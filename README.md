@@ -1,6 +1,6 @@
 # 🦉 HOOTNER - The Owl Never Sleeps
 
-**Ultimate Video Player & Social Platform**
+## Ultimate Video Player & Social Platform
 
 A full-stack, enterprise-grade video streaming platform with PWA capabilities, real-time features, and comprehensive DevOps infrastructure.
 
@@ -24,7 +24,7 @@ node video-player-server.js
 
 ## 📁 Project Structure
 
-```
+(")
 Hootner/
 ├── apps/
 │   └── frontend/              # React + Vite frontend
@@ -118,9 +118,6 @@ Hootner/
 │   └── STRIPE_INTEGRATION.md
 └── .github/
     └── workflows/             # CI/CD pipelines (24 workflows)
-```
-
----
 
 ## ✨ Features
 
@@ -225,7 +222,7 @@ node video-player-server.js
 
 Open `http://localhost:3000/video-player.html`
 
-### Features:
+### Features
 
 - **Carousel Navigation**: Scroll or swipe through videos
 - **Keyboard Shortcuts**: Arrow keys to navigate
@@ -233,7 +230,7 @@ Open `http://localhost:3000/video-player.html`
 - **Audio Effects**: Apply reverb, delay, distortion
 - **Share**: Native Web Share API support
 
-### PWA Installation:
+### PWA Installation
 
 1. Serve from HTTPS or localhost
 2. Click browser's "Install" prompt
@@ -581,15 +578,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 🌟 Key Technologies
 
-**Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Socket.io  
-**Backend**: Node.js, Express, GraphQL, NestJS  
-**Database**: MongoDB, Redis, Prisma ORM  
-**Infrastructure**: Docker, Kubernetes, Istio, Traefik  
-**Monitoring**: Prometheus, Grafana  
-**CI/CD**: GitHub Actions (24 workflows)  
-**Cloud**: AWS (S3, EC2)  
-**Payments**: Stripe  
-**Auth**: Firebase, JWT  
+**Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Socket.io
+**Backend**: Node.js, Express, GraphQL, NestJS
+**Database**: MongoDB, Redis, Prisma ORM
+**Infrastructure**: Docker, Kubernetes, Istio, Traefik
+**Monitoring**: Prometheus, Grafana
+**CI/CD**: GitHub Actions (24 workflows)
+**Cloud**: AWS (S3, EC2)
+**Payments**: Stripe
+**Auth**: Firebase, JWT
 **Testing**: Vitest, Chaos Engineering
 
 ---
@@ -653,11 +650,11 @@ MIT License - See LICENSE file for details
 
 ## 🆘 Support
 
-- 📧 Email: support@hootner.com
-- 💬 Discord: [Join our community](#)
+- 📧 Email: [support@hootner.com](mailto:support@hootner.com)
+- 💬 Discord: [Join our community](https://discord.gg/your-invite-link)
 - 🐛 Issues: [GitHub Issues](https://github.com/yourusername/hootner/issues)
 - 📖 Docs: [Full Documentation](docs/)
 
 ---
 
-**Made with 🦉 by the HOOTNER Team**
+### Made with 🦉 by the HOOTNER Team
