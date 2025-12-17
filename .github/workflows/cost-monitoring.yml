@@ -1,0 +1,203 @@
+name: AWS Cost Monitoring
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # Daily 9 AM
+  workflow_dispatch:
+
+env:
+  COST_THRESHOLD: 1000 # USD per month
+  ALERT_THRESHOLD: 80 # Percentage of budget
+
+jobs:
+  cost-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Get Current Month Costs
+        id: costs
+        run: |
+          START_DATE=$(date -u +%Y-%m-01)
+          END_DATE=$(date -u +%Y-%m-%d)
+
+          echo "## AWS Cost Report" >> $GITHUB_STEP_SUMMARY
+          echo "Period: $START_DATE to $END_DATE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Total costs
+          aws ce get-cost-and-usage \
+            --time-period Start=$START_DATE,End=$END_DATE \
+            --granularity MONTHLY \
+            --metrics BlendedCost UnblendedCost \
+            --output json > monthly-costs.json
+
+          TOTAL_COST=$(jq -r '.ResultsByTime[0].Total.BlendedCost.Amount' monthly-costs.json)
+          echo "total_cost=$TOTAL_COST" >> $GITHUB_OUTPUT
+          echo "### Total Cost: \$$TOTAL_COST USD" >> $GITHUB_STEP_SUMMARY
+
+          # Cost by service
+          aws ce get-cost-and-usage \
+            --time-period Start=$START_DATE,End=$END_DATE \
+            --granularity MONTHLY \
+            --metrics BlendedCost \
+            --group-by Type=DIMENSION,Key=SERVICE \
+            --output json > service-costs.json
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Top Services:" >> $GITHUB_STEP_SUMMARY
+          jq -r '.ResultsByTime[0].Groups | sort_by(-.Metrics.BlendedCost.Amount | tonumber) | .[:10][] | "- \(.Keys[0]): $\(.Metrics.BlendedCost.Amount) \(.Metrics.BlendedCost.Unit)"' service-costs.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Get Daily Costs (Last 7 Days)
+        run: |
+          START_DATE=$(date -u -d '7 days ago' +%Y-%m-%d)
+          END_DATE=$(date -u +%Y-%m-%d)
+
+          aws ce get-cost-and-usage \
+            --time-period Start=$START_DATE,End=$END_DATE \
+            --granularity DAILY \
+            --metrics BlendedCost \
+            --output json > daily-costs.json
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Daily Costs (Last 7 Days):" >> $GITHUB_STEP_SUMMARY
+          jq -r '.ResultsByTime[] | "\(.TimePeriod.Start): $\(.Total.BlendedCost.Amount)"' daily-costs.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Cost Forecast
+        run: |
+          START_DATE=$(date -u +%Y-%m-%d)
+          END_DATE=$(date -u -d '+30 days' +%Y-%m-%d)
+
+          aws ce get-cost-forecast \
+            --time-period Start=$START_DATE,End=$END_DATE \
+            --metric BLENDED_COST \
+            --granularity MONTHLY \
+            --output json > forecast.json
+
+          FORECAST=$(jq -r '.Total.Amount' forecast.json)
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 30-Day Forecast: \$$FORECAST USD" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check Budget Alerts
+        id: budget
+        continue-on-error: true
+        run: |
+          aws budgets describe-budgets \
+            --account-id $(aws sts get-caller-identity --query Account --output text) \
+            --output json > budgets.json
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Budget Status:" >> $GITHUB_STEP_SUMMARY
+
+          OVER_BUDGET=0
+          jq -c '.Budgets[]' budgets.json | while read budget; do
+            NAME=$(echo $budget | jq -r '.BudgetName')
+            LIMIT=$(echo $budget | jq -r '.BudgetLimit.Amount')
+            ACTUAL=$(echo $budget | jq -r '.CalculatedSpend.ActualSpend.Amount // "0"')
+            
+            PERCENT=$(awk "BEGIN {printf \"%.0f\", ($ACTUAL/$LIMIT)*100}")
+            
+            if [ "$PERCENT" -gt "$ALERT_THRESHOLD" ]; then
+              echo "- ⚠️ $NAME: $PERCENT% (\$$ACTUAL / \$$LIMIT)" >> $GITHUB_STEP_SUMMARY
+              OVER_BUDGET=$((OVER_BUDGET + 1))
+            else
+              echo "- ✅ $NAME: $PERCENT% (\$$ACTUAL / \$$LIMIT)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          echo "over_budget=$OVER_BUDGET" >> $GITHUB_OUTPUT
+
+      - name: Unused Resources Check
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Unused Resources:" >> $GITHUB_STEP_SUMMARY
+
+          # Unattached EBS volumes
+          UNATTACHED_VOLUMES=$(aws ec2 describe-volumes \
+            --filters Name=status,Values=available \
+            --query 'Volumes | length' --output text)
+          echo "- Unattached EBS Volumes: $UNATTACHED_VOLUMES" >> $GITHUB_STEP_SUMMARY
+
+          # Unused Elastic IPs
+          UNUSED_EIP=$(aws ec2 describe-addresses \
+            --filters Name=association-id,Values='' \
+            --query 'Addresses | length' --output text)
+          echo "- Unused Elastic IPs: $UNUSED_EIP" >> $GITHUB_STEP_SUMMARY
+
+          # Idle Load Balancers
+          IDLE_LB=$(aws elbv2 describe-load-balancers \
+            --query 'LoadBalancers[?State.Code==`active`] | length' --output text)
+          echo "- Active Load Balancers: $IDLE_LB" >> $GITHUB_STEP_SUMMARY
+
+          # Old Snapshots (>90 days)
+          OLD_SNAPSHOTS=$(aws ec2 describe-snapshots \
+            --owner-ids self \
+            --query "Snapshots[?StartTime<='$(date -u -d '90 days ago' --iso-8601)'] | length" \
+            --output text)
+          echo "- Old Snapshots (>90 days): $OLD_SNAPSHOTS" >> $GITHUB_STEP_SUMMARY
+
+      - name: Cost Optimization Recommendations
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Recommendations:" >> $GITHUB_STEP_SUMMARY
+
+          # Savings Plans
+          aws ce get-savings-plans-coverage \
+            --time-period Start=$(date -u -d '30 days ago' +%Y-%m-%d),End=$(date -u +%Y-%m-%d) \
+            --output json > savings-plans.json 2>/dev/null || echo "[]" > savings-plans.json
+
+          COVERAGE=$(jq -r '.SavingsPlansCoverages[0].Coverage.CoveragePercentage // "0"' savings-plans.json)
+          echo "- Savings Plans Coverage: $COVERAGE%" >> $GITHUB_STEP_SUMMARY
+
+          if (( $(echo "$COVERAGE < 70" | bc -l) )); then
+            echo "  - ⚠️ Consider increasing Savings Plans coverage" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Create Alert Issue
+        if: |
+          steps.costs.outputs.total_cost > env.COST_THRESHOLD ||
+          steps.budget.outputs.over_budget > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '💰 AWS Cost Alert - Budget Threshold Exceeded',
+              body: `## Cost Alert
+              
+              - Current Month Cost: $${${{ steps.costs.outputs.total_cost }}} USD
+              - Budget Threshold: $${process.env.COST_THRESHOLD} USD
+              - Budgets Over Threshold: ${{ steps.budget.outputs.over_budget }}
+              
+              [View Detailed Report](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              
+              ## Action Required
+              - Review cost breakdown by service
+              - Check for unused resources
+              - Consider cost optimization recommendations`,
+              labels: ['cost', 'aws', 'alert']
+            });
+
+      - name: Upload Cost Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: cost-reports-${{ github.run_number }}
+          path: |
+            monthly-costs.json
+            service-costs.json
+            daily-costs.json
+            forecast.json
+            budgets.json
+          retention-days: 90

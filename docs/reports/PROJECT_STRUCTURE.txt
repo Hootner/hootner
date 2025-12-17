@@ -1,0 +1,172 @@
+HOOTNER - 2025 AI-First Platform
+Project Structure Overview
+=====================================
+
+📦 ROOT
+├── 🤖 AI & ORCHESTRATION
+│   ├── lib/multi-agent-orchestrator.js    - Plan agents + subagents
+│   ├── lib/cursor-ai-modes.js             - Chat, Write, Refactor, Modernize
+│   ├── apps/.../ai-agent-panel.js         - AI panel UI
+│   └── apps/.../cursor-ui.js              - Cursor-style interface
+
+├── ⚡ PERFORMANCE & COLLABORATION
+│   ├── lib/lazy-loader.js                 - <100ms startup
+│   ├── lib/realtime-collab.js             - WebSocket multi-user
+│   ├── lib/memory-profiler.js             - Auto cache clearing
+│   └── services/collab-server.js          - Collaboration server
+
+├── 🔒 ELECTRON (Secure & Optimized)
+│   ├── electron/main.js                   - contextBridge, no nodeIntegration
+│   ├── electron/preload.js                - Secure IPC API
+│   ├── electron/renderer.js               - Renderer init
+│   ├── forge.config.js                    - <50MB builds
+│   ├── webpack.main.config.js             - Main bundling
+│   └── webpack.renderer.config.js         - Renderer bundling
+
+├── 🎨 VISUAL DESIGNER & DEBUG
+│   ├── lib/visual-designer.js             - Drag-and-drop UI prototyping
+│   ├── lib/debug-enhancer.js              - AI snooze + breakpoints
+│   └── apps/.../electron-code-editor/     - Full-featured IDE
+
+├── 🌱 SUSTAINABILITY & COMPLIANCE
+│   ├── lib/sustainability-monitor.js      - Energy tracking (powerMonitor)
+│   ├── lib/compliance-dashboard.js        - AI ethics + GDPR + SOC2
+│   └── middleware/                        - Security middleware (20+ files)
+
+├── 📚 DOCUMENTATION
+│   ├── docs/AI_AGENT_ORCHESTRATION.md     - Multi-agent system
+│   ├── docs/CURSOR_AI_MODES.md            - AI-first editing
+│   ├── docs/ZED_OPTIMIZATION.md           - Speed & collab
+│   ├── docs/ELECTRON_OPTIMIZATION.md      - Secure builds
+│   ├── docs/VISUAL_DESIGNER.md            - UI prototyping
+│   └── docs/SUSTAINABILITY_COMPLIANCE.md  - Energy & ethics
+
+├── 🎬 FRONTEND
+│   ├── apps/frontend/html-pages/          - 18 HTML pages
+│   │   ├── video-player.html              - Jukebox-style player
+│   │   ├── dashboard.html                 - Admin panel
+│   │   ├── code-editor.html               - Monaco editor
+│   │   └── electron-code-editor/          - Full IDE
+│   └── apps/frontend/public/              - Static assets
+
+├── 🔧 SERVICES & MIDDLEWARE
+│   ├── services/collab-server.js          - WebSocket server
+│   ├── middleware/                        - 20+ security middleware
+│   │   ├── injection-protection.js
+│   │   ├── rate-limiter.js
+│   │   ├── csrf.js
+│   │   └── ...
+│   └── lib/                               - Shared libraries
+
+├── 📦 CONFIGURATION
+│   ├── package.json                       - Dependencies + scripts
+│   ├── forge.config.js                    - Electron Forge
+│   ├── webpack.*.config.js                - Webpack configs
+│   ├── docker-compose.yml                 - Docker setup
+│   └── config/                            - App configs
+
+└── 🧪 TESTING & SCRIPTS
+    ├── tests/                             - Test suites
+    ├── scripts/                           - Automation scripts
+    └── playwright.config.js               - E2E testing
+
+=====================================
+KEY FEATURES (2025)
+=====================================
+
+✅ AI Orchestration
+   - Plan agents for complex tasks
+   - Parallel subagent execution
+   - Background task processing
+
+✅ Cursor AI Modes
+   - Chat Mode (Ctrl+K)
+   - Write Mode (Ctrl+L)
+   - Refactor Mode
+   - Modernize (JS → TS7)
+
+✅ Zed Speed
+   - <100ms startup
+   - Lazy loading
+   - Real-time collaboration
+
+✅ Electron Security
+   - contextBridge
+   - No nodeIntegration
+   - Sandbox mode
+   - <50MB builds
+
+✅ Visual Designer
+   - Drag-and-drop UI
+   - Export HTML
+   - Live preview
+
+✅ Debug Enhanced
+   - AI suggestion snooze
+   - Integrated breakpoints
+   - Session logging
+
+✅ Sustainability
+   - Energy tracking
+   - CPU monitoring
+   - Battery awareness
+
+✅ Compliance 2025
+   - AI ethics audits
+   - GDPR compliance
+   - SOC2 controls
+   - Auto-reporting
+
+=====================================
+QUICK START
+=====================================
+
+# Install dependencies
+npm install
+
+# Start Electron app
+npm start
+
+# Start collaboration server
+npm run collab
+
+# Package for distribution
+npm run package
+
+# Create installers
+npm run make
+
+=====================================
+COMMAND PALETTE (Ctrl+Shift+P)
+=====================================
+
+AI Commands:
+- AI: Open Agent Panel
+- AI: Refactor with Agents
+- AI: Debug with Agents
+- Cursor: Chat Mode (Ctrl+K)
+- Cursor: Write Mode (Ctrl+L)
+
+Collaboration:
+- Collab: Start Session
+- Collab: Join Session
+
+Performance:
+- Performance: Memory Report
+- Performance: Clear Cache
+
+Designer & Debug:
+- Designer: Open Visual Designer
+- Debug: Add Breakpoint
+- Debug: Snooze Suggestion
+
+Sustainability & Compliance:
+- Sustainability: Energy Report
+- Compliance: AI Ethics Audit
+- Compliance: GDPR Audit
+- Compliance: Export Report
+
+=====================================
+Made with 🦉 by the HOOTNER Team
+"The Owl Never Sleeps"
+=====================================

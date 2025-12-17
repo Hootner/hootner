@@ -1,0 +1,38 @@
+{
+  "network": {
+    "adapter_speed_mbps": 425,
+    "ipv4": "10.182.75.69",
+    "ipv6": "2600:380:695a:dc3e:e0dc:2b47:395d:3c95"
+  },
+  "video_streaming": {
+    "max_bitrate_mbps": 50,
+    "adaptive_bitrates": [
+      { "quality": "4K", "bitrate": "25000000", "resolution": "3840x2160" },
+      { "quality": "1080p", "bitrate": "8000000", "resolution": "1920x1080" },
+      { "quality": "720p", "bitrate": "5000000", "resolution": "1280x720" },
+      { "quality": "480p", "bitrate": "2500000", "resolution": "854x480" },
+      { "quality": "360p", "bitrate": "1000000", "resolution": "640x360" }
+    ],
+    "buffer_settings": {
+      "initial_buffer_seconds": 10,
+      "max_buffer_seconds": 30,
+      "rebuffer_threshold_seconds": 5
+    },
+    "chunk_settings": {
+      "segment_duration_seconds": 6,
+      "chunk_size_bytes": 2097152
+    }
+  },
+  "performance": {
+    "concurrent_streams": 10,
+    "max_connections_per_client": 5,
+    "connection_timeout_seconds": 30,
+    "read_timeout_seconds": 60,
+    "keepalive_timeout_seconds": 300
+  },
+  "cdn": {
+    "edge_locations": ["us-east-1", "us-west-2"],
+    "cache_ttl_seconds": 3600,
+    "prefetch_enabled": true
+  }
+}

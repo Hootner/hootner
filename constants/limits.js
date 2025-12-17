@@ -1,0 +1,23 @@
+/**
+ * System Limits and Boundaries
+ * @module constants/limits
+ */
+
+const LIMITS = {
+  MAX_STRING_LENGTH: 1000,
+  MAX_PORT: 65535,
+  MAX_FILE_SIZE_MB: 100,
+  MAX_BUFFER_SIZE: 2048,
+  MAX_RETRY_COUNT: 10,
+  MAX_Z_INDEX: 9999,
+  MAX_IP_OCTET: 254,
+  MIN_PORT: 3002,
+  DEFAULT_PORT: 3010,
+  HUB_PORT: 3013,
+  RATE_LIMIT_MIN: 10,
+  RATE_LIMIT_MAX: 100,
+  LIGHTHOUSE_MAX_SIZE: 10240,
+  LIGHTHOUSE_WIDTH: 940
+};
+
+export default LIMITS;

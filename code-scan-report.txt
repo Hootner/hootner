@@ -1,0 +1,1156 @@
+CODE SCAN REPORT
+================================================================================
+Timestamp: 2025-12-17T21:49:40.186Z
+Directory: c:\Users\12182\Projects\Hootner
+Files Scanned: 156
+Errors: 10
+Warnings: 927
+================================================================================
+
+ERRORS (10):
+--------------------------------------------------------------------------------
+📛 apps\frontend\html-pages\electron-code-editor\integration-commands.js
+   Security: Hardcoded credential detected at line 16
+   Security: Hardcoded credential detected at line 119
+
+📛 services\video-generation\__init__.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\__init__.py"
+
+📛 services\video-generation\api.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\api.py"
+
+📛 services\video-generation\diffusion.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\diffusion.py"
+
+📛 services\video-generation\example.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\example.py"
+
+📛 services\video-generation\generator.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\generator.py"
+
+📛 services\video-generation\install.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\install.py"
+
+📛 services\video-generation\text_encoder.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\text_encoder.py"
+
+📛 services\video-generation\unet.py
+   Python syntax error: Command failed: python3 -m py_compile "c:\Users\12182\Projects\Hootner\services\video-generation\unet.py"
+
+WARNINGS (927):
+--------------------------------------------------------------------------------
+⚠️  apps\frontend\html-pages\electron-code-editor\advanced-features.js
+   Catch block only logs - handle errors properly at line 210
+   Catch block only logs - handle errors properly at line 210
+   High complexity: 70 control structures - consider refactoring
+   Magic number 48771 at line 242 - use named constant
+   Magic number 400 at line 261 - use named constant
+   Magic number 400 at line 262 - use named constant
+   Magic number 9800 at line 274 - use named constant
+   Nested ternary operator - hard to read at line 242
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ai-agent-panel.js
+   Catch block only logs - handle errors properly at line 25
+   Catch block only logs - handle errors properly at line 25
+   Catch block only logs - handle errors properly at line 38
+   Catch block only logs - handle errors properly at line 38
+   Catch block only logs - handle errors properly at line 39
+   Catch block only logs - handle errors properly at line 39
+   Catch block only logs - handle errors properly at line 40
+   Catch block only logs - handle errors properly at line 40
+   await without nearby try-catch at line 63 - ensure error handling
+   Event listener without error handling at line 50
+   Event listener without error handling at line 108
+   High complexity: 30 control structures - consider refactoring
+   Magic number 400 at line 22 - use named constant
+   Magic number 600 at line 22 - use named constant
+   Magic number 9999 at line 22 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ai-assistant.js
+   Remove console.log before production at line 286
+   Catch block only logs - handle errors properly at line 54
+   Catch block only logs - handle errors properly at line 54
+   Catch block only logs - handle errors properly at line 65
+   Catch block only logs - handle errors properly at line 65
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 71
+   Catch block only logs - handle errors properly at line 71
+   Catch block only logs - handle errors properly at line 74
+   Catch block only logs - handle errors properly at line 74
+   Catch block only logs - handle errors properly at line 77
+   Catch block only logs - handle errors properly at line 77
+   Catch block only logs - handle errors properly at line 80
+   Catch block only logs - handle errors properly at line 80
+   Catch block only logs - handle errors properly at line 88
+   Catch block only logs - handle errors properly at line 88
+   Catch block only logs - handle errors properly at line 89
+   Catch block only logs - handle errors properly at line 89
+   Catch block only logs - handle errors properly at line 90
+   Catch block only logs - handle errors properly at line 90
+   Catch block only logs - handle errors properly at line 91
+   Catch block only logs - handle errors properly at line 91
+   Catch block only logs - handle errors properly at line 401
+   Catch block only logs - handle errors properly at line 418
+   Catch block only logs - handle errors properly at line 430
+   await without nearby try-catch at line 215 - ensure error handling
+   await without nearby try-catch at line 241 - ensure error handling
+   await without nearby try-catch at line 262 - ensure error handling
+   await without nearby try-catch at line 439 - ensure error handling
+   await without nearby try-catch at line 452 - ensure error handling
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 84 control structures - consider refactoring
+   Magic number 9800 at line 50 - use named constant
+   Magic number 9800 at line 190 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cloud-sync.js
+   Catch block only logs - handle errors properly at line 53
+   Catch block only logs - handle errors properly at line 53
+   Catch block only logs - handle errors properly at line 64
+   Catch block only logs - handle errors properly at line 64
+   Catch block only logs - handle errors properly at line 65
+   Catch block only logs - handle errors properly at line 65
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 85
+   Catch block only logs - handle errors properly at line 85
+   Catch block only logs - handle errors properly at line 86
+   Catch block only logs - handle errors properly at line 86
+   Catch block only logs - handle errors properly at line 151
+   Catch block only logs - handle errors properly at line 186
+   Catch block only logs - handle errors properly at line 215
+   Catch block only logs - handle errors properly at line 251
+   Catch block only logs - handle errors properly at line 283
+   Catch block only logs - handle errors properly at line 391
+   await without nearby try-catch at line 22 - ensure error handling
+   await without nearby try-catch at line 157 - ensure error handling
+   High complexity: 60 control structures - consider refactoring
+   Magic number 9800 at line 49 - use named constant
+   Magic number 666 at line 89 - use named constant
+   Magic number 44336 at line 105 - use named constant
+   Magic number 44336 at line 123 - use named constant
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 42
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 316
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 321
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 336
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cross-integration.js
+   Catch block only logs - handle errors properly at line 78
+   Catch block only logs - handle errors properly at line 150
+   Catch block only logs - handle errors properly at line 154
+   High complexity: 33 control structures - consider refactoring
+   Magic number 3000 at line 9 - use named constant
+   Magic number 3000 at line 10 - use named constant
+   Magic number 3000 at line 11 - use named constant
+   Magic number 3000 at line 66 - use named constant
+   Magic number 259 at line 104 - use named constant
+   Use camelCase instead of snake_case for 'hootner_import_pending' at line 143
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cursor-ui.js
+   Catch block only logs - handle errors properly at line 26
+   Catch block only logs - handle errors properly at line 26
+   Catch block only logs - handle errors properly at line 27
+   Catch block only logs - handle errors properly at line 27
+   Catch block only logs - handle errors properly at line 28
+   Catch block only logs - handle errors properly at line 28
+   Catch block only logs - handle errors properly at line 29
+   Catch block only logs - handle errors properly at line 29
+   Catch block only logs - handle errors properly at line 44
+   Catch block only logs - handle errors properly at line 44
+   Catch block only logs - handle errors properly at line 76
+   Catch block only logs - handle errors properly at line 102
+   Catch block only logs - handle errors properly at line 102
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 142
+   Catch block only logs - handle errors properly at line 142
+   await without nearby try-catch at line 83 - ensure error handling
+   High complexity: 55 control structures - consider refactoring
+   Magic number 9998 at line 24 - use named constant
+   Magic number 600 at line 40 - use named constant
+   Magic number 9999 at line 40 - use named constant
+   Magic number 200 at line 46 - use named constant
+   Magic number 44336 at line 92 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\enhancements.js
+   Catch block only logs - handle errors properly at line 66
+   Catch block only logs - handle errors properly at line 66
+   Catch block only logs - handle errors properly at line 87
+   Catch block only logs - handle errors properly at line 87
+   Catch block only logs - handle errors properly at line 124
+   Catch block only logs - handle errors properly at line 124
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 127
+   Catch block only logs - handle errors properly at line 127
+   Catch block only logs - handle errors properly at line 128
+   Catch block only logs - handle errors properly at line 128
+   High complexity: 50 control structures - consider refactoring
+   Magic number 600 at line 43 - use named constant
+   Magic number 252526 at line 43 - use named constant
+   Magic number 400 at line 46 - use named constant
+   Magic number 969696 at line 111 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\enterprise.js
+   Catch block only logs - handle errors properly at line 28
+   Catch block only logs - handle errors properly at line 28
+   Catch block only logs - handle errors properly at line 31
+   Catch block only logs - handle errors properly at line 31
+   Catch block only logs - handle errors properly at line 34
+   Catch block only logs - handle errors properly at line 34
+   Catch block only logs - handle errors properly at line 37
+   Catch block only logs - handle errors properly at line 37
+   Catch block only logs - handle errors properly at line 108
+   Catch block only logs - handle errors properly at line 108
+   Catch block only logs - handle errors properly at line 109
+   Catch block only logs - handle errors properly at line 109
+   Catch block only logs - handle errors properly at line 110
+   Catch block only logs - handle errors properly at line 110
+   Catch block only logs - handle errors properly at line 246
+   Catch block only logs - handle errors properly at line 246
+   High complexity: 38 control structures - consider refactoring
+   Magic number 3001 at line 57 - use named constant
+   Magic number 30000 at line 91 - use named constant
+   Magic number 9800 at line 243 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\error-handler.js
+   Empty if statement at line 242
+   Avoid Function constructor at line 261
+   Catch block only logs - handle errors properly at line 19
+   Catch block only logs - handle errors properly at line 19
+   Catch block only logs - handle errors properly at line 37
+   Catch block only logs - handle errors properly at line 37
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 81
+   Catch block only logs - handle errors properly at line 113
+   Catch block only logs - handle errors properly at line 113
+   Catch block only logs - handle errors properly at line 141
+   Catch block only logs - handle errors properly at line 141
+   Catch block only logs - handle errors properly at line 181
+   Catch block only logs - handle errors properly at line 181
+   Catch block only logs - handle errors properly at line 222
+   Catch block only logs - handle errors properly at line 255
+   Catch block only logs - handle errors properly at line 262
+   Catch block only logs - handle errors properly at line 291
+   High complexity: 59 control structures - consider refactoring
+   Magic number 581 at line 53 - use named constant
+   Magic number 400 at line 131 - use named constant
+   Magic number 2196 at line 151 - use named constant
+   Magic number 9800 at line 153 - use named constant
+   Magic number 44336 at line 154 - use named constant
+   Magic number 9999 at line 174 - use named constant
+   Magic number 255 at line 240 - use named constant
+   Magic number 400 at line 349 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\fallback-handlers.js
+   Catch block only logs - handle errors properly at line 17
+   Catch block only logs - handle errors properly at line 17
+   Catch block only logs - handle errors properly at line 18
+   Catch block only logs - handle errors properly at line 18
+   Catch block only logs - handle errors properly at line 31
+   Catch block only logs - handle errors properly at line 31
+   Catch block only logs - handle errors properly at line 32
+   Catch block only logs - handle errors properly at line 32
+   Catch block only logs - handle errors properly at line 51
+   Catch block only logs - handle errors properly at line 51
+   Catch block only logs - handle errors properly at line 67
+   Catch block only logs - handle errors properly at line 67
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 82
+   Catch block only logs - handle errors properly at line 82
+   Catch block only logs - handle errors properly at line 83
+   Catch block only logs - handle errors properly at line 83
+   Catch block only logs - handle errors properly at line 102
+   Catch block only logs - handle errors properly at line 102
+   Catch block only logs - handle errors properly at line 119
+   Catch block only logs - handle errors properly at line 119
+   Catch block only logs - handle errors properly at line 123
+   Catch block only logs - handle errors properly at line 123
+   High complexity: 50 control structures - consider refactoring
+   Magic number 200 at line 118 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\feature-expansions.js
+   Empty if statement at line 216
+   Catch block only logs - handle errors properly at line 36
+   Catch block only logs - handle errors properly at line 57
+   Catch block only logs - handle errors properly at line 88
+   Catch block only logs - handle errors properly at line 119
+   Catch block only logs - handle errors properly at line 160
+   Catch block only logs - handle errors properly at line 160
+   Catch block only logs - handle errors properly at line 179
+   Catch block only logs - handle errors properly at line 186
+   Catch block only logs - handle errors properly at line 197
+   Catch block only logs - handle errors properly at line 399
+   await without nearby try-catch at line 105 - ensure error handling
+   await without nearby try-catch at line 304 - ensure error handling
+   High complexity: 74 control structures - consider refactoring
+   Magic number 500 at line 73 - use named constant
+   Magic number 3002 at line 173 - use named constant
+   Use camelCase instead of snake_case for 'hootner_plugins' at line 111
+   Use camelCase instead of snake_case for 'hootner_user_id' at line 221
+   Use camelCase instead of snake_case for 'hootner_custom_snippets' at line 275
+   Nested ternary operator - hard to read at line 162
+   Nested ternary operator - hard to read at line 366
+
+⚠️  apps\frontend\html-pages\electron-code-editor\integration-commands.js
+   Catch block only logs - handle errors properly at line 17
+   Catch block only logs - handle errors properly at line 124
+   Catch block only logs - handle errors properly at line 136
+   Catch block only logs - handle errors properly at line 148
+   Catch block only logs - handle errors properly at line 218
+   Catch block only logs - handle errors properly at line 256
+   await without nearby try-catch at line 25 - ensure error handling
+   await without nearby try-catch at line 31 - ensure error handling
+   await without nearby try-catch at line 39 - ensure error handling
+   await without nearby try-catch at line 60 - ensure error handling
+   await without nearby try-catch at line 64 - ensure error handling
+   await without nearby try-catch at line 71 - ensure error handling
+   await without nearby try-catch at line 76 - ensure error handling
+   await without nearby try-catch at line 80 - ensure error handling
+   await without nearby try-catch at line 84 - ensure error handling
+   await without nearby try-catch at line 88 - ensure error handling
+   await without nearby try-catch at line 94 - ensure error handling
+   await without nearby try-catch at line 163 - ensure error handling
+   await without nearby try-catch at line 175 - ensure error handling
+   await without nearby try-catch at line 180 - ensure error handling
+   await without nearby try-catch at line 242 - ensure error handling
+   High complexity: 61 control structures - consider refactoring
+
+⚠️  apps\frontend\html-pages\electron-code-editor\lsp-client.js
+   Catch block only logs - handle errors properly at line 22
+   Catch block only logs - handle errors properly at line 29
+   Catch block only logs - handle errors properly at line 75
+   Catch block only logs - handle errors properly at line 78
+   Catch block only logs - handle errors properly at line 119
+   Catch block only logs - handle errors properly at line 124
+   Catch block only logs - handle errors properly at line 124
+   Catch block only logs - handle errors properly at line 165
+   Catch block only logs - handle errors properly at line 170
+   Catch block only logs - handle errors properly at line 170
+   Catch block only logs - handle errors properly at line 202
+   Catch block only logs - handle errors properly at line 204
+   Catch block only logs - handle errors properly at line 218
+   Catch block only logs - handle errors properly at line 222
+   Catch block only logs - handle errors properly at line 233
+   Catch block only logs - handle errors properly at line 233
+   JSON.parse without try-catch at line 110
+   JSON.parse without try-catch at line 159
+   High complexity: 42 control structures - consider refactoring
+
+⚠️  apps\frontend\html-pages\electron-code-editor\main.js
+   High complexity: 27 control structures - consider refactoring
+   Magic number 900 at line 14 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\monaco-extensions.js
+   Use const/let instead of var at line 70
+   Catch block only logs - handle errors properly at line 38
+   Catch block only logs - handle errors properly at line 352
+   Catch block only logs - handle errors properly at line 359
+   Catch block only logs - handle errors properly at line 370
+   Catch block only logs - handle errors properly at line 376
+   Catch block only logs - handle errors properly at line 387
+   Catch block only logs - handle errors properly at line 393
+   Catch block only logs - handle errors properly at line 404
+   Catch block only logs - handle errors properly at line 410
+   High complexity: 51 control structures - consider refactoring
+   Magic number 2020 at line 46 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\package-manager.js
+   Catch block only logs - handle errors properly at line 24
+   Catch block only logs - handle errors properly at line 56
+   Catch block only logs - handle errors properly at line 72
+   Catch block only logs - handle errors properly at line 143
+   Catch block only logs - handle errors properly at line 143
+   Catch block only logs - handle errors properly at line 144
+   Catch block only logs - handle errors properly at line 144
+   Catch block only logs - handle errors properly at line 153
+   Catch block only logs - handle errors properly at line 153
+   Catch block only logs - handle errors properly at line 162
+   Catch block only logs - handle errors properly at line 162
+   Catch block only logs - handle errors properly at line 205
+   Catch block only logs - handle errors properly at line 205
+   Catch block only logs - handle errors properly at line 228
+   Catch block only logs - handle errors properly at line 228
+   Catch block only logs - handle errors properly at line 229
+   Catch block only logs - handle errors properly at line 229
+   await without nearby try-catch at line 81 - ensure error handling
+   await without nearby try-catch at line 217 - ensure error handling
+   await without nearby try-catch at line 313 - ensure error handling
+   High complexity: 55 control structures - consider refactoring
+   Magic number 666 at line 155 - use named constant
+   Magic number 666 at line 164 - use named constant
+   Magic number 44336 at line 187 - use named constant
+   Magic number 9800 at line 253 - use named constant
+   Magic number 44336 at line 293 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\performance-optimizer.js
+   Remove console.log before production at line 23
+   Remove console.log before production at line 45
+   Catch block only logs - handle errors properly at line 97
+   High complexity: 48 control structures - consider refactoring
+   Magic number 200 at line 9 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\platform-integration.js
+   Catch block only logs - handle errors properly at line 22
+   Catch block only logs - handle errors properly at line 22
+   Catch block only logs - handle errors properly at line 27
+   Catch block only logs - handle errors properly at line 58
+   Catch block only logs - handle errors properly at line 63
+   Catch block only logs - handle errors properly at line 110
+   Catch block only logs - handle errors properly at line 129
+   Catch block only logs - handle errors properly at line 168
+   Catch block only logs - handle errors properly at line 220
+   Catch block only logs - handle errors properly at line 230
+   Catch block only logs - handle errors properly at line 238
+   Catch block only logs - handle errors properly at line 326
+   Catch block only logs - handle errors properly at line 329
+   Catch block only logs - handle errors properly at line 340
+   Catch block only logs - handle errors properly at line 387
+   Catch block only logs - handle errors properly at line 387
+   Catch block only logs - handle errors properly at line 397
+   Catch block only logs - handle errors properly at line 397
+   Catch block only logs - handle errors properly at line 434
+   High complexity: 122 control structures - consider refactoring
+   Magic number 3000 at line 8 - use named constant
+   Magic number 3001 at line 9 - use named constant
+   Magic number 3000 at line 244 - use named constant
+   Magic number 350 at line 291 - use named constant
+   Magic number 44336 at line 301 - use named constant
+   Magic number 9800 at line 302 - use named constant
+   Magic number 2196 at line 303 - use named constant
+   Magic number 300 at line 312 - use named constant
+   Use camelCase instead of snake_case for 'app_info' at line 79
+   Use camelCase instead of snake_case for 'app_info' at line 82
+   Use camelCase instead of snake_case for 'hootner_import_pending' at line 320
+   Use camelCase instead of snake_case for 'hootner_collab_invite' at line 335
+   Use camelCase instead of snake_case for 'hootner_session_id' at line 411
+
+⚠️  apps\frontend\html-pages\electron-code-editor\plugin-api.js
+   Remove console.log before production at line 208
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 85
+   Catch block only logs - handle errors properly at line 85
+   Catch block only logs - handle errors properly at line 112
+   High complexity: 35 control structures - consider refactoring
+
+⚠️  apps\frontend\html-pages\electron-code-editor\plugin-system.js
+   Catch block only logs - handle errors properly at line 164
+   Catch block only logs - handle errors properly at line 164
+   Catch block only logs - handle errors properly at line 178
+   Catch block only logs - handle errors properly at line 178
+   Catch block only logs - handle errors properly at line 230
+   Catch block only logs - handle errors properly at line 286
+   Catch block only logs - handle errors properly at line 286
+   Catch block only logs - handle errors properly at line 328
+   Catch block only logs - handle errors properly at line 380
+   Catch block only logs - handle errors properly at line 380
+   High complexity: 48 control structures - consider refactoring
+   Magic number 666 at line 167 - use named constant
+   Magic number 44336 at line 207 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\quick-setup.js
+   Remove console.log before production at line 14
+   Remove console.log before production at line 30
+   Remove console.log before production at line 38
+   Catch block only logs - handle errors properly at line 56
+   Catch block only logs - handle errors properly at line 56
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 68
+   Catch block only logs - handle errors properly at line 69
+   Catch block only logs - handle errors properly at line 69
+   Catch block only logs - handle errors properly at line 70
+   Catch block only logs - handle errors properly at line 70
+   Catch block only logs - handle errors properly at line 71
+   Catch block only logs - handle errors properly at line 71
+   Catch block only logs - handle errors properly at line 72
+   Catch block only logs - handle errors properly at line 72
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 73
+   await without nearby try-catch at line 133 - ensure error handling
+   await without nearby try-catch at line 139 - ensure error handling
+   await without nearby try-catch at line 164 - ensure error handling
+   await without nearby try-catch at line 171 - ensure error handling
+   await without nearby try-catch at line 185 - ensure error handling
+   await without nearby try-catch at line 186 - ensure error handling
+   High complexity: 29 control structures - consider refactoring
+   Magic number 2020 at line 39 - use named constant
+   Magic number 200 at line 54 - use named constant
+   Magic number 2021 at line 189 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\renderer-manager.js
+   Catch block only logs - handle errors properly at line 47
+   Catch block only logs - handle errors properly at line 47
+   Catch block only logs - handle errors properly at line 66
+   Catch block only logs - handle errors properly at line 106
+   High complexity: 24 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 84
+
+⚠️  apps\frontend\html-pages\electron-code-editor\security-compliance.js
+   Catch block only logs - handle errors properly at line 76
+   Catch block only logs - handle errors properly at line 85
+   Catch block only logs - handle errors properly at line 127
+   Catch block only logs - handle errors properly at line 166
+   Catch block only logs - handle errors properly at line 237
+   Catch block only logs - handle errors properly at line 308
+   Catch block only logs - handle errors properly at line 375
+   await without nearby try-catch at line 21 - ensure error handling
+   await without nearby try-catch at line 29 - ensure error handling
+   await without nearby try-catch at line 47 - ensure error handling
+   await without nearby try-catch at line 53 - ensure error handling
+   await without nearby try-catch at line 109 - ensure error handling
+   High complexity: 51 control structures - consider refactoring
+   Magic number 100000 at line 33 - use named constant
+   Magic number 256 at line 34 - use named constant
+   Magic number 256 at line 37 - use named constant
+   Use camelCase instead of snake_case for 'hootner_encrypted_backup' at line 121
+   Use camelCase instead of snake_case for 'hootner_audit_logs' at line 159
+   Use camelCase instead of snake_case for 'hootner_encrypted_backup' at line 369
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ui-enhancements.js
+   Catch block only logs - handle errors properly at line 39
+   Catch block only logs - handle errors properly at line 39
+   Catch block only logs - handle errors properly at line 108
+   Catch block only logs - handle errors properly at line 108
+   Catch block only logs - handle errors properly at line 147
+   Catch block only logs - handle errors properly at line 147
+   Catch block only logs - handle errors properly at line 150
+   Catch block only logs - handle errors properly at line 150
+   Catch block only logs - handle errors properly at line 157
+   Catch block only logs - handle errors properly at line 157
+   Catch block only logs - handle errors properly at line 168
+   Catch block only logs - handle errors properly at line 168
+   Catch block only logs - handle errors properly at line 186
+   Catch block only logs - handle errors properly at line 186
+   High complexity: 78 control structures - consider refactoring
+   Magic number 272822 at line 11 - use named constant
+   Magic number 282 at line 12 - use named constant
+   Magic number 666 at line 104 - use named constant
+   Magic number 255 at line 147 - use named constant
+   Magic number 255 at line 147 - use named constant
+   Magic number 255 at line 147 - use named constant
+   Magic number 255 at line 150 - use named constant
+   Magic number 255 at line 150 - use named constant
+   Magic number 255 at line 150 - use named constant
+   Use camelCase instead of snake_case for 'hootner_activity_bar' at line 23
+   Use camelCase instead of snake_case for 'hootner_theme' at line 80
+
+⚠️  apps\frontend\html-pages\electron-code-editor\web-bridge.js
+   Remove console.log before production at line 397
+   Catch block only logs - handle errors properly at line 34
+   Catch block only logs - handle errors properly at line 43
+   Catch block only logs - handle errors properly at line 57
+   Catch block only logs - handle errors properly at line 86
+   Catch block only logs - handle errors properly at line 112
+   Catch block only logs - handle errors properly at line 140
+   Catch block only logs - handle errors properly at line 181
+   Catch block only logs - handle errors properly at line 208
+   Catch block only logs - handle errors properly at line 229
+   Catch block only logs - handle errors properly at line 256
+   Catch block only logs - handle errors properly at line 271
+   Catch block only logs - handle errors properly at line 271
+   Catch block only logs - handle errors properly at line 340
+   Catch block only logs - handle errors properly at line 360
+   Catch block only logs - handle errors properly at line 368
+   await without nearby try-catch at line 15 - ensure error handling
+   High complexity: 91 control structures - consider refactoring
+   Use camelCase instead of snake_case for 'api_post' at line 178
+
+⚠️  apps\frontend\html-pages\libs\video.min.js
+   Code comment requires attention at line 37
+   Code comment requires attention at line 41
+   Code comment requires attention at line 45
+
+⚠️  apps\frontend\public\script.js
+   Code comment requires attention at line 46
+   Code comment requires attention at line 221
+   Code comment requires attention at line 356
+   Code comment requires attention at line 394
+   Code comment requires attention at line 504
+   Code comment requires attention at line 698
+   Catch block only logs - handle errors properly at line 44
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 126
+   Catch block only logs - handle errors properly at line 142
+   Catch block only logs - handle errors properly at line 160
+   Catch block only logs - handle errors properly at line 160
+   Catch block only logs - handle errors properly at line 182
+   Catch block only logs - handle errors properly at line 182
+   Catch block only logs - handle errors properly at line 204
+   Catch block only logs - handle errors properly at line 204
+   Catch block only logs - handle errors properly at line 215
+   Catch block only logs - handle errors properly at line 232
+   Catch block only logs - handle errors properly at line 284
+   Catch block only logs - handle errors properly at line 284
+   Catch block only logs - handle errors properly at line 311
+   Catch block only logs - handle errors properly at line 382
+   Catch block only logs - handle errors properly at line 426
+   Catch block only logs - handle errors properly at line 471
+   Catch block only logs - handle errors properly at line 488
+   Catch block only logs - handle errors properly at line 488
+   Catch block only logs - handle errors properly at line 513
+   Catch block only logs - handle errors properly at line 513
+   Catch block only logs - handle errors properly at line 520
+   Catch block only logs - handle errors properly at line 520
+   Catch block only logs - handle errors properly at line 527
+   Catch block only logs - handle errors properly at line 527
+   Catch block only logs - handle errors properly at line 536
+   Catch block only logs - handle errors properly at line 536
+   Catch block only logs - handle errors properly at line 545
+   Catch block only logs - handle errors properly at line 545
+   Catch block only logs - handle errors properly at line 552
+   Catch block only logs - handle errors properly at line 552
+   Catch block only logs - handle errors properly at line 561
+   Catch block only logs - handle errors properly at line 561
+   Catch block only logs - handle errors properly at line 568
+   Catch block only logs - handle errors properly at line 568
+   Catch block only logs - handle errors properly at line 577
+   Catch block only logs - handle errors properly at line 577
+   Catch block only logs - handle errors properly at line 584
+   Catch block only logs - handle errors properly at line 584
+   Catch block only logs - handle errors properly at line 593
+   Catch block only logs - handle errors properly at line 593
+   Catch block only logs - handle errors properly at line 600
+   Catch block only logs - handle errors properly at line 600
+   Catch block only logs - handle errors properly at line 607
+   Catch block only logs - handle errors properly at line 607
+   Catch block only logs - handle errors properly at line 614
+   Catch block only logs - handle errors properly at line 614
+   Catch block only logs - handle errors properly at line 621
+   Catch block only logs - handle errors properly at line 621
+   Catch block only logs - handle errors properly at line 628
+   Catch block only logs - handle errors properly at line 628
+   Catch block only logs - handle errors properly at line 635
+   Catch block only logs - handle errors properly at line 635
+   Catch block only logs - handle errors properly at line 644
+   Catch block only logs - handle errors properly at line 644
+   Catch block only logs - handle errors properly at line 690
+   Catch block only logs - handle errors properly at line 813
+   Catch block only logs - handle errors properly at line 813
+   Catch block only logs - handle errors properly at line 824
+   Catch block only logs - handle errors properly at line 824
+   await without nearby try-catch at line 79 - ensure error handling
+   await without nearby try-catch at line 319 - ensure error handling
+   await without nearby try-catch at line 323 - ensure error handling
+   await without nearby try-catch at line 433 - ensure error handling
+   High complexity: 167 control structures - consider refactoring
+   Magic number 250 at line 256 - use named constant
+   Magic number 3600 at line 405 - use named constant
+   Magic number 250 at line 475 - use named constant
+
+⚠️  config\app-config-browser.js
+   Magic number 3000 at line 19 - use named constant
+   Magic number 3001 at line 20 - use named constant
+   Magic number 300000 at line 29 - use named constant
+   Magic number 500 at line 35 - use named constant
+
+⚠️  config\app-config.js
+   Magic number 600000 at line 90 - use named constant
+
+⚠️  config\linting\frontend-eslint.config.js
+   Magic number 2020 at line 9 - use named constant
+
+⚠️  config\security\rate-limit-config.ts
+   High complexity: 37 control structures - consider refactoring
+   Magic number 500 at line 121 - use named constant
+
+⚠️  config\testing\electron-playwright.config.js
+   Magic number 3000 at line 30 - use named constant
+   Nested ternary operator - hard to read at line 6
+
+⚠️  config\testing\playwright.config.js
+   Magic number 3000 at line 11 - use named constant
+   Magic number 3000 at line 23 - use named constant
+   Magic number 120000 at line 25 - use named constant
+   Nested ternary operator - hard to read at line 7
+
+⚠️  constants\animation.js
+   Magic number 300 at line 7 - use named constant
+   Magic number 400 at line 8 - use named constant
+   Magic number 250 at line 9 - use named constant
+   Magic number 500 at line 10 - use named constant
+
+⚠️  constants\cache.js
+   Magic number 3600 at line 7 - use named constant
+   Magic number 86400 at line 8 - use named constant
+   Magic number 31536000 at line 9 - use named constant
+
+⚠️  constants\http-status.js
+   Magic number 200 at line 7 - use named constant
+   Magic number 206 at line 8 - use named constant
+   Magic number 400 at line 9 - use named constant
+   Magic number 401 at line 10 - use named constant
+   Magic number 403 at line 11 - use named constant
+   Magic number 404 at line 12 - use named constant
+   Magic number 415 at line 13 - use named constant
+   Magic number 416 at line 14 - use named constant
+   Magic number 429 at line 15 - use named constant
+   Magic number 500 at line 16 - use named constant
+   Magic number 503 at line 17 - use named constant
+   Magic number 504 at line 18 - use named constant
+
+⚠️  constants\limits.js
+   Magic number 65535 at line 8 - use named constant
+   Magic number 2048 at line 10 - use named constant
+   Magic number 9999 at line 12 - use named constant
+   Magic number 254 at line 13 - use named constant
+   Magic number 3002 at line 14 - use named constant
+   Magic number 3010 at line 15 - use named constant
+   Magic number 3013 at line 16 - use named constant
+   Magic number 10240 at line 19 - use named constant
+   Magic number 940 at line 20 - use named constant
+
+⚠️  constants\misc.js
+   Magic number 2020 at line 7 - use named constant
+   Magic number 2020 at line 7 - use named constant
+   Magic number 2021 at line 8 - use named constant
+   Magic number 2021 at line 8 - use named constant
+   Magic number 7280 at line 9 - use named constant
+   Magic number 4444 at line 10 - use named constant
+   Magic number 274 at line 11 - use named constant
+
+⚠️  constants\timeouts.js
+   Magic number 2000 at line 8 - use named constant
+   Magic number 5000 at line 9 - use named constant
+   Magic number 10000 at line 10 - use named constant
+   Magic number 30000 at line 11 - use named constant
+   Magic number 60000 at line 12 - use named constant
+   Magic number 300000 at line 13 - use named constant
+   Magic number 3600000 at line 14 - use named constant
+   Magic number 86400000 at line 15 - use named constant
+   Magic number 31536000 at line 16 - use named constant
+   Magic number 31536000000 at line 17 - use named constant
+
+⚠️  constants\ui-constants.js
+   Magic number 300000 at line 13 - use named constant
+   Magic number 280 at line 16 - use named constant
+   Magic number 9800 at line 25 - use named constant
+   Magic number 9980 at line 26 - use named constant
+   Magic number 9998 at line 27 - use named constant
+   Magic number 9999 at line 28 - use named constant
+   Magic number 99999 at line 29 - use named constant
+   Magic number 10485760 at line 37 - use named constant
+   Magic number 401 at line 43 - use named constant
+   Magic number 403 at line 44 - use named constant
+   Magic number 2020 at line 58 - use named constant
+   Magic number 2020 at line 58 - use named constant
+   Magic number 2021 at line 59 - use named constant
+   Magic number 2021 at line 59 - use named constant
+   Magic number 2025 at line 60 - use named constant
+   Magic number 2025 at line 60 - use named constant
+   Magic number 666 at line 63 - use named constant
+   Magic number 666 at line 63 - use named constant
+   Magic number 44336 at line 64 - use named constant
+   Magic number 44336 at line 64 - use named constant
+   Magic number 48771 at line 65 - use named constant
+   Magic number 48771 at line 65 - use named constant
+   Magic number 252526 at line 66 - use named constant
+   Magic number 252526 at line 66 - use named constant
+   Magic number 272822 at line 67 - use named constant
+   Magic number 272822 at line 67 - use named constant
+   Magic number 969696 at line 68 - use named constant
+   Magic number 969696 at line 68 - use named constant
+
+⚠️  electron\main.js
+   await without nearby try-catch at line 47 - ensure error handling
+   await without nearby try-catch at line 59 - ensure error handling
+   High complexity: 21 control structures - consider refactoring
+   Magic number 2025 at line 2 - use named constant
+   Magic number 900 at line 14 - use named constant
+   Magic number 1000000 at line 71 - use named constant
+
+⚠️  electron\renderer.js
+   Variable 'loadTime' is declared but never used
+   Catch block only logs - handle errors properly at line 25
+   Catch block only logs - handle errors properly at line 25
+   Catch block only logs - handle errors properly at line 37
+   Catch block only logs - handle errors properly at line 37
+   await without nearby try-catch at line 15 - ensure error handling
+   await without nearby try-catch at line 17 - ensure error handling
+
+⚠️  lib\graceful-shutdown.js
+   Catch block only logs - handle errors properly at line 11
+
+⚠️  lib\memory-monitor.js
+   Magic number 30000 at line 12 - use named constant
+
+⚠️  middleware\access-control.js
+   Catch block only logs - handle errors properly at line 94
+   Catch block only logs - handle errors properly at line 132
+   Catch block only logs - handle errors properly at line 143
+   Magic number 2021 at line 2 - use named constant
+
+⚠️  middleware\compression.js
+   Catch block only logs - handle errors properly at line 18
+
+⚠️  middleware\csrf.js
+   Catch block only logs - handle errors properly at line 48
+
+⚠️  middleware\dependency-check.js
+   Catch block only logs - handle errors properly at line 14
+   Catch block only logs - handle errors properly at line 18
+   Catch block only logs - handle errors properly at line 38
+   Catch block only logs - handle errors properly at line 47
+   Catch block only logs - handle errors properly at line 68
+   Magic number 2021 at line 2 - use named constant
+
+⚠️  middleware\enhanced-security.js
+   Catch block only logs - handle errors properly at line 96
+   Catch block only logs - handle errors properly at line 114
+   High complexity: 28 control structures - consider refactoring
+   Magic number 900 at line 57 - use named constant
+   Magic number 3000 at line 133 - use named constant
+   Magic number 5000 at line 134 - use named constant
+
+⚠️  middleware\error-handler.js
+   Catch block only logs - handle errors properly at line 19
+   Catch block only logs - handle errors properly at line 96
+   Callback with err parameter but no check at line 10
+
+⚠️  middleware\injection-protection.js
+   Catch block only logs - handle errors properly at line 22
+   Catch block only logs - handle errors properly at line 103
+   Catch block only logs - handle errors properly at line 135
+   High complexity: 36 control structures - consider refactoring
+
+⚠️  middleware\metrics.js
+   Catch block only logs - handle errors properly at line 27
+   Catch block only logs - handle errors properly at line 59
+
+⚠️  middleware\performance.js
+   Catch block only logs - handle errors properly at line 30
+
+⚠️  middleware\rate-limiter.js
+   High complexity: 21 control structures - consider refactoring
+
+⚠️  middleware\security-headers.js
+   Catch block only logs - handle errors properly at line 24
+   Magic number 2021 at line 2 - use named constant
+   Magic number 31536000 at line 22 - use named constant
+
+⚠️  middleware\security-integration.js
+   Catch block only logs - handle errors properly at line 77
+   Catch block only logs - handle errors properly at line 82
+   Catch block only logs - handle errors properly at line 100
+   Catch block only logs - handle errors properly at line 128
+   Catch block only logs - handle errors properly at line 180
+   High complexity: 22 control structures - consider refactoring
+   Magic number 900 at line 78 - use named constant
+
+⚠️  middleware\security.js
+   Catch block only logs - handle errors properly at line 55
+   Catch block only logs - handle errors properly at line 97
+   Catch block only logs - handle errors properly at line 131
+   Catch block only logs - handle errors properly at line 199
+   Callback with err parameter but no check at line 117
+   Callback with err parameter but no check at line 133
+   High complexity: 28 control structures - consider refactoring
+
+⚠️  middleware\sql-injection-prevention.js
+   Catch block only logs - handle errors properly at line 43
+   Catch block only logs - handle errors properly at line 67
+   Magic number 2021 at line 2 - use named constant
+
+⚠️  middleware\ssrf-protection.js
+   Catch block only logs - handle errors properly at line 75
+   Catch block only logs - handle errors properly at line 110
+   High complexity: 25 control structures - consider refactoring
+   Magic number 254 at line 13 - use named constant
+   Magic number 254 at line 13 - use named constant
+   Magic number 200 at line 16 - use named constant
+   Magic number 254 at line 43 - use named constant
+   Magic number 254 at line 45 - use named constant
+
+⚠️  middleware\validation.js
+   High complexity: 40 control structures - consider refactoring
+
+⚠️  package.json
+   Outdated package: bcryptjs (current: 2.4.3, latest: 3.0.3)
+   Outdated package: concurrently (current: 8.2.2, latest: 9.2.1)
+   Outdated package: electron-builder (current: 24.13.3, latest: 26.0.12)
+   Outdated package: eslint (current: 8.57.1, latest: 9.39.2)
+   Outdated package: eslint-plugin-jsdoc (current: 50.8.0, latest: 61.5.0)
+   Outdated package: express (current: 4.22.1, latest: 5.2.1)
+   Outdated package: helmet (current: 7.2.0, latest: 8.1.0)
+   Outdated package: jest (current: 29.7.0, latest: 30.2.0)
+   Outdated package: mongoose (current: 7.8.8, latest: 9.0.2)
+   Outdated package: multer (current: 1.4.5-lts.2, latest: 2.0.2)
+   Outdated package: prom-client (current: 14.2.0, latest: 15.1.3)
+   Outdated package: redis (current: 4.7.1, latest: 5.10.0)
+   Outdated package: sharp (current: 0.32.6, latest: 0.34.5)
+   Outdated package: stripe (current: 13.11.0, latest: 20.1.0)
+   Outdated package: supertest (current: 6.3.4, latest: 7.1.4)
+
+⚠️  scripts\ai\cursor-ai-modes.js
+   Code comment requires attention at line 63
+   await without nearby try-catch at line 15 - ensure error handling
+   await without nearby try-catch at line 18 - ensure error handling
+   await without nearby try-catch at line 25 - ensure error handling
+   await without nearby try-catch at line 26 - ensure error handling
+   await without nearby try-catch at line 37 - ensure error handling
+   await without nearby try-catch at line 38 - ensure error handling
+   await without nearby try-catch at line 49 - ensure error handling
+   await without nearby try-catch at line 50 - ensure error handling
+
+⚠️  scripts\ai\multi-agent-orchestrator.js
+   await without nearby try-catch at line 59 - ensure error handling
+   await without nearby try-catch at line 62 - ensure error handling
+   await without nearby try-catch at line 94 - ensure error handling
+   await without nearby try-catch at line 136 - ensure error handling
+   Magic number 2025 at line 3 - use named constant
+
+⚠️  scripts\collaboration\realtime-collab.js
+   Catch block only logs - handle errors properly at line 28
+   await without nearby try-catch at line 86 - ensure error handling
+   High complexity: 23 control structures - consider refactoring
+
+⚠️  scripts\find-malformed-jsdoc.js
+   Remove console.log before production at line 59
+   Remove console.log before production at line 60
+   High complexity: 33 control structures - consider refactoring
+
+⚠️  scripts\find-unterminated-regex.js
+   Remove console.log before production at line 40
+   Remove console.log before production at line 41
+
+⚠️  scripts\linting\lint-all.js
+   Remove console.log before production at line 23
+   Remove console.log before production at line 36
+
+⚠️  scripts\linting\quick-syntax-fix.js
+   Remove console.log before production at line 29
+   Remove console.log before production at line 63
+   Remove console.log before production at line 65
+   Catch block only logs - handle errors properly at line 32
+   Catch block only logs - handle errors properly at line 56
+
+⚠️  scripts\linting\simple-lint-fix.js
+   Remove console.log before production at line 17
+   Remove console.log before production at line 22
+   Remove console.log before production at line 79
+   await without nearby try-catch at line 20 - ensure error handling
+
+⚠️  scripts\monitoring\compliance-dashboard.js
+   Magic number 27001 at line 9 - use named constant
+
+⚠️  scripts\monitoring\memory-profiler.js
+   await without nearby try-catch at line 17 - ensure error handling
+   await without nearby try-catch at line 23 - ensure error handling
+   await without nearby try-catch at line 36 - ensure error handling
+   await without nearby try-catch at line 40 - ensure error handling
+   await without nearby try-catch at line 41 - ensure error handling
+
+⚠️  scripts\monitoring\sustainability-monitor.js
+   Empty if statement at line 12
+   Empty if statement at line 17
+
+⚠️  scripts\refactoring\advanced-refactor.js
+   Remove console.log before production at line 18
+   Remove console.log before production at line 23
+   Remove console.log before production at line 24
+   Remove console.log before production at line 75
+   Catch block only logs - handle errors properly at line 75
+   await without nearby try-catch at line 21 - ensure error handling
+   High complexity: 59 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 87
+   Nested ternary operator - hard to read at line 140
+
+⚠️  scripts\refactoring\extract-constants.js
+   Remove console.log before production at line 51
+   Catch block only logs - handle errors properly at line 93
+   await without nearby try-catch at line 48 - ensure error handling
+   High complexity: 28 control structures - consider refactoring
+   Magic number 2000 at line 19 - use named constant
+   Magic number 3000 at line 20 - use named constant
+   Magic number 5000 at line 21 - use named constant
+   Magic number 10000 at line 22 - use named constant
+   Magic number 30000 at line 23 - use named constant
+   Magic number 60000 at line 24 - use named constant
+   Magic number 255 at line 25 - use named constant
+   Magic number 400 at line 26 - use named constant
+   Magic number 404 at line 27 - use named constant
+   Magic number 500 at line 28 - use named constant
+   Magic number 200 at line 29 - use named constant
+   Magic number 300 at line 30 - use named constant
+   Magic number 500 at line 31 - use named constant
+   Magic number 3000 at line 33 - use named constant
+   Magic number 8080 at line 34 - use named constant
+   Magic number 2020 at line 35 - use named constant
+   Magic number 2020 at line 35 - use named constant
+   Magic number 2021 at line 36 - use named constant
+   Magic number 2021 at line 36 - use named constant
+   Magic number 2025 at line 37 - use named constant
+   Magic number 2025 at line 37 - use named constant
+   Magic number 1048576 at line 38 - use named constant
+
+⚠️  scripts\refactoring\final-quality-fixes.js
+   Remove console.log before production at line 72
+   Catch block only logs - handle errors properly at line 58
+   Catch block only logs - handle errors properly at line 74
+   Catch block only logs - handle errors properly at line 112
+   Catch block only logs - handle errors properly at line 112
+   Catch block only logs - handle errors properly at line 117
+   Catch block only logs - handle errors properly at line 118
+   Catch block only logs - handle errors properly at line 128
+   Catch block only logs - handle errors properly at line 128
+   await without nearby try-catch at line 19 - ensure error handling
+
+⚠️  scripts\refactoring\function-breakdown.js
+   Remove console.log before production at line 17
+   Remove console.log before production at line 22
+   Remove console.log before production at line 28
+   Remove console.log before production at line 137
+   Remove console.log before production at line 153
+   Code comment requires attention at line 225
+   await without nearby try-catch at line 20 - ensure error handling
+   await without nearby try-catch at line 25 - ensure error handling
+   High complexity: 52 control structures - consider refactoring
+
+⚠️  scripts\refactoring\simplify-ternary.js
+   Remove console.log before production at line 17
+   Remove console.log before production at line 22
+   Remove console.log before production at line 96
+   Catch block only logs - handle errors properly at line 57
+   await without nearby try-catch at line 20 - ensure error handling
+   High complexity: 87 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 54
+   Nested ternary operator - hard to read at line 219
+
+⚠️  scripts\testing\setup-testing.js
+   Catch block only logs - handle errors properly at line 6
+   Use camelCase instead of snake_case for 'child_process' at line 2
+
+⚠️  scripts\ui\visual-designer.js
+   Magic number 9997 at line 24 - use named constant
+   Magic number 44336 at line 30 - use named constant
+   Nested ternary operator - hard to read at line 41
+
+⚠️  scripts\utilities\debug-enhancer.js
+   Magic number 3600000 at line 24 - use named constant
+
+⚠️  scripts\utilities\event-utils.js
+   Catch block only logs - handle errors properly at line 23
+   Catch block only logs - handle errors properly at line 57
+   Catch block only logs - handle errors properly at line 76
+   Catch block only logs - handle errors properly at line 76
+   Catch block only logs - handle errors properly at line 97
+   Catch block only logs - handle errors properly at line 97
+   Magic number 300 at line 69 - use named constant
+
+⚠️  scripts\utilities\function-utils.js
+   Catch block only logs - handle errors properly at line 42
+   Catch block only logs - handle errors properly at line 57
+   Catch block only logs - handle errors properly at line 100
+   Catch block only logs - handle errors properly at line 177
+   Magic number 300 at line 119 - use named constant
+
+⚠️  scripts\utilities\json-utils.js
+   Catch block only logs - handle errors properly at line 18
+   Catch block only logs - handle errors properly at line 21
+   Catch block only logs - handle errors properly at line 41
+   Catch block only logs - handle errors properly at line 60
+   Catch block only logs - handle errors properly at line 83
+
+⚠️  scripts\utilities\lazy-loader.js
+   await without nearby try-catch at line 36 - ensure error handling
+
+⚠️  scripts\utilities\security-utils.js
+   Catch block only logs - handle errors properly at line 125
+   await without nearby try-catch at line 46 - ensure error handling
+   await without nearby try-catch at line 90 - ensure error handling
+   await without nearby try-catch at line 100 - ensure error handling
+   High complexity: 46 control structures - consider refactoring
+
+⚠️  server.js
+   High complexity: 44 control structures - consider refactoring
+   Magic number 3000 at line 74 - use named constant
+   Magic number 250 at line 254 - use named constant
+   Magic number 200 at line 270 - use named constant
+
+⚠️  servers\collab-server.js
+   Catch block only logs - handle errors properly at line 24
+
+⚠️  servers\hub-app.js
+   Catch block only logs - handle errors properly at line 62
+   Catch block only logs - handle errors properly at line 106
+   Catch block only logs - handle errors properly at line 130
+   Catch block only logs - handle errors properly at line 155
+   Catch block only logs - handle errors properly at line 178
+   Catch block only logs - handle errors properly at line 182
+   Catch block only logs - handle errors properly at line 182
+   Catch block only logs - handle errors properly at line 186
+   Catch block only logs - handle errors properly at line 186
+   Catch block only logs - handle errors properly at line 194
+   Catch block only logs - handle errors properly at line 194
+   Catch block only logs - handle errors properly at line 195
+   Catch block only logs - handle errors properly at line 195
+   Catch block only logs - handle errors properly at line 196
+   Catch block only logs - handle errors properly at line 196
+   Catch block only logs - handle errors properly at line 201
+   Catch block only logs - handle errors properly at line 201
+   Catch block only logs - handle errors properly at line 203
+   Catch block only logs - handle errors properly at line 203
+   Catch block only logs - handle errors properly at line 204
+   Catch block only logs - handle errors properly at line 204
+   Catch block only logs - handle errors properly at line 232
+   Catch block only logs - handle errors properly at line 302
+   Catch block only logs - handle errors properly at line 309
+   Catch block only logs - handle errors properly at line 314
+   Catch block only logs - handle errors properly at line 326
+   Catch block only logs - handle errors properly at line 337
+   Catch block only logs - handle errors properly at line 346
+   Catch block only logs - handle errors properly at line 352
+   High complexity: 48 control structures - consider refactoring
+
+⚠️  servers\mcp-server.js
+   Callback with err parameter but no check at line 57
+   Magic number 3000 at line 20 - use named constant
+
+⚠️  servers\secure-server.js
+   Remove console.log before production at line 157
+   Catch block only logs - handle errors properly at line 20
+   High complexity: 27 control structures - consider refactoring
+   Magic number 301 at line 74 - use named constant
+
+⚠️  servers\video-player-server.js
+   Remove console.log before production at line 315
+   Catch block only logs - handle errors properly at line 59
+   Catch block only logs - handle errors properly at line 73
+   Catch block only logs - handle errors properly at line 128
+   Catch block only logs - handle errors properly at line 144
+   Catch block only logs - handle errors properly at line 160
+   Catch block only logs - handle errors properly at line 244
+   Catch block only logs - handle errors properly at line 273
+   High complexity: 33 control structures - consider refactoring
+
+⚠️  tests\electron-code-editor\e2e\editor.spec.js
+   Remove console.log before production at line 21
+   Remove console.log before production at line 28
+   await without nearby try-catch at line 5 - ensure error handling
+   await without nearby try-catch at line 6 - ensure error handling
+   await without nearby try-catch at line 10 - ensure error handling
+   await without nearby try-catch at line 11 - ensure error handling
+   await without nearby try-catch at line 15 - ensure error handling
+   await without nearby try-catch at line 16 - ensure error handling
+   await without nearby try-catch at line 20 - ensure error handling
+   await without nearby try-catch at line 21 - ensure error handling
+   await without nearby try-catch at line 22 - ensure error handling
+   await without nearby try-catch at line 27 - ensure error handling
+   await without nearby try-catch at line 28 - ensure error handling
+   await without nearby try-catch at line 29 - ensure error handling
+   await without nearby try-catch at line 30 - ensure error handling
+   await without nearby try-catch at line 34 - ensure error handling
+   await without nearby try-catch at line 35 - ensure error handling
+   Magic number 3000 at line 5 - use named constant
+
+⚠️  tools\analysis\audit-node-modules.js
+   Remove console.log before production at line 59
+   Remove console.log before production at line 65
+   Catch block only logs - handle errors properly at line 13
+   Use camelCase instead of snake_case for 'child_process' at line 5
+
+⚠️  tools\health\healthcheck.js
+   Remove console.log before production at line 34
+   Magic number 3000 at line 6 - use named constant
+

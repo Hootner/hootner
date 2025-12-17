@@ -1,0 +1,713 @@
+CODE SCAN REPORT
+================================================================================
+Timestamp: 2025-12-17T14:50:52.969Z
+Directory: c:\Users\12182\Projects\Hootner
+Files Scanned: 136
+Errors: 6
+Warnings: 534
+================================================================================
+
+ERRORS (6):
+--------------------------------------------------------------------------------
+📛 apps\frontend\html-pages\electron-code-editor\integration-commands.js
+   Security: Hardcoded credential detected at line 16
+   Security: Hardcoded credential detected at line 116
+   Promise without catch handler at line 170
+
+📛 apps\frontend\html-pages\electron-code-editor\lib\visual-designer.js
+   Security: Potential XSS via innerHTML at line 124
+   Security: Potential XSS via innerHTML at line 173
+
+📛 lib\multi-agent-orchestrator.js
+   Promise without catch handler at line 139
+
+WARNINGS (534):
+--------------------------------------------------------------------------------
+⚠️  apps\frontend\eslint.config.js
+   Magic number 2020 at line 10 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\advanced-features.js
+   Use !== instead of !== at line 161
+   Event listener without error handling at line 181
+   Line too long (121 chars) at line 230
+   Magic number 2000 at line 178 - use named constant
+   Magic number 48771 at line 210 - use named constant
+   Magic number 300 at line 222 - use named constant
+   Magic number 3000 at line 223 - use named constant
+   Magic number 400 at line 229 - use named constant
+   Magic number 400 at line 230 - use named constant
+   Magic number 9800 at line 242 - use named constant
+   Magic number 2000 at line 247 - use named constant
+   Magic number 5000 at line 251 - use named constant
+   Nested ternary operator - hard to read at line 210
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ai-agent-panel.js
+   Use !== instead of !== at line 107
+   Event listener without error handling at line 50
+   Event listener without error handling at line 108
+   Line too long (260 chars) at line 22
+   Line too long (139 chars) at line 23
+   Line too long (146 chars) at line 25
+   Line too long (129 chars) at line 28
+   Line too long (157 chars) at line 36
+   Line too long (213 chars) at line 38
+   Line too long (207 chars) at line 39
+   Line too long (213 chars) at line 40
+   Line too long (213 chars) at line 78
+   Magic number 400 at line 22 - use named constant
+   Magic number 600 at line 22 - use named constant
+   Magic number 9999 at line 22 - use named constant
+   Magic number 2000 at line 72 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ai-assistant.js
+   Use const/let instead of var at line 166
+   Use === instead of === at line 169
+   Use === instead of === at line 251
+   Use !== instead of !== at line 254
+   Use !== instead of !== at line 453
+   Use !== instead of !== at line 467
+   Remove console.log before production at line 286
+   Variable 'optimized' is declared but never used
+   Line too long (134 chars) at line 48
+   Line too long (218 chars) at line 51
+   Line too long (124 chars) at line 62
+   Line too long (201 chars) at line 189
+   Line too long (150 chars) at line 304
+   Magic number 255 at line 48 - use named constant
+   Magic number 9800 at line 48 - use named constant
+   Magic number 9800 at line 189 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\app-config-browser.js
+   Use !== instead of !== at line 67
+   Magic number 30000 at line 21 - use named constant
+   Magic number 300000 at line 29 - use named constant
+   Magic number 500 at line 35 - use named constant
+   Magic number 30000 at line 44 - use named constant
+   Magic number 60000 at line 50 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cloud-sync.js
+   Use !== instead of !== at line 334
+   Use !== instead of !== at line 425
+   JSON.parse without try-catch at line 40
+   JSON.parse without try-catch at line 313
+   JSON.parse without try-catch at line 318
+   JSON.parse without try-catch at line 333
+   Line too long (134 chars) at line 47
+   Line too long (211 chars) at line 50
+   Line too long (123 chars) at line 54
+   Line too long (246 chars) at line 70
+   Line too long (123 chars) at line 81
+   Line too long (125 chars) at line 85
+   Magic number 255 at line 47 - use named constant
+   Magic number 9800 at line 47 - use named constant
+   Magic number 666 at line 88 - use named constant
+   Magic number 44336 at line 105 - use named constant
+   Magic number 44336 at line 123 - use named constant
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 40
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 313
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 318
+   Use camelCase instead of snake_case for 'hootner_cloud_projects' at line 333
+   Single letter variable 'a' at line 373 - use descriptive name
+   Nested ternary operator - hard to read at line 350
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cross-integration.js
+   Use !== instead of !== at line 138
+   Catch block only logs error - consider proper error handling at line 131
+   Use camelCase instead of snake_case for 'hootner_import_pending' at line 120
+
+⚠️  apps\frontend\html-pages\electron-code-editor\cursor-ui.js
+   Use !== instead of !== at line 122
+   Event listener without error handling at line 100
+   Event listener without error handling at line 115
+   Event listener without error handling at line 123
+   Line too long (167 chars) at line 24
+   Line too long (291 chars) at line 26
+   Line too long (294 chars) at line 27
+   Line too long (303 chars) at line 28
+   Line too long (306 chars) at line 29
+   Line too long (248 chars) at line 40
+   Line too long (224 chars) at line 43
+   Line too long (191 chars) at line 44
+   Line too long (166 chars) at line 46
+   Magic number 9998 at line 24 - use named constant
+   Magic number 600 at line 40 - use named constant
+   Magic number 9999 at line 40 - use named constant
+   Magic number 200 at line 46 - use named constant
+   Magic number 44336 at line 93 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\enhancements.js
+   Event listener without error handling at line 85
+   Line too long (210 chars) at line 44
+   Line too long (219 chars) at line 46
+   Line too long (265 chars) at line 67
+   Line too long (169 chars) at line 106
+   Line too long (150 chars) at line 107
+   Line too long (135 chars) at line 132
+   Magic number 600 at line 44 - use named constant
+   Magic number 252526 at line 44 - use named constant
+   Magic number 500 at line 44 - use named constant
+   Magic number 400 at line 47 - use named constant
+   Magic number 969696 at line 106 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\enterprise.js
+   Use !== instead of !== at line 56
+   Use !== instead of !== at line 297
+   Line too long (124 chars) at line 134
+   Magic number 30000 at line 88 - use named constant
+   Magic number 9800 at line 237 - use named constant
+   Single letter variable 'a' at line 280 - use descriptive name
+
+⚠️  apps\frontend\html-pages\electron-code-editor\error-handler.js
+   Use !== instead of !== at line 207
+   Use !== instead of !== at line 235
+   Use !== instead of !== at line 344
+   Avoid Function constructor at line 245
+   Catch block only logs error - consider proper error handling at line 57
+   Catch block only logs error - consider proper error handling at line 84
+   Event listener without error handling at line 16
+   Event listener without error handling at line 28
+   Line too long (126 chars) at line 113
+   Line too long (132 chars) at line 153
+   Magic number 10000 at line 101 - use named constant
+   Magic number 400 at line 102 - use named constant
+   Magic number 10000 at line 117 - use named constant
+   Magic number 2196 at line 122 - use named constant
+   Magic number 9800 at line 124 - use named constant
+   Magic number 44336 at line 125 - use named constant
+   Magic number 9999 at line 145 - use named constant
+   Magic number 5000 at line 157 - use named constant
+   Magic number 255 at line 210 - use named constant
+   Magic number 255 at line 211 - use named constant
+   Magic number 5000 at line 296 - use named constant
+   Magic number 400 at line 333 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\fallback-handlers.js
+   Line too long (215 chars) at line 17
+   Line too long (205 chars) at line 18
+   Line too long (217 chars) at line 31
+   Line too long (212 chars) at line 32
+   Line too long (134 chars) at line 50
+   Line too long (197 chars) at line 51
+   Line too long (219 chars) at line 67
+   Line too long (212 chars) at line 68
+   Line too long (210 chars) at line 82
+   Line too long (208 chars) at line 83
+   Line too long (200 chars) at line 102
+   Line too long (126 chars) at line 118
+   Line too long (158 chars) at line 119
+   Line too long (160 chars) at line 123
+   Magic number 200 at line 118 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\feature-expansions.js
+   Use !== instead of !== at line 372
+   Async function without try-catch at line 273
+   JSON.parse without try-catch at line 33
+   JSON.parse without try-catch at line 47
+   JSON.parse without try-catch at line 91
+   JSON.parse without try-catch at line 149
+   JSON.parse without try-catch at line 242
+   JSON.parse without try-catch at line 367
+   Line too long (134 chars) at line 127
+   Magic number 500 at line 59 - use named constant
+   Use camelCase instead of snake_case for 'hootner_commits' at line 33
+   Use camelCase instead of snake_case for 'hootner_plugins' at line 90
+   Use camelCase instead of snake_case for 'hootner_user_id' at line 187
+   Use camelCase instead of snake_case for 'hootner_custom_snippets' at line 241
+   Single letter variable 'q' at line 294 - use descriptive name
+   Single letter variable 'a' at line 345 - use descriptive name
+   Use camelCase instead of snake_case for 'hootner_permissions' at line 367
+   Nested ternary operator - hard to read at line 128
+   Nested ternary operator - hard to read at line 337
+
+⚠️  apps\frontend\html-pages\electron-code-editor\integration-commands.js
+   Use !== instead of !== at line 277
+   Use !== instead of !== at line 304
+   Async function without try-catch at line 25
+   Async function without try-catch at line 33
+   Async function without try-catch at line 54
+   Async function without try-catch at line 131
+   Async function without try-catch at line 142
+   Line too long (133 chars) at line 267
+   Line too long (123 chars) at line 268
+   Nested ternary operator - hard to read at line 266
+
+⚠️  apps\frontend\html-pages\electron-code-editor\lib\lazy-loader.js
+   Magic number 2000 at line 34 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\lib\memory-profiler.js
+   Magic number 5000 at line 25 - use named constant
+   Magic number 1048576 at line 41 - use named constant
+   Magic number 1048576 at line 42 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\lib\visual-designer.js
+   Line too long (133 chars) at line 30
+   Magic number 10000 at line 23 - use named constant
+   Magic number 300 at line 90 - use named constant
+   Magic number 200 at line 91 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\lsp-client.js
+   Use !== instead of !== at line 212
+   Catch block only logs error - consider proper error handling at line 71
+   Catch block only logs error - consider proper error handling at line 172
+   Catch block only logs error - consider proper error handling at line 190
+   Catch block only logs error - consider proper error handling at line 201
+   JSON.parse without try-catch at line 101
+   JSON.parse without try-catch at line 133
+
+⚠️  apps\frontend\html-pages\electron-code-editor\main.js
+   Use !== instead of !== at line 47
+   Magic number 900 at line 14 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\monaco-extensions.js
+   Use === instead of === at line 79
+   Use === instead of === at line 126
+   Use !== instead of !== at line 416
+   Catch block only logs error - consider proper error handling at line 359
+   Catch block only logs error - consider proper error handling at line 376
+   Catch block only logs error - consider proper error handling at line 393
+   Catch block only logs error - consider proper error handling at line 410
+   Magic number 2020 at line 46 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\package-manager.js
+   Use !== instead of !== at line 310
+   Line too long (204 chars) at line 193
+   Line too long (121 chars) at line 218
+   Line too long (215 chars) at line 282
+   Line too long (134 chars) at line 302
+   Magic number 666 at line 142 - use named constant
+   Magic number 666 at line 152 - use named constant
+   Magic number 44336 at line 176 - use named constant
+   Magic number 9800 at line 242 - use named constant
+   Magic number 44336 at line 282 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\performance-optimizer.js
+   Use !== instead of !== at line 157
+   Remove console.log before production at line 23
+   Remove console.log before production at line 45
+   Magic number 1048576 at line 123 - use named constant
+   Magic number 1048576 at line 124 - use named constant
+   Magic number 1048576 at line 125 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\platform-integration.js
+   Use !== instead of !== at line 310
+   Use !== instead of !== at line 440
+   Catch block only logs error - consider proper error handling at line 325
+   JSON.parse without try-catch at line 230
+   JSON.parse without try-catch at line 333
+   Event listener without error handling at line 364
+   Event listener without error handling at line 368
+   Line too long (138 chars) at line 132
+   Magic number 3000 at line 240 - use named constant
+   Magic number 10000 at line 286 - use named constant
+   Magic number 350 at line 287 - use named constant
+   Magic number 44336 at line 297 - use named constant
+   Magic number 9800 at line 298 - use named constant
+   Magic number 2196 at line 299 - use named constant
+   Magic number 300 at line 308 - use named constant
+   Use camelCase instead of snake_case for 'app_info' at line 82
+   Use camelCase instead of snake_case for 'app_info' at line 85
+   Use camelCase instead of snake_case for 'hootner_analytics_offline' at line 230
+   Use camelCase instead of snake_case for 'hootner_import_pending' at line 316
+   Use camelCase instead of snake_case for 'hootner_collab_invite' at line 331
+   Use camelCase instead of snake_case for 'hootner_session_id' at line 379
+
+⚠️  apps\frontend\html-pages\electron-code-editor\playwright.config.js
+   Nested ternary operator - hard to read at line 7
+
+⚠️  apps\frontend\html-pages\electron-code-editor\plugin-api.js
+   Use const/let instead of var at line 175
+   Use !== instead of !== at line 217
+   Remove console.log before production at line 187
+
+⚠️  apps\frontend\html-pages\electron-code-editor\plugin-system.js
+   Use !== instead of !== at line 389
+   Catch block only logs error - consider proper error handling at line 293
+   Magic number 3000 at line 95 - use named constant
+   Magic number 3000 at line 96 - use named constant
+   Magic number 666 at line 172 - use named constant
+   Magic number 44336 at line 214 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\quick-setup.js
+   Use !== instead of !== at line 195
+   Use !== instead of !== at line 215
+   Remove console.log before production at line 14
+   Remove console.log before production at line 30
+   Remove console.log before production at line 38
+   Line too long (176 chars) at line 13
+   Line too long (180 chars) at line 22
+   Line too long (201 chars) at line 23
+   Line too long (232 chars) at line 30
+   Line too long (155 chars) at line 38
+   Line too long (134 chars) at line 39
+   Line too long (136 chars) at line 187
+   Magic number 2020 at line 39 - use named constant
+   Magic number 200 at line 54 - use named constant
+   Magic number 2021 at line 187 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\renderer-manager.js
+   Use !== instead of !== at line 76
+   Use !== instead of !== at line 139
+   Magic number 10000 at line 34 - use named constant
+   Nested ternary operator - hard to read at line 79
+
+⚠️  apps\frontend\html-pages\electron-code-editor\security-compliance.js
+   Use !== instead of !== at line 343
+   JSON.parse without try-catch at line 108
+   JSON.parse without try-catch at line 137
+   JSON.parse without try-catch at line 266
+   Magic number 100000 at line 33 - use named constant
+   Magic number 256 at line 34 - use named constant
+   Magic number 256 at line 37 - use named constant
+   Use camelCase instead of snake_case for 'hootner_encrypted_backup' at line 105
+   Use camelCase instead of snake_case for 'hootner_audit_logs' at line 136
+   Use camelCase instead of snake_case for 'hootner_permissions' at line 266
+   Single letter variable 'a' at line 302 - use descriptive name
+   Use camelCase instead of snake_case for 'hootner_encrypted_backup' at line 323
+   Nested ternary operator - hard to read at line 91
+
+⚠️  apps\frontend\html-pages\electron-code-editor\server.js
+   Magic number 404 at line 21 - use named constant
+   Magic number 200 at line 24 - use named constant
+   Magic number 3000 at line 30 - use named constant
+
+⚠️  apps\frontend\html-pages\electron-code-editor\tests\e2e\editor.spec.js
+   Remove console.log before production at line 21
+   Remove console.log before production at line 28
+   Async function without try-catch at line 19
+   Async function without try-catch at line 26
+
+⚠️  apps\frontend\html-pages\electron-code-editor\ui-enhancements.js
+   Use !== instead of !== at line 179
+   JSON.parse without try-catch at line 24
+   Event listener without error handling at line 45
+   Event listener without error handling at line 156
+   Event listener without error handling at line 168
+   Line too long (163 chars) at line 138
+   Line too long (163 chars) at line 141
+   Magic number 272822 at line 11 - use named constant
+   Magic number 282 at line 12 - use named constant
+   Magic number 666 at line 107 - use named constant
+   Magic number 1048576 at line 129 - use named constant
+   Magic number 255 at line 138 - use named constant
+   Magic number 255 at line 138 - use named constant
+   Magic number 255 at line 138 - use named constant
+   Magic number 255 at line 141 - use named constant
+   Magic number 255 at line 141 - use named constant
+   Magic number 255 at line 141 - use named constant
+   Use camelCase instead of snake_case for 'hootner_activity_bar' at line 23
+   Use camelCase instead of snake_case for 'hootner_theme' at line 83
+
+⚠️  apps\frontend\html-pages\electron-code-editor\web-bridge.js
+   Use !== instead of !== at line 251
+   Use !== instead of !== at line 387
+   Remove console.log before production at line 366
+   JSON.parse without try-catch at line 341
+   Event listener without error handling at line 250
+   Line too long (126 chars) at line 43
+   Line too long (168 chars) at line 109
+   Line too long (164 chars) at line 128
+   Use camelCase instead of snake_case for 'api_post' at line 160
+   Single letter variable 'a' at line 217 - use descriptive name
+   Single letter variable 'a' at line 375 - use descriptive name
+
+⚠️  apps\frontend\html-pages\libs\video.min.js
+   Code comment requires attention at line 37
+   Code comment requires attention at line 41
+   Code comment requires attention at line 45
+
+⚠️  apps\frontend\html-pages\server.js
+   Remove console.log before production at line 9
+
+⚠️  apps\frontend\html-pages\video-player-server.js
+   Use !== instead of !== at line 94
+
+⚠️  apps\frontend\hub-app.js
+   Use !== instead of !== at line 61
+   Use !== instead of !== at line 345
+   Line too long (123 chars) at line 350
+   Nested ternary operator - hard to read at line 305
+   Nested ternary operator - hard to read at line 335
+
+⚠️  apps\frontend\public\script.js
+   Use !== instead of !== at line 369
+   Use !== instead of !== at line 483
+   Use !== instead of !== at line 499
+   Code comment requires attention at line 47
+   Code comment requires attention at line 136
+   Code comment requires attention at line 265
+   Code comment requires attention at line 303
+   Code comment requires attention at line 408
+   Code comment requires attention at line 494
+   Event listener without error handling at line 112
+   Event listener without error handling at line 119
+   Event listener without error handling at line 196
+   Event listener without error handling at line 395
+   Event listener without error handling at line 594
+   Event listener without error handling at line 599
+   Line too long (232 chars) at line 171
+   Line too long (121 chars) at line 254
+   Line too long (238 chars) at line 385
+   Line too long (122 chars) at line 474
+   Magic number 250 at line 171 - use named constant
+   Magic number 3600 at line 314 - use named constant
+   Magic number 250 at line 385 - use named constant
+   Single letter variable 'p' at line 192 - use descriptive name
+
+⚠️  apps\frontend\secure-server.js
+   Callback error parameter 'err' not checked at line 134
+
+⚠️  audit-node-modules.js
+   Use !== instead of !== at line 29
+   Remove console.log before production at line 53
+   Remove console.log before production at line 59
+   JSON.parse without try-catch at line 11
+   Use camelCase instead of snake_case for 'child_process' at line 6
+
+⚠️  config\app-config.js
+   Line too long (124 chars) at line 27
+   Line too long (122 chars) at line 29
+   Line too long (121 chars) at line 47
+   Line too long (123 chars) at line 55
+   Line too long (124 chars) at line 59
+   Line too long (121 chars) at line 63
+   Line too long (125 chars) at line 67
+   Line too long (128 chars) at line 75
+   Line too long (121 chars) at line 82
+   Line too long (136 chars) at line 85
+   Line too long (122 chars) at line 90
+   Line too long (130 chars) at line 92
+   Line too long (132 chars) at line 98
+   Magic number 600000 at line 91 - use named constant
+
+⚠️  constants\animation.js
+   Magic number 300 at line 7 - use named constant
+   Magic number 400 at line 8 - use named constant
+   Magic number 250 at line 9 - use named constant
+   Magic number 500 at line 10 - use named constant
+
+⚠️  constants\cache.js
+   Magic number 3600 at line 7 - use named constant
+   Magic number 86400 at line 8 - use named constant
+   Magic number 31536000 at line 9 - use named constant
+
+⚠️  constants\http-status.js
+   Magic number 200 at line 7 - use named constant
+   Magic number 206 at line 8 - use named constant
+   Magic number 400 at line 9 - use named constant
+   Magic number 401 at line 10 - use named constant
+   Magic number 403 at line 11 - use named constant
+   Magic number 404 at line 12 - use named constant
+   Magic number 415 at line 13 - use named constant
+   Magic number 416 at line 14 - use named constant
+   Magic number 429 at line 15 - use named constant
+   Magic number 500 at line 16 - use named constant
+   Magic number 503 at line 17 - use named constant
+   Magic number 504 at line 18 - use named constant
+
+⚠️  constants\limits.js
+   Magic number 255 at line 7 - use named constant
+   Magic number 65535 at line 8 - use named constant
+   Magic number 1048576 at line 9 - use named constant
+   Magic number 2048 at line 10 - use named constant
+   Magic number 10000 at line 11 - use named constant
+   Magic number 9999 at line 12 - use named constant
+   Magic number 254 at line 13 - use named constant
+   Magic number 3002 at line 14 - use named constant
+   Magic number 3010 at line 15 - use named constant
+   Magic number 3013 at line 16 - use named constant
+   Magic number 200 at line 17 - use named constant
+   Magic number 500 at line 18 - use named constant
+   Magic number 10240 at line 19 - use named constant
+   Magic number 940 at line 20 - use named constant
+
+⚠️  constants\misc.js
+   Magic number 2020 at line 7 - use named constant
+   Magic number 2020 at line 7 - use named constant
+   Magic number 2021 at line 8 - use named constant
+   Magic number 2021 at line 8 - use named constant
+   Magic number 7280 at line 9 - use named constant
+   Magic number 4444 at line 10 - use named constant
+   Magic number 274 at line 11 - use named constant
+
+⚠️  constants\timeouts.js
+   Magic number 2000 at line 8 - use named constant
+   Magic number 5000 at line 9 - use named constant
+   Magic number 10000 at line 10 - use named constant
+   Magic number 30000 at line 11 - use named constant
+   Magic number 60000 at line 12 - use named constant
+   Magic number 300000 at line 13 - use named constant
+   Magic number 3600000 at line 14 - use named constant
+   Magic number 86400000 at line 15 - use named constant
+   Magic number 31536000 at line 16 - use named constant
+   Magic number 31536000000 at line 17 - use named constant
+
+⚠️  electron\main.js
+   Use !== instead of !== at line 33
+   Async function without try-catch at line 45
+   Async function without try-catch at line 57
+   Magic number 2025 at line 2 - use named constant
+   Magic number 900 at line 14 - use named constant
+   Magic number 1000000 at line 71 - use named constant
+
+⚠️  electron\renderer.js
+   Remove console.log before production at line 24
+   Async function without try-catch at line 14
+   Event listener without error handling at line 22
+   Event listener without error handling at line 28
+   Magic number 60000 at line 19 - use named constant
+
+⚠️  lib\compliance-dashboard.js
+   Use !== instead of !== at line 65
+   Magic number 27001 at line 9 - use named constant
+
+⚠️  lib\cursor-ai-modes.js
+   Use const/let instead of var at line 82
+   Use !== instead of !== at line 106
+   Use !== instead of !== at line 122
+   Use !== instead of !== at line 130
+   Code comment requires attention at line 63
+   Variable 'extracted' is declared but never used
+   Nested ternary operator - hard to read at line 95
+
+⚠️  lib\debug-enhancer.js
+   Use !== instead of !== at line 56
+   Magic number 3600000 at line 24 - use named constant
+
+⚠️  lib\lazy-loader.js
+   Use !== instead of !== at line 44
+
+⚠️  lib\memory-profiler.js
+   Use !== instead of !== at line 59
+   Magic number 30000 at line 13 - use named constant
+
+⚠️  lib\multi-agent-orchestrator.js
+   Use !== instead of !== at line 165
+   Magic number 2025 at line 3 - use named constant
+
+⚠️  lib\realtime-collab.js
+   Use !== instead of !== at line 53
+   Use !== instead of !== at line 112
+   JSON.parse without try-catch at line 25
+   Line too long (145 chars) at line 98
+   Magic number 10000 at line 98 - use named constant
+   Magic number 3000 at line 100 - use named constant
+
+⚠️  lib\sustainability-monitor.js
+   Use !== instead of !== at line 43
+
+⚠️  lib\visual-designer.js
+   Use !== instead of !== at line 78
+   Line too long (163 chars) at line 25
+   Line too long (188 chars) at line 26
+   Line too long (194 chars) at line 27
+   Line too long (192 chars) at line 28
+   Line too long (201 chars) at line 29
+   Line too long (172 chars) at line 30
+   Magic number 9997 at line 24 - use named constant
+   Magic number 44336 at line 30 - use named constant
+   Nested ternary operator - hard to read at line 41
+
+⚠️  mcp-server.js
+   Use !== instead of !== at line 37
+   Callback error parameter 'err' not checked at line 57
+
+⚠️  middleware\access-control.js
+   Use !== instead of !== at line 107
+   Magic number 2021 at line 2 - use named constant
+   Magic number 500 at line 130 - use named constant
+
+⚠️  middleware\chaos.js
+   Variable 'chaosMiddleware' is declared but never used
+
+⚠️  middleware\csrf.js
+   Use !== instead of !== at line 65
+   Use !== instead of !== at line 65
+   Use !== instead of !== at line 68
+
+⚠️  middleware\dependency-check.js
+   JSON.parse without try-catch at line 15
+   Magic number 2021 at line 2 - use named constant
+   Magic number 274 at line 21 - use named constant
+
+⚠️  middleware\enhanced-security.js
+   Use !== instead of !== at line 88
+   Use !== instead of !== at line 158
+   Use !== instead of !== at line 158
+   Use !== instead of !== at line 161
+   Variable 'duration' is declared but never used
+
+⚠️  middleware\error-handler.js
+   Callback error parameter 'err' not checked at line 10
+   Nested ternary operator - hard to read at line 35
+
+⚠️  middleware\metrics.js
+   Variable 'metricsMiddleware' is declared but never used
+   Variable 'metricsEndpoint' is declared but never used
+   Magic number 400 at line 35 - use named constant
+
+⚠️  middleware\security-headers.js
+   Variable 'securityHeadersMiddleware' is declared but never used
+   Variable 'apiSecurityHeaders' is declared but never used
+   Magic number 2021 at line 2 - use named constant
+   Magic number 31536000 at line 22 - use named constant
+
+⚠️  middleware\security-integration.js
+   Magic number 400 at line 108 - use named constant
+
+⚠️  middleware\security.js
+   Use !== instead of !== at line 74
+   Use !== instead of !== at line 123
+   Variable 'securityHeaders' is declared but never used
+   Variable 'authRateLimiter' is declared but never used
+   Variable 'errorHandler' is declared but never used
+   Variable 'requestLogger' is declared but never used
+   Variable 'preventParameterPollution' is declared but never used
+   Variable 'validateContentType' is declared but never used
+   Variable 'sanitizeResponseHeaders' is declared but never used
+   Callback error parameter 'err' not checked at line 118
+   Callback error parameter 'err' not checked at line 134
+
+⚠️  middleware\sql-injection-prevention.js
+   Use !== instead of !== at line 27
+   Use !== instead of !== at line 51
+   Use !== instead of !== at line 86
+   Magic number 2021 at line 2 - use named constant
+
+⚠️  middleware\ssrf-protection.js
+   Use !== instead of !== at line 66
+   Magic number 254 at line 44 - use named constant
+
+⚠️  middleware\validation.js
+   Use !== instead of !== at line 48
+   Use !== instead of !== at line 67
+   Use !== instead of !== at line 76
+   Use !== instead of !== at line 90
+   Use !== instead of !== at line 90
+   Use !== instead of !== at line 96
+   Use !== instead of !== at line 127
+   Use !== instead of !== at line 127
+   Magic number 255 at line 46 - use named constant
+
+⚠️  playwright.config.js
+   Magic number 120000 at line 26 - use named constant
+   Nested ternary operator - hard to read at line 8
+
+⚠️  scripts\setup-testing.js
+   Use camelCase instead of snake_case for 'child_process' at line 2
+
+⚠️  server.js
+   Use !== instead of !== at line 280
+   Callback error parameter 'error' not checked at line 178
+   Line too long (145 chars) at line 257
+   Line too long (161 chars) at line 259
+   Magic number 250 at line 259 - use named constant
+   Magic number 200 at line 277 - use named constant
+
+⚠️  services\collab-server.js
+   Use !== instead of !== at line 84
+   JSON.parse without try-catch at line 21
+   Magic number 8080 at line 116 - use named constant
+
+⚠️  webpack.renderer.config.js
+   Magic number 244000 at line 13 - use named constant
+

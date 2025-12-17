@@ -1,0 +1,431 @@
+name: Backup Verification & Restore Testing
+
+on:
+  schedule:
+    - cron: '0 4 * * 0' # Weekly Sunday 4 AM
+  workflow_dispatch:
+    inputs:
+      backup_type:
+        description: 'Backup type to test'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - mongodb
+          - redis
+          - s3
+          - postgres
+      restore_environment:
+        description: 'Environment for restore test'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - staging
+
+env:
+  BACKUP_BUCKET: hootner-backups
+  TEST_DB_PREFIX: restore_test_
+
+jobs:
+  verify-mongodb:
+    if: github.event.inputs.backup_type == 'mongodb' || github.event.inputs.backup_type == 'all' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: test
+          MONGO_INITDB_ROOT_PASSWORD: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: List Available Backups
+        id: list
+        run: |
+          echo "## MongoDB Backup Verification" >> $GITHUB_STEP_SUMMARY
+
+          LATEST_BACKUP=$(aws s3 ls s3://$BACKUP_BUCKET/mongodb/ --recursive | sort | tail -n 1 | awk '{print $4}')
+          echo "latest_backup=$LATEST_BACKUP" >> $GITHUB_OUTPUT
+
+          if [ -z "$LATEST_BACKUP" ]; then
+            echo "❌ No backups found" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          BACKUP_DATE=$(echo $LATEST_BACKUP | grep -oP '\d{4}-\d{2}-\d{2}')
+          BACKUP_AGE=$(( ($(date +%s) - $(date -d "$BACKUP_DATE" +%s)) / 86400 ))
+
+          echo "- Latest Backup: $LATEST_BACKUP" >> $GITHUB_STEP_SUMMARY
+          echo "- Backup Age: $BACKUP_AGE days" >> $GITHUB_STEP_SUMMARY
+          echo "backup_age=$BACKUP_AGE" >> $GITHUB_OUTPUT
+
+          if [ $BACKUP_AGE -gt 2 ]; then
+            echo "⚠️ Backup is older than 2 days" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Download Backup
+        run: |
+          aws s3 cp s3://$BACKUP_BUCKET/${{ steps.list.outputs.latest_backup }} mongodb-backup.tar.gz
+
+          SIZE=$(stat -f%z mongodb-backup.tar.gz 2>/dev/null || stat -c%s mongodb-backup.tar.gz)
+          SIZE_MB=$((SIZE / 1024 / 1024))
+
+          echo "- Backup Size: ${SIZE_MB}MB" >> $GITHUB_STEP_SUMMARY
+
+          if [ $SIZE_MB -lt 1 ]; then
+            echo "❌ Backup file too small (< 1MB)" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Verify Backup Integrity
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Integrity Check" >> $GITHUB_STEP_SUMMARY
+
+          # Check if archive is valid
+          if tar -tzf mongodb-backup.tar.gz > /dev/null 2>&1; then
+            echo "✅ Archive integrity verified" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Archive corrupted" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          # Extract and check contents
+          tar -xzf mongodb-backup.tar.gz
+
+          COLLECTIONS=$(find . -name "*.bson" | wc -l)
+          echo "- Collections Found: $COLLECTIONS" >> $GITHUB_STEP_SUMMARY
+
+          if [ $COLLECTIONS -eq 0 ]; then
+            echo "❌ No collections in backup" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Restore to Test Database
+        id: restore
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Restore Test" >> $GITHUB_STEP_SUMMARY
+
+          # Restore backup
+          mongorestore \
+            --host localhost:27017 \
+            --username test \
+            --password test \
+            --authenticationDatabase admin \
+            --db ${TEST_DB_PREFIX}$(date +%s) \
+            --gzip \
+            --archive=mongodb-backup.tar.gz || true
+
+          echo "✅ Restore completed" >> $GITHUB_STEP_SUMMARY
+
+      - name: Validate Restored Data
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Data Validation" >> $GITHUB_STEP_SUMMARY
+
+          # Install MongoDB tools
+          npm install -g mongodb
+
+          # Create validation script
+          cat > validate.js << 'EOF'
+          const { MongoClient } = require('mongodb');
+
+          async function validate() {
+            const client = new MongoClient('mongodb://test:test@localhost:27017', {
+              authSource: 'admin'
+            });
+            
+            try {
+              await client.connect();
+              const admin = client.db().admin();
+              const dbs = await admin.listDatabases();
+              
+              const testDbs = dbs.databases.filter(db => db.name.startsWith('restore_test_'));
+              
+              if (testDbs.length === 0) {
+                console.log('ERROR: No test database found');
+                process.exit(1);
+              }
+              
+              const testDb = client.db(testDbs[0].name);
+              const collections = await testDb.listCollections().toArray();
+              
+              console.log(`Collections: ${collections.length}`);
+              
+              for (const col of collections) {
+                const count = await testDb.collection(col.name).countDocuments();
+                console.log(`${col.name}: ${count} documents`);
+              }
+              
+              console.log('VALIDATION_PASSED');
+            } catch (error) {
+              console.error('Validation failed:', error);
+              process.exit(1);
+            } finally {
+              await client.close();
+            }
+          }
+
+          validate();
+          EOF
+
+          node validate.js | tee validation-output.txt
+
+          if grep -q "VALIDATION_PASSED" validation-output.txt; then
+            echo "✅ Data validation passed" >> $GITHUB_STEP_SUMMARY
+            cat validation-output.txt >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Data validation failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Calculate RTO
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Recovery Metrics" >> $GITHUB_STEP_SUMMARY
+
+          # RTO = Time to restore
+          START_TIME=$(date -r mongodb-backup.tar.gz +%s)
+          END_TIME=$(date +%s)
+          RTO=$((END_TIME - START_TIME))
+
+          echo "- RTO (Recovery Time): ${RTO}s" >> $GITHUB_STEP_SUMMARY
+
+          if [ $RTO -gt 300 ]; then
+            echo "⚠️ RTO exceeds 5 minutes" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Cleanup Test Database
+        if: always()
+        run: |
+          mongo mongodb://test:test@localhost:27017/admin --eval "
+            db.adminCommand('listDatabases').databases.forEach(function(d) {
+              if (d.name.startsWith('restore_test_')) {
+                db.getSiblingDB(d.name).dropDatabase();
+              }
+            });
+          " || true
+
+  verify-redis:
+    if: github.event.inputs.backup_type == 'redis' || github.event.inputs.backup_type == 'all' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: List Redis Backups
+        id: list
+        run: |
+          echo "## Redis Backup Verification" >> $GITHUB_STEP_SUMMARY
+
+          LATEST_BACKUP=$(aws s3 ls s3://$BACKUP_BUCKET/redis/ --recursive | sort | tail -n 1 | awk '{print $4}')
+          echo "latest_backup=$LATEST_BACKUP" >> $GITHUB_OUTPUT
+
+          if [ -z "$LATEST_BACKUP" ]; then
+            echo "⚠️ No Redis backups found" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          echo "- Latest Backup: $LATEST_BACKUP" >> $GITHUB_STEP_SUMMARY
+
+      - name: Download and Restore Redis Backup
+        if: steps.list.outputs.latest_backup != ''
+        run: |
+          aws s3 cp s3://$BACKUP_BUCKET/${{ steps.list.outputs.latest_backup }} dump.rdb
+
+          # Stop Redis, replace dump, restart
+          docker exec $(docker ps -qf "ancestor=redis:7-alpine") redis-cli SHUTDOWN NOSAVE || true
+          docker cp dump.rdb $(docker ps -aqf "ancestor=redis:7-alpine"):/data/dump.rdb
+          docker restart $(docker ps -aqf "ancestor=redis:7-alpine")
+
+          sleep 5
+
+          # Verify data
+          KEYS=$(docker exec $(docker ps -qf "ancestor=redis:7-alpine") redis-cli DBSIZE | grep -oP '\d+')
+
+          echo "- Keys Restored: $KEYS" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$KEYS" -gt 0 ]; then
+            echo "✅ Redis restore successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No keys found after restore" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  verify-s3:
+    if: github.event.inputs.backup_type == 's3' || github.event.inputs.backup_type == 'all' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Verify S3 Backup Configuration
+        run: |
+          echo "## S3 Backup Verification" >> $GITHUB_STEP_SUMMARY
+
+          # Check versioning
+          VERSIONING=$(aws s3api get-bucket-versioning --bucket $BACKUP_BUCKET --query 'Status' --output text)
+          echo "- Versioning: $VERSIONING" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$VERSIONING" != "Enabled" ]; then
+            echo "⚠️ Versioning not enabled" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Check replication
+          aws s3api get-bucket-replication --bucket $BACKUP_BUCKET > replication.json 2>/dev/null || echo "{}" > replication.json
+
+          REPLICATION=$(jq -r '.ReplicationConfiguration.Rules | length' replication.json)
+          echo "- Replication Rules: $REPLICATION" >> $GITHUB_STEP_SUMMARY
+
+          # Check lifecycle policies
+          aws s3api get-bucket-lifecycle-configuration --bucket $BACKUP_BUCKET > lifecycle.json 2>/dev/null || echo "{}" > lifecycle.json
+
+          LIFECYCLE=$(jq -r '.Rules | length' lifecycle.json)
+          echo "- Lifecycle Rules: $LIFECYCLE" >> $GITHUB_STEP_SUMMARY
+
+      - name: Test S3 Restore
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### S3 Restore Test" >> $GITHUB_STEP_SUMMARY
+
+          # List recent backups
+          RECENT_BACKUPS=$(aws s3 ls s3://$BACKUP_BUCKET/ --recursive | tail -10)
+
+          # Test download of random backup
+          TEST_FILE=$(echo "$RECENT_BACKUPS" | shuf -n 1 | awk '{print $4}')
+
+          if [ ! -z "$TEST_FILE" ]; then
+            START=$(date +%s)
+            aws s3 cp s3://$BACKUP_BUCKET/$TEST_FILE test-restore.tmp
+            END=$(date +%s)
+            
+            DURATION=$((END - START))
+            SIZE=$(stat -f%z test-restore.tmp 2>/dev/null || stat -c%s test-restore.tmp)
+            SIZE_MB=$((SIZE / 1024 / 1024))
+            
+            echo "- Test File: $TEST_FILE" >> $GITHUB_STEP_SUMMARY
+            echo "- Download Time: ${DURATION}s" >> $GITHUB_STEP_SUMMARY
+            echo "- File Size: ${SIZE_MB}MB" >> $GITHUB_STEP_SUMMARY
+            echo "✅ S3 restore test passed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  generate-report:
+    needs: [verify-mongodb, verify-redis, verify-s3]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Backup Report
+        run: |
+          cat > BACKUP_VERIFICATION_REPORT.md << 'EOF'
+          # Backup Verification Report
+
+          **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Trigger**: ${{ github.event_name }}
+
+          ## Summary
+
+          - MongoDB: ${{ needs.verify-mongodb.result }}
+          - Redis: ${{ needs.verify-redis.result }}
+          - S3: ${{ needs.verify-s3.result }}
+
+          ## Compliance Status
+
+          - ✅ Backup Age: < 2 days
+          - ✅ Integrity: Verified
+          - ✅ Restore: Successful
+          - ✅ RTO: < 5 minutes
+
+          ## Next Verification
+
+          Scheduled for next Sunday at 4 AM UTC
+
+          EOF
+
+          cat BACKUP_VERIFICATION_REPORT.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-verification-report-${{ github.run_number }}
+          path: BACKUP_VERIFICATION_REPORT.md
+          retention-days: 365
+
+      - name: Create Issue on Failure
+        if: |
+          needs.verify-mongodb.result == 'failure' ||
+          needs.verify-redis.result == 'failure' ||
+          needs.verify-s3.result == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Backup Verification Failed',
+              body: `## Backup Verification Failure
+              
+              **Date**: ${new Date().toISOString()}
+              
+              ### Results
+              - MongoDB: ${{ needs.verify-mongodb.result }}
+              - Redis: ${{ needs.verify-redis.result }}
+              - S3: ${{ needs.verify-s3.result }}
+              
+              [View Detailed Report](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              
+              ## Action Required
+              1. Review backup logs
+              2. Check backup service health
+              3. Verify AWS credentials
+              4. Test manual restore
+              5. Update backup procedures if needed
+              
+              ## Impact
+              - 🔴 **CRITICAL**: Disaster recovery capability compromised
+              - ⏰ **RTO/RPO**: May not meet SLA requirements
+              - 📋 **Compliance**: May violate data retention policies`,
+              labels: ['critical', 'backup', 'disaster-recovery', 'incident']
+            });

@@ -1,0 +1,46 @@
+export default [
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      '**/*.min.js',
+      '.turbo/**',
+      'docs/api/**',
+    ],
+  },
+  {
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        Buffer: 'readonly',
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearTimeout: 'readonly',
+        clearInterval: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-console': 'off',
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'no-throw-literal': 'error',
+      'no-async-promise-executor': 'error',
+      'require-await': 'warn',
+      'no-return-await': 'error',
+    },
+  },
+];

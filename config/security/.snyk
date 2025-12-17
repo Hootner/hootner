@@ -1,0 +1,18 @@
+# Snyk (https://snyk.io) policy file
+version: v1.0.0
+ignore: {}
+patch: {}
+
+# Security thresholds
+language-settings:
+  javascript:
+    severity-threshold: medium
+  
+# Exclude test files from security scanning
+exclude:
+  global:
+    - "**/*.test.ts"
+    - "**/*.test.tsx"
+    - "**/*.spec.ts"
+    - "**/*.spec.tsx"
+    - "**/node_modules/**"

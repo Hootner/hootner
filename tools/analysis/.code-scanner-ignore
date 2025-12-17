@@ -1,0 +1,29 @@
+# Code Scanner Ignore Rules
+# Lines starting with # are comments
+
+# Minified files - skip all checks
+**/*.min.js
+
+# Middleware exports are intentional library functions
+middleware/access-control.js:unused-vars
+middleware/auth.js:unused-vars
+middleware/chaos.js:unused-vars
+middleware/correlation-id.js:unused-vars
+middleware/csp.js:unused-vars
+middleware/dependency-check.js:unused-vars
+middleware/enhanced-security.js:unused-vars
+middleware/metrics.js:unused-vars
+middleware/performance.js:unused-vars
+middleware/rate-limiter.js:unused-vars
+middleware/security-headers.js:unused-vars
+middleware/security.js:unused-vars
+middleware/session.js:unused-vars
+middleware/sql-injection-prevention.js:unused-vars
+middleware/timeout.js:unused-vars
+middleware/validation.js:unused-vars
+
+# Catch blocks that appropriately log errors
+*:catch-only-logs
+
+# Event listeners in UI code are appropriately handled
+apps/frontend/**:event-listener-no-error

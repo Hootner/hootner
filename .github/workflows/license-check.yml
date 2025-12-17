@@ -1,0 +1,252 @@
+name: License Compliance
+
+on:
+  pull_request:
+    paths:
+      - 'package*.json'
+      - 'apps/**/package*.json'
+      - 'api/**/package*.json'
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly Sunday midnight
+  workflow_dispatch:
+
+env:
+  ALLOWED_LICENSES: 'MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;CC0-1.0;Unlicense;Python-2.0'
+  FORBIDDEN_LICENSES: 'GPL;AGPL;LGPL;SSPL;CC-BY-NC'
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install License Checker
+        run: npm install -g license-checker
+
+      - name: Check Production Licenses
+        id: prod-check
+        continue-on-error: true
+        run: |
+          echo "## Production Dependencies" >> $GITHUB_STEP_SUMMARY
+
+          license-checker --production \
+            --json \
+            --out prod-licenses.json
+
+          license-checker --production \
+            --onlyAllow "$ALLOWED_LICENSES" \
+            --summary > prod-summary.txt 2>&1 || true
+
+          if grep -q "└─" prod-summary.txt; then
+            echo "✅ All production licenses compliant" >> $GITHUB_STEP_SUMMARY
+            echo "compliant=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Non-compliant licenses found" >> $GITHUB_STEP_SUMMARY
+            cat prod-summary.txt >> $GITHUB_STEP_SUMMARY
+            echo "compliant=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check All Dependencies
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## All Dependencies (including dev)" >> $GITHUB_STEP_SUMMARY
+
+          license-checker --json --out all-licenses.json
+
+          # Count by license type
+          jq -r 'to_entries[] | .value.licenses' all-licenses.json | sort | uniq -c | sort -rn > license-counts.txt
+
+          echo "### License Distribution:" >> $GITHUB_STEP_SUMMARY
+          cat license-counts.txt >> $GITHUB_STEP_SUMMARY
+
+      - name: Check Forbidden Licenses
+        id: forbidden
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Forbidden License Check" >> $GITHUB_STEP_SUMMARY
+
+          FORBIDDEN_FOUND=0
+          IFS=';' read -ra LICENSES <<< "$FORBIDDEN_LICENSES"
+
+          for license in "${LICENSES[@]}"; do
+            MATCHES=$(jq -r "to_entries[] | select(.value.licenses | contains(\"$license\")) | .key" all-licenses.json)
+            if [ ! -z "$MATCHES" ]; then
+              echo "❌ Found $license licensed packages:" >> $GITHUB_STEP_SUMMARY
+              echo "$MATCHES" | while read pkg; do
+                echo "  - $pkg" >> $GITHUB_STEP_SUMMARY
+              done
+              FORBIDDEN_FOUND=$((FORBIDDEN_FOUND + 1))
+            fi
+          done
+
+          if [ $FORBIDDEN_FOUND -eq 0 ]; then
+            echo "✅ No forbidden licenses found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "forbidden_count=$FORBIDDEN_FOUND" >> $GITHUB_OUTPUT
+
+      - name: Check Missing Licenses
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Missing License Information" >> $GITHUB_STEP_SUMMARY
+
+          MISSING=$(jq -r 'to_entries[] | select(.value.licenses == "UNKNOWN" or .value.licenses == null) | .key' all-licenses.json)
+
+          if [ ! -z "$MISSING" ]; then
+            echo "⚠️ Packages with missing license info:" >> $GITHUB_STEP_SUMMARY
+            echo "$MISSING" | while read pkg; do
+              echo "  - $pkg" >> $GITHUB_STEP_SUMMARY
+            done
+          else
+            echo "✅ All packages have license information" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check Frontend Licenses
+        if: hashFiles('apps/frontend/package.json') != ''
+        run: |
+          cd apps/frontend
+          npm ci
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Frontend Dependencies" >> $GITHUB_STEP_SUMMARY
+
+          license-checker --production \
+            --onlyAllow "$ALLOWED_LICENSES" \
+            --summary >> $GITHUB_STEP_SUMMARY 2>&1 || echo "⚠️ Some non-compliant licenses" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check GraphQL API Licenses
+        if: hashFiles('api/graphql/package.json') != ''
+        run: |
+          cd api/graphql
+          npm ci
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## GraphQL API Dependencies" >> $GITHUB_STEP_SUMMARY
+
+          license-checker --production \
+            --onlyAllow "$ALLOWED_LICENSES" \
+            --summary >> $GITHUB_STEP_SUMMARY 2>&1 || echo "⚠️ Some non-compliant licenses" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate License Report
+        run: |
+          cat > LICENSE_REPORT.md << 'EOF'
+          # License Compliance Report
+
+          Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Summary
+
+          - Total Dependencies: $(jq 'length' all-licenses.json)
+          - Production Dependencies: $(jq 'length' prod-licenses.json)
+          - Forbidden Licenses Found: ${{ steps.forbidden.outputs.forbidden_count }}
+          - Production Compliant: ${{ steps.prod-check.outputs.compliant }}
+
+          ## Allowed Licenses
+
+          $ALLOWED_LICENSES
+
+          ## Forbidden Licenses
+
+          $FORBIDDEN_LICENSES
+
+          ## Full License List
+
+          EOF
+
+          jq -r 'to_entries[] | "- \(.key): \(.value.licenses) (\(.value.repository // "N/A"))"' all-licenses.json >> LICENSE_REPORT.md
+
+      - name: Upload License Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-reports-${{ github.run_number }}
+          path: |
+            prod-licenses.json
+            all-licenses.json
+            LICENSE_REPORT.md
+          retention-days: 90
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('prod-summary.txt', 'utf8');
+            const compliant = '${{ steps.prod-check.outputs.compliant }}' === 'true';
+            const forbidden = parseInt('${{ steps.forbidden.outputs.forbidden_count }}');
+
+            const body = `## 📜 License Compliance Check
+
+            ${compliant && forbidden === 0 ? '✅' : '❌'} **Status**: ${compliant && forbidden === 0 ? 'PASSED' : 'FAILED'}
+
+            - Production Dependencies: ${compliant ? '✅ Compliant' : '❌ Non-compliant'}
+            - Forbidden Licenses: ${forbidden === 0 ? '✅ None found' : `❌ ${forbidden} found`}
+
+            <details>
+            <summary>View Details</summary>
+
+            \`\`\`
+            ${summary}
+            \`\`\`
+
+            </details>
+
+            [View Full Report](${context.payload.repository.html_url}/actions/runs/${context.runId})`;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+
+      - name: Create Issue on Failure
+        if: |
+          steps.prod-check.outputs.compliant == 'false' ||
+          steps.forbidden.outputs.forbidden_count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '📜 License Compliance Violation Detected',
+              body: `## License Compliance Issue
+              
+              - Production Compliant: ${{ steps.prod-check.outputs.compliant }}
+              - Forbidden Licenses Found: ${{ steps.forbidden.outputs.forbidden_count }}
+              
+              [View Detailed Report](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              
+              ## Action Required
+              
+              1. Review non-compliant dependencies
+              2. Replace or remove forbidden licenses
+              3. Update to compatible alternatives
+              4. Consult legal team if needed`,
+              labels: ['legal', 'compliance', 'license']
+            });
+
+      - name: Fail on Non-Compliance
+        if: |
+          steps.prod-check.outputs.compliant == 'false' ||
+          steps.forbidden.outputs.forbidden_count > 0
+        run: |
+          echo "::error::License compliance check failed"
+          exit 1

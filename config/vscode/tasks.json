@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Turbo: Build All",
+      "type": "shell",
+      "command": "turbo run build",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Turbo: Dev",
+      "type": "shell",
+      "command": "turbo run dev --parallel",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Turbo: Lint",
+      "type": "shell",
+      "command": "turbo run lint",
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Turbo: Test",
+      "type": "shell",
+      "command": "turbo run test",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Build All",
+      "type": "shell",
+      "command": "docker-compose build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Up",
+      "type": "shell",
+      "command": "docker-compose up -d",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Down",
+      "type": "shell",
+      "command": "docker-compose down",
+      "problemMatcher": []
+    },
+    {
+      "label": "Prisma: Migrate Dev",
+      "type": "shell",
+      "command": "npm run migrate:dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "Security Audit",
+      "type": "shell",
+      "command": "npm audit --audit-level=moderate",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: Apply All",
+      "type": "shell",
+      "command": "kubectl apply -f k8s/",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: Get Pods",
+      "type": "shell",
+      "command": "kubectl get pods -n hootner",
+      "problemMatcher": []
+    },
+    {
+      "label": "Chaos Test",
+      "type": "shell",
+      "command": "npm run chaos:test",
+      "problemMatcher": []
+    }
+  ]
+}

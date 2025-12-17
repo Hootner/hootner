@@ -1,0 +1,3660 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; media-src 'self' https:; connect-src 'self' https:; worker-src 'self' blob:;"
+    />
+    <title>HOOTNER • The Owl Never Sleeps</title>
+    <link rel="stylesheet" href="shared-styles.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link href="./libs/video-js.css" rel="stylesheet" />
+    <script src="./libs/video.min.js" crossorigin="anonymous"></script>
+    <script src="./libs/peerjs.min.js" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
+        color: #00ff00;
+        font-size: 1rem;
+      }
+
+      /* Buttons below video player */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 24px;
+        flex-wrap: wrap;
+      }
+
+      .top-btn {
+        padding: 2px 4px;
+        background: transparent;
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        color: #00ff00;
+        font-weight: bold;
+        font-size: 0.5rem;
+        cursor: pointer;
+        border-radius: 9999px;
+        transition: all 0.3s;
+      }
+
+      .top-btn:hover {
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff;
+      }
+
+      .top-btn:active {
+        background: linear-gradient(135deg, #ff00ff, #ffff00);
+        color: #fff;
+        transform: scale(0.95);
+      }
+
+      .top-btn:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      .app {
+        display: flex;
+        min-height: 100vh;
+        padding-top: 60px;
+      }
+
+      /* Jukebox Sidebar (less than half screen) */
+      .library {
+        width: 24vw;
+        background: linear-gradient(
+          180deg,
+          rgba(10, 10, 15, 0.8),
+          rgba(5, 5, 10, 0.95)
+        );
+        backdrop-filter: blur(32px);
+        border-right: 1px solid #00ff00;
+        padding: 24px;
+        overflow-y: auto;
+      }
+
+      .library-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+
+      .library-title {
+        font-size: 0.5rem;
+        font-weight: 900;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 2px 4px;
+        background: rgba(10, 10, 15, 0.8);
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        color: #00ff00;
+        margin-bottom: 24px;
+        border-radius: 16px;
+        font-size: 0.5rem;
+      }
+
+      .search-input:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+        border-color: #00ff00;
+      }
+
+      /* Jukebox Carousel */
+      .jukebox-container {
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 48px 0;
+      }
+
+      .jukebox-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #00ff00;
+        margin-bottom: 48px;
+      }
+
+      .carousel-container {
+        position: relative;
+        width: 320px;
+        height: 600px;
+        overflow: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        border: 3px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 16px;
+        box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+      }
+
+      .carousel-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .carousel {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        transition: transform 0.5s cubic-bezier(0.22, 0.85, 0.32, 1);
+      }
+
+      .video-card {
+        position: relative;
+        width: 256px;
+        cursor: pointer;
+        transition: all 0.5s ease;
+      }
+
+      .video-card.active {
+        transform: scale(1.1);
+        z-index: 20;
+        filter: drop-shadow(0 20px 40px #00ff00);
+      }
+
+      .video-card:not(.active) {
+        transform: scale(0.9);
+        opacity: 0.6;
+        z-index: 10;
+      }
+
+      .video-card:not(.active):hover {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+
+      .card-image {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        background: rgba(10, 10, 15, 0.8);
+        backdrop-filter: blur(20px);
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+      }
+
+      .card-image img {
+        width: 100%;
+        height: 384px;
+        object-fit: cover;
+      }
+
+      .video-card.active .card-image {
+        border: 3px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+        animation: pulse 2s infinite;
+      }
+
+      .video-card.active .card-image::before,
+      .video-card:hover .card-image::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(0, 255, 0, 0.6));
+        border-radius: 24px;
+      }
+
+      /* Owl Eyes Easter Egg */
+      .video-card:hover .card-image::after {
+        content: '';
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 32px;
+        height: 32px;
+        background: radial-gradient(circle, #ffff00 30%, transparent 70%);
+        border-radius: 50%;
+        box-shadow:
+          0 0 20px #ffff00,
+          -64px 0 0 0 #ffff00,
+          -64px 0 20px #ffff00;
+        animation: blink 2s infinite;
+      }
+
+      /* Vinyl Record Spin */
+      .video-card.active .card-image::before {
+        content: '';
+        position: absolute;
+        inset: 20%;
+        background: radial-gradient(
+          circle,
+          transparent 40%,
+          white 42%,
+          white 45%,
+          transparent 46%
+        );
+        border-radius: 50%;
+        animation: spin 8s linear infinite;
+        z-index: 30;
+        pointer-events: none;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes blink {
+        0%,
+        90%,
+        100% {
+          opacity: 0.9;
+        }
+        95% {
+          opacity: 0.2;
+        }
+      }
+      .notif-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .notif-item:hover {
+        background: rgba(0, 255, 0, 0.05);
+      }
+      .notif-item.unread {
+        background: rgba(0, 255, 255, 0.05);
+        border-left: 3px solid #00ffff;
+      }
+      #notif-dropdown::-webkit-scrollbar {
+        width: 6px;
+      }
+      #notif-dropdown::-webkit-scrollbar-track {
+        background: rgba(0, 255, 0, 0.1);
+      }
+      #notif-dropdown::-webkit-scrollbar-thumb {
+        background: rgba(0, 255, 0, 0.5);
+        border-radius: 3px;
+      }
+
+      .card-info {
+        margin-top: 16px;
+        text-align: center;
+      }
+
+      .card-title {
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 6px;
+        color: #00ff00;
+      }
+
+      .card-duration {
+        font-size: 1rem;
+        opacity: 0.7;
+        color: #00ff00;
+      }
+
+      .offline-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid #00ff00;
+        border-radius: 50%;
+        color: #00ff00;
+        font-size: 4px;
+        cursor: pointer;
+        z-index: 40;
+        transition: all 0.3s;
+      }
+
+      .offline-btn:hover {
+        background: #00ff00;
+        color: #000;
+        transform: scale(1.1);
+      }
+
+      .offline-btn.cached {
+        background: #00ff00;
+        color: #000;
+      }
+
+      .scroll-controls {
+        margin-top: 32px;
+        display: flex;
+        gap: 16px;
+      }
+
+      .scroll-btn {
+        padding: 3px;
+        background: rgba(10, 10, 15, 0.9);
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.5rem;
+      }
+
+      .scroll-btn:hover {
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff;
+      }
+
+      .scroll-btn:active {
+        background: linear-gradient(135deg, #ff00ff, #ffff00);
+        color: #fff;
+        transform: scale(0.9);
+      }
+
+      .scroll-btn:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      /* Player Area */
+      .player-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+
+      .video-player {
+        position: relative;
+        width: 100%;
+        max-width: 1400px;
+        aspect-ratio: 16/9;
+        background: #000;
+        border-radius: 32px;
+        overflow: hidden;
+        border: 4px solid transparent;
+        background-image:
+          linear-gradient(#000, #000),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        box-shadow:
+          0 0 60px rgba(0, 255, 0, 0.5),
+          0 0 100px rgba(0, 255, 255, 0.3);
+      }
+
+      .video-player iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      video,
+      .video-js {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .vjs-tech {
+        object-fit: contain;
+      }
+      .video-js .vjs-control-bar {
+        display: none !important;
+      }
+
+      .play-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        opacity: 1;
+        transition: opacity 0.4s;
+        cursor: pointer;
+      }
+
+      .play-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .play-icon {
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, #00ff00, #ffff00);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 8px;
+        box-shadow: 0 0 60px #00ff00;
+        animation: pulse 2s infinite;
+        color: #301934;
+      }
+
+      .controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        padding: 30px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .video-player:hover .controls {
+        opacity: 1;
+      }
+
+      .progress-container {
+        height: 8px;
+        background: rgba(0, 255, 0, 0.2);
+        border-radius: 4px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: #00ff00;
+        width: 0%;
+        border-radius: 4px;
+      }
+
+      .control-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .btn {
+        width: 24px;
+        height: 24px;
+        background: rgba(10, 10, 15, 0.9);
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        padding: 4px;
+      }
+
+      .btn:hover {
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff;
+        transform: scale(1.1);
+      }
+
+      .btn:active {
+        background: linear-gradient(135deg, #ff00ff, #ffff00);
+        color: #fff;
+        transform: scale(0.9);
+      }
+
+      .btn:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      .play-btn {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff;
+        font-size: 14px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        padding: 6px;
+      }
+
+      .play-btn:hover {
+        transform: scale(1.1);
+      }
+
+      .play-btn:active {
+        background: linear-gradient(135deg, #ff00ff, #ffff00);
+        transform: scale(0.85);
+      }
+
+      .play-btn:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      .time-display {
+        min-width: 140px;
+        font-variant-numeric: tabular-nums; /* cspell:disable-line */
+        color: #00ff00;
+        font-size: 1rem;
+      }
+
+      /* Next Up Section */
+      .next-up {
+        margin-top: 32px;
+        max-width: 1400px;
+        width: 100%;
+      }
+
+      .next-up h2 {
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin-bottom: 16px;
+        color: #00ff00;
+      }
+
+      .next-up-grid {
+        display: flex;
+        gap: 24px;
+        overflow-x: auto;
+        padding-bottom: 16px;
+      }
+
+      .next-up-card {
+        flex-shrink: 0;
+        width: 256px;
+        background: rgba(10, 10, 15, 0.8);
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+        background-image:
+          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+      }
+
+      .next-up-card:hover {
+        transform: scale(1.05);
+      }
+
+      .next-up-card .thumbnail {
+        background: linear-gradient(135deg, #00ff00, #ffff00);
+        height: 144px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        overflow: hidden;
+      }
+
+      /* Visualizer Canvas */
+      #visualizer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .next-up-card .info {
+        padding: 16px;
+      }
+
+      .next-up-card .title {
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: #00ff00;
+        font-size: 1rem;
+      }
+
+      .next-up-card .meta {
+        font-size: 0.875rem;
+        opacity: 0.7;
+        color: #00ff00;
+      }
+
+      /* Focus indicators for all interactive elements */
+      input[type='range']:focus,
+      select:focus,
+      input[type='file']:focus,
+      button:focus,
+      a:focus,
+      [onclick]:focus,
+      [tabindex]:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      .video-card:focus {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+        border-radius: 24px;
+      }
+
+      /* Focus Indicators */
+      *:focus-visible {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+      }
+
+      button:focus-visible,
+      .btn:focus-visible,
+      .top-btn:focus-visible,
+      .scroll-btn:focus-visible {
+        outline: 3px solid #00ffff;
+        outline-offset: 3px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+      }
+
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #00ffff;
+        outline-offset: 2px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+      }
+
+      .video-card:focus-visible {
+        outline: 4px solid #00ffff;
+        outline-offset: 4px;
+        transform: scale(1.05);
+      }
+
+      /* Card animations */
+      @keyframes cardFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes cardFadeOut {
+        from {
+          opacity: 1;
+          transform: scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      /* Tabs */
+      .library-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .tab-btn {
+        padding: 2px 4px;
+        background: transparent;
+        border: 1px solid #00ff00;
+        border-radius: 9999px;
+        color: #00ff00;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.5rem;
+      }
+      .tab-btn.active {
+        background: linear-gradient(135deg, #00ff00, #00ffff);
+        color: #000;
+      }
+      .tab-btn:hover {
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff;
+      }
+
+      /* Tooltips */
+      .top-btn,
+      .scroll-btn,
+      .tab-btn {
+        position: relative;
+      }
+      .top-btn::after,
+      .scroll-btn::after,
+      .tab-btn::after {
+        content: attr(aria-label);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        font-size: 0.75rem;
+      }
+      .top-btn:hover::after,
+      .scroll-btn:hover::after,
+      .tab-btn:hover::after {
+        opacity: 1;
+      }
+
+      /* Loading and Empty States */
+      #loadingSpinner {
+        color: #00ff00;
+        animation: pulse 1.5s infinite;
+      }
+      #emptyState {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+
+      /* Responsiveness */
+      @media (max-width: 768px) {
+        .library-tabs {
+          flex-wrap: wrap;
+        }
+        .tab-btn {
+          flex: 1 0 auto;
+        }
+        body {
+          font-size: 0.875rem;
+        }
+        .library {
+          width: 100%;
+        }
+      }
+
+      .card-enter {
+        animation: cardFadeIn 0.3s ease-out forwards;
+      }
+
+      .card-exit {
+        animation: cardFadeOut 0.2s ease-in forwards;
+      }
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10001;
+        animation: fadeIn 0.2s;
+      }
+      .modal {
+        background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+        border: 3px solid;
+        border-image: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff) 1;
+        border-radius: 24px;
+        padding: 32px;
+        min-width: 400px;
+        max-width: 500px;
+        box-shadow: 0 0 60px rgba(0, 255, 0, 0.5);
+        animation: slideUp 0.3s;
+      }
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #00ff00;
+        margin-bottom: 16px;
+      }
+      .modal-message {
+        font-size: 1.125rem;
+        color: #00ffff;
+        margin-bottom: 24px;
+        line-height: 1.5;
+      }
+      .modal-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px solid #00ff00;
+        border-radius: 12px;
+        color: #00ff00;
+        font-size: 1rem;
+        margin-bottom: 24px;
+      }
+      .modal-input:focus {
+        outline: none;
+        border-color: #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+      }
+      .modal-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+      .modal-btn {
+        padding: 12px 24px;
+        border: 2px solid #00ff00;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .modal-btn-primary {
+        background: linear-gradient(135deg, #00ff00, #00ffff);
+        color: #000;
+      }
+      .modal-btn-primary:hover {
+        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        transform: scale(1.05);
+      }
+      .modal-btn-secondary {
+        background: transparent;
+        color: #00ff00;
+      }
+      .modal-btn-secondary:hover {
+        background: rgba(0, 255, 0, 0.1);
+        transform: scale(1.05);
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    </style>
+
+    <style>
+      /* Content size fixes */
+      body {
+        padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important;
+      }
+      nav {
+        height: 70px !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+      }
+      .main-content {
+        margin-top: 0 !important;
+        padding: 20px !important;
+      }
+    </style>
+
+    <style>
+      html {
+        font-size: 12px !important;
+      }
+      body {
+        zoom: 0.75 !important;
+        transform: scale(0.75) !important;
+        transform-origin: 0 0 !important;
+        width: 133% !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+      <div
+        style="
+          padding: 12px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div style="display: flex; align-items: center; gap: 24px">
+          <a
+            href="index.html"
+            class="nav-logo"
+            style="
+              font-weight: bold;
+              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              text-decoration: none;
+            "
+            >🦉 HOOTNER</a
+          >
+          <div style="position: relative">
+            <button
+              onclick="toggleNotifications()"
+              style="
+                background: none;
+                border: none;
+                color: #00ffff;
+                cursor: pointer;
+                font-size: 12px;
+                padding: 4px 8px;
+                position: relative;
+              "
+              title="Notifications"
+            >
+              🔔
+              <span
+                id="notif-badge"
+                style="
+                  position: absolute;
+                  top: 2px;
+                  right: 2px;
+                  background: #ef4444;
+                  color: white;
+                  border-radius: 50%;
+                  width: 14px;
+                  height: 14px;
+                  font-size: 9px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                "
+                >3</span
+              >
+            </button>
+            <div
+              id="notif-dropdown"
+              style="
+                display: none;
+                position: fixed;
+                top: 60px;
+                right: 20px;
+                width: 400px;
+                max-width: calc(100vw - 40px);
+                max-height: calc(100vh - 80px);
+                background: rgba(10, 10, 15, 0.98);
+                border: 2px solid rgba(0, 255, 0, 0.3);
+                border-radius: 8px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                flex-direction: column;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  padding: 12px 16px;
+                  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+                  flex-shrink: 0;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <h3
+                    style="
+                      color: #00ff00;
+                      font-size: 16px;
+                      font-weight: bold;
+                      margin: 0;
+                    "
+                  >
+                    Notifications
+                  </h3>
+                  <div style="display: flex; gap: 8px; align-items: center">
+                    <button
+                      onclick="toggleNotifSound()"
+                      id="sound-btn"
+                      style="
+                        background: none;
+                        border: none;
+                        color: #00ffff;
+                        cursor: pointer;
+                        font-size: 16px;
+                      "
+                      title="Toggle sound"
+                    >
+                      🔔
+                    </button>
+                    <button
+                      onclick="clearAllNotifications()"
+                      style="
+                        background: none;
+                        border: none;
+                        color: #ef4444;
+                        cursor: pointer;
+                        font-size: 16px;
+                      "
+                      title="Clear all"
+                    >
+                      🗑️
+                    </button>
+                    <button
+                      onclick="markAllRead()"
+                      style="
+                        background: none;
+                        border: none;
+                        color: #00ffff;
+                        cursor: pointer;
+                        font-size: 12px;
+                      "
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  id="notif-search"
+                  oninput="filterNotifications()"
+                  placeholder="🔍 Search notifications..."
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    background: rgba(0, 0, 0, 0.3);
+                    border: 1px solid rgba(0, 255, 0, 0.3);
+                    border-radius: 4px;
+                    color: #00ff00;
+                    font-size: 13px;
+                    margin-bottom: 8px;
+                  "
+                />
+                <div style="display: flex; gap: 4px; flex-wrap: wrap">
+                  <button
+                    class="notif-filter active"
+                    data-filter="all"
+                    onclick="setNotifFilter('all')"
+                    style="
+                      padding: 4px 12px;
+                      background: rgba(0, 255, 255, 0.2);
+                      border: 1px solid rgba(0, 255, 255, 0.3);
+                      border-radius: 12px;
+                      color: #00ffff;
+                      font-size: 11px;
+                      cursor: pointer;
+                    "
+                  >
+                    All
+                  </button>
+                  <button
+                    class="notif-filter"
+                    data-filter="like"
+                    onclick="setNotifFilter('like')"
+                    style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    "
+                  >
+                    ❤️ Likes
+                  </button>
+                  <button
+                    class="notif-filter"
+                    data-filter="comment"
+                    onclick="setNotifFilter('comment')"
+                    style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    "
+                  >
+                    💬 Comments
+                  </button>
+                  <button
+                    class="notif-filter"
+                    data-filter="follow"
+                    onclick="setNotifFilter('follow')"
+                    style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    "
+                  >
+                    👤 Follows
+                  </button>
+                  <button
+                    class="notif-filter"
+                    data-filter="system"
+                    onclick="setNotifFilter('system')"
+                    style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    "
+                  >
+                    ⚠️ System
+                  </button>
+                </div>
+              </div>
+              <div
+                id="notif-list"
+                style="
+                  flex: 1;
+                  overflow-y: auto;
+                  min-height: 200px;
+                  max-height: calc(100vh - 280px);
+                "
+              ></div>
+              <div
+                style="
+                  padding: 12px;
+                  text-align: center;
+                  border-top: 1px solid rgba(0, 255, 0, 0.2);
+                  display: flex;
+                  gap: 8px;
+                  justify-content: center;
+                "
+              >
+                <button
+                  onclick="loadMoreNotifications()"
+                  style="
+                    background: none;
+                    border: none;
+                    color: #00ffff;
+                    font-size: 13px;
+                    cursor: pointer;
+                    text-decoration: underline;
+                  "
+                >
+                  Load more
+                </button>
+                <span style="color: #6b7280">•</span>
+                <a
+                  href="#"
+                  style="color: #00ffff; font-size: 13px; text-decoration: none"
+                  >View all</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2 items-center">
+          <a href="profile.html" class="text-slate-300 hover:text-white"
+            >👤 Profile</a
+          >
+          <a href="design-showcase.html" class="text-slate-300 hover:text-white"
+            >🎨 Design</a
+          >
+          <a href="feed.html" class="text-slate-300 hover:text-white"
+            >📰 Social</a
+          >
+          <a href="marketplace.html" class="text-slate-300 hover:text-white"
+            >🛒 Marketplace</a
+          >
+          <a href="dashboard.html" class="text-slate-300 hover:text-white"
+            >📈 Dashboard</a
+          >
+          <a href="video-player.html" class="text-green-400 font-medium"
+            >▶️ Video</a
+          >
+          <a href="auto-editor.html" class="text-slate-300 hover:text-white"
+            >✂️ Editor</a
+          >
+          <a href="code-editor.html" class="text-slate-300 hover:text-white"
+            >💻 Code</a
+          >
+          <a href="settings.html" class="text-slate-300 hover:text-white"
+            >⚙️ Settings</a
+          >
+          <a href="login.html" class="text-slate-300 hover:text-white"
+            >🔐 Login</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="app" style="padding-top: 0">
+      <!-- Jukebox Library (less than half screen) -->
+      <div class="library" role="navigation" aria-label="Video library">
+        <div class="library-header">
+          <span class="library-title" role="heading" aria-level="1"
+            >📹 Library</span
+          >
+        </div>
+
+        <div class="library-tabs" role="tablist" aria-label="Library views">
+          <button
+            class="tab-btn active"
+            data-view="all"
+            aria-selected="true"
+            role="tab"
+          >
+            All
+          </button>
+          <button
+            class="tab-btn"
+            data-view="favorites"
+            aria-selected="false"
+            role="tab"
+          >
+            ⭐ Favorites
+          </button>
+          <button
+            class="tab-btn"
+            data-view="history"
+            aria-selected="false"
+            role="tab"
+          >
+            🕐 History
+          </button>
+          <button
+            class="tab-btn"
+            data-view="playlists"
+            aria-selected="false"
+            role="tab"
+          >
+            📁 Playlists
+          </button>
+          <button
+            class="tab-btn"
+            data-view="recommendations"
+            aria-selected="false"
+            role="tab"
+          >
+            🔍 Recommendations
+          </button>
+          <button
+            class="tab-btn"
+            data-view="continue"
+            aria-selected="false"
+            role="tab"
+          >
+            ▶️ Continue Watching
+          </button>
+        </div>
+
+        <input
+          type="text"
+          placeholder="Search videos..."
+          class="search-input"
+          id="searchInput"
+          aria-label="Search videos"
+          role="searchbox"
+        />
+
+        <div
+          style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap"
+        >
+          <select
+            id="sortSelector"
+            class="search-input"
+            style="flex: 1; padding: 8px"
+            aria-label="Sort videos by"
+          >
+            <option value="default">Sort: Default</option>
+            <option value="title">Title A-Z</option>
+            <option value="duration">Duration</option>
+            <option value="recent">Recently Added</option>
+            <option value="mostWatched">Most Watched</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 16px">
+          <button
+            class="top-btn"
+            style="flex: 1"
+            onclick="createPlaylist()"
+            aria-label="Create new playlist"
+          >
+            ➕ Playlist
+          </button>
+          <button
+            class="top-btn"
+            style="flex: 1"
+            onclick="clearHistory()"
+            aria-label="Clear watch history"
+          >
+            🗑️ Clear History
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 16px">
+          <button
+            class="top-btn"
+            style="flex: 1"
+            onclick="exportLibrary()"
+            aria-label="Export library data"
+          >
+            📤 Export
+          </button>
+          <button
+            class="top-btn"
+            style="flex: 1"
+            onclick="importLibrary()"
+            aria-label="Import library data"
+          >
+            📥 Import
+          </button>
+        </div>
+        <input
+          type="file"
+          id="importInput"
+          accept=".json"
+          style="display: none"
+          aria-label="Import file input"
+        />
+
+        <div style="margin-bottom: 16px">
+          <div
+            id="libraryStats"
+            style="font-size: 0.45rem; opacity: 0.85; font-weight: 700"
+            role="status"
+            aria-live="polite"
+          ></div>
+        </div>
+
+        <!-- Video Grid -->
+        <div
+          id="videoGridContainer"
+          style="
+            overflow-y: auto;
+            height: calc(100vh - 300px);
+            position: relative;
+          "
+          role="list"
+          aria-label="Video list"
+        >
+          <div
+            id="loadingSpinner"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            Loading...
+          </div>
+          <div
+            id="emptyState"
+            style="
+              display: none;
+              text-align: center;
+              padding: 20px;
+              color: #00ffff;
+            "
+          >
+            No videos found. Try adding some or adjusting your search!
+          </div>
+          <div id="videoGridSpacer" style="width: 100%"></div>
+          <div
+            id="videoGrid"
+            style="
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 12px;
+              padding: 8px;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+            "
+          ></div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: center;
+            padding: 8px;
+          "
+          role="group"
+          aria-label="Playback controls"
+        >
+          <button
+            class="scroll-btn"
+            id="shuffleBtn"
+            title="Shuffle"
+            aria-label="Toggle shuffle mode"
+            aria-pressed="false"
+          >
+            🔀
+          </button>
+          <button
+            class="scroll-btn"
+            id="repeatBtn"
+            title="Repeat"
+            aria-label="Toggle repeat mode"
+            aria-pressed="false"
+          >
+            🔁
+          </button>
+          <button
+            class="scroll-btn"
+            id="autoplayBtn"
+            title="Autoplay Queue"
+            aria-label="Toggle autoplay"
+            aria-pressed="true"
+          >
+            ▶️▶️
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Player -->
+      <div class="player-area" role="main">
+        <div
+          class="video-player"
+          id="videoPlayer"
+          role="region"
+          aria-label="Video player"
+        >
+          <div
+            class="play-overlay"
+            id="playOverlay"
+            role="button"
+            aria-label="Play video"
+            tabindex="0"
+          >
+            <div class="play-icon" aria-hidden="true">▶️</div>
+            <div style="font-size: 1.25rem; font-weight: bold">
+              Select a video to play
+            </div>
+          </div>
+
+          <video
+            id="video"
+            class="video-js"
+            preload="auto"
+            crossorigin="anonymous"
+            aria-label="Video player"
+          ></video>
+          <canvas id="visualizer" aria-hidden="true"></canvas>
+
+          <div class="controls" role="group" aria-label="Video controls">
+            <div
+              class="progress-container"
+              id="progressContainer"
+              role="slider"
+              aria-label="Video progress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              tabindex="0"
+            >
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="control-buttons">
+              <button
+                class="btn play-btn"
+                id="playBtn"
+                aria-label="Play or pause video"
+              >
+                ▶️
+              </button>
+              <button class="btn" id="rewindBtn" aria-label="Rewind 10 seconds">
+                ⏪
+              </button>
+              <button
+                class="btn"
+                id="forwardBtn"
+                aria-label="Forward 10 seconds"
+              >
+                ⏩
+              </button>
+              <div
+                class="time-display"
+                id="timeDisplay"
+                role="timer"
+                aria-live="off"
+              >
+                00:00 / 00:00
+              </div>
+              <button class="btn" id="volumeBtn" aria-label="Mute or unmute">
+                🔊
+              </button>
+              <input
+                type="range"
+                id="volumeSlider"
+                min="0"
+                max="100"
+                value="100"
+                style="width: 60px; cursor: pointer"
+                aria-label="Volume control"
+              />
+              <select
+                class="btn"
+                id="speedSelector"
+                style="width: auto; font-size: 14px"
+                aria-label="Playback speed"
+              >
+                <option value="0.5">0.5x</option>
+                <option value="1" selected>1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+              </select>
+              <select
+                class="btn"
+                id="qualitySelector"
+                style="width: auto; font-size: 14px"
+                aria-label="Video quality"
+              >
+                <option value="auto" selected>Auto</option>
+                <option value="1080p">1080p</option>
+                <option value="4k">4K UHD</option>
+                <option value="8k">8K UHD</option>
+              </select>
+              <button
+                class="btn"
+                id="subtitleBtn"
+                title="Subtitles"
+                aria-label="Toggle subtitles"
+              >
+                CC
+              </button>
+              <button
+                class="btn"
+                id="recordBtn"
+                title="Record"
+                aria-label="Record video"
+              >
+                ⏺️
+              </button>
+              <button
+                class="btn"
+                id="pipBtn"
+                title="Picture-in-Picture"
+                aria-label="Toggle picture in picture"
+              >
+                📺
+              </button>
+              <button
+                class="btn"
+                id="fullscreenBtn"
+                title="Fullscreen"
+                aria-label="Toggle fullscreen"
+              >
+                ⛶
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <header class="header" role="banner">
+          <button class="top-btn" id="uploadBtn" aria-label="Upload video file">
+            Upload
+          </button>
+          <input
+            type="file"
+            id="fileInput"
+            accept="video/*"
+            style="display: none"
+            aria-label="Video file input"
+          />
+          <button
+            class="top-btn"
+            id="youtubeBtn"
+            aria-label="Add YouTube video"
+          >
+            Add YouTube
+          </button>
+          <button
+            class="top-btn"
+            id="downloadBtn"
+            aria-label="Download current video"
+          >
+            Download
+          </button>
+          <button
+            class="top-btn"
+            id="shareBtn"
+            aria-label="Share current video"
+          >
+            Share
+          </button>
+          <button
+            class="top-btn"
+            id="marketplaceBtn"
+            aria-label="Open marketplace"
+          >
+            Marketplace
+          </button>
+          <button class="top-btn" id="lobbyBtn" aria-label="Open lobby">
+            Lobby
+          </button>
+          <button
+            class="top-btn"
+            id="liveStreamBtn"
+            aria-label="Start live stream"
+          >
+            Live Stream
+          </button>
+          <button class="top-btn" id="webrtcBtn" aria-label="Start video call">
+            Video Call
+          </button>
+          <input
+            type="file"
+            id="subtitleInput"
+            accept=".vtt"
+            style="display: none"
+            aria-label="Subtitle file input"
+          />
+        </header>
+
+        <!-- Video Queue -->
+        <div class="next-up" id="queueSection" style="display: none">
+          <h2>▶️ Up Next</h2>
+          <div class="next-up-grid" id="queueGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Videos Data with HLS adaptive streaming
+      const videos = [
+        {
+          id: 1,
+          title: 'Big Buck Bunny',
+          duration: '10:34',
+          src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+          poster:
+            'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg',
+          type: 'application/x-mpegURL',
+          isHLS: true,
+          tags: ['animation', 'comedy', 'bunny', 'nature'],
+          watchCount: 0,
+        },
+        {
+          id: 2,
+          title: 'Elephants Dream',
+          duration: '10:53',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          poster: 'https://i.imgur.com/8vJ2K5p.png',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['animation', 'surreal', 'dream', 'fantasy'],
+          watchCount: 0,
+        },
+        {
+          id: 3,
+          title: 'For Bigger Blazes',
+          duration: '0:15',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['action', 'fire', 'demo'],
+          watchCount: 0,
+        },
+        {
+          id: 4,
+          title: 'For Bigger Escape',
+          duration: '0:15',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['adventure', 'travel', 'nature'],
+          watchCount: 0,
+        },
+        {
+          id: 5,
+          title: 'For Bigger Fun',
+          duration: '0:15',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['comedy', 'entertainment', 'fun'],
+          watchCount: 0,
+        },
+        {
+          id: 6,
+          title: 'For Bigger Joyrides',
+          duration: '0:15',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['cars', 'action', 'speed'],
+          watchCount: 0,
+        },
+        {
+          id: 7,
+          title: 'Sintel', // cspell:disable-line
+          duration: '14:48',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['animation', 'fantasy', 'dragon', 'adventure'],
+          watchCount: 0,
+        },
+        {
+          id: 8,
+          title: 'Tears of Steel',
+          duration: '12:14',
+          src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['scifi', 'action', 'drama', 'robot'], // cspell:disable-line
+          watchCount: 0,
+        },
+        {
+          id: 9,
+          title: '8K Nature Demo',
+          duration: '0:30',
+          src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+          poster:
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+          type: 'video/mp4',
+          isHLS: false,
+          tags: ['8k', 'uhd', 'demo', 'nature'],
+          watchCount: 0,
+        },
+      ];
+
+      // Enhanced Library Data
+      let favorites =
+        JSON.parse(localStorage.getItem('hootnerFavorites')) || [];
+      let playlists =
+        JSON.parse(localStorage.getItem('hootnerPlaylists')) || [];
+
+      // Recommendation Engine
+      let viewHistory =
+        JSON.parse(localStorage.getItem('hootnerHistory')) || [];
+
+      function logView(id) {
+        viewHistory.push({ id, timestamp: Date.now() });
+        if (viewHistory.length > 50) viewHistory = viewHistory.slice(-50);
+        localStorage.setItem('hootnerHistory', JSON.stringify(viewHistory));
+
+        const video = videos.find(v => v.id === id);
+        if (video) {
+          video.watchCount = (video.watchCount || 0) + 1;
+        }
+        updateLibraryStats();
+      }
+
+      function getRecommendations(excludeId, count = 5) {
+        const current = videos.find(v => v.id === excludeId);
+        const now = Date.now();
+        const recentViews = viewHistory.slice(-20);
+
+        return videos
+          .filter(v => v.id !== excludeId && !favorites.includes(v.id))
+          .map(v => {
+            let score = 0;
+
+            // Tag similarity (highest weight)
+            if (current?.tags && v.tags) {
+              const commonTags = current.tags.filter(t =>
+                v.tags.includes(t)
+              ).length;
+              score += commonTags * 10;
+            }
+
+            // View history with time decay
+            const views = recentViews.filter(h => h.id === v.id);
+            views.forEach(view => {
+              const daysSince = (now - view.timestamp) / (1000 * 60 * 60 * 24);
+              const decay = Math.exp(-daysSince / 7);
+              score += 5 * decay;
+            });
+
+            // Title similarity
+            if (current) {
+              const currentWords = current.title.toLowerCase().split(/\s+/);
+              const videoWords = v.title.toLowerCase().split(/\s+/);
+              const commonWords = currentWords.filter(
+                w => videoWords.includes(w) && w.length > 3
+              ).length;
+              score += commonWords * 3;
+            }
+
+            // Popularity boost
+            score += (v.watchCount || 0) * 0.5;
+
+            // Diversity penalty (avoid recommending same type repeatedly)
+            const recentIds = recentViews.slice(-5).map(h => h.id);
+            if (recentIds.includes(v.id)) score *= 0.3;
+
+            // Random factor for discovery
+            score += Math.random() * 2;
+
+            return { ...v, score };
+          })
+          .sort((a, b) => b.score - a.score)
+          .slice(0, count);
+      }
+
+      // AudioManager (PWA Audio System)
+      class AudioManager {
+        constructor() {
+          this.audioContext = new (
+            window.AudioContext || window.webkitAudioContext
+          )();
+          this.sounds = {};
+          this.videoSource = null;
+          this.gainNode = this.audioContext.createGain();
+          this.reverbNode = this.audioContext.createConvolver();
+          this.reverbNode.buffer = this.createReverbImpulse();
+          this.analyzer = this.audioContext.createAnalyser();
+          this.analyzer.fftSize = 256;
+          this.bufferLength = this.analyzer.frequencyBinCount;
+          this.dataArray = new Uint8Array(this.bufferLength);
+          this.isReverb = false;
+          this.loadSounds();
+        }
+
+        async loadSounds() {
+          // Create simple synthetic sounds instead of external URLs
+          this.sounds.click = this.createClickSound();
+          this.sounds.whoosh = this.createWhooshSound();
+        }
+
+        createClickSound() {
+          const buffer = this.audioContext.createBuffer(
+            1,
+            this.audioContext.sampleRate * 0.1,
+            this.audioContext.sampleRate
+          );
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < data.length; i++) {
+            data[i] =
+              Math.sin((2 * Math.PI * 800 * i) / this.audioContext.sampleRate) *
+              Math.exp(-i / (this.audioContext.sampleRate * 0.05));
+          }
+          return buffer;
+        }
+
+        createWhooshSound() {
+          const buffer = this.audioContext.createBuffer(
+            1,
+            this.audioContext.sampleRate * 0.3,
+            this.audioContext.sampleRate
+          );
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < data.length; i++) {
+            const freq = 200 + (i / data.length) * 400;
+            data[i] =
+              (Math.random() * 2 - 1) *
+              Math.exp(-i / (this.audioContext.sampleRate * 0.1)) *
+              0.3;
+          }
+          return buffer;
+        }
+
+        playSound(name, options = {}) {
+          if (!this.sounds[name] || this.audioContext.state !== 'running')
+            return;
+
+          try {
+            const source = this.audioContext.createBufferSource();
+            source.buffer = this.sounds[name];
+
+            const gainNode = this.audioContext.createGain();
+            gainNode.gain.value = options.volume || 0.1;
+
+            let chain = source;
+
+            if (options.reverb && this.reverbNode) {
+              chain.connect(this.reverbNode);
+              chain = this.reverbNode;
+            }
+
+            if (options.pan) {
+              const panner = this.audioContext.createStereoPanner();
+              panner.pan.value = options.pan;
+              chain.connect(panner);
+              chain = panner;
+            }
+
+            chain.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            source.start();
+          } catch (error) {
+            console.warn('Audio playback failed:', error);
+          }
+        }
+
+        connectVideo(video) {
+          if (this.videoSource) return;
+          try {
+            this.videoSource =
+              this.audioContext.createMediaElementSource(video);
+            this.videoSource.connect(this.analyzer);
+            this.analyzer.connect(this.gainNode);
+            this.gainNode.connect(this.audioContext.destination);
+          } catch (e) {
+            console.warn('Audio routing failed:', e);
+          }
+        }
+
+        toggleReverb() {
+          this.isReverb = !this.isReverb;
+          if (this.isReverb) {
+            this.videoSource.disconnect();
+            this.videoSource.connect(this.reverbNode);
+            this.reverbNode.connect(this.gainNode);
+          } else {
+            this.videoSource.disconnect();
+            this.reverbNode.disconnect();
+            this.videoSource.connect(this.gainNode);
+          }
+        }
+
+        createReverbImpulse() {
+          const length = this.audioContext.sampleRate * 2;
+          const impulse = this.audioContext.createBuffer(
+            2,
+            length,
+            this.audioContext.sampleRate
+          );
+          const left = impulse.getChannelData(0);
+          const right = impulse.getChannelData(1);
+          for (let i = 0; i < length; i++) {
+            left[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2;
+            right[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2;
+          }
+          return impulse;
+        }
+      }
+
+      // Init audio manager first
+      const audioManager = new AudioManager();
+
+      // Video Grid with Virtual Scrolling
+      let currentIndex = 0;
+      let filteredVideos = videos;
+      const CARD_HEIGHT = 132;
+      const BUFFER = 2;
+
+      function renderVideoGrid(filtered = videos, animate = false) {
+        if (animate) isAnimating = true;
+        filteredVideos = filtered;
+        const container = document.getElementById('videoGridContainer');
+        const spacer = document.getElementById('videoGridSpacer');
+        spacer.style.height = filtered.length * CARD_HEIGHT + 'px';
+
+        if (!container._scrollHandler) {
+          container._scrollHandler = () => renderVisibleCards();
+          container.addEventListener('scroll', container._scrollHandler);
+        }
+        renderVisibleCards();
+      }
+
+      let focusedCardIndex = -1;
+
+      let isAnimating = false;
+
+      function renderVisibleCards() {
+        const container = document.getElementById('videoGridContainer');
+        const grid = document.getElementById('videoGrid');
+        const scrollTop = container.scrollTop;
+        const containerHeight = container.clientHeight;
+
+        const startIdx = Math.max(
+          0,
+          Math.floor(scrollTop / CARD_HEIGHT) - BUFFER
+        );
+        const endIdx = Math.min(
+          filteredVideos.length,
+          Math.ceil((scrollTop + containerHeight) / CARD_HEIGHT) + BUFFER
+        );
+
+        grid.style.transform = `translateY(${startIdx * CARD_HEIGHT}px)`;
+
+        const cards = filteredVideos
+          .slice(startIdx, endIdx)
+          .map((v, i) => {
+            const actualIdx = startIdx + i;
+            const videoIdx = videos.indexOf(v);
+            return `
+          <div class="${isAnimating ? 'card-enter' : ''}" tabindex="0" data-video-idx="${videoIdx}" data-card-idx="${actualIdx}" onclick="loadVideo(${videoIdx})" onkeydown="handleCardKeydown(event, ${videoIdx})" style="cursor:pointer;background:rgba(10,10,15,0.9);border-radius:16px;padding:16px;border:3px solid ${videoIdx === currentIndex ? '#00ff00' : 'transparent'};transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3);height:${CARD_HEIGHT - 12}px;outline:none;animation-delay:${i * 0.03}s;" onmouseover="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)'" onmouseout="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'" onfocus="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)';focusedCardIndex=${actualIdx}" onblur="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <img src="${v.poster}" style="width:140px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 2px 8px rgba(0,255,0,0.2);">
+              <div style="flex:1;">
+                <div style="font-weight:bold;color:#00ff00;margin-bottom:8px;font-size:1.25rem;">${v.title}</div>
+                <div style="font-size:0.875rem;opacity:0.8;color:#00ffff;">${v.duration} ${v.watchCount > 0 ? `• ${v.watchCount}▶ views` : ''}</div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button onclick="event.stopPropagation();toggleFavorite(${v.id})" style="background:none;border:none;font-size:1.5rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">${favorites.includes(v.id) ? '⭐' : '☆'}</button>
+              </div>
+            </div>
+          </div>
+        `;
+          })
+          .join('');
+
+        grid.innerHTML = cards;
+        if (isAnimating) {
+          setTimeout(() => {
+            isAnimating = false;
+          }, 500);
+        }
+      }
+
+      function handleCardKeydown(e, videoIdx) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          loadVideo(videoIdx);
+        }
+      }
+
+      // Jukebox Mode Controls
+      document.getElementById('shuffleBtn').addEventListener('click', () => {
+        jukeboxMode.shuffle = !jukeboxMode.shuffle;
+        const btn = document.getElementById('shuffleBtn');
+        btn.style.background = jukeboxMode.shuffle
+          ? 'linear-gradient(135deg, #00ffff, #ff00ff)'
+          : '';
+        btn.setAttribute('aria-pressed', jukeboxMode.shuffle);
+        if (jukeboxMode.shuffle) {
+          playQueue = [...Array(videos.length).keys()].sort(
+            () => Math.random() - 0.5
+          );
+          showNotification('🔀 Shuffle ON');
+        } else {
+          playQueue = [];
+          showNotification('🔀 Shuffle OFF');
+        }
+      });
+
+      document.getElementById('repeatBtn').addEventListener('click', () => {
+        const modes = ['off', 'all', 'one'];
+        const current = modes.indexOf(jukeboxMode.repeat);
+        jukeboxMode.repeat = modes[(current + 1) % modes.length];
+        const btn = document.getElementById('repeatBtn');
+
+        if (jukeboxMode.repeat === 'one') {
+          btn.innerHTML = '🔂';
+          btn.style.background = 'linear-gradient(135deg, #00ffff, #ff00ff)';
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-label', 'Repeat one enabled');
+          showNotification('🔂 Repeat One');
+        } else if (jukeboxMode.repeat === 'all') {
+          btn.innerHTML = '🔁';
+          btn.style.background = 'linear-gradient(135deg, #00ff00, #ffff00)';
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-label', 'Repeat all enabled');
+          showNotification('🔁 Repeat All');
+        } else {
+          btn.innerHTML = '🔁';
+          btn.style.background = '';
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-label', 'Toggle repeat mode');
+          showNotification('Repeat OFF');
+        }
+      });
+
+      document.getElementById('autoplayBtn').addEventListener('click', () => {
+        jukeboxMode.autoplay = !jukeboxMode.autoplay;
+        const btn = document.getElementById('autoplayBtn');
+        btn.style.background = jukeboxMode.autoplay
+          ? 'linear-gradient(135deg, #00ff00, #ffff00)'
+          : '';
+        btn.setAttribute('aria-pressed', jukeboxMode.autoplay);
+        showNotification(
+          jukeboxMode.autoplay ? '▶️ Autoplay ON' : 'Autoplay OFF'
+        );
+        updateQueue();
+      });
+
+      function getUpcomingVideos(count = 5) {
+        const upcoming = [];
+        if (jukeboxMode.shuffle && playQueue.length > 0) {
+          for (let i = 0; i < Math.min(count, playQueue.length); i++) {
+            upcoming.push(videos[playQueue[i]]);
+          }
+        } else {
+          for (let i = 1; i <= count; i++) {
+            let idx = (currentIndex + i) % videos.length;
+            if (idx === 0 && !jukeboxMode.repeat) break;
+            upcoming.push(videos[idx]);
+          }
+        }
+        return upcoming;
+      }
+
+      function updateQueue() {
+        const queueSection = document.getElementById('queueSection');
+        const queueGrid = document.getElementById('queueGrid');
+
+        if (!jukeboxMode.autoplay) {
+          queueSection.style.display = 'none';
+          return;
+        }
+
+        const upcoming = getUpcomingVideos(5);
+        queueSection.style.display = upcoming.length > 0 ? 'block' : 'none';
+
+        queueGrid.innerHTML = upcoming
+          .map(
+            (v, i) => `
+          <div class="next-up-card" onclick="loadVideo(${videos.indexOf(v)})" tabindex="0" role="button" aria-label="Play ${v.title}">
+            <div class="thumbnail">
+              <img src="${v.poster}" style="width:100%;height:100%;object-fit:cover;" alt="${v.title}">
+            </div>
+            <div class="info">
+              <div class="title">${i + 1}. ${v.title}</div>
+              <div class="meta">${v.duration}</div>
+            </div>
+          </div>
+        `
+          )
+          .join('');
+      }
+
+      function playNext() {
+        let nextIndex;
+
+        if (jukeboxMode.shuffle && playQueue.length > 0) {
+          nextIndex = playQueue.shift();
+          if (playQueue.length === 0 && jukeboxMode.repeat === 'all') {
+            playQueue = [...Array(videos.length).keys()].sort(
+              () => Math.random() - 0.5
+            );
+          }
+        } else {
+          nextIndex = currentIndex + 1;
+          if (nextIndex >= videos.length) {
+            if (jukeboxMode.repeat === 'all') {
+              nextIndex = 0;
+            } else {
+              return;
+            }
+          }
+        }
+
+        currentIndex = nextIndex;
+        loadVideo(currentIndex);
+        updateQueue();
+      }
+
+      // Video.js Player with HLS support
+      let player = videojs('video', {
+        // cspell:disable-line
+        fluid: true,
+        controls: false,
+        preload: 'auto',
+        html5: {
+          vhs: {
+            overrideNative: true,
+            enableLowInitialPlaylist: true,
+            smoothQualityChange: true,
+            useBandwidthFromLocalStorage: true,
+          },
+          nativeAudioTracks: false,
+          nativeVideoTracks: false,
+        },
+      });
+
+      const video = player.el().querySelector('video');
+      const playBtn = document.getElementById('playBtn');
+      const playOverlay = document.getElementById('playOverlay');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const timeDisplay = document.getElementById('timeDisplay');
+      const rewindBtn = document.getElementById('rewindBtn');
+      const forwardBtn = document.getElementById('forwardBtn');
+      const volumeBtn = document.getElementById('volumeBtn');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      const pipBtn = document.getElementById('pipBtn');
+      const recordBtn = document.getElementById('recordBtn');
+      const subtitleBtn = document.getElementById('subtitleBtn');
+      const speedSelector = document.getElementById('speedSelector');
+      const qualitySelector = document.getElementById('qualitySelector');
+      const liveStreamBtn = document.getElementById('liveStreamBtn');
+
+      let isReverb = false;
+      let recorder = null;
+      let isRecording = false;
+      let isLiveStreaming = false;
+      let liveStreamEnhancements = {
+        noiseReduction: false,
+        videoFilter: 'none',
+      };
+      let streamProcessor = null;
+
+      // Jukebox Enhancements
+      let jukeboxMode = {
+        shuffle: false,
+        repeat: 'off', // 'off', 'one', 'all'
+        autoplay: true,
+      };
+      let playQueue = [];
+
+      // Preload next video
+      let preloadVideo = document.createElement('video');
+      preloadVideo.preload = 'auto';
+      preloadVideo.style.display = 'none';
+
+      // BroadcastChannel for multi-tab sync
+      const syncChannel = new BroadcastChannel('hootner-sync');
+
+      syncChannel.onmessage = e => {
+        const { type, data } = e.data;
+        switch (type) {
+          case 'playback':
+            if (data.videoId !== videos[currentIndex]?.id) {
+              const idx = videos.findIndex(v => v.id === data.videoId);
+              if (idx !== -1) loadVideo(idx);
+            }
+            break;
+          case 'favorites':
+            favorites = data.favorites;
+            renderVideoGrid();
+            break;
+          case 'playlist':
+            playlists = data.playlists;
+            break;
+          case 'history':
+            viewHistory = data.history;
+            updateLibraryStats();
+            break;
+        }
+      };
+
+      function preloadNextVideo() {
+        const nextIdx = (currentIndex + 1) % videos.length;
+        if (nextIdx >= 0 && nextIdx < videos.length) {
+          const nextVid = videos[nextIdx];
+          if (!nextVid.isYouTube && !nextVid.isHLS) {
+            preloadVideo.src = nextVid.src;
+            preloadVideo.load();
+          }
+        }
+      }
+
+      function loadVideo(index) {
+        if (index < 0 || index >= videos.length) return;
+        currentIndex = index;
+        isLiveStreaming = false;
+        const v = videos[index];
+
+        syncChannel.postMessage({
+          type: 'playback',
+          data: { videoId: v.id, index },
+        });
+        updateQueue();
+
+        if (v.isYouTube) {
+          const existingIframe = videoPlayer.querySelector('iframe');
+          if (existingIframe) existingIframe.remove();
+
+          player.pause();
+          video.style.display = 'none';
+          video.disablePictureInPicture = true;
+
+          const iframe = document.createElement('iframe');
+          iframe.src =
+            v.src +
+            '?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1&disablekb=1'; // cspell:disable-line
+          iframe.style.cssText =
+            'position:absolute;top:0;left:0;width:100%;height:100%;border:none;z-index:10;';
+          iframe.allow =
+            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope';
+          iframe.allowFullscreen = true;
+          iframe.disablePictureInPicture = true;
+          videoPlayer.appendChild(iframe);
+          playOverlay.classList.add('hidden');
+          document.exitPictureInPicture?.().catch(() => {});
+        } else {
+          const existingIframe = videoPlayer.querySelector('iframe');
+          if (existingIframe) existingIframe.remove();
+          video.style.display = 'block';
+          video.disablePictureInPicture = false;
+
+          player.src({ src: v.src, type: v.type || 'video/mp4' });
+          player.poster(v.poster);
+          player.load();
+          player.play().catch(() => playOverlay.classList.remove('hidden'));
+
+          if (v.isHLS) {
+            setTimeout(() => {
+              const levels = player.qualityLevels();
+              if (levels && levels.length > 0) {
+                console.log(`HLS: ${levels.length} quality levels available`);
+              }
+            }, 1000);
+          }
+        }
+
+        liveStreamBtn.textContent = 'Live Stream';
+        renderVideoGrid();
+        preloadNextVideo();
+        updateQueue();
+      }
+
+      playBtn.onclick = e => {
+        e.stopPropagation();
+        if (audioManager.audioContext.state === 'suspended') {
+          audioManager.audioContext.resume();
+        }
+        if (!audioManager.videoSource) {
+          audioManager.connectVideo(video);
+        }
+        if (video.paused) {
+          video.play().catch(err => console.error('Play failed:', err));
+        } else {
+          video.pause();
+        }
+        audioManager.playSound('click');
+      };
+
+      playOverlay.onclick = () => {
+        if (video.src) {
+          if (audioManager.audioContext.state === 'suspended') {
+            audioManager.audioContext.resume();
+          }
+          if (!audioManager.videoSource) {
+            audioManager.connectVideo(video);
+          }
+          video.play().catch(err => console.error('Play failed:', err));
+          audioManager.playSound('click');
+        }
+      };
+
+      video.onplay = () => {
+        playBtn.innerHTML = '⏸️';
+        playOverlay.classList.add('hidden');
+        visualize();
+      };
+
+      video.onpause = () => {
+        playBtn.innerHTML = '▶️';
+        if (!video.src) playOverlay.classList.remove('hidden');
+      };
+
+      video.onended = () => {
+        logView(videos[currentIndex].id);
+
+        if (jukeboxMode.repeat === 'one') {
+          video.currentTime = 0;
+          video.play();
+          return;
+        }
+
+        if (jukeboxMode.autoplay) {
+          playNext();
+        }
+      };
+
+      video.onwaiting = () => {
+        playOverlay.classList.remove('hidden');
+      };
+
+      video.oncanplay = () => {
+        if (!video.paused) playOverlay.classList.add('hidden');
+      };
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT') return;
+
+        // Video card navigation
+        if (e.target.hasAttribute('data-video-idx')) return;
+
+        switch (e.key) {
+          case ' ':
+            e.preventDefault();
+            video.paused ? video.play() : video.pause();
+            break;
+          case 'ArrowLeft':
+            video.currentTime -= 5;
+            break;
+          case 'ArrowRight':
+            video.currentTime += 5;
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            video.volume = Math.min(1, video.volume + 0.1);
+            volumeSlider.value = video.volume * 100;
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            video.volume = Math.max(0, video.volume - 0.1);
+            volumeSlider.value = video.volume * 100;
+            break;
+          case 'f':
+            if (!document.fullscreenElement) videoPlayer.requestFullscreen();
+            else document.exitFullscreen();
+            break;
+          case 'm':
+            video.muted = !video.muted;
+            volumeBtn.innerHTML = video.muted ? '🔇' : '🔊';
+            break;
+        }
+      });
+
+      video.ontimeupdate = () => {
+        const percent = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = percent + '%';
+        progressContainer.setAttribute('aria-valuenow', Math.round(percent));
+        timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(
+          video.duration
+        )}`;
+      };
+
+      progressContainer.onclick = e => {
+        const rect = progressContainer.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        video.currentTime = pos * video.duration;
+      };
+
+      rewindBtn.onclick = () => (video.currentTime -= 10);
+      forwardBtn.onclick = () => (video.currentTime += 10);
+
+      const volumeSlider = document.getElementById('volumeSlider');
+
+      volumeBtn.onclick = () => {
+        if (videos[currentIndex]?.isYouTube) {
+          showNotification('Use YouTube player controls for volume');
+          return;
+        }
+        video.muted = !video.muted;
+        volumeBtn.innerHTML = video.muted ? '🔇' : '🔊';
+        volumeBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+      };
+
+      volumeSlider.oninput = e => {
+        if (videos[currentIndex]?.isYouTube) return;
+        video.volume = e.target.value / 100;
+        video.muted = false;
+        volumeBtn.innerHTML = video.volume === 0 ? '🔇' : '🔊';
+      };
+
+      fullscreenBtn.onclick = () => {
+        if (!document.fullscreenElement) {
+          videoPlayer.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      };
+
+      pipBtn.onclick = async () => {
+        if (videos[currentIndex]?.isYouTube) {
+          showNotification('PIP not available for YouTube videos');
+          return;
+        }
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          try {
+            const pipWindow = await video.requestPictureInPicture();
+            if ('getScreenDetails' in window) {
+              const screens = await window.getScreenDetails();
+              if (screens.screens.length > 1) {
+                const secondScreen = screens.screens[1];
+                pipWindow.moveTo(secondScreen.left, secondScreen.top);
+              }
+            }
+          } catch (err) {
+            showNotification('PIP not available');
+          }
+        }
+      };
+
+      recordBtn.onclick = () => {
+        if (isRecording) {
+          recorder.stop();
+          isRecording = false;
+          recordBtn.innerHTML = '⏺️';
+        } else {
+          const stream = video.captureStream();
+          recorder = new MediaRecorder(stream);
+          recorder.ondataavailable = e => {
+            const url = URL.createObjectURL(e.data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hootner-recording.webm';
+            a.click();
+          };
+          recorder.start();
+          isRecording = true;
+          recordBtn.innerHTML = '⏹️';
+        }
+      };
+
+      subtitleBtn.onclick = () => {
+        const track = video.textTracks[0];
+        if (track) {
+          track.mode = track.mode === 'showing' ? 'hidden' : 'showing';
+          subtitleBtn.style.background =
+            track.mode === 'showing'
+              ? 'linear-gradient(135deg, #00ffff, #ff00ff)'
+              : '';
+          subtitleBtn.setAttribute('aria-pressed', track.mode === 'showing');
+          subtitleBtn.setAttribute(
+            'aria-label',
+            track.mode === 'showing' ? 'Hide subtitles' : 'Show subtitles'
+          );
+        } else {
+          document.getElementById('subtitleInput').click();
+        }
+      };
+
+      document.getElementById('subtitleInput').onchange = e => {
+        const file = e.target.files[0];
+        if (file && file.name.endsWith('.vtt')) {
+          const url = URL.createObjectURL(file);
+          const track = document.createElement('track');
+          track.kind = 'subtitles';
+          track.label = 'Subtitles';
+          track.srclang = 'en';
+          track.src = url;
+          track.default = true;
+          video.appendChild(track);
+          track.track.mode = 'showing';
+          subtitleBtn.style.background =
+            'linear-gradient(135deg, #00ffff, #ff00ff)';
+        }
+      };
+
+      speedSelector.onchange = e => (video.playbackRate = parseFloat(e.value));
+
+      qualitySelector.onchange = e => {
+        const quality = e.target.value;
+        const levels = player.qualityLevels();
+
+        if (levels && levels.length > 0) {
+          if (quality === 'auto') {
+            for (let i = 0; i < levels.length; i++) levels[i].enabled = true;
+          } else {
+            const targetHeight =
+              quality === '1080p'
+                ? 1080
+                : quality === '4k'
+                  ? 2160
+                  : quality === '8k'
+                    ? 4320
+                    : 0;
+            for (let i = 0; i < levels.length; i++) {
+              levels[i].enabled =
+                targetHeight === 0 ||
+                Math.abs(levels[i].height - targetHeight) < 200;
+            }
+          }
+        }
+
+        const msg = document.createElement('div');
+        msg.textContent = `Quality: ${quality.toUpperCase()}`;
+        msg.style.cssText =
+          'position:fixed;top:80px;right:20px;background:#00ff00;color:#000;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:9999';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 2000);
+      };
+
+      // AI-Enhanced Live Streaming
+      class StreamProcessor {
+        constructor() {
+          this.canvas = document.createElement('canvas');
+          this.ctx = this.canvas.getContext('2d');
+          this.tempVideo = document.createElement('video');
+          this.stream = null;
+          this.animationId = null;
+        }
+
+        async start(sourceStream) {
+          this.stream = sourceStream;
+          this.tempVideo.srcObject = sourceStream;
+          this.tempVideo.play();
+
+          this.tempVideo.onloadedmetadata = () => {
+            this.canvas.width = this.tempVideo.videoWidth;
+            this.canvas.height = this.tempVideo.videoHeight;
+            this.processFrame();
+          };
+
+          const processedStream = this.canvas.captureStream(30);
+          const audioTrack = sourceStream.getAudioTracks()[0];
+
+          if (audioTrack && liveStreamEnhancements.noiseReduction) {
+            const processedAudio = await this.applyNoiseReduction(audioTrack);
+            processedStream.addTrack(processedAudio);
+          } else if (audioTrack) {
+            processedStream.addTrack(audioTrack);
+          }
+
+          return processedStream;
+        }
+
+        processFrame() {
+          if (!this.stream) return;
+
+          this.ctx.drawImage(
+            this.tempVideo,
+            0,
+            0,
+            this.canvas.width,
+            this.canvas.height
+          );
+
+          if (liveStreamEnhancements.videoFilter !== 'none') {
+            const imageData = this.ctx.getImageData(
+              0,
+              0,
+              this.canvas.width,
+              this.canvas.height
+            );
+            this.applyFilter(imageData);
+            this.ctx.putImageData(imageData, 0, 0);
+          }
+
+          this.animationId = requestAnimationFrame(() => this.processFrame());
+        }
+
+        applyFilter(imageData) {
+          const data = imageData.data;
+
+          switch (liveStreamEnhancements.videoFilter) {
+            case 'brightness':
+              for (let i = 0; i < data.length; i += 4) {
+                data[i] = Math.min(255, data[i] * 1.3);
+                data[i + 1] = Math.min(255, data[i + 1] * 1.3);
+                data[i + 2] = Math.min(255, data[i + 2] * 1.3);
+              }
+              break;
+            case 'contrast':
+              const factor = 1.5;
+              for (let i = 0; i < data.length; i += 4) {
+                data[i] = (data[i] - 128) * factor + 128;
+                data[i + 1] = (data[i + 1] - 128) * factor + 128;
+                data[i + 2] = (data[i + 2] - 128) * factor + 128;
+              }
+              break;
+            case 'grayscale':
+              for (let i = 0; i < data.length; i += 4) {
+                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = data[i + 1] = data[i + 2] = avg;
+              }
+              break;
+          }
+        }
+
+        async applyNoiseReduction(audioTrack) {
+          const audioCtx = audioManager.audioContext;
+          const source = audioCtx.createMediaStreamSource(
+            new MediaStream([audioTrack])
+          );
+
+          const biquadFilter = audioCtx.createBiquadFilter();
+          biquadFilter.type = 'highpass';
+          biquadFilter.frequency.value = 200;
+
+          const compressor = audioCtx.createDynamicsCompressor();
+          compressor.threshold.value = -50;
+          compressor.knee.value = 40;
+          compressor.ratio.value = 12;
+          compressor.attack.value = 0;
+          compressor.release.value = 0.25;
+
+          const destination = audioCtx.createMediaStreamDestination();
+          source.connect(biquadFilter).connect(compressor).connect(destination);
+
+          return destination.stream.getAudioTracks()[0];
+        }
+
+        stop() {
+          if (this.animationId) cancelAnimationFrame(this.animationId);
+          if (this.stream) this.stream.getTracks().forEach(t => t.stop());
+          this.stream = null;
+        }
+      }
+
+      liveStreamBtn.onclick = async () => {
+        isLiveStreaming = !isLiveStreaming;
+        if (isLiveStreaming) {
+          const options = await showModal(
+            'Live Stream',
+            '1. Normal\n2. Noise Reduction\n3. Brightness\n4. Contrast\n5. Grayscale\n\nEnter (1-5):',
+            'prompt',
+            '1'
+          );
+
+          if (options === '2') liveStreamEnhancements.noiseReduction = true;
+          else if (options === '3')
+            liveStreamEnhancements.videoFilter = 'brightness';
+          else if (options === '4')
+            liveStreamEnhancements.videoFilter = 'contrast';
+          else if (options === '5')
+            liveStreamEnhancements.videoFilter = 'grayscale';
+
+          try {
+            const rawStream = await navigator.mediaDevices.getUserMedia({
+              video: { width: 1280, height: 720 },
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+              },
+            });
+
+            if (
+              liveStreamEnhancements.noiseReduction ||
+              liveStreamEnhancements.videoFilter !== 'none'
+            ) {
+              streamProcessor = new StreamProcessor();
+              const processedStream = await streamProcessor.start(rawStream);
+              video.srcObject = processedStream;
+            } else {
+              video.srcObject = rawStream;
+            }
+
+            video.play();
+            playOverlay.classList.add('hidden');
+            liveStreamBtn.textContent = 'Stop Live';
+            audioManager.connectVideo(video);
+            visualize();
+
+            const enhancement = liveStreamEnhancements.noiseReduction
+              ? 'Noise Reduction'
+              : liveStreamEnhancements.videoFilter !== 'none'
+                ? liveStreamEnhancements.videoFilter
+                : 'Normal';
+            showNotification(`Live: ${enhancement}`);
+          } catch (err) {
+            await showModal('Error', 'Camera/microphone access denied');
+            isLiveStreaming = false;
+          }
+        } else {
+          if (streamProcessor) {
+            streamProcessor.stop();
+            streamProcessor = null;
+          }
+          if (video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+          }
+          liveStreamEnhancements = {
+            noiseReduction: false,
+            videoFilter: 'none',
+          };
+          loadVideo(currentIndex);
+          liveStreamBtn.textContent = 'Live Stream';
+        }
+      };
+
+      // WebRTC Video Call Setup
+      const peer = new Peer();
+      peer.on('open', id => console.log('My Peer ID:', id));
+
+      document.getElementById('webrtcBtn').onclick = async () => {
+        // cspell:disable-line
+        const remoteId = await showModal(
+          'Video Call',
+          'Enter peer ID:',
+          'prompt'
+        );
+        if (!remoteId) {
+          await showModal(
+            'Your Peer ID',
+            `${peer.id}\n\nShare this ID to receive calls`
+          );
+          return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+          });
+          const call = peer.call(remoteId, stream);
+          call.on('stream', remoteStream => {
+            video.srcObject = remoteStream;
+            video.play();
+            playOverlay.classList.add('hidden');
+            visualize();
+          });
+        } catch (err) {
+          await showModal('Error', String(err));
+        }
+      };
+
+      peer.on('call', async call => {
+        if (await showModal('Incoming Call', 'Accept video call?', 'confirm')) {
+          navigator.mediaDevices
+            .getUserMedia({ video: true, audio: true })
+            .then(stream => {
+              call.answer(stream);
+              call.on('stream', remoteStream => {
+                video.srcObject = remoteStream;
+                video.play();
+                playOverlay.classList.add('hidden');
+                visualize();
+              });
+            });
+        }
+      });
+
+      // Audio Visualizer
+      const canvas = document.getElementById('visualizer');
+      const canvasCtx = canvas.getContext('2d');
+      let animationId;
+
+      function visualize() {
+        if (!audioManager.analyzer) return;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        function draw() {
+          animationId = requestAnimationFrame(draw);
+          audioManager.analyzer.getByteFrequencyData(audioManager.dataArray);
+
+          canvasCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+          canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const barWidth = (canvas.width / audioManager.bufferLength) * 2.5;
+          let x = 0;
+
+          for (let i = 0; i < audioManager.bufferLength; i++) {
+            const barHeight = (audioManager.dataArray[i] / 255) * canvas.height;
+            const r = barHeight + 25 * (i / audioManager.bufferLength);
+            const g = 250 * (i / audioManager.bufferLength);
+            const b = 50;
+            canvasCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            canvasCtx.fillRect(
+              x,
+              canvas.height - barHeight,
+              barWidth,
+              barHeight
+            );
+            x += barWidth + 1;
+          }
+        }
+        draw();
+      }
+
+      // YouTube handler
+      document.getElementById('youtubeBtn').onclick = async () => {
+        const url = await showModal(
+          'Add YouTube Video',
+          'Enter YouTube URL or Video ID:',
+          'prompt'
+        );
+        if (!url) return;
+
+        let videoId = url.trim();
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+          // cspell:disable-line
+          const match = url.match(
+            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/
+          ); // cspell:disable-line
+          videoId = match ? match[1] : url;
+        }
+
+        if (videoId && videoId.length === 11) {
+          videos.push({
+            id: videos.length + 1,
+            title: `YouTube Video ${videoId}`,
+            duration: '0:00',
+            src: `https://www.youtube.com/embed/${videoId}`,
+            poster: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+            type: 'youtube',
+            isHLS: false,
+            tags: ['youtube', 'video'],
+            watchCount: 0,
+            isYouTube: true,
+          });
+          currentIndex = videos.length - 1;
+          renderVideoGrid();
+          loadVideo(currentIndex);
+          showNotification('✅ YouTube video added!');
+        } else {
+          await showModal('Error', 'Invalid YouTube URL or Video ID');
+        }
+      };
+
+      // IndexedDB for video metadata
+      class MetadataDB {
+        constructor() {
+          this.db = null;
+          this.init();
+        }
+
+        async init() {
+          return new Promise((resolve, reject) => {
+            const request = indexedDB.open('HootnerDB', 1);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+              this.db = request.result;
+              resolve(this.db);
+            };
+            request.onupgradeneeded = e => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains('metadata')) {
+                db.createObjectStore('metadata', { keyPath: 'fileName' });
+              }
+            };
+          });
+        }
+
+        async save(fileName, duration, poster) {
+          if (!this.db) await this.init();
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(['metadata'], 'readwrite');
+            const store = tx.objectStore('metadata');
+            const request = store.put({
+              fileName,
+              duration,
+              poster,
+              timestamp: Date.now(),
+            });
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+          });
+        }
+
+        async get(fileName) {
+          if (!this.db) await this.init();
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(['metadata'], 'readonly');
+            const store = tx.objectStore('metadata');
+            const request = store.get(fileName);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          });
+        }
+      }
+
+      const metadataDB = new MetadataDB();
+
+      // Upload handler (client-side only)
+      document.getElementById('uploadBtn').onclick = () =>
+        document.getElementById('fileInput').click();
+
+      async function processVideoFile(file) {
+        if (!file || !file.type.startsWith('video/')) return;
+        const src = URL.createObjectURL(file);
+        const title = file.name.replace(/\.[^/.]+$/, '');
+        const cached = await metadataDB.get(file.name);
+
+        if (cached) {
+          videos.push({
+            id: videos.length + 1,
+            title,
+            duration: cached.duration,
+            src,
+            poster: cached.poster,
+            type: 'video/mp4',
+            isHLS: false,
+            tags: title
+              .toLowerCase()
+              .split(/[\s_-]+/)
+              .filter(w => w.length > 2),
+            watchCount: 0,
+            _blobUrl: src,
+          });
+          renderVideoGrid();
+          showNotification(`✅ "${file.name}" added!`);
+        } else {
+          const tempVideo = document.createElement('video');
+          tempVideo.src = src;
+          tempVideo.onloadedmetadata = () => {
+            const duration = formatTime(tempVideo.duration);
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 384;
+            const ctx = canvas.getContext('2d');
+            tempVideo.currentTime = Math.min(1, tempVideo.duration / 2);
+            tempVideo.onseeked = async () => {
+              ctx.drawImage(tempVideo, 0, 0, 256, 384);
+              const poster = canvas.toDataURL('image/jpeg');
+              await metadataDB.save(file.name, duration, poster);
+              videos.push({
+                id: videos.length + 1,
+                title,
+                duration,
+                src,
+                poster,
+                type: 'video/mp4',
+                isHLS: false,
+                tags: title
+                  .toLowerCase()
+                  .split(/[\s_-]+/)
+                  .filter(w => w.length > 2),
+                watchCount: 0,
+                _blobUrl: src,
+              });
+              renderVideoGrid();
+              showNotification(`✅ "${file.name}" added!`);
+            };
+          };
+        }
+
+        setTimeout(() => {
+          if (video.src !== src) URL.revokeObjectURL(src);
+        }, 60000);
+      }
+
+      document.getElementById('fileInput').onchange = e => {
+        processVideoFile(e.target.files[0]);
+      };
+
+      // Drag & Drop Upload
+      let dropOverlay;
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+        document.body.addEventListener(evt, e => e.preventDefault());
+      });
+
+      document.body.addEventListener('dragenter', e => {
+        if (!dropOverlay) {
+          dropOverlay = document.createElement('div');
+          dropOverlay.style.cssText =
+            'position:fixed;inset:0;background:rgba(0,255,0,0.1);backdrop-filter:blur(10px);z-index:10000;display:flex;align-items:center;justify-content:center;border:4px dashed #00ff00;';
+          dropOverlay.innerHTML =
+            '<div style="font-size:48px;font-weight:bold;color:#00ff00;text-shadow:0 0 20px #00ff00;">📹 Drop Video Here</div>';
+          document.body.appendChild(dropOverlay);
+        }
+      });
+
+      document.body.addEventListener('dragleave', e => {
+        if (e.target === document.body && dropOverlay) {
+          dropOverlay.remove();
+          dropOverlay = null;
+        }
+      });
+
+      document.body.addEventListener('drop', e => {
+        if (dropOverlay) {
+          dropOverlay.remove();
+          dropOverlay = null;
+        }
+        const files = Array.from(e.dataTransfer.files).filter(f =>
+          f.type.startsWith('video/')
+        );
+        files.forEach(processVideoFile);
+        if (files.length > 0)
+          showNotification(`📥 Processing ${files.length} video(s)...`);
+      });
+
+      // Download handler (direct)
+      document.getElementById('downloadBtn').onclick = () => {
+        const a = document.createElement('a');
+        a.href = video.src;
+        a.download = videos[currentIndex].title + '.mp4';
+        a.click();
+      };
+
+      // Load videos from server
+      async function loadServerVideos() {
+        try {
+          const response = await fetch('http://localhost:3000/api/videos');
+          const serverVideos = await response.json();
+          serverVideos.forEach(v => {
+            videos.push({
+              id: videos.length + 1,
+              title: v.title,
+              duration: v.duration,
+              src: 'http://localhost:3000' + v.src,
+              poster: 'http://localhost:3000' + v.poster,
+              type: 'video/mp4',
+              isHLS: false,
+              tags: ['server', 'video'],
+              watchCount: 0,
+            });
+          });
+          renderVideoGrid();
+        } catch (err) {
+          console.log('Server not available, using default videos');
+        }
+      }
+
+      // Utility functions
+      function formatTime(seconds) {
+        if (isNaN(seconds)) return '00:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      // Get video player element
+      const videoPlayer = document.getElementById('videoPlayer');
+
+      // Enhanced Library Controls
+      let currentSort = 'default';
+      let currentFilter = 'all';
+      let searchDebounceTimer;
+
+      // Tab handling
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', e => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          e.target.classList.add('active');
+          e.target.setAttribute('aria-selected', 'true');
+          currentFilter = e.target.dataset.view;
+          applyLibraryFilters();
+        });
+      });
+
+      document.getElementById('sortSelector').addEventListener('change', e => {
+        currentSort = e.target.value;
+        applyLibraryFilters();
+      });
+
+      document.getElementById('searchInput').addEventListener('input', () => {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(applyLibraryFilters, 300);
+      });
+
+      function applyLibraryFilters() {
+        const query = document
+          .getElementById('searchInput')
+          .value.toLowerCase();
+        let filtered = [...videos];
+
+        // Show loading
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('videoGrid').innerHTML = '';
+        document.getElementById('emptyState').style.display = 'none';
+
+        setTimeout(() => {
+          // Search filter
+          if (query) {
+            filtered = filtered.filter(
+              v =>
+                v.title.toLowerCase().includes(query) ||
+                (v.tags && v.tags.some(t => t.includes(query)))
+            );
+          }
+
+          // Category filter
+          if (currentFilter === 'favorites') {
+            filtered = filtered.filter(v => favorites.includes(v.id));
+          } else if (currentFilter === 'offline') {
+            filtered = filtered.filter(v => v.cached);
+          } else if (currentFilter === 'history') {
+            const historyIds = [...new Set(viewHistory.map(h => h.id))];
+            filtered = filtered.filter(v => historyIds.includes(v.id));
+          } else if (currentFilter === 'playlists') {
+            renderPlaylists();
+            document.getElementById('loadingSpinner').style.display = 'none';
+            return;
+          } else if (currentFilter === 'recommendations') {
+            filtered = getRecommendations(
+              videos[currentIndex]?.id || videos[0]?.id,
+              10
+            );
+          } else if (currentFilter === 'continue') {
+            filtered = viewHistory
+              .slice(-5)
+              .reverse()
+              .map(h => videos.find(v => v.id === h.id))
+              .filter(Boolean);
+          } else if (currentFilter !== 'all') {
+            filtered = filtered.filter(
+              v => v.tags && v.tags.includes(currentFilter)
+            );
+          }
+
+          // Sort
+          switch (currentSort) {
+            case 'title':
+              filtered.sort((a, b) => a.title.localeCompare(b.title));
+              break;
+            case 'duration':
+              filtered.sort((a, b) => {
+                const aDur = a.duration
+                  .split(':')
+                  .reduce((acc, time) => 60 * acc + +time, 0);
+                const bDur = b.duration
+                  .split(':')
+                  .reduce((acc, time) => 60 * acc + +time, 0);
+                return bDur - aDur;
+              });
+              break;
+            case 'recent':
+              filtered.sort((a, b) => b.id - a.id);
+              break;
+            case 'mostWatched':
+              filtered.sort(
+                (a, b) => (b.watchCount || 0) - (a.watchCount || 0)
+              );
+              break;
+          }
+
+          renderVideoGrid(filtered, true);
+          updateLibraryStats();
+
+          // Hide loading and show empty if needed
+          document.getElementById('loadingSpinner').style.display = 'none';
+          if (filtered.length === 0) {
+            document.getElementById('emptyState').style.display = 'block';
+          }
+        }, 300);
+      }
+
+      // Favorites Management
+      function toggleFavorite(videoId) {
+        if (favorites.includes(videoId)) {
+          favorites = favorites.filter(id => id !== videoId);
+          showNotification('Removed from favorites');
+        } else {
+          favorites.push(videoId);
+          showNotification('⭐ Added to favorites');
+        }
+        localStorage.setItem('hootnerFavorites', JSON.stringify(favorites));
+        syncChannel.postMessage({ type: 'favorites', data: { favorites } });
+        renderVideoGrid();
+      }
+
+      // Custom Modal
+      function showModal(title, message, type = 'alert', defaultValue = '') {
+        return new Promise(resolve => {
+          const overlay = document.createElement('div');
+          overlay.className = 'modal-overlay';
+          const modal = document.createElement('div');
+          modal.className = 'modal';
+          modal.innerHTML = `<div class="modal-title">${title}</div><div class="modal-message">${message}</div>${type === 'prompt' ? `<input class="modal-input" value="${defaultValue}">` : ''}<div class="modal-buttons">${type !== 'alert' ? '<button class="modal-btn modal-btn-secondary" data-action="cancel">Cancel</button>' : ''}<button class="modal-btn modal-btn-primary" data-action="ok">${type === 'confirm' ? 'Confirm' : 'OK'}</button></div>`;
+          overlay.appendChild(modal);
+          document.body.appendChild(overlay);
+          const input = modal.querySelector('.modal-input');
+          if (input) input.focus();
+          modal.onclick = e => {
+            const action = e.target.dataset.action;
+            if (action === 'ok') {
+              overlay.remove();
+              resolve(type === 'prompt' ? input?.value || '' : true);
+            } else if (action === 'cancel') {
+              overlay.remove();
+              resolve(type === 'prompt' ? null : false);
+            }
+          };
+          if (input)
+            input.onkeydown = e => {
+              if (e.key === 'Enter')
+                modal.querySelector('[data-action="ok"]').click();
+              if (e.key === 'Escape') overlay.remove();
+            };
+          overlay.onclick = e => {
+            if (e.target === overlay) {
+              overlay.remove();
+              resolve(type === 'prompt' ? null : false);
+            }
+          };
+        });
+      }
+
+      // Playlist Management
+      async function createPlaylist() {
+        const name = await showModal(
+          'Create Playlist',
+          'Enter playlist name:',
+          'prompt'
+        );
+        if (name) {
+          playlists.push({ id: Date.now(), name, videos: [] });
+          localStorage.setItem('hootnerPlaylists', JSON.stringify(playlists));
+          syncChannel.postMessage({ type: 'playlist', data: { playlists } });
+          showNotification(`📁 Created "${name}"`);
+        }
+      }
+
+      // Render playlists
+      function renderPlaylists() {
+        const grid = document.getElementById('videoGrid');
+        if (playlists.length === 0) {
+          document.getElementById('emptyState').style.display = 'block';
+          return;
+        }
+        grid.innerHTML = playlists
+          .map(
+            p => `
+          <div draggable="true" ondragstart="dragPlaylist(event, ${p.id})" class="playlist-card" style="cursor:move; background:rgba(10,10,15,0.9); border-radius:16px; padding:16px; border:2px solid #00ff00; margin-bottom:12px;">
+            <div style="font-weight:bold; color:#00ff00; font-size:1rem;">${p.name}</div>
+            <div style="font-size:0.875rem; color:#00ffff; opacity:0.8;">${p.videos.length} videos</div>
+          </div>
+        `
+          )
+          .join('');
+      }
+
+      // Drag-and-drop
+      function dragPlaylist(ev, id) {
+        ev.dataTransfer.setData('text/plain', id);
+      }
+      document
+        .getElementById('videoGridContainer')
+        .addEventListener('dragover', ev => ev.preventDefault());
+      document
+        .getElementById('videoGridContainer')
+        .addEventListener('drop', ev => {
+          ev.preventDefault();
+          const id = ev.dataTransfer.getData('text/plain');
+          // Reorder logic can be added here
+        });
+
+      async function clearHistory() {
+        if (
+          await showModal('Clear History', 'Clear watch history?', 'confirm')
+        ) {
+          viewHistory = [];
+          localStorage.setItem('hootnerHistory', JSON.stringify(viewHistory));
+          videos.forEach(v => (v.watchCount = 0));
+          syncChannel.postMessage({ type: 'history', data: { history: [] } });
+          showNotification('History cleared');
+          updateLibraryStats();
+        }
+      }
+
+      // Export/Import Library
+      function exportLibrary() {
+        const data = {
+          favorites,
+          playlists,
+          viewHistory,
+          exportDate: new Date().toISOString(),
+          version: '1.0',
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: 'application/json',
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `hootner-library-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showNotification('📤 Library exported!');
+      }
+
+      function importLibrary() {
+        document.getElementById('importInput').click();
+      }
+
+      document.getElementById('importInput').onchange = e => {
+        const file = e.target.files[0];
+        if (file && file.type === 'application/json') {
+          const reader = new FileReader();
+          reader.onload = async ev => {
+            try {
+              const data = JSON.parse(ev.target.result);
+              if (data.favorites) {
+                favorites = data.favorites;
+                localStorage.setItem(
+                  'hootnerFavorites',
+                  JSON.stringify(favorites)
+                );
+              }
+              if (data.playlists) {
+                playlists = data.playlists;
+                localStorage.setItem(
+                  'hootnerPlaylists',
+                  JSON.stringify(playlists)
+                );
+              }
+              if (data.viewHistory) {
+                viewHistory = data.viewHistory;
+                localStorage.setItem(
+                  'hootnerHistory',
+                  JSON.stringify(viewHistory)
+                );
+              }
+              renderVideoGrid();
+              updateLibraryStats();
+              showNotification('📥 Library imported!');
+            } catch (err) {
+              await showModal('Error', 'Invalid library file');
+            }
+          };
+          reader.readAsText(file);
+        }
+      };
+
+      function updateLibraryStats() {
+        const stats = document.getElementById('libraryStats');
+        if (stats) {
+          const totalWatched = viewHistory.length;
+          const uniqueWatched = new Set(viewHistory.map(h => h.id)).size;
+          stats.innerHTML = `📊 ${videos.length} videos • ${offlineVideos.length} offline • ${favorites.length} favorites • ${uniqueWatched} watched`;
+        }
+      }
+
+      // Share functionality
+      document.getElementById('shareBtn').onclick = () => {
+        if (navigator.share) {
+          navigator.share({
+            title: videos[currentIndex].title,
+            text: 'Check out this video on HOOTNER!',
+            url: window.location.href,
+          });
+        } else {
+          navigator.clipboard.writeText(window.location.href);
+          alert('Link copied to clipboard!');
+        }
+      };
+
+      // Enhanced navigation with state preservation and transitions
+      function navigateTo(url) {
+        localStorage.setItem(
+          'hootnerPlayerState',
+          JSON.stringify({
+            videoId: videos[currentIndex]?.id,
+            timestamp: video.currentTime,
+            isPlaying: !video.paused,
+          })
+        );
+        const loader = document.createElement('div');
+        loader.style.cssText =
+          'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#00ff00;font-size:24px;z-index:10000;';
+        loader.textContent = 'Loading...';
+        document.body.appendChild(loader);
+        document.body.style.transition = 'opacity 0.3s';
+        document.body.style.opacity = '0';
+        setTimeout(() => (window.location.href = url), 300);
+      }
+
+      document.getElementById('marketplaceBtn').onclick = () =>
+        navigateTo('./marketplace.html?from=player');
+      document.getElementById('lobbyBtn').onclick = () =>
+        showModal('Coming Soon', 'Lobby feature coming soon!');
+
+      // Offline Video Management
+      let offlineVideos =
+        JSON.parse(localStorage.getItem('hootnerOffline')) || [];
+
+      async function toggleOffline(videoId) {
+        const video = videos.find(v => v.id === videoId);
+        if (!video) return;
+
+        if (video.cached) {
+          // Remove from cache
+          const cache = await caches.open('hootner-videos');
+          await cache.delete(video.src);
+          video.cached = false;
+          offlineVideos = offlineVideos.filter(id => id !== videoId);
+          localStorage.setItem('hootnerOffline', JSON.stringify(offlineVideos));
+          showNotification('Removed from offline');
+        } else {
+          // Download for offline
+          showNotification('Downloading for offline...');
+          try {
+            const cache = await caches.open('hootner-videos');
+            const response = await fetch(video.src);
+            await cache.put(video.src, response);
+            video.cached = true;
+            offlineVideos.push(videoId);
+            localStorage.setItem(
+              'hootnerOffline',
+              JSON.stringify(offlineVideos)
+            );
+            showNotification('✓ Available offline!');
+          } catch (err) {
+            showNotification('Download failed');
+          }
+        }
+        renderVideoGrid();
+      }
+
+      let notificationStack = [];
+
+      function showNotification(text) {
+        const msg = document.createElement('div');
+        msg.textContent = text;
+        msg.style.cssText =
+          'position:fixed;right:20px;background:#00ff00;color:#000;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:9999;transition:all 0.3s;opacity:0;transform:translateX(100px)';
+        document.body.appendChild(msg);
+
+        notificationStack.push(msg);
+        updateNotificationPositions();
+
+        setTimeout(() => (msg.style.opacity = '1'), 10);
+        setTimeout(() => (msg.style.transform = 'translateX(0)'), 10);
+
+        setTimeout(() => {
+          msg.style.opacity = '0';
+          msg.style.transform = 'translateX(100px)';
+          setTimeout(() => {
+            msg.remove();
+            notificationStack = notificationStack.filter(n => n !== msg);
+            updateNotificationPositions();
+          }, 300);
+        }, 2000);
+      }
+
+      function updateNotificationPositions() {
+        notificationStack.forEach((msg, i) => {
+          msg.style.top = 80 + i * 60 + 'px';
+        });
+      }
+
+      // Check cached videos on load
+      async function checkOfflineVideos() {
+        const cache = await caches.open('hootner-videos');
+        for (const video of videos) {
+          const cached = await cache.match(video.src);
+          video.cached = !!cached || offlineVideos.includes(video.id);
+        }
+        renderVideoGrid();
+      }
+
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('sw.js')
+          .then(() => console.log('✓ Service Worker registered'))
+          .catch(err => console.warn('SW registration failed:', err));
+      }
+
+      // Handle audio context user interaction requirement
+      document.addEventListener(
+        'click',
+        () => {
+          if (audioManager.audioContext.state === 'suspended') {
+            audioManager.audioContext.resume();
+          }
+        },
+        { once: true }
+      );
+
+      // Restore player state
+      function restorePlayerState() {
+        const state = localStorage.getItem('hootnerPlayerState');
+        if (state) {
+          try {
+            const { videoId, timestamp, isPlaying } = JSON.parse(state);
+            const index = videos.findIndex(v => v.id === videoId);
+            if (index !== -1) {
+              currentIndex = index;
+              loadVideo(index);
+              video.addEventListener(
+                'loadedmetadata',
+                () => {
+                  video.currentTime = timestamp || 0;
+                  if (isPlaying) video.play();
+                },
+                { once: true }
+              );
+            }
+          } catch (e) {}
+        }
+      }
+
+      // Init
+      console.log('🦉 HOOTNER Initializing...');
+      console.log('Videos loaded:', videos.length);
+      renderVideoGrid();
+      loadServerVideos();
+      checkOfflineVideos();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('from') === 'marketplace') {
+        restorePlayerState();
+      } else {
+        loadVideo(0);
+      }
+      updateLibraryStats();
+      document.getElementById('autoplayBtn').style.background =
+        'linear-gradient(135deg, #00ff00, #ffff00)';
+      console.log('✅ HOOTNER Ready!');
+      document.body.style.transition = 'opacity 0.3s';
+      document.body.style.opacity = '1';
+    </script>
+    <div class="main-content"><script src="notifications.js"></script></div>
+  </body>
+</html>

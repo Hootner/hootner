@@ -1,0 +1,20 @@
+/**
+ * Timeout Duration Constants (in milliseconds)
+ * @module constants/timeouts
+ */
+
+const TIMEOUTS = {
+  ONE_SECOND: 1000,
+  TWO_SECONDS: 2000,
+  FIVE_SECONDS: 5000,
+  TEN_SECONDS: 10000,
+  THIRTY_SECONDS: 30000,
+  ONE_MINUTE: 60000,
+  FIVE_MINUTES: 300000,
+  ONE_HOUR: 3600000,
+  ONE_DAY: 86400000,
+  ONE_YEAR_SECONDS: 31536000,
+  ONE_YEAR_MS: 31536000000
+};
+
+export default TIMEOUTS;

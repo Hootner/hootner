@@ -1,0 +1,13 @@
+{
+  "name": "@hootner/constants",
+  "version": "1.0.0",
+  "description": "Centralized constants for Hootner project",
+  "main": "index.js",
+  "keywords": [
+    "constants",
+    "config",
+    "hootner"
+  ],
+  "author": "Hootner Team",
+  "license": "MIT"
+}

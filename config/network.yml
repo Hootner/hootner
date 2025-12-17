@@ -1,0 +1,47 @@
+# HOOTNER Network Configuration
+# Optimized for 425 Mbps connection and video streaming
+
+network:
+  adapter:
+    speed: 425 # Mbps
+    type: 'Remote NDIS'
+    ipv4: '10.182.75.69'
+    ipv6: '2600:380:695a:dc3e:e0dc:2b47:395d:3c95'
+    dns_servers:
+      ipv4: ['10.0.0.241']
+      ipv6: ['2600:380:695a:dc3e::29']
+
+  video_streaming:
+    max_bitrate: '50Mbps' # Conservative for 425 Mbps
+    buffer_size: '30s'
+    chunk_size: '2MB'
+    concurrent_streams: 10
+
+  load_balancing:
+    algorithm: 'round_robin'
+    health_check_interval: '10s'
+    max_connections_per_backend: 1000
+
+  rate_limiting:
+    requests_per_minute: 1000
+    burst_size: 100
+    video_upload_limit: '10MB/s'
+
+  timeouts:
+    connection: '30s'
+    read: '60s'
+    write: '60s'
+    keepalive: '300s'
+
+  compression:
+    enabled: true
+    level: 6
+    min_size: '1KB'
+    types:
+      ['text/html', 'text/css', 'application/javascript', 'application/json']
+
+  security:
+    max_request_size: '100MB'
+    allowed_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    cors_origins: ['http://localhost:3000', 'https://localhost:3000']
+    rate_limit_enabled: true

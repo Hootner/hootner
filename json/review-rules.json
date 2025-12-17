@@ -1,0 +1,33 @@
+{
+  "security": {
+    "enabled": true,
+    "standards": ["OWASP Top 10", "AWS Best Practices", "CWE Top 25"],
+    "checks": [
+      "SQL Injection",
+      "XSS",
+      "CSRF",
+      "Authentication",
+      "Authorization",
+      "Sensitive Data Exposure",
+      "Security Misconfiguration",
+      "Insecure Dependencies",
+      "Insufficient Logging",
+      "Server-Side Request Forgery"
+    ]
+  },
+  "compliance": {
+    "frameworks": ["OWASP", "AWS Well-Architected", "NIST"],
+    "autoFix": true,
+    "severity": {
+      "critical": "block",
+      "high": "warn",
+      "medium": "info",
+      "low": "info"
+    }
+  },
+  "scanSchedule": {
+    "onCommit": true,
+    "onPR": true,
+    "periodic": "weekly"
+  }
+}
