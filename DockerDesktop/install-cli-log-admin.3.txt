@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------->8
+Version: 4.44.2 (202017)
+Sha1: 
+Started on: 2025/08/20 12:36:47.737
+Resources: C:\Program Files\Docker\Docker\resources
+OS: Windows 10 Pro
+Edition: Professional
+Id: 2009
+Build: 19045
+BuildLabName: 19041.1.amd64fre.vb_release.191206-1406
+File: C:\ProgramData\DockerDesktop\install-cli-log-admin.txt
+CommandLine: "C:\Program Files\Docker\Docker\InstallerCli.exe" -i
+You can send feedback, including this log file, at https://github.com/docker/for-win/issues
+[2025-08-20T12:36:47.939933600Z][Installer][I] Preparing...
+[2025-08-20T12:36:47.967859900Z][HyperVManager][I] Destroy
+[2025-08-20T12:36:47.997779000Z][HyperVInfrastructure][I] Try to remove VM DockerDesktopVM
+[2025-08-20T12:36:48.332036900Z][Installer][W] Failed to uninstall HyperV VM: Sequence contains no elements
+[2025-08-20T12:36:48.462027400Z][Installer][I] distro docker-desktop not found, skipping unregister
+[2025-08-20T12:36:48.462027400Z][Installer][I] Prepare completed successfully
+[2025-08-20T12:36:48.463024800Z][Installer][I] Recreating Docker CLI plugins directory
+[2025-08-20T12:36:48.465019500Z][Installer][I] Directory C:\Program Files\Docker\cli-plugins does not exist
+[2025-08-20T12:36:48.467014300Z][Installer][I] Installing Docker CLI plugins
+[2025-08-20T12:36:48.475990600Z][SymlinkUtils][W] Deleting folder C:\Users\12182\.docker\modules\tmp-delete\8784536e-e630-431b-80ab-3bec32e02449
+[2025-08-20T12:36:48.476987600Z][SymlinkUtils][W] Deleting folder C:\Users\12182\.docker\modules\tmp-delete
+[2025-08-20T12:36:48.476987600Z][Installer][I] Re-linking docker-compose.exe
+[2025-08-20T12:36:48.859846000Z][Installer][I] Setting permissions
+[2025-08-20T12:36:48.864832400Z][Installer][I] Granting ReadAndExecute on C:\ProgramData\DockerDesktop
+[2025-08-20T12:36:48.865830200Z][Installer][I] Permissions updated

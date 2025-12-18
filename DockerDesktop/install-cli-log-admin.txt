@@ -1,0 +1,56 @@
+-------------------------------------------------------------------------------->8
+Version: 4.44.3 (202357)
+Sha1: 
+Started on: 2025/08/28 07:14:28.159
+Resources: C:\Program Files\Docker\Docker\resources
+OS: Windows 10 Pro
+Edition: Professional
+Id: 2009
+Build: 19045
+BuildLabName: 19041.1.amd64fre.vb_release.191206-1406
+File: C:\ProgramData\DockerDesktop\install-cli-log-admin.txt
+CommandLine: "C:\Program Files\Docker\Docker\InstallerCli.exe" -k -u
+You can send feedback, including this log file, at https://github.com/docker/for-win/issues
+[2025-08-28T07:14:28.302969200Z][Installer][I] Killing processes...
+[2025-08-28T07:14:28.327658000Z][Installer][I] Killing existing com.docker.service process with PID 20244
+[2025-08-28T07:14:28.398825000Z][Installer][I] Removing Windows daemon service
+[2025-08-28T07:14:28.998998500Z][Cmd][I] The specified service does not exist as an installed service.
+[2025-08-28T07:14:29.003157700Z][Installer][I] Uninstalling...
+[2025-08-28T07:14:29.004184500Z][Installer][I] Uninstall user Docker CLI plugins
+[2025-08-28T07:14:29.044622200Z][Installer][I] Removing Windows Containers components
+[2025-08-28T07:14:29.051618100Z][Installer][I] Removing Hyper-V components
+[2025-08-28T07:14:29.067323100Z][HyperVManager][I] Destroy
+[2025-08-28T07:14:29.092921800Z][HyperVInfrastructure][I] Try to remove VM DockerDesktopVM
+[2025-08-28T07:14:29.309570800Z][Installer][W] Failed to uninstall HyperV VM: Sequence contains no elements
+[2025-08-28T07:14:29.412880700Z][Installer][I] distro docker-desktop not found, skipping unregister
+[2025-08-28T07:14:29.480440500Z][Installer][I] distro docker-desktop-data not found, skipping unregister
+[2025-08-28T07:14:29.552758000Z][Installer][W] could not unmount disk\docker_data.vhdx: The system cannot find the path specified. 
+Error code: Wsl/ERROR_PATH_NOT_FOUND
+[2025-08-28T07:14:29.644958500Z][Installer][I] Deleting stored credentials
+[2025-08-28T07:14:30.095407900Z][Installer][I] Cleaning up application files and folders
+[2025-08-28T07:14:30.096437500Z][Installer][I] Deleting file C:\Users\12182\AppData\Roaming\Docker\settings-store.json
+[2025-08-28T07:14:30.096437500Z][Installer][I] File C:\Users\12182\AppData\Roaming\Docker\settings.json does not exist
+[2025-08-28T07:14:30.096437500Z][Installer][I] File C:\Users\12182\.docker\daemon.json does not exist
+[2025-08-28T07:14:30.097432600Z][Installer][I] File C:\Users\12182\.docker\windows-daemon.json does not exist
+[2025-08-28T07:14:30.097432600Z][Installer][I] File C:\Users\12182\AppData\Roaming\Docker\last-start-linux-daemon.json does not exist
+[2025-08-28T07:14:30.097432600Z][Installer][I] File C:\Users\12182\AppData\Roaming\Docker\last-start-windows-daemon.json does not exist
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.1.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.2.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.3.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.4.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.5.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-cli-log-admin.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.10.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.11.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.7.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.8.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.9.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Keeping file install-log-admin.txt
+[2025-08-28T07:14:30.099396700Z][Installer][I] Deleting file install-settings.json
+[2025-08-28T07:14:30.100394200Z][Installer][I] Deleting directory C:\Program Files\Docker\cli-plugins
+[2025-08-28T07:14:30.110173500Z][Installer][I] Directory C:\ProgramData\DockerDesktop\vm-data does not exist
+[2025-08-28T07:14:30.111175600Z][Installer][I] Deleting directory C:\Users\12182\AppData\Roaming\Docker\extensions
+[2025-08-28T07:14:30.112171800Z][Installer][I] File C:\Users\12182\.docker\config.json does not exist
+[2025-08-28T07:14:30.112171800Z][Installer][I] File C:\Users\12182\AppData\Local\Docker\wsl\disk\docker_data.vhdx does not exist
+[2025-08-28T07:14:30.112171800Z][Installer][I] Deleting directory C:\Users\12182\AppData\Local\Docker\wsl
+[2025-08-28T07:14:30.121802300Z][Installer][I] Uninstall completed successfully
