@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AmazonQMCPConfiguration">
+    <servers>
+      <server name="hootner-deployment">
+        <transport>stdio</transport>
+        <command>node</command>
+        <args>
+          <arg>mcp-server.js</arg>
+        </args>
+        <cwd>${PROJECT_DIR}</cwd>
+        <env>
+          <entry key="HOOTNER_ENV" value="development" />
+          <entry key="NODE_ENV" value="production" />
+        </env>
+        <tools>
+          <tool name="deploy_service" permission="ask" />
+          <tool name="run_chaos_test" permission="ask" />
+          <tool name="check_system_health" permission="always" />
+          <tool name="backup_system" permission="ask" />
+          <tool name="security_audit" permission="always" />
+        </tools>
+      </server>
+      <server name="aws-cdk">
+        <transport>stdio</transport>
+        <command>uvx</command>
+        <args>
+          <arg>awslabs.cdk-mcp-server@latest</arg>
+        </args>
+        <env>
+          <entry key="AWS_PROFILE" value="default" />
+        </env>
+      </server>
+    </servers>
+  </component>
+</project>

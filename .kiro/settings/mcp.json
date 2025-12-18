@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "hootner-mcp": {
+      "command": "node",
+      "args": ["servers/hootner-mcp-server.js"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

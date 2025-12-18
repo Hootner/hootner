@@ -1,53 +1,35 @@
-# Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-
-# Environment
 .env
 .env.local
-.env.*.local
-*.env
-
-# Build outputs
+.env.production
+*.log
 dist/
 build/
-out/
-*.log
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
 .DS_Store
 Thumbs.db
-
-# Testing
+*.tmp
+*.temp
+.vscode/settings.json
+.idea/workspace.xml
 coverage/
 .nyc_output/
-playwright-report/
-
-# Temp
-temp/
-tmp/
-*.tmp
-
-# Secrets
-*.pem
-*.key
-ssl/*.pem
-ssl/*.key
-
-# Docker
-.dockerignore
-
-# Misc
-*.bak
-*.cache
+*.pid
+*.seed
+*.pid.lock
+.npm
 .eslintcache
+.cache/
+.parcel-cache/
+.next/
+out/
+.nuxt/
+.vuepress/dist/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+ssl/private/
+*.key
+*.pem
+!ssl/example.key
+!ssl/example.pem
