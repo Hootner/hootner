@@ -1,7 +1,4 @@
 import DOMPurify from 'dompurify';
-/**
- * Cursor-style AI UI Integration
- *//
 
 class CursorUI {
   constructor(editor) {
@@ -21,14 +18,14 @@ class CursorUI {
     const selector = document.createElement('div');
     selector.id = 'aiModeSelector';
     selector.innerHTML = DOMPurify.sanitize(`
-      <div style="position:fixed; top:80px; right:20px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:8px; padding:12px; z-index:9998;">"
+      <div style="position:fixed; top:80px; right:20px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:8px; padding:12px; z-index:9998;">
         <div style="font-size:12px; color:var(--text); margin-bottom:8px; font-weight:bold;">AI MODE</div>
-        <button onclick="try { cursorUI.setMode( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"chat')" class="ai-mode-btn" data-mode="chat" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">💬 Chat</button>
-        <button onclick="try { cursorUI.setMode( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"write')" class="ai-mode-btn" data-mode="write" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">✍️ Write</button>
-        <button onclick="try { cursorUI.setMode( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"refactor')" class="ai-mode-btn" data-mode="refactor" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">🔧 Refactor</button>
-        <button onclick="try { cursorUI.setMode( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"modernize')" class="ai-mode-btn" data-mode="modernize" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">🚀 Modernize</button>
+        <button onclick="cursorUI.setMode('chat')" class="ai-mode-btn" data-mode="chat" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">💬 Chat</button>
+        <button onclick="cursorUI.setMode('write')" class="ai-mode-btn" data-mode="write" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">✍️ Write</button>
+        <button onclick="cursorUI.setMode('refactor')" class="ai-mode-btn" data-mode="refactor" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">🔧 Refactor</button>
+        <button onclick="cursorUI.setMode('modernize')" class="ai-mode-btn" data-mode="modernize" style="display:block; width:100%; padding:8px; margin:4px 0; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); cursor:pointer; text-align:left;">🚀 Modernize</button>
       </div>
-    `;
+    `);
     document.body.appendChild(selector);
   }
 
@@ -37,21 +34,21 @@ class CursorUI {
     chat.id = 'inlineAIChat';
     chat.style.display = 'none';
     chat.innerHTML = DOMPurify.sanitize(`
-      <div style="position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:8px; padding:16px; z-index:9999; box-shadow:0 8px 32px rgba(0,0,0,0.5);">"
-        <div style="display:flex; align-items:center; margin-bottom:12px;">"
+      <div style="position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:8px; padding:16px; z-index:9999; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+        <div style="display:flex; align-items:center; margin-bottom:12px;">
           <span id="modeIndicator" style="font-weight:bold; color:var(--accent); margin-right:12px;">💬 CHAT</span>
-          <input type="text" id="aiPrompt" placeholder="Ask AI or give instructions..." style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); outline:none;">"
-          <button onclick="try { cursorUI.execute() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" style="margin-left:8px; padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Send</button>
+          <input type="text" id="aiPrompt" placeholder="Ask AI or give instructions..." style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text); outline:none;">
+          <button onclick="cursorUI.execute()" style="margin-left:8px; padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Send</button>
         </div>
         <div id="aiResponse" style="max-height:200px; overflow-y:auto; padding:12px; background:var(--bg); border-radius:4px; font-size:13px; line-height:1.6;"></div>
       </div>
-    `;
-    document.body.appendChild(chat);'
-    }
+    `);
+    document.body.appendChild(chat);
+  }
 
   setMode(mode) {
     this.activeMode = mode;
-    document.querySelectorAll('.ai-mode-btn').forEach(button => {
+    document.querySelectorAll('.ai-mode-btn').forEach(btn => {
       btn.style.background = btn.dataset.mode === mode ? 'var(--accent)' : 'var(--bg)';
     });
     
@@ -67,42 +64,37 @@ class CursorUI {
     if (!prompt || !this.activeMode) return;
 
     const response = document.getElementById('aiResponse');
-    response.innerHTML = DOMPurify.sanitize('<div style="color:var(--accent));">⏳ Processing...</div>';
-    let operationResult;
+    response.innerHTML = DOMPurify.sanitize('<div style="color:var(--accent);">⏳ Processing...</div>');
+    
     try {
+      let result;
       switch (this.activeMode) {
         case 'chat':
           result = await this.aiModes.chatMode(prompt);
-          response.innerHTML = DOMPurify.sanitize(`<div>${result.response} catch (error) { console.error("Error:", error); }</div>`);
+          response.innerHTML = DOMPurify.sanitize(`<div>${result.response}</div>`);
           break;
         case 'write':
           result = await this.aiModes.writeMode(prompt);
-          response.innerHTML = DOMPurify.sanitize(`<div style="color:#4caf50);">✅ Code generated</div>`;
+          response.innerHTML = DOMPurify.sanitize('<div style="color:#4caf50;">✅ Code generated</div>');
           break;
         case 'refactor':
           result = await this.aiModes.refactorMode(prompt);
-          response.innerHTML = DOMPurify.sanitize(`<div style="color:#4caf50);">✅ Refactored: ${result.type}</div>`;
+          response.innerHTML = DOMPurify.sanitize(`<div style="color:#4caf50;">✅ Refactored: ${result.type}</div>`);
           break;
         case 'modernize':
           result = await this.aiModes.modernize(prompt || 'typescript');
-          response.innerHTML = DOMPurify.sanitize(`<div style="color:#4caf50);">✅ Modernized to ${result.target}</div>`;
+          response.innerHTML = DOMPurify.sanitize(`<div style="color:#4caf50;">✅ Modernized to ${result.target}</div>`);
           break;
       }
     } catch (error) {
-      response.innerHTML = DOMPurify.sanitize(`<div style="color:#f44336);">❌ Error: ${error.message}</div>`;
+      response.innerHTML = DOMPurify.sanitize(`<div style="color:#f44336;">❌ Error: ${error.message}</div>`);
     }
-`
+
     document.getElementById('aiPrompt').value = '';
   }
 
   bindShortcuts() {
-    document.addEventListener('keydown', (event) => {
-        try {
-          ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
-    }) => {
+    document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         this.setMode('chat');
@@ -117,18 +109,7 @@ class CursorUI {
       }
     });
 
-    document.getElementById('aiPrompt')(() => {
-  const getConditionalValue32n7 = (condition) => {
-    if (condition) {
-      return .addEventListener('keypress', (event) => {
-        try {
-          ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error;
-    } else {
-      return ', error);
-        }
-      }) => {
+    document.getElementById('aiPrompt').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') this.execute();
     });
   }
@@ -136,20 +117,10 @@ class CursorUI {
 
 let cursorUI;
 if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', (event) => {
-        try {
-          (()(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error;
-    }
-  };
-  return getConditionalValue32n7();
-})(): ', error);
-        }
-      }) => {
+  window.addEventListener('DOMContentLoaded', () => {
     if (window.editor) {
       cursorUI = new CursorUI(window.editor);
       window.cursorUI = cursorUI;
     }
-  });'
-    }
+  });
+}

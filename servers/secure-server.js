@@ -17,8 +17,11 @@ try {
   options = {
     key: readFileSync(keyPath),
     cert: readFileSync(certPath),
-  } catch (error) { console.error("Error:", error); };
-} catch (error) {
+  } catch (err) {error) {
+    console.error(error);
+    throw error;
+  };
+} catch (err) {error) {
   console.error('Failed to load SSL certificates: ', error.message);
   process.exit(1);'
     }
@@ -154,7 +157,7 @@ const server = https.createServer(options, app);
 
 server
   .listen(PORT, ':: ', () => {
-    console.log(`Secure Server: https://localhost:${PORT} | https://[::1]:${PORT}`);'
+    '
     })
   .on('error', (err) => {
     if (err) {

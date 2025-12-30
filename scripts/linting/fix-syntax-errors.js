@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Fix Syntax Errors from Refactoring
  * Repairs common syntax issues introduced during automated refactoring
  *//
@@ -14,13 +14,11 @@ class SyntaxFixer {
   }
 
   async fixAllSyntaxErrors() {
-    console.log('🔧 Fixing syntax errors from refactoring...\n');
-    
+        
     const rootDir = path.resolve(__dirname, '..');
     await this.processDirectory(rootDir);
     
-    console.log(`\n✅ Fixed ${this.totalFixes} syntax errors in ${this.fixedFiles} files`);
-  }
+      }
 
   async processDirectory(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -37,7 +35,7 @@ class SyntaxFixer {
   }
 
   shouldSkipDir(name) {
-    return ['node_modules', '.git', 'dist', 'build', 'coverage'].includes(name);
+    return ['nodeModules', '.git', 'dist', 'build', 'coverage'].includes(name);
   }
 
   shouldProcessFile(name) {
@@ -56,7 +54,10 @@ class SyntaxFixer {
           fixes++;
           return match + match[0];
         }
-         catch (error) { console.error("Error:", error); }return match;
+         catch (error) {
+    console.error(error);
+    throw error;
+  }return match;
       });
 
       // Fix unterminated regular expressions
@@ -74,7 +75,10 @@ class SyntaxFixer {
       // Fix missing catch/finally clauses
       content = content.replace(/try\s*\{[^}]*\}\s*(?!catch|finally)/g, (match) => {
         fixes++;
-        return match + ' catch (error) { console.error("Error:", error); }';
+        return match + ' catch (error) {
+    console.error(error);
+    throw error;
+  }';
       });
 
       // Fix unexpected tokens after dots
@@ -106,7 +110,7 @@ class SyntaxFixer {
         fs.writeFileSync(filePath, content);
         this.fixedFiles++;
         this.totalFixes += fixes;
-        console.log(`✓ Fixed ${fixes} syntax errors in ${path.relative(path.resolve(__dirname, '..'), filePath)}`);
+        , filePath)}`);
       }
     } catch (error) {
       console.warn(`⚠️  Could not process ${filePath}: ${error.message}`);

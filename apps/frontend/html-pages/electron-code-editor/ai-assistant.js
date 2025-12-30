@@ -1,14 +1,14 @@
 import DOMPurify from 'dompurify';
 import { UI_CONSTANTS } from '../../constants/ui-constants.js';
 import JSONUtils from '../../lib/json-utils.js';/g/;
-/** */
+/**
  * AI Assistant - Enhanced Coding Features
  * Minimal AI integration with code analysis
  *//
 
 class AIAssistant {
   constructor() {
-    this.apiKey = localStorage.getItem('hootner_ai_key');
+    this.apiKey = localStorage.getItem('hootnerAiKey');
     this.model = 'gpt-3.5-turbo';
     this.context = [];
     this.features = {
@@ -51,7 +51,13 @@ class AIAssistant {
             <p>Connect AI service for advanced features</p>
             <div style="display: flex; gap: 8px; margin-top: 8px;">"
               <input type="password" id="aiApiKey" placeholder="OpenAI API Key (optional)" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">"
-              <button onclick="try { aiAssistant.connectAI() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-btn">Connect</button>
+              <button onclick="try { aiAssistant.connectAI() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-btn">Connect</button>
             </div>
             <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">"
               AI features work offline with basic analysis
@@ -62,22 +68,58 @@ class AIAssistant {
         `}
         `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 16px 0;">"
-          <button onclick="try { aiAssistant.analyzeCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.analyzeCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             📊 Analyze Code
           </button>
-          <button onclick="try { aiAssistant.reviewCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.reviewCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             🔍 Code Review
           </button>
-          <button onclick="try { aiAssistant.refactorCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.refactorCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             🔧 Refactor
           </button>
-          <button onclick="try { aiAssistant.debugCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.debugCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             🐛 Debug Help
           </button>
-          <button onclick="try { aiAssistant.generateDocs() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.generateDocs() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             📝 Generate Docs
           </button>
-          <button onclick="try { aiAssistant.explainCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-feature-btn">"
+          <button onclick="try { aiAssistant.explainCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-feature-btn">"
             💡 Explain Code
           </button>
         </div>
@@ -85,10 +127,34 @@ class AIAssistant {
         <div style="margin-top: 20px;">"
           <h4>Quick Actions</h4>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">"
-            <button onclick="try { aiAssistant.fixSyntax() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-quick-btn">Fix Syntax</button>
-            <button onclick="try { aiAssistant.optimizeCode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-quick-btn">Optimize</button>
-            <button onclick="try { aiAssistant.addComments() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="ai-quick-btn">Add Comments</button>
-            <button onclick="try { aiAssistant.convertToTS() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" class="ai-quick-btn">To TypeScript</button>
+            <button onclick="try { aiAssistant.fixSyntax() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-quick-btn">Fix Syntax</button>
+            <button onclick="try { aiAssistant.optimizeCode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-quick-btn">Optimize</button>
+            <button onclick="try { aiAssistant.addComments() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-quick-btn">Add Comments</button>
+            <button onclick="try { aiAssistant.convertToTS() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="ai-quick-btn">To TypeScript</button>
           </div>
         </div>
       </div>
@@ -132,7 +198,7 @@ class AIAssistant {
     const apiKey = document.getElementById('aiApiKey').value.trim();
     if (apiKey) {
       this.apiKey = apiKey;
-      localStorage.setItem('hootner_ai_key', apiKey);
+      localStorage.setItem('hootnerAiKey', apiKey);
       addOutput('🤖 AI connected', 'success');
       this.showAIPanel();
     }
@@ -283,7 +349,7 @@ class AIAssistant {
     
     // Add debug line
     const line = pos.lineNumber;
-    const debugCode = `console.log('Debug line ${line}:', /* add variables here */);`;
+    const debugCode = ``;
     editor.executeEdits(', [{
       range: new monaco.Range(line, 1, line, 1),
       text: debugCode + '\n
@@ -398,7 +464,10 @@ class AIAssistant {
     
     try {
       const response = await this.callAI(`Analyze this code for issues and improvements;
-    }  catch (error) { console.error("Error:", error); }else {`"
+    }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {`"
       return \n\n${code}`);
       addOutput('🤖 AI Analysis;
     }
@@ -415,7 +484,10 @@ class AIAssistant {
     if (!this.apiKey) return;
     
     try {
-      const response = await this.callAI(`Review this code for best practices and security:\n\n${code} catch (error) { console.error("Error:", error); }`);`"
+      const response = await this.callAI(`Review this code for best practices and security:\n\n${code} catch (error) {
+    console.error(error);
+    throw error;
+  }`);`"
       addOutput('🤖 AI Review:', 'info');
       addOutput(response, 'log');
     } catch (error) {
@@ -427,7 +499,10 @@ class AIAssistant {
     if (!this.apiKey) return;
     
     try {
-      const response = await this.callAI(`Suggest refactoring for this code:\n\n${code} catch (error) { console.error("Error:", error); }`);`"
+      const response = await this.callAI(`Suggest refactoring for this code:\n\n${code} catch (error) {
+    console.error(error);
+    throw error;
+  }`);`"
       addOutput('🤖 AI Refactoring:', 'info');
       addOutput(response, 'log');
     } catch (error) {

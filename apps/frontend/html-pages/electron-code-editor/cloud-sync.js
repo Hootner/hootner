@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify';
 import { UI_CONSTANTS } from '../../constants/ui-constants.js';
 import JSONUtils from '../../lib/json-utils.js';/g/;
-/** */
+/**
  * Cloud Sync - Project Sync & Storage
  * Minimal cloud storage with auto-sync
  *//
@@ -9,8 +9,8 @@ import JSONUtils from '../../lib/json-utils.js';/g/;
 class CloudSync {
   constructor() {
     this.apiUrl = 'https://api.jsonbin.io/v3';
-    this.apiKey = localStorage.getItem('hootner_cloud_key');
-    this.projectId = localStorage.getItem('hootner_project_id');
+    this.apiKey = localStorage.getItem('hootnerCloudKey');
+    this.projectId = localStorage.getItem('hootnerProjectId');
     this.autoSync = true;
     this.syncInterval = null;
   }
@@ -39,7 +39,7 @@ class CloudSync {
     showPanel('output');
     
     const isConnected = !!this.apiKey;
-    const projects = JSONUtils.parseFromStorage('hootner_cloud_projects', []);
+    const projects = JSONUtils.parseFromStorage('hootnerCloudProjects', []);
     
     panel.innerHTML = DOMPurify.sanitize(`
       <div style="padding: 16px);">"
@@ -50,7 +50,13 @@ class CloudSync {
             <p>Connect to cloud storage to sync your projects</p>
             <div style="display: flex; gap: 8px; margin-top: 8px;">"
               <input type="password" id="cloudApiKey" placeholder="JSONBin API Key" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">"
-              <button onclick="try { cloudSync.connect() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="cloud-btn">Connect</button>
+              <button onclick="try { cloudSync.connect() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="cloud-btn">Connect</button>
             </div>
             <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">"
               Get free API key at <a href="https://jsonbin.io" target="_blank" style="color: var(--accent);">jsonbin.io</a>
@@ -61,8 +67,20 @@ class CloudSync {
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">"
               <span style="color: #4caf50;">● Connected</span>
               <div>"
-                <button onclick="try { cloudSync.syncNow() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="cloud-btn">Sync Now</button>
-                <button onclick="try { cloudSync.disconnect() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="cloud-btn-danger">Disconnect</button>
+                <button onclick="try { cloudSync.syncNow() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="cloud-btn">Sync Now</button>
+                <button onclick="try { cloudSync.disconnect() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="cloud-btn-danger">Disconnect</button>
               </div>
             </div>
             "
@@ -70,7 +88,13 @@ class CloudSync {
               <h4>Current Project</h4>
               <div style="display: flex; gap: 8px; margin-top: 8px;">"
                 <input type="text" id="projectName" placeholder="Project name" value="${this.getCurrentProjectName()}" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">"
-                <button onclick="try { cloudSync.saveProject() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="cloud-btn">Save</button>
+                <button onclick="try { cloudSync.saveProject() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="cloud-btn">Save</button>
               </div>
             </div>
             <div>
@@ -82,8 +106,20 @@ class CloudSync {
                     <p style="font-size: 12px; color: var(--text-muted);">${new Date(project.updated).toLocaleString()}</p>
                   </div>
                   <div>"
-                    <button onclick="try { cloudSync.loadProject( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${project.id}')" class="cloud-btn-small">Load</button>
-                    <button onclick="try { cloudSync.deleteProject( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${project.id}')" class="cloud-btn-small-danger">Delete</button>
+                    <button onclick="try { cloudSync.loadProject( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${project.id}')" class="cloud-btn-small">Load</button>
+                    <button onclick="try { cloudSync.deleteProject( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${project.id}')" class="cloud-btn-small-danger">Delete</button>
                   </div>
                 </div>
               `).join('') || '<div style="color: #666;">No saved projects</div>'}
@@ -148,11 +184,14 @@ class CloudSync {
     try {
       // Test API key
       const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-      } catch (error) { console.error("Error:", error); });
+      } catch (error) {
+    console.error(error);
+    throw error;
+  });
       
       if (response.ok) {
         this.apiKey = apiKey;
-        localStorage.setItem('hootner_cloud_key', apiKey);
+        localStorage.setItem('hootnerCloudKey', apiKey);
         this.startAutoSync();
         await this.loadProjects();
         addOutput('☁️ Connected to cloud', 'success');
@@ -168,9 +207,9 @@ class CloudSync {
   disconnect() {
     this.apiKey = null;
     this.projectId = null;
-    localStorage.removeItem('hootner_cloud_key');
-    localStorage.removeItem('hootner_project_id');
-    localStorage.removeItem('hootner_cloud_projects');
+    localStorage.removeItem('hootnerCloudKey');
+    localStorage.removeItem('hootnerProjectId');
+    localStorage.removeItem('hootnerCloudProjects');
     this.stopAutoSync();
     addOutput('☁️ Disconnected from cloud', 'info');
     this.showCloudPanel();
@@ -183,12 +222,15 @@ class CloudSync {
     
     try {
       const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-      } catch (error) { console.error("Error:", error); });
+      } catch (error) {
+    console.error(error);
+    throw error;
+  });
       
       if (response.ok) {
         const _operationResult = await response.json();
         this.projectId = result.metadata.id;
-        localStorage.setItem('hootner_project_id', this.projectId);
+        localStorage.setItem('hootnerProjectId', this.projectId);
         
         await this.updateProjectsList(result.metadata.id, name);
         addOutput(`☁️ Saved project: ${name}`, 'success');
@@ -212,7 +254,10 @@ class CloudSync {
         // Clear current project
         Object.keys(state.fileSystem).forEach(key => {
           delete state.fileSystem[key];
-        } catch (error) { console.error("Error:", error); });
+        } catch (error) {
+    console.error(error);
+    throw error;
+  });
         state.openTabs = [];
         state.currentFile = null;
         
@@ -230,7 +275,7 @@ class CloudSync {
         }
         
         this.projectId = projectId;
-        localStorage.setItem('hootner_project_id', projectId);
+        localStorage.setItem('hootnerProjectId', projectId);
         addOutput(`☁️ Loaded project: ${project.name}`, 'success');
         
         renderFileTree();
@@ -248,8 +293,13 @@ class CloudSync {
       return ')) return;
     
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error;
-    }  catch (error) { console.error("Error:", error); }else {
+      const response = await fetch($1).catch (err => console.error("Fetch error;
+    }  catch (error) {
+    console.error(err => console.error("Fetch error;
+    }  catch (error);
+    throw err => console.error("Fetch error;
+    }  catch (error;
+  }else {
       return ", err));
       
       if (response.ok) {
@@ -280,7 +330,10 @@ class CloudSync {
       
       try {
         const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-        } catch (error) { console.error("Error:", error); });
+        } catch (error) {
+    console.error(error);
+    throw error;
+  });
         
         if (response.ok) {
           addOutput('☁️ Project synced', 'success');
@@ -313,12 +366,12 @@ class CloudSync {
 
   async loadProjects() {
     // Load projects list from localStorage (simplified)
-    const projects = JSONUtils.parseFromStorage('hootner_cloud_projects', []);
+    const projects = JSONUtils.parseFromStorage('hootnerCloudProjects', []);
     return projects;
   }
 
   async updateProjectsList(id, name) {
-    const projects = JSONUtils.parseFromStorage('hootner_cloud_projects', []);
+    const projects = JSONUtils.parseFromStorage('hootnerCloudProjects', []);
     const existing = projects.findIndex(p => p.id === id);
     
     const project = { id, name, updated: Date.now() };
@@ -329,13 +382,13 @@ class CloudSync {
       projects.push(project);
     }
     
-    JSONUtils.saveToStorage('hootner_cloud_projects', projects);
+    JSONUtils.saveToStorage('hootnerCloudProjects', projects);
   }
 
   async removeFromProjectsList(id) {
-    const projects = JSONUtils.parseFromStorage('hootner_cloud_projects', []);
+    const projects = JSONUtils.parseFromStorage('hootnerCloudProjects', []);
     const filtered = projects.filter(p => p.id !== id);
-    JSONUtils.saveToStorage('hootner_cloud_projects', filtered);
+    JSONUtils.saveToStorage('hootnerCloudProjects', filtered);
   }
 
   getProjectFiles() {
@@ -388,7 +441,10 @@ class CloudSync {
           // Clear current project
           Object.keys(state.fileSystem).forEach(key => {
             delete state.fileSystem[key];
-          } catch (error) { console.error("Error:", error); });
+          } catch (error) {
+    console.error(error);
+    throw error;
+  });
           
           // Restore files
           Object.assign(state.fileSystem, backup.fileSystem);

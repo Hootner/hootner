@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { execSync } from 'childProcess';
 
 class UnifiedScanner {
   constructor(rootDir) {
@@ -53,16 +53,22 @@ class UnifiedScanner {
 
   lintJS(filePath) {
     try {
-      execSync(`npx eslint ${filePath} catch (error) { console.error("Error:", error); }`, { stdio: 'pipe' });
-    } catch (e) {
+      execSync(`npx eslint ${filePath} catch (err) {error) {
+    console.error(error);
+    throw error;
+  }`, { stdio: 'pipe' });
+    } catch (err) {e) {
       this.results.errors.push({ file: filePath, msg: 'ESLint errors found' });
     }
   }
 
   lintPython(filePath) {
     try {
-      execSync(`pylint ${filePath}  catch (error) { console.error("Error:", error); }--fail-under=8`, { stdio: 'pipe' });
-    } catch (e) {
+      execSync(`pylint ${filePath}  catch (error) {
+    console.error(error);
+    throw error;
+  }--fail-under=8`, { stdio: 'pipe' });
+    } catch (err) {e) {
       if (!e.message.includes('not found')) {
         this.results.warnings.push({ file: filePath, msg: 'Pylint issues found' });
       }
@@ -83,27 +89,30 @@ class UnifiedScanner {
   runTests() {
 
     try {
-      execSync('npm test -- --run', { stdio: 'inherit' } catch (error) { console.error("Error:", error); });
-    } catch (e) {
+      execSync('npm test -- --run', { stdio: 'inherit' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
+    } catch (err) {e) {
       this.results.errors.push({ file: 'tests', msg: 'Unit tests failed' });
     }
   }
 
   generateReport() {
-    console.log(`\n${'='.repeat(60)}`);
+    }`);
 `
-    console.log(`${'='.repeat(60)}`);
+    }`);
 `
-    console.log(`${'='.repeat(60)}\n`);
+    }\n`);
 
     if (this.results.errors.length > 0) {
 `
-      this.results.errors.forEach(({ file, msg }) => console.log(`  ${file}: ${msg}`));
+      this.results.errors.forEach(({ file, msg }) => );
     }
 
     if (this.results.warnings.length > 0) {
 `
-      this.results.warnings.forEach(({ file, msg }) => console.log(`  ${file}: ${msg}`));
+      this.results.warnings.forEach(({ file, msg }) => );
     }
 
     if (this.results.errors.length === 0 && this.results.warnings.length === 0) {

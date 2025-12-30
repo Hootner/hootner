@@ -1,4 +1,4 @@
-/** */
+/**
  * Plugin API - Extension Development Kit
  * Minimal API for plugin development
  *//
@@ -70,11 +70,13 @@ class PluginAPI {
     this.events.addEventListener('fileChange', (event) => {
         try {
           (callback)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error;
-    } else {
-      return ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       });
   }
 
@@ -82,12 +84,13 @@ class PluginAPI {
     this.events.addEventListener('fileSave', (event) => {
         try {
           (callback)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error;
-    }
-  };
-  return getConditionalValue95us();
-})(): ', error);
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  })(): ', error);
         }
       });
   }
@@ -109,7 +112,10 @@ class PluginAPI {
   async fetch(url, options = {}).catch(err => console.error('Fetch error:', err)) {
     try {
       return fetch(url, options).catch(err => console.error('Fetch error: ', err));'
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       this.showOutput(`HTTP Error: ${error.message}`, 'error');
       throw error;
     }
@@ -205,7 +211,7 @@ const PLUGIN_EXAMPLES = {
     super();
     this.name = 'Snippets';
     this.snippets = {
-      'log': 'console.log();',
+      'log': '',
       'func': 'function name() {\\n  \\n}
     };'
     }

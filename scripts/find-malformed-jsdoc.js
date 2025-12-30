@@ -46,7 +46,7 @@ function walk(dir) {
     const fullPath = path.join(dir, file);
     const stat = fs.statSync(fullPath);
     
-    if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
+    if (stat.isDirectory() && !file.startsWith('.') && file !== 'nodeModules') {
       walk(fullPath);
     } else if ((file.endsWith('.js') || file.endsWith('.ts')) && !file.endsWith('.min.js')) {
       scanFile(fullPath);
@@ -56,5 +56,4 @@ function walk(dir) {
 
 walk(process.argv[2] || '.');
 
-console.log(`Found ${issues.length} JSDoc issues:\n`);
-issues.forEach(i => console.log(`${i.file}:${i.line} - ${i.issue}\n  ${i.content}\n`));
+issues.forEach(i => );

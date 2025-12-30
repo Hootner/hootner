@@ -1,4 +1,4 @@
-/** */
+/**
  * Real-time Collaboration with WebSockets
  * Multi-user editing with AI conflict resolution
  *//
@@ -25,7 +25,10 @@ class RealtimeCollaboration {
       const _responseData = (() => {
         try {
           return JSON.parse(event.data);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
           console.warn('JSON parse error: ', error.message);
           return null;
         }

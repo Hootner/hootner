@@ -1,3 +1,6 @@
+// Constants imported
+import { DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS, HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS } from '../../constants/timeouts.js';
+
 import express from 'express';
 import compression from 'compression';
 import path from 'path';
@@ -56,9 +59,12 @@ app.get('/api/csrf-token', (req, res) => {
   try {
     const token = generateCSRFToken();
     csrfTokens.set(req.sessionId, token);
-    console.info(`CSRF token generated for session: ${req.sessionId} catch (error) { console.error("Error:", error); }`);
+    console.info(`CSRF token generated for session: ${req.sessionId} catch (err) {error) {
+    console.error(error);
+    throw error;
+  }`);
     res.json({ token, sessionId: req.sessionId });
-  } catch (error) {
+  } catch (err) {error) {
     console.error('CSRF token generation error:', error.message, error.stack);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Failed to generate token' });
   }
@@ -70,7 +76,10 @@ app.use((req, res, next) => {
     if (!req.headers['x-session-id']) {
       req.sessionId = crypto.randomUUID();
       res.setHeader('X-Session-Id', req.sessionId);
-    }  catch (error) { console.error("Error:", error); }else {
+    }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {
       const sessionId = req.headers['x-session-id'];
       if (!/^[a-f0-9-]{36}$/.test(sessionId)) {
 
@@ -79,7 +88,7 @@ app.use((req, res, next) => {
       req.sessionId = sessionId;
     }
     next();
-  } catch (error) {
+  } catch (err) {error) {
     console.error('Session middleware error:', error.message, error.stack);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
   }
@@ -125,7 +134,10 @@ app.get('/api/video/:id', (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id) || id < 1) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid video ID' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid video ID' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
     const video = videos.find((v) => v.id === id);
     if (video) {
@@ -133,7 +145,7 @@ app.get('/api/video/:id', (req, res) => {
     } else {
       res.status(HTTP_STATUS.NOT_FOUND).json({ error: 'Video not found' });
     }
-  } catch (error) {
+  } catch (err) {error) {
     console.error('Video fetch error:', error.message);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch video' });
   }
@@ -141,8 +153,11 @@ app.get('/api/video/:id', (req, res) => {
 
 app.post('/api/upload', validateCSRF, (req, res) => {
   try {
-    res.json({ success: true, message: 'Upload endpoint ready' } catch (error) { console.error("Error:", error); });
-  } catch (error) {
+    res.json({ success: true, message: 'Upload endpoint ready' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
+  } catch (err) {error) {
     console.error('Upload error:', error.message);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Upload failed' });
   }
@@ -157,7 +172,10 @@ app.get('/videos/:filename', (req, res) => {
     const filename = path.basename(req.params.filename);
     if (!ALLOWED_EXTENSIONS.test(filename)) {
 
-      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Invalid filename' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Invalid filename' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
 '
     const publicVideosDir = path.resolve(__dirname, 'public', 'videos');
@@ -225,7 +243,7 @@ app.get('/videos/:filename', (req, res) => {
         }
       });
     }
-  } catch (error) {
+  } catch (err) {error) {
     console.error('Video serving error:', error.message, error.stack);
     if (!res.headersSent) {
       res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Error serving video' });
@@ -241,7 +259,10 @@ app.get('/', (req, res) => {
 
     const htmlPath = path.resolve(__dirname, 'video-player.html');
     if (!htmlPath.startsWith(__dirname)) {
-      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Access denied' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Access denied' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
 '
     const html = fs.readFileSync(htmlPath, 'utf8');
@@ -257,7 +278,7 @@ app.get('/', (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.send(html);
-  } catch (error) {
+  } catch (err) {error) {
     console.error('Page load error:', error.message);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Error loading page' });
   }
@@ -270,7 +291,10 @@ app.get('/video-player.html', (req, res) => {
 
     const htmlPath = path.resolve(__dirname, 'video-player.html');
     if (!htmlPath.startsWith(__dirname)) {
-      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Access denied' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Access denied' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
 '
     const html = fs.readFileSync(htmlPath, 'utf8');
@@ -286,7 +310,7 @@ app.get('/video-player.html', (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.send(html);
-  } catch (error) {
+  } catch (err) {error) {
     console.error('Page load error:', error.message);
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Error loading page' });
   }
@@ -312,7 +336,7 @@ process.on('SIGTERM', () => {
 
 app
   .listen(PORT, ':: ', () => {
-    console.log(`Video Player: http://localhost:${PORT} | http://[::1]:${PORT}`);'
+    '
     })
   .on('error', (err) => {
     console.error('Server error: ', err);

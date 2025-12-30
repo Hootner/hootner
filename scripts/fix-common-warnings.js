@@ -11,7 +11,9 @@ const removeConsoleLogs = (filePath) => {
       fs.writeFileSync(filePath, updated);
       return true;
     }
-  } catch (e) {}
+  } catch (error) {
+    console.error(`Error processing ${filePath}:`, error.message);
+  }
   return false;
 };
 
@@ -26,7 +28,9 @@ const fixEquality = (filePath) => {
       fs.writeFileSync(filePath, updated);
       return true;
     }
-  } catch (e) {}
+  } catch (error) {
+    console.error(`Error processing ${filePath}:`, error.message);
+  }
   return false;
 };
 
@@ -40,23 +44,14 @@ const files = [
 
 let fixed = 0;
 files.forEach(file => {
-  if (removeConsoleLogs(file)) {
-    console.log(`✓ Removed console.log from ${file}`);
-    fixed++;
-  }
-  if (fixEquality(file)) {
-    console.log(`✓ Fixed equality operators in ${file}`);
-    fixed++;
-  }
+  if (removeConsoleLogs(file)) fixed++;
+  if (fixEquality(file)) fixed++;
 });
 
-console.log(`\n🔧 Applied ${fixed} quick fixes`);
+console.log(`Fixed ${fixed} files`);
 
-// Update outdated packages
 try {
-  console.log('\n📦 Updating critical packages...');
   execSync('npm update express helmet mongoose stripe', { stdio: 'inherit' });
-  console.log('✓ Updated packages');
-} catch (e) {
-  console.log('⚠️ Package update failed - run manually: npm update');
+} catch (error) {
+  console.error('Failed to update packages:', error.message);
 }

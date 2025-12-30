@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Advanced Code Refactoring Tool
  * Breaks down long functions, simplifies ternary operators, improves naming
  *//
@@ -15,14 +15,11 @@ class AdvancedRefactor {
   }
 
   async refactorAllFiles() {
-    console.log('🔧 Starting advanced code refactoring...\n');
-    
+        
     const rootDir = path.resolve(__dirname, '..');
     await this.processDirectory(rootDir);
     
-    console.log(`\n✅ Refactored ${this.totalFixes} issues in ${this.fixedFiles} files`);
-    console.log(`📦 Extracted ${this.functionExtractCount} helper functions`);
-  }
+          }
 
   async processDirectory(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -39,7 +36,7 @@ class AdvancedRefactor {
   }
 
   shouldSkipDir(name) {
-    return ['node_modules', '.git', 'dist', 'build', 'coverage'].includes(name);
+    return ['nodeModules', '.git', 'dist', 'build', 'coverage'].includes(name);
   }
 
   shouldProcessFile(name) {
@@ -72,7 +69,7 @@ class AdvancedRefactor {
         fs.writeFileSync(filePath, content);
         this.fixedFiles++;
         this.totalFixes += fixes;
-        console.log(`✓ Refactored ${fixes}  catch (error) { console.error("Error:", error); }issues in ${path.relative(path.resolve(__dirname, '..'), filePath)}`);
+         { console.error("Error:", error); }issues in ${path.relative(path.resolve(__dirname, '..'), filePath)}`);
       }
     } catch (error) {
       console.warn(`⚠️  Could not process ${filePath}: ${error.message}`);

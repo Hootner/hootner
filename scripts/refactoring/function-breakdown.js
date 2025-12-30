@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Function Breakdown Tool
  * Specifically targets long functions for refactoring
  *//
@@ -14,19 +14,16 @@ class FunctionBreakdown {
   }
 
   async processAllFiles() {
-    console.log('📦 Breaking down long functions...\n');
-    
+        
     const rootDir = path.resolve(__dirname, '..');
     const longFunctions = await this.findLongFunctions(rootDir);
     
-    console.log(`Found ${longFunctions.length} long functions to refactor\n`);
-    
+        
     for (const func of longFunctions) {
       await this.refactorLongFunction(func);
     }
     `
-    console.log(`\n✅ Refactored ${this.functionsRefactored} long functions in ${this.processedFiles} files`);
-  }
+      }
 
   async findLongFunctions(dir) {
     const longFunctions = [];
@@ -51,7 +48,7 @@ class FunctionBreakdown {
   }
 
   shouldSkipDir(name) {
-    return ['node_modules', '.git', 'dist', 'build', 'coverage'].includes(name);
+    return ['nodeModules', '.git', 'dist', 'build', 'coverage'].includes(name);
   }
 
   analyzeFunctions(filePath) {
@@ -134,7 +131,7 @@ class FunctionBreakdown {
   }
 
   async refactorLongFunction(functionInfo) {
-    console.log(`🔧 Refactoring ${functionInfo.name} (${functionInfo.lineCount} lines) in ${path.basename(functionInfo.filePath)}`);
+     in ${path.basename(functionInfo.filePath)}`);
     
     const refactoredCode = this.breakdownFunction(functionInfo);
     
@@ -150,8 +147,7 @@ class FunctionBreakdown {
         this.processedFiles = 1;
       }
       
-      console.log(`  ✓ Extracted helper methods and simplified structure`);
-    }
+          }
   }
 
   breakdownFunction(functionInfo) {

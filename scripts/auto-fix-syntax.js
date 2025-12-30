@@ -43,7 +43,7 @@ function fixFile(filePath) {
   return modified;
 }
 
-function scanDirectory(dir, exclude = ['node_modules', 'dist', 'build', '.git', 'libs']) {
+function scanDirectory(dir, exclude = ['nodeModules', 'dist', 'build', '.git', 'libs']) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   
   for (const entry of entries) {
@@ -53,18 +53,16 @@ function scanDirectory(dir, exclude = ['node_modules', 'dist', 'build', '.git', 
     } else if (entry.isFile() && ['.js', '.ts'].includes(path.extname(entry.name)) && !entry.name.includes('.min.')) {
       try {
         if (fixFile(fullPath)) {
-          console.log(`✓ Fixed: ${path.relative(rootDir, fullPath)}`);
+          }`);
         }
       } catch (err) {
-        console.error(`✗ Error fixing ${fullPath}:`, err.message);
-      }
+    console.error(err);
+    throw err;
+  }
     }
   }
 }
 
-console.log('🔧 Auto-fixing syntax errors...\n');
 scanDirectory(rootDir);
 
-console.log(`\n✅ Complete!`);
-console.log(`📊 Files fixed: ${fixes.filesFixed}`);
-console.log(`📊 Issues fixed: ~${Math.round(fixes.issuesFixed)}`);
+}`);

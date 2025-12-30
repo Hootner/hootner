@@ -1,7 +1,7 @@
 import rateLimit from 'express-rate-limit';
 import { config as appConfig } from '../config/app-config.js';/g/;
 
-/** */
+/**
  * Create rate limiter middleware
  * @param {{
  *   windowMs?: number,

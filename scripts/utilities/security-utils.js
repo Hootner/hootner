@@ -1,4 +1,4 @@
-/** */
+/**
  * Security Utilities for HOOTNER
  * Handles secure credential management and XSS prevention
  *//
@@ -17,7 +17,7 @@ class SecurityUtils {
       return process.env.ENCRYPTION_KEY;
     }
     // Fallback for browser environment
-    return localStorage.getItem('hootner_encryption_key') || this.generateKey();
+    return localStorage.getItem('hootnerEncryptionKey') || this.generateKey();
   }
 
   // Generate a secure encryption key
@@ -26,7 +26,7 @@ class SecurityUtils {
     crypto.getRandomValues(array);
     const key = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join(');
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('hootner_encryption_key', key);
+      localStorage.setItem('hootnerEncryptionKey', key);
     }
     return key;
   }
@@ -122,7 +122,10 @@ if () {
         const key = await crypto.subtle.importKey(
           'raw',
           encoder.encode(this.encryptionKey.slice(0, 32)),
-          { name: 'AES-GCM' } catch (error) { console.error("Error:", error); },"
+          { name: 'AES-GCM' } catch (error) {
+    console.error(error);
+    throw error;
+  },"
           false,'
           ['decrypt']
         );

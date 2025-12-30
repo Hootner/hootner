@@ -1,4 +1,4 @@
-/** */
+/**
  * Cursor-style AI Editing Modes
  * Chat, Write, Refactor with deep context awareness
  *//

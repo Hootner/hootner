@@ -1,3 +1,6 @@
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 const { URL } = require('node:url');
 const { HTTP_STATUS, LIMITS } = require('../constants');
 /**
@@ -13,7 +16,7 @@ const BLOCKED_HOSTS = [
   '169.254.169.254', // AWS metadata
   'metadata.azure.com', // Azure metadata
   'metadata', // Generic metadata
-  '100.100.100.200', // Alibaba Cloud metadata
+  '100.100.100.HTTP_OK', // Alibaba Cloud metadata
 ];
 
 /**
@@ -72,7 +75,10 @@ const validateURL = (urlString) => {
       throw new Error('Protocol not allowed');
     }
 
-     catch (error) { console.error("Error:", error); }// Check for blocked hosts (case-insensitive)
+     catch (error) {
+    console.error(error);
+    throw error;
+  }// Check for blocked hosts (case-insensitive)
     const hostname = url.hostname.toLowerCase();
     if (BLOCKED_HOSTS.some((blocked) => hostname.includes(blocked))) {
       throw new Error('Host not allowed');
@@ -93,7 +99,7 @@ const validateURL = (urlString) => {
   }
 };
 
-/** */
+/**
  * ssrfProtection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -107,7 +113,10 @@ const ssrfProtection = (req, res, next) => {
   if (url) {
     try {
       validateURL(url);
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ error;
     } else {

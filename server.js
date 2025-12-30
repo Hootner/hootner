@@ -1,3 +1,6 @@
+// Constants imported
+import { ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -6,7 +9,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { doubleCsrf } from 'csrf-csrf';
-import { HTTP_STATUS, TIMEOUTS, CACHE, LIMITS, ANIMATION } from './constants/index.js';
+import { HTTP_STATUS, TIMEOUTS, CACHE, LIMITS } from './constants/index.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { schemas, validate } from './middleware/validation.js';
@@ -71,7 +74,7 @@ app.use(limiter);
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:DEFAULT_PORT',
     credentials: true,
   })
 );
@@ -246,7 +249,7 @@ app.get('/api/videos', async (req, res) => {
     const files = await fs.promises.readdir(uploadsDir);
     const videos = files
       .filter((file) => file.match(/\.(mp4|webm|ogg|avi|mov)$/i))
-      .map((file, index) => ({
+      .map((file) => ({
         id: index + 1,
         title: file.replace(/\.[^/.]+$/, ''),
         duration: 'Unknown',
@@ -317,8 +320,8 @@ app.get('/health', (req, res) => {
   res.status(HTTP_STATUS.OK).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-import { setupGracefulShutdown } from './lib/graceful-shutdown.js';;
-import memoryMonitor from './lib/memory-monitor.js';;
+import { setupGracefulShutdown } from './lib/graceful-shutdown.js';
+import memoryMonitor from './lib/memory-monitor.js';
 
 memoryMonitor.start();
 

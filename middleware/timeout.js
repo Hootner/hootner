@@ -1,6 +1,6 @@
 import { config } from '../config/app-config.js';/g/;
 
-/** */
+/**
  * timeoutMiddleware middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response

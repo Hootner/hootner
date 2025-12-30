@@ -1,4 +1,4 @@
-/** */
+/**
  * @fileoverview Comprehensive security middleware
  * @module middleware/security
  *//
@@ -52,7 +52,10 @@ export const createRateLimiter = (windowMs = 15 * 60 * UI_CONSTANTS.ANIMATION_VE
     legacyHeaders: false,
     handler: (req, res) => {
       try {
-        logger.warn('Rate limit exceeded', { ip: req.ip, path: req.path } catch (error) { console.error("Error:", error); });
+        logger.warn('Rate limit exceeded', { ip: req.ip, path: req.path } catch (error) {
+    console.error(error);
+    throw error;
+  });
         return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Too many requests' });
       } catch (error) {
         return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Too many requests' });
@@ -83,7 +86,7 @@ const sanitizeStrings = (obj) => {
   return obj;
 };
 
-/** */
+/**
  * sanitizeRequest middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -94,7 +97,10 @@ export const _sanitizeRequest = (req, res, next) => {
     if (req.body) {
       req.body = sanitizeStrings(req.body);
     }
-     catch (error) { console.error("Error:", error); }if (req.query) {
+     catch (error) {
+    console.error(error);
+    throw error;
+  }if (req.query) {
       req.query = sanitizeStrings(req.query);
     }
     if (req.params) {
@@ -107,7 +113,7 @@ export const _sanitizeRequest = (req, res, next) => {
   }
 };
 
-/** */
+/**
  * Error handler that prevents information disclosure
  * @param {Error} err - Error object
  * @param {Object} req - Express request object
@@ -128,7 +134,10 @@ export const _errorHandler = (err, req, res, next) => {
       ip: req.ip,
       body: redactSensitiveData(req.body),
       query: redactSensitiveData(req.query),
-    } catch (error) { console.error("Error:", error); });
+    } catch (error) {
+    console.error(error);
+    throw error;
+  });
     const statusCode = err.statusCode || err.status || UI_CONSTANTS.ANIMATION_SLOW;
     return res.status(statusCode).json(sanitizeError(err, false));
   } catch (error) {
@@ -196,7 +205,10 @@ export const _validateContentType = (req, res, next) => {
         !contentType ||
         (!contentType.includes('application/json') && !contentType.includes('multipart/form-data'))
       ) {
-        return res.status(HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE).json({ error: 'Unsupported Media Type' } catch (error) { console.error("Error:", error); });
+        return res.status(HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE).json({ error: 'Unsupported Media Type' } catch (error) {
+    console.error(error);
+    throw error;
+  });
       }
     }
 

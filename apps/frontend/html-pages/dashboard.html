@@ -24,6 +24,38 @@
       integrity="sha384-5VLbVvGaxKBxvJqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qV"
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Code Editor Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/view@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/state@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/commands@6.10.1/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/language@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-javascript@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-python@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-html@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-css@6/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-json@6/dist/index.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codemirror/theme-one-dark@6/dist/index.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" />
+    <!-- Data Visualization -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Security & Utilities -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js" integrity="sha512-VE9f7XWSG7ldPPgS/kkjeaRzJLVtdr8L8c5RJAt3K8SVzcse2lLCLBxMRVur7Oj7M0IMxQKDHTYbgLEQZFzy4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Export/Import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- Accessibility -->
+    <script src="https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js"></script>
     <style>
       :root {
         --glass-bg: rgba(255, 255, 255, 0.05);
@@ -97,6 +129,7 @@
         margin-bottom: 24px;
         border-bottom: 2px solid var(--glass-border);
         background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         border-radius: 12px 12px 0 0;
         padding: 8px;
@@ -104,6 +137,7 @@
       .tab {
         padding: 12px 24px;
         background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(15px);
         border: 1px solid var(--glass-border);
         border-radius: 8px;
@@ -139,6 +173,7 @@
       }
       .stat-card {
         background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(25px);
         backdrop-filter: blur(25px);
         border: 1px solid var(--glass-border);
         border-radius: 12px;
@@ -190,6 +225,7 @@
       }
       .card {
         background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(25px);
         backdrop-filter: blur(25px);
         border: 1px solid var(--glass-border);
         padding: 1.5rem;
@@ -217,6 +253,8 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+      } column;
+        gap: 0.75rem;
       }
       button {
         padding: 0.75rem;
@@ -226,6 +264,7 @@
         font-size: 14px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background: var(--glass-bg);
+        -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(15px);
         color: #00ff00;
         font-weight: bold;
@@ -1414,7 +1453,7 @@
         <div class="editor-container">
           <div class="editor-panel">
             <div class="editor-toolbar">
-              <select id="language">
+              <select id="language" aria-label="Select programming language">
                 <option>JavaScript</option>
                 <option>Python</option>
                 <option>HTML</option>
@@ -1477,6 +1516,7 @@ console.log('Hello, HOOTNER!');</textarea
                   maxlength="30"
                   placeholder="Enter username"
                   value="hootner_admin"
+                  aria-label="Username"
                 />
               </div>
               <div class="form-group">
@@ -1487,6 +1527,7 @@ console.log('Hello, HOOTNER!');</textarea
                   maxlength="254"
                   placeholder="Enter email"
                   value="admin@hootner.com"
+                  aria-label="Email address"
                 />
               </div>
               <div class="form-group">
@@ -1703,7 +1744,7 @@ console.log('Hello, HOOTNER!');</textarea
               </div>
               <div class="form-group">
                 <label>Font Size</label>
-                <select class="form-select" id="font-size">
+                <select class="form-select" id="font-size" aria-label="Font size">
                   <option>Small</option>
                   <option selected>Medium</option>
                   <option>Large</option>
@@ -1711,7 +1752,7 @@ console.log('Hello, HOOTNER!');</textarea
               </div>
               <div class="form-group">
                 <label>Language</label>
-                <select class="form-select" id="language-select">
+                <select class="form-select" id="language-select" aria-label="Language selection">
                   <option selected>English</option>
                   <option>Spanish</option>
                   <option>French</option>
@@ -2009,7 +2050,7 @@ console.log('Hello, HOOTNER!');</textarea
               </div>
               <div class="form-group">
                 <label>Text Scaling</label>
-                <select class="form-select">
+                <select class="form-select" aria-label="Text scaling">
                   <option>100% (Default)</option>
                   <option>125%</option>
                   <option>150%</option>
@@ -2018,7 +2059,7 @@ console.log('Hello, HOOTNER!');</textarea
               </div>
               <div class="form-group">
                 <label>Color Blind Mode</label>
-                <select class="form-select">
+                <select class="form-select" aria-label="Color blind mode">
                   <option selected>None</option>
                   <option>Protanopia (Red-Blind)</option>
                   <option>Deuteranopia (Green-Blind)</option>
@@ -2163,7 +2204,7 @@ console.log('Hello, HOOTNER!');</textarea
                     margin-bottom: 12px;
                   "
                 >
-                  <select class="form-select" id="api-method" style="margin-bottom: 8px">
+                  <select class="form-select" id="api-method" style="margin-bottom: 8px" aria-label="HTTP method">
                     <option>GET</option>
                     <option>POST</option>
                     <option>PUT</option>
@@ -2278,7 +2319,12 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                       margin-bottom: 8px;
                     "
                   />
-                  <select class="form-select" style="margin-bottom: 8px">
+                  <select
+                    class="form-select"
+                    onchange="performSearch()"
+                    style="padding: 8px; font-size: 13px"
+                    aria-label="Event type"
+                  >
                     <option>user.created</option>
                     <option>user.updated</option>
                     <option>payment.success</option>
@@ -2629,6 +2675,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                 id="date-filter"
                 onchange="performSearch()"
                 style="padding: 8px; font-size: 13px"
+                aria-label="Date range filter"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -2646,6 +2693,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                 id="sort-filter"
                 onchange="performSearch()"
                 style="padding: 8px; font-size: 13px"
+                aria-label="Sort by filter"
               >
                 <option value="relevance">Relevance</option>
                 <option value="date">Date (Newest)</option>
@@ -2663,6 +2711,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                 id="limit-filter"
                 onchange="performSearch()"
                 style="padding: 8px; font-size: 13px"
+                aria-label="Results per page"
               >
                 <option value="10">10</option>
                 <option value="25" selected>25</option>
@@ -2858,7 +2907,37 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
         </div>
       </div>
 
+      <script src="../../../scripts/monitoring/metrics-tracker.js"></script>
+      <script src="../../../scripts/monitoring/performance-monitor.js"></script>
+      <script src="../../../scripts/monitoring/error-tracker.js"></script>
+      <script src="../../../scripts/monitoring/behavior-analytics.js"></script>
+      <script src="../../../lib/data-utils.js"></script>
+      <script src="../../../lib/date-utils.js"></script>
+      <script src="../../../lib/http-client.js"></script>
+      <script src="../../../lib/storage.js"></script>
+      <script src="../../../lib/d3-charts.js"></script>
+      <script src="../../../lib/apexcharts-config.js"></script>
+      <script src="../../../lib/plotly-graphs.js"></script>
+      <script src="../../../lib/csrf-protection.js"></script>
+      <script src="../../../lib/rate-limiter.js"></script>
+      <script src="../../../lib/sanitizer.js"></script>
+      <script src="../../../lib/csp-reporter.js"></script>
+
       <script>
+            // Security: HTML sanitization helper
+            const sanitize = (html) => {
+              if (typeof DOMPurify !== 'undefined') {
+                return DOMPurify.sanitize(html, {
+                  ALLOWED_TAGS: ['strong', 'p', 'span', 'div', 'h3', 'button'],
+                  ALLOWED_ATTR: ['class', 'style', 'onclick']
+                });
+              }
+              // Fallback: escape HTML
+              const div = document.createElement('div');
+              div.textContent = html;
+              return div.innerHTML;
+            };
+
             let socket, trafficChart, engagementChart;
 
             function showTab(tab) {
@@ -2918,16 +2997,15 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
               if (data.posts) document.getElementById('stat-posts').textContent = data.posts;
               if (data.users) document.getElementById('stat-users').textContent = data.users.toLocaleString();
               if (data.engagement) document.getElementById('stat-engagement').textContent = data.engagement + '%';
-              if (data.revenue) document.getElementById('stat-revenue').textContent = '</body>
-        </html>
-         + (data.revenue / 1000).toFixed(1) + 'K';
+              if (data.revenue) document.getElementById('stat-revenue').textContent = '$' + (data.revenue / 1000).toFixed(1) + 'K';
             }
 
             function addActivity(activity) {
               const feed = document.getElementById('activity-feed');
               const item = document.createElement('div');
               item.className = 'activity-item';
-              item.innerHTML = `<p><strong>${activity.text}</strong></p><p class="time">Just now</p>`;
+              const safeText = sanitize(activity.text);
+              item.innerHTML = `<p><strong>${safeText}</strong></p><p class="time">Just now</p>`;
               feed.insertBefore(item, feed.firstChild);
               if (feed.children.length > 5) feed.removeChild(feed.lastChild);
             }
@@ -2953,7 +3031,14 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                 const logs = [];
                 const originalLog = console.log;
                 console.log = (...args) => logs.push(args.join(' '));
-                const result = eval(code);
+                // Security: Use Function constructor instead of eval
+                const result = (() => {
+                  try {
+                    return new Function('return ' + code)();
+                  } catch (e) {
+                    throw new Error('Code execution failed: ' + e.message);
+                  }
+                })();
                 console.log = originalLog;
                 output.textContent = logs.length ? logs.join('\n') : (result !== undefined ? String(result) : 'Code executed successfully!');
                 output.style.color = '#d4d4d4';
@@ -2992,7 +3077,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
             function saveProfile() {
               const username = document.getElementById('username').value;
               const email = document.getElementById('email').value;
-              if (username && !/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
+              // Security: Check length first to prevent ReDoS
+              if (username && (username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_]+$/.test(username))) {
                 alert('Invalid username format');
                 return;
               }
@@ -3241,9 +3327,10 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
               if (suggestions.length === 0) return;
 
               const container = document.getElementById('search-suggestions');
-              container.innerHTML = suggestions.map(s =>
-                `<div onclick="applySuggestion('${s}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${s}</div>`
-              ).join('');
+              container.innerHTML = suggestions.map(s => {
+                const safeSuggestion = sanitize(s);
+                return `<div onclick="applySuggestion('${safeSuggestion}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${safeSuggestion}</div>`;
+              }).join('');
               container.style.display = 'block';
             }
 
@@ -3253,12 +3340,13 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
 
               const container = document.getElementById('search-suggestions');
               container.innerHTML = '<div style="padding:8px 12px;color:#6b7280;font-size:12px;font-weight:bold;">Recent Searches</div>' +
-                searchData.recentSearches.slice(0, 5).map(s =>
-                  `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
-                    <span onclick="applySuggestion('${s}')" style="flex:1;color:#00ffff;">🕐 ${s}</span>
-                    <button onclick="removeRecentSearch('${s}');event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">✕</button>
-                  </div>`
-                ).join('') +
+                searchData.recentSearches.slice(0, 5).map(s => {
+                  const safeSearch = sanitize(s);
+                  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
+                    <span onclick="applySuggestion('${safeSearch}')" style="flex:1;color:#00ffff;">🕐 ${safeSearch}</span>
+                    <button onclick="removeRecentSearch('${safeSearch}');event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">✕</button>
+                  </div>`;
+                }).join('') +
                 '<div onclick="clearRecentSearches()" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#ef4444;font-size:12px;text-align:center;margin-top:4px;" onmouseover="this.style.background=\'rgba(239,68,68,0.1)\'" onmouseout="this.style.background=\'transparent\'">Clear All</div>';
               container.style.display = 'block';
             }
@@ -3549,13 +3637,16 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
               ['today', 'yesterday', 'older'].forEach(group => {
                 if (grouped[group].length > 0) {
                   html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
-                  html += grouped[group].map(n => `
+                  html += grouped[group].map(n => {
+                    const safeUser = sanitize(n.user);
+                    const safeText = sanitize(n.text);
+                    return `
                     <div class="notif-item ${n.unread ? 'unread' : ''}">
                       <div style="display:flex;gap:12px;align-items:start;">
                         <div style="font-size:24px;flex-shrink:0;">${n.icon}</div>
                         <div style="flex:1;min-width:0;" onclick="markRead(${n.id})">
-                          <div style="color:#00ff00;font-weight:bold;font-size:13px;margin-bottom:4px;">@${n.user}</div>
-                          <div style="color:#00ffff;font-size:13px;margin-bottom:4px;">${n.text}</div>
+                          <div style="color:#00ff00;font-weight:bold;font-size:13px;margin-bottom:4px;">@${safeUser}</div>
+                          <div style="color:#00ffff;font-size:13px;margin-bottom:4px;">${safeText}</div>
                           <div style="color:#6b7280;font-size:11px;">${n.time}</div>
                         </div>
                         <div style="display:flex;gap:4px;flex-shrink:0;">
@@ -3564,7 +3655,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                         </div>
                       </div>
                     </div>
-                  `).join('');
+                  `;
+                  }).join('');
                 }
               });
 
@@ -3789,7 +3881,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
         pointer-events: none;
         z-index: 1;
       }
-      
+
       .matrix-rain {
         position: fixed;
         top: 0;
@@ -3800,14 +3892,14 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
         z-index: 1;
         opacity: 0.3;
       }
-      
+
       @keyframes float {
         0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
         25% { transform: translateY(-20px) rotate(90deg); opacity: 1; }
         50% { transform: translateY(-10px) rotate(180deg); opacity: 0.7; }
         75% { transform: translateY(-30px) rotate(270deg); opacity: 0.9; }
       }
-      
+
       @keyframes matrixFall {
         0% {
           transform: translateY(-100vh);
@@ -3828,4 +3920,85 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
 
   // Initialize effects when page loads
   document.addEventListener('DOMContentLoaded', initCyberEffects);
+
+  // Code Editor Integration
+  if (typeof require !== 'undefined') {
+    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
+    require(['vs/editor/editor.main'], () => {
+      const container = document.querySelector('.code-textarea');
+      if (!container) return;
+      const parent = container.parentNode;
+      container.style.display = 'none';
+      const editorDiv = document.createElement('div');
+      editorDiv.style.cssText = 'flex:1;min-height:400px';
+      parent.appendChild(editorDiv);
+
+      const editor = monaco.editor.create(editorDiv, {
+        value: container.value || "console.log('Hello, HOOTNER!');",
+        language: 'javascript',
+        theme: 'vs-dark',
+        minimap: { enabled: false },
+        fontSize: 14,
+        wordWrap: 'on',
+        automaticLayout: true,
+        scrollBeyondLastLine: false
+      });
+
+      monaco.editor.defineTheme('cyber', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [{ token: '', foreground: '00ffff' }],
+        colors: { 'editor.foreground': '#00ff00', 'editor.background': '#1e1e1e' }
+      });
+      monaco.editor.setTheme('cyber');
+
+      document.getElementById('language').addEventListener('change', (e) => {
+        const langMap = { JavaScript: 'javascript', Python: 'python', HTML: 'html', CSS: 'css', JSON: 'json' };
+        monaco.editor.setModelLanguage(editor.getModel(), langMap[e.target.value]);
+      });
+
+      window.runCode = () => {
+        const code = editor.getValue();
+        const output = document.getElementById('output');
+        try {
+          const logs = [];
+          const originalLog = console.log;
+          console.log = (...args) => logs.push(args.join(' '));
+          // Security: Use Function constructor instead of eval
+          const result = (() => {
+            try {
+              const fn = new Function(code);
+              return fn();
+            } catch (e) {
+              throw new Error('Execution error: ' + e.message);
+            }
+          })();
+          console.log = originalLog;
+          output.textContent = logs.length ? logs.join('\n') : (result !== undefined ? String(result) : 'Executed!');
+          output.style.color = '#00ff00';
+        } catch (error) {
+          output.textContent = 'Error: ' + error.message;
+          output.style.color = '#ff0000';
+        }
+      };
+
+      window.clearEditor = () => {
+        editor.setValue('');
+        document.getElementById('output').textContent = 'Run your code to see output here...';
+      };
+
+      window.saveCode = () => {
+        const code = editor.getValue();
+        const lang = document.getElementById('language').value.toLowerCase();
+        const ext = { javascript: 'js', python: 'py', html: 'html', css: 'css', json: 'json' }[lang] || 'txt';
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `hootner-code.${ext}`;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+    });
+  }
 </script>

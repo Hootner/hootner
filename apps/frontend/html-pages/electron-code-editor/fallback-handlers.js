@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Fallback Handlers - Missing Function Implementations
  * Provides working implementations when main modules fail to load
  *//
@@ -14,8 +14,20 @@ window.fallbackHandlers = {
         <div style="padding: 16px);">"
           <h3>🌐 Web Services (Demo Mode)</h3>
           <p>Web services are available in full version.</p>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: GitHub connected')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Connect GitHub</button>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: NPM search')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Search NPM</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: GitHub connected')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Connect GitHub</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: NPM search')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Search NPM</button>
         </div>
       `;
     }
@@ -28,8 +40,20 @@ window.fallbackHandlers = {
         <div style="padding: 16px);">"
           <h3>📤 Share Options (Demo Mode)</h3>
           <p>Sharing features are available in full version.</p>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Shared to GitHub Gist')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">GitHub Gist</button>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Shared to Social')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Social Feed</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Shared to GitHub Gist')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">GitHub Gist</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Shared to Social')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Social Feed</button>
         </div>
       `;
     }
@@ -48,7 +72,13 @@ window.fallbackHandlers = {
             <div style="padding: 8px; border: 1px solid var(--border); margin: 8px 0; border-radius: 4px;">"
               <strong>react</strong> v18.2.0
               <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">JavaScript library for building user interfaces</p>
-              <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: React installed')" style="padding: 4px 8px; background: var(--accent); color: white; border: none; border-radius: 3px; cursor: pointer;">Install</button>
+              <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: React installed')" style="padding: 4px 8px; background: var(--accent); color: white; border: none; border-radius: 3px; cursor: pointer;">Install</button>
             </div>
           </div>
         </div>
@@ -64,8 +94,20 @@ window.fallbackHandlers = {
         <div style="padding: 16px);">"
           <h3>☁️ Cloud Sync (Demo Mode)</h3>
           <p>Cloud features are available in full version.</p>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Project saved to cloud')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Save Project</button>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Backup created')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Create Backup</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Project saved to cloud')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Save Project</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Backup created')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Create Backup</button>
         </div>
       `;
     }
@@ -79,8 +121,20 @@ window.fallbackHandlers = {
         <div style="padding: 16px);">"
           <h3>🤖 AI Assistant (Demo Mode)</h3>
           <p>AI features are available in full version.</p>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Code analyzed')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Analyze Code</button>
-          <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Code refactored')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Refactor</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Code analyzed')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Analyze Code</button>
+          <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Code refactored')" style="padding: 8px 16px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; margin: 4px;">Refactor</button>
         </div>
       `;
     }
@@ -99,7 +153,13 @@ window.fallbackHandlers = {
             <div style="padding: 8px; border: 1px solid var(--border); margin: 8px 0; border-radius: 4px;">"
               <strong>✨ Prettier</strong>
               <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">Code formatter</p>
-              <button onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Prettier installed')" style="padding: 4px 8px; background: var(--accent); color: white; border: none; border-radius: 3px; cursor: pointer;">Install</button>
+              <button onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Prettier installed')" style="padding: 4px 8px; background: var(--accent); color: white; border: none; border-radius: 3px; cursor: pointer;">Install</button>
             </div>
           </div>
         </div>
@@ -116,11 +176,23 @@ window.fallbackHandlers = {
           <h3>🚀 Project Templates (Demo Mode)</h3>
           <p>Template system is available in full version.</p>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0;">"
-            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: React template created')">"
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: React template created')">"
               <h4>React App</h4>
               <p style="font-size: 12px; color: var(--text-muted);">Includes: react, react-dom</p>
             </div>
-            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="try { alert( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"Demo: Express template created')">"
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="try { alert( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"Demo: Express template created')">"
               <h4>Express Server</h4>
               <p style="font-size: 12px; color: var(--text-muted);">Includes: express</p>
             </div>

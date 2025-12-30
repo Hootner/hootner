@@ -8,25 +8,37 @@ const fixes = [
     file: 'apps/frontend/html-pages/electron-code-editor/feature-expansions.js',
     line: 197,
     find: /catch\s*\([^)]*\)\s*\{\s*\}/,
-    replace: 'catch (error) { console.error("Error:", error); }'
+    replace: 'catch (error) {
+    console.error(error);
+    throw error;
+  }'
   },
   {
     file: 'apps/frontend/html-pages/electron-code-editor/platform-integration.js',
     line: 22,
     find: /catch\s*\([^)]*\)\s*\{\s*\}/,
-    replace: 'catch (error) { console.error("Error:", error); }'
+    replace: 'catch (error) {
+    console.error(error);
+    throw error;
+  }'
   },
   {
     file: 'middleware/dependency-check.js',
     line: 38,
     find: /catch\s*\([^)]*\)\s*\{\s*\}/,
-    replace: 'catch (error) { console.error("Dependency check error:", error); }'
+    replace: 'catch (error) {
+    console.error(error);
+    throw error;
+  }'
   },
   {
     file: 'scripts/refactoring/final-quality-fixes.js',
     line: 74,
     find: /catch\s*\([^)]*\)\s*\{\s*\}/,
-    replace: 'catch (error) { console.error("Quality fix error:", error); }'
+    replace: 'catch (error) {
+    console.error(error);
+    throw error;
+  }'
   },
   // Fix XSS vulnerability
   {
@@ -57,7 +69,8 @@ function fixFile(filePath, find, replace) {
       return true;
     }
   } catch (e) {
-    console.error(`Failed to fix ${filePath}:`, e.message);
+    console.error(e);
+    throw e;
   }
   return false;
 }
@@ -65,9 +78,7 @@ function fixFile(filePath, find, replace) {
 let fixed = 0;
 fixes.forEach(({ file, find, replace }) => {
   if (fixFile(file, find, replace)) {
-    console.log(`✓ Fixed ${file}`);
-    fixed++;
+        fixed++;
   }
 });
 
-console.log(`\n🔧 Fixed ${fixed}/${fixes.length} critical errors`);

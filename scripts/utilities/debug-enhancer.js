@@ -12,13 +12,13 @@ class DebugEnhancer {
   addBreakpoint(file, line) {
     const key = `${file}:${line}`;
     this.breakpoints.set(key, { file, line, active: true });
-    this.logSession('breakpoint_added', { file, line });
+    this.logSession('breakpointAdded', { file, line });
   }
 
   removeBreakpoint(file, line) {
     const key = `${file}:${line}`;
     this.breakpoints.delete(key);
-    this.logSession('breakpoint_removed', { file, line });
+    this.logSession('breakpointRemoved', { file, line });
   }
 
   snoozeSuggestion(suggestion, duration = 3600000) {
@@ -27,7 +27,7 @@ class DebugEnhancer {
       until: Date.now() + duration,
       snoozedAt: Date.now()
     });
-    this.logSession('suggestion_snoozed', { suggestion, duration });
+    this.logSession('suggestionSnoozed', { suggestion, duration });
   }
 
   getActiveSuggestions() {

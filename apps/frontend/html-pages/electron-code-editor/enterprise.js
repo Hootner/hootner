@@ -1,5 +1,8 @@
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Enterprise Features - Advanced Editor Capabilities
  * Minimal enterprise-grade features
  *//
@@ -25,16 +28,40 @@ class Enterprise {
     const enterpriseBar = document.createElement('div');
     enterpriseBar.className = 'enterprise-bar';
     enterpriseBar.innerHTML = DOMPurify.sanitize(`
-      <button class="enterprise-btn" onclick="try { enterprise.showCollaboration() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">"
+      <button class="enterprise-btn" onclick="try { enterprise.showCollaboration() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }">"
         👥 Collaboration
       </button>
-      <button class="enterprise-btn" onclick="try { enterprise.showAnalytics() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">"
+      <button class="enterprise-btn" onclick="try { enterprise.showAnalytics() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }">"
         📊 Analytics
       </button>
-      <button class="enterprise-btn" onclick="try { enterprise.showSecurity() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">"
+      <button class="enterprise-btn" onclick="try { enterprise.showSecurity() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }">"
         🔒 Security
       </button>
-      <button class="enterprise-btn" onclick="try { enterprise.showCompliance() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }">"
+      <button class="enterprise-btn" onclick="try { enterprise.showCompliance() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }">"
         📋 Compliance
       </button>
     `);
@@ -54,7 +81,7 @@ class Enterprise {
 
   setupCollaboration() {
     if (typeof io !== 'undefined') {
-      this.socket = io('ws://localhost:3001');
+      this.socket = io('ws://localhost:SECONDARY_PORT');
       this.socket.on('connect', () => {
         addOutput('👥 Collaboration ready', 'success');
       });
@@ -105,9 +132,27 @@ class Enterprise {
   };
   return getConditionalValueg7gj();
 })(): 16px 0;">"
-          <button onclick="try { enterprise.startSession() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="enterprise-action-btn">Start Session</button>
-          <button onclick="try { enterprise.joinSession() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="enterprise-action-btn">Join Session</button>
-          <button onclick="try { enterprise.shareScreen() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" class="enterprise-action-btn">Share Screen</button>
+          <button onclick="try { enterprise.startSession() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="enterprise-action-btn">Start Session</button>
+          <button onclick="try { enterprise.joinSession() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="enterprise-action-btn">Join Session</button>
+          <button onclick="try { enterprise.shareScreen() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="enterprise-action-btn">Share Screen</button>
         </div>
         <div id="collaborators" style="margin-top: 16px;">"
           <h4>Active Users (1)</h4>
@@ -243,7 +288,13 @@ class Enterprise {
             <span style="color: #ff9800;">⚠ Pending</span>
           </div>
         </div>
-        <button onclick="try { enterprise.generateReport() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" class="enterprise-action-btn">Generate Report</button>
+        <button onclick="try { enterprise.generateReport() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="enterprise-action-btn">Generate Report</button>
       </div>
       <style>
         .compliance-item {

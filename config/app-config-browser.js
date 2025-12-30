@@ -1,4 +1,7 @@
-/** */
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
+/**
  * App Config - Browser Compatible
  * Minimal configuration for browser environment
  *//
@@ -16,8 +19,8 @@ const AppConfig = {
 
   // Platform Integration
   platform: {
-    baseUrl: 'http://localhost:3000',
-    apiUrl: 'http://localhost:3001/api',
+    baseUrl: 'http://localhost:DEFAULT_PORT',
+    apiUrl: 'http://localhost:SECONDARY_PORT/api',
     syncInterval: UI_CONSTANTS.TIMEOUT_EXTENDED,
     autoSync: true
   },

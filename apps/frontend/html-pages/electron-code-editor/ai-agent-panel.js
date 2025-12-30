@@ -19,25 +19,22 @@ class AIAgentUI {
     const panel = document.createElement('div');
     panel.id = 'aiAgentPanel';
     panel.innerHTML = DOMPurify.sanitize(`
-      <div style="position:fixed; right:20px; bottom:20px; width:400px; height:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.5); z-index:9999; display:flex; flex-direction:column;">"
-        <div style="padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">"
+      <div style="position:fixed; right:20px; bottom:20px; width:400px; height:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.5); z-index:9999; display:flex; flex-direction:column;">
+        <div style="padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
           <h3 style="margin:0; color:var(--accent);">🤖 AI Agents</h3>
-          <button onclick="try { aiAgentUI.toggle() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" style="background:none; border:none; color:var(--text); cursor:pointer; font-size:20px;">×</button>
+          <button onclick="aiAgentUI.toggle()" style="background:none; border:none; color:var(--text); cursor:pointer; font-size:20px;">×</button>
         </div>
-        "
-        <div id="agentStatus" style="padding:12px; background:var(--bg); border-bottom:1px solid var(--border); font-size:12px;">"
+        <div id="agentStatus" style="padding:12px; background:var(--bg); border-bottom:1px solid var(--border); font-size:12px;">
           <span id="statusText">Ready</span> | <span id="activeOps">0 active</span>
         </div>
-        "
         <div id="chatHistory" style="flex:1; overflow-y:auto; padding:16px;"></div>
-        "
-        <div style="padding:16px; border-top:1px solid var(--border);">"
-          <input type="text" id="aiInput" placeholder="Ask AI to refactor, debug, optimize..." "
-                 style="width:100%; padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); outline:none;">"
-          <div style="display:flex; gap:8px; margin-top:8px;">"
-            <button onclick="try { aiAgentUI.quickAction( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"refactor')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Refactor</button>
-            <button onclick="try { aiAgentUI.quickAction( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"debug')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Debug</button>
-            <button onclick="try { aiAgentUI.quickAction( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"optimize')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Optimize</button>
+        <div style="padding:16px; border-top:1px solid var(--border);">
+          <input type="text" id="aiInput" placeholder="Ask AI to refactor, debug, optimize..." 
+                 style="width:100%; padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); outline:none;">
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button onclick="aiAgentUI.quickAction('refactor')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Refactor</button>
+            <button onclick="aiAgentUI.quickAction('debug')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Debug</button>
+            <button onclick="aiAgentUI.quickAction('optimize')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Optimize</button>
           </div>
         </div>
       </div>

@@ -35,8 +35,7 @@ const scanPort = (host, port, timeout = 2000) => {
 };
 
 const scan = async (host = 'localhost') => {
-  console.log(`🔍 Scanning ports on ${host}...\n`);
-
+  
   const results = await Promise.all(
     PORTS.map(async ({ port, service }) => {
       const result = await scanPort(host, port);
@@ -44,15 +43,13 @@ const scan = async (host = 'localhost') => {
     })
   );
 
-  console.log('Port Status:');
-  results.forEach(({ port, service, open }) => {
+    results.forEach(({ port, service, open }) => {
     const status = open ? '✅ OPEN' : '❌ CLOSED';
-    console.log(`${status} - ${port} (${service})`);
+    `);
   });
 
   const openPorts = results.filter(r => r.open);
-  console.log(`\n📊 Summary: ${openPorts.length}/${PORTS.length} ports open`);
-
+  
   return results;
 };
 

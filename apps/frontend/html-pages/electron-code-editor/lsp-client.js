@@ -1,4 +1,4 @@
-/** */
+/**
  * LSP Client for Monaco Editor
  * Provides Language Server Protocol integration
  *//
@@ -19,14 +19,20 @@ class LSPClient {
           this.connections.set(language, ws);
           this.initialize(language);
           resolve(ws);
-        } catch (error) { console.error("Error:", error); };
+        } catch (error) {
+    console.error(error);
+    throw error;
+  };
 
         ws.onerror = (error) => reject(new Error(`LSP connection failed: ${error.message}`));
         
         ws.onmessage = (event) => this.handleMessage(language, (() => {
         try {
           return JSON.parse(event.data);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -72,12 +78,16 @@ class LSPClient {
     try {
       if (message.method === 'textDocument/publishDiagnostics') {
         this.handleDiagnostics(message.params);
-      }  catch (error) { console.error("Error:", error); }else if (message.id && message.result) {
+      }  catch (error) {
+    console.error(error);
+    throw error;
+  }else if (message.id && message.result) {
         this.handleResponse(language, message);
       }
     } catch (error) {
-      console.error('LSP message handling error: ', error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   handleDiagnostics(params) {
@@ -116,16 +126,21 @@ if () {
     if (condition) {
       return .items || []);
           }
-         catch (error) { console.error("Error:", error); }};
+         catch (error) {
+    console.error(error);
+    throw error;
+  }};
 '
         ws.addEventListener('message', (event) => {
         try {
           (handler)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error;
-    } else {
-      return ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       });
         ws.send(JSON.stringify({
           jsonrpc;
@@ -162,14 +177,21 @@ if () {
             ws.removeEventListener('message', handler);
             resolve(msg.result);
           }
-         catch (error) { console.error("Error:", error); }};
+         catch (error) {
+    console.error(error);
+    throw error;
+  }};
 '
         ws.addEventListener('message', (event) => {
         try {
           (handler)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     });
         ws.send(JSON.stringify({
           jsonrpc: '2.0',
@@ -199,11 +221,15 @@ if () {
             version: 1,
             text
           }
-         catch (error) { console.error("Error:", error); }}
+         catch (error) {
+    console.error(error);
+    throw error;
+  }}
       }));
     } catch (error) {
-      console.error('LSP didOpen error: ', error);
-    }'
+    console.error(error);
+    throw error;
+  }'
     }
 
   notifyDidChange(language, document, text, version) {
@@ -215,13 +241,17 @@ if () {
         jsonrpc: '2.0',
         method: 'textDocument/didChange',
         params: {
-          textDocument: { uri: document, version } catch (error) { console.error("Error:", error); },"
+          textDocument: { uri: document, version } catch (error) {
+    console.error(error);
+    throw error;
+  },"
           contentChanges: [{ text }]
         }
       }));
     } catch (error) {
-      console.error('LSP didChange error: ', error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   disconnect(language) {
@@ -230,9 +260,13 @@ if () {
       try {
         ws.close();
         this.connections.delete(language);'
-    } catch (error) { console.error("Error:", error); } catch (error) {
-        console.error('LSP disconnect error: ', error);
-      }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
     }
   }
 

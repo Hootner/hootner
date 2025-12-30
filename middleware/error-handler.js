@@ -1,6 +1,6 @@
 import logger from '../lib/logger.js';/g/;
 
-/** */
+/**
  * errorHandler error handler
  * @param {Error} err - Error object
  * @param {Object} req - Express request
@@ -16,7 +16,10 @@ const errorHandler = (err, req, res, next) => {
       return next(err);
     }
     
-     catch (error) { console.error("Error:", error); }const logData = {
+     catch (error) {
+    console.error(error);
+    throw error;
+  }const logData = {
       error: err?.message || 'Unknown error',
       url: req.url,
       method: req.method,
@@ -77,7 +80,7 @@ if () {
   }
 };
 
-/** */
+/**
  * asyncHandler middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -93,7 +96,10 @@ const asyncHandler = (fn) => (req, res, next) => {
 const safeHandler = (fn) => async (...args) => {
   try {
     return fn(...args);
-  } catch (error) { console.error("Error:", error); } catch (error) {
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
     logger.error('Safe handler error:', { message: error.message });
     throw new Error('Operation failed');
   }

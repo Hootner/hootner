@@ -458,6 +458,11 @@ Access: `http://localhost:3001` (Grafana)
 
 ## 📚 Documentation
 
+### 📖 View Online
+
+- **GitBook**: [Setup Guide](GITBOOK_QUICK.md) - Professional documentation site (3-minute setup)
+- **GitHub**: [docs/](docs/) - Browse documentation files
+
 ### Architecture & Design
 
 - [Architecture](docs/ARCHITECTURE.md)
@@ -500,6 +505,9 @@ Access: `http://localhost:3001` (Grafana)
 - [Documentation Status](docs/DOCUMENTATION_STATUS.md) - Coverage tracking ⭐ NEW
 - [JSDoc Quick Reference](JSDOC_QUICK_REFERENCE.md) - Quick syntax guide ⭐ NEW
 - [Type Definitions](types/services.d.ts) - TypeScript definitions ⭐ NEW
+- [TODO Guidelines](docs/TODO_GUIDELINES.md) - TODO comment standards ⭐ NEW
+- [TODO Quick Reference](TODO_QUICK_REFERENCE.md) - Quick TODO guide ⭐ NEW
+- [TODO Report](TODO_REPORT.md) - Current action items (368 total) ⭐ NEW
 
 ### AI Features
 
@@ -546,6 +554,126 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
+## 🔧 Git Commands Reference
+
+### Basic Operations
+
+```bash
+# Clone repository
+git clone <url>
+
+# Check status
+git status
+
+# View commit history
+git log
+
+# View changes
+git diff
+```
+
+### Staging & Committing
+
+```bash
+# Stage all changes
+git add .
+
+# Stage specific file/path
+git add <path>
+
+# Commit with message
+git commit -m "Short description"
+
+# Stage and commit tracked files
+git commit -am "Short description"
+
+# Amend last commit
+git commit -a --amend
+```
+
+### Branching
+
+```bash
+# Switch to existing branch
+git switch chshersh/branch-name
+
+# Create and switch to new branch
+git switch -c chshersh/branch-name
+
+# Delete branch
+git branch -D chshersh/branch-name
+```
+
+### Remote Operations
+
+```bash
+# Push to remote
+git push
+
+# Push and set upstream
+git push -u origin chshersh/branch-name
+
+# Pull with fast-forward only
+git pull --ff-only origin <current-branch>
+
+# Fetch from main
+git fetch origin main
+
+# Add upstream remote
+git remote add upstream <url>
+```
+
+### Reset & Revert
+
+```bash
+# Hard reset to remote
+git reset --hard origin/main
+
+# Discard local changes
+git checkout -- .
+```
+
+### Rebase & Cherry-pick
+
+```bash
+# Rebase on main
+git rebase origin/main
+
+# Interactive rebase last N commits
+git rebase -i HEAD~<N>
+
+# Rebase onto specific branch
+git rebase --onto <branch>
+
+# Cherry-pick commit
+git cherry-pick <hash>
+```
+
+### Stash
+
+```bash
+# Stash changes
+git stash
+
+# Apply and remove stash
+git stash pop
+
+# List stashes
+git stash list
+```
+
+### Advanced
+
+```bash
+# Binary search for bugs
+git bisect
+
+# View reference logs
+git reflog
+```
+
+---
+
 ## 📝 Scripts
 
 | Script                           | Description                           |
@@ -566,6 +694,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 | `npm run security:scan`          | Scan for hardcoded credentials ⭐ NEW |
 | `npm run security:validate-env`  | Validate environment variables ⭐ NEW |
 | `npm run generate:secrets`       | Generate secure secrets ⭐ NEW        |
+| `npm run todos:scan`             | Scan codebase for TODOs ⭐ NEW        |
+| `npm run todos:export`           | Export TODO report ⭐ NEW             |
 | `node scripts/backup-manager.js` | Unified backup manager ⭐ NEW         |
 | `./scripts/backup-all.sh`        | Backup all services (deprecated)      |
 | `./scripts/blue-green-deploy.sh` | Deploy with zero downtime             |

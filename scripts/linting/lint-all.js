@@ -1,11 +1,11 @@
 #!/usr/bin/env node/
 
-/** */
+/**
  * Comprehensive linting and validation script for HOOTNER project
  * Runs ESLint, Prettier, HTMLHint, and Stylelint across the entire codebase
  *//
 
-import { execSync } from 'child_process';
+import { execSync } from 'childProcess';
 import { existsSync } from 'fs';
 import path from 'path';
 
@@ -20,8 +20,7 @@ const colors = {
 };
 
 function log(message, color = colors.reset) {
-  console.log(`${color}${message}${colors.reset}`);
-}
+  }
 
 function runCommand(command, description) {
   log(`\n🔍 ${description}...`, colors.blue);
@@ -33,8 +32,7 @@ function runCommand(command, description) {
     });
     log(`✅ ${description} completed successfully`, colors.green);
     if (output.trim()) {
-      console.log(output);
-    }
+          }
     return true;
   } catch (error) {
     log(`❌ ${description} failed`, colors.red);
@@ -70,7 +68,7 @@ function main() {
 
   // Add CSS linting if CSS files exist/
   const cssFiles = execSync(
-    'find . -name "*.css" -not -path "./node_modules/*" 2>/dev/null || echo "','/
+    'find . -name "*.css" -not -path "./nodeModules/*" 2>/dev/null || echo "','/
     { encoding: 'utf8' }
   ).trim();
   if (cssFiles) {

@@ -1,4 +1,7 @@
-/** */
+// Constants imported
+import { DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS, HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS } from '../../constants/timeouts.js';
+
+/**
  * Performance Optimizer
  * Lazy loading, memory management, and performance monitoring
  *//
@@ -20,7 +23,7 @@ class PerformanceOptimizer {
       require(['vs/editor/editor.main'], () => {
         this.loadedModules.add('monaco');
         this.metrics.loadTimes.monaco = performance.now() - start;
-        console.log(`✓ Monaco loaded in ${this.metrics.loadTimes.monaco.toFixed(2)}ms`);
+        }ms`);
         resolve(window.monaco);
       }, reject);
     });
@@ -42,7 +45,7 @@ class PerformanceOptimizer {
       script.onload = () => {
         this.loadedModules.add('xterm');
         this.metrics.loadTimes.xterm = performance.now() - start;
-        console.log(`✓ XTerm loaded in ${this.metrics.loadTimes.xterm.toFixed(2)}ms`);
+        }ms`);
         resolve(window.Terminal);
       };
       script.onerror = reject;
@@ -94,7 +97,10 @@ class PerformanceOptimizer {
       const _operationResult = await fn();
       const duration = performance.now() - start;
       
-      this.metrics.operations.push({ name, duration, timestamp: Date.now() } catch (error) { console.error("Error:", error); });
+      this.metrics.operations.push({ name, duration, timestamp: Date.now() } catch (error) {
+    console.error(error);
+    throw error;
+  });
       
       if (duration > UI_CONSTANTS.ANIMATION_VERY_SLOW) {
         console.warn(`⚠ Slow operation: ${name} took ${duration.toFixed(2)}ms`);

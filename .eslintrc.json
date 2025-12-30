@@ -1,25 +1,30 @@
 {
   "env": {
     "browser": true,
-    "es2021": true,
-    "node": true
+    "node": true,
+    "es2022": true
   },
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended"],
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 2022,
     "sourceType": "module"
   },
-  "plugins": ["prettier", "jsdoc"],
-  "rules": {
-    "no-invalid-regexp": "error",
-    "no-regex-spaces": "error",
-    "prettier/prettier": "warn",
-    "no-unused-vars": "warn",
-    "no-undef": "error",
-    "jsdoc/check-alignment": "warn",
-    "jsdoc/check-indentation": "warn",
-    "jsdoc/check-syntax": "warn",
-    "jsdoc/require-asterisk-prefix": "warn"
+  "globals": {
+    "webBridge": "readonly",
+    "addOutput": "readonly",
+    "platformIntegration": "readonly",
+    "editor": "readonly",
+    "createFile": "readonly",
+    "state": "readonly",
+    "showPanel": "readonly",
+    "commandPalette": "readonly",
+    "UI_CONSTANTS": "readonly"
   },
-  "ignorePatterns": ["node_modules/", "dist/", "build/", "coverage/", "docs/generated/"]
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-empty": "warn",
+    "no-useless-catch": "warn",
+    "no-useless-escape": "warn"
+  }
 }

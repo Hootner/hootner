@@ -68,25 +68,22 @@ const servers = [
 ];
 
 const processes = [];
-const reset = '\x1b[0m';
+
 
 // Graceful shutdown handler
 const shutdown = () => {
-  console.log('\n🛑 Shutting down all servers...');
-
-  processes.forEach((proc, index) => {
+  console.log('\nShutting down servers...');
+  processes.forEach((proc) => {
     if (proc && !proc.killed) {
-      console.log(`${servers[index].color}⏹️  Stopping ${servers[index].name}${reset}`);
-      proc.kill('SIGTERM');
+            proc.kill('SIGTERM');
     }
   });
 
   // Force kill after 5 seconds
   setTimeout(() => {
-    processes.forEach((proc, index) => {
+    processes.forEach((proc) => {
       if (proc && !proc.killed) {
-        console.log(`${servers[index].color}💀 Force killing ${servers[index].name}${reset}`);
-        proc.kill('SIGKILL');
+                proc.kill('SIGKILL');
       }
     });
     process.exit(0);
@@ -100,21 +97,19 @@ process.on('exit', shutdown);
 
 // Start servers
 const startServers = async () => {
-  console.log('🚀 Starting HOOTNER servers...\n');
-
+  
   for (let i = 0; i < servers.length; i++) {
     const server = servers[i];
     const scriptPath = path.join(rootDir, server.script);
 
     // Check if server file exists
     if (!fs.existsSync(scriptPath)) {
-      console.log(`${server.color}⚠️  ${server.name} script not found: ${server.script}${reset}`);
+      console.log(`${server.color}[${server.name}]${reset} Script not found: ${server.script}`);
       processes[i] = null;
       continue;
     }
 
-    console.log(`${server.color}🔄 Starting ${server.name} on port ${server.port}...${reset}`);
-
+    
     const proc = spawn('node', [server.script], {
       cwd: rootDir,
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -139,36 +134,32 @@ const startServers = async () => {
     proc.stderr.on('data', (data) => {
       const output = data.toString().trim();
       if (output) {
-        console.log(`${server.color}[${server.name} ERROR]${reset} ${output}`);
+        console.error(`${server.color}[${server.name}]${reset} ${output}`);
       }
     });
 
     // Handle process exit
     proc.on('exit', (code, signal) => {
       if (code !== 0 && signal !== 'SIGTERM' && signal !== 'SIGKILL') {
-        console.log(`${server.color}💥 ${server.name} exited with code ${code}${reset}`);
-      } else {
-        console.log(`${server.color}✅ ${server.name} stopped${reset}`);
+        console.error(`${server.color}[${server.name}]${reset} Exited with code ${code}`);
       }
     });
 
-    proc.on('error', (error) => {
-      console.log(`${server.color}❌ Failed to start ${server.name}: ${error.message}${reset}`);
+    proc.on('error', (err) => {
+      console.error(`${server.color}[${server.name}]${reset} Error: ${err.message}`);
     });
 
     // Small delay between server starts
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  console.log('\n🎉 All servers started! Press Ctrl+C to stop all servers.\n');
-
+  
   // Display server status
-  console.log('📊 Server Status:');
-  servers.forEach((server, index) => {
-    const status = processes[index] ? '🟢 Running' : '🔴 Failed';
-    console.log(`${server.color}  ${server.name}: ${status} - http://localhost:${server.port}${reset}`);
+  console.log('\n=== Server Status ===');
+  servers.forEach((server, idx) => {
+    const status = processes[idx] ? '🟢 Running' : '🔴 Failed';
+    console.log(`${server.color}${status} ${server.name} (Port ${server.port})${reset}`);
   });
-  console.log('');
-};
+  };
 
 startServers().catch(console.error);

@@ -1,4 +1,4 @@
-/** */
+/**
  * Electron Renderer Process
  * Modular structure with memory profiling
  *//
@@ -22,9 +22,13 @@ setInterval(async () => {
 window.addEventListener('load', (event) => {
         try {
           (()(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       }) => {
   const loadTime = performance.now();
   }ms`);'
@@ -34,9 +38,13 @@ window.addEventListener('load', (event) => {
 window.addEventListener('beforeunload', (event) => {
         try {
           (()(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       }) => {
   memoryProfiler.stop();'
     });

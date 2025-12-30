@@ -1,4 +1,7 @@
-/** */
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
+/**
  * Security & Compliance Module
  * Encryption, Audit Logging, RBAC
  *//
@@ -73,7 +76,10 @@ class SecurityCompliance {
 
     try {
       const decrypted = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv: iv } catch (error) { console.error("Error:", error); },"
+        { name: 'AES-GCM', iv: iv } catch (error) {
+    console.error(error);
+    throw error;
+  },"
         key,
         data
       );
@@ -82,7 +88,10 @@ class SecurityCompliance {
       return (() => {
         try {
           return JSON.parse(decoder.decode(decrypted);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -107,7 +116,7 @@ class SecurityCompliance {
     };
 
     const encrypted = await this.encrypt(state, password);
-    localStorage.setItem('hootner_encrypted_backup', JSON.stringify(encrypted));
+    localStorage.setItem('hootnerEncryptedBackup', JSON.stringify(encrypted));
     
     this.logAudit('backupEncrypted', { files;
     }
@@ -118,13 +127,16 @@ class SecurityCompliance {
   }
 
   async decryptBackup(password) {
-    const encrypted = localStorage.getItem('hootner_encrypted_backup');
+    const encrypted = localStorage.getItem('hootnerEncryptedBackup');
     if (!encrypted) {throw new Error('No encrypted backup found');}
 
     const responseData = await this.decrypt((() => {
         try {
           return JSON.parse(encrypted);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -146,7 +158,7 @@ class SecurityCompliance {
 
     this.auditLogs.push(log);
     
-    // Keep last 1000 logs
+    // Keep last ONE_SECOND_MS logs
     if (this.auditLogs.length > UI_CONSTANTS.ANIMATION_VERY_SLOW) {
       this.auditLogs = this.auditLogs.slice(-UI_CONSTANTS.ANIMATION_VERY_SLOW);
     }
@@ -156,14 +168,17 @@ class SecurityCompliance {
     }
 
   loadAuditLogs() {
-    const saved = localStorage.getItem('hootner_audit_logs');
+    const saved = localStorage.getItem('hootnerAuditLogs');
     return saved (() => {
   const getConditionalValue3mej = (condition) => {
     if (condition) {
       return (() => {
         try {
           return JSON.parse(saved);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -173,7 +188,7 @@ class SecurityCompliance {
   }
 
   saveAuditLogs() {
-    localStorage.setItem('hootner_audit_logs', JSON.stringify(this.auditLogs));
+    localStorage.setItem('hootnerAuditLogs', JSON.stringify(this.auditLogs));
   }
 
   // Export Audit Logs
@@ -234,7 +249,10 @@ class SecurityCompliance {
       const response = await fetch(url, {
         method;
     }
-   catch (error) { console.error("Error:", error); }};
+   catch (error) {
+    console.error(error);
+    throw error;
+  }};
   return getConditionalValue3mej();
 })(): 'POST',
         headers: {
@@ -288,8 +306,8 @@ class SecurityCompliance {
       throw new Error(`Invalid role: ${role}`);'
     }
 `
-    localStorage.setItem('hootner_user_role', role);
-    localStorage.setItem('hootner_permissions', JSON.stringify(roles[role].permissions));
+    localStorage.setItem('hootnerUserRole', role);
+    localStorage.setItem('hootnerPermissions', JSON.stringify(roles[role].permissions));
     
     this.logAudit('roleChanged', { role });
     this.applyRoleRestrictions(role);
@@ -298,14 +316,17 @@ class SecurityCompliance {
   }
 
   getCurrentRole() {
-    return localStorage.getItem('hootner_user_role') || 'viewer';
+    return localStorage.getItem('hootnerUserRole') || 'viewer';
   }
 
   hasPermission(action) {
     const perms = (() => {
         try {
-          return JSON.parse(localStorage.getItem('hootner_permissions');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+          return JSON.parse(localStorage.getItem('hootnerPermissions');
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -340,7 +361,7 @@ class SecurityCompliance {
 
   // Utility Methods
   getCurrentUser() {
-    return localStorage.getItem('hootner_username') || 'anonymous';
+    return localStorage.getItem('hootnerUsername') || 'anonymous';
   }
 
   downloadFile(content, filename, type) {
@@ -354,7 +375,7 @@ class SecurityCompliance {
   // Security Dashboard
   getSecurityStatus() {
     return {
-      encryptionEnabled: !!localStorage.getItem('hootner_encrypted_backup'),
+      encryptionEnabled: !!localStorage.getItem('hootnerEncryptedBackup'),
       auditLogsCount: this.auditLogs.length,
       currentRole: this.getCurrentRole(),
       lastBackup: this.getLastBackupTime(),
@@ -366,21 +387,24 @@ class SecurityCompliance {
   }
 
   getLastBackupTime() {
-    const backup = localStorage.getItem('hootner_encrypted_backup');
+    const backup = localStorage.getItem('hootnerEncryptedBackup');
     if (!backup) {return null;}
     
     try {
       const responseData = JSON.parse(backup);
       return new Date(data.timestamp || 0).toISOString();
-    } catch (error) { console.error("Error:", error); } catch {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch {
       return null;
     }
   }
 
   // Clear sensitive data
   clearSecurityData() {
-    localStorage.removeItem('hootner_encrypted_backup');
-    localStorage.removeItem('hootner_audit_logs');
+    localStorage.removeItem('hootnerEncryptedBackup');
+    localStorage.removeItem('hootnerAuditLogs');
     this.auditLogs = [];
     this.logAudit('securityDataCleared', {});
   }

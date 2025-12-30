@@ -1,8 +1,9 @@
 import DOMPurify from 'dompurify';
-/** */
+
+/**
  * Integration Commands - Enhanced Command Palette
  * Extended commands for web and platform integration
- *//
+ */
 
 class IntegrationCommands {
   constructor() {
@@ -13,8 +14,12 @@ class IntegrationCommands {
   setupCommands() {
     // Web Service Commands
     this.addCommand('web:github:connect', 'Connect to GitHub', async () => {
-      const token = prompt('Enter GitHub token:') || process.env.HOOTNER_GITHUB_TOKEN || '';
-        } catch (error) { console.error("Error:", error); } catch (error) {
+      const token = prompt('Enter GitHub token:');
+      if (token) {
+        try {
+          await webBridge.setApiKey('github', token);
+          addOutput('GitHub connected successfully', 'success');
+        } catch (error) {
           addOutput(`GitHub connection failed: ${error.message}`, 'error');
         }
       }
@@ -57,7 +62,7 @@ class IntegrationCommands {
     this.addCommand('platform:social:share', 'Share to Social Feed', async () => {
       const code = editor.getValue();
       const desc = prompt('Description: ');
-      if (desc) await platformIntegration.shareToSocial(code, desc);'
+      if (desc) await platformIntegration.shareToSocial(code, desc);
     });
 
     this.addCommand('platform:collab:video', 'Start Video Collaboration', async () => {
@@ -68,12 +73,12 @@ class IntegrationCommands {
     // Import/Export Commands
     this.addCommand('import:url', 'Import from URL', async () => {
       const url = prompt('Enter URL: ');
-      if (url) await webBridge.importFromUrl(url);'
+      if (url) await webBridge.importFromUrl(url);
     });
 
     this.addCommand('import:template', 'Import Template', async () => {
       const id = prompt('Template ID: ');
-      if (id) await platformIntegration.importTemplate(id);'
+      if (id) await platformIntegration.importTemplate(id);
     });
 
     this.addCommand('export:gist', 'Export as Gist', async () => {
@@ -91,7 +96,7 @@ class IntegrationCommands {
     // Package Management Commands
     this.addCommand('package:install', 'Install Package', async () => {
       const name = prompt('Package name: ');
-      if (name) await webBridge.installPackage(name);'
+      if (name) await webBridge.installPackage(name);
     });
 
     this.addCommand('package:init', 'Initialize package.json', () => {
@@ -121,7 +126,7 @@ class IntegrationCommands {
         try {
           await webBridge.setApiKey('github', token);
           addOutput('GitHub token set successfully', 'success');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
           addOutput(`Failed to set GitHub token: ${error.message}`, 'error');
         }
       }
@@ -133,7 +138,7 @@ class IntegrationCommands {
         try {
           await webBridge.setApiKey('pastebin', key);
           addOutput('Pastebin API key set successfully', 'success');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
           addOutput(`Failed to set Pastebin API key: ${error.message}`, 'error');
         }
       }
@@ -145,7 +150,7 @@ class IntegrationCommands {
         try {
           await webBridge.setApiKey('jsonbin', key);
           addOutput('JSONBin API key set successfully', 'success');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
           addOutput(`Failed to set JSONBin API key: ${error.message}`, 'error');
         }
       }
@@ -153,7 +158,7 @@ class IntegrationCommands {
 
     // Cloud Storage Commands
     this.addCommand('cloud:save', 'Save to Cloud', async () => {
-      const responseData = {
+      const data = {
         files: this.getCurrentFiles(),
         metadata: {
           created: Date.now(),
@@ -188,34 +193,25 @@ class IntegrationCommands {
       };
       
       const encoded = btoa(JSON.stringify(projectData));
-      const shareUrl = `${window.location.origin}(() => {
-  const getConditionalValue11ow = (condition) => {
-    if (condition) {
-      return import=${encoded}`;
+      const shareUrl = `${window.location.origin}?import=${encoded}`;
       
       navigator.clipboard.writeText(shareUrl)
         .then(() => {
           addOutput('Share link copied to clipboard', 'success');
         })
         .catch(err => {
-          addOutput(`Failed to copy link;
-    } else {
-      return ${err.message}`, 'error');
+          addOutput(`Failed to copy link: ${err.message}`, 'error');
         });
     });
 
     // Analytics Commands
-    this.addCommand('analytics;
-    }
-  };
-  return getConditionalValue11ow();
-})():track', 'Send Analytics Event', () => {
+    this.addCommand('analytics:track', 'Send Analytics Event', () => {
       const event = prompt('Event name:');
-      const responseData = prompt('Event data (JSON):');
+      const data = prompt('Event data (JSON):');
       
       if (event) {
         try {
-          const eventData = data ? JSON.parse(data) : {} catch (error) { console.error("Error:", error); };
+          const eventData = data ? JSON.parse(data) : {};
           platformIntegration.sendAnalytics(event, eventData);
           addOutput(`Analytics event sent: ${event}`, 'success');
         } catch (error) {
@@ -253,7 +249,7 @@ class IntegrationCommands {
     if (command) {
       try {
         command.handler();
-      } catch (error) { console.error("Error:", error); } catch (error) {
+      } catch (error) {
         addOutput(`Command failed: ${error.message}`, 'error');
       }
     }
@@ -263,7 +259,7 @@ class IntegrationCommands {
     return Array.from(this.commands.entries()).map(([id, cmd]) => ({
       id,
       name: cmd.name,
-      category: id.split(': ')[0]
+      category: id.split(':')[0]
     }));
   }
 
@@ -272,8 +268,8 @@ class IntegrationCommands {
     return all.filter(cmd => 
       cmd.name.toLowerCase().includes(query.toLowerCase()) ||
       cmd.id.toLowerCase().includes(query.toLowerCase())
-    );'
-    }
+    );
+  }
 
   getCurrentFiles() {
     const files = {};
@@ -290,22 +286,22 @@ class IntegrationCommands {
     showPanel('output');
     
     panel.innerHTML = DOMPurify.sanitize(`
-      <div style="padding: 16px);">"
+      <div style="padding: 16px;">
         <h4>${title}</h4>
         ${results.map(item => `
-          <div style="padding: 8px; border: 1px solid var(--border); margin: 8px 0; border-radius: 4px;">"
+          <div style="padding: 8px; border: 1px solid var(--border); margin: 8px 0; border-radius: 4px;">
             <strong>${item.name}</strong>
             ${item.version ? ` v${item.version}` : ''}
             ${item.description ? `<p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">${item.description}</p>` : ''}
             ${item.cdn ? `<code style="font-size: 11px; background: var(--bg); padding: 2px 4px;">${item.cdn}</code>` : ''}
           </div>
-        `).join(')}
+        `).join('')}
       </div>
-    `;
+    `);
   }
 }
 
-// Enhanced command palette with integration commands`
+// Enhanced command palette with integration commands
 if (typeof commandPalette !== 'undefined') {
   const integrationCommands = new IntegrationCommands();
   

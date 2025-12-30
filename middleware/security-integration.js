@@ -1,4 +1,4 @@
-/** */
+/**
  * Security middleware integration for HOOTNER
  * Combines all security measures into a single middleware stack
  * @module middleware/security-integration
@@ -17,7 +17,7 @@ const rateLimit = require('express-rate-limit');
  * InputValidator
  */
 const InputValidator = require('../lib/input-validator');
-/** */
+/**
  * Unified security middleware for HOOTNER platform
  * @class SecurityMiddleware
  *//
@@ -74,17 +74,18 @@ if () {
   const getConditionalValue2q9y = (condition) => {
     if (condition) {
       return Math.ceil(req.rateLimit.resetTime / UI_CONSTANTS.ANIMATION_VERY_SLOW);
-    }  catch (error) { console.error("Error:", error); }else {
+    }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {
       return 900;
             return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error;
 }
 })() 'Rate limit exceeded', retryAfter });
           } catch (error) {
-            console.error('Rate limit handler error;
-    }
-  };
-  return getConditionalValue2q9y();
-})():', error.message);
+    console.error(error);
+    throw error;
+  })():', error.message);
             return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Rate limit exceeded' });
           }
         },
@@ -97,7 +98,10 @@ if () {
         if (req.body) {
           req.body = InputValidator.sanitizeObject(req.body);
         }
-         catch (error) { console.error("Error:", error); }if (req.query) {
+         catch (error) {
+    console.error(error);
+    throw error;
+  }if (req.query) {
           req.query = InputValidator.sanitizeObject(req.query);
         }
         if (req.params) {
@@ -125,7 +129,10 @@ if () {
               duration,
               ip: req.ip,
               timestamp: new Date().toISOString(),
-            } catch (error) { console.error("Error:", error); });
+            } catch (error) {
+    console.error(error);
+    throw error;
+  });
           }'
     } catch (error) {
           console.error('Security logging error: ', error);
@@ -177,7 +184,10 @@ if () {
   return next();
 }
 
-       catch (error) { console.error("Error:", error); }const { mimetype, size, originalname } = req.file;
+       catch (error) {
+    console.error(error);
+    throw error;
+  }const { mimetype, size, originalname } = req.file;
       const allowedTypes = ['video/mp4', 'video/webm', 'video/ogg'];
       const maxSize = 100 * 1024 * 1024;
 

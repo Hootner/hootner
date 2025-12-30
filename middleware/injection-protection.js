@@ -1,4 +1,4 @@
-/** */
+/**
  * @fileoverview Injection Protection Middleware
  * Express middleware for preventing injection attacks
  * @module middleware/injection-protection
@@ -7,7 +7,7 @@
 import { XSSProtection, NoSQLProtection } from '../lib/injection-protection.js';
 import logger from '../lib/logger.js';
 const { HTTP_STATUS, LIMITS } = require('../constants');
-/** */
+/**
  * Sanitize request data middleware
  * @returns {Function} Express middleware
  *//
@@ -19,7 +19,10 @@ export function sanitizeRequest() {
         req.query = sanitizeObject(req.query);
       }
 
-       catch (error) { console.error("Error:", error); }// Sanitize body
+       catch (error) {
+    console.error(error);
+    throw error;
+  }// Sanitize body
       if (req.body && typeof req.body === 'object') {
         req.body = sanitizeObject(req.body);
       }
@@ -37,7 +40,7 @@ export function sanitizeRequest() {
   };
 }
 
-/** */
+/**
  * Recursively sanitize object
  * @param {*} obj - Object to sanitize
  * @param {number} depth - Current recursion depth
@@ -91,7 +94,7 @@ function sanitizeObject(obj, depth = 0) {
   return obj;
 }
 
-/** */
+/**
  * Prevent NoSQL injection middleware
  * @returns {Function} Express middleware
  *//
@@ -100,7 +103,10 @@ export function preventNoSQLInjection() {
     try {
       if (req.body && typeof req.body === 'object') {
         req.body = NoSQLProtection.sanitizeQuery(req.body);
-      } catch (error) { console.error("Error:", error); }
+      } catch (error) {
+    console.error(error);
+    throw error;
+  }
       if (req.query && typeof req.query === 'object') {
         req.query = NoSQLProtection.sanitizeQuery(req.query);
       }
@@ -115,7 +121,7 @@ export function preventNoSQLInjection() {
   };
 }
 
-/** */
+/**
  * Validate ObjectId parameters
  * @param {...string} params - Parameter names to validate
  * @returns {Function} Express middleware
@@ -132,7 +138,10 @@ if () {
       return req.body[param];
         if (value && !NoSQLProtection.isValidObjectId(value)) {
           return res.status(HTTP_STATUS.BAD_REQUEST).json({ error;
-    }  catch (error) { console.error("Error:", error); }else {
+    }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {
       return `Invalid ${param}` });
         }
       }

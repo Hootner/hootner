@@ -15,12 +15,11 @@ class HootnerMCPServer {
     this.server = new Server(
       {
         name: 'hootner-mcp',
-        vame: 'hootner-mcp',
         version: '0.1.0',
       },
       {
         capabilities: {
-ls: {},
+          tools: {},
         },
       }
     );
@@ -33,7 +32,7 @@ ls: {},
       return {
         tools: [
           {
-            name: 'get_project_info',
+            name: 'getProjectInfo',
             description: 'Get information about the Hootner project structure and configuration',
             inputSchema: {
               type: 'object',
@@ -42,16 +41,16 @@ ls: {},
             },
           },
           {
-            name: 'list_services',
+            name: 'listServices',
             description: 'List all available services in the Hootner platform',
             inputSchema: {
-   type: 'object',
+              type: 'object',
               properties: {},
               required: [],
             },
           },
           {
-            name: 'get_service_status',
+            name: 'getServiceStatus',
             description: 'Get the status of a specific service',
             inputSchema: {
               type: 'object',
@@ -65,7 +64,7 @@ ls: {},
             },
           },
           {
-            name: 'read_logs',
+            name: 'readLogs',
             description: 'Read application logs',
             inputSchema: {
               type: 'object',
@@ -76,7 +75,7 @@ ls: {},
                 },
                 lines: {
                   type: 'number',
-        description: 'Number of lines to read from the end',
+                  description: 'Number of lines to read from the end',
                   default: 50,
                 },
               },
@@ -89,13 +88,13 @@ ls: {},
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       switch (request.params.name) {
-        case 'get_project_info':
+        case 'getProjectInfo':
           return await this.getProjectInfo();
-        case 'list_services':
+        case 'listServices':
           return await this.listServices();
-        case 'get_service_status':
+        case 'getServiceStatus':
           return await this.getServiceStatus(request.params.arguments?.serviceName);
-        case 'read_logs':
+        case 'readLogs':
           return await this.readLogs(
             request.params.arguments?.logFile,
             request.params.arguments?.lines || 50
@@ -136,7 +135,7 @@ ls: {},
 
   async getProjectStructure() {
     const structure = {};
-    constrectories = ['apps', 'services', 'servers', 'lib', 'middleware'];
+    const directories = ['apps', 'services', 'servers', 'lib', 'middleware'];
 
     for (const dir of directories) {
       try {
@@ -160,3 +159,56 @@ ls: {},
         services.push(...serverFiles.map(file => ({ type: 'server', name: file })));
       } catch (error) {
         // Directory doesn't exist
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({ services }, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to list services: ${error.message}`);
+    }
+  }
+
+  async getServiceStatus(serviceName) {
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `Service ${serviceName} status: running`,
+        },
+      ],
+    };
+  }
+
+  async readLogs(logFile = 'combined.log', lines = 50) {
+    try {
+      const content = await fs.readFile(logFile, 'utf-8');
+      const logLines = content.split('\n').slice(-lines).join('\n');
+      
+      return {
+        content: [
+          {
+            type: 'text',
+            text: logLines,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to read logs: ${error.message}`);
+    }
+  }
+
+  async start() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error('Hootner MCP Server started');
+  }
+}
+
+const server = new HootnerMCPServer();
+server.start().catch(console.error);

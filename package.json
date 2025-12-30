@@ -5,6 +5,9 @@
   "type": "module",
   "main": "mcp-server.js",
   "scripts": {
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:report": "eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file eslint-report.json",
     "mcp:start": "node mcp-server.js",
     "mcp:setup": "setup-mcp.bat",
     "mcp:ide-setup": "setup-ide-mcp.bat",
@@ -20,15 +23,24 @@
     "mcp:http": "node mcp-http-server.js",
     "deploy:aws": "bash deploy-mcp-aws.sh",
     "docker:build": "docker build -f Dockerfile.mcp -t hootner-mcp .",
-    "docker:run": "docker run -p 3000:3000 hootner-mcp"
+    "docker:run": "docker run -p 3000:3000 hootner-mcp",
+    "todos:scan": "node scripts/scan-todos.js",
+    "todos:export": "node scripts/scan-todos.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "express": "^4.18.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.0"
+    "eslint": "^8.57.0",
+    "eslint-plugin-compat": "^4.2.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-security": "^2.1.0",
+    "nodemon": "^3.0.0",
+    "prettier": "^3.7.4"
   },
   "keywords": [
     "mcp",

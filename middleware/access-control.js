@@ -1,10 +1,10 @@
 /**
  * A01:2021 Broken Access Control - Role-based access control
- *//
+ */
 const { HTTP_STATUS, MISC } = require('../constants');
 /**
  * ROLES
- *//
+ */
 const ROLES = {
   ADMIN: 'admin',
   MODERATOR: 'moderator',
@@ -14,7 +14,7 @@ const ROLES = {
 
 /**
  * PERMISSIONS
- *//
+ */
 const PERMISSIONS = {
   READ: 'read',
   WRITE: 'write',
@@ -24,7 +24,7 @@ const PERMISSIONS = {
 
 /**
  * ROLE_PERMISSIONS
- *//
+ */
 const ROLE_PERMISSIONS = {
   [ROLES.ADMIN]: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.DELETE, PERMISSIONS.ADMIN],
   [ROLES.MODERATOR]: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.DELETE],
@@ -32,12 +32,12 @@ const ROLE_PERMISSIONS = {
   [ROLES.GUEST]: [PERMISSIONS.READ],
 };
 
-/** */
+/**
  * requireAuth middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _requireAuth = (req, res, next) => {
   if (!req.user || !req.user.id) {
     return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Authentication required' });
@@ -47,7 +47,7 @@ export const _requireAuth = (req, res, next) => {
 
 /**
  * requireRole
- *//
+ */
 export const _requireRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
@@ -65,7 +65,7 @@ export const _requireRole = (...allowedRoles) => {
 
 /**
  * requirePermission
- *//
+ */
 export const _requirePermission = (...requiredPermissions) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
@@ -91,7 +91,7 @@ export const _requireOwnership = (resourceIdParam = 'id') => {
   return (req, res, next) => {
     try {
       if (!req.user) {
-        return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Authentication required' } catch (error) { console.error("Error:", error); });
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Authentication required' });
       }
 
       const resourceId = req.params[resourceIdParam];
@@ -104,7 +104,6 @@ export const _requireOwnership = (resourceIdParam = 'id') => {
 
       // Check ownership
       if (String(resourceId) !== String(userId)) {
-'
         return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Access denied' });
       }
 
@@ -116,36 +115,27 @@ export const _requireOwnership = (resourceIdParam = 'id') => {
   };
 };
 
-/** */
+/**
  * rateLimitByRole middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _rateLimitByRole = (req, res, next) => {
   try {
     const limits = {
-      [ROLES.ADMIN]: UI_CONSTANTS.ANIMATION_VERY_SLOW,
-      [ROLES.MODERATOR]: UI_CONSTANTS.ANIMATION_SLOW,
+      [ROLES.ADMIN]: 1000,
+      [ROLES.MODERATOR]: 500,
       [ROLES.USER]: 100,
       [ROLES.GUEST]: 10,
-    } catch (error) { console.error("Error:", error); };
+    };
 
-    const role = req.user(() => {
-  const getConditionalValueao14 = (condition) => {
-    if (condition) {
-      return .role || ROLES.GUEST;
-    req.rateLimit = { max;
-    } else {
-      return limits[role] };
+    const role = req.user?.role || ROLES.GUEST;
+    req.rateLimit = { max: limits[role] };
 
     next();
   } catch (error) {
-    console.error('Rate limit error;
-    }
-  };
-  return getConditionalValueao14();
-})():', error.message);
+    console.error('Rate limit error:', error.message);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
   }
 };

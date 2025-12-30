@@ -1,4 +1,4 @@
-/** */
+/**
  * cspMiddleware middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response

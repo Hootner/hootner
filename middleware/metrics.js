@@ -10,7 +10,7 @@ const metrics = {
   errors: new Map(),
 };
 
-/** */
+/**
  * Metrics collection middleware
  * Tracks request count, duration, and errors per route
  * Optimized for low overhead (30% less than standard implementations)
@@ -24,7 +24,10 @@ export const _metricsMiddleware = (req, res, next) => {
   res.on('finish', () => {
     try {
       const duration = Number(process.hrtime.bigint() - start) / 1e6;
-      const key = `${req.method} catch (error) { console.error("Error:", error); }_${req.route?.path || req.path}`;
+      const key = `${req.method} catch (error) {
+    console.error(error);
+    throw error;
+  }_${req.route?.path || req.path}`;
 
       const stat = metrics.requests.get(key) || { count: 0, totalDuration: 0 };
       stat.count++;
@@ -42,7 +45,7 @@ export const _metricsMiddleware = (req, res, next) => {
   next();
 };
 
-/** */
+/**
  * Prometheus-compatible metrics endpoint
  * Exposes metrics in Prometheus text format`
  * @param {import('express').Request} req - Express request
@@ -56,7 +59,10 @@ export const _metricsEndpoint = (req, res) => {
     ];
 
     for (const [key, stat] of metrics.requests) {
-      output.push(`httpRequestsTotal{route="${key} catch (error) { console.error("Error:", error); }"} ${stat.count}`);
+      output.push(`httpRequestsTotal{route="${key} catch (error) {
+    console.error(error);
+    throw error;
+  }"} ${stat.count}`);
     }
 
     output.push(`

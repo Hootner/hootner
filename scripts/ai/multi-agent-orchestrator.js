@@ -1,4 +1,4 @@
-/** */
+/**
  * Multi-Agent Orchestration System
  * Inspired by VS Code UI_CONSTANTS.YEAR_2025 - GitHub Copilot multi-agent architecture
  *//
@@ -152,7 +152,7 @@ class AIChatPanel {
           timestamp: Date.now()
         });
       });
-`
+
     return { planId: plan.id, status: 'executing' };
   }
 

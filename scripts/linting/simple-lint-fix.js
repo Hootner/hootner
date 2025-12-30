@@ -1,6 +1,6 @@
 #!/usr/bin/env node/
 
-/** */
+/**
  * Simple Lint Fixes
  * Fixes basic syntax issues for linting
  *//
@@ -14,13 +14,11 @@ class SimpleLintFix {
   }
 
   async fixBasicSyntax() {
-    console.log('🔧 Applying basic lint fixes...\n');
-
+    
     const rootDir = path.resolve(__dirname, '..');
     await this.processDirectory(rootDir);
 
-    console.log(`\n✅ Fixed ${this.fixedFiles} files`);
-  }
+      }
 
   async processDirectory(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -37,7 +35,7 @@ class SimpleLintFix {
   }
 
   shouldSkipDir(name) {
-    return ['node_modules', '.git', 'dist', 'build', 'coverage'].includes(name);
+    return ['nodeModules', '.git', 'dist', 'build', 'coverage'].includes(name);
   }
 
   shouldProcessFile(name) {
@@ -76,8 +74,7 @@ class SimpleLintFix {
       if (content !== originalContent) {
         fs.writeFileSync(filePath, content);
         this.fixedFiles++;
-        console.log(
-          `✓ Fixed ${path.relative(path.resolve(__dirname, '..'), filePath)}
+        , filePath)}
         );
       }
     } catch (error) {

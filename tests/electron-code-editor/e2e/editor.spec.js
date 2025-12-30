@@ -1,8 +1,11 @@
+// Constants imported
+import { ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 const { test, expect } = require('@playwright/test');
 
 test.describe('HOOTNER Code Editor', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:DEFAULT_PORT');
     await page.waitForLoadState('networkidle');
   });
 
@@ -18,14 +21,14 @@ test.describe('HOOTNER Code Editor', () => {
 
   test('should type code in editor', async ({ page }) => {
     await page.click('#editor');
-    await page.keyboard.type('console.log("Hello");');
+    await page.keyboard.type('');
     const content = await page.evaluate(() => window.editor.getValue());
     expect(content).toContain('Hello');
   });
 
   test('should run code', async ({ page }) => {
     await page.click('#editor');
-    await page.keyboard.type('console.log("Test");');
+    await page.keyboard.type('');
     await page.click('button:has-text("Run")');
     await expect(page.locator('#output')).toContainText('Test');
   });

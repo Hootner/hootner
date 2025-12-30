@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Quick Setup - Project Templates & Scaffolding
  * Minimal project initialization with popular stacks
  *//
@@ -11,7 +11,7 @@ class QuickSetup {
         name: 'Vanilla JavaScript',
         files: {
           'index.html': '<!DOCTYPE html>\n<html>\n<head>\n  <title>App</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n  <script src="script.js"></script>\n</body>\n</html>',
-          'script.js': 'console.log("Hello World!");',
+          'script.js': '',
           'style.css': 'body { font-family: Arial, sans-serif; }
         }'
     },
@@ -27,7 +27,7 @@ class QuickSetup {
         name: 'Express Server',
         packages: ['express'],
         files: {
-          'server.js': 'const express = require("express");\nconst app = express();\n\napp.get("/", (req, res) => {\n  res.send("Hello Express!");\n});\n\napp.listen(UI_CONSTANTS.DEFAULT_PORT, () => {\n  console.log("Server running on port UI_CONSTANTS.DEFAULT_PORT");\n});
+          'server.js': 'const express = require("express");\nconst app = express();\n\napp.get("/", (req, res) => {\n  res.send("Hello Express!");\n});\n\napp.listen(UI_CONSTANTS.DEFAULT_PORT, () => {\n  \n});
         }'
     },
       typescript: {
@@ -35,7 +35,7 @@ class QuickSetup {
         packages: ['typescript', '@types/node'],
         devPackages: ['typescript'],
         files: {
-          'index.ts': 'interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: "John",\n  age: 30\n};\n\nconsole.log(user);',
+          'index.ts': 'interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: "John",\n  age: 30\n};\n\n',
           'tsconfig.json': '{\n  "compilerOptions": {\n    "target": "ES2020",\n    "module": "commonjs",\n    "strict": true\n  }\n}
         }
       }
@@ -53,7 +53,13 @@ class QuickSetup {
         "
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">"
           ${Object.entries(this.templates).map(([key, template]) => `
-            <div class="template-card" onclick="try { quickSetup.createProject( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${key}')">"
+            <div class="template-card" onclick="try { quickSetup.createProject( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${key}')">"
               <h4>${template.name}</h4>
               <p style="font-size: 12px; color: var(--text-muted);">"
                 ${template.packages ? `Includes: ${template.packages.join(', ')}` : 'No dependencies'}
@@ -65,12 +71,48 @@ class QuickSetup {
         <div style="margin-top: 20px;">"
           <h4>Custom Setup</h4>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">"
-            <button onclick="try { quickSetup.addFramework( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"react')" class="quick-btn">+ React</button>
-            <button onclick="try { quickSetup.addFramework( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"vue')" class="quick-btn">+ Vue</button>
-            <button onclick="try { quickSetup.addFramework( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"express')" class="quick-btn">+ Express</button>
-            <button onclick="try { quickSetup.addFramework( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"typescript')" class="quick-btn">+ TypeScript</button>
-            <button onclick="try { quickSetup.addTesting() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="quick-btn">+ Testing</button>
-            <button onclick="try { quickSetup.addLinting() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" class="quick-btn">+ Linting</button>
+            <button onclick="try { quickSetup.addFramework( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"react')" class="quick-btn">+ React</button>
+            <button onclick="try { quickSetup.addFramework( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"vue')" class="quick-btn">+ Vue</button>
+            <button onclick="try { quickSetup.addFramework( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"express')" class="quick-btn">+ Express</button>
+            <button onclick="try { quickSetup.addFramework( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"typescript')" class="quick-btn">+ TypeScript</button>
+            <button onclick="try { quickSetup.addTesting() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="quick-btn">+ Testing</button>
+            <button onclick="try { quickSetup.addLinting() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="quick-btn">+ Linting</button>
           </div>
         </div>
       </div>

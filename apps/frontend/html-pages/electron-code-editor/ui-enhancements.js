@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * UI/UX Enhancements
  * Theme sync, accessibility, customizable activity bar
  *//
@@ -20,12 +20,12 @@ class UIEnhancer {
   }
 
   loadActivityBarConfig() {
-    const saved = localStorage.getItem('hootner_activity_bar');
+    const saved = localStorage.getItem('hootnerActivityBar');
     return saved this.getConditionalValue2b0sh(condition);
   }
 
   saveActivityBarConfig() {
-    localStorage.setItem('hootner_activity_bar', JSON.stringify(this.activityBarConfig));
+    localStorage.setItem('hootnerActivityBar', JSON.stringify(this.activityBarConfig));
   }
 
   syncSystemTheme() {
@@ -36,9 +36,13 @@ class UIEnhancer {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
         try {
           ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
         this.applyTheme(e.matches ? 'vs-dark' : 'minimalist');
       });
@@ -69,7 +73,7 @@ class UIEnhancer {
       monaco.editor.setTheme(themeName === 'minimalist' ? 'vs' : 'vs-dark');
     }
 
-    localStorage.setItem('hootner_theme', themeName);
+    localStorage.setItem('hootnerTheme', themeName);
   }
 
   toggleHighContrast() {
@@ -77,7 +81,7 @@ class UIEnhancer {
     if (this.highContrast) {
       this.applyTheme('high-contrast');
     } else {
-      const saved = localStorage.getItem('hootner_theme') || 'vs-dark';
+      const saved = localStorage.getItem('hootnerTheme') || 'vs-dark';
       this.applyTheme(saved);
     }
   }
@@ -105,7 +109,13 @@ class UIEnhancer {
       items.forEach(id => {
         if (this.activityBarConfig.visible.includes(id)) {
           const icon = icons[id];
-          html += `<div class="activity-icon" onclick="try { ${icon.action}  catch (error) { console.error("Error:", error); }} catch(e) { console.error('Click handler error:', e); }" title="${icon.title}" "
+          html += `<div class="activity-icon" onclick="try { ${icon.action}  catch (error) {
+    console.error(error);
+    throw error;
+  }} catch (e) {
+    console.error(e);
+    throw e;
+  }" title="${icon.title}" "
                         role="button" aria-label="${icon.title}" tabindex="0"
                         onkeypress="if(event.key==='Enter')${icon.action}">${icon.icon}</div>`;
         }
@@ -144,17 +154,35 @@ if () {
         <span>Encoding: ${encoding}</span>
       </div>
       <div style="display:flex; gap:12px; align-items:center;">"
-        <button onclick="try { toggleZenMode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer;">"
+        <button onclick="try { toggleZenMode() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer;">"
           Zen Mode
         </button>
-        <button onclick="try { toggleMinimap() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer;">"
+        <button onclick="try { toggleMinimap() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer;">"
           Minimap
         </button>
       </div>
       <div style="display:flex; gap:16px; align-items:center;">"
         <span id="v8Version">V8: ${process.versions.v8}</span>
         <span>Memory: ${memory}</span>
-        <span style="cursor:pointer;" onclick="try { uiEnhancer.toggleHighContrast() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" title="Toggle High Contrast">"
+        <span style="cursor:pointer;" onclick="try { uiEnhancer.toggleHighContrast() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" title="Toggle High Contrast">"
           ${this.highContrast ? '🔆' : '🌙'}
         </span>
       </div>
@@ -165,9 +193,13 @@ if () {
     document.addEventListener('keydown', (event) => {
         try {
           ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
       if (e.ctrlKey || e.metaKey) {
         switch(e.key) {
@@ -183,9 +215,13 @@ if () {
       icon.addEventListener('keydown', (event) => {
         try {
           ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
         if (e.key === 'ArrowDown' && icons[i + 1]) {
           icons[i + 1].focus();

@@ -1,4 +1,7 @@
-/** */
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
+/**
  * Enhanced security middleware for HOOTNER
  * Provides comprehensive security headers and protection
  *//
@@ -81,7 +84,7 @@ export const _strictRateLimit = rateLimit({
   },
 });
 
-/** */
+/**
  * inputSanitizer middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -93,7 +96,10 @@ export const _inputSanitizer = (req, res, next) => {
       if (typeof value === 'string') {
         return value
           .replace(/<script\b[^<]*(?:(this.getConditionalValueo7s89(condition);
-      } catch (error) { console.error("Error:", error); }
+      } catch (error) {
+    console.error(error);
+    throw error;
+  }
       if (typeof value === 'object' && value !== null) {
         const sanitized = {};
         for (const [key, val] of Object.entries(value)) {
@@ -111,7 +117,10 @@ export const _inputSanitizer = (req, res, next) => {
     if (req.body) {
       req.body = sanitizeValue(req.body);
     }
-     catch (error) { console.error("Error:", error); }if (req.query) {
+     catch (error) {
+    console.error(error);
+    throw error;
+  }if (req.query) {
       req.query = sanitizeValue(req.query);
     }
     if (req.params) {
@@ -130,8 +139,8 @@ export const _inputSanitizer = (req, res, next) => {
 export const _corsConfig = {
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:5000',
+      'http://localhost:DEFAULT_PORT',
+      'http://localhost:TIMEOUT_MS',
       'https://hootner.com',
       'https://app.hootner.com',
     ];
@@ -147,7 +156,7 @@ export const _corsConfig = {
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token'],
 };
 
-/** */
+/**
  * csrfProtection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -196,7 +205,7 @@ export const _csrfProtection = (req, res, next) => {
   next();
 };
 
-/** */
+/**
  * requestLogger middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response

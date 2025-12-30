@@ -1,4 +1,4 @@
-/** */
+/**
  * Function Utilities for Code Refactoring
  * Helper functions for breaking down complex code
  *//
@@ -39,7 +39,10 @@ export class FunctionUtils {
   static safeExecute(operation, context = 'operation') {
     try {
       return operation();
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       console.error(`${context} failed:`, error);
       return null;
     }
@@ -54,7 +57,10 @@ export class FunctionUtils {
   static async safeExecuteAsync(asyncOperation, context = 'async operation') {
     try {
       return asyncOperation();
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       console.error(`${context} failed:`, error);
       return null;
     }
@@ -97,7 +103,10 @@ export class FunctionUtils {
     for (const attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return operation();
-      } catch (error) { console.error("Error:", error); } catch (error) {
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
         lastError = error;
         
         if (attempt < maxRetries) {
@@ -174,7 +183,10 @@ export class FunctionUtils {
     return operations.reduce((result, operation) => {
       try {
         return operation(result);
-      } catch (error) { console.error("Error:", error); } catch (error) {`"
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {`"
         console.error('Chain operation failed: ', error);
         return result;
       }

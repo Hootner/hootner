@@ -4,7 +4,7 @@ const path = require('path');
 const issues = [];
 
 function scanFile(filePath) {
-  if (filePath.includes('.min.js') || filePath.includes('node_modules')) return;
+  if (filePath.includes('.min.js') || filePath.includes('nodeModules')) return;
   
   const content = fs.readFileSync(filePath, 'utf-8');
   const lines = content.split('\n');
@@ -27,7 +27,7 @@ function walk(dir) {
     const fullPath = path.join(dir, file);
     const stat = fs.statSync(fullPath);
     
-    if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
+    if (stat.isDirectory() && !file.startsWith('.') && file !== 'nodeModules') {
       walk(fullPath);
     } else if (file.endsWith('.js') && !file.endsWith('.min.js')) {
       scanFile(fullPath);
@@ -37,5 +37,4 @@ function walk(dir) {
 
 walk(process.argv[2] || '.');
 
-console.log(`Found ${issues.length} potential unterminated regex issues:\n`);
-issues.forEach(i => console.log(`${i.file}:${i.line}\n  ${i.content}\n`));
+issues.forEach(i => );

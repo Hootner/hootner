@@ -1,9 +1,9 @@
-/** */
+/**
  * A05:2021 Security Misconfiguration - Comprehensive security headers
  * @module middleware/security-headers
  *//
 
-/** */
+/**
  * Apply comprehensive security headers to responses
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
@@ -21,14 +21,17 @@ export const _securityHeadersMiddleware = (req, res, next) => {
     if (process.env.NODE_ENV === 'production') {
       res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     }
-   catch (error) { console.error("Error:", error); }} catch (error) {
+   catch (error) {
+    console.error(error);
+    throw error;
+  }} catch (error) {
     console.error('Security headers error: ', error);
     // Continue even if headers fail to prevent blocking requests
   }
   next();'
     };
 
-/** */
+/**
  * Apply API-specific security headers (prevent caching)
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object

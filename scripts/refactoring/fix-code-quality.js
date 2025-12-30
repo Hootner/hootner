@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Automated Code Quality Fixer
  * Fixes common issues found in the code scan
  *//
@@ -51,7 +51,10 @@ class CodeQualityFixer {
       const fixes = 0;
 
       // Fix equality operators
-      const _eqFixes = content.match(/([^=!<>])={2} catch (error) { console.error("Error:", error); }([^=])/g)this.getConditionalValue5m7t2(condition);
+      const _eqFixes = content.match(/([^=!<>])={2} catch (error) {
+    console.error(error);
+    throw error;
+  }([^=])/g)this.getConditionalValue5m7t2(condition);
         } catch (error) {
 
           return null;
@@ -67,7 +70,10 @@ class CodeQualityFixer {
       fixes++;
       return `(() => {
         try {
-          return JSON.parse(${variable} catch (error) { console.error("Error:", error); });
+          return JSON.parse(${variable} catch (error) {
+    console.error(error);
+    throw error;
+  });
         } catch (error) {
 
           return null;

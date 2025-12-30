@@ -1,4 +1,4 @@
-/** */
+/**
  * Monaco Editor Language Extensions
  * Adds custom language support and features
  *//
@@ -35,7 +35,10 @@ class MonacoExtensions {
       // Shell
       this.registerShell();
 
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       console.error('Language registration error: ', error);
       throw new Error(`Failed to register languages: ${error.message}`);
     }'
@@ -349,7 +352,10 @@ class MonacoExtensions {
         provideCompletionItems: async (model, position) => {
           try {
             const suggestions = await provider(model, position);
-            return { suggestions } catch (error) { console.error("Error:", error); };
+            return { suggestions } catch (error) {
+    console.error(error);
+    throw error;
+  };
           } catch (error) {
             console.error(`Completion provider error for ${language}:`, error);
             return { suggestions: [] };
@@ -357,8 +363,9 @@ class MonacoExtensions {
         }
       });
     } catch (error) {
-      console.error(`Failed to setup completion provider for ${language}:`, error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   setupHoverProvider(language, provider) {
@@ -367,15 +374,19 @@ class MonacoExtensions {
         provideHover: async (model, position) => {
           try {
             return provider(model, position);
-          } catch (error) { console.error("Error:", error); } catch (error) {`"
+          } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {`"
             console.error(`Hover provider error for ${language}:`, error);
             return null;
           }
         }
       });
     } catch (error) {
-      console.error(`Failed to setup hover provider for ${language}:`, error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   setupDefinitionProvider(language, provider) {
@@ -384,15 +395,19 @@ class MonacoExtensions {
         provideDefinition: async (model, position) => {
           try {
             return provider(model, position);
-          } catch (error) { console.error("Error:", error); } catch (error) {`"
+          } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {`"
             console.error(`Definition provider error for ${language}:`, error);
             return null;
           }
         }
       });
     } catch (error) {
-      console.error(`Failed to setup definition provider for ${language}:`, error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   setupFormattingProvider(language, provider) {
@@ -401,15 +416,19 @@ class MonacoExtensions {
         provideDocumentFormattingEdits: async (model) => {
           try {
             return provider(model);
-          } catch (error) { console.error("Error:", error); } catch (error) {`"
+          } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {`"
             console.error(`Formatting provider error for ${language}:`, error);
             return [];
           }
         }
       });
     } catch (error) {
-      console.error(`Failed to setup formatting provider for ${language}:`, error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 }
 `

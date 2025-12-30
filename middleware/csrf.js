@@ -36,7 +36,7 @@ const generateCSRFToken = () => {
   return crypto.randomBytes(32).toString('hex');
 };
 
-/** */
+/**
  * csrfProtection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -45,7 +45,10 @@ const generateCSRFToken = () => {
 const csrfProtection = (req, res, next) => {
   try {
     if (!req.sessionID) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Session required' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Session required' } catch (error) {
+    console.error(error);
+    throw error;
+  });
     }
     '
     if (req.method === 'GET') {

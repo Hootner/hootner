@@ -1,0 +1,15 @@
+# Minified libraries
+apps/frontend/html-pages/libs/*.min.js
+**/*.min.js
+
+# Build output
+dist/
+build/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated files
+coverage/
+.next/

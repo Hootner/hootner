@@ -1,5 +1,8 @@
+// Constants imported
+import { DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS, HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS } from '../../constants/timeouts.js';
+
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Plugin System - Extension Marketplace
  * Minimal plugin architecture with marketplace
  *//
@@ -161,7 +164,13 @@ class PluginSystem {
             return `
               <div class="plugin-item installed">"
                 <span>${plugin.icon} ${plugin.name}</span>
-                <button onclick="try { pluginSystem.uninstall( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${id}')" class="plugin-btn-remove">Uninstall</button>
+                <button onclick="try { pluginSystem.uninstall( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${id}')" class="plugin-btn-remove">Uninstall</button>
               </div>
             `;
           }).join('') || '<div style="color: #666;">No plugins installed</div>'}
@@ -175,7 +184,13 @@ class PluginSystem {
                 <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">${plugin.description}</p>
                 <span class="plugin-category">${plugin.category}</span>
               </div>
-              <button onclick="try { pluginSystem.install( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${id}')" class="plugin-btn">Install</button>
+              <button onclick="try { pluginSystem.install( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${id}')" class="plugin-btn">Install</button>
             </div>
           `).join('')}
         </div>
@@ -227,7 +242,10 @@ class PluginSystem {
 
     try {
       // Execute plugin code`
-      const PluginClass = eval(`(function() { ${plugin.code}  catch (error) { console.error("Error:", error); }})()`);
+      const PluginClass = eval(`(function() { ${plugin.code}  catch (error) {
+    console.error(error);
+    throw error;
+  }})()`);
       const instance = new PluginClass();
       
       // Add helper methods
@@ -283,9 +301,13 @@ class PluginSystem {
     handlers.forEach(handler => {
       try {
         handler(...args);
-      } catch (error) { console.error("Error:", error); } catch (error) {
-        console.error(`Plugin hook error:`, error);
-      }
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
     });
   }
 
@@ -325,7 +347,10 @@ return ${name.replace(/\s+/g, '')}Plugin;`;
     
     try {
       const code = state.fileSystem[filename].content;
-      const PluginClass = eval(`(function() { ${code}  catch (error) { console.error("Error:", error); }})()`);
+      const PluginClass = eval(`(function() { ${code}  catch (error) {
+    console.error(error);
+    throw error;
+  }})()`);
       const instance = new PluginClass();
       
       instance.addCommand = (name, handler) => {
@@ -377,9 +402,13 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', (event) => {
         try {
           (setupPluginUI)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       });
 } else {
   setupPluginUI();'

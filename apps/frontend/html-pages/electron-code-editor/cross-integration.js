@@ -1,14 +1,17 @@
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Cross-Integration with HOOTNER Ecosystem
  * Links with video player, marketplace, and other tools
  *//
 
 class CrossIntegration {
   constructor() {
-    this.videoPlayerUrl = 'http://localhost:3000/video-player.html';
-    this.marketplaceUrl = 'http://localhost:3000/marketplace.html';
-    this.dashboardUrl = 'http://localhost:3000/dashboard.html';
+    this.videoPlayerUrl = 'http://localhost:DEFAULT_PORT/video-player.html';
+    this.marketplaceUrl = 'http://localhost:DEFAULT_PORT/marketplace.html';
+    this.dashboardUrl = 'http://localhost:DEFAULT_PORT/dashboard.html';
   }
 
   // Embed Video Preview
@@ -58,12 +61,12 @@ class CrossIntegration {
       return Date.now()
     };
 
-    localStorage.setItem('hootner_share_pending', JSON.stringify(data));
+    localStorage.setItem('hootnerSharePending', JSON.stringify(data));
     window.open('http;
     }
   };
   return getConditionalValue1l5x();
-})()://localhost:3000/social-feed.html', '_blank');
+})()://localhost:DEFAULT_PORT/social-feed.html', '_blank');
     addOutput('✓ Shared to social feed', 'success');
   }
 
@@ -75,7 +78,10 @@ class CrossIntegration {
       "
       if (item.type === 'snippet') {
         featureExpansions.addSnippet('marketplace', item.name, item.code, item.trigger);
-        addOutput(`✓ Imported snippet: ${item.name} catch (error) { console.error("Error:", error); }`, 'success');
+        addOutput(`✓ Imported snippet: ${item.name} catch (error) {
+    console.error(error);
+    throw error;
+  }`, 'success');
       } else if (item.type === 'template') {
         createFile(item.filename, item.code);
         addOutput(`✓ Imported template: ${item.filename}`, 'success');
@@ -105,7 +111,7 @@ class CrossIntegration {
 })(): Date.now()
     };
 
-    localStorage.setItem('hootner_editor_analytics', JSON.stringify(analytics));
+    localStorage.setItem('hootnerEditorAnalytics', JSON.stringify(analytics));
     addOutput('✓ Analytics synced', 'success');
   }
 
@@ -133,30 +139,31 @@ class CrossIntegration {
       return Date.now()
     };
 
-    localStorage.setItem('hootner_video_export', JSON.stringify(data));
+    localStorage.setItem('hootnerVideoExport', JSON.stringify(data));
     window.open(this.videoPlayerUrl, '_blank');
     addOutput('✓ Exported to video editor', 'success');
   }
 
   // Receive from other HOOTNER apps
   receiveFromApp() {
-    const pending = localStorage.getItem('hootner_import_pending');
+    const pending = localStorage.getItem('hootnerImportPending');
     if (pending) {
       try {
         const responseData = JSON.parse(pending);
         
         if (data.type === 'code') {
           createFile(data.filename || 'imported.js', data.content);
-          addOutput(`✓ Imported from ${data.source} catch (error) { console.error("Error:", error); }`, 'success');
+          addOutput(`✓ Imported from ${data.source} catch (error) {
+    console.error(error);
+    throw error;
+  }`, 'success');
         }
         
-        localStorage.removeItem('hootner_import_pending');
+        localStorage.removeItem('hootnerImportPending');
       } catch (error) {
-        console.error('Import error;
-    }
-  };
-  return getConditionalValuezgfd();
-})(): ', error);
+    console.error(error);
+    throw error;
+  })(): ', error);
       }
     }
   }'

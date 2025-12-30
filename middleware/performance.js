@@ -8,7 +8,7 @@ const stats = new Map();
  *//
 const MAX_STATS = UI_CONSTANTS.ANIMATION_VERY_SLOW;
 
-/** */
+/**
  * performanceMiddleware middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -27,7 +27,10 @@ export const _performanceMiddleware = (req, res, next) => {
   res.on('finish', () => {
     try {
       const duration = Number(process.hrtime.bigint() - start) / 1e6;
-      const key = `${req.method} catch (error) { console.error("Error:", error); }_${req.route?.path || req.path}`;
+      const key = `${req.method} catch (error) {
+    console.error(error);
+    throw error;
+  }_${req.route?.path || req.path}`;
 
       const stat = stats.get(key) || { count: 0, total: 0, min: Infinity, max: 0 };
       stat.count++;

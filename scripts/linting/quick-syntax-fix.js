@@ -26,11 +26,11 @@ const processFile = (filePath) => {
     
     if (content !== fixed) {
       writeFileSync(filePath, fixed);
-      console.log(`Fixed: ${filePath}`);
-      return true;
+            return true;
     }
   } catch (error) {
-    console.error(`Error processing ${filePath}:`, error.message);
+    console.error(error);
+    throw error;
   }
   return false;
 };
@@ -45,7 +45,7 @@ const processDirectory = (dir, extensions = ['.js', '.mjs', '.cjs']) => {
       const fullPath = join(dir, item);
       const stat = statSync(fullPath);
       
-      if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
+      if (stat.isDirectory() && !item.startsWith('.') && item !== 'nodeModules') {
         fixedCount += processDirectory(fullPath, extensions);
       } else if (stat.isFile() && extensions.includes(extname(item))) {
         if (processFile(fullPath)) {
@@ -54,12 +54,11 @@ const processDirectory = (dir, extensions = ['.js', '.mjs', '.cjs']) => {
       }
     }
   } catch (error) {
-    console.error(`Error processing directory ${dir}:`, error.message);
+    console.error(error);
+    throw error;
   }
   
   return fixedCount;
 };
 
-console.log('🔧 Quick Syntax Fix - Starting...');
 const fixedCount = processDirectory(process.cwd());
-console.log(`✅ Fixed ${fixedCount} files`);

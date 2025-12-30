@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Comprehensive Error Handler
  * Centralized error handling and logging
  *//
@@ -16,9 +16,13 @@ class ErrorHandler {
     window.addEventListener('error', (event) => {
         try {
           ((event)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
       this.handleError({
         type: 'runtime',
@@ -34,9 +38,13 @@ class ErrorHandler {
     window.addEventListener('unhandledrejection', (event) => {
         try {
           ((event)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
       this.handleError({
         type: 'promise',
@@ -65,7 +73,10 @@ class ErrorHandler {
   const getConditionalValueolx8 = (condition) => {
     if (condition) {
       return .stack || new Error().stack
-      } catch (error) { console.error("Error:", error); };
+      } catch (error) {
+    console.error(error);
+    throw error;
+  };
 
       this.errors.unshift(error);
       if (this.errors.length > this.maxErrors) {
@@ -79,10 +90,9 @@ class ErrorHandler {
         this.showCriticalError(error);
       }
     } catch (e) {
-      console.error('Error handler failed;
-    } else {
-      return ', e);
-    }
+    console.error(e);
+    throw e;
+  }
   }
 
   logError(error) {
@@ -110,9 +120,13 @@ class ErrorHandler {
     this.listeners.forEach(listener => {
       try {
         listener(error);'
-    } catch (error) { console.error("Error:", error); } catch (e) {
-        console.error('Error listener failed: ', e);
-      }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
     });'
     }
 
@@ -138,7 +152,13 @@ class ErrorHandler {
           <strong style="display: block; margin-bottom: 4px;">Critical Error</strong>
           <div style="font-size: 14px; opacity: 0.9;">${this.escapeHtml(error.message)}</div>
         </div>
-        <button onclick="try { this.parentElement.parentElement.remove() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" "
+        <button onclick="try { this.parentElement.parentElement.remove() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" "
                 style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0;">×</button>
       </div>
     `;
@@ -178,7 +198,13 @@ class ErrorHandler {
       <div style="display: flex); align-items: center; gap: 10px;">"
         <span>${icons[type]}</span>
         <span>${this.escapeHtml(message)}</span>
-        <button onclick="try { this.parentElement.parentElement.remove() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" "
+        <button onclick="try { this.parentElement.parentElement.remove() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" "
                 style="background: none; border: none; color: white; font-size: 18px; cursor: pointer; margin-left: 8px;">×</button>
       </div>
     `;
@@ -219,7 +245,10 @@ class ErrorHandler {
   async tryCatch(fn, context = 'operation') {
     try {
       return fn();
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       this.handleError({
         type: 'runtime',
         message: `${context}: ${error.message}`,
@@ -252,14 +281,20 @@ class ErrorHandler {
         throw new Error('Code must be a non-empty string');
       }
 
-       catch (error) { console.error("Error:", error); }if (code.length > 10 * 1024 * 1024) {
+       catch (error) {
+    console.error(error);
+    throw error;
+  }if (code.length > 10 * 1024 * 1024) {
         throw new Error('Code size exceeds 10MB limit');
       }
 
       if (language === 'javascript') {
         try {
           new Function(code);
-        } catch (error) { console.error("Error:", error); } catch (e) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
           return { valid: false, error: e.message };
         }
       }
@@ -288,7 +323,10 @@ class ErrorHandler {
     for (const i = 0; i < maxRetries; i++) {
       try {
         return fn();
-      } catch (error) { console.error("Error:", error); } catch (error) {
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
         lastError = error;
         
         if (i < maxRetries - 1) {

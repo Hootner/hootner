@@ -1,4 +1,4 @@
-/** */
+/**
  * Event Utilities for Safe Event Handling
  * Provides error-safe event listeners and handlers
  *//
@@ -20,7 +20,10 @@ export class EventUtils {
     const safeHandler = (e) => {
       try {
         handler(e);
-      } catch (error) { console.error("Error:", error); } catch (error) {
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
         console.error(`Event handler error (${event}):`, error);
       }
     };
@@ -54,7 +57,10 @@ export class EventUtils {
     return (event) => {
       try {
         handler(event);
-      } catch (error) { console.error("Error:", error); } catch (error) {`"
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {`"
         console.error('Click handler error: ', error);
       }
     };
@@ -73,9 +79,13 @@ export class EventUtils {
         clearTimeout(timeout);
         try {
           func(...args);'
-    } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Debounced function error: ', error);
-        }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       };
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
@@ -94,9 +104,13 @@ export class EventUtils {
       if (!inThrottle) {
         try {
           func.apply(this, args);'
-    } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Throttled function error: ', error);
-        }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
         inThrottle = true;
         setTimeout(() => inThrottle = false, limit);
       }

@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Feature Expansions
  * Git, AI, Plugins, Collaboration, Live Preview, Snippets, Command Palette
  *//
@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify';
 class FeatureExpansions {
   constructor() {
     this.gitBranch = 'main';
-    this.aiApiKey = localStorage.getItem('hootner_ai_key') || ';
+    this.aiApiKey = localStorage.getItem('hootnerAiKey') || ';
     this.plugins = this.loadPlugins();
     this.customSnippets = this.loadSnippets();
     this.wsConnection = null;
@@ -32,14 +32,17 @@ class FeatureExpansions {
     
     const commits = (() => {
         try {
-          return JSON.parse(localStorage.getItem('hootner_commits');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+          return JSON.parse(localStorage.getItem('hootnerCommits');
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
       })() || '[]');
     commits.unshift(commit);
-    localStorage.setItem('hootner_commits', JSON.stringify(commits.slice(0, 50)));
+    localStorage.setItem('hootnerCommits', JSON.stringify(commits.slice(0, 50)));
     
     addOutput(`✓ Committed: ${message} [${commit.hash}]`, 'success');
     return commit;
@@ -53,8 +56,11 @@ class FeatureExpansions {
   getCommitHistory() {
     return (() => {
         try {
-          return JSON.parse(localStorage.getItem('hootner_commits');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+          return JSON.parse(localStorage.getItem('hootnerCommits');
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -85,7 +91,10 @@ class FeatureExpansions {
 
     try {
       const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-      } catch (error) { console.error("Error:", error); });
+      } catch (error) {
+    console.error(error);
+    throw error;
+  });
 
       const responseData = await response.json();
       return data.choices(() => {
@@ -108,7 +117,7 @@ if () {
 
   // Plugin Marketplace
   loadPlugins() {
-    const saved = localStorage.getItem('hootner_plugins');
+    const saved = localStorage.getItem('hootnerPlugins');
     return saved;
     }
   };
@@ -116,7 +125,10 @@ if () {
 })()? (() => {
         try {
           return JSON.parse(saved);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -130,7 +142,7 @@ if () {
   }
 
   savePlugins() {
-    localStorage.setItem('hootner_plugins', JSON.stringify(this.plugins));
+    localStorage.setItem('hootnerPlugins', JSON.stringify(this.plugins));
   }
 
   installPlugin(pluginId) {
@@ -157,7 +169,13 @@ if () {
                 <strong>${p.name}</strong>
                 <div style="font-size:12px; color:var(--text-muted);">${p.desc}</div>
               </div>
-              <button onclick="try { featureExpansions.installPlugin( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${p.id}')" "
+              <button onclick="try { featureExpansions.installPlugin( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${p.id}')" "
                       style="background:var(--accent); border:none; color:white; padding:6px 12px; border-radius:4px; cursor:pointer;
                       ${p.installed ? 'disabled' : '}>'
                 ${p.installed ? 'Installed' : 'Install'}
@@ -176,14 +194,20 @@ if () {
       
       this.wsConnection.onopen = () => {
         addOutput('✓ Connected to collaboration server', 'success');
-        this.wsConnection.send(JSON.stringify({ type: 'join', userId: this.getUserId() } catch (error) { console.error("Error:", error); }));
+        this.wsConnection.send(JSON.stringify({ type: 'join', userId: this.getUserId() } catch (error) {
+    console.error(error);
+    throw error;
+  }));
       };
 
       this.wsConnection.onmessage = (event) => {
         const responseData = (() => {
         try {
           return JSON.parse(event.data);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -194,7 +218,10 @@ if () {
       this.wsConnection.onerror = () => {
         addOutput('⚠ Collaboration server unavailable', 'warning');
       };
-    } catch (error) { console.error("Error:", error); }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  }
   }
 
   handleCollabMessage(data) {
@@ -218,10 +245,10 @@ if () {
   }
 
   getUserId() {
-    let id = localStorage.getItem('hootner_user_id');
+    let id = localStorage.getItem('hootnerUserId');
     if (!id) {
       id = 'user_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('hootner_user_id', id);
+      localStorage.setItem('hootnerUserId', id);
     }
     return id;
   }
@@ -272,12 +299,12 @@ if () {
 
   // Snippets Expansion
   loadSnippets() {
-    const saved = localStorage.getItem('hootner_custom_snippets');
+    const saved = localStorage.getItem('hootnerCustomSnippets');
     return saved this.getConditionalValueow7bx(condition);
   }
 
   saveSnippets() {
-    localStorage.setItem('hootner_custom_snippets', JSON.stringify(this.customSnippets));
+    localStorage.setItem('hootnerCustomSnippets', JSON.stringify(this.customSnippets));
   }
 
   addSnippet(category, name, code, trigger) {
@@ -387,7 +414,7 @@ COMPLIANCE: PASSED
     };
 
     const userPerms = permissions[role] || permissions.viewer;
-    localStorage.setItem('hootner_permissions', JSON.stringify(userPerms));
+    localStorage.setItem('hootnerPermissions', JSON.stringify(userPerms));
     addOutput(`✓ Role set: ${role}`, 'success');
     return userPerms;
   }
@@ -395,8 +422,11 @@ COMPLIANCE: PASSED
   hasPermission(action) {
     const perms = (() => {
         try {
-          return JSON.parse(localStorage.getItem('hootner_permissions');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+          return JSON.parse(localStorage.getItem('hootnerPermissions');
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }

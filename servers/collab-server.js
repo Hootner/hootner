@@ -1,15 +1,16 @@
 /**
  * WebSocket Collaboration Server
- *//
+ */
 
 const WebSocket = require('ws');
 
 class CollaborationServer {
-  constructor(port = UI_CONSTANTS.COLLAB_PORT) {
+  constructor(port = 3002) {
     this.wss = new WebSocket.Server({ port });
     this.rooms = new Map();
     this.clients = new Map();
     this.init();
+    console.log(`Collaboration server running on port ${port}`);
   }
 
   init() {
@@ -18,22 +19,18 @@ class CollaborationServer {
       this.clients.set(clientId, { ws, rooms: new Set() });
 
       ws.on('message', (data) => {
-        const msg = (() => {
         try {
-          return JSON.parse(data);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-
-          return null;
+          const msg = JSON.parse(data);
+          this.handleMessage(clientId, msg);
+        } catch (error) {
+          console.error('Invalid message:', error.message);
         }
-      })();
-        this.handleMessage(clientId, msg);
       });
-'
+
       ws.on('close', () => {
         this.handleDisconnect(clientId);
       });
     });
-
   }
 
   handleMessage(clientId, msg) {
@@ -85,14 +82,12 @@ class CollaborationServer {
 
   broadcast(roomId, msg, excludeId) {
     const room = this.rooms.get(roomId);
-    if (!room) {return;}
+    if (!room) return;
 
     room.forEach(clientId => {
       if (clientId !== excludeId) {
         const client = this.clients.get(clientId);
-        if (client(() => {
-if () {
-  return .ws.readyState === WebSocket.OPEN) {
+        if (client?.ws.readyState === WebSocket.OPEN) {
           client.ws.send(JSON.stringify(msg));
         }
       }
@@ -101,22 +96,15 @@ if () {
 
   handleDisconnect(clientId) {
     const client = this.clients.get(clientId);
-    if (!client) {return;}
+    if (!client) return;
 
     client.rooms.forEach(roomId => {
       const room = this.rooms.get(roomId);
-      room(() => {
-  const getConditionalValuedb1q = (condition) => {
-    if (condition) {
-      return .delete(clientId);
+      room?.delete(clientId);
       
       this.broadcast(roomId, {
-        type;
-    } else {
-      return 'user-left',
-        userId;
-}
-})() client.userId
+        type: 'user-left',
+        userId: client.userId
       });
     });
 
@@ -129,11 +117,7 @@ if () {
 }
 
 if (require.main === module) {
-  new CollaborationServer(UI_CONSTANTS.COLLAB_PORT);
+  new CollaborationServer(3002);
 }
 
 module.exports = CollaborationServer;
-    }
-  };
-  return getConditionalValuedb1q();
-})()`

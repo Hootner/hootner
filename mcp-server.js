@@ -7,10 +7,12 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { deployService } from './tools/deploy-service.js';
+import { chaosTest } from './tools/chaos-test.js';
+import { systemHealth } from './tools/system-health.js';
+import { backupSystem } from './tools/backup-system.js';
+import { securityScan } from './tools/security-scan.js';
 
 class HootnerMCPServer {
   constructor() {
@@ -31,11 +33,11 @@ class HootnerMCPServer {
   }
 
   setupTools() {
-    // Register tools with modern SDK approach
-    this.server.setRequestHandler('tools/list', async () => ({
+    // Register tools list handler
+    this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: [
         {
-          name: 'deploy_service',
+          name: 'deployService',
           description: 'Deploy HOOTNER microservices',
           inputSchema: {
             type: 'object',
@@ -48,10 +50,6 @@ class HootnerMCPServer {
               }
             },
             required: ['environment']
-          },
-          execute: async (input) => {
-            console.log(`Deploying ${input.service || 'all services'} to ${input.environment}`);
-            return await this.deployService(input);
           }
         },
         {
@@ -68,14 +66,10 @@ class HootnerMCPServer {
               duration: { type: 'number', description: 'Duration in minutes' }
             },
             required: ['scenario']
-          },
-          execute: async (input) => {
-            console.log(`Running chaos test: ${input.scenario}`);
-            return { result: `Chaos test for ${input.scenario} completed`, duration: input.duration || 5 };
           }
         },
         {
-          name: 'system_health',
+          name: 'systemHealth',
           description: 'Check HOOTNER system health',
           inputSchema: {
             type: 'object',
@@ -86,13 +80,10 @@ class HootnerMCPServer {
                 description: 'Component to check' 
               }
             }
-          },
-          execute: async (input) => {
-            return await this.checkSystemHealth(input);
           }
         },
         {
-          name: 'backup_system',
+          name: 'backupSystem',
           description: 'Trigger system backup',
           inputSchema: {
             type: 'object',
@@ -104,27 +95,21 @@ class HootnerMCPServer {
               }
             },
             required: ['type']
-          },
-          execute: async (input) => {
-            return await this.backupSystem(input);
           }
         },
         {
-          name: 'security_scan',
+          name: 'securityScan',
           description: 'Run security audit',
           inputSchema: {
             type: 'object',
             properties: {
-              scan_type: { 
+              scanType: { 
                 type: 'string',
                 enum: ['full', 'dependencies', 'secrets'],
                 description: 'Scan type' 
               }
             },
-            required: ['scan_type']
-          },
-          execute: async (input) => {
-            return await this.securityAudit(input);
+            required: ['scanType']
           }
         }
       ]
@@ -132,72 +117,31 @@ class HootnerMCPServer {
 
     
     // Handle tool execution
-    this.server.setRequestHandler('tools/call', async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
-      const tool = this.tools.find(t => t.name === name);
-      
-      if (!tool) {
-        throw new Error(`Unknown tool: ${name}`);
-      }
       
       try {
-        return await tool.execute(args);
+        switch (name) {
+          case 'deployService':
+            return await deployService(args);
+          case 'chaos_test':
+            return await chaosTest(args);
+          case 'systemHealth':
+            return await systemHealth(args);
+          case 'backupSystem':
+            return await backupSystem(args);
+          case 'securityScan':
+            return await securityScan(args);
+          default:
+            throw new Error(`Unknown tool: ${name}`);
+        }
       } catch (error) {
         return { error: error.message };
       }
     });
   }
 
-  async deployService(args) {
-    const { environment, service } = args;
-    const cmd = `docker-compose -f docker-compose.${environment}.yml up -d ${service || ''}`;
-    
-    const { stdout } = await execAsync(cmd);
-    return { status: 'deployed', environment, service, output: stdout };
-  }
 
-  async checkSystemHealth(args) {
-    const { component = 'all' } = args;
-    const checks = {
-      frontend: 'curl -f http://localhost:3000/health',
-      backend: 'curl -f http://localhost:4000/graphql',
-      database: 'docker ps | grep mongo'
-    };
-
-    const results = {};
-    const targets = component === 'all' ? Object.keys(checks) : [component];
-    
-    for (const target of targets) {
-      try {
-        await execAsync(checks[target]);
-        results[target] = 'healthy';
-      } catch {
-        results[target] = 'down';
-      }
-    }
-    
-    return { health: results };
-  }
-
-  async backupSystem(args) {
-    const { type } = args;
-    const cmd = `node scripts/backup-manager.js --type ${type}`;
-    
-    const { stdout } = await execAsync(cmd);
-    return { status: 'completed', type, output: stdout };
-  }
-
-  async securityAudit(args) {
-    const { scan_type } = args;
-    const cmds = {
-      full: 'node scripts/security-audit.js',
-      dependencies: 'npm audit',
-      secrets: 'npm run security:scan'
-    };
-    
-    const { stdout } = await execAsync(cmds[scan_type]);
-    return { scan: scan_type, results: stdout };
-  }
 
   setupErrorHandling() {
     this.server.onerror = (error) => {

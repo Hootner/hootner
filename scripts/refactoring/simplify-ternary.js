@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Ternary Operator Simplification Tool
  * Converts complex nested ternary operators to readable if-else statements
  *//
@@ -14,13 +14,11 @@ class TernarySimplifier {
   }
 
   async simplifyAllFiles() {
-    console.log('🔀 Simplifying nested ternary operators...\n');
-    
+        
     const rootDir = path.resolve(__dirname, '..');
     await this.processDirectory(rootDir);
     
-    console.log(`\n✅ Simplified ${this.simplifiedOperators} ternary operators in ${this.fixedFiles} files`);
-  }
+      }
 
   async processDirectory(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -37,7 +35,7 @@ class TernarySimplifier {
   }
 
   shouldSkipDir(name) {
-    return ['node_modules', '.git', 'dist', 'build', 'coverage'].includes(name);
+    return ['nodeModules', '.git', 'dist', 'build', 'coverage'].includes(name);
   }
 
   shouldProcessFile(name) {
@@ -54,7 +52,10 @@ class TernarySimplifier {
       const nestedTernaryPattern = /\?\s*[^?:]*\(() => {
   if () {
     return \s*[^?;
-  }  catch (error) { console.error("Error:", error); }else {
+  }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {
     return undefined;
   }
 })()\s*[^?:]*:/g;
@@ -93,7 +94,7 @@ class TernarySimplifier {
       if (content !== originalContent) {
         fs.writeFileSync(filePath, content);
         this.fixedFiles++;
-        console.log(`✓ Simplified ternary operators in ${path.relative(path.resolve(__dirname, '..'), filePath)}`);
+        , filePath)}`);
       }
     } catch (error) {
       console.warn(`⚠️  Could not process ${filePath}: ${error.message}`);

@@ -1,4 +1,4 @@
-/** */
+/**
  * Renderer Process Manager
  * Splits heavy operations across renderer processes
  *//
@@ -44,9 +44,13 @@ class RendererManager {
       worker.addEventListener('message', (event) => {
         try {
           (handler)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       });
       worker.postMessage({ id, task, data });
     });
@@ -63,7 +67,10 @@ class RendererManager {
         
         try {
           if (task === 'diff') {
-            const { original, current }  catch (error) { console.error("Error:", error); }= data;
+            const { original, current }  catch (error) {
+    console.error(error);
+    throw error;
+  }= data;
             const operationResult = computeDiff(original, current);
             self.postMessage({ id, result });
           }
@@ -103,7 +110,10 @@ class RendererManager {
         try {
           if (task === 'analyze') {
             const operationResult = analyzeCode(data.code);
-            self.postMessage({ id, result } catch (error) { console.error("Error:", error); });
+            self.postMessage({ id, result } catch (error) {
+    console.error(error);
+    throw error;
+  });
           }
         } catch (error) {
           self.postMessage({ id, error: error.message });

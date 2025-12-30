@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify';
-// Editor Enhancements Module
+
 let currentFontSize = 14;
-const minimapEnabled = true;
+let minimapEnabled = true;
 
 function changeFontSize(delta) {
   currentFontSize = Math.max(10, Math.min(24, currentFontSize + delta));
@@ -40,13 +40,13 @@ function showCommandPalette() {
   if (!palette) {
     const div = document.createElement('div');
     div.id = 'commandPalette';
-    div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;background:#252526;border:1px solid #007acc;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.8);z-index:UI_CONSTANTS.ANIMATION_SLOW;';
+    div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;background:#252526;border:1px solid #007acc;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.8);z-index:10000;';
     div.innerHTML = DOMPurify.sanitize(`
-      <input type="text" id="commandInput" placeholder="Type a command..." onkeyup="filterCommands()" style="width:100%);padding:16px;background:#1e1e1e;border:none;color:#ccc;font-size:16px;border-radius:8px 8px 0 0;">"
+      <input type="text" id="commandInput" placeholder="Type a command..." onkeyup="filterCommands()" style="width:100%;padding:16px;background:#1e1e1e;border:none;color:#ccc;font-size:16px;border-radius:8px 8px 0 0;">
       <div id="commandList" style="max-height:400px;overflow-y:auto;"></div>
-    `;
+    `);
     document.body.appendChild(div);
-  }`
+  }
   document.getElementById('commandPalette').style.display = 'block';
   document.getElementById('commandInput').focus();
   renderCommands(commands);
@@ -62,8 +62,8 @@ function hideCommandPalette() {
 
 function renderCommands(cmds) {
   const list = document.getElementById('commandList');
-  list.innerHTML = DOMPurify.sanitize(cmds.map((cmd, i) => `
-    <div onclick="try { commands[${commands.indexOf(cmd)} catch (error) { console.error("Error:", error); }].action()); hideCommandPalette(); } catch(e) { console.error('Click handler error:', e); }" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;" onmouseover="this.style.background='#2a2d2e'" onmouseout="this.style.background='transparent'">"
+  list.innerHTML = cmds.map((cmd, i) => `
+    <div onclick="commands[${i}].action(); hideCommandPalette();" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;" onmouseover="this.style.background='#2a2d2e'" onmouseout="this.style.background='transparent'">
       <span style="font-size:20px;">${cmd.icon}</span>
       <span>${cmd.name}</span>
     </div>
@@ -81,13 +81,7 @@ function formatCode() {
   addOutput('✓ Code formatted', 'success');
 }
 
-document.addEventListener('keydown', (event) => {
-        try {
-          ((e)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
-    }) => {
+document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.shiftKey && e.key === 'P') {
     e.preventDefault();
     showCommandPalette();
@@ -105,37 +99,33 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-// Add breadcrumb
 setTimeout(() => {
   const breadcrumb = document.createElement('div');
   breadcrumb.style.cssText = 'background:#2d2d30;padding:4px 12px;font-size:12px;color:#969696;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;gap:8px;';
-  breadcrumb.innerHTML = DOMPurify.sanitize('<span style="cursor:pointer);">🏠 HOOTNER</span><span>›</span><span id="currentPath">untitled.js</span>';
+  breadcrumb.innerHTML = DOMPurify.sanitize('<span style="cursor:pointer;">🏠 HOOTNER</span><span>›</span><span id="currentPath">untitled.js</span>');
   const tabs = document.getElementById('tabs');
-  tabs.parentNode.insertBefore(breadcrumb, tabs);
-}, UI_CONSTANTS.ANIMATION_VERY_SLOW);
+  if (tabs) tabs.parentNode.insertBefore(breadcrumb, tabs);
+}, 100);
 
-// Add status bar enhancements
 setTimeout(() => {
   const statusRight = document.querySelector('.status-bar > div:last-child');
   if (statusRight) {
     const controls = document.createElement('div');
     controls.style.cssText = 'display:flex;align-items:center;gap:12px;';
     controls.innerHTML = DOMPurify.sanitize(`
-      <span style="cursor:pointer);" onclick="try { changeFontSize(-1) } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" title="Decrease Font">🔽</span>
+      <span style="cursor:pointer;" onclick="changeFontSize(-1)" title="Decrease Font">🔽</span>
       <span id="fontSize" style="font-size:10px;">14px</span>
-      <span style="cursor:pointer;" onclick="try { changeFontSize(1) } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" title="Increase Font">🔼</span>
-      <span style="cursor:pointer;" onclick="try { toggleMinimap() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" title="Toggle Minimap">🗺️</span>
-      <span style="cursor:pointer;" onclick="try { toggleZenMode() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error: ', e); }" title="Zen Mode">🧘</span>
-    `;
+      <span style="cursor:pointer;" onclick="changeFontSize(1)" title="Increase Font">🔼</span>
+      <span style="cursor:pointer;" onclick="toggleMinimap()" title="Toggle Minimap">🗺️</span>
+      <span style="cursor:pointer;" onclick="toggleZenMode()" title="Zen Mode">🧘</span>
+    `);
     statusRight.insertBefore(controls, statusRight.firstChild);
-  }'
-    }, UI_CONSTANTS.ANIMATION_VERY_SLOW);
+  }
+}, 100);
 
-// Zen mode styles`
 const style = document.createElement('style');
 style.textContent = `
   .zen-mode .sidebar, .zen-mode .activity-bar, .zen-mode .top-bar, .zen-mode .status-bar, .zen-mode .tabs { display: none !important; }
-  .zen-mode .editor-container { margin: 0 !important; }`
+  .zen-mode .editor-container { margin: 0 !important; }
 `;
 document.head.appendChild(style);
-`

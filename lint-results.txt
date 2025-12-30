@@ -1,0 +1,400 @@
+
+> hootner-mcp-integration@1.0.0 lint
+> eslint . --ext .js,.jsx,.ts,.tsx
+
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\advanced-features.js
+  49:6  error  Parsing error: Unexpected token ;
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\ai-agent-panel.js
+  68:6  error  Parsing error: Unexpected token ;
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\ai-assistant.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\cloud-sync.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\cross-integration.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\cursor-ui.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\enhancements.js
+  47:6  error  Parsing error: Unexpected token ;
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\enterprise.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\error-handler.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\fallback-handlers.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\feature-expansions.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\lsp-client.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\main.js
+  23:1  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\monaco-extensions.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\package-manager.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\performance-optimizer.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\platform-integration.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\plugin-api.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\plugin-system.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\quick-setup.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\renderer-manager.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\security-compliance.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\ui-enhancements.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages\electron-code-editor\web-bridge.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\apps\frontend\public\script.js
+  6:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\config\app-config-browser.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\config\security\rate-limit-config.ts
+  5:55  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\config\security\security.config.ts
+  1:47  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\config\testing\electron-playwright.config.js
+  2:10   warning  'HTTP_OK' is defined but never used               no-unused-vars
+  2:19   warning  'HTTP_BAD_REQUEST' is defined but never used      no-unused-vars
+  2:37   warning  'HTTP_NOT_FOUND' is defined but never used        no-unused-vars
+  2:53   warning  'HTTP_SERVER_ERROR' is defined but never used     no-unused-vars
+  2:72   warning  'ONE_SECOND_MS' is defined but never used         no-unused-vars
+  2:87   warning  'TWO_SECONDS_MS' is defined but never used        no-unused-vars
+  2:103  warning  'DEFAULT_PORT' is defined but never used          no-unused-vars
+  2:117  warning  'SECONDARY_PORT' is defined but never used        no-unused-vars
+  2:133  warning  'TIMEOUT_MS' is defined but never used            no-unused-vars
+  2:145  warning  'LONG_TIMEOUT_MS' is defined but never used       no-unused-vars
+  2:162  warning  'VERY_LONG_TIMEOUT_MS' is defined but never used  no-unused-vars
+  2:184  warning  'ONE_MINUTE_MS' is defined but never used         no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\config\testing\playwright.config.js
+  2:10   warning  'HTTP_OK' is defined but never used               no-unused-vars
+  2:19   warning  'HTTP_BAD_REQUEST' is defined but never used      no-unused-vars
+  2:37   warning  'HTTP_NOT_FOUND' is defined but never used        no-unused-vars
+  2:53   warning  'HTTP_SERVER_ERROR' is defined but never used     no-unused-vars
+  2:72   warning  'ONE_SECOND_MS' is defined but never used         no-unused-vars
+  2:87   warning  'TWO_SECONDS_MS' is defined but never used        no-unused-vars
+  2:103  warning  'DEFAULT_PORT' is defined but never used          no-unused-vars
+  2:117  warning  'SECONDARY_PORT' is defined but never used        no-unused-vars
+  2:133  warning  'TIMEOUT_MS' is defined but never used            no-unused-vars
+  2:145  warning  'LONG_TIMEOUT_MS' is defined but never used       no-unused-vars
+  2:162  warning  'VERY_LONG_TIMEOUT_MS' is defined but never used  no-unused-vars
+  2:184  warning  'ONE_MINUTE_MS' is defined but never used         no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\constants\ui-constants.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\electron\main.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\electron\preload.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\electron\renderer.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\lib\graceful-shutdown.js
+  4:27  warning  'signal' is defined but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\mcp-http-server.js
+  4:2  error  Parsing error: Unexpected character '!'
+
+c:\Users\12182\Projects\my-local-repo\mcp-tools-test.js
+  4:2  error  Parsing error: Unexpected character '!'
+
+c:\Users\12182\Projects\my-local-repo\middleware\access-control.js
+  4:22  warning  'MISC' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\middleware\chaos.js
+  18:19  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\middleware\compression.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\correlation-id.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\csp.js
+  6:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\csrf.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\dependency-check.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\enhanced-security.js
+  7:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\error-handler.js
+  9:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\injection-protection.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\metrics.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\performance.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\rate-limiter.js
+  14:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\security-headers.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\security-integration.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\security.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\session.js
+  10:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\sql-injection-prevention.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\ssrf-protection.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\middleware\timeout.js
+  8:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\fix-console-logs.js
+  38:7  warning  'fixed' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\fix-error-handling.js
+  44:7  warning  'fixed' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\fix-hardcoded-credentials.js
+  35:14  warning  Empty block statement  no-empty
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\fix-magic-numbers.js
+  64:7  warning  'fixed' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\fix-snake-case.js
+  51:7  warning  'fixed' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\agents\master-fix-agent.js
+  16:5  warning  Unnecessary try/catch wrapper  no-useless-catch
+
+c:\Users\12182\Projects\my-local-repo\scripts\ai\cursor-ai-modes.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\ai\multi-agent-orchestrator.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\analysis\advanced-code-scanner.js
+  316:73  warning  Unnecessary escape character: \&            no-useless-escape
+  409:11  warning  'lines' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\analysis\code-scanner.js
+  34:94  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\scripts\analysis\unified-scanner.js
+  92:58  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\scripts\auto-fix-syntax.js
+  23:58  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\scripts\collaboration\realtime-collab.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\find-malformed-jsdoc.js
+  37:26  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\scripts\find-unterminated-regex.js
+  40:21  error  Parsing error: Unexpected token )
+
+c:\Users\12182\Projects\my-local-repo\scripts\fix-common-warnings.js
+   7:3  warning  Unnecessary try/catch wrapper               no-useless-catch
+  22:3  warning  Unnecessary try/catch wrapper               no-useless-catch
+  45:5  warning  'fixed' is assigned a value but never used  no-unused-vars
+  57:1  warning  Unnecessary try/catch wrapper               no-useless-catch
+
+c:\Users\12182\Projects\my-local-repo\scripts\fix-critical-errors.js
+  11:14  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\scripts\fix-syntax-errors.js
+  97:39  error  Parsing error: Unexpected token }
+
+c:\Users\12182\Projects\my-local-repo\scripts\linting\fix-syntax-errors.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\linting\lint-all.js
+  6:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\linting\quick-syntax-fix.js
+  8:68  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\scripts\linting\simple-lint-fix.js
+  6:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\monitoring\compliance-dashboard.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\monitoring\memory-profiler.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\monitoring\sustainability-monitor.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\advanced-refactor.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\extract-constants.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\final-quality-fixes.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\fix-code-quality.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\function-breakdown.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\refactoring\simplify-ternary.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\start-all-servers.js
+   71:7   warning  'reset' is assigned a value but never used   no-unused-vars
+   76:28  warning  'index' is defined but never used            no-unused-vars
+   84:30  warning  'index' is defined but never used            no-unused-vars
+  127:19  warning  Empty block statement                        no-empty
+  134:19  warning  Empty block statement                        no-empty
+  140:71  warning  Empty block statement                        no-empty
+  141:22  warning  Empty block statement                        no-empty
+  145:23  warning  'error' is defined but never used            no-unused-vars
+  155:11  warning  'status' is assigned a value but never used  no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\scripts\testing\setup-testing.js
+  6:68  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\scripts\ui\visual-designer.js
+  5:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\debug-enhancer.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\event-utils.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\function-utils.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\json-utils.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\lazy-loader.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\port-scanner.js
+  48:6  error  Parsing error: Unterminated template
+
+c:\Users\12182\Projects\my-local-repo\scripts\utilities\security-utils.js
+  4:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\server.js
+   2:10   warning  'HTTP_OK' is defined but never used               no-unused-vars
+   2:19   warning  'HTTP_BAD_REQUEST' is defined but never used      no-unused-vars
+   2:37   warning  'HTTP_NOT_FOUND' is defined but never used        no-unused-vars
+   2:53   warning  'HTTP_SERVER_ERROR' is defined but never used     no-unused-vars
+   2:72   warning  'ONE_SECOND_MS' is defined but never used         no-unused-vars
+   2:87   warning  'TWO_SECONDS_MS' is defined but never used        no-unused-vars
+   2:103  warning  'DEFAULT_PORT' is defined but never used          no-unused-vars
+   2:117  warning  'SECONDARY_PORT' is defined but never used        no-unused-vars
+   2:133  warning  'TIMEOUT_MS' is defined but never used            no-unused-vars
+   2:145  warning  'LONG_TIMEOUT_MS' is defined but never used       no-unused-vars
+   2:162  warning  'VERY_LONG_TIMEOUT_MS' is defined but never used  no-unused-vars
+   2:184  warning  'ONE_MINUTE_MS' is defined but never used         no-unused-vars
+  12:48   warning  'ANIMATION' is defined but never used             no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\servers\collab-server.js
+  3:5  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\servers\html-pages-server.js
+  9:24  error  Parsing error: Unexpected token )
+
+c:\Users\12182\Projects\my-local-repo\servers\hub-app.js
+  62:89  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\servers\mcp-server.js
+  8:48  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\servers\secure-server.js
+  20:5  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\servers\video-player-server.js
+  79:8  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\test-mcp-ide.js
+  23:3  error  Parsing error: Unexpected token .
+
+c:\Users\12182\Projects\my-local-repo\tests\electron-code-editor\e2e\editor.spec.js
+  2:10   warning  'HTTP_OK' is defined but never used               no-unused-vars
+  2:19   warning  'HTTP_BAD_REQUEST' is defined but never used      no-unused-vars
+  2:37   warning  'HTTP_NOT_FOUND' is defined but never used        no-unused-vars
+  2:53   warning  'HTTP_SERVER_ERROR' is defined but never used     no-unused-vars
+  2:72   warning  'ONE_SECOND_MS' is defined but never used         no-unused-vars
+  2:87   warning  'TWO_SECONDS_MS' is defined but never used        no-unused-vars
+  2:103  warning  'DEFAULT_PORT' is defined but never used          no-unused-vars
+  2:117  warning  'SECONDARY_PORT' is defined but never used        no-unused-vars
+  2:133  warning  'TIMEOUT_MS' is defined but never used            no-unused-vars
+  2:145  warning  'LONG_TIMEOUT_MS' is defined but never used       no-unused-vars
+  2:162  warning  'VERY_LONG_TIMEOUT_MS' is defined but never used  no-unused-vars
+  2:184  warning  'ONE_MINUTE_MS' is defined but never used         no-unused-vars
+
+c:\Users\12182\Projects\my-local-repo\tests\frontend-setup.ts
+  2:37  error  Parsing error: Unterminated regular expression
+
+c:\Users\12182\Projects\my-local-repo\tests\setup.ts
+  1:36  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\tools\analysis\audit-node-modules.js
+  16:5  error  Parsing error: Unexpected token catch
+
+c:\Users\12182\Projects\my-local-repo\tools\health\healthcheck.js
+  2:66  error  Parsing error: Unterminated string constant
+
+c:\Users\12182\Projects\my-local-repo\tools\system-health.js
+  4:2  error  Parsing error: Unexpected character '!'
+
+✖ 169 problems (97 errors, 72 warnings)
+

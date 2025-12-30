@@ -1,6 +1,6 @@
 /**
  * Electron Preload - Secure contextBridge API
- *//
+ */
 
 const { contextBridge, ipcRenderer } = require('electron');
 

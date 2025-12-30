@@ -13,5 +13,4 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🦉 HOOTNER Code Editor running at http://localhost:${PORT}`);
-});
+  });

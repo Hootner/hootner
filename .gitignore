@@ -9,7 +9,6 @@ build/
 Thumbs.db
 *.tmp
 *.temp
-.vscode/settings.json
 .idea/workspace.xml
 coverage/
 .nyc_output/
@@ -33,3 +32,16 @@ ssl/private/
 *.pem
 !ssl/example.key
 !ssl/example.pem
+
+# Keep VS Code settings for Todo Tree configuration
+# .vscode/settings.json
+
+# GitBook
+_book/
+.gitbook/
+
+# Binary installers
+*.exe
+*.msi
+*.dmg
+*.pkg

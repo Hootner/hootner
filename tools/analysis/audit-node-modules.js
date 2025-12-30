@@ -2,7 +2,7 @@
 // Forensic audit: detect duplicates + unused modules in HOOTNER
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
+const { execSync } = require("childProcess");
 
 // Step 1: List all installed modules
 function listInstalledModules() {
@@ -10,7 +10,10 @@ function listInstalledModules() {
   return (() => {
         try {
           return JSON.parse(output);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {error) {
 
           return null;
         }
@@ -56,13 +59,13 @@ function audit(rootDir) {
   }
   for (const [name, vers] of Object.entries(versions)) {
     if (vers.size > 1) {
-      console.log(`⚠️ ${name}: multiple versions -> ${Array.from(vers).join(", ")}`);
+      .join(", ")}`);
     }
   }
 
   for (const name of Object.keys(installed)) {
     if (!used.has(name)) {
-      console.log(`🗑 ${name} (installed but not referenced)`);
+      `);
     }
   }
 }

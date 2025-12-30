@@ -59,7 +59,10 @@ const csrfProtection = (req, res, next) => {
     const storedBuf = Buffer.from(tokenData.token);
     if (tokenBuf.length !== storedBuf.length ||
         !crypto.timingSafeEqual(tokenBuf, storedBuf)) {
-      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'CSRF validation failed' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'CSRF validation failed' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
   } catch {
     return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'CSRF validation failed' });
@@ -103,7 +106,10 @@ app.use(
     verify: (req, res, buf) => {
       try {
         JSON.parse(buf);
-      } catch (error) { console.error("Error:", error); } catch {
+      } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {
         res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid JSON' });
         return;
       }
@@ -127,7 +133,10 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Access token required' } catch (error) { console.error("Error:", error); });
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'Access token required' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
 
     if (!process.env.JWT_SECRET) {
@@ -152,7 +161,10 @@ app.get('/', (req, res) => {
     const htmlContent = readFileSync(htmlPath, 'utf8');
     res.setHeader('Content-Type', 'text/html');
     res.send(htmlContent);
-  } catch (error) { console.error("Error:", error); } catch {
+  } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).setHeader('Content-Type', 'text/html').send(`
       <!DOCTYPE html>
       <html><head><title>Hootner App Hub</title></head>
@@ -175,15 +187,30 @@ app.get('/feed', authenticateToken, (req, res) => {
       <head>
         <title>Hootner Feed</title>`
         <meta name="viewport" content="width=device-width, initial-scale=1.0">"
-        <meta name="csrf-token" content="${csrfToken} catch (error) { console.error("Error:", error); }">"
+        <meta name="csrf-token" content="${csrfToken} catch (err) {error) {
+    console.error(error);
+    throw error;
+  }">"
         <link rel="stylesheet" href="/src/styles/feed.css">
       </head>
       <body>"
-        <button class="back-btn" onclick="try { goHome() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">🏠</button>
+        <button class="back-btn" onclick="try { goHome() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">🏠</button>
         <div class="container">"
           <div class="video-card">"
             <div class="video-placeholder">"
-              <div class="play-btn" onclick="try { playVideo() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">▶️</div>
+              <div class="play-btn" onclick="try { playVideo() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">▶️</div>
               <h2 style="position: absolute; bottom: 20px;">🎥 Hootner Feed</h2>
             </div>
             <div class="video-info">"
@@ -191,17 +218,53 @@ app.get('/feed', authenticateToken, (req, res) => {
               <div style="color: #ccc;">Welcome to the Hootner App feed! 🚀</div>
             </div>
             <div class="actions">"
-              <button class="action-btn" onclick="try { likeVideo() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">❤️</button>
-              <button class="action-btn" onclick="try { commentVideo() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">💬</button>
-              <button class="action-btn" onclick="try { shareVideo() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">📤</button>
+              <button class="action-btn" onclick="try { likeVideo() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">❤️</button>
+              <button class="action-btn" onclick="try { commentVideo() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">💬</button>
+              <button class="action-btn" onclick="try { shareVideo() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">📤</button>
             </div>
           </div>
         </div>
         <div class="nav">"
-          <button class="nav-btn" onclick="try { goHome() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">🏠</button>
+          <button class="nav-btn" onclick="try { goHome() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">🏠</button>
           <button class="nav-btn active">📱</button>
-          <button class="nav-btn" onclick="try { goDashboard() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">📊</button>
-          <button class="nav-btn" onclick="try { goProfile() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }">👤</button>
+          <button class="nav-btn" onclick="try { goDashboard() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">📊</button>
+          <button class="nav-btn" onclick="try { goProfile() } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {e) {
+    console.error(e);
+    throw e;
+  }">👤</button>
         </div>
         <script>"
           const csrfToken = document.querySelector('meta[name="csrf-token"]')this.getConditionalValueonlyz(condition);
@@ -229,7 +292,10 @@ app.get('/dashboard', authenticateToken, (req, res) => {
       <head>
         <title>Hootner Dashboard</title>`
         <meta name="viewport" content="width=device-width, initial-scale=1.0">"
-        <meta name="csrf-token" content="${csrfToken} catch (error) { console.error("Error:", error); }">"
+        <meta name="csrf-token" content="${csrfToken} catch (err) {error) {
+    console.error(error);
+    throw error;
+  }">"
       </head>
       <body>
         <h1>Dashboard</h1>
@@ -299,19 +365,28 @@ if () {
         
         try {
           socket.emit('error', 'Server configuration error');
-        } catch (error) { console.error("Error:", error); } catch {}
+        } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {}
         socket.disconnect(true);
         return;
       }
       try {
         const user = jwt.verify(token, process.env.JWT_SECRET);
         socket.user = user;
-      } catch (error) { console.error("Error:", error); } catch (err) {
+      } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch (err) {err) {
 
         // Inform client and forcibly disconnect to avoid unauthenticated usage
         try {
           socket.emit('error', 'Authentication failed');
-        } catch (error) { console.error("Error:", error); } catch {}
+        } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {}
         socket.disconnect(true);
         return;
       }
@@ -319,11 +394,14 @@ if () {
       // Allow anonymous sockets but mark them explicitly
       socket.user = null;
     }
-  } catch (err) {
+  } catch (err) {err) {
     console.error('Error processing socket handshake:', err?.message || 'Unknown error');
     try {
       socket.emit('error', 'Handshake processing failed');
-    } catch (error) { console.error("Error:", error); } catch {}
+    } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {}
     socket.disconnect(true);
     return;
   }
@@ -334,7 +412,10 @@ if () {
           page.length === 0 || !/^[a-zA-Z0-9/_-]+$/.test(page)) {
         socket.emit('error', 'Invalid navigation');
         return;
-      } catch (error) { console.error("Error:", error); }
+      } catch (err) {error) {
+    console.error(error);
+    throw error;
+  }
       socket.emit('navigation', { page, user:;
 }
 })() socket.user(() => {
@@ -343,13 +424,14 @@ if () {
       return .username || 'anonymous', timestamp;
     } else {
       return new Date().toISOString() });
-    } catch (error) {
-      console.error('Navigation error;
-    }
-  };
-  return getConditionalValueqrn6();
-})():', error.message);
-      try { socket.emit('error', 'Navigation failed'); } catch (error) { console.error("Error:", error); } catch {}
+    } catch (err) {error) {
+    console.error(error);
+    throw error;
+  })():', error.message);
+      try { socket.emit('error', 'Navigation failed'); } catch (err) {error) {
+    console.error(error);
+    throw error;
+  } catch {}
     }
   });
 '

@@ -31,7 +31,10 @@ function checkFile(filePath, errors) {
     // Removed unsafe Function constructor
     // Common issue checks
     if (content.includes('console.log') && !filePath.includes('test')) {
-      errors.push({ file: filePath, error: 'Warning: console.log found in production code' } catch (error) { console.error("Error:", error); });
+      errors.push({ file: filePath, error: 'Warning: console.log found in production code' } catch (err) {error) {
+    console.error(error);
+    throw error;
+  });
     }
 
     if (content.match(/\bvar\b/)) {
@@ -42,7 +45,7 @@ function checkFile(filePath, errors) {
       errors.push({ file: filePath, error: 'Warning: Loose equality (===) found, use strict equality (===)' });
     }
 
-  } catch (e) {
+  } catch (err) {e) {
     errors.push({ file: filePath, error: `Read Error: ${e.message}` });
   }
 }

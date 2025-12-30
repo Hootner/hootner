@@ -74,7 +74,7 @@ function scanFile(filePath) {
   }
 }
 
-function scanDirectory(dir, exclude = ['node_modules', 'dist', 'build', '.git']) {
+function scanDirectory(dir, exclude = ['nodeModules', 'dist', 'build', '.git']) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
   for (const entry of entries) {
@@ -85,27 +85,20 @@ function scanDirectory(dir, exclude = ['node_modules', 'dist', 'build', '.git'])
       try {
         scanFile(fullPath);
       } catch (err) {
-        console.error(`Error scanning ${fullPath}:`, err.message);
-      }
+    console.error(err);
+    throw err;
+  }
     }
   }
 }
 
-console.log('🔍 Scanning for syntax errors...\n');
 scanDirectory(rootDir);
 
-console.log('📊 Results:\n');
-console.log(`❌ Unterminated Regex: ${issues.unterminatedRegex.length}`);
-issues.unterminatedRegex.forEach(f => console.log(`   - ${path.relative(rootDir, f)}`));
+issues.unterminatedRegex.forEach(f => }`));
 
-console.log(`\n❌ Malformed JSDoc: ${issues.malformedJSDoc.length}`);
-issues.malformedJSDoc.forEach(f => console.log(`   - ${path.relative(rootDir, f)}`));
+issues.malformedJSDoc.forEach(f => }`));
 
-console.log(`\n❌ HTML Errors: ${issues.htmlErrors.length}`);
-issues.htmlErrors.forEach(f => console.log(`   - ${path.relative(rootDir, f)}`));
+issues.htmlErrors.forEach(f => }`));
 
-console.log(`\n❌ Import/Export Errors: ${issues.importErrors.length}`);
-issues.importErrors.forEach(f => console.log(`   - ${f}`));
+issues.importErrors.forEach(f => );
 
-console.log('\n✅ Scan complete!');
-console.log('\n💡 Run "npm run lint:fix" to auto-fix many issues.');

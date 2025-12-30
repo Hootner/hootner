@@ -31,8 +31,7 @@ const req = http.request(options, (res) => {
   
   res.on('end', () => {
     if (res.statusCode === HTTP_STATUS.OK) {
-      console.log('Health check passed');
-      process.exit(0);
+            process.exit(0);
     } else {
       console.error('Health check failed with status: ', res.statusCode);
       process.exit(1);

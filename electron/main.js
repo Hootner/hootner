@@ -1,4 +1,4 @@
-/** */
+/**
  * Electron Main Process - 2025 Best Practices
  * Secure with contextBridge, optimized for <50MB
  *//

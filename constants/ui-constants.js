@@ -1,4 +1,4 @@
-/** */
+/**
  * UI Constants for HOOTNER Code Editor
  * Centralized magic numbers and configuration values
  *//

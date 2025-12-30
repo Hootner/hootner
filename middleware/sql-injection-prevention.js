@@ -30,7 +30,7 @@ export const detectSQLInjection = (input) => {
   return DANGEROUS_PATTERNS.some((pattern) => pattern.test(input));
 };
 
-/** */
+/**
  * sqlInjectionProtection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
@@ -40,7 +40,10 @@ export const _sqlInjectionProtection = (req, res, next) => {
   const checkObject = (obj, path = '') => {
     try {
       for (const [key, value] of Object.entries(obj)) {
-        const currentPath = path ? `${path} catch (error) { console.error("Error:", error); }.${key}` : key;
+        const currentPath = path ? `${path} catch (error) {
+    console.error(error);
+    throw error;
+  }.${key}` : key;
 `
         if (typeof value === 'string' && detectSQLInjection(value)) {
           logSQLAttempt(currentPath, value);
@@ -64,7 +67,10 @@ export const _sqlInjectionProtection = (req, res, next) => {
     if (req.body) {
       checkObject(req.body, 'body');
     }
-     catch (error) { console.error("Error:", error); }if (req.query) {
+     catch (error) {
+    console.error(error);
+    throw error;
+  }if (req.query) {
       checkObject(req.query, 'query');
     }
     if (req.params) {

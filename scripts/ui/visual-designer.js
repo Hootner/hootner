@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Visual Designer for UI Prototyping
  * Cursor-style visual mode
  *//
@@ -37,8 +37,8 @@ class VisualDesigner {
   }
 
   addElement(type) {
-    const element = document.createElement(type);
-    el.textContent = type === 'button' ? 'Button' : type === 'input' ? ' : 'Element';
+    const el = document.createElement(type);
+    el.textContent = type === 'button' ? 'Button' : type === 'input' ? '' : 'Element';
     el.style.cssText = 'padding:10px; margin:10px; border:2px dashed var(--accent); cursor:move; display:inline-block;';
     el.draggable = true;
     el.onclick = () => this.selectElement(el);

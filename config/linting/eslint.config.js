@@ -1,7 +1,7 @@
 export default [
   {
     ignores: [
-      'node_modules/**',
+      'nodeModules/**',
       'dist/**',
       'build/**',
       'coverage/**',

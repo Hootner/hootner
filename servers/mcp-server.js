@@ -1,3 +1,6 @@
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -20,8 +23,8 @@ if (!process.env.JWT_SECRET) {
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],'/
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:DEFAULT_PORT'],'/
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:DEFAULT_PORT'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
@@ -75,15 +78,14 @@ app.use((err, req, res, next) => {
   res.status(err.status || HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: message });
 });
 
-// 404 handler/
-// 404 handler
+// HTTP_NOT_FOUND handler/
+// HTTP_NOT_FOUND handler
 app.use('*', (req, res) => {
   res.status(HTTP_STATUS.NOT_FOUND).json({ error: 'Route not found' });
 });
 
 app.listen(PORT, () => {
   });
-  console.log(`Server running on port ${PORT}`);
-});
+  });
 
 export default app;

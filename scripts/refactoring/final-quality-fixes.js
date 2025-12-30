@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Final Code Quality Fixes
  * Removes console.log, fixes naming, adds event listener error handling
  *//
@@ -55,7 +55,10 @@ class FinalQualityFixer {
         fixes += consoleFixes.fixes;
       }
 
-       catch (error) { console.error("Error:", error); }// Fix naming conventions
+       catch (error) {
+    console.error(error);
+    throw error;
+  }// Fix naming conventions
       const namingFixes = this.fixNamingConventions(content);
       content = namingFixes.content;
       fixes += namingFixes.fixes;
@@ -69,9 +72,12 @@ class FinalQualityFixer {
         fs.writeFileSync(filePath, content);
         this.fixedFiles++;
         this.totalFixes += fixes;
-        console.log(`✓ Applied ${fixes} fixes to ${path.relative(path.resolve(__dirname, '..'), filePath)}`);
+        , filePath)}`);
       }
-    } catch (error) { console.error("Quality fix error:", error); }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  }
   }
 
   removeConsoleStatements(content) {
@@ -109,15 +115,23 @@ class FinalQualityFixer {
       return `addEventListener('${event}', (event) => {
         try {
           ((event)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       }) => {
         try {
-          (${handler} catch (error) { console.error("Error:", error); })(event);'
+          (${handler} catch (error) {
+    console.error(error);
+    throw error;
+  })(event);'
     } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+    console.error(error);
+    throw error;
+  }
       })`;'
     });
 
@@ -125,7 +139,13 @@ class FinalQualityFixer {
     const onclickPattern = /onclick\s*=\s*['"`]([^'"`]+)['"`]/g;
     content = content.replace(onclickPattern, (match, handler) => {
       fixes++;
-      return `onclick="try { try { ${handler}  catch (error) { console.error("Error:", error); }} catch(e) { console.error( } catch(e) { console.error('Click handler error:', e); }"Click handler error: ', e); }"`;
+      return `onclick="try { try { ${handler}  catch (error) {
+    console.error(error);
+    throw error;
+  }} catch(e) { console.error( } catch (e) {
+    console.error(e);
+    throw e;
+  }"Click handler error: ', e); }"`;
     });
     
     return { content, fixes };

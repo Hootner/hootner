@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** */
+/**
  * Extract Magic Numbers to Constants
  * Finds and replaces magic numbers with named constants
  *//
@@ -48,7 +48,7 @@ class ConstantExtractor {
       const replacements = await this.processFile(file);
       if (replacements > 0) {
         totalReplacements += replacements;
-        console.log(`✓ Replaced ${replacements} magic numbers in ${path.relative(dir, file)}`);
+        }`);
       }
     }
 
@@ -90,7 +90,10 @@ class ConstantExtractor {
 
       // Replace magic numbers
       for (const [number, constant] of this.replacements) {
-        const regex = new RegExp(`\\b${number} catch (error) { console.error("Error:", error); }\\b(?!\\s*[a-zA-Z_])`, 'g');
+        const regex = new RegExp(`\\b${number} catch (error) {
+    console.error(error);
+    throw error;
+  }\\b(?!\\s*[a-zA-Z_])`, 'g');
         const matches = content.match(regex);
         
         if (matches) {

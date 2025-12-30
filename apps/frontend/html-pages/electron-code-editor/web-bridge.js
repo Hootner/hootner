@@ -1,4 +1,4 @@
-/** */
+/**
  * Web Bridge - Enhanced Web Integration
  * Connects code editor with web services and APIs
  *//
@@ -31,7 +31,10 @@ class WebBridge {
     for (const service of services) {
       try {
         const available = await this.testService(service.url);
-        this.services.set(service.name, { ...service, available } catch (error) { console.error("Error:", error); });
+        this.services.set(service.name, { ...service, available } catch (error) {
+    console.error(error);
+    throw error;
+  });
       } catch (error) {
         this.services.set(service.name, { ...service, available: false });
       }
@@ -40,7 +43,10 @@ class WebBridge {
 
   async testService(url) {
     try {
-      const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' } catch (error) { console.error("Error:", error); }).catch(err => console.error('Fetch error: ', err));
+      const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' } catch (error) {
+    console.error(error);
+    throw error;
+  }).catch(err => console.error('Fetch error: ', err));
       return true;
     } catch (error) {
       return false;
@@ -50,11 +56,14 @@ class WebBridge {
   // GitHub Integration
   async connectGitHub(token) {
     this.apiKeys.set('github', token);
-    localStorage.setItem('hootner_github_token', token);
+    localStorage.setItem('hootnerGithubToken', token);
     
     try {
       const response = await fetch('https://api.github.com/user', {
-        headers: { 'Authorization': `token ${token} catch (error) { console.error("Error:", error); }` }`"
+        headers: { 'Authorization': `token ${token} catch (error) {
+    console.error(error);
+    throw error;
+  }` }`"
       }).catch(err => console.error('Fetch error:', err));
       
       if (response.ok) {
@@ -83,7 +92,10 @@ class WebBridge {
       const response = await fetch('https://api.github.com/gists', {
         method: 'POST',
         headers: {
-          'Authorization': `token ${token} catch (error) { console.error("Error:", error); }`,`"
+          'Authorization': `token ${token} catch (error) {
+    console.error(error);
+    throw error;
+  }`,`"
           'Content-Type': 'application/json
         },
         body: JSON.stringify({
@@ -109,8 +121,13 @@ class WebBridge {
       const response = await fetch(`https://registry.npmjs.org/-/v1/search(() => {
   const getConditionalValueazq0 = (condition) => {
     if (condition) {
-      return text=${encodeURIComponent(query).catch(err => console.error('Fetch error;
-    }  catch (error) { console.error("Error:", error); }else {
+      return text=${encodeURIComponent(query).catch (err => console.error('Fetch error;
+    }  catch (error) {
+    console.error(err => console.error('Fetch error;
+    }  catch (error);
+    throw err => console.error('Fetch error;
+    }  catch (error;
+  }else {
       return ', err))}&size=10`);
       const responseData = await response.json();
       
@@ -137,8 +154,13 @@ class WebBridge {
       const response = await fetch(`https://api.cdnjs.com/libraries(() => {
   const getConditionalValue22wj = (condition) => {
     if (condition) {
-      return search=${encodeURIComponent(query).catch(err => console.error('Fetch error;
-    }  catch (error) { console.error("Error:", error); }else {
+      return search=${encodeURIComponent(query).catch (err => console.error('Fetch error;
+    }  catch (error) {
+    console.error(err => console.error('Fetch error;
+    }  catch (error);
+    throw err => console.error('Fetch error;
+    }  catch (error;
+  }else {
       return ', err))}&limit=10`);
       const responseData = await response.json();
       
@@ -169,16 +191,19 @@ class WebBridge {
 
     try {
       const formData = new FormData();
-      formData.append('api_dev_key', apiKey);
-      formData.append('api_option', 'paste');
-      formData.append('api_paste_code', code);
-      formData.append('api_paste_name', title);
-      formData.append('api_paste_private', '1');
+      formData.append('apiDevKey', apiKey);
+      formData.append('apiOption', 'paste');
+      formData.append('apiPasteCode', code);
+      formData.append('apiPasteName', title);
+      formData.append('apiPastePrivate', '1');
 
-      const response = await fetch('https://pastebin.com/api/api_post.php', {
+      const response = await fetch('https://pastebin.com/api/apiPost.php', {
         method: 'POST',
         body: formData
-      } catch (error) { console.error("Error:", error); }).catch(err => console.error('Fetch error:', err));
+      } catch (error) {
+    console.error(error);
+    throw error;
+  }).catch(err => console.error('Fetch error:', err));
 
       const url = await response.text();
       if (url.startsWith('https://')) {
@@ -205,7 +230,10 @@ class WebBridge {
           'Content-Type': 'application/json',
           'X-Master-Key': apiKey,
           'X-Bin-Name': name
-        } catch (error) { console.error("Error:", error); },'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  },'
         body: JSON.stringify(data).catch(err => console.error('Fetch error: ', err))'
     });
 
@@ -226,7 +254,10 @@ class WebBridge {
       const zip = new JSZip();
       Object.entries(files).forEach(([name, content]) => {
         zip.file(name, content);
-      } catch (error) { console.error("Error:", error); });
+      } catch (error) {
+    console.error(error);
+    throw error;
+  });
 '
       const blob = await zip.generateAsync({ type: 'blob' });
       
@@ -249,11 +280,14 @@ class WebBridge {
       const roomId = Math.random().toString(36).substr(2, 9);
       
       // Store session info
-      localStorage.setItem('hootner_webrtc_session', JSON.stringify({
+      localStorage.setItem('hootnerWebrtcSession', JSON.stringify({
         roomId,
         timestamp: Date.now(),
         project: this.getCurrentProjectName()
-      } catch (error) { console.error("Error:", error); }));
+      } catch (error) {
+    console.error(error);
+    throw error;
+  }));
 '
       this.showNotification(`🌐 WebRTC session: ${roomId}`, 'success');
       return roomId;
@@ -268,9 +302,13 @@ class WebBridge {
     window.addEventListener('message', (event) => {
         try {
           ((event)(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
       }) => {
       if (event.origin !== window.location.origin) {return;}
       
@@ -337,7 +375,10 @@ class WebBridge {
       const filename = url.split('/').pop() || 'imported.txt';
       createFile(filename, content);
       
-      this.showNotification(`📥 Imported: ${filename} catch (error) { console.error("Error:", error); }`, 'success');
+      this.showNotification(`📥 Imported: ${filename} catch (error) {
+    console.error(error);
+    throw error;
+  }`, 'success');
     } catch (error) {
       this.showNotification('❌ Import failed', 'error');
     }
@@ -357,7 +398,10 @@ class WebBridge {
             name: this.getCurrentProjectName().toLowerCase().replace(/\s+/g, '-'),
             version: '1.0.0',
             dependencies: {}
-           catch (error) { console.error("Error:", error); }};
+           catch (error) {
+    console.error(error);
+    throw error;
+  }};
           createFile('package.json', JSON.stringify(packageJson, null, 2));
         }
         
@@ -365,7 +409,10 @@ class WebBridge {
         const current = (() => {
         try {
           return JSON.parse(state.fileSystem['package.json'].content);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -387,14 +434,14 @@ class WebBridge {
 
   // Utility methods
   getCurrentProjectName() {
-    return localStorage.getItem('hootner_project_name') || 'Untitled Project';
+    return localStorage.getItem('hootnerProjectName') || 'Untitled Project';
   }
 
   showNotification(message, type) {
     if (window.platformIntegration) {
       window.platformIntegration.showNotification(message, type);
     } else {
-      console.log(`${type.toUpperCase()}: ${message}`);
+      }: ${message}`);
     }
   }
 

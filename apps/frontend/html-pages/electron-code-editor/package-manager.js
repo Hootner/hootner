@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-/** */
+/**
  * Package Manager - NPM/Yarn Integration
  * Minimal package management with dependency resolution
  *//
@@ -21,7 +21,10 @@ class PackageManager {
     if (state.fileSystem['package.json']) {
       try {
         this.packageJson = JSON.parse(state.fileSystem['package.json'].content);
-      } catch (error) { console.error("Error:", error); } catch (e) {
+      } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
         this.packageJson = this.createDefaultPackage();
       }
     } else {
@@ -53,7 +56,10 @@ class PackageManager {
 
   async searchPackages(query, limit = 10) {
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err))} catch (error) { console.error("Error:", error); }&size=${limit}`);
+      const response = await fetch($1).catch(err => console.error("Fetch error:", err))} catch (error) {
+    console.error(error);
+    throw error;
+  }&size=${limit}`);
       const _responseData = await response.json();
       return data.objects.map(pkg => ({
         name: pkg.package.name,
@@ -69,7 +75,10 @@ class PackageManager {
 
   async getPackageInfo(name) {
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err))} catch (error) { console.error("Error:", error); }`);
+      const response = await fetch($1).catch(err => console.error("Fetch error:", err))} catch (error) {
+    console.error(error);
+    throw error;
+  }`);
       return response.json();
     } catch (error) {
       addOutput(`Package info failed: ${error.message}`, 'error');
@@ -140,8 +149,20 @@ if () {
 })(): space-between; align-items: center; margin-bottom: 16px;">"
           <h3 style="margin: 0;">📦 Package Manager</h3>
           <div>"
-            <button onclick="try { packageManager.showSearch() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="pkg-btn">Search</button>
-            <button onclick="try { packageManager.initProject() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="pkg-btn">Init</button>
+            <button onclick="try { packageManager.showSearch() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="pkg-btn">Search</button>
+            <button onclick="try { packageManager.initProject() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="pkg-btn">Init</button>
           </div>
         </div>
         "
@@ -150,7 +171,13 @@ if () {
           ${deps.map(([name, version]) => `
             <div class="pkg-item">"
               <span><strong>${name}</strong> ${version}</span>
-              <button onclick="try { packageManager.removePackage( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${name}')" class="pkg-remove">×</button>
+              <button onclick="try { packageManager.removePackage( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${name}')" class="pkg-remove">×</button>
             </div>
           `).join('') || '<div style="color: #666;">No dependencies</div>'}
         </div>
@@ -159,7 +186,13 @@ if () {
           ${devDeps.map(([name, version]) => `
             <div class="pkg-item">"
               <span><strong>${name}</strong> ${version}</span>
-              <button onclick="try { packageManager.removePackage( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${name}')" class="pkg-remove">×</button>
+              <button onclick="try { packageManager.removePackage( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${name}')" class="pkg-remove">×</button>
             </div>
           `).join('') || '<div style="color: #666;">No dev dependencies</div>'}
         </div>
@@ -202,7 +235,13 @@ if () {
         <h3>🔍 Search Packages</h3>
         <div style="display: flex; gap: 8px; margin: 16px 0;">"
           <input type="text" id="pkgSearch" placeholder="Search packages..." style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px;">"
-          <button onclick="try { packageManager.doSearch() } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }" class="pkg-btn">Search</button>
+          <button onclick="try { packageManager.doSearch() } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }" class="pkg-btn">Search</button>
         </div>
         <div id="searchResults"></div>
       </div>
@@ -225,8 +264,20 @@ if () {
           ${pkg.keywords.slice(0, 3).map(k => `<span class="pkg-tag">${k}</span>`).join('')}
         </div>
         <div>
-          <button onclick="try { packageManager.installPackage( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${pkg.name}')" class="pkg-btn">Install</button>
-          <button onclick="try { packageManager.installPackage( } catch (error) { console.error("Error:", error); } catch(e) { console.error('Click handler error:', e); }"${pkg.name}', 'latest', true)" class="pkg-btn-dev">Dev</button>
+          <button onclick="try { packageManager.installPackage( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${pkg.name}')" class="pkg-btn">Install</button>
+          <button onclick="try { packageManager.installPackage( } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }"${pkg.name}', 'latest', true)" class="pkg-btn-dev">Dev</button>
         </div>
       </div>
     `).join('') + 

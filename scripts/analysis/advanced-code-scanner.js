@@ -47,6 +47,7 @@ class CodeScanner {
     this.errors = new Map();
     this.warnings = new Map();
     this.stats = { filesScanned: 0, errors: 0, warnings: 0 };
+    this.report = '';
 
     // Pre-create extension sets and regex cache for performance
     this.jsExtensions = new Set(['.js', '.jsx']);
@@ -236,7 +237,7 @@ class CodeScanner {
       { regex: /document\.write(ln)?\s*\(/, msg: 'Potential XSS via document.write' },
       { regex: /eval\s*\([^)]*(?:req\.|user|input|params)/, msg: 'Dangerous eval with user input' },
       {
-        regex: /(?:SELECT|INSERT|UPDATE|DELETE).*\+.*(?:req\.|params\.|user|input)(?!.*regex)/i,
+        regex: /(?:SELECT|INSERT|UPDATE|DELETE).*\+.*(?:req\.|params\.|user|input)/i,
         msg: 'Potential SQL injection via concatenation',
       },
       {
@@ -244,6 +245,8 @@ class CodeScanner {
         msg: 'Potential SQL injection via template literal',
       },
       { regex: /setTimeout\s*\(\s*['"]/, msg: 'setTimeout with string - use function' },
+      { regex: /createHash\s*\(\s*['"](md5|sha1)['"]\s*\)/i, msg: 'Weak hash algorithm (MD5/SHA1) - use stronger like SHA-256' },
+      { regex: /localStorage\.setItem\s*\(\s*['"](token|password|key|secret)['"]/i, msg: 'Storing sensitive data in localStorage - consider more secure storage' },
     ];
     const pyPatterns = [
       { regex: /os\.system\s*\(/, msg: 'Potential command injection via os.system' },
@@ -251,6 +254,7 @@ class CodeScanner {
       { regex: /exec\s*\(/, msg: 'Dangerous exec() usage' },
       { regex: /pickle\.loads?\(/, msg: 'Unsafe pickle load - use safer alternative' },
       { regex: /yaml\.load\(/, msg: 'Unsafe yaml.load - use yaml.safe_load' },
+      { regex: /hashlib\.(md5|sha1)\(/i, msg: 'Weak hash algorithm (MD5/SHA1) - use stronger like SHA-256' },
     ];
 
     const patterns = [...commonPatterns];
@@ -321,8 +325,9 @@ class CodeScanner {
 
   checkMagicNumbers(filePath, content) {
     const lines = content.split('\n');
+    const commonLegitimate = new Set([100, 200, 201, 204, 400, 401, 403, 404, 500, 1000, 1024, 2048, 3000, 4096, 5000, 8192, 10000, 60000]);
     lines.forEach((line, idx) => {
-      const magicNumberPattern = /(?<!\d)([2-9]\d{2,}|[1-9]\d{4,})(?!\d)/g;
+      const magicNumberPattern = /(?<!\d)([1-9]\d{2,})(?!\d)/g;
       const matches = line.match(magicNumberPattern);
       if (
         matches &&
@@ -331,7 +336,10 @@ class CodeScanner {
         !line.includes('let')
       ) {
         matches.forEach(num => {
-          if (Number.parseInt(num) > 100 && !line.includes('0x')) {
+          const numVal = Number.parseInt(num);
+          const isPowerOf2 = numVal > 0 && (numVal & (numVal - 1)) === 0;
+          const isMultipleOf100 = numVal % 100 === 0;
+          if (numVal > 100 && !line.includes('0x') && !commonLegitimate.has(numVal) && !isPowerOf2 && !isMultipleOf100) {
             this.addWarning(
               filePath,
               `Magic number ${num} at line ${idx + 1} - use named constant`
@@ -424,11 +432,11 @@ class CodeScanner {
     const lines = content.split('\n');
     this._checkTryCatchPatterns(filePath, content);
     this._checkPromiseHandling(filePath, content);
-    this._checkAsyncFunctions(filePath, lines);
+    this._checkAsyncFunctions(filePath);
     this._checkHTTPRequests(filePath, content);
-    this._checkJSONParsing(filePath, lines);
+    this._checkJSONParsing(filePath);
     this._checkEventListeners(filePath, content);
-    this._checkCallbackErrors(filePath, lines);
+    this._checkCallbackErrors(filePath);
   }
 
   _checkTryCatchPatterns(filePath, content) {
@@ -458,7 +466,7 @@ class CodeScanner {
     }
   }
 
-  _checkAsyncFunctions(filePath, lines) {
+  _checkAsyncFunctions(filePath) {
     lines.forEach((line, idx) => {
       if (
         line.includes('await ') &&
@@ -483,7 +491,7 @@ class CodeScanner {
     }
   }
 
-  _checkJSONParsing(filePath, lines) {
+  _checkJSONParsing(filePath) {
     lines.forEach((line, idx) => {
       if (line.includes('JSON.parse(')) {
         const prevLines = lines.slice(Math.max(0, idx - 2), idx).join('\n');
@@ -504,7 +512,7 @@ class CodeScanner {
     );
   }
 
-  _checkCallbackErrors(filePath, lines) {
+  _checkCallbackErrors(filePath) {
     lines.forEach((line, idx) => {
       if (line.match(/function\s*\(err,/) || line.match(/\(\s*err,\s*/)) {
         const nextLines = lines.slice(idx, idx + 10).join('\n');
@@ -542,8 +550,7 @@ class CodeScanner {
         hasSkipped: content.includes('@pytest.mark.skip'),
       };
     } catch (e) {
-      // Log the error for visibility since filePath is not available
-      console.error('Error in _checkPyTests:', e);
+      this.addWarning('_checkPyTests', `Test analysis error: ${e.message}`);
       return { hasTests: false, hasAssertions: false, hasSkipped: false };
     }
   }
@@ -754,6 +761,8 @@ class CodeScanner {
       report += '✅ No issues found!\n';
     }
 
+    this.report = report;
+
     const outputFile = path.join(this.rootDir, 'code-scan-report.txt');
     try {
       fs.writeFileSync(outputFile, report);
@@ -767,11 +776,32 @@ class CodeScanner {
 
 const isMain = process.argv[1] === __filename;
 if (isMain) {
-  const dir = process.argv[2] || process.cwd();
+  let dir = process.cwd();
+  const checksOverrides = {};
+  const args = process.argv.slice(2);
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith('--no-')) {
+      const checkName = arg.slice(5);
+      if (checkName in CONFIG.checks) {
+        checksOverrides[checkName] = false;
+      }
+    } else if (!arg.startsWith('--')) {
+      dir = arg;
+    }
+  }
+
+  const config = {
+    ...CONFIG,
+    checks: { ...CONFIG.checks, ...checksOverrides },
+  };
+
   try {
-    const scanner = new CodeScanner(dir);
-    const results = scanner.scan();
-    process.exit(results.stats.errors > 0 ? 1 : 0);
+    const scanner = new CodeScanner(dir, config);
+    scanner.scan();
+    console.log(scanner.report);
+    process.exit(scanner.stats.errors > 0 ? 1 : 0);
   } catch (e) {
     console.error('Fatal error: ', e.message);
     process.exit(2);

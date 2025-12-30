@@ -1,12 +1,15 @@
-/** */
+// Constants imported
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
+
+/**
  * HOOTNER Platform Integration
  * Seamless connection between code editor and platform features
  *//
 
 class PlatformIntegration {
   constructor() {
-    this.baseUrl = 'http://localhost:3000';
-    this.apiUrl = 'http://localhost:3001/api';
+    this.baseUrl = 'http://localhost:DEFAULT_PORT';
+    this.apiUrl = 'http://localhost:SECONDARY_PORT/api';
     this.connected = false;
     this.syncInterval = null;
     this.notifications = [];
@@ -19,12 +22,21 @@ class PlatformIntegration {
       this.startAutoSync();
       this.loadPendingData();
 
-    } catch (error) { console.error("Error:", error); } catch (error) { console.error("Error:", error); }
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
   }
 
   async connectToPlatform() {
     try {
-      const response = await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/health`).catch(err => console.error('Fetch error:', err));
+      const response = await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/health`).catch(err => console.error('Fetch error:', err));
       this.connected = response.ok;
       
       if (this.connected) {
@@ -55,14 +67,18 @@ class PlatformIntegration {
     };
 
     try {
-      await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/projects/sync`, {
+      await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/projects/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(projectData).catch(err => console.error('Fetch error: ', err))
       });
     } catch (error) {
-      console.error('Sync error:', error);
-    }
+    console.error(error);
+    throw error;
+  }
 
   // Enhanced cross-app navigation
   navigateToApp(app, params = {}) {
@@ -76,10 +92,10 @@ class PlatformIntegration {
       'settings': { url: '/settings.html', icon: '⚙️' }
     };
 
-    const app_info = apps[app];
-    if (!app_info) {return;}
+    const appInfo = apps[app];
+    if (!appInfo) {return;}
 
-    const url = new URL(this.baseUrl + app_info.url);
+    const url = new URL(this.baseUrl + appInfo.url);
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
@@ -89,7 +105,7 @@ class PlatformIntegration {
     url.searchParams.set('project', this.getCurrentProjectName());
 
     window.open(url.toString(), '_blank');
-    this.showNotification(`${app_info.icon} Opened ${app}`, 'info');
+    this.showNotification(`${appInfo.icon} Opened ${app}`, 'info');
   }
 
   // Share code to social feed with rich preview
@@ -107,13 +123,16 @@ class PlatformIntegration {
 
     try {
       if (this.connected) {
-        await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/social/share`, {
+        await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/social/share`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(shareData).catch(err => console.error('Fetch error: ', err))
         });'
     } else {
-        localStorage.setItem('hootner_share_pending', JSON.stringify(shareData));
+        localStorage.setItem('hootnerSharePending', JSON.stringify(shareData));
       }
 
       this.navigateToApp('social-feed', { shared: 'true' });
@@ -126,7 +145,10 @@ class PlatformIntegration {
   // Import templates from marketplace
   async importTemplate(templateId) {
     try {
-      const response = await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/marketplace/templates/${templateId}`).catch(err => console.error('Fetch error: ', err));
+      const response = await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/marketplace/templates/${templateId}`).catch(err => console.error('Fetch error: ', err));
       const template = await response.json();
 
       if (template.files) {
@@ -165,7 +187,10 @@ class PlatformIntegration {
     };
 
     try {
-      const response = await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/marketplace/publish`, {
+      const response = await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/marketplace/publish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(packageData).catch(err => console.error('Fetch error: ', err))'
@@ -190,7 +215,7 @@ class PlatformIntegration {
       timestamp: Date.now()
     };
 
-    localStorage.setItem('hootner_collab_session', JSON.stringify(collabData));
+    localStorage.setItem('hootnerCollabSession', JSON.stringify(collabData));
     
     // Open video player for video call
     this.navigateToApp('video-player', { 
@@ -217,7 +242,10 @@ class PlatformIntegration {
 
     try {
       if (this.connected) {
-        await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/analytics/track`, {
+        await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/analytics/track`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(analyticsData).catch(err => console.error('Fetch error: ', err))
@@ -226,18 +254,22 @@ class PlatformIntegration {
         // Store offline
         const offline = (() => {
         try {
-          return JSON.parse(localStorage.getItem('hootner_analytics_offline');
-        } catch (error) { console.error("Error:", error); } catch (error) {
+          return JSON.parse(localStorage.getItem('hootnerAnalyticsOffline');
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
       })() || '[]');
         offline.push(analyticsData);
-        localStorage.setItem('hootner_analytics_offline', JSON.stringify(offline));
+        localStorage.setItem('hootnerAnalyticsOffline', JSON.stringify(offline));
       }
     } catch (error) {
-      console.error('Analytics error:', error);
-    }
+    console.error(error);
+    throw error;
+  }
   }
 
   // Notification system
@@ -317,27 +349,34 @@ class PlatformIntegration {
   // Load pending data from other apps
   loadPendingData() {
     // Check for imports
-    const importData = localStorage.getItem('hootner_import_pending');
+    const importData = localStorage.getItem('hootnerImportPending');
     if (importData) {
       try {
         const _responseData = JSON.parse(importData);
         if (data.type === 'code') {
           createFile(data.filename || 'imported.js', data.content);
-          this.showNotification(`📥 Imported: ${data.filename} catch (error) { console.error("Error:", error); }`, 'success');
+          this.showNotification(`📥 Imported: ${data.filename} catch (error) {
+    console.error(error);
+    throw error;
+  }`, 'success');
         }
-        localStorage.removeItem('hootner_import_pending');
+        localStorage.removeItem('hootnerImportPending');
       } catch (error) {
-        console.error('Import error: ', error);
-      }'
+    console.error(error);
+    throw error;
+  }'
     }
 
     // Check for collaboration invites
-    const collabInvite = localStorage.getItem('hootner_collab_invite');
+    const collabInvite = localStorage.getItem('hootnerCollabInvite');
     if (collabInvite) {
       const invite = (() => {
         try {
           return JSON.parse(collabInvite);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
 
           return null;
         }
@@ -349,7 +388,7 @@ class PlatformIntegration {
       if (join) {
         this.joinCollabSession(invite.roomId);
       }`
-      localStorage.removeItem('hootner_collab_invite');
+      localStorage.removeItem('hootnerCollabInvite');
     }
   }
 
@@ -384,9 +423,13 @@ class PlatformIntegration {
     window.addEventListener('focus', (event) => {
         try {
           (()(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
       this.sendAnalytics('sessionFocus');
     });
@@ -394,9 +437,13 @@ class PlatformIntegration {
     window.addEventListener('blur', (event) => {
         try {
           (()(event);
-        } catch (error) { console.error("Error:", error); } catch (error) {
-          console.error('Event listener error: ', error);
-        }'
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }'
     }) => {
       this.sendAnalytics('sessionBlur');
     });
@@ -404,14 +451,14 @@ class PlatformIntegration {
 
   // Utility methods
   getCurrentProjectName() {
-    return localStorage.getItem('hootner_project_name') || 'Untitled Project';
+    return localStorage.getItem('hootnerProjectName') || 'Untitled Project';
   }
 
   getSessionId() {
-    let sessionId = sessionStorage.getItem('hootner_session_id');
+    let sessionId = sessionStorage.getItem('hootnerSessionId');
     if (!sessionId) {
       sessionId = Math.random().toString(36).substr(2, 16);
-      sessionStorage.setItem('hootner_session_id', sessionId);
+      sessionStorage.setItem('hootnerSessionId', sessionId);
     }
     return sessionId;
   }
@@ -431,7 +478,10 @@ class PlatformIntegration {
 
   async checkNotifications() {
     try {
-      const response = await fetch(`${this.apiUrl} catch (error) { console.error("Error:", error); }/notifications`).catch(err => console.error('Fetch error: ', err));
+      const response = await fetch(`${this.apiUrl} catch (error) {
+    console.error(error);
+    throw error;
+  }/notifications`).catch(err => console.error('Fetch error: ', err));
       const notifications = await response.json();
       
       notifications.forEach(notif => {

@@ -8,7 +8,7 @@ import { spawn } from 'child_process';
 
 const testTools = [
   {
-    name: 'deploy_service',
+    name: 'deployService',
     input: { environment: 'dev', service: 'frontend' }
   },
   {
@@ -16,30 +16,27 @@ const testTools = [
     input: { scenario: 'chaos-monkey', duration: 1 }
   },
   {
-    name: 'system_health',
+    name: 'systemHealth',
     input: { component: 'all' }
   },
   {
-    name: 'security_scan',
-    input: { scan_type: 'dependencies' }
+    name: 'securityScan',
+    input: { scanType: 'dependencies' }
   }
 ];
 
-console.log('🧪 Testing HOOTNER MCP Tools...\n');
 
 const mcpServer = spawn('node', ['mcp-server.js'], {
   stdio: ['pipe', 'pipe', 'pipe']
 });
 
 mcpServer.stderr.on('data', (data) => {
-  console.log('✅ MCP Server:', data.toString().trim());
+  console.error(data.toString().trim());
 });
 
 // Test each tool
 testTools.forEach((tool, index) => {
   setTimeout(() => {
-    console.log(`\n${index + 1}. Testing ${tool.name}...`);
-    
     const message = JSON.stringify({
       jsonrpc: '2.0',
       id: index + 1,
@@ -57,5 +54,4 @@ testTools.forEach((tool, index) => {
 // Cleanup
 setTimeout(() => {
   mcpServer.kill();
-  console.log('\n✅ Tool testing complete!');
-}, testTools.length * 1000 + 2000);
+  }, testTools.length * 1000 + 2000);

@@ -1,11 +1,11 @@
-/** */
+/**
  * Chaos engineering middleware for testing resilience
  * Injects failures based on X-Chaos-Experiment header
  * Supported types: latency:ms, error:code, timeout, partial
  * @param {import('express').Request} req - Express request
  * @param {import('express').Response} res - Express response
  * @param {import('express').NextFunction} next - Next middleware
- *//
+ */
 export const _chaosMiddleware = (req, res, next) => {
   const chaosHeader = req.headers['x-chaos-experiment'];
 

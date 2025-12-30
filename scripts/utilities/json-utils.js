@@ -1,4 +1,4 @@
-/** */
+/**
  * JSON Utilities for Safe Parsing
  * Prevents JSON.parse errors with proper error handling
  *//
@@ -15,10 +15,16 @@ export class JSONUtils {
       if (!jsonString || typeof jsonString !== 'string') {
         return defaultValue;
       }
-       catch (error) { console.error("Error:", error); }return (() => {
+       catch (error) {
+    console.error(error);
+    throw error;
+  }return (() => {
         try {
           return JSON.parse(jsonString);
-        } catch (error) { console.error("Error:", error); } catch (error) {
+        } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
           console.warn('JSON parse error: ', error.message);
           return null;
         }
@@ -38,7 +44,10 @@ export class JSONUtils {
   static safeStringify(obj, defaultValue = '{}') {
     try {
       return JSON.stringify(obj);
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       console.warn('JSON stringify error: ', error.message);
       return defaultValue;
     }
@@ -57,7 +66,10 @@ export class JSONUtils {
   const getConditionalValue3nfn = (condition) => {
     if (condition) {
       return this.safeParse(item, defaultValue);
-    }  catch (error) { console.error("Error:", error); }else {
+    }  catch (error) {
+    console.error(error);
+    throw error;
+  }else {
       return defaultValue;'
     } catch (error) {
       console.warn('localStorage access error;
@@ -80,7 +92,10 @@ export class JSONUtils {
       const jsonString = this.safeStringify(value);
       localStorage.setItem(key, jsonString);
       return true;'
-    } catch (error) { console.error("Error:", error); } catch (error) {
+    } catch (error) {
+    console.error(error);
+    throw error;
+  } catch (error) {
       console.warn('localStorage save error: ', error.message);
       return false;
     }
