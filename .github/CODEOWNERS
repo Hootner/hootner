@@ -1,0 +1,39 @@
+# CODEOWNERS - Define code ownership for automatic review requests
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @hootner-team/maintainers
+
+# Frontend
+/apps/frontend/ @hootner-team/frontend-team
+/apps/frontend/src/ @hootner-team/frontend-team
+/apps/frontend/html-pages/ @hootner-team/frontend-team
+
+# Backend & API
+/api/ @hootner-team/backend-team
+/services/ @hootner-team/backend-team
+
+# Infrastructure & DevOps
+/infrastructure/ @hootner-team/devops-team
+/k8s/ @hootner-team/devops-team
+/scripts/ @hootner-team/devops-team
+/.github/workflows/ @hootner-team/devops-team
+/docker-compose*.yml @hootner-team/devops-team
+/Dockerfile* @hootner-team/devops-team
+
+# Security
+/middleware/security*.js @hootner-team/security-team
+/config/security/ @hootner-team/security-team
+SECURITY.md @hootner-team/security-team
+
+# Documentation
+/docs/ @hootner-team/documentation-team
+*.md @hootner-team/documentation-team
+
+# Database
+/prisma/ @hootner-team/database-team
+
+# Configuration files require multiple approvals
+package.json @hootner-team/maintainers
+package-lock.json @hootner-team/maintainers
+.env.example @hootner-team/maintainers @hootner-team/security-team
