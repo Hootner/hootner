@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Q Agent Templates - 113 Minimal Code Examples</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 60px; }
+        h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { font-size: 1.3rem; opacity: 0.9; margin-bottom: 30px; }
+        .stats { display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+        .stat { background: rgba(255,255,255,0.1); padding: 20px 30px; border-radius: 10px; backdrop-filter: blur(10px); }
+        .stat-number { font-size: 2.5rem; font-weight: bold; display: block; }
+        .stat-label { font-size: 0.9rem; opacity: 0.8; }
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+        .category { background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); transition: transform 0.3s; }
+        .category:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
+        .category h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        .category ul { list-style: none; }
+        .category li { padding: 8px 0; opacity: 0.9; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .category li:last-child { border-bottom: none; }
+        .cta { text-align: center; margin-top: 60px; }
+        .btn { display: inline-block; background: #fff; color: #667eea; padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: transform 0.3s; }
+        .btn:hover { transform: scale(1.05); }
+        footer { text-align: center; margin-top: 80px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦉 Amazon Q Agent Templates</h1>
+            <p class="subtitle">113 Minimal Code Examples • 17 Categories • ~12,000 Lines</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">113</span>
+                    <span class="stat-label">Templates</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">17</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">&lt;150</span>
+                    <span class="stat-label">Lines Each</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="categories">
+            <div class="category">
+                <h3>🖥️ CPU & Emulation (7)</h3>
+                <ul>
+                    <li>8-bit CPU Emulator</li>
+                    <li>Stack Machine VM</li>
+                    <li>Register Machine</li>
+                    <li>Bytecode Interpreter</li>
+                    <li>JIT Compiler</li>
+                    <li>Assembly Parser</li>
+                    <li>Instruction Decoder</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🗄️ Databases (10)</h3>
+                <ul>
+                    <li>Key-Value Store</li>
+                    <li>B-Tree Index</li>
+                    <li>LSM Tree</li>
+                    <li>Write-Ahead Log</li>
+                    <li>Query Parser</li>
+                    <li>Transaction Manager</li>
+                    <li>MVCC Engine</li>
+                    <li>Replication</li>
+                    <li>Sharding</li>
+                    <li>Vector Database</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🌐 Networking (8)</h3>
+                <ul>
+                    <li>TCP Server</li>
+                    <li>HTTP Parser</li>
+                    <li>WebSocket Server</li>
+                    <li>Load Balancer</li>
+                    <li>Reverse Proxy</li>
+                    <li>DNS Resolver</li>
+                    <li>Rate Limiter</li>
+                    <li>Circuit Breaker</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🔐 Cryptography (7)</h3>
+                <ul>
+                    <li>AES Encryption</li>
+                    <li>RSA Implementation</li>
+                    <li>Hash Functions</li>
+                    <li>Digital Signatures</li>
+                    <li>Key Exchange</li>
+                    <li>Password Hashing</li>
+                    <li>Zero-Knowledge Proof</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>⛓️ Blockchain (6)</h3>
+                <ul>
+                    <li>Basic Blockchain</li>
+                    <li>Proof of Work</li>
+                    <li>Merkle Tree</li>
+                    <li>Smart Contracts</li>
+                    <li>Consensus Algorithm</li>
+                    <li>Wallet</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🤖 AI & ML (9)</h3>
+                <ul>
+                    <li>Neural Network</li>
+                    <li>Backpropagation</li>
+                    <li>Decision Tree</li>
+                    <li>K-Means Clustering</li>
+                    <li>Gradient Descent</li>
+                    <li>Transformer</li>
+                    <li>Attention Mechanism</li>
+                    <li>Reinforcement Learning</li>
+                    <li>Genetic Algorithm</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>📊 Data Structures (8)</h3>
+                <ul>
+                    <li>Skip List</li>
+                    <li>Bloom Filter</li>
+                    <li>Trie</li>
+                    <li>Segment Tree</li>
+                    <li>Fenwick Tree</li>
+                    <li>Disjoint Set</li>
+                    <li>LRU Cache</li>
+                    <li>Consistent Hashing</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🔍 Search & Index (6)</h3>
+                <ul>
+                    <li>Inverted Index</li>
+                    <li>Full-Text Search</li>
+                    <li>Fuzzy Matching</li>
+                    <li>Autocomplete</li>
+                    <li>Spell Checker</li>
+                    <li>PageRank</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🎮 Graphics (7)</h3>
+                <ul>
+                    <li>Ray Tracer</li>
+                    <li>Rasterizer</li>
+                    <li>3D Renderer</li>
+                    <li>Physics Engine</li>
+                    <li>Collision Detection</li>
+                    <li>Particle System</li>
+                    <li>Shader Compiler</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🔧 Compilers (8)</h3>
+                <ul>
+                    <li>Lexer</li>
+                    <li>Parser</li>
+                    <li>AST Builder</li>
+                    <li>Type Checker</li>
+                    <li>Code Generator</li>
+                    <li>Optimizer</li>
+                    <li>Register Allocator</li>
+                    <li>Garbage Collector</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🌍 Distributed (9)</h3>
+                <ul>
+                    <li>Raft Consensus</li>
+                    <li>Paxos</li>
+                    <li>Vector Clocks</li>
+                    <li>Gossip Protocol</li>
+                    <li>DHT</li>
+                    <li>Message Queue</li>
+                    <li>Event Sourcing</li>
+                    <li>CQRS</li>
+                    <li>Service Mesh</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>📦 Containers (5)</h3>
+                <ul>
+                    <li>Container Runtime</li>
+                    <li>Namespace Isolation</li>
+                    <li>Cgroups</li>
+                    <li>Image Builder</li>
+                    <li>Orchestrator</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🧬 Quantum (4)</h3>
+                <ul>
+                    <li>Quantum Simulator</li>
+                    <li>Qubit Operations</li>
+                    <li>Quantum Gates</li>
+                    <li>Shor's Algorithm</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🎵 Media (6)</h3>
+                <ul>
+                    <li>Audio Codec</li>
+                    <li>Video Codec</li>
+                    <li>Image Processor</li>
+                    <li>FFT</li>
+                    <li>Compression</li>
+                    <li>Streaming Protocol</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🔬 Testing (7)</h3>
+                <ul>
+                    <li>Test Runner</li>
+                    <li>Assertion Library</li>
+                    <li>Mock Framework</li>
+                    <li>Coverage Tool</li>
+                    <li>Fuzzer</li>
+                    <li>Property Testing</li>
+                    <li>Snapshot Testing</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🛠️ DevOps (6)</h3>
+                <ul>
+                    <li>CI/CD Pipeline</li>
+                    <li>Log Aggregator</li>
+                    <li>Metrics Collector</li>
+                    <li>Alerting System</li>
+                    <li>Config Manager</li>
+                    <li>Secret Vault</li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h3>🌟 Specialized (6)</h3>
+                <ul>
+                    <li>Git Clone</li>
+                    <li>Regex Engine</li>
+                    <li>JSON Parser</li>
+                    <li>Markdown Parser</li>
+                    <li>Template Engine</li>
+                    <li>Package Manager</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cta">
+            <a href="https://github.com/yourusername/amazonq-agents" class="btn">View on GitHub</a>
+        </div>
+
+        <footer>
+            <p>Built with 🦉 by HOOTNER • The Owl Never Sleeps</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">All templates under 150 lines • Production-ready • MIT License</p>
+        </footer>
+    </div>
+</body>
+</html>

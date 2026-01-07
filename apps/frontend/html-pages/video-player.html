@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,37 +8,30 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; media-src 'self' https:; connect-src 'self' https:; worker-src 'self' blob:;"
     />
-    <title>HOOTNER • The Owl Never Sleeps</title>
+    <title>HOOTNER � The Owl Never Sleeps</title>
     <link rel="stylesheet" href="shared-styles.css" />
     <link rel="manifest" href="manifest.json" />
     <link href="./libs/video-js.css" rel="stylesheet" />
     <script src="./libs/video.min.js" crossorigin="anonymous"></script>
     <script src="./libs/peerjs.min.js" crossorigin="anonymous"></script>
     <style>
-      * {
-        margin: 0;
+      * { margin: 0;
         padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Segoe UI', sans-serif;
+        box-sizing: border-box; }
+      body { font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
         color: #00ff00;
-        font-size: 1rem;
-      }
+        font-size: 1rem; }
 
       /* Buttons below video player */
-      .header {
-        display: flex;
+      .header { display: flex;
         align-items: center;
         justify-content: center;
         gap: 16px;
         padding: 24px;
-        flex-wrap: wrap;
-      }
+        flex-wrap: wrap; }
 
-      .top-btn {
-        padding: 2px 4px;
+      .top-btn { padding: 2px 4px;
         background: transparent;
         border: 2px solid transparent;
         background-image:
@@ -51,34 +44,24 @@
         font-size: 0.5rem;
         cursor: pointer;
         border-radius: 9999px;
-        transition: all 0.3s;
-      }
+        transition: all 0.3s; }
 
-      .top-btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
+      .top-btn:hover { background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff; }
+
+      .top-btn:active { background: linear-gradient(135deg, #ff00ff, #ffff00);
         color: #fff;
-      }
+        transform: scale(0.95); }
 
-      .top-btn:active {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-        color: #fff;
-        transform: scale(0.95);
-      }
+      .top-btn:focus { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
-      .top-btn:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
-
-      .app {
-        display: flex;
+      .app { display: flex;
         min-height: 100vh;
-        padding-top: 60px;
-      }
+        padding-top: 60px; }
 
       /* Jukebox Sidebar (less than half screen) */
-      .library {
-        width: 24vw;
+      .library { width: 24vw;
         background: linear-gradient(
           180deg,
           rgba(10, 10, 15, 0.8),
@@ -87,23 +70,17 @@
         backdrop-filter: blur(32px);
         border-right: 1px solid #00ff00;
         padding: 24px;
-        overflow-y: auto;
-      }
+        overflow-y: auto; }
 
-      .library-header {
-        display: flex;
+      .library-header { display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 32px;
-      }
+        margin-bottom: 32px; }
 
-      .library-title {
-        font-size: 0.5rem;
-        font-weight: 900;
-      }
+      .library-title { font-size: 0.5rem;
+        font-weight: 900; }
 
-      .search-input {
-        width: 100%;
+      .search-input { width: 100%;
         padding: 2px 4px;
         background: rgba(10, 10, 15, 0.8);
         border: 2px solid transparent;
@@ -115,34 +92,26 @@
         color: #00ff00;
         margin-bottom: 24px;
         border-radius: 16px;
-        font-size: 0.5rem;
-      }
+        font-size: 0.5rem; }
 
-      .search-input:focus {
-        outline: 3px solid #00ffff;
+      .search-input:focus { outline: 3px solid #00ffff;
         outline-offset: 2px;
-        border-color: #00ff00;
-      }
+        border-color: #00ff00; }
 
       /* Jukebox Carousel */
-      .jukebox-container {
-        position: relative;
+      .jukebox-container { position: relative;
         height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 48px 0;
-      }
+        padding: 48px 0; }
 
-      .jukebox-title {
-        font-size: 1.5rem;
+      .jukebox-title { font-size: 1.5rem;
         font-weight: 900;
         color: #00ff00;
-        margin-bottom: 48px;
-      }
+        margin-bottom: 48px; }
 
-      .carousel-container {
-        position: relative;
+      .carousel-container { position: relative;
         width: 320px;
         height: 600px;
         overflow: hidden;
@@ -155,15 +124,11 @@
         background-origin: border-box;
         background-clip: padding-box, border-box;
         border-radius: 16px;
-        box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
-      }
+        box-shadow: 0 0 40px rgba(0, 255, 0, 0.3); }
 
-      .carousel-container::-webkit-scrollbar {
-        display: none;
-      }
+      .carousel-container::-webkit-scrollbar { display: none; }
 
-      .carousel {
-        position: absolute;
+      .carousel { position: absolute;
         top: 50%;
         left: 0;
         right: 0;
@@ -171,35 +136,25 @@
         flex-direction: column;
         align-items: center;
         gap: 32px;
-        transition: transform 0.5s cubic-bezier(0.22, 0.85, 0.32, 1);
-      }
+        transition: transform 0.5s cubic-bezier(0.22, 0.85, 0.32, 1); }
 
-      .video-card {
-        position: relative;
+      .video-card { position: relative;
         width: 256px;
         cursor: pointer;
-        transition: all 0.5s ease;
-      }
+        transition: all 0.5s ease; }
 
-      .video-card.active {
-        transform: scale(1.1);
+      .video-card.active { transform: scale(1.1);
         z-index: 20;
-        filter: drop-shadow(0 20px 40px #00ff00);
-      }
+        filter: drop-shadow(0 20px 40px #00ff00); }
 
-      .video-card:not(.active) {
-        transform: scale(0.9);
+      .video-card:not(.active) { transform: scale(0.9);
         opacity: 0.6;
-        z-index: 10;
-      }
+        z-index: 10; }
 
-      .video-card:not(.active):hover {
-        transform: scale(1.05);
-        opacity: 1;
-      }
+      .video-card:not(.active):hover { transform: scale(1.05);
+        opacity: 1; }
 
-      .card-image {
-        position: relative;
+      .card-image { position: relative;
         overflow: hidden;
         border-radius: 24px;
         background: rgba(10, 10, 15, 0.8);
@@ -209,38 +164,30 @@
           linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
-        background-clip: padding-box, border-box;
-      }
+        background-clip: padding-box, border-box; }
 
-      .card-image img {
-        width: 100%;
+      .card-image img { width: 100%;
         height: 384px;
-        object-fit: cover;
-      }
+        object-fit: cover; }
 
-      .video-card.active .card-image {
-        border: 3px solid transparent;
+      .video-card.active .card-image { border: 3px solid transparent;
         background-image:
           linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
         background-clip: padding-box, border-box;
         box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-        animation: pulse 2s infinite;
-      }
+        animation: pulse 2s infinite; }
 
       .video-card.active .card-image::before,
-      .video-card:hover .card-image::before {
-        content: '';
+      .video-card:hover .card-image::before { content: '';
         position: absolute;
         inset: 0;
         background: linear-gradient(180deg, transparent, rgba(0, 255, 0, 0.6));
-        border-radius: 24px;
-      }
+        border-radius: 24px; }
 
       /* Owl Eyes Easter Egg */
-      .video-card:hover .card-image::after {
-        content: '';
+      .video-card:hover .card-image::after { content: '';
         position: absolute;
         top: 16px;
         left: 50%;
@@ -253,12 +200,10 @@
           0 0 20px #ffff00,
           -64px 0 0 0 #ffff00,
           -64px 0 20px #ffff00;
-        animation: blink 2s infinite;
-      }
+        animation: blink 2s infinite; }
 
       /* Vinyl Record Spin */
-      .video-card.active .card-image::before {
-        content: '';
+      .video-card.active .card-image::before { content: '';
         position: absolute;
         inset: 20%;
         background: radial-gradient(
@@ -271,72 +216,40 @@
         border-radius: 50%;
         animation: spin 8s linear infinite;
         z-index: 30;
-        pointer-events: none;
-      }
+        pointer-events: none; }
 
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
+      @keyframes spin { from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); } }
 
-      @keyframes blink {
-        0%,
+      @keyframes blink { 0%,
         90%,
-        100% {
-          opacity: 0.9;
-        }
-        95% {
-          opacity: 0.2;
-        }
-      }
-      .notif-item {
-        padding: 12px 16px;
+        100% { opacity: 0.9; }
+        95% { opacity: 0.2; } }
+      .notif-item { padding: 12px 16px;
         border-bottom: 1px solid rgba(0, 255, 0, 0.1);
         cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 0, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.05);
-        border-left: 3px solid #00ffff;
-      }
-      #notif-dropdown::-webkit-scrollbar {
-        width: 6px;
-      }
-      #notif-dropdown::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-      }
-      #notif-dropdown::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
+        transition: background 0.2s; }
+      .notif-item:hover { background: rgba(0, 255, 0, 0.05); }
+      .notif-item.unread { background: rgba(0, 255, 255, 0.05);
+        border-left: 3px solid #00ffff; }
+      #notif-dropdown::-webkit-scrollbar { width: 6px; }
+      #notif-dropdown::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1); }
+      #notif-dropdown::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+        border-radius: 3px; }
 
-      .card-info {
-        margin-top: 16px;
-        text-align: center;
-      }
+      .card-info { margin-top: 16px;
+        text-align: center; }
 
-      .card-title {
-        font-weight: bold;
+      .card-title { font-weight: bold;
         font-size: 1.25rem;
         margin-bottom: 6px;
-        color: #00ff00;
-      }
+        color: #00ff00; }
 
-      .card-duration {
-        font-size: 1rem;
+      .card-duration { font-size: 1rem;
         opacity: 0.7;
-        color: #00ff00;
-      }
+        color: #00ff00; }
 
-      .offline-btn {
-        position: absolute;
+      .offline-btn { position: absolute;
         top: 8px;
         right: 8px;
         width: 8px;
@@ -348,28 +261,20 @@
         font-size: 4px;
         cursor: pointer;
         z-index: 40;
-        transition: all 0.3s;
-      }
+        transition: all 0.3s; }
 
-      .offline-btn:hover {
-        background: #00ff00;
+      .offline-btn:hover { background: #00ff00;
         color: #000;
-        transform: scale(1.1);
-      }
+        transform: scale(1.1); }
 
-      .offline-btn.cached {
-        background: #00ff00;
-        color: #000;
-      }
+      .offline-btn.cached { background: #00ff00;
+        color: #000; }
 
-      .scroll-controls {
-        margin-top: 32px;
+      .scroll-controls { margin-top: 32px;
         display: flex;
-        gap: 16px;
-      }
+        gap: 16px; }
 
-      .scroll-btn {
-        padding: 3px;
+      .scroll-btn { padding: 3px;
         background: rgba(10, 10, 15, 0.9);
         border: 2px solid transparent;
         background-image:
@@ -381,37 +286,27 @@
         color: #fff;
         cursor: pointer;
         transition: all 0.3s;
-        font-size: 0.5rem;
-      }
+        font-size: 0.5rem; }
 
-      .scroll-btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
+      .scroll-btn:hover { background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff; }
+
+      .scroll-btn:active { background: linear-gradient(135deg, #ff00ff, #ffff00);
         color: #fff;
-      }
+        transform: scale(0.9); }
 
-      .scroll-btn:active {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-        color: #fff;
-        transform: scale(0.9);
-      }
-
-      .scroll-btn:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
+      .scroll-btn:focus { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
       /* Player Area */
-      .player-area {
-        flex: 1;
+      .player-area { flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 40px;
-      }
+        padding: 40px; }
 
-      .video-player {
-        position: relative;
+      .video-player { position: relative;
         width: 100%;
         max-width: 1400px;
         aspect-ratio: 16/9;
@@ -426,34 +321,27 @@
         background-clip: padding-box, border-box;
         box-shadow:
           0 0 60px rgba(0, 255, 0, 0.5),
-          0 0 100px rgba(0, 255, 255, 0.3);
-      }
+          0 0 100px rgba(0, 255, 255, 0.3); }
 
-      .video-player iframe {
-        position: absolute;
+      .video-player iframe { position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        border: none;
-      }
+        border: none; }
 
       video,
-      .video-js {
-        width: 100%;
+      .video-js { width: 100%;
         height: 100%;
         object-fit: contain;
-      }
+        color-space: rec2020; }
 
-      .vjs-tech {
-        object-fit: contain;
-      }
-      .video-js .vjs-control-bar {
-        display: none !important;
-      }
+      video[style*='rec2020'] { filter: contrast(1.1) saturate(1.2); }
 
-      .play-overlay {
-        position: absolute;
+      .vjs-tech { object-fit: contain; }
+      .video-js .vjs-control-bar { display: none !important; }
+
+      .play-overlay { position: absolute;
         inset: 0;
         background: rgba(0, 0, 0, 0.8);
         display: flex;
@@ -463,16 +351,12 @@
         gap: 30px;
         opacity: 1;
         transition: opacity 0.4s;
-        cursor: pointer;
-      }
+        cursor: pointer; }
 
-      .play-overlay.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
+      .play-overlay.hidden { opacity: 0;
+        pointer-events: none; }
 
-      .play-icon {
-        width: 20px;
+      .play-icon { width: 20px;
         height: 20px;
         background: radial-gradient(circle, #00ff00, #ffff00);
         border-radius: 50%;
@@ -481,49 +365,37 @@
         font-size: 8px;
         box-shadow: 0 0 60px #00ff00;
         animation: pulse 2s infinite;
-        color: #301934;
-      }
+        color: #301934; }
 
-      .controls {
-        position: absolute;
+      .controls { position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
         padding: 30px;
         opacity: 0;
-        transition: opacity 0.3s;
-      }
+        transition: opacity 0.3s; }
 
-      .video-player:hover .controls {
-        opacity: 1;
-      }
+      .video-player:hover .controls { opacity: 1; }
 
-      .progress-container {
-        height: 8px;
+      .progress-container { height: 8px;
         background: rgba(0, 255, 0, 0.2);
         border-radius: 4px;
         margin-bottom: 20px;
         cursor: pointer;
-        position: relative;
-      }
+        position: relative; }
 
-      .progress-bar {
-        height: 100%;
+      .progress-bar { height: 100%;
         background: #00ff00;
         width: 0%;
-        border-radius: 4px;
-      }
+        border-radius: 4px; }
 
-      .control-buttons {
-        display: flex;
+      .control-buttons { display: flex;
         align-items: center;
         gap: 12px;
-        justify-content: center;
-      }
+        justify-content: center; }
 
-      .btn {
-        width: 24px;
+      .btn { width: 24px;
         height: 24px;
         background: rgba(10, 10, 15, 0.9);
         border: 2px solid transparent;
@@ -537,80 +409,56 @@
         font-size: 10px;
         cursor: pointer;
         transition: all 0.3s;
-        padding: 4px;
-      }
+        padding: 4px; }
 
-      .btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
+      .btn:hover { background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: #fff;
-        transform: scale(1.1);
-      }
+        transform: scale(1.1); }
 
-      .btn:active {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
+      .btn:active { background: linear-gradient(135deg, #ff00ff, #ffff00);
         color: #fff;
-        transform: scale(0.9);
-      }
+        transform: scale(0.9); }
 
-      .btn:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
+      .btn:focus { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
-      .play-btn {
-        width: 32px;
+      .play-btn { width: 32px;
         height: 32px;
         background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: #fff;
         font-size: 14px;
         box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-        padding: 6px;
-      }
+        padding: 6px; }
 
-      .play-btn:hover {
-        transform: scale(1.1);
-      }
+      .play-btn:hover { transform: scale(1.1); }
 
-      .play-btn:active {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-        transform: scale(0.85);
-      }
+      .play-btn:active { background: linear-gradient(135deg, #ff00ff, #ffff00);
+        transform: scale(0.85); }
 
-      .play-btn:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
+      .play-btn:focus { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
-      .time-display {
-        min-width: 140px;
+      .time-display { min-width: 140px;
         font-variant-numeric: tabular-nums; /* cspell:disable-line */
         color: #00ff00;
-        font-size: 1rem;
-      }
+        font-size: 1rem; }
 
       /* Next Up Section */
-      .next-up {
-        margin-top: 32px;
+      .next-up { margin-top: 32px;
         max-width: 1400px;
-        width: 100%;
-      }
+        width: 100%; }
 
-      .next-up h2 {
-        font-size: 1.75rem;
+      .next-up h2 { font-size: 1.75rem;
         font-weight: bold;
         margin-bottom: 16px;
-        color: #00ff00;
-      }
+        color: #00ff00; }
 
-      .next-up-grid {
-        display: flex;
+      .next-up-grid { display: flex;
         gap: 24px;
         overflow-x: auto;
-        padding-bottom: 16px;
-      }
+        padding-bottom: 16px; }
 
-      .next-up-card {
-        flex-shrink: 0;
+      .next-up-card { flex-shrink: 0;
         width: 256px;
         background: rgba(10, 10, 15, 0.8);
         border-radius: 16px;
@@ -622,50 +470,37 @@
           linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
-        background-clip: padding-box, border-box;
-      }
+        background-clip: padding-box, border-box; }
 
-      .next-up-card:hover {
-        transform: scale(1.05);
-      }
+      .next-up-card:hover { transform: scale(1.05); }
 
-      .next-up-card .thumbnail {
-        background: linear-gradient(135deg, #00ff00, #ffff00);
+      .next-up-card .thumbnail { background: linear-gradient(135deg, #00ff00, #ffff00);
         height: 144px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 2rem;
-        overflow: hidden;
-      }
+        overflow: hidden; }
 
       /* Visualizer Canvas */
-      #visualizer {
-        position: absolute;
+      #visualizer { position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         height: 60px;
         pointer-events: none;
-        opacity: 0.8;
-      }
+        opacity: 0.8; }
 
-      .next-up-card .info {
-        padding: 16px;
-      }
+      .next-up-card .info { padding: 16px; }
 
-      .next-up-card .title {
-        font-weight: bold;
+      .next-up-card .title { font-weight: bold;
         margin-bottom: 4px;
         color: #00ff00;
-        font-size: 1rem;
-      }
+        font-size: 1rem; }
 
-      .next-up-card .meta {
-        font-size: 0.875rem;
+      .next-up-card .meta { font-size: 0.875rem;
         opacity: 0.7;
-        color: #00ff00;
-      }
+        color: #00ff00; }
 
       /* Focus indicators for all interactive elements */
       input[type='range']:focus,
@@ -674,78 +509,51 @@
       button:focus,
       a:focus,
       [onclick]:focus,
-      [tabindex]:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
+      [tabindex]:focus { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
-      .video-card:focus {
-        outline: 3px solid #00ffff;
+      .video-card:focus { outline: 3px solid #00ffff;
         outline-offset: 2px;
-        border-radius: 24px;
-      }
+        border-radius: 24px; }
 
       /* Focus Indicators */
-      *:focus-visible {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-      }
+      *:focus-visible { outline: 3px solid #00ffff;
+        outline-offset: 2px; }
 
       button:focus-visible,
       .btn:focus-visible,
       .top-btn:focus-visible,
-      .scroll-btn:focus-visible {
-        outline: 3px solid #00ffff;
+      .scroll-btn:focus-visible { outline: 3px solid #00ffff;
         outline-offset: 3px;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-      }
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); }
 
       input:focus-visible,
-      select:focus-visible {
-        outline: 3px solid #00ffff;
+      select:focus-visible { outline: 3px solid #00ffff;
         outline-offset: 2px;
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
-      }
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.6); }
 
-      .video-card:focus-visible {
-        outline: 4px solid #00ffff;
+      .video-card:focus-visible { outline: 4px solid #00ffff;
         outline-offset: 4px;
-        transform: scale(1.05);
-      }
+        transform: scale(1.05); }
 
       /* Card animations */
-      @keyframes cardFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px) scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
+      @keyframes cardFadeIn { from { opacity: 0;
+          transform: translateY(20px) scale(0.95); }
+        to { opacity: 1;
+          transform: translateY(0) scale(1); } }
 
-      @keyframes cardFadeOut {
-        from {
-          opacity: 1;
-          transform: scale(1);
-        }
-        to {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
+      @keyframes cardFadeOut { from { opacity: 1;
+          transform: scale(1); }
+        to { opacity: 0;
+          transform: scale(0.9); } }
 
       /* Tabs */
-      .library-tabs {
-        display: flex;
+      .library-tabs { display: flex;
         gap: 8px;
         margin-bottom: 16px;
         overflow-x: auto;
-        padding-bottom: 4px;
-      }
-      .tab-btn {
-        padding: 2px 4px;
+        padding-bottom: 4px; }
+      .tab-btn { padding: 2px 4px;
         background: transparent;
         border: 1px solid #00ff00;
         border-radius: 9999px;
@@ -753,27 +561,19 @@
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s;
-        font-size: 0.5rem;
-      }
-      .tab-btn.active {
-        background: linear-gradient(135deg, #00ff00, #00ffff);
-        color: #000;
-      }
-      .tab-btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: #fff;
-      }
+        font-size: 0.5rem; }
+      .tab-btn.active { background: linear-gradient(135deg, #00ff00, #00ffff);
+        color: #000; }
+      .tab-btn:hover { background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #fff; }
 
       /* Tooltips */
       .top-btn,
       .scroll-btn,
-      .tab-btn {
-        position: relative;
-      }
+      .tab-btn { position: relative; }
       .top-btn::after,
       .scroll-btn::after,
-      .tab-btn::after {
-        content: attr(aria-label);
+      .tab-btn::after { content: attr(aria-label);
         position: absolute;
         bottom: 100%;
         left: 50%;
@@ -786,49 +586,27 @@
         opacity: 0;
         transition: opacity 0.2s;
         pointer-events: none;
-        font-size: 0.75rem;
-      }
+        font-size: 0.75rem; }
       .top-btn:hover::after,
       .scroll-btn:hover::after,
-      .tab-btn:hover::after {
-        opacity: 1;
-      }
+      .tab-btn:hover::after { opacity: 1; }
 
       /* Loading and Empty States */
-      #loadingSpinner {
-        color: #00ff00;
-        animation: pulse 1.5s infinite;
-      }
-      #emptyState {
-        font-size: 1rem;
-        opacity: 0.8;
-      }
+      #loadingSpinner { color: #00ff00;
+        animation: pulse 1.5s infinite; }
+      #emptyState { font-size: 1rem;
+        opacity: 0.8; }
 
       /* Responsiveness */
-      @media (max-width: 768px) {
-        .library-tabs {
-          flex-wrap: wrap;
-        }
-        .tab-btn {
-          flex: 1 0 auto;
-        }
-        body {
-          font-size: 0.875rem;
-        }
-        .library {
-          width: 100%;
-        }
-      }
+      @media (max-width: 768px) { .library-tabs { flex-wrap: wrap; }
+        .tab-btn { flex: 1 0 auto; }
+        body { font-size: 0.875rem; }
+        .library { width: 100%; } }
 
-      .card-enter {
-        animation: cardFadeIn 0.3s ease-out forwards;
-      }
+      .card-enter { animation: cardFadeIn 0.3s ease-out forwards; }
 
-      .card-exit {
-        animation: cardFadeOut 0.2s ease-in forwards;
-      }
-      .modal-overlay {
-        position: fixed;
+      .card-exit { animation: cardFadeOut 0.2s ease-in forwards; }
+      .modal-overlay { position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.8);
         backdrop-filter: blur(10px);
@@ -836,10 +614,8 @@
         align-items: center;
         justify-content: center;
         z-index: 10001;
-        animation: fadeIn 0.2s;
-      }
-      .modal {
-        background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+        animation: fadeIn 0.2s; }
+      .modal { background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
         border: 3px solid;
         border-image: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff) 1;
         border-radius: 24px;
@@ -847,111 +623,287 @@
         min-width: 400px;
         max-width: 500px;
         box-shadow: 0 0 60px rgba(0, 255, 0, 0.5);
-        animation: slideUp 0.3s;
-      }
-      .modal-title {
-        font-size: 1.5rem;
+        animation: slideUp 0.3s; }
+      .modal-title { font-size: 1.5rem;
         font-weight: bold;
         color: #00ff00;
-        margin-bottom: 16px;
-      }
-      .modal-message {
-        font-size: 1.125rem;
+        margin-bottom: 16px; }
+      .modal-message { font-size: 1.125rem;
         color: #00ffff;
         margin-bottom: 24px;
-        line-height: 1.5;
-      }
-      .modal-input {
-        width: 100%;
+        line-height: 1.5; }
+      .modal-input { width: 100%;
         padding: 12px 16px;
         background: rgba(0, 0, 0, 0.5);
         border: 2px solid #00ff00;
         border-radius: 12px;
         color: #00ff00;
         font-size: 1rem;
-        margin-bottom: 24px;
-      }
-      .modal-input:focus {
-        outline: none;
+        margin-bottom: 24px; }
+      .modal-input:focus { outline: none;
         border-color: #00ffff;
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-      }
-      .modal-buttons {
-        display: flex;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
+      .modal-buttons { display: flex;
         gap: 12px;
-        justify-content: flex-end;
-      }
-      .modal-btn {
-        padding: 12px 24px;
+        justify-content: flex-end; }
+      .modal-btn { padding: 12px 24px;
         border: 2px solid #00ff00;
         border-radius: 12px;
         font-size: 1rem;
         font-weight: bold;
         cursor: pointer;
-        transition: all 0.3s;
-      }
-      .modal-btn-primary {
-        background: linear-gradient(135deg, #00ff00, #00ffff);
-        color: #000;
-      }
-      .modal-btn-primary:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        transform: scale(1.05);
-      }
-      .modal-btn-secondary {
-        background: transparent;
-        color: #00ff00;
-      }
-      .modal-btn-secondary:hover {
-        background: rgba(0, 255, 0, 0.1);
-        transform: scale(1.05);
-      }
-      @keyframes slideUp {
-        from {
-          transform: translateY(50px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
+        transition: all 0.3s; }
+      .modal-btn-primary { background: linear-gradient(135deg, #00ff00, #00ffff);
+        color: #000; }
+      .modal-btn-primary:hover { background: linear-gradient(135deg, #00ffff, #ff00ff);
+        transform: scale(1.05); }
+      .modal-btn-secondary { background: transparent;
+        color: #00ff00; }
+      .modal-btn-secondary:hover { background: rgba(0, 255, 0, 0.1);
+        transform: scale(1.05); }
+      @keyframes slideUp { from { transform: translateY(50px);
+          opacity: 0; }
+        to { transform: translateY(0);
+          opacity: 1; } }
     </style>
 
     <style>
       /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
+      body { padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important; }
+      nav { height: 70px !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
+        z-index: 1000 !important; }
+      .main-content { margin-top: 0 !important;
+        padding: 20px !important; }
     </style>
 
     <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
+      html { font-size: 12px !important; }
+      body { zoom: 0.75 !important;
         transform: scale(0.75) !important;
         transform-origin: 0 0 !important;
-        width: 133% !important;
+        width: 133% !important; }
+    </style>
+    <link rel="stylesheet" href="design-system.css">
+</head>
+  <body>
+    <!-- HOOTNER Unified Dashboard Header -->
+    <style>
+      .dashboard-header {
+        background: var(--color-bg-secondary);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-md);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .dashboard-nav {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .nav-btn {
+        padding: var(--space-xs) var(--space-md);
+        background: var(--color-bg-tertiary);
+        color: var(--color-text-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        transition: all var(--transition-fast);
+        cursor: pointer;
+      }
+
+      .nav-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      .nav-btn.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      .notification-bell {
+        position: relative;
+        margin-left: auto;
+        padding: var(--space-sm);
+        background: var(--color-bg-tertiary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+
+      .notification-bell:hover {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+      }
+
+      .notification-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        background: var(--color-error);
+        color: white;
+        border-radius: var(--radius-full);
+        padding: 1px 4px;
+        font-size: 0.5rem;
+        font-weight: bold;
+        min-width: 12px;
+        text-align: center;
+      }
+
+      .notification-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: var(--space-sm);
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        min-width: 250px;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+      }
+
+      .notification-dropdown.show {
+        display: block;
+      }
+
+      .notification-item {
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--color-border);
+        cursor: pointer;
+        transition: background var(--transition-fast);
+      }
+
+      .notification-item:hover {
+        background: var(--color-bg-tertiary);
+      }
+
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+
+      .notification-item.unread {
+        background: rgba(59, 130, 246, 0.05);
+      }
+
+      .notification-title {
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: var(--space-xs);
+      }
+
+      .notification-text {
+        font-size: var(--font-size-xs);
+        color: var(--color-text-secondary);
+      }
+
+      .notification-time {
+        font-size: 0.5rem;
+        color: var(--color-text-muted);
+        margin-top: var(--space-xs);
       }
     </style>
-  </head>
-  <body>
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+
+    <div class="dashboard-header">
+      <nav class="dashboard-nav">
+        <a href="dashboard.html" class="nav-btn">Dashboard</a>
+        <a href="video-player.html" class="nav-btn active">Video Player</a>
+        <a href="code-editor.html" class="nav-btn">Code Editor</a>
+        <a href="marketplace.html" class="nav-btn">Marketplace</a>
+        <a href="profile.html" class="nav-btn">Profile</a>
+        <a href="settings.html" class="nav-btn">Settings</a>
+        <a href="feed-react.html" class="nav-btn">Feed</a>
+        <a href="login.html" class="nav-btn">Login</a>
+        <a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+        <a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+        <a href="design-showcase.html" class="nav-btn">Showcase</a>
+        <a href="test-page-clean.html" class="nav-btn">Test</a>
+
+        <div class="notification-bell" id="notificationBell">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge" id="notificationCount">3</span>
+
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-item unread">
+              <div class="notification-title">New deployment ready</div>
+              <div class="notification-text">Your production build is ready to deploy</div>
+              <div class="notification-time">2 minutes ago</div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-title">Security scan complete</div>
+              <div class="notification-text">No vulnerabilities found in latest scan</div>
+              <div class="notification-time">15 minutes ago</div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-title">Backup completed</div>
+              <div class="notification-text">Database backup finished successfully</div>
+              <div class="notification-time">1 hour ago</div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <script>
+      (function () {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          if (btn.getAttribute('href') === currentPage) {
+            btn.classList.add('active');
+          }
+        });
+
+        const bell = document.getElementById('notificationBell');
+        const dropdown = document.getElementById('notificationDropdown');
+        const badge = document.getElementById('notificationCount');
+
+        bell.addEventListener('click', e => {
+          e.stopPropagation();
+          dropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+          dropdown.classList.remove('show');
+        });
+
+        document.querySelectorAll('.notification-item').forEach(item => {
+          item.addEventListener('click', function () {
+            this.classList.remove('unread');
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            badge.textContent = unreadCount;
+            badge.style.display = unreadCount > 0 ? 'block' : 'none';
+          });
+        });
+      })();
+    </script>
+
+    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="display:none;">
       <div
         style="
           padding: 12px 20px;
@@ -971,7 +923,7 @@
               -webkit-text-fill-color: transparent;
               text-decoration: none;
             "
-            >🦉 HOOTNER</a
+            >?? HOOTNER</a
           >
           <div style="position: relative">
             <button
@@ -987,7 +939,7 @@
               "
               title="Notifications"
             >
-              🔔
+              ??
               <span
                 id="notif-badge"
                 style="
@@ -1065,7 +1017,7 @@
                       "
                       title="Toggle sound"
                     >
-                      🔔
+                      ??
                     </button>
                     <button
                       onclick="clearAllNotifications()"
@@ -1078,7 +1030,7 @@
                       "
                       title="Clear all"
                     >
-                      🗑️
+                      ???
                     </button>
                     <button
                       onclick="markAllRead()"
@@ -1098,7 +1050,7 @@
                   type="text"
                   id="notif-search"
                   oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
+                  placeholder="?? Search notifications..."
                   style="
                     width: 100%;
                     padding: 8px;
@@ -1141,7 +1093,7 @@
                       cursor: pointer;
                     "
                   >
-                    ❤️ Likes
+                    ?? Likes
                   </button>
                   <button
                     class="notif-filter"
@@ -1157,7 +1109,7 @@
                       cursor: pointer;
                     "
                   >
-                    💬 Comments
+                    ?? Comments
                   </button>
                   <button
                     class="notif-filter"
@@ -1173,7 +1125,7 @@
                       cursor: pointer;
                     "
                   >
-                    👤 Follows
+                    ?? Follows
                   </button>
                   <button
                     class="notif-filter"
@@ -1189,7 +1141,7 @@
                       cursor: pointer;
                     "
                   >
-                    ⚠️ System
+                    ?? System
                   </button>
                 </div>
               </div>
@@ -1225,7 +1177,7 @@
                 >
                   Load more
                 </button>
-                <span style="color: #6b7280">•</span>
+                <span style="color: #6b7280">�</span>
                 <a
                   href="#"
                   style="color: #00ffff; font-size: 13px; text-decoration: none"
@@ -1237,34 +1189,34 @@
         </div>
         <div class="flex gap-2 items-center">
           <a href="profile.html" class="text-slate-300 hover:text-white"
-            >👤 Profile</a
+            >?? Profile</a
           >
           <a href="design-showcase.html" class="text-slate-300 hover:text-white"
-            >🎨 Design</a
+            >?? Design</a
           >
           <a href="feed.html" class="text-slate-300 hover:text-white"
-            >📰 Social</a
+            >?? Social</a
           >
           <a href="marketplace.html" class="text-slate-300 hover:text-white"
-            >🛒 Marketplace</a
+            >?? Marketplace</a
           >
           <a href="dashboard.html" class="text-slate-300 hover:text-white"
-            >📈 Dashboard</a
+            >?? Dashboard</a
           >
           <a href="video-player.html" class="text-green-400 font-medium"
-            >▶️ Video</a
+            >?? Video</a
           >
           <a href="auto-editor.html" class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
+            >?? Editor</a
           >
           <a href="code-editor.html" class="text-slate-300 hover:text-white"
-            >💻 Code</a
+            >?? Code</a
           >
           <a href="settings.html" class="text-slate-300 hover:text-white"
-            >⚙️ Settings</a
+            >?? Settings</a
           >
           <a href="login.html" class="text-slate-300 hover:text-white"
-            >🔐 Login</a
+            >?? Login</a
           >
         </div>
       </div>
@@ -1275,7 +1227,7 @@
       <div class="library" role="navigation" aria-label="Video library">
         <div class="library-header">
           <span class="library-title" role="heading" aria-level="1"
-            >📹 Library</span
+            >?? Library</span
           >
         </div>
 
@@ -1294,7 +1246,7 @@
             aria-selected="false"
             role="tab"
           >
-            ⭐ Favorites
+            ? Favorites
           </button>
           <button
             class="tab-btn"
@@ -1302,7 +1254,7 @@
             aria-selected="false"
             role="tab"
           >
-            🕐 History
+            ?? History
           </button>
           <button
             class="tab-btn"
@@ -1310,7 +1262,7 @@
             aria-selected="false"
             role="tab"
           >
-            📁 Playlists
+            ?? Playlists
           </button>
           <button
             class="tab-btn"
@@ -1318,7 +1270,7 @@
             aria-selected="false"
             role="tab"
           >
-            🔍 Recommendations
+            ?? Recommendations
           </button>
           <button
             class="tab-btn"
@@ -1326,7 +1278,7 @@
             aria-selected="false"
             role="tab"
           >
-            ▶️ Continue Watching
+            ?? Continue Watching
           </button>
         </div>
 
@@ -1363,7 +1315,7 @@
             onclick="createPlaylist()"
             aria-label="Create new playlist"
           >
-            ➕ Playlist
+            ? Playlist
           </button>
           <button
             class="top-btn"
@@ -1371,7 +1323,7 @@
             onclick="clearHistory()"
             aria-label="Clear watch history"
           >
-            🗑️ Clear History
+            ??? Clear History
           </button>
         </div>
 
@@ -1382,7 +1334,7 @@
             onclick="exportLibrary()"
             aria-label="Export library data"
           >
-            📤 Export
+            ?? Export
           </button>
           <button
             class="top-btn"
@@ -1390,7 +1342,7 @@
             onclick="importLibrary()"
             aria-label="Import library data"
           >
-            📥 Import
+            ?? Import
           </button>
         </div>
         <input
@@ -1472,7 +1424,7 @@
             aria-label="Toggle shuffle mode"
             aria-pressed="false"
           >
-            🔀
+            ??
           </button>
           <button
             class="scroll-btn"
@@ -1481,7 +1433,7 @@
             aria-label="Toggle repeat mode"
             aria-pressed="false"
           >
-            🔁
+            ??
           </button>
           <button
             class="scroll-btn"
@@ -1490,7 +1442,7 @@
             aria-label="Toggle autoplay"
             aria-pressed="true"
           >
-            ▶️▶️
+            ????
           </button>
         </div>
       </div>
@@ -1510,7 +1462,7 @@
             aria-label="Play video"
             tabindex="0"
           >
-            <div class="play-icon" aria-hidden="true">▶️</div>
+            <div class="play-icon" aria-hidden="true">??</div>
             <div style="font-size: 1.25rem; font-weight: bold">
               Select a video to play
             </div>
@@ -1522,7 +1474,9 @@
             preload="auto"
             crossorigin="anonymous"
             aria-label="Video player"
-          ></video>
+          >
+            <source type="video/mp4; codecs=hev1.2.4.L153.B0" />
+          </video>
           <canvas id="visualizer" aria-hidden="true"></canvas>
 
           <div class="controls" role="group" aria-label="Video controls">
@@ -1544,17 +1498,17 @@
                 id="playBtn"
                 aria-label="Play or pause video"
               >
-                ▶️
+                ??
               </button>
               <button class="btn" id="rewindBtn" aria-label="Rewind 10 seconds">
-                ⏪
+                ?
               </button>
               <button
                 class="btn"
                 id="forwardBtn"
                 aria-label="Forward 10 seconds"
               >
-                ⏩
+                ?
               </button>
               <div
                 class="time-display"
@@ -1565,7 +1519,7 @@
                 00:00 / 00:00
               </div>
               <button class="btn" id="volumeBtn" aria-label="Mute or unmute">
-                🔊
+                ??
               </button>
               <input
                 type="range"
@@ -1596,7 +1550,9 @@
                 <option value="auto" selected>Auto</option>
                 <option value="1080p">1080p</option>
                 <option value="4k">4K UHD</option>
+                <option value="4k-hdr">4K HDR10</option>
                 <option value="8k">8K UHD</option>
+                <option value="8k-hdr">8K HDR10</option>
               </select>
               <button
                 class="btn"
@@ -1612,7 +1568,7 @@
                 title="Record"
                 aria-label="Record video"
               >
-                ⏺️
+                ??
               </button>
               <button
                 class="btn"
@@ -1620,7 +1576,7 @@
                 title="Picture-in-Picture"
                 aria-label="Toggle picture in picture"
               >
-                📺
+                ??
               </button>
               <button
                 class="btn"
@@ -1628,7 +1584,7 @@
                 title="Fullscreen"
                 aria-label="Toggle fullscreen"
               >
-                ⛶
+                ?
               </button>
             </div>
           </div>
@@ -1697,7 +1653,7 @@
 
         <!-- Video Queue -->
         <div class="next-up" id="queueSection" style="display: none">
-          <h2>▶️ Up Next</h2>
+          <h2>?? Up Next</h2>
           <div class="next-up-grid" id="queueGrid"></div>
         </div>
       </div>
@@ -1706,8 +1662,7 @@
     <script>
       // Videos Data with HLS adaptive streaming
       const videos = [
-        {
-          id: 1,
+        { id: 1,
           title: 'Big Buck Bunny',
           duration: '10:34',
           src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
@@ -1716,10 +1671,8 @@
           type: 'application/x-mpegURL',
           isHLS: true,
           tags: ['animation', 'comedy', 'bunny', 'nature'],
-          watchCount: 0,
-        },
-        {
-          id: 2,
+          watchCount: 0, },
+        { id: 2,
           title: 'Elephants Dream',
           duration: '10:53',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
@@ -1727,10 +1680,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['animation', 'surreal', 'dream', 'fantasy'],
-          watchCount: 0,
-        },
-        {
-          id: 3,
+          watchCount: 0, },
+        { id: 3,
           title: 'For Bigger Blazes',
           duration: '0:15',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
@@ -1739,10 +1690,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['action', 'fire', 'demo'],
-          watchCount: 0,
-        },
-        {
-          id: 4,
+          watchCount: 0, },
+        { id: 4,
           title: 'For Bigger Escape',
           duration: '0:15',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
@@ -1751,10 +1700,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['adventure', 'travel', 'nature'],
-          watchCount: 0,
-        },
-        {
-          id: 5,
+          watchCount: 0, },
+        { id: 5,
           title: 'For Bigger Fun',
           duration: '0:15',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
@@ -1763,10 +1710,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['comedy', 'entertainment', 'fun'],
-          watchCount: 0,
-        },
-        {
-          id: 6,
+          watchCount: 0, },
+        { id: 6,
           title: 'For Bigger Joyrides',
           duration: '0:15',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
@@ -1775,10 +1720,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['cars', 'action', 'speed'],
-          watchCount: 0,
-        },
-        {
-          id: 7,
+          watchCount: 0, },
+        { id: 7,
           title: 'Sintel', // cspell:disable-line
           duration: '14:48',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
@@ -1787,10 +1730,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['animation', 'fantasy', 'dragon', 'adventure'],
-          watchCount: 0,
-        },
-        {
-          id: 8,
+          watchCount: 0, },
+        { id: 8,
           title: 'Tears of Steel',
           duration: '12:14',
           src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
@@ -1799,10 +1740,8 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['scifi', 'action', 'drama', 'robot'], // cspell:disable-line
-          watchCount: 0,
-        },
-        {
-          id: 9,
+          watchCount: 0, },
+        { id: 9,
           title: '8K Nature Demo',
           duration: '0:30',
           src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -1811,8 +1750,17 @@
           type: 'video/mp4',
           isHLS: false,
           tags: ['8k', 'uhd', 'demo', 'nature'],
+          watchCount: 0, },
+        { id: 10,
+          title: 'HDR10 Demo',
+          duration: '0:30',
+          src: 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8',
+          poster: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg',
+          type: 'application/x-mpegURL',
+          isHLS: true,
+          tags: ['hdr', 'hdr10', 'demo', 'uhd'],
           watchCount: 0,
-        },
+          hdr: true, },
       ];
 
       // Enhanced Library Data
@@ -1825,53 +1773,41 @@
       let viewHistory =
         JSON.parse(localStorage.getItem('hootnerHistory')) || [];
 
-      function logView(id) {
-        viewHistory.push({ id, timestamp: Date.now() });
+      function logView(id) { viewHistory.push({ id, timestamp: Date.now() });
         if (viewHistory.length > 50) viewHistory = viewHistory.slice(-50);
         localStorage.setItem('hootnerHistory', JSON.stringify(viewHistory));
 
         const video = videos.find(v => v.id === id);
-        if (video) {
-          video.watchCount = (video.watchCount || 0) + 1;
-        }
-        updateLibraryStats();
-      }
+        if (video) { video.watchCount = (video.watchCount || 0) + 1; }
+        updateLibraryStats(); }
 
-      function getRecommendations(excludeId, count = 5) {
-        const current = videos.find(v => v.id === excludeId);
+      function getRecommendations(excludeId, count = 5) { const current = videos.find(v => v.id === excludeId);
         const now = Date.now();
         const recentViews = viewHistory.slice(-20);
 
         return videos
           .filter(v => v.id !== excludeId && !favorites.includes(v.id))
-          .map(v => {
-            let score = 0;
+          .map(v => { let score = 0;
 
             // Tag similarity (highest weight)
-            if (current?.tags && v.tags) {
-              const commonTags = current.tags.filter(t =>
+            if (current?.tags && v.tags) { const commonTags = current.tags.filter(t =>
                 v.tags.includes(t)
               ).length;
-              score += commonTags * 10;
-            }
+              score += commonTags * 10; }
 
             // View history with time decay
             const views = recentViews.filter(h => h.id === v.id);
-            views.forEach(view => {
-              const daysSince = (now - view.timestamp) / (1000 * 60 * 60 * 24);
+            views.forEach(view => { const daysSince = (now - view.timestamp) / (1000 * 60 * 60 * 24);
               const decay = Math.exp(-daysSince / 7);
-              score += 5 * decay;
-            });
+              score += 5 * decay; });
 
             // Title similarity
-            if (current) {
-              const currentWords = current.title.toLowerCase().split(/\s+/);
+            if (current) { const currentWords = current.title.toLowerCase().split(/\s+/);
               const videoWords = v.title.toLowerCase().split(/\s+/);
               const commonWords = currentWords.filter(
                 w => videoWords.includes(w) && w.length > 3
               ).length;
-              score += commonWords * 3;
-            }
+              score += commonWords * 3; }
 
             // Popularity boost
             score += (v.watchCount || 0) * 0.5;
@@ -1883,16 +1819,12 @@
             // Random factor for discovery
             score += Math.random() * 2;
 
-            return { ...v, score };
-          })
+            return { ...v, score }; })
           .sort((a, b) => b.score - a.score)
-          .slice(0, count);
-      }
+          .slice(0, count); }
 
       // AudioManager (PWA Audio System)
-      class AudioManager {
-        constructor() {
-          this.audioContext = new (
+      class AudioManager { constructor() { this.audioContext = new (
             window.AudioContext || window.webkitAudioContext
           )();
           this.sounds = {};
@@ -1905,53 +1837,40 @@
           this.bufferLength = this.analyzer.frequencyBinCount;
           this.dataArray = new Uint8Array(this.bufferLength);
           this.isReverb = false;
-          this.loadSounds();
-        }
+          this.loadSounds(); }
 
-        async loadSounds() {
-          // Create simple synthetic sounds instead of external URLs
+        async loadSounds() { // Create simple synthetic sounds instead of external URLs
           this.sounds.click = this.createClickSound();
-          this.sounds.whoosh = this.createWhooshSound();
-        }
+          this.sounds.whoosh = this.createWhooshSound(); }
 
-        createClickSound() {
-          const buffer = this.audioContext.createBuffer(
+        createClickSound() { const buffer = this.audioContext.createBuffer(
             1,
             this.audioContext.sampleRate * 0.1,
             this.audioContext.sampleRate
           );
           const data = buffer.getChannelData(0);
-          for (let i = 0; i < data.length; i++) {
-            data[i] =
+          for (let i = 0; i < data.length; i++) { data[i] =
               Math.sin((2 * Math.PI * 800 * i) / this.audioContext.sampleRate) *
-              Math.exp(-i / (this.audioContext.sampleRate * 0.05));
-          }
-          return buffer;
-        }
+              Math.exp(-i / (this.audioContext.sampleRate * 0.05)); }
+          return buffer; }
 
-        createWhooshSound() {
-          const buffer = this.audioContext.createBuffer(
+        createWhooshSound() { const buffer = this.audioContext.createBuffer(
             1,
             this.audioContext.sampleRate * 0.3,
             this.audioContext.sampleRate
           );
           const data = buffer.getChannelData(0);
-          for (let i = 0; i < data.length; i++) {
-            const freq = 200 + (i / data.length) * 400;
+          for (let i = 0; i < data.length; i++) { const freq = 200 + (i / data.length) * 400;
             data[i] =
               (Math.random() * 2 - 1) *
               Math.exp(-i / (this.audioContext.sampleRate * 0.1)) *
-              0.3;
-          }
-          return buffer;
-        }
+              0.3; }
+          return buffer; }
 
-        playSound(name, options = {}) {
-          if (!this.sounds[name] || this.audioContext.state !== 'running')
+        playSound(name, options = {}) { if (!this.sounds[name] || this.audioContext.state !== 'running')
             return;
 
-          try {
-            const source = this.audioContext.createBufferSource();
+          try { const source = this.audioContext.createBufferSource();
             source.buffer = this.sounds[name];
 
             const gainNode = this.audioContext.createGain();
@@ -1959,54 +1878,33 @@
 
             let chain = source;
 
-            if (options.reverb && this.reverbNode) {
-              chain.connect(this.reverbNode);
-              chain = this.reverbNode;
-            }
+            if (options.reverb && this.reverbNode) { chain.connect(this.reverbNode);
+              chain = this.reverbNode; }
 
-            if (options.pan) {
-              const panner = this.audioContext.createStereoPanner();
+            if (options.pan) { const panner = this.audioContext.createStereoPanner();
               panner.pan.value = options.pan;
               chain.connect(panner);
-              chain = panner;
-            }
+              chain = panner; }
 
             chain.connect(gainNode);
             gainNode.connect(this.audioContext.destination);
-            source.start();
-          } catch (error) {
-            console.warn('Audio playback failed:', error);
-          }
-        }
+            source.start(); } catch (error) { console.warn('Audio playback failed:', error); } }
 
-        connectVideo(video) {
-          if (this.videoSource) return;
-          try {
-            this.videoSource =
+        connectVideo(video) { if (this.videoSource) return;
+          try { this.videoSource =
               this.audioContext.createMediaElementSource(video);
             this.videoSource.connect(this.analyzer);
             this.analyzer.connect(this.gainNode);
-            this.gainNode.connect(this.audioContext.destination);
-          } catch (e) {
-            console.warn('Audio routing failed:', e);
-          }
-        }
+            this.gainNode.connect(this.audioContext.destination); } catch (e) { console.warn('Audio routing failed:', e); } }
 
-        toggleReverb() {
-          this.isReverb = !this.isReverb;
-          if (this.isReverb) {
-            this.videoSource.disconnect();
+        toggleReverb() { this.isReverb = !this.isReverb;
+          if (this.isReverb) { this.videoSource.disconnect();
             this.videoSource.connect(this.reverbNode);
-            this.reverbNode.connect(this.gainNode);
-          } else {
-            this.videoSource.disconnect();
+            this.reverbNode.connect(this.gainNode); } else { this.videoSource.disconnect();
             this.reverbNode.disconnect();
-            this.videoSource.connect(this.gainNode);
-          }
-        }
+            this.videoSource.connect(this.gainNode); } }
 
-        createReverbImpulse() {
-          const length = this.audioContext.sampleRate * 2;
+        createReverbImpulse() { const length = this.audioContext.sampleRate * 2;
           const impulse = this.audioContext.createBuffer(
             2,
             length,
@@ -2014,13 +1912,9 @@
           );
           const left = impulse.getChannelData(0);
           const right = impulse.getChannelData(1);
-          for (let i = 0; i < length; i++) {
-            left[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2;
-            right[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2;
-          }
-          return impulse;
-        }
-      }
+          for (let i = 0; i < length; i++) { left[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2;
+            right[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 2; }
+          return impulse; } }
 
       // Init audio manager first
       const audioManager = new AudioManager();
@@ -2030,167 +1924,124 @@
       let filteredVideos = videos;
       const CARD_HEIGHT = 132;
       const BUFFER = 2;
+      let rafId = null;
 
-      function renderVideoGrid(filtered = videos, animate = false) {
-        if (animate) isAnimating = true;
+      function renderVideoGrid(filtered = videos, animate = false) { if (animate) isAnimating = true;
         filteredVideos = filtered;
         const container = document.getElementById('videoGridContainer');
         const spacer = document.getElementById('videoGridSpacer');
         spacer.style.height = filtered.length * CARD_HEIGHT + 'px';
 
-        if (!container._scrollHandler) {
-          container._scrollHandler = () => renderVisibleCards();
-          container.addEventListener('scroll', container._scrollHandler);
-        }
-        renderVisibleCards();
-      }
+        if (!container._scrollHandler) { container._scrollHandler = () => { if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(renderVisibleCards); };
+          container.addEventListener('scroll', container._scrollHandler, { passive: true }); }
+        renderVisibleCards(); }
 
       let focusedCardIndex = -1;
 
       let isAnimating = false;
 
-      function renderVisibleCards() {
-        const container = document.getElementById('videoGridContainer');
+      let lastStartIdx = -1;
+      let lastEndIdx = -1;
+
+      function renderVisibleCards() { const container = document.getElementById('videoGridContainer');
         const grid = document.getElementById('videoGrid');
         const scrollTop = container.scrollTop;
         const containerHeight = container.clientHeight;
 
-        const startIdx = Math.max(
-          0,
-          Math.floor(scrollTop / CARD_HEIGHT) - BUFFER
-        );
-        const endIdx = Math.min(
-          filteredVideos.length,
-          Math.ceil((scrollTop + containerHeight) / CARD_HEIGHT) + BUFFER
-        );
+        const startIdx = Math.max(0, Math.floor(scrollTop / CARD_HEIGHT) - BUFFER);
+        const endIdx = Math.min(filteredVideos.length, Math.ceil((scrollTop + containerHeight) / CARD_HEIGHT) + BUFFER);
+
+        if (startIdx === lastStartIdx && endIdx === lastEndIdx) return;
+        lastStartIdx = startIdx;
+        lastEndIdx = endIdx;
 
         grid.style.transform = `translateY(${startIdx * CARD_HEIGHT}px)`;
 
-        const cards = filteredVideos
-          .slice(startIdx, endIdx)
-          .map((v, i) => {
-            const actualIdx = startIdx + i;
-            const videoIdx = videos.indexOf(v);
-            return `
-          <div class="${isAnimating ? 'card-enter' : ''}" tabindex="0" data-video-idx="${videoIdx}" data-card-idx="${actualIdx}" onclick="loadVideo(${videoIdx})" onkeydown="handleCardKeydown(event, ${videoIdx})" style="cursor:pointer;background:rgba(10,10,15,0.9);border-radius:16px;padding:16px;border:3px solid ${videoIdx === currentIndex ? '#00ff00' : 'transparent'};transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3);height:${CARD_HEIGHT - 12}px;outline:none;animation-delay:${i * 0.03}s;" onmouseover="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)'" onmouseout="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'" onfocus="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)';focusedCardIndex=${actualIdx}" onblur="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'">
-            <div style="display:flex;gap:16px;align-items:center;">
-              <img src="${v.poster}" style="width:140px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 2px 8px rgba(0,255,0,0.2);">
-              <div style="flex:1;">
-                <div style="font-weight:bold;color:#00ff00;margin-bottom:8px;font-size:1.25rem;">${v.title}</div>
-                <div style="font-size:0.875rem;opacity:0.8;color:#00ffff;">${v.duration} ${v.watchCount > 0 ? `• ${v.watchCount}▶ views` : ''}</div>
-              </div>
-              <div style="display:flex;gap:8px;">
-                <button onclick="event.stopPropagation();toggleFavorite(${v.id})" style="background:none;border:none;font-size:1.5rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">${favorites.includes(v.id) ? '⭐' : '☆'}</button>
-              </div>
-            </div>
-          </div>
-        `;
-          })
-          .join('');
+        const fragment = document.createDocumentFragment();
+        for (let i = startIdx; i < endIdx; i++) { const v = filteredVideos[i];
+          const videoIdx = videos.indexOf(v);
+          const div = document.createElement('div');
+          div.className = isAnimating ? 'card-enter' : '';
+          div.tabIndex = 0;
+          div.dataset.videoIdx = videoIdx;
+          div.dataset.cardIdx = i;
+          div.style.cssText = `cursor:pointer;background:rgba(10,10,15,0.9);border-radius:16px;padding:16px;border:3px solid ${videoIdx === currentIndex ? '#00ff00' : 'transparent'};transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3);height:${CARD_HEIGHT - 12}px;outline:none;animation-delay:${(i - startIdx) * 0.03}s;`;
+          div.textContent = `<div style="display:flex;gap:16px;align-items:center;"><img loading="lazy" src="${v.poster}" style="width:140px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 2px 8px rgba(0,255,0,0.2);"><div style="flex:1;"><div style="font-weight:bold;color:#00ff00;margin-bottom:8px;font-size:1.25rem;">${v.title}</div><div style="font-size:0.875rem;opacity:0.8;color:#00ffff;">${v.duration} ${v.watchCount > 0 ? `� ${v.watchCount}? views` : ''}</div></div><div style="display:flex;gap:8px;"><button data-fav="${v.id}" style="background:none;border:none;font-size:1.5rem;cursor:pointer;transition:transform 0.2s;">${favorites.includes(v.id) ? '?' : '?'}</button></div></div>`;
+          div.onclick = () => loadVideo(videoIdx);
+          div.onkeydown = e => handleCardKeydown(e, videoIdx);
+          fragment.appendChild(div); }
+        grid.textContent = '';
+        grid.appendChild(fragment);
 
-        grid.innerHTML = cards;
-        if (isAnimating) {
-          setTimeout(() => {
-            isAnimating = false;
-          }, 500);
-        }
-      }
+        grid.addEventListener('click', e => { const favBtn = e.target.closest('[data-fav]');
+          if (favBtn) { e.stopPropagation();
+            toggleFavorite(parseInt(favBtn.dataset.fav)); } }, { once: true });
 
-      function handleCardKeydown(e, videoIdx) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          loadVideo(videoIdx);
-        }
-      }
+        if (isAnimating) setTimeout(() => isAnimating = false, 500); }
+
+      function handleCardKeydown(e, videoIdx) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault();
+          loadVideo(videoIdx); } }
 
       // Jukebox Mode Controls
-      document.getElementById('shuffleBtn').addEventListener('click', () => {
-        jukeboxMode.shuffle = !jukeboxMode.shuffle;
+      document.getElementById('shuffleBtn').addEventListener('click', () => { jukeboxMode.shuffle = !jukeboxMode.shuffle;
         const btn = document.getElementById('shuffleBtn');
         btn.style.background = jukeboxMode.shuffle
           ? 'linear-gradient(135deg, #00ffff, #ff00ff)'
           : '';
         btn.setAttribute('aria-pressed', jukeboxMode.shuffle);
-        if (jukeboxMode.shuffle) {
-          playQueue = [...Array(videos.length).keys()].sort(
+        if (jukeboxMode.shuffle) { playQueue = [...Array(videos.length).keys()].sort(
             () => Math.random() - 0.5
           );
-          showNotification('🔀 Shuffle ON');
-        } else {
-          playQueue = [];
-          showNotification('🔀 Shuffle OFF');
-        }
-      });
+          showNotification('?? Shuffle ON'); } else { playQueue = [];
+          showNotification('?? Shuffle OFF'); } });
 
-      document.getElementById('repeatBtn').addEventListener('click', () => {
-        const modes = ['off', 'all', 'one'];
+      document.getElementById('repeatBtn').addEventListener('click', () => { const modes = ['off', 'all', 'one'];
         const current = modes.indexOf(jukeboxMode.repeat);
         jukeboxMode.repeat = modes[(current + 1) % modes.length];
         const btn = document.getElementById('repeatBtn');
 
-        if (jukeboxMode.repeat === 'one') {
-          btn.innerHTML = '🔂';
+        if (jukeboxMode.repeat === 'one') { btn.textContent = '??';
           btn.style.background = 'linear-gradient(135deg, #00ffff, #ff00ff)';
           btn.setAttribute('aria-pressed', 'true');
           btn.setAttribute('aria-label', 'Repeat one enabled');
-          showNotification('🔂 Repeat One');
-        } else if (jukeboxMode.repeat === 'all') {
-          btn.innerHTML = '🔁';
+          showNotification('?? Repeat One'); } else if (jukeboxMode.repeat === 'all') { btn.textContent = '??';
           btn.style.background = 'linear-gradient(135deg, #00ff00, #ffff00)';
           btn.setAttribute('aria-pressed', 'true');
           btn.setAttribute('aria-label', 'Repeat all enabled');
-          showNotification('🔁 Repeat All');
-        } else {
-          btn.innerHTML = '🔁';
+          showNotification('?? Repeat All'); } else { btn.textContent = '??';
           btn.style.background = '';
           btn.setAttribute('aria-pressed', 'false');
           btn.setAttribute('aria-label', 'Toggle repeat mode');
-          showNotification('Repeat OFF');
-        }
-      });
+          showNotification('Repeat OFF'); } });
 
-      document.getElementById('autoplayBtn').addEventListener('click', () => {
-        jukeboxMode.autoplay = !jukeboxMode.autoplay;
+      document.getElementById('autoplayBtn').addEventListener('click', () => { jukeboxMode.autoplay = !jukeboxMode.autoplay;
         const btn = document.getElementById('autoplayBtn');
         btn.style.background = jukeboxMode.autoplay
           ? 'linear-gradient(135deg, #00ff00, #ffff00)'
           : '';
         btn.setAttribute('aria-pressed', jukeboxMode.autoplay);
         showNotification(
-          jukeboxMode.autoplay ? '▶️ Autoplay ON' : 'Autoplay OFF'
+          jukeboxMode.autoplay ? '?? Autoplay ON' : 'Autoplay OFF'
         );
-        updateQueue();
-      });
+        updateQueue(); });
 
-      function getUpcomingVideos(count = 5) {
-        const upcoming = [];
-        if (jukeboxMode.shuffle && playQueue.length > 0) {
-          for (let i = 0; i < Math.min(count, playQueue.length); i++) {
-            upcoming.push(videos[playQueue[i]]);
-          }
-        } else {
-          for (let i = 1; i <= count; i++) {
-            let idx = (currentIndex + i) % videos.length;
+      function getUpcomingVideos(count = 5) { const upcoming = [];
+        if (jukeboxMode.shuffle && playQueue.length > 0) { for (let i = 0; i < Math.min(count, playQueue.length); i++) { upcoming.push(videos[playQueue[i]]); } } else { for (let i = 1; i <= count; i++) { let idx = (currentIndex + i) % videos.length;
             if (idx === 0 && !jukeboxMode.repeat) break;
-            upcoming.push(videos[idx]);
-          }
-        }
-        return upcoming;
-      }
+            upcoming.push(videos[idx]); } }
+        return upcoming; }
 
-      function updateQueue() {
-        const queueSection = document.getElementById('queueSection');
+      function updateQueue() { const queueSection = document.getElementById('queueSection');
         const queueGrid = document.getElementById('queueGrid');
 
-        if (!jukeboxMode.autoplay) {
-          queueSection.style.display = 'none';
-          return;
-        }
+        if (!jukeboxMode.autoplay) { queueSection.style.display = 'none';
+          return; }
 
         const upcoming = getUpcomingVideos(5);
         queueSection.style.display = upcoming.length > 0 ? 'block' : 'none';
 
-        queueGrid.innerHTML = upcoming
+        queueGrid.textContent = upcoming
           .map(
             (v, i) => `
           <div class="next-up-card" onclick="loadVideo(${videos.indexOf(v)})" tabindex="0" role="button" aria-label="Play ${v.title}">
@@ -2204,52 +2055,43 @@
           </div>
         `
           )
-          .join('');
-      }
+          .join(''); }
 
-      function playNext() {
-        let nextIndex;
+      function playNext() { let nextIndex;
 
-        if (jukeboxMode.shuffle && playQueue.length > 0) {
-          nextIndex = playQueue.shift();
-          if (playQueue.length === 0 && jukeboxMode.repeat === 'all') {
-            playQueue = [...Array(videos.length).keys()].sort(
+        if (jukeboxMode.shuffle && playQueue.length > 0) { nextIndex = playQueue.shift();
+          if (playQueue.length === 0 && jukeboxMode.repeat === 'all') { playQueue = [...Array(videos.length).keys()].sort(
               () => Math.random() - 0.5
-            );
-          }
-        } else {
-          nextIndex = currentIndex + 1;
-          if (nextIndex >= videos.length) {
-            if (jukeboxMode.repeat === 'all') {
-              nextIndex = 0;
-            } else {
-              return;
-            }
-          }
-        }
+            ); } } else { nextIndex = currentIndex + 1;
+          if (nextIndex >= videos.length) { if (jukeboxMode.repeat === 'all') { nextIndex = 0; } else { return; } } }
 
         currentIndex = nextIndex;
         loadVideo(currentIndex);
-        updateQueue();
-      }
+        updateQueue(); }
 
-      // Video.js Player with HLS support
-      let player = videojs('video', {
-        // cspell:disable-line
-        fluid: true,
+      // Video.js Player with HLS + HDR10 support
+      let player = videojs('video', { fluid: true,
         controls: false,
-        preload: 'auto',
-        html5: {
-          vhs: {
-            overrideNative: true,
+        preload: 'metadata',
+        html5: { vhs: { overrideNative: true,
             enableLowInitialPlaylist: true,
             smoothQualityChange: true,
             useBandwidthFromLocalStorage: true,
-          },
+            limitRenditionByPlayerDimensions: true,
+            useDevicePixelRatio: true, },
           nativeAudioTracks: false,
-          nativeVideoTracks: false,
-        },
-      });
+          nativeVideoTracks: false, }, });
+
+      // HDR10 Detection
+      const hdrSupport = { hdr10: false,
+        dolbyVision: false,
+        hlg: false, };
+
+      if (window.matchMedia) { hdrSupport.hdr10 = window.matchMedia('(dynamic-range: high)').matches;
+        hdrSupport.dolbyVision = window.matchMedia('(color-gamut: p3)').matches && hdrSupport.hdr10;
+        hdrSupport.hlg = hdrSupport.hdr10; }
+
+      if (hdrSupport.hdr10) { video.style.colorSpace = 'rec2020'; }
 
       const video = player.el().querySelector('video');
       const playBtn = document.getElementById('playBtn');
@@ -2272,36 +2114,28 @@
       let recorder = null;
       let isRecording = false;
       let isLiveStreaming = false;
-      let liveStreamEnhancements = {
-        noiseReduction: false,
-        videoFilter: 'none',
-      };
+      let liveStreamEnhancements = { noiseReduction: false,
+        videoFilter: 'none', };
       let streamProcessor = null;
 
       // Jukebox Enhancements
-      let jukeboxMode = {
-        shuffle: false,
+      let jukeboxMode = { shuffle: false,
         repeat: 'off', // 'off', 'one', 'all'
-        autoplay: true,
-      };
+        autoplay: true, };
       let playQueue = [];
 
       // Preload next video
       let preloadVideo = document.createElement('video');
-      preloadVideo.preload = 'auto';
+      preloadVideo.preload = 'metadata';
       preloadVideo.style.display = 'none';
 
       // BroadcastChannel for multi-tab sync
       const syncChannel = new BroadcastChannel('hootner-sync');
 
-      syncChannel.onmessage = e => {
-        const { type, data } = e.data;
-        switch (type) {
-          case 'playback':
-            if (data.videoId !== videos[currentIndex]?.id) {
-              const idx = videos.findIndex(v => v.id === data.videoId);
-              if (idx !== -1) loadVideo(idx);
-            }
+      syncChannel.onmessage = e => { const { type, data } = e.data;
+        switch (type) { case 'playback':
+            if (data.videoId !== videos[currentIndex]?.id) { const idx = videos.findIndex(v => v.id === data.videoId);
+              if (idx !== -1) loadVideo(idx); }
             break;
           case 'favorites':
             favorites = data.favorites;
@@ -2313,35 +2147,24 @@
           case 'history':
             viewHistory = data.history;
             updateLibraryStats();
-            break;
-        }
-      };
+            break; } };
 
-      function preloadNextVideo() {
+      function preloadNextVideo() { if (!jukeboxMode.autoplay) return;
         const nextIdx = (currentIndex + 1) % videos.length;
-        if (nextIdx >= 0 && nextIdx < videos.length) {
-          const nextVid = videos[nextIdx];
-          if (!nextVid.isYouTube && !nextVid.isHLS) {
-            preloadVideo.src = nextVid.src;
-            preloadVideo.load();
-          }
-        }
-      }
+        if (nextIdx >= 0 && nextIdx < videos.length) { const nextVid = videos[nextIdx];
+          if (!nextVid.isYouTube && !nextVid.isHLS) { requestIdleCallback(() => { preloadVideo.src = nextVid.src;
+              preloadVideo.load(); }, { timeout: 2000 }); } } }
 
-      function loadVideo(index) {
-        if (index < 0 || index >= videos.length) return;
+      function loadVideo(index) { if (index < 0 || index >= videos.length) return;
         currentIndex = index;
         isLiveStreaming = false;
         const v = videos[index];
 
-        syncChannel.postMessage({
-          type: 'playback',
-          data: { videoId: v.id, index },
-        });
+        syncChannel.postMessage({ type: 'playback',
+          data: { videoId: v.id, index }, });
         updateQueue();
 
-        if (v.isYouTube) {
-          const existingIframe = videoPlayer.querySelector('iframe');
+        if (v.isYouTube) { const existingIframe = videoPlayer.querySelector('iframe');
           if (existingIframe) existingIframe.remove();
 
           player.pause();
@@ -2360,9 +2183,7 @@
           iframe.disablePictureInPicture = true;
           videoPlayer.appendChild(iframe);
           playOverlay.classList.add('hidden');
-          document.exitPictureInPicture?.().catch(() => {});
-        } else {
-          const existingIframe = videoPlayer.querySelector('iframe');
+          document.exitPictureInPicture?.().catch(() => {}); } else { const existingIframe = videoPlayer.querySelector('iframe');
           if (existingIframe) existingIframe.remove();
           video.style.display = 'block';
           video.disablePictureInPicture = false;
@@ -2372,93 +2193,51 @@
           player.load();
           player.play().catch(() => playOverlay.classList.remove('hidden'));
 
-          if (v.isHLS) {
-            setTimeout(() => {
-              const levels = player.qualityLevels();
-              if (levels && levels.length > 0) {
-                console.log(`HLS: ${levels.length} quality levels available`);
-              }
-            }, 1000);
-          }
-        }
+          if (v.isHLS) { setTimeout(() => { const levels = player.qualityLevels();
+              if (levels && levels.length > 0) { } }, 1000); } }
 
         liveStreamBtn.textContent = 'Live Stream';
         renderVideoGrid();
         preloadNextVideo();
-        updateQueue();
-      }
+        updateQueue(); }
 
-      playBtn.onclick = e => {
-        e.stopPropagation();
-        if (audioManager.audioContext.state === 'suspended') {
-          audioManager.audioContext.resume();
-        }
-        if (!audioManager.videoSource) {
-          audioManager.connectVideo(video);
-        }
-        if (video.paused) {
+      playBtn.onclick = e => { e.stopPropagation();
+        if (audioManager.audioContext.state === 'suspended') { audioManager.audioContext.resume(); }
+        if (!audioManager.videoSource) { audioManager.connectVideo(video); }
+        if (video.paused) { video.play().catch(err => console.error('Play failed:', err)); } else { video.pause(); }
+        audioManager.playSound('click'); };
+
+      playOverlay.onclick = () => { if (video.src) { if (audioManager.audioContext.state === 'suspended') { audioManager.audioContext.resume(); }
+          if (!audioManager.videoSource) { audioManager.connectVideo(video); }
           video.play().catch(err => console.error('Play failed:', err));
-        } else {
-          video.pause();
-        }
-        audioManager.playSound('click');
-      };
+          audioManager.playSound('click'); } };
 
-      playOverlay.onclick = () => {
-        if (video.src) {
-          if (audioManager.audioContext.state === 'suspended') {
-            audioManager.audioContext.resume();
-          }
-          if (!audioManager.videoSource) {
-            audioManager.connectVideo(video);
-          }
-          video.play().catch(err => console.error('Play failed:', err));
-          audioManager.playSound('click');
-        }
-      };
-
-      video.onplay = () => {
-        playBtn.innerHTML = '⏸️';
+      video.onplay = () => { playBtn.textContent = '??';
         playOverlay.classList.add('hidden');
-        visualize();
-      };
+        visualize(); };
 
-      video.onpause = () => {
-        playBtn.innerHTML = '▶️';
-        if (!video.src) playOverlay.classList.remove('hidden');
-      };
+      video.onpause = () => { playBtn.textContent = '??';
+        if (!video.src) playOverlay.classList.remove('hidden'); };
 
-      video.onended = () => {
-        logView(videos[currentIndex].id);
+      video.onended = () => { logView(videos[currentIndex].id);
 
-        if (jukeboxMode.repeat === 'one') {
-          video.currentTime = 0;
+        if (jukeboxMode.repeat === 'one') { video.currentTime = 0;
           video.play();
-          return;
-        }
+          return; }
 
-        if (jukeboxMode.autoplay) {
-          playNext();
-        }
-      };
+        if (jukeboxMode.autoplay) { playNext(); } };
 
-      video.onwaiting = () => {
-        playOverlay.classList.remove('hidden');
-      };
+      video.onwaiting = () => { playOverlay.classList.remove('hidden'); };
 
-      video.oncanplay = () => {
-        if (!video.paused) playOverlay.classList.add('hidden');
-      };
+      video.oncanplay = () => { if (!video.paused) playOverlay.classList.add('hidden'); };
 
       // Keyboard shortcuts
-      document.addEventListener('keydown', e => {
-        if (e.target.tagName === 'INPUT') return;
+      document.addEventListener('keydown', e => { if (e.target.tagName === 'INPUT') return;
 
         // Video card navigation
         if (e.target.hasAttribute('data-video-idx')) return;
 
-        switch (e.key) {
-          case ' ':
+        switch (e.key) { case ' ':
             e.preventDefault();
             video.paused ? video.play() : video.pause();
             break;
@@ -2484,104 +2263,62 @@
             break;
           case 'm':
             video.muted = !video.muted;
-            volumeBtn.innerHTML = video.muted ? '🔇' : '🔊';
-            break;
-        }
-      });
+            volumeBtn.textContent = video.muted ? '??' : '??';
+            break; } });
 
-      video.ontimeupdate = () => {
+      let lastUpdateTime = 0;
+      video.ontimeupdate = () => { const now = Date.now();
+        if (now - lastUpdateTime < 250) return;
+        lastUpdateTime = now;
         const percent = (video.currentTime / video.duration) * 100;
         progressBar.style.width = percent + '%';
         progressContainer.setAttribute('aria-valuenow', Math.round(percent));
-        timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(
-          video.duration
-        )}`;
-      };
+        timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`; };
 
-      progressContainer.onclick = e => {
-        const rect = progressContainer.getBoundingClientRect();
+      progressContainer.onclick = e => { const rect = progressContainer.getBoundingClientRect();
         const pos = (e.clientX - rect.left) / rect.width;
-        video.currentTime = pos * video.duration;
-      };
+        video.currentTime = pos * video.duration; };
 
       rewindBtn.onclick = () => (video.currentTime -= 10);
       forwardBtn.onclick = () => (video.currentTime += 10);
 
       const volumeSlider = document.getElementById('volumeSlider');
 
-      volumeBtn.onclick = () => {
-        if (videos[currentIndex]?.isYouTube) {
-          showNotification('Use YouTube player controls for volume');
-          return;
-        }
+      volumeBtn.onclick = () => { if (videos[currentIndex]?.isYouTube) { showNotification('Use YouTube player controls for volume');
+          return; }
         video.muted = !video.muted;
-        volumeBtn.innerHTML = video.muted ? '🔇' : '🔊';
-        volumeBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
-      };
+        volumeBtn.textContent = video.muted ? '??' : '??';
+        volumeBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute'); };
 
-      volumeSlider.oninput = e => {
-        if (videos[currentIndex]?.isYouTube) return;
+      volumeSlider.oninput = e => { if (videos[currentIndex]?.isYouTube) return;
         video.volume = e.target.value / 100;
         video.muted = false;
-        volumeBtn.innerHTML = video.volume === 0 ? '🔇' : '🔊';
-      };
+        volumeBtn.textContent = video.volume === 0 ? '??' : '??'; };
 
-      fullscreenBtn.onclick = () => {
-        if (!document.fullscreenElement) {
-          videoPlayer.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
-      };
+      fullscreenBtn.onclick = () => { if (!document.fullscreenElement) { videoPlayer.requestFullscreen(); } else { document.exitFullscreen(); } };
 
-      pipBtn.onclick = async () => {
-        if (videos[currentIndex]?.isYouTube) {
-          showNotification('PIP not available for YouTube videos');
-          return;
-        }
-        if (document.pictureInPictureElement) {
-          await document.exitPictureInPicture();
-        } else {
-          try {
-            const pipWindow = await video.requestPictureInPicture();
-            if ('getScreenDetails' in window) {
-              const screens = await window.getScreenDetails();
-              if (screens.screens.length > 1) {
-                const secondScreen = screens.screens[1];
-                pipWindow.moveTo(secondScreen.left, secondScreen.top);
-              }
-            }
-          } catch (err) {
-            showNotification('PIP not available');
-          }
-        }
-      };
+      pipBtn.onclick = async () => { if (videos[currentIndex]?.isYouTube) { showNotification('PIP not available for YouTube videos');
+          return; }
+        if (document.pictureInPictureElement) { await document.exitPictureInPicture(); } else { try { const pipWindow = await video.requestPictureInPicture();
+            if ('getScreenDetails' in window) { const screens = await window.getScreenDetails();
+              if (screens.screens.length > 1) { const secondScreen = screens.screens[1];
+                pipWindow.moveTo(secondScreen.left, secondScreen.top); } } } catch (err) { showNotification('PIP not available'); } } };
 
-      recordBtn.onclick = () => {
-        if (isRecording) {
-          recorder.stop();
+      recordBtn.onclick = () => { if (isRecording) { recorder.stop();
           isRecording = false;
-          recordBtn.innerHTML = '⏺️';
-        } else {
-          const stream = video.captureStream();
+          recordBtn.textContent = '??'; } else { const stream = video.captureStream();
           recorder = new MediaRecorder(stream);
-          recorder.ondataavailable = e => {
-            const url = URL.createObjectURL(e.data);
+          recorder.ondataavailable = e => { const url = URL.createObjectURL(e.data);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'hootner-recording.webm';
-            a.click();
-          };
+            a.click(); };
           recorder.start();
           isRecording = true;
-          recordBtn.innerHTML = '⏹️';
-        }
-      };
+          recordBtn.textContent = '??'; } };
 
-      subtitleBtn.onclick = () => {
-        const track = video.textTracks[0];
-        if (track) {
-          track.mode = track.mode === 'showing' ? 'hidden' : 'showing';
+      subtitleBtn.onclick = () => { const track = video.textTracks[0];
+        if (track) { track.mode = track.mode === 'showing' ? 'hidden' : 'showing';
           subtitleBtn.style.background =
             track.mode === 'showing'
               ? 'linear-gradient(135deg, #00ffff, #ff00ff)'
@@ -2590,16 +2327,10 @@
           subtitleBtn.setAttribute(
             'aria-label',
             track.mode === 'showing' ? 'Hide subtitles' : 'Show subtitles'
-          );
-        } else {
-          document.getElementById('subtitleInput').click();
-        }
-      };
+          ); } else { document.getElementById('subtitleInput').click(); } };
 
-      document.getElementById('subtitleInput').onchange = e => {
-        const file = e.target.files[0];
-        if (file && file.name.endsWith('.vtt')) {
-          const url = URL.createObjectURL(file);
+      document.getElementById('subtitleInput').onchange = e => { const file = e.target.files[0];
+        if (file && file.name.endsWith('.vtt')) { const url = URL.createObjectURL(file);
           const track = document.createElement('track');
           track.kind = 'subtitles';
           track.label = 'Subtitles';
@@ -2609,80 +2340,48 @@
           video.appendChild(track);
           track.track.mode = 'showing';
           subtitleBtn.style.background =
-            'linear-gradient(135deg, #00ffff, #ff00ff)';
-        }
-      };
+            'linear-gradient(135deg, #00ffff, #ff00ff)'; } };
 
       speedSelector.onchange = e => (video.playbackRate = parseFloat(e.value));
 
-      qualitySelector.onchange = e => {
-        const quality = e.target.value;
+      qualitySelector.onchange = e => { const quality = e.target.value;
         const levels = player.qualityLevels();
+        const isHDR = quality.includes('hdr');
 
-        if (levels && levels.length > 0) {
-          if (quality === 'auto') {
-            for (let i = 0; i < levels.length; i++) levels[i].enabled = true;
-          } else {
-            const targetHeight =
-              quality === '1080p'
-                ? 1080
-                : quality === '4k'
-                  ? 2160
-                  : quality === '8k'
-                    ? 4320
-                    : 0;
-            for (let i = 0; i < levels.length; i++) {
-              levels[i].enabled =
-                targetHeight === 0 ||
-                Math.abs(levels[i].height - targetHeight) < 200;
-            }
-          }
-        }
+        if (!isHDR || hdrSupport.hdr10) { if (levels && levels.length > 0) { if (quality === 'auto') { for (let i = 0; i < levels.length; i++) levels[i].enabled = true; } else { const targetHeight = quality.includes('1080') ? 1080 : quality.includes('4k') ? 2160 : quality.includes('8k') ? 4320 : 0;
+              for (let i = 0; i < levels.length; i++) { levels[i].enabled = targetHeight === 0 || Math.abs(levels[i].height - targetHeight) < 200; } } }
 
-        const msg = document.createElement('div');
-        msg.textContent = `Quality: ${quality.toUpperCase()}`;
-        msg.style.cssText =
-          'position:fixed;top:80px;right:20px;background:#00ff00;color:#000;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:9999';
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 2000);
-      };
+          if (isHDR) { video.style.colorSpace = 'rec2020';
+            video.style.colorGamut = 'p3'; } else { video.style.colorSpace = '';
+            video.style.colorGamut = ''; }
+
+          showNotification(`Quality: ${quality.toUpperCase()}`); } else { showNotification('HDR10 not supported on this display');
+          qualitySelector.value = 'auto'; } };
 
       // AI-Enhanced Live Streaming
-      class StreamProcessor {
-        constructor() {
-          this.canvas = document.createElement('canvas');
+      class StreamProcessor { constructor() { this.canvas = document.createElement('canvas');
           this.ctx = this.canvas.getContext('2d');
           this.tempVideo = document.createElement('video');
           this.stream = null;
-          this.animationId = null;
-        }
+          this.animationId = null; }
 
-        async start(sourceStream) {
-          this.stream = sourceStream;
+        async start(sourceStream) { this.stream = sourceStream;
           this.tempVideo.srcObject = sourceStream;
           this.tempVideo.play();
 
-          this.tempVideo.onloadedmetadata = () => {
-            this.canvas.width = this.tempVideo.videoWidth;
+          this.tempVideo.onloadedmetadata = () => { this.canvas.width = this.tempVideo.videoWidth;
             this.canvas.height = this.tempVideo.videoHeight;
-            this.processFrame();
-          };
+            this.processFrame(); };
 
           const processedStream = this.canvas.captureStream(30);
           const audioTrack = sourceStream.getAudioTracks()[0];
 
-          if (audioTrack && liveStreamEnhancements.noiseReduction) {
-            const processedAudio = await this.applyNoiseReduction(audioTrack);
-            processedStream.addTrack(processedAudio);
-          } else if (audioTrack) {
-            processedStream.addTrack(audioTrack);
-          }
+          if (audioTrack && liveStreamEnhancements.noiseReduction) { const processedAudio = await this.applyNoiseReduction(audioTrack);
+            processedStream.addTrack(processedAudio); } else if (audioTrack) { processedStream.addTrack(audioTrack); }
 
-          return processedStream;
-        }
+          return processedStream; }
 
-        processFrame() {
-          if (!this.stream) return;
+        processFrame() { if (!this.stream) return;
 
           this.ctx.drawImage(
             this.tempVideo,
@@ -2692,50 +2391,36 @@
             this.canvas.height
           );
 
-          if (liveStreamEnhancements.videoFilter !== 'none') {
-            const imageData = this.ctx.getImageData(
+          if (liveStreamEnhancements.videoFilter !== 'none') { const imageData = this.ctx.getImageData(
               0,
               0,
               this.canvas.width,
               this.canvas.height
             );
             this.applyFilter(imageData);
-            this.ctx.putImageData(imageData, 0, 0);
-          }
+            this.ctx.putImageData(imageData, 0, 0); }
 
-          this.animationId = requestAnimationFrame(() => this.processFrame());
-        }
+          this.animationId = requestAnimationFrame(() => this.processFrame()); }
 
-        applyFilter(imageData) {
-          const data = imageData.data;
+        applyFilter(imageData) { const data = imageData.data;
 
-          switch (liveStreamEnhancements.videoFilter) {
-            case 'brightness':
-              for (let i = 0; i < data.length; i += 4) {
-                data[i] = Math.min(255, data[i] * 1.3);
+          switch (liveStreamEnhancements.videoFilter) { case 'brightness':
+              for (let i = 0; i < data.length; i += 4) { data[i] = Math.min(255, data[i] * 1.3);
                 data[i + 1] = Math.min(255, data[i + 1] * 1.3);
-                data[i + 2] = Math.min(255, data[i + 2] * 1.3);
-              }
+                data[i + 2] = Math.min(255, data[i + 2] * 1.3); }
               break;
             case 'contrast':
               const factor = 1.5;
-              for (let i = 0; i < data.length; i += 4) {
-                data[i] = (data[i] - 128) * factor + 128;
+              for (let i = 0; i < data.length; i += 4) { data[i] = (data[i] - 128) * factor + 128;
                 data[i + 1] = (data[i + 1] - 128) * factor + 128;
-                data[i + 2] = (data[i + 2] - 128) * factor + 128;
-              }
+                data[i + 2] = (data[i + 2] - 128) * factor + 128; }
               break;
             case 'grayscale':
-              for (let i = 0; i < data.length; i += 4) {
-                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                data[i] = data[i + 1] = data[i + 2] = avg;
-              }
-              break;
-          }
-        }
+              for (let i = 0; i < data.length; i += 4) { const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = data[i + 1] = data[i + 2] = avg; }
+              break; } }
 
-        async applyNoiseReduction(audioTrack) {
-          const audioCtx = audioManager.audioContext;
+        async applyNoiseReduction(audioTrack) { const audioCtx = audioManager.audioContext;
           const source = audioCtx.createMediaStreamSource(
             new MediaStream([audioTrack])
           );
@@ -2754,20 +2439,14 @@
           const destination = audioCtx.createMediaStreamDestination();
           source.connect(biquadFilter).connect(compressor).connect(destination);
 
-          return destination.stream.getAudioTracks()[0];
-        }
+          return destination.stream.getAudioTracks()[0]; }
 
-        stop() {
-          if (this.animationId) cancelAnimationFrame(this.animationId);
+        stop() { if (this.animationId) cancelAnimationFrame(this.animationId);
           if (this.stream) this.stream.getTracks().forEach(t => t.stop());
-          this.stream = null;
-        }
-      }
+          this.stream = null; } }
 
-      liveStreamBtn.onclick = async () => {
-        isLiveStreaming = !isLiveStreaming;
-        if (isLiveStreaming) {
-          const options = await showModal(
+      liveStreamBtn.onclick = async () => { isLiveStreaming = !isLiveStreaming;
+        if (isLiveStreaming) { const options = await showModal(
             'Live Stream',
             '1. Normal\n2. Noise Reduction\n3. Brightness\n4. Contrast\n5. Grayscale\n\nEnter (1-5):',
             'prompt',
@@ -2782,26 +2461,17 @@
           else if (options === '5')
             liveStreamEnhancements.videoFilter = 'grayscale';
 
-          try {
-            const rawStream = await navigator.mediaDevices.getUserMedia({
-              video: { width: 1280, height: 720 },
-              audio: {
-                echoCancellation: true,
+          try { const rawStream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 },
+              audio: { echoCancellation: true,
                 noiseSuppression: true,
-                autoGainControl: true,
-              },
-            });
+                autoGainControl: true, }, });
 
             if (
               liveStreamEnhancements.noiseReduction ||
               liveStreamEnhancements.videoFilter !== 'none'
-            ) {
-              streamProcessor = new StreamProcessor();
+            ) { streamProcessor = new StreamProcessor();
               const processedStream = await streamProcessor.start(rawStream);
-              video.srcObject = processedStream;
-            } else {
-              video.srcObject = rawStream;
-            }
+              video.srcObject = processedStream; } else { video.srcObject = rawStream; }
 
             video.play();
             playOverlay.classList.add('hidden');
@@ -2814,121 +2484,79 @@
               : liveStreamEnhancements.videoFilter !== 'none'
                 ? liveStreamEnhancements.videoFilter
                 : 'Normal';
-            showNotification(`Live: ${enhancement}`);
-          } catch (err) {
-            await showModal('Error', 'Camera/microphone access denied');
-            isLiveStreaming = false;
-          }
-        } else {
-          if (streamProcessor) {
-            streamProcessor.stop();
-            streamProcessor = null;
-          }
-          if (video.srcObject) {
-            video.srcObject.getTracks().forEach(track => track.stop());
-            video.srcObject = null;
-          }
-          liveStreamEnhancements = {
-            noiseReduction: false,
-            videoFilter: 'none',
-          };
+            showNotification(`Live: ${enhancement}`); } catch (err) { await showModal('Error', 'Camera/microphone access denied');
+            isLiveStreaming = false; } } else { if (streamProcessor) { streamProcessor.stop();
+            streamProcessor = null; }
+          if (video.srcObject) { video.srcObject.getTracks().forEach(track => track.stop());
+            video.srcObject = null; }
+          liveStreamEnhancements = { noiseReduction: false,
+            videoFilter: 'none', };
           loadVideo(currentIndex);
-          liveStreamBtn.textContent = 'Live Stream';
-        }
-      };
+          liveStreamBtn.textContent = 'Live Stream'; } };
 
       // WebRTC Video Call Setup
       const peer = new Peer();
       peer.on('open', id => console.log('My Peer ID:', id));
 
-      document.getElementById('webrtcBtn').onclick = async () => {
-        // cspell:disable-line
+      document.getElementById('webrtcBtn').onclick = async () => { // cspell:disable-line
         const remoteId = await showModal(
           'Video Call',
           'Enter peer ID:',
           'prompt'
         );
-        if (!remoteId) {
-          await showModal(
+        if (!remoteId) { await showModal(
             'Your Peer ID',
             `${peer.id}\n\nShare this ID to receive calls`
           );
-          return;
-        }
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-          });
+          return; }
+        try { const stream = await navigator.mediaDevices.getUserMedia({ video: true,
+            audio: true, });
           const call = peer.call(remoteId, stream);
-          call.on('stream', remoteStream => {
-            video.srcObject = remoteStream;
+          call.on('stream', remoteStream => { video.srcObject = remoteStream;
             video.play();
             playOverlay.classList.add('hidden');
-            visualize();
-          });
-        } catch (err) {
-          await showModal('Error', String(err));
-        }
-      };
+            visualize(); }); } catch (err) { await showModal('Error', String(err)); } };
 
-      peer.on('call', async call => {
-        if (await showModal('Incoming Call', 'Accept video call?', 'confirm')) {
-          navigator.mediaDevices
+      peer.on('call', async call => { if (await showModal('Incoming Call', 'Accept video call?', 'confirm')) { navigator.mediaDevices
             .getUserMedia({ video: true, audio: true })
-            .then(stream => {
-              call.answer(stream);
-              call.on('stream', remoteStream => {
-                video.srcObject = remoteStream;
+            .then(stream => { call.answer(stream);
+              call.on('stream', remoteStream => { video.srcObject = remoteStream;
                 video.play();
                 playOverlay.classList.add('hidden');
-                visualize();
-              });
-            });
-        }
-      });
+                visualize(); }); }); } });
 
       // Audio Visualizer
       const canvas = document.getElementById('visualizer');
-      const canvasCtx = canvas.getContext('2d');
+      const canvasCtx = canvas.getContext('2d', { alpha: false });
       let animationId;
+      let lastDrawTime = 0;
+      const FPS_LIMIT = 30;
 
-      function visualize() {
-        if (!audioManager.analyzer) return;
+      function visualize() { if (!audioManager.analyzer) return;
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
 
-        function draw() {
-          animationId = requestAnimationFrame(draw);
-          audioManager.analyzer.getByteFrequencyData(audioManager.dataArray);
+        function draw(timestamp) { animationId = requestAnimationFrame(draw);
+          if (timestamp - lastDrawTime < 1000 / FPS_LIMIT) return;
+          lastDrawTime = timestamp;
 
+          audioManager.analyzer.getByteFrequencyData(audioManager.dataArray);
           canvasCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
           canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
           const barWidth = (canvas.width / audioManager.bufferLength) * 2.5;
           let x = 0;
 
-          for (let i = 0; i < audioManager.bufferLength; i++) {
-            const barHeight = (audioManager.dataArray[i] / 255) * canvas.height;
+          for (let i = 0; i < audioManager.bufferLength; i += 2) { const barHeight = (audioManager.dataArray[i] / 255) * canvas.height;
             const r = barHeight + 25 * (i / audioManager.bufferLength);
             const g = 250 * (i / audioManager.bufferLength);
-            const b = 50;
-            canvasCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            canvasCtx.fillRect(
-              x,
-              canvas.height - barHeight,
-              barWidth,
-              barHeight
-            );
-            x += barWidth + 1;
-          }
-        }
-        draw();
-      }
+            canvasCtx.fillStyle = `rgb(${r|0}, ${g|0}, 50)`;
+            canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth + 1; } }
+        draw(0); }
 
       // YouTube handler
-      document.getElementById('youtubeBtn').onclick = async () => {
-        const url = await showModal(
+      document.getElementById('youtubeBtn').onclick = async () => { const url = await showModal(
           'Add YouTube Video',
           'Enter YouTube URL or Video ID:',
           'prompt'
@@ -2936,17 +2564,13 @@
         if (!url) return;
 
         let videoId = url.trim();
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-          // cspell:disable-line
+        if (url.includes('youtube.com') || url.includes('youtu.be')) { // cspell:disable-line
           const match = url.match(
             /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/
           ); // cspell:disable-line
-          videoId = match ? match[1] : url;
-        }
+          videoId = match ? match[1] : url; }
 
-        if (videoId && videoId.length === 11) {
-          videos.push({
-            id: videos.length + 1,
+        if (videoId && videoId.length === 11) { videos.push({ id: videos.length + 1,
             title: `YouTube Video ${videoId}`,
             duration: '0:00',
             src: `https://www.youtube.com/embed/${videoId}`,
@@ -2955,68 +2579,39 @@
             isHLS: false,
             tags: ['youtube', 'video'],
             watchCount: 0,
-            isYouTube: true,
-          });
+            isYouTube: true, });
           currentIndex = videos.length - 1;
           renderVideoGrid();
           loadVideo(currentIndex);
-          showNotification('✅ YouTube video added!');
-        } else {
-          await showModal('Error', 'Invalid YouTube URL or Video ID');
-        }
-      };
+          showNotification('? YouTube video added!'); } else { await showModal('Error', 'Invalid YouTube URL or Video ID'); } };
 
       // IndexedDB for video metadata
-      class MetadataDB {
-        constructor() {
-          this.db = null;
-          this.init();
-        }
+      class MetadataDB { constructor() { this.db = null;
+          this.init(); }
 
-        async init() {
-          return new Promise((resolve, reject) => {
-            const request = indexedDB.open('HootnerDB', 1);
+        async init() { return new Promise((resolve, reject) => { const request = indexedDB.open('HootnerDB', 1);
             request.onerror = () => reject(request.error);
-            request.onsuccess = () => {
-              this.db = request.result;
-              resolve(this.db);
-            };
-            request.onupgradeneeded = e => {
-              const db = e.target.result;
-              if (!db.objectStoreNames.contains('metadata')) {
-                db.createObjectStore('metadata', { keyPath: 'fileName' });
-              }
-            };
-          });
-        }
+            request.onsuccess = () => { this.db = request.result;
+              resolve(this.db); };
+            request.onupgradeneeded = e => { const db = e.target.result;
+              if (!db.objectStoreNames.contains('metadata')) { db.createObjectStore('metadata', { keyPath: 'fileName' }); } }; }); }
 
-        async save(fileName, duration, poster) {
-          if (!this.db) await this.init();
-          return new Promise((resolve, reject) => {
-            const tx = this.db.transaction(['metadata'], 'readwrite');
+        async save(fileName, duration, poster) { if (!this.db) await this.init();
+          return new Promise((resolve, reject) => { const tx = this.db.transaction(['metadata'], 'readwrite');
             const store = tx.objectStore('metadata');
-            const request = store.put({
-              fileName,
+            const request = store.put({ fileName,
               duration,
               poster,
-              timestamp: Date.now(),
-            });
+              timestamp: Date.now(), });
             request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-          });
-        }
+            request.onerror = () => reject(request.error); }); }
 
-        async get(fileName) {
-          if (!this.db) await this.init();
-          return new Promise((resolve, reject) => {
-            const tx = this.db.transaction(['metadata'], 'readonly');
+        async get(fileName) { if (!this.db) await this.init();
+          return new Promise((resolve, reject) => { const tx = this.db.transaction(['metadata'], 'readonly');
             const store = tx.objectStore('metadata');
             const request = store.get(fileName);
             request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-          });
-        }
-      }
+            request.onerror = () => reject(request.error); }); } }
 
       const metadataDB = new MetadataDB();
 
@@ -3024,15 +2619,12 @@
       document.getElementById('uploadBtn').onclick = () =>
         document.getElementById('fileInput').click();
 
-      async function processVideoFile(file) {
-        if (!file || !file.type.startsWith('video/')) return;
+      async function processVideoFile(file) { if (!file || !file.type.startsWith('video/')) return;
         const src = URL.createObjectURL(file);
         const title = file.name.replace(/\.[^/.]+$/, '');
         const cached = await metadataDB.get(file.name);
 
-        if (cached) {
-          videos.push({
-            id: videos.length + 1,
+        if (cached) { videos.push({ id: videos.length + 1,
             title,
             duration: cached.duration,
             src,
@@ -3044,26 +2636,20 @@
               .split(/[\s_-]+/)
               .filter(w => w.length > 2),
             watchCount: 0,
-            _blobUrl: src,
-          });
+            _blobUrl: src, });
           renderVideoGrid();
-          showNotification(`✅ "${file.name}" added!`);
-        } else {
-          const tempVideo = document.createElement('video');
+          showNotification(`? "${file.name}" added!`); } else { const tempVideo = document.createElement('video');
           tempVideo.src = src;
-          tempVideo.onloadedmetadata = () => {
-            const duration = formatTime(tempVideo.duration);
+          tempVideo.onloadedmetadata = () => { const duration = formatTime(tempVideo.duration);
             const canvas = document.createElement('canvas');
             canvas.width = 256;
             canvas.height = 384;
             const ctx = canvas.getContext('2d');
             tempVideo.currentTime = Math.min(1, tempVideo.duration / 2);
-            tempVideo.onseeked = async () => {
-              ctx.drawImage(tempVideo, 0, 0, 256, 384);
+            tempVideo.onseeked = async () => { ctx.drawImage(tempVideo, 0, 0, 256, 384);
               const poster = canvas.toDataURL('image/jpeg');
               await metadataDB.save(file.name, duration, poster);
-              videos.push({
-                id: videos.length + 1,
+              videos.push({ id: videos.length + 1,
                 title,
                 duration,
                 src,
@@ -3075,77 +2661,48 @@
                   .split(/[\s_-]+/)
                   .filter(w => w.length > 2),
                 watchCount: 0,
-                _blobUrl: src,
-              });
+                _blobUrl: src, });
               renderVideoGrid();
-              showNotification(`✅ "${file.name}" added!`);
-            };
-          };
-        }
+              showNotification(`? "${file.name}" added!`); }; }; }
 
-        setTimeout(() => {
-          if (video.src !== src) URL.revokeObjectURL(src);
-        }, 60000);
-      }
+        setTimeout(() => { if (video.src !== src) URL.revokeObjectURL(src); }, 60000); }
 
-      document.getElementById('fileInput').onchange = e => {
-        processVideoFile(e.target.files[0]);
-      };
+      document.getElementById('fileInput').onchange = e => { processVideoFile(e.target.files[0]); };
 
       // Drag & Drop Upload
       let dropOverlay;
 
-      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
-        document.body.addEventListener(evt, e => e.preventDefault());
-      });
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => { document.body.addEventListener(evt, e => e.preventDefault()); });
 
-      document.body.addEventListener('dragenter', e => {
-        if (!dropOverlay) {
-          dropOverlay = document.createElement('div');
+      document.body.addEventListener('dragenter', e => { if (!dropOverlay) { dropOverlay = document.createElement('div');
           dropOverlay.style.cssText =
             'position:fixed;inset:0;background:rgba(0,255,0,0.1);backdrop-filter:blur(10px);z-index:10000;display:flex;align-items:center;justify-content:center;border:4px dashed #00ff00;';
-          dropOverlay.innerHTML =
-            '<div style="font-size:48px;font-weight:bold;color:#00ff00;text-shadow:0 0 20px #00ff00;">📹 Drop Video Here</div>';
-          document.body.appendChild(dropOverlay);
-        }
-      });
+          dropOverlay.textContent =
+            '<div style="font-size:48px;font-weight:bold;color:#00ff00;text-shadow:0 0 20px #00ff00;">?? Drop Video Here</div>';
+          document.body.appendChild(dropOverlay); } });
 
-      document.body.addEventListener('dragleave', e => {
-        if (e.target === document.body && dropOverlay) {
-          dropOverlay.remove();
-          dropOverlay = null;
-        }
-      });
+      document.body.addEventListener('dragleave', e => { if (e.target === document.body && dropOverlay) { dropOverlay.remove();
+          dropOverlay = null; } });
 
-      document.body.addEventListener('drop', e => {
-        if (dropOverlay) {
-          dropOverlay.remove();
-          dropOverlay = null;
-        }
+      document.body.addEventListener('drop', e => { if (dropOverlay) { dropOverlay.remove();
+          dropOverlay = null; }
         const files = Array.from(e.dataTransfer.files).filter(f =>
           f.type.startsWith('video/')
         );
         files.forEach(processVideoFile);
         if (files.length > 0)
-          showNotification(`📥 Processing ${files.length} video(s)...`);
-      });
+          showNotification(`?? Processing ${files.length} video(s)...`); });
 
       // Download handler (direct)
-      document.getElementById('downloadBtn').onclick = () => {
-        const a = document.createElement('a');
+      document.getElementById('downloadBtn').onclick = () => { const a = document.createElement('a');
         a.href = video.src;
         a.download = videos[currentIndex].title + '.mp4';
-        a.click();
-      };
+        a.click(); };
 
       // Load videos from server
-      async function loadServerVideos() {
-        try {
-          const response = await fetch('http://localhost:3000/api/videos');
+      async function loadServerVideos() { try { const response = await fetch('http://localhost:3000/api/videos');
           const serverVideos = await response.json();
-          serverVideos.forEach(v => {
-            videos.push({
-              id: videos.length + 1,
+          serverVideos.forEach(v => { videos.push({ id: videos.length + 1,
               title: v.title,
               duration: v.duration,
               src: 'http://localhost:3000' + v.src,
@@ -3153,22 +2710,14 @@
               type: 'video/mp4',
               isHLS: false,
               tags: ['server', 'video'],
-              watchCount: 0,
-            });
-          });
-          renderVideoGrid();
-        } catch (err) {
-          console.log('Server not available, using default videos');
-        }
-      }
+              watchCount: 0, }); });
+          renderVideoGrid(); } catch (err) { } }
 
       // Utility functions
-      function formatTime(seconds) {
-        if (isNaN(seconds)) return '00:00';
+      function formatTime(seconds) { if (isNaN(seconds)) return '00:00';
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-      }
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`; }
 
       // Get video player element
       const videoPlayer = document.getElementById('videoPlayer');
@@ -3180,94 +2729,63 @@
 
       // Tab handling
       const tabs = document.querySelectorAll('.tab-btn');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', e => {
-          tabs.forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
-          });
+      tabs.forEach(tab => { tab.addEventListener('click', e => { tabs.forEach(t => { t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false'); });
           e.target.classList.add('active');
           e.target.setAttribute('aria-selected', 'true');
           currentFilter = e.target.dataset.view;
-          applyLibraryFilters();
-        });
-      });
+          applyLibraryFilters(); }); });
 
-      document.getElementById('sortSelector').addEventListener('change', e => {
-        currentSort = e.target.value;
-        applyLibraryFilters();
-      });
+      document.getElementById('sortSelector').addEventListener('change', e => { currentSort = e.target.value;
+        applyLibraryFilters(); });
 
-      document.getElementById('searchInput').addEventListener('input', () => {
-        clearTimeout(searchDebounceTimer);
-        searchDebounceTimer = setTimeout(applyLibraryFilters, 300);
-      });
+      document.getElementById('searchInput').addEventListener('input', () => { clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(applyLibraryFilters, 150); });
 
-      function applyLibraryFilters() {
-        const query = document
+      function applyLibraryFilters() { const query = document
           .getElementById('searchInput')
           .value.toLowerCase();
         let filtered = [...videos];
 
         // Show loading
         document.getElementById('loadingSpinner').style.display = 'block';
-        document.getElementById('videoGrid').innerHTML = '';
+        document.getElementById('videoGrid').textContent = '';
         document.getElementById('emptyState').style.display = 'none';
 
-        setTimeout(() => {
-          // Search filter
-          if (query) {
-            filtered = filtered.filter(
+        setTimeout(() => { // Search filter
+          if (query) { filtered = filtered.filter(
               v =>
                 v.title.toLowerCase().includes(query) ||
                 (v.tags && v.tags.some(t => t.includes(query)))
-            );
-          }
+            ); }
 
           // Category filter
-          if (currentFilter === 'favorites') {
-            filtered = filtered.filter(v => favorites.includes(v.id));
-          } else if (currentFilter === 'offline') {
-            filtered = filtered.filter(v => v.cached);
-          } else if (currentFilter === 'history') {
-            const historyIds = [...new Set(viewHistory.map(h => h.id))];
-            filtered = filtered.filter(v => historyIds.includes(v.id));
-          } else if (currentFilter === 'playlists') {
-            renderPlaylists();
+          if (currentFilter === 'favorites') { filtered = filtered.filter(v => favorites.includes(v.id)); } else if (currentFilter === 'offline') { filtered = filtered.filter(v => v.cached); } else if (currentFilter === 'history') { const historyIds = [...new Set(viewHistory.map(h => h.id))];
+            filtered = filtered.filter(v => historyIds.includes(v.id)); } else if (currentFilter === 'playlists') { renderPlaylists();
             document.getElementById('loadingSpinner').style.display = 'none';
-            return;
-          } else if (currentFilter === 'recommendations') {
-            filtered = getRecommendations(
+            return; } else if (currentFilter === 'recommendations') { filtered = getRecommendations(
               videos[currentIndex]?.id || videos[0]?.id,
               10
-            );
-          } else if (currentFilter === 'continue') {
-            filtered = viewHistory
+            ); } else if (currentFilter === 'continue') { filtered = viewHistory
               .slice(-5)
               .reverse()
               .map(h => videos.find(v => v.id === h.id))
-              .filter(Boolean);
-          } else if (currentFilter !== 'all') {
-            filtered = filtered.filter(
+              .filter(Boolean); } else if (currentFilter !== 'all') { filtered = filtered.filter(
               v => v.tags && v.tags.includes(currentFilter)
-            );
-          }
+            ); }
 
           // Sort
-          switch (currentSort) {
-            case 'title':
+          switch (currentSort) { case 'title':
               filtered.sort((a, b) => a.title.localeCompare(b.title));
               break;
             case 'duration':
-              filtered.sort((a, b) => {
-                const aDur = a.duration
+              filtered.sort((a, b) => { const aDur = a.duration
                   .split(':')
                   .reduce((acc, time) => 60 * acc + +time, 0);
                 const bDur = b.duration
                   .split(':')
                   .reduce((acc, time) => 60 * acc + +time, 0);
-                return bDur - aDur;
-              });
+                return bDur - aDur; });
               break;
             case 'recent':
               filtered.sort((a, b) => b.id - a.id);
@@ -3276,94 +2794,60 @@
               filtered.sort(
                 (a, b) => (b.watchCount || 0) - (a.watchCount || 0)
               );
-              break;
-          }
+              break; }
 
           renderVideoGrid(filtered, true);
           updateLibraryStats();
 
           // Hide loading and show empty if needed
           document.getElementById('loadingSpinner').style.display = 'none';
-          if (filtered.length === 0) {
-            document.getElementById('emptyState').style.display = 'block';
-          }
-        }, 300);
-      }
+          if (filtered.length === 0) { document.getElementById('emptyState').style.display = 'block'; } }, 300); }
 
       // Favorites Management
-      function toggleFavorite(videoId) {
-        if (favorites.includes(videoId)) {
-          favorites = favorites.filter(id => id !== videoId);
-          showNotification('Removed from favorites');
-        } else {
-          favorites.push(videoId);
-          showNotification('⭐ Added to favorites');
-        }
+      function toggleFavorite(videoId) { if (favorites.includes(videoId)) { favorites = favorites.filter(id => id !== videoId);
+          showNotification('Removed from favorites'); } else { favorites.push(videoId);
+          showNotification('? Added to favorites'); }
         localStorage.setItem('hootnerFavorites', JSON.stringify(favorites));
         syncChannel.postMessage({ type: 'favorites', data: { favorites } });
-        renderVideoGrid();
-      }
+        renderVideoGrid(); }
 
       // Custom Modal
-      function showModal(title, message, type = 'alert', defaultValue = '') {
-        return new Promise(resolve => {
-          const overlay = document.createElement('div');
+      function showModal(title, message, type = 'alert', defaultValue = '') { return new Promise(resolve => { const overlay = document.createElement('div');
           overlay.className = 'modal-overlay';
           const modal = document.createElement('div');
           modal.className = 'modal';
-          modal.innerHTML = `<div class="modal-title">${title}</div><div class="modal-message">${message}</div>${type === 'prompt' ? `<input class="modal-input" value="${defaultValue}">` : ''}<div class="modal-buttons">${type !== 'alert' ? '<button class="modal-btn modal-btn-secondary" data-action="cancel">Cancel</button>' : ''}<button class="modal-btn modal-btn-primary" data-action="ok">${type === 'confirm' ? 'Confirm' : 'OK'}</button></div>`;
+          modal.textContent = `<div class="modal-title">${title}</div><div class="modal-message">${message}</div>${type === 'prompt' ? `<input class="modal-input" value="${defaultValue}">` : ''}<div class="modal-buttons">${type !== 'alert' ? '<button class="modal-btn modal-btn-secondary" data-action="cancel">Cancel</button>' : ''}<button class="modal-btn modal-btn-primary" data-action="ok">${type === 'confirm' ? 'Confirm' : 'OK'}</button></div>`;
           overlay.appendChild(modal);
           document.body.appendChild(overlay);
           const input = modal.querySelector('.modal-input');
           if (input) input.focus();
-          modal.onclick = e => {
-            const action = e.target.dataset.action;
-            if (action === 'ok') {
-              overlay.remove();
-              resolve(type === 'prompt' ? input?.value || '' : true);
-            } else if (action === 'cancel') {
-              overlay.remove();
-              resolve(type === 'prompt' ? null : false);
-            }
-          };
+          modal.onclick = e => { const action = e.target.dataset.action;
+            if (action === 'ok') { overlay.remove();
+              resolve(type === 'prompt' ? input?.value || '' : true); } else if (action === 'cancel') { overlay.remove();
+              resolve(type === 'prompt' ? null : false); } };
           if (input)
-            input.onkeydown = e => {
-              if (e.key === 'Enter')
+            input.onkeydown = e => { if (e.key === 'Enter')
                 modal.querySelector('[data-action="ok"]').click();
-              if (e.key === 'Escape') overlay.remove();
-            };
-          overlay.onclick = e => {
-            if (e.target === overlay) {
-              overlay.remove();
-              resolve(type === 'prompt' ? null : false);
-            }
-          };
-        });
-      }
+              if (e.key === 'Escape') overlay.remove(); };
+          overlay.onclick = e => { if (e.target === overlay) { overlay.remove();
+              resolve(type === 'prompt' ? null : false); } }; }); }
 
       // Playlist Management
-      async function createPlaylist() {
-        const name = await showModal(
+      async function createPlaylist() { const name = await showModal(
           'Create Playlist',
           'Enter playlist name:',
           'prompt'
         );
-        if (name) {
-          playlists.push({ id: Date.now(), name, videos: [] });
+        if (name) { playlists.push({ id: Date.now(), name, videos: [] });
           localStorage.setItem('hootnerPlaylists', JSON.stringify(playlists));
           syncChannel.postMessage({ type: 'playlist', data: { playlists } });
-          showNotification(`📁 Created "${name}"`);
-        }
-      }
+          showNotification(`?? Created "${name}"`); } }
 
       // Render playlists
-      function renderPlaylists() {
-        const grid = document.getElementById('videoGrid');
-        if (playlists.length === 0) {
-          document.getElementById('emptyState').style.display = 'block';
-          return;
-        }
-        grid.innerHTML = playlists
+      function renderPlaylists() { const grid = document.getElementById('videoGrid');
+        if (playlists.length === 0) { document.getElementById('emptyState').style.display = 'block';
+          return; }
+        grid.textContent = playlists
           .map(
             p => `
           <div draggable="true" ondragstart="dragPlaylist(event, ${p.id})" class="playlist-card" style="cursor:move; background:rgba(10,10,15,0.9); border-radius:16px; padding:16px; border:2px solid #00ff00; margin-bottom:12px;">
@@ -3372,133 +2856,85 @@
           </div>
         `
           )
-          .join('');
-      }
+          .join(''); }
 
       // Drag-and-drop
-      function dragPlaylist(ev, id) {
-        ev.dataTransfer.setData('text/plain', id);
-      }
+      function dragPlaylist(ev, id) { ev.dataTransfer.setData('text/plain', id); }
       document
         .getElementById('videoGridContainer')
         .addEventListener('dragover', ev => ev.preventDefault());
       document
         .getElementById('videoGridContainer')
-        .addEventListener('drop', ev => {
-          ev.preventDefault();
+        .addEventListener('drop', ev => { ev.preventDefault();
           const id = ev.dataTransfer.getData('text/plain');
-          // Reorder logic can be added here
-        });
+          // Reorder logic can be added here });
 
-      async function clearHistory() {
-        if (
+      async function clearHistory() { if (
           await showModal('Clear History', 'Clear watch history?', 'confirm')
-        ) {
-          viewHistory = [];
+        ) { viewHistory = [];
           localStorage.setItem('hootnerHistory', JSON.stringify(viewHistory));
           videos.forEach(v => (v.watchCount = 0));
           syncChannel.postMessage({ type: 'history', data: { history: [] } });
           showNotification('History cleared');
-          updateLibraryStats();
-        }
-      }
+          updateLibraryStats(); } }
 
       // Export/Import Library
-      function exportLibrary() {
-        const data = {
-          favorites,
+      function exportLibrary() { const data = { favorites,
           playlists,
           viewHistory,
           exportDate: new Date().toISOString(),
-          version: '1.0',
-        };
-        const blob = new Blob([JSON.stringify(data, null, 2)], {
-          type: 'application/json',
-        });
+          version: '1.0', };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json', });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `hootner-library-${Date.now()}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showNotification('📤 Library exported!');
-      }
+        showNotification('?? Library exported!'); }
 
-      function importLibrary() {
-        document.getElementById('importInput').click();
-      }
+      function importLibrary() { document.getElementById('importInput').click(); }
 
-      document.getElementById('importInput').onchange = e => {
-        const file = e.target.files[0];
-        if (file && file.type === 'application/json') {
-          const reader = new FileReader();
-          reader.onload = async ev => {
-            try {
-              const data = JSON.parse(ev.target.result);
-              if (data.favorites) {
-                favorites = data.favorites;
+      document.getElementById('importInput').onchange = e => { const file = e.target.files[0];
+        if (file && file.type === 'application/json') { const reader = new FileReader();
+          reader.onload = async ev => { try { const data = JSON.parse(ev.target.result);
+              if (data.favorites) { favorites = data.favorites;
                 localStorage.setItem(
                   'hootnerFavorites',
                   JSON.stringify(favorites)
-                );
-              }
-              if (data.playlists) {
-                playlists = data.playlists;
+                ); }
+              if (data.playlists) { playlists = data.playlists;
                 localStorage.setItem(
                   'hootnerPlaylists',
                   JSON.stringify(playlists)
-                );
-              }
-              if (data.viewHistory) {
-                viewHistory = data.viewHistory;
+                ); }
+              if (data.viewHistory) { viewHistory = data.viewHistory;
                 localStorage.setItem(
                   'hootnerHistory',
                   JSON.stringify(viewHistory)
-                );
-              }
+                ); }
               renderVideoGrid();
               updateLibraryStats();
-              showNotification('📥 Library imported!');
-            } catch (err) {
-              await showModal('Error', 'Invalid library file');
-            }
-          };
-          reader.readAsText(file);
-        }
-      };
+              showNotification('?? Library imported!'); } catch (err) { await showModal('Error', 'Invalid library file'); } };
+          reader.readAsText(file); } };
 
-      function updateLibraryStats() {
-        const stats = document.getElementById('libraryStats');
-        if (stats) {
-          const totalWatched = viewHistory.length;
+      function updateLibraryStats() { const stats = document.getElementById('libraryStats');
+        if (stats) { const totalWatched = viewHistory.length;
           const uniqueWatched = new Set(viewHistory.map(h => h.id)).size;
-          stats.innerHTML = `📊 ${videos.length} videos • ${offlineVideos.length} offline • ${favorites.length} favorites • ${uniqueWatched} watched`;
-        }
-      }
+          stats.textContent = `?? ${videos.length} videos � ${offlineVideos.length} offline � ${favorites.length} favorites � ${uniqueWatched} watched`; } }
 
       // Share functionality
-      document.getElementById('shareBtn').onclick = () => {
-        if (navigator.share) {
-          navigator.share({
-            title: videos[currentIndex].title,
+      document.getElementById('shareBtn').onclick = () => { if (navigator.share) { navigator.share({ title: videos[currentIndex].title,
             text: 'Check out this video on HOOTNER!',
-            url: window.location.href,
-          });
-        } else {
-          navigator.clipboard.writeText(window.location.href);
-          alert('Link copied to clipboard!');
-        }
-      };
+            url: window.location.href, }); } else { navigator.clipboard.writeText(window.location.href);
+          alert('Link copied to clipboard!'); } };
 
       // Enhanced navigation with state preservation and transitions
-      function navigateTo(url) {
-        localStorage.setItem(
+      function navigateTo(url) { localStorage.setItem(
           'hootnerPlayerState',
-          JSON.stringify({
-            videoId: videos[currentIndex]?.id,
+          JSON.stringify({ videoId: videos[currentIndex]?.id,
             timestamp: video.currentTime,
-            isPlaying: !video.paused,
-          })
+            isPlaying: !video.paused, })
         );
         const loader = document.createElement('div');
         loader.style.cssText =
@@ -3507,8 +2943,7 @@
         document.body.appendChild(loader);
         document.body.style.transition = 'opacity 0.3s';
         document.body.style.opacity = '0';
-        setTimeout(() => (window.location.href = url), 300);
-      }
+        setTimeout(() => (window.location.href = url), 300); }
 
       document.getElementById('marketplaceBtn').onclick = () =>
         navigateTo('./marketplace.html?from=player');
@@ -3519,23 +2954,18 @@
       let offlineVideos =
         JSON.parse(localStorage.getItem('hootnerOffline')) || [];
 
-      async function toggleOffline(videoId) {
-        const video = videos.find(v => v.id === videoId);
+      async function toggleOffline(videoId) { const video = videos.find(v => v.id === videoId);
         if (!video) return;
 
-        if (video.cached) {
-          // Remove from cache
+        if (video.cached) { // Remove from cache
           const cache = await caches.open('hootner-videos');
           await cache.delete(video.src);
           video.cached = false;
           offlineVideos = offlineVideos.filter(id => id !== videoId);
           localStorage.setItem('hootnerOffline', JSON.stringify(offlineVideos));
-          showNotification('Removed from offline');
-        } else {
-          // Download for offline
+          showNotification('Removed from offline'); } else { // Download for offline
           showNotification('Downloading for offline...');
-          try {
-            const cache = await caches.open('hootner-videos');
+          try { const cache = await caches.open('hootner-videos');
             const response = await fetch(video.src);
             await cache.put(video.src, response);
             video.cached = true;
@@ -3544,18 +2974,12 @@
               'hootnerOffline',
               JSON.stringify(offlineVideos)
             );
-            showNotification('✓ Available offline!');
-          } catch (err) {
-            showNotification('Download failed');
-          }
-        }
-        renderVideoGrid();
-      }
+            showNotification('? Available offline!'); } catch (err) { showNotification('Download failed'); } }
+        renderVideoGrid(); }
 
       let notificationStack = [];
 
-      function showNotification(text) {
-        const msg = document.createElement('div');
+      function showNotification(text) { const msg = document.createElement('div');
         msg.textContent = text;
         msg.style.cssText =
           'position:fixed;right:20px;background:#00ff00;color:#000;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:9999;transition:all 0.3s;opacity:0;transform:translateX(100px)';
@@ -3567,94 +2991,63 @@
         setTimeout(() => (msg.style.opacity = '1'), 10);
         setTimeout(() => (msg.style.transform = 'translateX(0)'), 10);
 
-        setTimeout(() => {
-          msg.style.opacity = '0';
+        setTimeout(() => { msg.style.opacity = '0';
           msg.style.transform = 'translateX(100px)';
-          setTimeout(() => {
-            msg.remove();
+          setTimeout(() => { msg.remove();
             notificationStack = notificationStack.filter(n => n !== msg);
-            updateNotificationPositions();
-          }, 300);
-        }, 2000);
-      }
+            updateNotificationPositions(); }, 300); }, 2000); }
 
-      function updateNotificationPositions() {
-        notificationStack.forEach((msg, i) => {
-          msg.style.top = 80 + i * 60 + 'px';
-        });
-      }
+      function updateNotificationPositions() { notificationStack.forEach((msg, i) => { msg.style.top = 80 + i * 60 + 'px'; }); }
 
       // Check cached videos on load
-      async function checkOfflineVideos() {
-        const cache = await caches.open('hootner-videos');
-        for (const video of videos) {
-          const cached = await cache.match(video.src);
-          video.cached = !!cached || offlineVideos.includes(video.id);
-        }
-        renderVideoGrid();
-      }
+      async function checkOfflineVideos() { const cache = await caches.open('hootner-videos');
+        for (const video of videos) { const cached = await cache.match(video.src);
+          video.cached = !!cached || offlineVideos.includes(video.id); }
+        renderVideoGrid(); }
 
       // Service Worker Registration
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
+      if ('serviceWorker' in navigator) { navigator.serviceWorker
           .register('sw.js')
-          .then(() => console.log('✓ Service Worker registered'))
-          .catch(err => console.warn('SW registration failed:', err));
-      }
+          .then(() => console.log('? Service Worker registered'))
+          .catch(err => console.warn('SW registration failed:', err)); }
 
       // Handle audio context user interaction requirement
       document.addEventListener(
         'click',
-        () => {
-          if (audioManager.audioContext.state === 'suspended') {
-            audioManager.audioContext.resume();
-          }
-        },
+        () => { if (audioManager.audioContext.state === 'suspended') { audioManager.audioContext.resume(); } },
         { once: true }
       );
 
       // Restore player state
-      function restorePlayerState() {
-        const state = localStorage.getItem('hootnerPlayerState');
-        if (state) {
-          try {
-            const { videoId, timestamp, isPlaying } = JSON.parse(state);
+      function restorePlayerState() { const state = localStorage.getItem('hootnerPlayerState');
+        if (state) { try { const { videoId, timestamp, isPlaying } = JSON.parse(state);
             const index = videos.findIndex(v => v.id === videoId);
-            if (index !== -1) {
-              currentIndex = index;
+            if (index !== -1) { currentIndex = index;
               loadVideo(index);
               video.addEventListener(
                 'loadedmetadata',
-                () => {
-                  video.currentTime = timestamp || 0;
-                  if (isPlaying) video.play();
-                },
+                () => { video.currentTime = timestamp || 0;
+                  if (isPlaying) video.play(); },
                 { once: true }
-              );
-            }
-          } catch (e) {}
-        }
-      }
+              ); } } catch (e) {} } }
+
+      // Cleanup on unload
+      window.addEventListener('beforeunload', () => { if (animationId) cancelAnimationFrame(animationId);
+        if (rafId) cancelAnimationFrame(rafId);
+        syncChannel.close();
+        videos.forEach(v => v._blobUrl && URL.revokeObjectURL(v._blobUrl)); });
 
       // Init
-      console.log('🦉 HOOTNER Initializing...');
-      console.log('Videos loaded:', videos.length);
-      renderVideoGrid();
-      loadServerVideos();
-      checkOfflineVideos();
+                  requestIdleCallback(() => { renderVideoGrid();
+        loadServerVideos();
+        checkOfflineVideos();
+        updateLibraryStats(); });
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('from') === 'marketplace') {
-        restorePlayerState();
-      } else {
-        loadVideo(0);
-      }
-      updateLibraryStats();
-      document.getElementById('autoplayBtn').style.background =
-        'linear-gradient(135deg, #00ff00, #ffff00)';
-      console.log('✅ HOOTNER Ready!');
-      document.body.style.transition = 'opacity 0.3s';
+      if (urlParams.get('from') === 'marketplace') { restorePlayerState(); } else { loadVideo(0); }
+      document.getElementById('autoplayBtn').style.background = 'linear-gradient(135deg, #00ff00, #ffff00)';
+            document.body.style.transition = 'opacity 0.3s';
       document.body.style.opacity = '1';
     </script>
     <div class="main-content"><script src="notifications.js"></script></div>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

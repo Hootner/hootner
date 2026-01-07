@@ -15,14 +15,18 @@
       crossorigin="anonymous"
     ></script>
     <script
+      data-lazy="socket"
       src="https://cdn.socket.io/4.5.4/socket.io.min.js"
       integrity="sha384-/RzZdHy8yAKYP0j0UT0gnvYVnTLpP8MpgqJaJLHCHqzN5H7XMKqXX3xJOJqKHqzN"
       crossorigin="anonymous"
+      defer
     ></script>
     <script
+      data-lazy="chart"
       src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
       integrity="sha384-5VLbVvGaxKBxvJqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qV"
       crossorigin="anonymous"
+      defer
     ></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -31,7 +35,11 @@
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <!-- Code Editor Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.js"></script>
+    <script
+      data-lazy="monaco"
+      src="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.js"
+      defer
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/view@6/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/state@6/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/commands@6.10.1/dist/index.min.js"></script>
@@ -41,806 +49,556 @@
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-html@6/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-css@6/dist/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-json@6/dist/index.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codemirror/theme-one-dark@6/dist/index.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@codemirror/theme-one-dark@6/dist/index.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
+    />
     <!-- Data Visualization -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script data-lazy="d3" src="https://d3js.org/d3.v7.min.js" defer></script>
+    <script data-lazy="apex" src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
+    <script data-lazy="plotly" src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
     <!-- Security & Utilities -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js" integrity="sha512-VE9f7XWSG7ldPPgS/kkjeaRzJLVtdr8L8c5RJAt3K8SVzcse2lLCLBxMRVur7Oj7M0IMxQKDHTYbgLEQZFzy4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"
+      integrity="sha512-VE9f7XWSG7ldPPgS/kkjeaRzJLVtdr8L8c5RJAt3K8SVzcse2lLCLBxMRVur7Oj7M0IMxQKDHTYbgLEQZFzy4Q==="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <!-- Export/Import -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+    :root { --glass-bg: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
     <!-- Accessibility -->
     <script src="https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js"></script>
     <style>
-      :root {
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
-        --glass-hover: rgba(255, 255, 255, 0.08);
-        --neon-gradient: linear-gradient(45deg, #00d4ff, #7b68ee, #ff0080);
-        --cyber-glow: 0 0 20px rgba(0, 212, 255, 0.3);
-      }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
-        color: #00ff00;
-        padding: 20px;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-      }
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background:
-          radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(123, 104, 238, 0.05) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: 0;
-        animation: quantumShift 10s ease-in-out infinite;
-      }
-      @keyframes quantumShift {
-        0%,
-        100% {
-          opacity: 0.3;
-        }
-        50% {
-          opacity: 0.7;
-        }
-      }
-      h1 {
-        color: #00d4ff;
-        margin-bottom: 20px;
-        text-shadow:
-          0 0 20px #00d4ff,
-          0 0 40px #00d4ff;
-        font-size: 38px;
-        font-weight: 700;
-        background: var(--neon-gradient);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textGlow 3s ease-in-out infinite alternate;
-      }
-      @keyframes textGlow {
-        from {
-          filter: brightness(1);
-        }
-        to {
-          filter: brightness(1.3) drop-shadow(0 0 10px #00d4ff);
-        }
-      }
-      .tabs {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 24px;
-        border-bottom: 2px solid var(--glass-border);
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: blur(20px);
-        backdrop-filter: blur(20px);
-        border-radius: 12px 12px 0 0;
-        padding: 8px;
-      }
-      .tab {
-        padding: 12px 24px;
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: blur(15px);
-        backdrop-filter: blur(15px);
-        border: 1px solid var(--glass-border);
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        color: #00ffff;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-      }
-      .tab.active {
-        color: #fff;
-        background: var(--neon-gradient);
-        box-shadow: var(--cyber-glow);
-        font-weight: 600;
-        border-color: transparent;
-      }
-      .tab:hover {
-        color: #00d4ff;
-        background: var(--glass-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-      }
-      .tab-content {
-        display: none;
-      }
-      .tab-content.active {
-        display: block;
-      }
-      .stats {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 40px;
-      }
-      .stat-card {
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: blur(25px);
-        backdrop-filter: blur(25px);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        box-shadow:
-          var(--cyber-glow),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        text-align: center;
-        flex: 1;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-      }
-      .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.6s;
-      }
-      .stat-card:hover::before {
-        left: 100%;
-      }
-      .stat-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow:
-          0 0 40px rgba(0, 212, 255, 0.6),
-          inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        border-color: var(--glass-hover);
-      }
-      .stat-card h3 {
-        margin: 0;
-        font-size: 16px;
-        color: #00ffff;
-      }
-      .stat-card p {
-        margin: 5px 0 0;
-        font-size: 24px;
-        font-weight: bold;
-        color: #00ff00;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-      }
-      .card {
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: blur(25px);
-        backdrop-filter: blur(25px);
-        border: 1px solid var(--glass-border);
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow:
-          var(--cyber-glow),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-      }
-      .card:hover {
-        background: var(--glass-hover);
-        box-shadow:
-          0 0 30px rgba(0, 212, 255, 0.5),
-          inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        transform: translateY(-2px);
-      }
-      .card h2 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        color: #00ff00;
-      }
-      .actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      } column;
-        gap: 0.75rem;
-      }
-      button {
-        padding: 0.75rem;
-        border-radius: 8px;
-        border: 1px solid var(--glass-border);
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: blur(15px);
-        backdrop-filter: blur(15px);
-        color: #00ff00;
-        font-weight: bold;
-        position: relative;
-        overflow: hidden;
-      }
-      button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
-        transition: left 0.5s;
-      }
-      button:hover::before {
-        left: 100%;
-      }
-      button:hover {
-        background: var(--neon-gradient);
-        color: #fff;
-        box-shadow: var(--cyber-glow);
-        transform: translateY(-2px) scale(1.02);
-        border-color: transparent;
-      }
-      .activity-item {
-        border-left: 4px solid #00ff00;
-        padding-left: 12px;
-        margin-bottom: 12px;
-      }
-      .activity-item p {
-        margin: 4px 0;
-        color: #00ff00;
-      }
-      .activity-item .time {
-        color: #00ffff;
-        font-size: 12px;
-      }
-      .search-box {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        border-radius: 8px;
-        color: #00ff00;
-        font-size: 16px;
-        margin-bottom: 20px;
-      }
-      .filter-btn {
-        padding: 8px 16px;
-        margin-right: 8px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        background: rgba(0, 255, 255, 0.2);
-        color: #00ffff;
-      }
-      .filter-btn.active {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: #fff;
-      }
-      .item {
-        background: rgba(10, 10, 15, 0.8);
-        padding: 16px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(0, 255, 0, 0.3);
-      }
-      .item-header {
-        margin-bottom: 8px;
-      }
-      .item-meta {
-        font-size: 12px;
-        color: #00ffff;
-      }
-      .btn-approve {
-        background: #10b981;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 8px;
-      }
-      .btn-reject {
-        background: #ef4444;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 8px;
-      }
-      .btn-warn {
-        background: #f59e0b;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      .chart {
-        height: 200px;
-        background: rgba(0, 255, 0, 0.1);
-        border-radius: 8px;
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-around;
-        padding: 20px;
-      }
-      .bar {
-        width: 30px;
-        background: linear-gradient(to top, #00ff00, #00ffff);
-        border-radius: 4px 4px 0 0;
-      }
-      .status-indicator {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 8px;
-        animation: pulse 2s infinite;
-      }
-      .status-healthy {
-        background: #10b981;
-        box-shadow: 0 0 10px #10b981;
-      }
-      .status-warning {
-        background: #f59e0b;
-        box-shadow: 0 0 10px #f59e0b;
-      }
-      .status-critical {
-        background: #ef4444;
-        box-shadow: 0 0 10px #ef4444;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-      .metric-trend {
-        font-size: 14px;
-        margin-top: 8px;
-      }
-      .trend-up {
-        color: #10b981;
-      }
-      .trend-down {
-        color: #ef4444;
-      }
-      .service-card {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        border-left: 4px solid #00ff00;
-      }
-      .chart-container {
-        position: relative;
-        height: 300px;
-      }
-      .editor-container {
-        display: flex;
-        height: 600px;
-        gap: 16px;
-      }
-      .editor-panel {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        background: #1e1e1e;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .editor-toolbar {
-        background: #252526;
-        padding: 12px;
-        display: flex;
-        gap: 12px;
-        border-bottom: 1px solid #3e3e42;
-      }
-      .editor-toolbar button {
-        background: #0e639c;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-      }
-      .editor-toolbar button:hover {
-        background: #1177bb;
-      }
-      .editor-toolbar select {
-        background: #3c3c3c;
-        color: white;
-        border: 1px solid #555;
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .code-textarea {
-        flex: 1;
-        background: #1e1e1e;
-        color: #d4d4d4;
-        border: none;
-        padding: 16px;
-        font-family: 'Courier New', monospace;
-        font-size: 14px;
-        line-height: 1.6;
-        resize: none;
-      }
-      .code-textarea:focus {
-        outline: none;
-      }
-      .output-panel {
-        width: 400px;
-        background: #252526;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      .output-header {
-        padding: 12px;
-        background: #2d2d30;
-        border-bottom: 1px solid #3e3e42;
-        font-weight: bold;
-        color: #d4d4d4;
-      }
-      .output-content {
-        flex: 1;
-        padding: 16px;
-        overflow-y: auto;
-        font-size: 14px;
-        color: #d4d4d4;
-        font-family: 'Courier New', monospace;
-      }
-      .settings-layout {
-        display: flex;
-        gap: 24px;
-      }
-      .settings-sidebar {
-        width: 200px;
-        max-height: 600px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding-right: 8px;
-      }
-      .settings-sidebar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .settings-sidebar::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-        border-radius: 3px;
-      }
-      .settings-sidebar::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
-      .settings-sidebar::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 255, 0, 0.7);
-      }
-      .settings-nav {
-        width: 100%;
-        text-align: left;
-        padding: 12px 16px;
-        border: none;
-        background: transparent;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        color: #00ff00;
-        transition: all 0.3s;
-        display: block;
-        margin-bottom: 8px;
-      }
-      .settings-nav:hover {
-        background: rgba(0, 255, 0, 0.2);
-      }
-      .settings-nav.active {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: white;
-        font-weight: 600;
-      }
-      .settings-content {
-        flex: 1;
-        max-height: 600px;
-        overflow-y: auto;
-        padding-right: 8px;
-      }
-      .settings-content::-webkit-scrollbar {
-        width: 6px;
-      }
-      .settings-content::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-        border-radius: 3px;
-      }
-      .settings-content::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
-      .settings-content::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 255, 0, 0.7);
-      }
-      .settings-panel {
-        display: none;
-      }
-      .settings-panel.active {
-        display: block;
-      }
-      .form-group {
-        margin-bottom: 16px;
-      }
-      .form-group label {
-        display: block;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 8px;
-        color: #00ffff;
-      }
-      .form-group input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #00ff00;
-      }
-      .save-btn {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: white;
-        padding: 10px 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 8px;
-        transition: all 0.3s;
-        font-weight: bold;
-      }
-      .save-btn:hover {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-      }
-      .success-msg {
-        background: rgba(16, 185, 129, 0.2);
-        color: #10b981;
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        border: 1px solid #10b981;
-      }
-      .api-key-item {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(0, 255, 0, 0.3);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .api-key-text {
-        font-family: 'Courier New', monospace;
-        color: #00ffff;
-        font-size: 12px;
-      }
-      .btn-danger {
-        background: #ef4444;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-      }
-      .btn-secondary {
-        background: #6b7280;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        margin-left: 8px;
-      }
-      .theme-option {
-        display: inline-block;
-        width: 80px;
-        height: 60px;
-        border-radius: 8px;
-        margin-right: 12px;
-        cursor: pointer;
-        border: 3px solid transparent;
-        transition: all 0.3s;
-      }
-      .theme-option.active {
-        border-color: #00ff00;
-        box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-      }
-      .theme-dark {
-        background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
-      }
-      .theme-light {
-        background: linear-gradient(135deg, #f0f0f0, #ffffff);
-      }
-      .theme-neon {
-        background: linear-gradient(135deg, #ff00ff, #00ffff);
-      }
-      .qr-code {
-        width: 150px;
-        height: 150px;
-        background: white;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #000;
-        font-weight: bold;
-        margin: 16px 0;
-      }
-      .session-item {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        border-left: 4px solid #00ffff;
-      }
-      select.form-select {
-        width: 100%;
-        padding: 10px 12px;
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #00ff00;
-      }
-      .webhook-item {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(0, 255, 0, 0.3);
-      }
-      .integration-card {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 16px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(0, 255, 0, 0.3);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .backup-code {
-        font-family: 'Courier New', monospace;
-        background: rgba(0, 255, 0, 0.1);
-        padding: 8px 12px;
-        border-radius: 4px;
-        color: #00ff00;
-        font-size: 14px;
-        display: inline-block;
-        margin: 4px;
-      }
-      .audit-log {
-        background: rgba(10, 10, 15, 0.6);
-        padding: 10px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        border-left: 3px solid #00ffff;
-        font-size: 13px;
-      }
-      .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-      }
-      .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #6b7280;
-        transition: 0.4s;
-        border-radius: 24px;
-      }
-      .slider:before {
-        position: absolute;
-        content: '';
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-      input:checked + .slider {
-        background-color: #10b981;
-      }
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
-      .notif-item {
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 0, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.05);
-        border-left: 3px solid #00ffff;
-      }
-      #notif-dropdown::-webkit-scrollbar {
-        width: 6px;
-      }
-      #notif-dropdown::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-      }
-      #notif-dropdown::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
-      @media (max-width: 768px) {
-        .grid {
-          grid-template-columns: 1fr;
-        }
-        .stats {
-          flex-direction: column;
-        }
-        .editor-container {
-          flex-direction: column;
-          height: auto;
-        }
-        .output-panel {
-          width: 100%;
-        }
-        .settings-layout {
-          flex-direction: column;
-        }
-        .settings-sidebar {
-          width: 100%;
-        }
-        #notif-dropdown {
-          width: 320px;
-        }
-      }
+      --glass-hover: rgba(255, 255, 255, 0.08);
+              --neon-gradient: linear-gradient(45deg, #00d4ff, #7b68ee, #ff0080);
+              --cyber-glow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            * { margin: 0;
+              padding: 0;
+              box-sizing: border-box; }
+            body { font-family: 'Segoe UI', sans-serif;
+              background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
+              color: #00ff00;
+              padding: 20px;
+              min-height: 100vh;
+              position: relative;
+              overflow-x: hidden; }
+            body::before { content: '';
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background:
+                radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(123, 104, 238, 0.05) 0%, transparent 50%);
+              pointer-events: none;
+              z-index: 0;
+              animation: quantumShift 10s ease-in-out infinite; }
+            @keyframes quantumShift { 0%,
+              100% { opacity: 0.3; }
+              50% { opacity: 0.7; } }
+            h1 {
+              color: #ffffff;
+              margin-bottom: 20px;
+              font-size: 38px;
+              font-weight: 700;
+            }
+            @keyframes textGlow { from { filter: brightness(1); }
+              to { filter: brightness(1.3) drop-shadow(0 0 10px #00d4ff); } }
+            .tabs { display: flex;
+              gap: 8px;
+              margin-bottom: 24px;
+              border-bottom: 2px solid var(--glass-border);
+              background: var(--glass-bg);
+              -webkit-backdrop-filter: blur(20px);
+              backdrop-filter: blur(20px);
+              border-radius: 12px 12px 0 0;
+              padding: 8px; }
+            .tab { padding: 12px 24px;
+              background: var(--glass-bg);
+              -webkit-backdrop-filter: blur(15px);
+              backdrop-filter: blur(15px);
+              border: 1px solid var(--glass-border);
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 16px;
+              color: #00ffff;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative; }
+            .tab.active { color: #fff;
+              background: var(--neon-gradient);
+              box-shadow: var(--cyber-glow);
+              font-weight: 600;
+              border-color: transparent; }
+            .tab:hover { color: #00d4ff;
+              background: var(--glass-hover);
+              transform: translateY(-2px);
+              box-shadow: 0 0 15px rgba(0, 212, 255, 0.3); }
+            .tab-content { display: none; }
+            .tab-content.active { display: block; }
+            .stats { display: flex;
+              gap: 20px;
+              margin-bottom: 40px; }
+            .stat-card { background: var(--glass-bg);
+              -webkit-backdrop-filter: blur(25px);
+              backdrop-filter: blur(25px);
+              border: 1px solid var(--glass-border);
+              border-radius: 12px;
+              box-shadow:
+                var(--cyber-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              padding: 20px;
+              text-align: center;
+              flex: 1;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden; }
+            .stat-card::before { content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+              transition: left 0.6s; }
+            .stat-card:hover::before { left: 100%; }
+            .stat-card:hover { transform: translateY(-8px) scale(1.02);
+              box-shadow:
+                0 0 40px rgba(0, 212, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+              border-color: var(--glass-hover); }
+            .stat-card h3 { margin: 0;
+              font-size: 16px;
+              color: #00ffff; }
+            .stat-card p { margin: 5px 0 0;
+              font-size: 24px;
+              font-weight: bold;
+              color: #00ff00; }
+            .grid { display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 1.5rem; }
+            .card { background: var(--glass-bg);
+              -webkit-backdrop-filter: blur(25px);
+              backdrop-filter: blur(25px);
+              border: 1px solid var(--glass-border);
+              padding: 1.5rem;
+              border-radius: 12px;
+              box-shadow:
+                var(--cyber-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative; }
+            .card:hover { background: var(--glass-hover);
+              box-shadow:
+                0 0 30px rgba(0, 212, 255, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+              transform: translateY(-2px); }
+            .card h2 { font-size: 1.25rem;
+              font-weight: bold;
+              margin-bottom: 1rem;
+              color: #00ff00; }
+            .actions { display: flex;
+              flex-direction: column;
+              gap: 0.75rem; }
+            button { padding: 0.75rem;
+              border-radius: 8px;
+              border: 1px solid var(--glass-border);
+              cursor: pointer;
+              font-size: 14px;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              background: var(--glass-bg);
+              -webkit-backdrop-filter: blur(15px);
+              backdrop-filter: blur(15px);
+              color: #00ff00;
+              font-weight: bold;
+              position: relative;
+              overflow: hidden; }
+            .btn-blue { background: linear-gradient(135deg, #0ea5e9, #3b82f6); color: #fff; }
+            .btn-purple { background: linear-gradient(135deg, #a855f7, #8b5cf6); color: #fff; }
+            .btn-green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+            button::before { content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+              transition: left 0.5s; }
+            button:hover::before { left: 100%; }
+            button:hover { background: var(--neon-gradient);
+              color: #fff;
+              box-shadow: var(--cyber-glow);
+              transform: translateY(-2px) scale(1.02);
+              border-color: transparent; }
+            .activity-item { border-left: 4px solid #00ff00;
+              padding-left: 12px;
+              margin-bottom: 12px; }
+            .activity-item p { margin: 4px 0;
+              color: #00ff00; }
+            .activity-item .time { color: #00ffff;
+              font-size: 12px; }
+            .search-box { width: 100%;
+              padding: 12px;
+              border: 2px solid transparent;
+              background-image:
+                linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+                linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+              background-origin: border-box;
+              background-clip: padding-box, border-box;
+              border-radius: 8px;
+              color: #00ff00;
+              font-size: 16px;
+              margin-bottom: 20px; }
+            .filter-btn { padding: 8px 16px;
+              margin-right: 8px;
+              border-radius: 6px;
+              border: none;
+              cursor: pointer;
+              background: rgba(0, 255, 255, 0.2);
+              color: #00ffff; }
+            .filter-btn.active { background: linear-gradient(135deg, #00ffff, #ff00ff);
+              color: #fff; }
+            .item { background: rgba(10, 10, 15, 0.8);
+              padding: 16px;
+              border-radius: 8px;
+              margin-bottom: 12px;
+              border: 1px solid rgba(0, 255, 0, 0.3); }
+            .item-header { margin-bottom: 8px; }
+            .item-meta { font-size: 12px;
+              color: #00ffff; }
+            .btn-approve { background: #10b981;
+              color: white;
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              margin-right: 8px; }
+            .btn-reject { background: #ef4444;
+              color: white;
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              margin-right: 8px; }
+            .btn-warn { background: #f59e0b;
+              color: white;
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer; }
+            .chart { height: 200px;
+              background: rgba(0, 255, 0, 0.1);
+              border-radius: 8px;
+              display: flex;
+              align-items: flex-end;
+              justify-content: space-around;
+              padding: 20px; }
+            .bar { width: 30px;
+              background: linear-gradient(to top, #00ff00, #00ffff);
+              border-radius: 4px 4px 0 0; }
+            .status-indicator { width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              display: inline-block;
+              margin-right: 8px;
+              animation: pulse 2s infinite; }
+            .status-healthy { background: #10b981;
+              box-shadow: 0 0 10px #10b981; }
+            .status-warning { background: #f59e0b;
+              box-shadow: 0 0 10px #f59e0b; }
+            .status-critical { background: #ef4444;
+              box-shadow: 0 0 10px #ef4444; }
+            @keyframes pulse { 0%,
+              100% { opacity: 1; }
+              50% { opacity: 0.5; } }
+            .metric-trend { font-size: 14px;
+              margin-top: 8px; }
+            .trend-up { color: #10b981; }
+            .trend-down { color: #ef4444; }
+            .service-card { background: rgba(10, 10, 15, 0.6);
+              padding: 12px;
+              border-radius: 6px;
+              margin-bottom: 8px;
+              border-left: 4px solid #00ff00; }
+            .chart-container { position: relative;
+              height: 300px; }
+            .editor-container { display: flex;
+              height: 600px;
+              gap: 16px; }
+            .editor-panel { flex: 1;
+              display: flex;
+              flex-direction: column;
+              background: #1e1e1e;
+              border-radius: 8px;
+              overflow: hidden; }
+            .editor-toolbar { background: #252526;
+              padding: 12px;
+              display: flex;
+              gap: 12px;
+              border-bottom: 1px solid #3e3e42; }
+            .editor-toolbar button { background: #0e639c;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 12px; }
+            .editor-toolbar button:hover { background: #1177bb; }
+            .editor-toolbar select { background: #3c3c3c;
+              color: white;
+              border: 1px solid #555;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 12px; }
+            .code-textarea { flex: 1;
+              background: #1e1e1e;
+              color: #d4d4d4;
+              border: none;
+              padding: 16px;
+              font-family: 'Courier New', monospace;
+              font-size: 14px;
+              line-height: 1.6;
+              resize: none; }
+            .code-textarea:focus { outline: none; }
+            .output-panel { width: 400px;
+              background: #252526;
+              border-radius: 8px;
+              display: flex;
+              flex-direction: column;
+              overflow: hidden; }
+            .output-header { padding: 12px;
+              background: #2d2d30;
+              border-bottom: 1px solid #3e3e42;
+              font-weight: bold;
+              color: #d4d4d4; }
+            .output-content { flex: 1;
+              padding: 16px;
+              overflow-y: auto;
+              font-size: 14px;
+              color: #d4d4d4;
+              font-family: 'Courier New', monospace; }
+            .settings-layout { display: flex;
+              gap: 24px; }
+            .settings-sidebar { width: 200px;
+              max-height: 600px;
+              overflow-y: auto;
+              overflow-x: hidden;
+              padding-right: 8px; }
+            .settings-sidebar::-webkit-scrollbar { width: 6px; }
+            .settings-sidebar::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1);
+              border-radius: 3px; }
+            .settings-sidebar::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+              border-radius: 3px; }
+            .settings-sidebar::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 0, 0.7); }
+            .settings-nav { width: 100%;
+              text-align: left;
+              padding: 12px 16px;
+              border: none;
+              background: transparent;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 14px;
+              color: #00ff00;
+              transition: all 0.3s;
+              display: block;
+              margin-bottom: 8px; }
+            .settings-nav:hover { background: rgba(0, 255, 0, 0.2); }
+            .settings-nav.active { background: linear-gradient(135deg, #00ffff, #ff00ff);
+              color: white;
+              font-weight: 600; }
+            .settings-content { flex: 1;
+              max-height: 600px;
+              overflow-y: auto;
+              padding-right: 8px; }
+            .settings-content::-webkit-scrollbar { width: 6px; }
+            .settings-content::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1);
+              border-radius: 3px; }
+            .settings-content::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+              border-radius: 3px; }
+            .settings-content::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 0, 0.7); }
+            .settings-panel { display: none; }
+            .settings-panel.active { display: block; }
+            .form-group { margin-bottom: 16px; }
+            .form-group label { display: block;
+              font-size: 14px;
+              font-weight: 500;
+              margin-bottom: 8px;
+              color: #00ffff; }
+            .form-group input { width: 100%;
+              padding: 10px 12px;
+              border: 2px solid transparent;
+              background-image:
+                linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+                linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+              background-origin: border-box;
+              background-clip: padding-box, border-box;
+              border-radius: 4px;
+              font-size: 14px;
+              color: #00ff00; }
+            .save-btn { background: linear-gradient(135deg, #00ffff, #ff00ff);
+              color: white;
+              padding: 10px 16px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              margin-top: 8px;
+              transition: all 0.3s;
+              font-weight: bold; }
+            .save-btn:hover { background: linear-gradient(135deg, #ff00ff, #ffff00); }
+            .success-msg { background: rgba(16, 185, 129, 0.2);
+              color: #10b981;
+              padding: 12px;
+              border-radius: 6px;
+              margin-bottom: 16px;
+              font-size: 14px;
+              border: 1px solid #10b981; }
+            .api-key-item { background: rgba(10, 10, 15, 0.6);
+              padding: 12px;
+              border-radius: 6px;
+              margin-bottom: 12px;
+              border: 1px solid rgba(0, 255, 0, 0.3);
+              display: flex;
+              justify-content: space-between;
+              align-items: center; }
+            .api-key-text { font-family: 'Courier New', monospace;
+              color: #00ffff;
+              font-size: 12px; }
+            .btn-danger { background: #ef4444;
+              color: white;
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 12px; }
+            .btn-secondary { background: #6b7280;
+              color: white;
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 12px;
+              margin-left: 8px; }
+            .theme-option { display: inline-block;
+              width: 80px;
+              height: 60px;
+              border-radius: 8px;
+              margin-right: 12px;
+              cursor: pointer;
+              border: 3px solid transparent;
+              transition: all 0.3s; }
+            .theme-option.active { border-color: #00ff00;
+              box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+            .theme-dark { background: linear-gradient(135deg, #0a0a0f, #1a1a2e); }
+            .theme-light { background: linear-gradient(135deg, #f0f0f0, #ffffff); }
+            .theme-neon { background: linear-gradient(135deg, #ff00ff, #00ffff); }
+            .qr-code { width: 150px;
+              height: 150px;
+              background: white;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #000;
+              font-weight: bold;
+              margin: 16px 0; }
+            .session-item { background: rgba(10, 10, 15, 0.6);
+              padding: 12px;
+              border-radius: 6px;
+              margin-bottom: 8px;
+              border-left: 4px solid #00ffff; }
+            select.form-select { width: 100%;
+              padding: 10px 12px;
+              border: 2px solid transparent;
+              background-image:
+                linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+                linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+              background-origin: border-box;
+              background-clip: padding-box, border-box;
+              border-radius: 4px;
+              font-size: 14px;
+              color: #00ff00; }
+            .webhook-item { background: rgba(10, 10, 15, 0.6);
+              padding: 12px;
+              border-radius: 6px;
+              margin-bottom: 12px;
+              border: 1px solid rgba(0, 255, 0, 0.3); }
+            .integration-card { background: rgba(10, 10, 15, 0.6);
+              padding: 16px;
+              border-radius: 8px;
+              margin-bottom: 12px;
+              border: 1px solid rgba(0, 255, 0, 0.3);
+              display: flex;
+              justify-content: space-between;
+              align-items: center; }
+            .backup-code { font-family: 'Courier New', monospace;
+              background: rgba(0, 255, 0, 0.1);
+              padding: 8px 12px;
+              border-radius: 4px;
+              color: #00ff00;
+              font-size: 14px;
+              display: inline-block;
+              margin: 4px; }
+            .audit-log { background: rgba(10, 10, 15, 0.6);
+              padding: 10px;
+              border-radius: 6px;
+              margin-bottom: 8px;
+              border-left: 3px solid #00ffff;
+              font-size: 13px; }
+            .toggle-switch { position: relative;
+              display: inline-block;
+              width: 50px;
+              height: 24px; }
+            .toggle-switch input { opacity: 0;
+              width: 0;
+              height: 0; }
+            .slider { position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #6b7280;
+              transition: 0.4s;
+              border-radius: 24px; }
+            .slider:before { position: absolute;
+              content: '';
+              height: 18px;
+              width: 18px;
+              left: 3px;
+              bottom: 3px;
+              background-color: white;
+              transition: 0.4s;
+              border-radius: 50%; }
+            input:checked + .slider { background-color: #10b981; }
+            input:checked + .slider:before { transform: translateX(26px); }
+            .notif-item { padding: 12px 16px;
+              border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+              cursor: pointer;
+              transition: background 0.2s; }
+            .notif-item:hover { background: rgba(0, 255, 0, 0.05); }
+            .notif-item.unread { background: rgba(0, 255, 255, 0.05);
+              border-left: 3px solid #00ffff; }
+            #notif-dropdown::-webkit-scrollbar { width: 6px; }
+            #notif-dropdown::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1); }
+            #notif-dropdown::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+              border-radius: 3px; }
+            @media (max-width: 768px) { .grid { grid-template-columns: 1fr; }
+              .stats { flex-direction: column; }
+              .editor-container { flex-direction: column;
+                height: auto; }
+              .output-panel { width: 100%; }
+              .settings-layout { flex-direction: column; }
+              .settings-sidebar { width: 100%; }
+              #notif-dropdown { width: 320px; } }
     </style>
 
     <style>
@@ -871,347 +629,222 @@
         width: 105% !important;
       }
     </style>
+    <link rel="stylesheet" href="design-system.css" />
   </head>
   <body>
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
-      <div
-        style="
-          padding: 12px 20px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        "
-      >
-        <div style="display: flex; align-items: center; gap: 24px">
-          <a
-            href="index.html"
-            style="
-              font-size: 18px;
-              font-weight: bold;
-              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              text-decoration: none;
-            "
-            >🦉 HOOTNER</a
+    <!-- HOOTNER Unified Dashboard Header -->
+    <style>
+      .dashboard-header {
+        background: var(--color-bg-secondary);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-md);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .dashboard-nav {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .nav-btn {
+        padding: var(--space-xs) var(--space-md);
+        background: var(--color-bg-tertiary);
+        color: var(--color-text-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        transition: all var(--transition-fast);
+        cursor: pointer;
+      }
+
+      .nav-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      .nav-btn.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      .notification-bell {
+        position: relative;
+        margin-left: auto;
+        padding: var(--space-sm);
+        background: var(--color-bg-tertiary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+
+      .notification-bell:hover {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+      }
+
+      .notification-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        background: var(--color-error);
+        color: white;
+        border-radius: var(--radius-full);
+        padding: 1px 4px;
+        font-size: 0.5rem;
+        font-weight: bold;
+        min-width: 12px;
+        text-align: center;
+      }
+
+      .notification-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: var(--space-sm);
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        min-width: 250px;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+      }
+
+      .notification-dropdown.show {
+        display: block;
+      }
+
+      .notification-item {
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--color-border);
+        cursor: pointer;
+        transition: background var(--transition-fast);
+      }
+
+      .notification-item:hover {
+        background: var(--color-bg-tertiary);
+      }
+
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+
+      .notification-item.unread {
+        background: rgba(59, 130, 246, 0.05);
+      }
+
+      .notification-title {
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: var(--space-xs);
+      }
+
+      .notification-text {
+        font-size: var(--font-size-xs);
+        color: var(--color-text-secondary);
+      }
+
+      .notification-time {
+        font-size: 0.5rem;
+        color: var(--color-text-muted);
+        margin-top: var(--space-xs);
+      }
+    </style>
+
+    <div class="dashboard-header">
+      <nav class="dashboard-nav">
+        <a href="dashboard.html" class="nav-btn">Dashboard</a>
+        <a href="video-player.html" class="nav-btn">Video Player</a>
+        <a href="code-editor.html" class="nav-btn">Code Editor</a>
+        <a href="marketplace.html" class="nav-btn">Marketplace</a>
+        <a href="profile.html" class="nav-btn">Profile</a>
+        <a href="settings.html" class="nav-btn">Settings</a>
+        <a href="feed-react.html" class="nav-btn">Feed</a>
+        <a href="login.html" class="nav-btn">Login</a>
+        <a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+        <a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+        <a href="design-showcase.html" class="nav-btn">Showcase</a>
+        <a href="test-page-clean.html" class="nav-btn">Test</a>
+
+        <div class="notification-bell" id="notificationBell">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-          <div style="position: relative">
-            <button
-              onclick="toggleNotifications()"
-              style="
-                background: none;
-                border: none;
-                color: #00ffff;
-                cursor: pointer;
-                font-size: 16px;
-                padding: 8px 12px;
-                position: relative;
-              "
-              title="Notifications"
-            >
-              🔔
-              <span
-                id="notif-badge"
-                style="
-                  position: absolute;
-                  top: 2px;
-                  right: 2px;
-                  background: #ef4444;
-                  color: white;
-                  border-radius: 50%;
-                  width: 14px;
-                  height: 14px;
-                  font-size: 9px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-weight: bold;
-                "
-                >3</span
-              >
-            </button>
-            <div
-              id="notif-dropdown"
-              style="
-                display: none;
-                position: fixed;
-                top: 60px;
-                right: 20px;
-                width: 400px;
-                max-width: calc(100vw - 40px);
-                max-height: calc(100vh - 80px);
-                background: rgba(10, 10, 15, 0.98);
-                border: 2px solid rgba(0, 255, 0, 0.3);
-                border-radius: 8px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-                z-index: 9999;
-                flex-direction: column;
-                overflow: hidden;
-              "
-            >
-              <div
-                style="
-                  padding: 12px 16px;
-                  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-                  flex-shrink: 0;
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 12px;
-                  "
-                >
-                  <h3 style="color: #00ff00; font-size: 16px; font-weight: bold; margin: 0">
-                    Notifications
-                  </h3>
-                  <div style="display: flex; gap: 8px; align-items: center">
-                    <button
-                      onclick="toggleNotifSound()"
-                      id="sound-btn"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 16px;
-                      "
-                      title="Toggle sound"
-                    >
-                      🔔
-                    </button>
-                    <button
-                      onclick="clearAllNotifications()"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #ef4444;
-                        cursor: pointer;
-                        font-size: 16px;
-                      "
-                      title="Clear all"
-                    >
-                      🗑️
-                    </button>
-                    <button
-                      onclick="markAllRead()"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 12px;
-                      "
-                    >
-                      Mark all read
-                    </button>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  id="notif-search"
-                  oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 1px solid rgba(0, 255, 0, 0.3);
-                    border-radius: 4px;
-                    color: #00ff00;
-                    font-size: 13px;
-                    margin-bottom: 8px;
-                  "
-                />
-                <div style="display: flex; gap: 4px; flex-wrap: wrap">
-                  <button
-                    class="notif-filter active"
-                    data-filter="all"
-                    onclick="setNotifFilter('all')"
-                    style="
-                      padding: 4px 12px;
-                      background: rgba(0, 255, 255, 0.2);
-                      border: 1px solid rgba(0, 255, 255, 0.3);
-                      border-radius: 12px;
-                      color: #00ffff;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    All
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="like"
-                    onclick="setNotifFilter('like')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    ❤️ Likes
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="comment"
-                    onclick="setNotifFilter('comment')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    💬 Comments
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="follow"
-                    onclick="setNotifFilter('follow')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    👤 Follows
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="system"
-                    onclick="setNotifFilter('system')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    ⚠️ System
-                  </button>
-                </div>
-              </div>
-              <div
-                id="notif-list"
-                style="
-                  flex: 1;
-                  overflow-y: auto;
-                  min-height: 200px;
-                  max-height: calc(100vh - 280px);
-                "
-              ></div>
-              <div
-                style="
-                  padding: 12px;
-                  text-align: center;
-                  border-top: 1px solid rgba(0, 255, 0, 0.2);
-                  display: flex;
-                  gap: 8px;
-                  justify-content: center;
-                "
-              >
-                <button
-                  onclick="loadMoreNotifications()"
-                  style="
-                    background: none;
-                    border: none;
-                    color: #00ffff;
-                    font-size: 13px;
-                    cursor: pointer;
-                    text-decoration: underline;
-                  "
-                >
-                  Load more
-                </button>
-                <span style="color: #6b7280">•</span>
-                <a href="#" style="color: #00ffff; font-size: 13px; text-decoration: none"
-                  >View all</a
-                >
-              </div>
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge" id="notificationCount">3</span>
+
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-item unread">
+              <div class="notification-title">New deployment ready</div>
+              <div class="notification-text">Your production build is ready to deploy</div>
+              <div class="notification-time">2 minutes ago</div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-title">Security scan complete</div>
+              <div class="notification-text">No vulnerabilities found in latest scan</div>
+              <div class="notification-time">15 minutes ago</div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-title">Backup completed</div>
+              <div class="notification-text">Database backup finished successfully</div>
+              <div class="notification-time">1 hour ago</div>
             </div>
           </div>
         </div>
-        <div class="flex gap-2 items-center">
-          <a
-            href="profile.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >👤 Profile</a
-          >
-          <a
-            href="design-showcase.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >🎨 Design</a
-          >
-          <a
-            href="feed.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >📰 Social</a
-          >
-          <a
-            href="marketplace.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >🛒 Marketplace</a
-          >
-          <a
-            href="dashboard.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-green-400 font-medium"
-            >📈 Dashboard</a
-          >
-          <a
-            href="video-player.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >▶️ Video</a
-          >
-          <a
-            href="auto-editor.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
-          >
-          <a
-            href="code-editor.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >💻 Code</a
-          >
-          <a
-            href="settings.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >⚙️ Settings</a
-          >
-          <a
-            href="login.html"
-            style="font-size: 14px; text-decoration: none; padding: 8px 12px"
-            class="text-slate-300 hover:text-white"
-            >🔐 Login</a
-          >
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
+
+    <script>
+      (function () {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          if (btn.getAttribute('href') === currentPage) {
+            btn.classList.add('active');
+          }
+        });
+
+        const bell = document.getElementById('notificationBell');
+        const dropdown = document.getElementById('notificationDropdown');
+        const badge = document.getElementById('notificationCount');
+
+        bell.addEventListener('click', e => {
+          e.stopPropagation();
+          dropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+          dropdown.classList.remove('show');
+        });
+
+        document.querySelectorAll('.notification-item').forEach(item => {
+          item.addEventListener('click', function () {
+            this.classList.remove('unread');
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            badge.textContent = unreadCount;
+            badge.style.display = unreadCount > 0 ? 'block' : 'none';
+          });
+        });
+      })();
+    </script>
+
+    <!-- OLD NAV REMOVED -->
 
     <div style="padding: 20px">
       <h1>Dashboard</h1>
@@ -2204,7 +1837,12 @@ console.log('Hello, HOOTNER!');</textarea
                     margin-bottom: 12px;
                   "
                 >
-                  <select class="form-select" id="api-method" style="margin-bottom: 8px" aria-label="HTTP method">
+                  <select
+                    class="form-select"
+                    id="api-method"
+                    style="margin-bottom: 8px"
+                    aria-label="HTTP method"
+                  >
                     <option>GET</option>
                     <option>POST</option>
                     <option>PUT</option>
@@ -2287,7 +1925,7 @@ console.log('Hello, HOOTNER!');</textarea
                       margin-bottom: 8px;
                     "
                   >
-query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
+query {\n  users {\n    id\n    name\n    email\n }\n}</textarea
                   >
                   <button class="save-btn" onclick="runGraphQL()">▶️ Execute Query</button>
                   <button class="btn-secondary" onclick="openGraphiQL()">🔗 Open GraphiQL</button>
@@ -2924,354 +2562,521 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
       <script src="../../../lib/csp-reporter.js"></script>
 
       <script>
-            // Security: HTML sanitization helper
-            const sanitize = (html) => {
-              if (typeof DOMPurify !== 'undefined') {
-                return DOMPurify.sanitize(html, {
-                  ALLOWED_TAGS: ['strong', 'p', 'span', 'div', 'h3', 'button'],
-                  ALLOWED_ATTR: ['class', 'style', 'onclick']
-                });
-              }
-              // Fallback: escape HTML
-              const div = document.createElement('div');
-              div.textContent = html;
-              return div.innerHTML;
-            };
+        // Security: HTML sanitization helper
+        const sanitize = html => {
+          if (typeof DOMPurify !== 'undefined') {
+            return DOMPurify.sanitize(html, {
+              ALLOWED_TAGS: ['strong', 'p', 'span', 'div', 'h3', 'button'],
+              ALLOWED_ATTR: ['class', 'style', 'onclick'],
+            });
+          }
+          // Fallback: escape HTML
+          const div = document.createElement('div');
+          div.textContent = html;
+          return div.innerHTML;
+        };
 
-            let socket, trafficChart, engagementChart;
+        let socket, trafficChart, engagementChart;
 
-            function showTab(tab) {
-              document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-              document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-              event.target.classList.add('active');
-              document.getElementById(tab).classList.add('active');
-              if (tab === 'analytics' && !trafficChart) initCharts();
-            }
+        function showTab(tab) {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          event.target.classList.add('active');
+          document.getElementById(tab).classList.add('active');
+          if (tab === 'analytics' && !trafficChart) loadChartLibs().then(initCharts);
+          if (tab === 'code') loadMonaco();
+        }
 
-            function initCharts() {
-              const chartConfig = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#00ff00' } } }, scales: { y: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(0,255,0,0.1)' } }, x: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(0,255,0,0.1)' } } } };
+        function loadChartLibs() {
+          return Promise.all([
+            loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
+            loadScript('https://d3js.org/d3.v7.min.js'),
+            loadScript('https://cdn.jsdelivr.net/npm/apexcharts'),
+            loadScript('https://cdn.plot.ly/plotly-latest.min.js'),
+          ]);
+        }
 
-              trafficChart = new Chart(document.getElementById('trafficChart'), {
-                type: 'line',
-                data: {
-                  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                  datasets: [{ label: 'Page Views', data: [1200, 1900, 1500, 2200, 1800, 2400, 2100], borderColor: '#00ff00', backgroundColor: 'rgba(0,255,0,0.1)', tension: 0.4 }]
+        function loadMonaco() {
+          if (window.monaco) return;
+          loadScript('https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.js');
+        }
+
+        function loadScript(src) {
+          return new Promise((resolve, reject) => {
+            if (document.querySelector(`script[src="${src}"]`)) return resolve();
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+
+        function initCharts() {
+          const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#00ff00' } } },
+            scales: {
+              y: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(0,255,0,0.1)' } },
+              x: { ticks: { color: '#00ffff' }, grid: { color: 'rgba(0,255,0,0.1)' } },
+            },
+          };
+
+          trafficChart = new Chart(document.getElementById('trafficChart'), {
+            type: 'line',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              datasets: [
+                {
+                  label: 'Page Views',
+                  data: [1200, 1900, 1500, 2200, 1800, 2400, 2100],
+                  borderColor: '#00ff00',
+                  backgroundColor: 'rgba(0,255,0,0.1)',
+                  tension: 0.4,
                 },
-                options: chartConfig
-              });
-
-              engagementChart = new Chart(document.getElementById('engagementChart'), {
-                type: 'doughnut',
-                data: {
-                  labels: ['Videos', 'Posts', 'Comments', 'Shares'],
-                  datasets: [{ data: [45, 25, 20, 10], backgroundColor: ['#00ff00', '#00ffff', '#ff00ff', '#ffff00'] }]
-                },
-                options: { ...chartConfig, scales: undefined }
-              });
-            }
-
-            function moderateContent(id, action) {
-              const item = document.querySelector(`[data-id="${id}"]`);
-              item.style.opacity = '0.5';
-              setTimeout(() => {
-                item.remove();
-                const count = document.querySelectorAll('#moderation-queue .item').length;
-                document.getElementById('pending-count').textContent = count;
-              }, 500);
-            }
-
-            function connectWebSocket() {
-              try {
-                socket = io('http://localhost:3000', { transports: ['websocket', 'polling'] });
-                socket.on('connect', () => console.log('✓ WebSocket connected'));
-                socket.on('metrics', updateMetrics);
-                socket.on('activity', addActivity);
-                socket.on('disconnect', () => console.log('✗ WebSocket disconnected'));
-              } catch (e) {
-                console.log('WebSocket unavailable, using mock data');
-                startMockUpdates();
-              }
-            }
-
-            function updateMetrics(data) {
-              if (data.posts) document.getElementById('stat-posts').textContent = data.posts;
-              if (data.users) document.getElementById('stat-users').textContent = data.users.toLocaleString();
-              if (data.engagement) document.getElementById('stat-engagement').textContent = data.engagement + '%';
-              if (data.revenue) document.getElementById('stat-revenue').textContent = '$' + (data.revenue / 1000).toFixed(1) + 'K';
-            }
-
-            function addActivity(activity) {
-              const feed = document.getElementById('activity-feed');
-              const item = document.createElement('div');
-              item.className = 'activity-item';
-              const safeText = sanitize(activity.text);
-              item.innerHTML = `<p><strong>${safeText}</strong></p><p class="time">Just now</p>`;
-              feed.insertBefore(item, feed.firstChild);
-              if (feed.children.length > 5) feed.removeChild(feed.lastChild);
-            }
-
-            function startMockUpdates() {
-              setInterval(() => {
-                const cpu = Math.floor(Math.random() * 30) + 40;
-                const mem = Math.floor(Math.random() * 20) + 55;
-                const disk = Math.floor(Math.random() * 15) + 35;
-                document.getElementById('cpu-usage').textContent = cpu + '%';
-                document.getElementById('cpu-bar').style.width = cpu + '%';
-                document.getElementById('mem-usage').textContent = mem + '%';
-                document.getElementById('mem-bar').style.width = mem + '%';
-                document.getElementById('disk-usage').textContent = disk + '%';
-                document.getElementById('disk-bar').style.width = disk + '%';
-              }, 3000);
-            }
-
-            function runCode() {
-              const code = document.getElementById('code').value;
-              const output = document.getElementById('output');
-              try {
-                const logs = [];
-                const originalLog = console.log;
-                console.log = (...args) => logs.push(args.join(' '));
-                // Security: Use Function constructor instead of eval
-                const result = (() => {
-                  try {
-                    return new Function('return ' + code)();
-                  } catch (e) {
-                    throw new Error('Code execution failed: ' + e.message);
-                  }
-                })();
-                console.log = originalLog;
-                output.textContent = logs.length ? logs.join('\n') : (result !== undefined ? String(result) : 'Code executed successfully!');
-                output.style.color = '#d4d4d4';
-              } catch (error) {
-                output.textContent = 'Error: ' + error.message;
-                output.style.color = '#f48771';
-              }
-            }
-
-            function clearEditor() {
-              document.getElementById('code').value = '';
-              document.getElementById('output').textContent = 'Run your code to see output here...';
-              document.getElementById('output').style.color = '#d4d4d4';
-            }
-
-            function saveCode() {
-              const code = document.getElementById('code').value;
-              const lang = document.getElementById('language').value.toLowerCase();
-              const ext = { javascript: 'js', python: 'py', html: 'html', css: 'css', json: 'json' }[lang] || 'txt';
-              const blob = new Blob([code], { type: 'text/plain' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `code.${ext}`;
-              a.click();
-              URL.revokeObjectURL(url);
-            }
-
-            function showSettings(panel) {
-              document.querySelectorAll('.settings-nav').forEach(el => el.classList.remove('active'));
-              event.target.classList.add('active');
-              document.querySelectorAll('.settings-panel').forEach(el => el.classList.remove('active'));
-              document.getElementById(panel + '-panel').classList.add('active');
-            }
-
-            function saveProfile() {
-              const username = document.getElementById('username').value;
-              const email = document.getElementById('email').value;
-              // Security: Check length first to prevent ReDoS
-              if (username && (username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_]+$/.test(username))) {
-                alert('Invalid username format');
-                return;
-              }
-              if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert('Invalid email format');
-                return;
-              }
-              showSuccess('Profile updated successfully!');
-            }
-
-            function sendResetLink() {
-              const email = document.getElementById('reset-email').value;
-              if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                document.getElementById('reset-success').style.display = 'block';
-                document.getElementById('reset-email').value = '';
-                setTimeout(() => document.getElementById('reset-success').style.display = 'none', 5000);
-              }
-            }
-
-            function showSuccess(msg) {
-              const div = document.createElement('div');
-              div.className = 'success-msg';
-              div.textContent = msg;
-              div.style.position = 'fixed';
-              div.style.top = '80px';
-              div.style.right = '20px';
-              div.style.zIndex = '1000';
-              document.body.appendChild(div);
-              setTimeout(() => div.remove(), 3000);
-            }
-
-            function enable2FA() {
-              document.getElementById('2fa-disabled').style.display = 'none';
-              document.getElementById('2fa-setup').style.display = 'block';
-            }
-
-            function verify2FA() {
-              const code = document.getElementById('2fa-code').value;
-              if (code.length === 6) {
-                showSuccess('Two-factor authentication enabled!');
-                document.getElementById('2fa-setup').style.display = 'none';
-              }
-            }
-
-            function generateApiKey() {
-              const key = 'hoot_' + Math.random().toString(36).substr(2, 20);
-              showSuccess('New API key generated: ' + key);
-            }
-
-            function copyApiKey(key) {
-              navigator.clipboard.writeText(key);
-              showSuccess('API key copied to clipboard!');
-            }
-
-            function revokeApiKey(type) {
-              if (confirm('Are you sure you want to revoke this API key?')) {
-                showSuccess(type.charAt(0).toUpperCase() + type.slice(1) + ' API key revoked!');
-              }
-            }
-
-            function setTheme(theme) {
-              document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
-              event.target.classList.add('active');
-              showSuccess('Theme changed to ' + theme + '!');
-            }
-
-            function revokeSession(type) {
-              showSuccess('Session revoked successfully!');
-              event.target.closest('.session-item').remove();
-            }
-
-            function revokeAllSessions() {
-              if (confirm('This will log you out from all other devices. Continue?')) {
-                showSuccess('All other sessions revoked!');
-              }
-            }
-
-            function exportData() {
-              showSuccess('Data export request submitted! You\'ll receive an email when ready.');
-            }
-
-            function deleteAccount() {
-              if (confirm('Are you ABSOLUTELY sure? This action cannot be undone!')) {
-                if (confirm('Final confirmation: Delete your account permanently?')) {
-                  showSuccess('Account deletion initiated. You will be logged out shortly.');
-                }
-              }
-            }
-
-            function toggleIntegration(service) {
-              showSuccess(service.charAt(0).toUpperCase() + service.slice(1) + ' integration toggled!');
-            }
-
-            function downloadBackupCodes() {
-              const codes = 'HOOT-A1B2-C3D4\nHOOT-E5F6-G7H8\nHOOT-I9J0-K1L2\nHOOT-M3N4-O5P6\nHOOT-Q7R8-S9T0\nHOOT-U1V2-W3X4\nHOOT-Y5Z6-A7B8\nHOOT-C9D0-E1F2';
-              const blob = new Blob([codes], { type: 'text/plain' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = 'hootner-backup-codes.txt';
-              a.click();
-              URL.revokeObjectURL(url);
-              showSuccess('Backup codes downloaded!');
-            }
-
-            function regenerateBackupCodes() {
-              if (confirm('This will invalidate all existing backup codes. Continue?')) {
-                showSuccess('New backup codes generated!');
-              }
-            }
-
-            function exportAuditLogs() {
-              showSuccess('Audit logs exported successfully!');
-            }
-
-            function downloadSDK(lang) {
-              showSuccess(lang.toUpperCase() + ' SDK download started!');
-            }
-
-            function testAPI() {
-              const method = document.getElementById('api-method').value;
-              const responseDiv = document.getElementById('api-response');
-              responseDiv.style.display = 'block';
-              responseDiv.innerHTML = `<div style="color:#00ff00;margin-bottom:8px;">Status: 200 OK</div><div style="color:#00ffff;">Response Time: 142ms</div><pre style="margin-top:8px;color:#00ff00;">{\n  "success": true,\n  "data": {\n    "id": "usr_123",\n    "name": "Test User"\n  }\n}</pre>`;
-              showSuccess('API request sent successfully!');
-            }
-
-            function runGraphQL() {
-              const query = document.getElementById('graphql-query').value;
-              showSuccess('GraphQL query executed! Check console for results.');
-              console.log('GraphQL Query:', query);
-            }
-
-            function openGraphiQL() {
-              window.open('/graphql/playground', '_blank');
-              showSuccess('Opening GraphiQL playground...');
-            }
-
-            function testWebhook() {
-              showSuccess('Test webhook event sent successfully!');
-            }
-
-            function generatePostmanCollection() {
-              const collection = JSON.stringify({
-                info: { name: 'HOOTNER API', schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json' },
-                item: [{ name: 'Get Users', request: { method: 'GET', url: 'https://api.hootner.com/v1/users' } }]
-              }, null, 2);
-              const blob = new Blob([collection], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = 'hootner-api-collection.json';
-              a.click();
-              URL.revokeObjectURL(url);
-              showSuccess('Postman collection downloaded!');
-            }
-
-            let searchData = {
-              recentSearches: JSON.parse(localStorage.getItem('hootner_recent_searches') || '[]'),
-              viewMode: 'list',
-              all: [
-                { type: 'post', title: 'Building Scalable Microservices with Node.js', content: 'Learn how to build production-ready microservices using Node.js, Docker, and Kubernetes...', author: 'tech_guru', date: '2024-01-15', views: 1247, likes: 89, verified: true, hasMedia: true },
-                { type: 'user', name: 'Sarah Chen', username: 'sarahchen_dev', bio: 'Full-stack developer | Open source contributor | Coffee enthusiast', followers: 5420, verified: true, avatar: '👩‍💻' },
-                { type: 'video', title: 'Advanced React Patterns Tutorial', content: 'Deep dive into advanced React patterns including render props, HOCs, and custom hooks...', author: 'react_master', date: '2024-01-14', views: 8932, duration: '45:23', hasMedia: true },
-                { type: 'marketplace', title: 'Premium UI Kit - 500+ Components', content: 'Professional React component library with dark mode, animations, and TypeScript support...', price: '$49.99', author: 'designpro', rating: 4.8, sales: 342 },
-                { type: 'post', title: 'The Future of Web Development in 2024', content: 'Exploring emerging trends: AI integration, edge computing, WebAssembly, and more...', author: 'web_visionary', date: '2024-01-13', views: 3421, likes: 234, verified: true },
-                { type: 'code', title: 'Efficient Binary Search Implementation', content: 'function binarySearch(arr, target) { let left = 0, right = arr.length - 1...', author: 'algo_expert', date: '2024-01-12', language: 'JavaScript', stars: 156 },
-                { type: 'user', name: 'Alex Rodriguez', username: 'alex_codes', bio: 'DevOps Engineer | Kubernetes certified | Cloud architecture', followers: 2890, verified: false, avatar: '👨‍💻' },
-                { type: 'video', title: 'Docker & Kubernetes Crash Course', content: 'Complete guide to containerization and orchestration for beginners and professionals...', author: 'devops_ninja', date: '2024-01-11', views: 12453, duration: '1:32:15', hasMedia: true },
-                { type: 'marketplace', title: 'Video Editing Software License', content: 'Professional video editing suite with AI-powered features and 4K support...', price: '$199.99', author: 'videotools', rating: 4.9, sales: 128 },
-                { type: 'post', title: 'Optimizing Database Queries for Performance', content: 'Best practices for indexing, query optimization, and database design patterns...', author: 'db_wizard', date: '2024-01-10', views: 2156, likes: 167, hasMedia: false, hasLinks: true }
               ],
-              currentPage: 1,
-              resultsPerPage: 25,
-              currentFilter: 'all',
-              currentQuery: ''
-            };
+            },
+            options: chartConfig,
+          });
 
-            function performSearch() {
-              const query = document.getElementById('search-input').value.toLowerCase().trim();
-              const dateFilter = document.getElementById('date-filter').value;
-              const sortFilter = document.getElementById('sort-filter').value;
-              const verifiedOnly = document.getElementById('verified-only').checked;
-              const hasMedia = document.getElementById('has-media').checked;
-              const hasLinks = document.getElementById('has-links').checked;
+          engagementChart = new Chart(document.getElementById('engagementChart'), {
+            type: 'doughnut',
+            data: {
+              labels: ['Videos', 'Posts', 'Comments', 'Shares'],
+              datasets: [
+                {
+                  data: [45, 25, 20, 10],
+                  backgroundColor: ['#00ff00', '#00ffff', '#ff00ff', '#ffff00'],
+                },
+              ],
+            },
+            options: { ...chartConfig, scales: undefined },
+          });
+        }
 
-              document.getElementById('clear-btn').style.display = query ? 'block' : 'none';
-              document.getElementById('search-suggestions').style.display = 'none';
-              searchData.currentQuery = query;
-              searchData.currentPage = 1;
+        function moderateContent(id, action) {
+          const item = document.querySelector(`[data-id="${id}"]`);
+          item.style.opacity = '0.5';
+          setTimeout(() => {
+            item.remove();
+            const count = document.querySelectorAll('#moderation-queue .item').length;
+            document.getElementById('pending-count').textContent = count;
+          }, 500);
+        }
 
-              if (!query) {
-                document.getElementById('search-results').innerHTML = `
+        function connectWebSocket() {
+          try {
+            socket = io('http://localhost:3000', { transports: ['websocket', 'polling'] });
+            socket.on('connect', () => console.log('✓ WebSocket connected'));
+            socket.on('metrics', updateMetrics);
+            socket.on('activity', addActivity);
+            socket.on('disconnect', () => console.log('✗ WebSocket disconnected'));
+          } catch (e) {
+            startMockUpdates();
+          }
+        }
+
+        function updateMetrics(data) {
+          if (data.posts) document.getElementById('stat-posts').textContent = data.posts;
+          if (data.users)
+            document.getElementById('stat-users').textContent = data.users.toLocaleString();
+          if (data.engagement)
+            document.getElementById('stat-engagement').textContent = data.engagement + '%';
+          if (data.revenue)
+            document.getElementById('stat-revenue').textContent =
+              '$' + (data.revenue / 1000).toFixed(1) + 'K';
+        }
+
+        function addActivity(activity) {
+          const feed = document.getElementById('activity-feed');
+          const item = document.createElement('div');
+          item.className = 'activity-item';
+          const safeText = sanitize(activity.text);
+          item.textContent = `<p><strong>${safeText}</strong></p><p class="time">Just now</p>`;
+          feed.insertBefore(item, feed.firstChild);
+          if (feed.children.length > 5) feed.removeChild(feed.lastChild);
+        }
+
+        function startMockUpdates() {
+          setInterval(() => {
+            const cpu = Math.floor(Math.random() * 30) + 40;
+            const mem = Math.floor(Math.random() * 20) + 55;
+            const disk = Math.floor(Math.random() * 15) + 35;
+            document.getElementById('cpu-usage').textContent = cpu + '%';
+            document.getElementById('cpu-bar').style.width = cpu + '%';
+            document.getElementById('mem-usage').textContent = mem + '%';
+            document.getElementById('mem-bar').style.width = mem + '%';
+            document.getElementById('disk-usage').textContent = disk + '%';
+            document.getElementById('disk-bar').style.width = disk + '%';
+          }, 3000);
+        }
+
+        function runCode() {
+          const code = document.getElementById('code').value;
+          const output = document.getElementById('output');
+          try {
+            const logs = [];
+            const originalLog = console.log;
+            console.log = (...args) => logs.push(args.join(' '));
+            const result = (() => {
+              try {
+                return new Function('return ' + code)();
+              } catch (e) {
+                throw new Error('Code execution failed: ' + e.message);
+              }
+            })();
+            console.log = originalLog;
+            output.textContent = logs.length
+              ? logs.join('\n')
+              : result !== undefined
+                ? String(result)
+                : 'Code executed successfully!';
+            output.style.color = '#d4d4d4';
+          } catch (error) {
+            output.textContent = 'Error: ' + error.message;
+            output.style.color = '#f48771';
+          }
+        }
+
+        function clearEditor() {
+          document.getElementById('code').value = '';
+          document.getElementById('output').textContent = 'Run your code to see output here...';
+          document.getElementById('output').style.color = '#d4d4d4';
+        }
+
+        function saveCode() {
+          const code = document.getElementById('code').value;
+          const lang = document.getElementById('language').value.toLowerCase();
+          const ext =
+            { javascript: 'js', python: 'py', html: 'html', css: 'css', json: 'json' }[lang] ||
+            'txt';
+          const blob = new Blob([code], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `code.${ext}`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
+        function showSettings(panel) {
+          document.querySelectorAll('.settings-nav').forEach(el => el.classList.remove('active'));
+          event.target.classList.add('active');
+          document.querySelectorAll('.settings-panel').forEach(el => el.classList.remove('active'));
+          document.getElementById(panel + '-panel').classList.add('active');
+        }
+
+        function saveProfile() {
+          const username = document.getElementById('username').value;
+          const email = document.getElementById('email').value;
+          if (
+            username &&
+            (username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_]+$/.test(username))
+          ) {
+            alert('Invalid username format');
+            return;
+          }
+          if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Invalid email format');
+            return;
+          }
+          showSuccess('Profile updated successfully!');
+        }
+
+        function sendResetLink() {
+          const email = document.getElementById('reset-email').value;
+          if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('reset-success').style.display = 'block';
+            document.getElementById('reset-email').value = '';
+            setTimeout(
+              () => (document.getElementById('reset-success').style.display = 'none'),
+              5000
+            );
+          }
+        }
+
+        function showSuccess(msg) {
+          const div = document.createElement('div');
+          div.className = 'success-msg';
+          div.textContent = msg;
+          div.style.position = 'fixed';
+          div.style.top = '80px';
+          div.style.right = '20px';
+          div.style.zIndex = '1000';
+          document.body.appendChild(div);
+          setTimeout(() => div.remove(), 3000);
+        }
+
+        function enable2FA() {
+          document.getElementById('2fa-disabled').style.display = 'none';
+          document.getElementById('2fa-setup').style.display = 'block';
+        }
+
+        function verify2FA() {
+          const code = document.getElementById('2fa-code').value;
+          if (code.length === 6) {
+            showSuccess('Two-factor authentication enabled!');
+            document.getElementById('2fa-setup').style.display = 'none';
+          }
+        }
+
+        function generateApiKey() {
+          const key = 'hoot_' + Math.random().toString(36).substr(2, 20);
+          showSuccess('New API key generated: ' + key);
+        }
+
+        function copyApiKey(key) {
+          navigator.clipboard.writeText(key);
+          showSuccess('API key copied to clipboard!');
+        }
+
+        function revokeApiKey(type) {
+          if (confirm('Are you sure you want to revoke this API key?')) {
+            showSuccess(type.charAt(0).toUpperCase() + type.slice(1) + ' API key revoked!');
+          }
+        }
+
+        function setTheme(theme) {
+          document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
+          event.target.classList.add('active');
+          showSuccess('Theme changed to ' + theme + '!');
+        }
+
+        function revokeSession(type) {
+          showSuccess('Session revoked successfully!');
+          event.target.closest('.session-item').remove();
+        }
+
+        function revokeAllSessions() {
+          if (confirm('This will log you out from all other devices. Continue?')) {
+            showSuccess('All other sessions revoked!');
+          }
+        }
+
+        function exportData() {
+          showSuccess("Data export request submitted! You'll receive an email when ready.");
+        }
+
+        function deleteAccount() {
+          if (confirm('Are you ABSOLUTELY sure? This action cannot be undone!')) {
+            if (confirm('Final confirmation: Delete your account permanently?')) {
+              showSuccess('Account deletion initiated. You will be logged out shortly.');
+            }
+          }
+        }
+
+        function toggleIntegration(service) {
+          showSuccess(service.charAt(0).toUpperCase() + service.slice(1) + ' integration toggled!');
+        }
+
+        function downloadBackupCodes() {
+          const codes =
+            'HOOT-A1B2-C3D4\nHOOT-E5F6-G7H8\nHOOT-I9J0-K1L2\nHOOT-M3N4-O5P6\nHOOT-Q7R8-S9T0\nHOOT-U1V2-W3X4\nHOOT-Y5Z6-A7B8\nHOOT-C9D0-E1F2';
+          const blob = new Blob([codes], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'hootner-backup-codes.txt';
+          a.click();
+          URL.revokeObjectURL(url);
+          showSuccess('Backup codes downloaded!');
+        }
+
+        function regenerateBackupCodes() {
+          if (confirm('This will invalidate all existing backup codes. Continue?')) {
+            showSuccess('New backup codes generated!');
+          }
+        }
+
+        function exportAuditLogs() {
+          showSuccess('Audit logs exported successfully!');
+        }
+
+        function downloadSDK(lang) {
+          showSuccess(lang.toUpperCase() + ' SDK download started!');
+        }
+
+        function testAPI() {
+          const method = document.getElementById('api-method').value;
+          const responseDiv = document.getElementById('api-response');
+          responseDiv.style.display = 'block';
+          responseDiv.textContent = `<div style="color:#00ff00;margin-bottom:8px;">Status: 200 OK</div><div style="color:#00ffff;">Response Time: 142ms</div><pre style="margin-top:8px;color:#00ff00;">{\n  "success": true,\n  "data": {\n    "id": "usr_123",\n    "name": "Test User"\n }\n}</pre>`;
+          showSuccess('API request sent successfully!');
+        }
+
+        function runGraphQL() {
+          const query = document.getElementById('graphql-query').value;
+          showSuccess('GraphQL query executed! Check console for results.');
+        }
+
+        function openGraphiQL() {
+          window.open('/graphql/playground', '_blank');
+          showSuccess('Opening GraphiQL playground...');
+        }
+
+        function testWebhook() {
+          showSuccess('Test webhook event sent successfully!');
+        }
+
+        function generatePostmanCollection() {
+          const collection = JSON.stringify(
+            {
+              info: {
+                name: 'HOOTNER API',
+                schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+              },
+              item: [
+                {
+                  name: 'Get Users',
+                  request: { method: 'GET', url: 'https://api.hootner.com/v1/users' },
+                },
+              ],
+            },
+            null,
+            2
+          );
+          const blob = new Blob([collection], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'hootner-api-collection.json';
+          a.click();
+          URL.revokeObjectURL(url);
+          showSuccess('Postman collection downloaded!');
+        }
+
+        let searchData = {
+          recentSearches: JSON.parse(localStorage.getItem('hootner_recent_searches') || '[]'),
+          viewMode: 'list',
+          all: [
+            {
+              type: 'post',
+              title: 'Building Scalable Microservices with Node.js',
+              content:
+                'Learn how to build production-ready microservices using Node.js, Docker, and Kubernetes...',
+              author: 'tech_guru',
+              date: '2024-01-15',
+              views: 1247,
+              likes: 89,
+              verified: true,
+              hasMedia: true,
+            },
+            {
+              type: 'user',
+              name: 'Sarah Chen',
+              username: 'sarahchen_dev',
+              bio: 'Full-stack developer | Open source contributor | Coffee enthusiast',
+              followers: 5420,
+              verified: true,
+              avatar: '👩‍💻',
+            },
+            {
+              type: 'video',
+              title: 'Advanced React Patterns Tutorial',
+              content:
+                'Deep dive into advanced React patterns including render props, HOCs, and custom hooks...',
+              author: 'react_master',
+              date: '2024-01-14',
+              views: 8932,
+              duration: '45:23',
+              hasMedia: true,
+            },
+            {
+              type: 'marketplace',
+              title: 'Premium UI Kit - 500+ Components',
+              content:
+                'Professional React component library with dark mode, animations, and TypeScript support...',
+              price: '$49.99',
+              author: 'designpro',
+              rating: 4.8,
+              sales: 342,
+            },
+            {
+              type: 'post',
+              title: 'The Future of Web Development in 2024',
+              content:
+                'Exploring emerging trends: AI integration, edge computing, WebAssembly, and more...',
+              author: 'web_visionary',
+              date: '2024-01-13',
+              views: 3421,
+              likes: 234,
+              verified: true,
+            },
+            {
+              type: 'code',
+              title: 'Efficient Binary Search Implementation',
+              content:
+                'function binarySearch(arr, target) { let left = 0, right = arr.length - 1...',
+              author: 'algo_expert',
+              date: '2024-01-12',
+              language: 'JavaScript',
+              stars: 156,
+            },
+            {
+              type: 'user',
+              name: 'Alex Rodriguez',
+              username: 'alex_codes',
+              bio: 'DevOps Engineer | Kubernetes certified | Cloud architecture',
+              followers: 2890,
+              verified: false,
+              avatar: '👨‍💻',
+            },
+            {
+              type: 'video',
+              title: 'Docker & Kubernetes Crash Course',
+              content:
+                'Complete guide to containerization and orchestration for beginners and professionals...',
+              author: 'devops_ninja',
+              date: '2024-01-11',
+              views: 12453,
+              duration: '1:32:15',
+              hasMedia: true,
+            },
+            {
+              type: 'marketplace',
+              title: 'Video Editing Software License',
+              content:
+                'Professional video editing suite with AI-powered features and 4K support...',
+              price: '$199.99',
+              author: 'videotools',
+              rating: 4.9,
+              sales: 128,
+            },
+            {
+              type: 'post',
+              title: 'Optimizing Database Queries for Performance',
+              content:
+                'Best practices for indexing, query optimization, and database design patterns...',
+              author: 'db_wizard',
+              date: '2024-01-10',
+              views: 2156,
+              likes: 167,
+              hasMedia: false,
+              hasLinks: true,
+            },
+          ],
+          currentPage: 1,
+          resultsPerPage: 25,
+          currentFilter: 'all',
+          currentQuery: '',
+        };
+
+        function performSearch() {
+          const query = document.getElementById('search-input').value.toLowerCase().trim();
+          const dateFilter = document.getElementById('date-filter').value;
+          const sortFilter = document.getElementById('sort-filter').value;
+          const verifiedOnly = document.getElementById('verified-only').checked;
+          const hasMedia = document.getElementById('has-media').checked;
+          const hasLinks = document.getElementById('has-links').checked;
+
+          document.getElementById('clear-btn').style.display = query ? 'block' : 'none';
+          document.getElementById('search-suggestions').style.display = 'none';
+          searchData.currentQuery = query;
+          searchData.currentPage = 1;
+
+          if (!query) {
+            document.getElementById('search-results').textContent = `
                   <div style="text-align:center;padding:60px 20px;color:#00ffff;">
                     <div style="font-size:48px;margin-bottom:16px;">🔍</div>
                     <h3 style="color:#00ff00;margin-bottom:8px;">Start Searching</h3>
@@ -3285,136 +3090,178 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                       </div>
                     </div>
                   </div>`;
-                document.getElementById('search-stats').textContent = 'Ready to search';
-                document.getElementById('search-pagination').style.display = 'none';
-                document.getElementById('export-btn').style.display = 'none';
-                document.getElementById('view-toggle').style.display = 'none';
-                document.getElementById('ai-insights').style.display = 'none';
-                return;
-              }
+            document.getElementById('search-stats').textContent = 'Ready to search';
+            document.getElementById('search-pagination').style.display = 'none';
+            document.getElementById('export-btn').style.display = 'none';
+            document.getElementById('view-toggle').style.display = 'none';
+            document.getElementById('ai-insights').style.display = 'none';
+            return;
+          }
 
-              saveRecentSearch(query);
+          saveRecentSearch(query);
 
-              let results = searchData.all.filter(item => {
-                if (searchData.currentFilter !== 'all' && item.type !== searchData.currentFilter) return false;
-                const searchText = (item.title || item.name || '') + ' ' + (item.content || item.bio || '') + ' ' + (item.author || item.username || '');
-                if (!searchText.toLowerCase().includes(query)) return false;
-                if (verifiedOnly && !item.verified) return false;
-                if (hasMedia && !item.hasMedia) return false;
-                if (hasLinks && !item.hasLinks) return false;
-                return true;
-              });
+          let results = searchData.all.filter(item => {
+            if (searchData.currentFilter !== 'all' && item.type !== searchData.currentFilter)
+              return false;
+            const searchText =
+              (item.title || item.name || '') +
+              ' ' +
+              (item.content || item.bio || '') +
+              ' ' +
+              (item.author || item.username || '');
+            if (!searchText.toLowerCase().includes(query)) return false;
+            if (verifiedOnly && !item.verified) return false;
+            if (hasMedia && !item.hasMedia) return false;
+            if (hasLinks && !item.hasLinks) return false;
+            return true;
+          });
 
-              if (sortFilter === 'date') results.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-              else if (sortFilter === 'date-old') results.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-              else if (sortFilter === 'popular') results.sort((a, b) => (b.likes || b.followers || 0) - (a.likes || a.followers || 0));
-              else if (sortFilter === 'views') results.sort((a, b) => (b.views || 0) - (a.views || 0));
+          if (sortFilter === 'date')
+            results.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+          else if (sortFilter === 'date-old')
+            results.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+          else if (sortFilter === 'popular')
+            results.sort((a, b) => (b.likes || b.followers || 0) - (a.likes || a.followers || 0));
+          else if (sortFilter === 'views') results.sort((a, b) => (b.views || 0) - (a.views || 0));
 
-              displayResults(results);
-              showAIInsights(query, results);
-              document.getElementById('export-btn').style.display = results.length > 0 ? 'block' : 'none';
-              document.getElementById('view-toggle').style.display = results.length > 0 ? 'block' : 'none';
-            }
+          displayResults(results);
+          showAIInsights(query, results);
+          document.getElementById('export-btn').style.display =
+            results.length > 0 ? 'block' : 'none';
+          document.getElementById('view-toggle').style.display =
+            results.length > 0 ? 'block' : 'none';
+        }
 
-            function showSuggestions() {
-              const query = document.getElementById('search-input').value.toLowerCase().trim();
-              if (query.length < 2) return;
+        function showSuggestions() {
+          const query = document.getElementById('search-input').value.toLowerCase().trim();
+          if (query.length < 2) return;
 
-              const suggestions = ['microservices', 'react patterns', 'kubernetes', 'docker', 'typescript', 'node.js', 'database optimization', 'web development', 'UI components', 'video editing']
-                .filter(s => s.includes(query))
-                .slice(0, 5);
+          const suggestions = [
+            'microservices',
+            'react patterns',
+            'kubernetes',
+            'docker',
+            'typescript',
+            'node.js',
+            'database optimization',
+            'web development',
+            'UI components',
+            'video editing',
+          ]
+            .filter(s => s.includes(query))
+            .slice(0, 5);
 
-              if (suggestions.length === 0) return;
+          if (suggestions.length === 0) return;
 
-              const container = document.getElementById('search-suggestions');
-              container.innerHTML = suggestions.map(s => {
-                const safeSuggestion = sanitize(s);
-                return `<div onclick="applySuggestion('${safeSuggestion}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${safeSuggestion}</div>`;
-              }).join('');
-              container.style.display = 'block';
-            }
+          const container = document.getElementById('search-suggestions');
+          container.textContent = suggestions
+            .map(s => {
+              const safeSuggestion = sanitize(s);
+              return `<div onclick="applySuggestion('${safeSuggestion}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${safeSuggestion}</div>`;
+            })
+            .join('');
+          container.style.display = 'block';
+        }
 
-            function showRecentSearches() {
-              if (document.getElementById('search-input').value.trim()) return;
-              if (searchData.recentSearches.length === 0) return;
+        function showRecentSearches() {
+          if (document.getElementById('search-input').value.trim()) return;
+          if (searchData.recentSearches.length === 0) return;
 
-              const container = document.getElementById('search-suggestions');
-              container.innerHTML = '<div style="padding:8px 12px;color:#6b7280;font-size:12px;font-weight:bold;">Recent Searches</div>' +
-                searchData.recentSearches.slice(0, 5).map(s => {
-                  const safeSearch = sanitize(s);
-                  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
+          const container = document.getElementById('search-suggestions');
+          container.textContent =
+            '<div style="padding:8px 12px;color:#6b7280;font-size:12px;font-weight:bold;">Recent Searches</div>' +
+            searchData.recentSearches
+              .slice(0, 5)
+              .map(s => {
+                const safeSearch = sanitize(s);
+                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
                     <span onclick="applySuggestion('${safeSearch}')" style="flex:1;color:#00ffff;">🕐 ${safeSearch}</span>
                     <button onclick="removeRecentSearch('${safeSearch}');event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">✕</button>
                   </div>`;
-                }).join('') +
-                '<div onclick="clearRecentSearches()" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#ef4444;font-size:12px;text-align:center;margin-top:4px;" onmouseover="this.style.background=\'rgba(239,68,68,0.1)\'" onmouseout="this.style.background=\'transparent\'">Clear All</div>';
-              container.style.display = 'block';
-            }
+              })
+              .join('') +
+            '<div onclick="clearRecentSearches()" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#ef4444;font-size:12px;text-align:center;margin-top:4px;" onmouseover="this.style.background=\'rgba(239,68,68,0.1)\'" onmouseout="this.style.background=\'transparent\'">Clear All</div>';
+          container.style.display = 'block';
+        }
 
-            function applySuggestion(text) {
-              document.getElementById('search-input').value = text;
-              performSearch();
-            }
+        function applySuggestion(text) {
+          document.getElementById('search-input').value = text;
+          performSearch();
+        }
 
-            function saveRecentSearch(query) {
-              if (!searchData.recentSearches.includes(query)) {
-                searchData.recentSearches.unshift(query);
-                searchData.recentSearches = searchData.recentSearches.slice(0, 10);
-                localStorage.setItem('hootner_recent_searches', JSON.stringify(searchData.recentSearches));
-              }
-            }
+        function saveRecentSearch(query) {
+          if (!searchData.recentSearches.includes(query)) {
+            searchData.recentSearches.unshift(query);
+            searchData.recentSearches = searchData.recentSearches.slice(0, 10);
+            localStorage.setItem(
+              'hootner_recent_searches',
+              JSON.stringify(searchData.recentSearches)
+            );
+          }
+        }
 
-            function removeRecentSearch(query) {
-              searchData.recentSearches = searchData.recentSearches.filter(s => s !== query);
-              localStorage.setItem('hootner_recent_searches', JSON.stringify(searchData.recentSearches));
-              showRecentSearches();
-            }
+        function removeRecentSearch(query) {
+          searchData.recentSearches = searchData.recentSearches.filter(s => s !== query);
+          localStorage.setItem(
+            'hootner_recent_searches',
+            JSON.stringify(searchData.recentSearches)
+          );
+          showRecentSearches();
+        }
 
-            function clearRecentSearches() {
-              searchData.recentSearches = [];
-              localStorage.removeItem('hootner_recent_searches');
-              document.getElementById('search-suggestions').style.display = 'none';
-            }
+        function clearRecentSearches() {
+          searchData.recentSearches = [];
+          localStorage.removeItem('hootner_recent_searches');
+          document.getElementById('search-suggestions').style.display = 'none';
+        }
 
-            function clearSearch() {
-              document.getElementById('search-input').value = '';
-              performSearch();
-            }
+        function clearSearch() {
+          document.getElementById('search-input').value = '';
+          performSearch();
+        }
 
-            function voiceSearch() {
-              if (!('webkitSpeechRecognition' in window)) {
-                showSuccess('Voice search not supported in this browser');
-                return;
-              }
-              const recognition = new webkitSpeechRecognition();
-              recognition.onresult = (e) => {
-                document.getElementById('search-input').value = e.results[0][0].transcript;
-                performSearch();
-              };
-              recognition.start();
-              showSuccess('🎤 Listening...');
-            }
+        function voiceSearch() {
+          if (!('webkitSpeechRecognition' in window)) {
+            showSuccess('Voice search not supported in this browser');
+            return;
+          }
+          const recognition = new webkitSpeechRecognition();
+          recognition.onresult = e => {
+            document.getElementById('search-input').value = e.results[0][0].transcript;
+            performSearch();
+          };
+          recognition.start();
+          showSuccess('🎤 Listening...');
+        }
 
-            function showAIInsights(query, results) {
-              if (results.length === 0) {
-                document.getElementById('ai-insights').style.display = 'none';
-                return;
-              }
+        function showAIInsights(query, results) {
+          if (results.length === 0) {
+            document.getElementById('ai-insights').style.display = 'none';
+            return;
+          }
 
-              const insights = [];
-              const types = {};
-              results.forEach(r => types[r.type] = (types[r.type] || 0) + 1);
+          const insights = [];
+          const types = {};
+          results.forEach(r => (types[r.type] = (types[r.type] || 0) + 1));
 
-              const topType = Object.keys(types).reduce((a, b) => types[a] > types[b] ? a : b);
-              insights.push(`Most results are <strong style="color:#00ff00;">${topType}</strong>`);
+          const topType = Object.keys(types).reduce((a, b) => (types[a] > types[b] ? a : b));
+          insights.push(`Most results are <strong style="color:#00ff00;">${topType}</strong>`);
 
-              const avgViews = Math.round(results.reduce((sum, r) => sum + (r.views || 0), 0) / results.length);
-              if (avgViews > 0) insights.push(`Average views: <strong style="color:#00ff00;">${avgViews.toLocaleString()}</strong>`);
+          const avgViews = Math.round(
+            results.reduce((sum, r) => sum + (r.views || 0), 0) / results.length
+          );
+          if (avgViews > 0)
+            insights.push(
+              `Average views: <strong style="color:#00ff00;">${avgViews.toLocaleString()}</strong>`
+            );
 
-              const verifiedCount = results.filter(r => r.verified).length;
-              if (verifiedCount > 0) insights.push(`<strong style="color:#00ff00;">${verifiedCount}</strong> verified results`);
+          const verifiedCount = results.filter(r => r.verified).length;
+          if (verifiedCount > 0)
+            insights.push(
+              `<strong style="color:#00ff00;">${verifiedCount}</strong> verified results`
+            );
 
-              document.getElementById('ai-insights').innerHTML = `
+          document.getElementById('ai-insights').textContent = `
                 <div style="display:flex;align-items:center;gap:12px;">
                   <div style="font-size:24px;">🤖</div>
                   <div style="flex:1;">
@@ -3422,91 +3269,102 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                     <div style="font-size:13px;color:#00ffff;">${insights.join(' • ')}</div>
                   </div>
                 </div>`;
-              document.getElementById('ai-insights').style.display = 'block';
-            }
+          document.getElementById('ai-insights').style.display = 'block';
+        }
 
-            function toggleViewMode() {
-              searchData.viewMode = searchData.viewMode === 'list' ? 'grid' : 'list';
-              performSearch();
-            }
+        function toggleViewMode() {
+          searchData.viewMode = searchData.viewMode === 'list' ? 'grid' : 'list';
+          performSearch();
+        }
 
-            function exportResults() {
-              const query = searchData.currentQuery;
-              let results = searchData.all.filter(item => {
-                if (searchData.currentFilter !== 'all' && item.type !== searchData.currentFilter) return false;
-                const searchText = (item.title || item.name || '') + ' ' + (item.content || item.bio || '');
-                return searchText.toLowerCase().includes(query);
-              });
+        function exportResults() {
+          const query = searchData.currentQuery;
+          let results = searchData.all.filter(item => {
+            if (searchData.currentFilter !== 'all' && item.type !== searchData.currentFilter)
+              return false;
+            const searchText =
+              (item.title || item.name || '') + ' ' + (item.content || item.bio || '');
+            return searchText.toLowerCase().includes(query);
+          });
 
-              const csv = 'Type,Title,Author,Date,Views\n' + results.map(r =>
-                `${r.type},"${r.title || r.name}",${r.author || r.username},${r.date || ''},${r.views || r.followers || 0}`
-              ).join('\n');
+          const csv =
+            'Type,Title,Author,Date,Views\n' +
+            results
+              .map(
+                r =>
+                  `${r.type},"${r.title || r.name}",${r.author || r.username},${r.date || ''},${r.views || r.followers || 0}`
+              )
+              .join('\n');
 
-              const blob = new Blob([csv], { type: 'text/csv' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `hootner-search-${query}-${Date.now()}.csv`;
-              a.click();
-              URL.revokeObjectURL(url);
-              showSuccess('Search results exported!');
-            }
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `hootner-search-${query}-${Date.now()}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+          showSuccess('Search results exported!');
+        }
 
-            function handleSearchKeys(e) {
-              if (e.key === 'Escape') {
-                clearSearch();
-                document.getElementById('search-suggestions').style.display = 'none';
-              } else if (e.key === 'Enter') {
-                document.getElementById('search-suggestions').style.display = 'none';
-              }
-            }
+        function handleSearchKeys(e) {
+          if (e.key === 'Escape') {
+            clearSearch();
+            document.getElementById('search-suggestions').style.display = 'none';
+          } else if (e.key === 'Enter') {
+            document.getElementById('search-suggestions').style.display = 'none';
+          }
+        }
 
-            document.addEventListener('keydown', (e) => {
-              if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                document.getElementById('search-input').focus();
-              } else if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '6') {
-                e.preventDefault();
-                const types = ['all', 'posts', 'users', 'videos', 'marketplace', 'code'];
-                filterResults(types[parseInt(e.key) - 1]);
-              }
-            });
+        document.addEventListener('keydown', e => {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('search-input').focus();
+          } else if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '6') {
+            e.preventDefault();
+            const types = ['all', 'posts', 'users', 'videos', 'marketplace', 'code'];
+            filterResults(types[parseInt(e.key) - 1]);
+          }
+        });
 
-            document.addEventListener('click', (e) => {
-              if (!e.target.closest('#search-input') && !e.target.closest('#search-suggestions')) {
-                document.getElementById('search-suggestions').style.display = 'none';
-              }
-            });
+        document.addEventListener('click', e => {
+          if (!e.target.closest('#search-input') && !e.target.closest('#search-suggestions')) {
+            document.getElementById('search-suggestions').style.display = 'none';
+          }
+        });
 
-            function displayResults(results) {
-              const container = document.getElementById('search-results');
-              const limit = parseInt(document.getElementById('limit-filter').value);
-              const start = (searchData.currentPage - 1) * limit;
-              const end = start + limit;
-              const pageResults = results.slice(start, end);
-              const totalPages = Math.ceil(results.length / limit);
+        function displayResults(results) {
+          const container = document.getElementById('search-results');
+          const limit = parseInt(document.getElementById('limit-filter').value);
+          const start = (searchData.currentPage - 1) * limit;
+          const end = start + limit;
+          const pageResults = results.slice(start, end);
+          const totalPages = Math.ceil(results.length / limit);
 
-              document.getElementById('search-stats').innerHTML = `Found <strong style="color:#00ff00;">${results.length}</strong> results in <strong style="color:#00ff00;">0.${Math.floor(Math.random()*90)+10}s</strong>`;
+          document.getElementById('search-stats').textContent =
+            `Found <strong style="color:#00ff00;">${results.length}</strong> results in <strong style="color:#00ff00;">0.${Math.floor(Math.random() * 90) + 10}s</strong>`;
 
-              if (results.length === 0) {
-                container.innerHTML = `
+          if (results.length === 0) {
+            container.textContent = `
                   <div style="text-align:center;padding:60px 20px;color:#00ffff;">
                     <div style="font-size:48px;margin-bottom:16px;">😕</div>
                     <h3 style="color:#00ff00;margin-bottom:8px;">No Results Found</h3>
                     <p>Try different keywords or adjust your filters</p>
                   </div>`;
-                document.getElementById('search-pagination').style.display = 'none';
-                return;
-              }
+            document.getElementById('search-pagination').style.display = 'none';
+            return;
+          }
 
-              const isGrid = searchData.viewMode === 'grid';
-              container.style.display = isGrid ? 'grid' : 'block';
-              container.style.gridTemplateColumns = isGrid ? 'repeat(auto-fill, minmax(300px, 1fr))' : '1fr';
-              container.style.gap = isGrid ? '16px' : '0';
+          const isGrid = searchData.viewMode === 'grid';
+          container.style.display = isGrid ? 'grid' : 'block';
+          container.style.gridTemplateColumns = isGrid
+            ? 'repeat(auto-fill, minmax(300px, 1fr))'
+            : '1fr';
+          container.style.gap = isGrid ? '16px' : '0';
 
-              container.innerHTML = pageResults.map(item => {
-                if (item.type === 'user') {
-                  return `
+          container.textContent = pageResults
+            .map(item => {
+              if (item.type === 'user') {
+                return `
                     <div class="item" style="display:flex;align-items:center;gap:16px;">
                       <div style="font-size:48px;">${item.avatar}</div>
                       <div style="flex:1;">
@@ -3517,8 +3375,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                       </div>
                       <button class="save-btn" style="padding:8px 16px;">Follow</button>
                     </div>`;
-                } else if (item.type === 'video') {
-                  return `
+              } else if (item.type === 'video') {
+                return `
                     <div class="item">
                       <div style="display:flex;gap:12px;">
                         <div style="width:160px;height:90px;background:linear-gradient(135deg,#00ff00,#00ffff);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;">🎬</div>
@@ -3529,8 +3387,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                         </div>
                       </div>
                     </div>`;
-                } else if (item.type === 'marketplace') {
-                  return `
+              } else if (item.type === 'marketplace') {
+                return `
                     <div class="item">
                       <div style="display:flex;justify-content:space-between;align-items:start;">
                         <div style="flex:1;">
@@ -3544,103 +3402,192 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                         </div>
                       </div>
                     </div>`;
-                } else if (item.type === 'code') {
-                  return `
+              } else if (item.type === 'code') {
+                return `
                     <div class="item">
                       <h3 style="margin-bottom:8px;">${item.title}</h3>
                       <pre style="background:rgba(0,0,0,0.3);padding:12px;border-radius:6px;color:#00ff00;font-size:13px;overflow-x:auto;margin-bottom:8px;">${item.content}</pre>
                       <div class="item-meta">👤 ${item.author} • 💻 ${item.language} • ⭐ ${item.stars} stars • 📅 ${item.date}</div>
                     </div>`;
-                } else {
-                  return `
+              } else {
+                return `
                     <div class="item">
                       <h3 style="margin-bottom:8px;">${item.title} ${item.verified ? '<span style="color:#00ffff;">✓</span>' : ''}</h3>
                       <p style="color:#00ffff;margin-bottom:8px;">${item.content}</p>
                       <div class="item-meta">👤 ${item.author} • 👁️ ${item.views.toLocaleString()} views • ❤️ ${item.likes} likes • 📅 ${item.date}</div>
                     </div>`;
-                }
-              }).join('');
-
-              if (totalPages > 1) {
-                document.getElementById('search-pagination').style.display = 'block';
-                document.getElementById('page-info').textContent = `Page ${searchData.currentPage} of ${totalPages}`;
-                document.getElementById('prev-btn').disabled = searchData.currentPage === 1;
-                document.getElementById('next-btn').disabled = searchData.currentPage === totalPages;
-              } else {
-                document.getElementById('search-pagination').style.display = 'none';
               }
-            }
+            })
+            .join('');
 
-            function filterResults(type) {
-              document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-              event.target.classList.add('active');
-              searchData.currentFilter = type;
-              performSearch();
-            }
+          if (totalPages > 1) {
+            document.getElementById('search-pagination').style.display = 'block';
+            document.getElementById('page-info').textContent =
+              `Page ${searchData.currentPage} of ${totalPages}`;
+            document.getElementById('prev-btn').disabled = searchData.currentPage === 1;
+            document.getElementById('next-btn').disabled = searchData.currentPage === totalPages;
+          } else {
+            document.getElementById('search-pagination').style.display = 'none';
+          }
+        }
 
-            function toggleAdvancedSearch() {
-              const panel = document.getElementById('advanced-search');
-              panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            }
+        function filterResults(type) {
+          document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+          event.target.classList.add('active');
+          searchData.currentFilter = type;
+          performSearch();
+        }
 
-            function changePage(delta) {
-              searchData.currentPage += delta;
-              performSearch();
-              document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
-            }
+        function toggleAdvancedSearch() {
+          const panel = document.getElementById('advanced-search');
+          panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
 
-            let notifications = [
-              { id: 1, type: 'like', user: 'sarah_dev', text: 'liked your post "Building Scalable Microservices"', time: '5m ago', timestamp: Date.now() - 300000, unread: true, icon: '❤️', group: 'today' },
-              { id: 2, type: 'comment', user: 'alex_codes', text: 'commented on your video', time: '1h ago', timestamp: Date.now() - 3600000, unread: true, icon: '💬', group: 'today' },
-              { id: 3, type: 'follow', user: 'tech_guru', text: 'started following you', time: '2h ago', timestamp: Date.now() - 7200000, unread: true, icon: '👤', group: 'today' },
-              { id: 4, type: 'mention', user: 'react_master', text: 'mentioned you in a post', time: '3h ago', timestamp: Date.now() - 10800000, unread: false, icon: '@', group: 'today' },
-              { id: 5, type: 'system', user: 'HOOTNER', text: 'Your API key will expire in 7 days', time: '5h ago', timestamp: Date.now() - 18000000, unread: false, icon: '⚠️', group: 'today' },
-              { id: 6, type: 'like', user: 'dev_master', text: 'and 5 others liked your comment', time: '1d ago', timestamp: Date.now() - 86400000, unread: false, icon: '❤️', group: 'yesterday' },
-              { id: 7, type: 'follow', user: 'code_ninja', text: 'started following you', time: '1d ago', timestamp: Date.now() - 90000000, unread: false, icon: '👤', group: 'yesterday' },
-              { id: 8, type: 'system', user: 'HOOTNER', text: 'New feature: Voice search is now available!', time: '2d ago', timestamp: Date.now() - 172800000, unread: false, icon: '🎉', group: 'older' }
-            ];
-            let notifFilter = 'all';
-            let notifSoundEnabled = true;
+        function changePage(delta) {
+          searchData.currentPage += delta;
+          performSearch();
+          document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
+        }
 
-            function toggleNotifications() {
-              const dropdown = document.getElementById('notif-dropdown');
-              const isVisible = dropdown.style.display === 'flex';
-              if (isVisible) {
-                dropdown.style.display = 'none';
-              } else {
-                dropdown.style.display = 'flex';
-                renderNotifications();
-              }
-            }
+        let notifications = [
+          {
+            id: 1,
+            type: 'like',
+            user: 'sarah_dev',
+            text: 'liked your post "Building Scalable Microservices"',
+            time: '5m ago',
+            timestamp: Date.now() - 300000,
+            unread: true,
+            icon: '❤️',
+            group: 'today',
+          },
+          {
+            id: 2,
+            type: 'comment',
+            user: 'alex_codes',
+            text: 'commented on your video',
+            time: '1h ago',
+            timestamp: Date.now() - 3600000,
+            unread: true,
+            icon: '💬',
+            group: 'today',
+          },
+          {
+            id: 3,
+            type: 'follow',
+            user: 'tech_guru',
+            text: 'started following you',
+            time: '2h ago',
+            timestamp: Date.now() - 7200000,
+            unread: true,
+            icon: '👤',
+            group: 'today',
+          },
+          {
+            id: 4,
+            type: 'mention',
+            user: 'react_master',
+            text: 'mentioned you in a post',
+            time: '3h ago',
+            timestamp: Date.now() - 10800000,
+            unread: false,
+            icon: '@',
+            group: 'today',
+          },
+          {
+            id: 5,
+            type: 'system',
+            user: 'HOOTNER',
+            text: 'Your API key will expire in 7 days',
+            time: '5h ago',
+            timestamp: Date.now() - 18000000,
+            unread: false,
+            icon: '⚠️',
+            group: 'today',
+          },
+          {
+            id: 6,
+            type: 'like',
+            user: 'dev_master',
+            text: 'and 5 others liked your comment',
+            time: '1d ago',
+            timestamp: Date.now() - 86400000,
+            unread: false,
+            icon: '❤️',
+            group: 'yesterday',
+          },
+          {
+            id: 7,
+            type: 'follow',
+            user: 'code_ninja',
+            text: 'started following you',
+            time: '1d ago',
+            timestamp: Date.now() - 90000000,
+            unread: false,
+            icon: '👤',
+            group: 'yesterday',
+          },
+          {
+            id: 8,
+            type: 'system',
+            user: 'HOOTNER',
+            text: 'New feature: Voice search is now available!',
+            time: '2d ago',
+            timestamp: Date.now() - 172800000,
+            unread: false,
+            icon: '🎉',
+            group: 'older',
+          },
+        ];
+        let notifFilter = 'all';
+        let notifSoundEnabled = true;
 
-            function renderNotifications() {
-              const container = document.getElementById('notif-list');
-              if (!container) return;
-              const searchInput = document.getElementById('notif-search');
-              const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
+        function toggleNotifications() {
+          const dropdown = document.getElementById('notif-dropdown');
+          const isVisible = dropdown.style.display === 'flex';
+          if (isVisible) {
+            dropdown.style.display = 'none';
+          } else {
+            dropdown.style.display = 'flex';
+            renderNotifications();
+          }
+        }
 
-              let filtered = notifications.filter(n => {
-                if (notifFilter !== 'all' && n.type !== notifFilter) return false;
-                if (searchQuery && !n.text.toLowerCase().includes(searchQuery) && !n.user.toLowerCase().includes(searchQuery)) return false;
-                return true;
-              });
+        function renderNotifications() {
+          const container = document.getElementById('notif-list');
+          if (!container) return;
+          const searchInput = document.getElementById('notif-search');
+          const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
 
-              if (filtered.length === 0) {
-                container.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#6b7280;font-size:13px;">No notifications found</div>';
-                return;
-              }
+          let filtered = notifications.filter(n => {
+            if (notifFilter !== 'all' && n.type !== notifFilter) return false;
+            if (
+              searchQuery &&
+              !n.text.toLowerCase().includes(searchQuery) &&
+              !n.user.toLowerCase().includes(searchQuery)
+            )
+              return false;
+            return true;
+          });
 
-              const grouped = { today: [], yesterday: [], older: [] };
-              filtered.forEach(n => grouped[n.group].push(n));
+          if (filtered.length === 0) {
+            container.textContent =
+              '<div style="padding:40px 20px;text-align:center;color:#6b7280;font-size:13px;">No notifications found</div>';
+            return;
+          }
 
-              let html = '';
-              ['today', 'yesterday', 'older'].forEach(group => {
-                if (grouped[group].length > 0) {
-                  html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
-                  html += grouped[group].map(n => {
-                    const safeUser = sanitize(n.user);
-                    const safeText = sanitize(n.text);
-                    return `
+          const grouped = { today: [], yesterday: [], older: [] };
+          filtered.forEach(n => grouped[n.group].push(n));
+
+          let html = '';
+          ['today', 'yesterday', 'older'].forEach(group => {
+            if (grouped[group].length > 0) {
+              html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
+              html += grouped[group]
+                .map(n => {
+                  const safeUser = sanitize(n.user);
+                  const safeText = sanitize(n.text);
+                  return `
                     <div class="notif-item ${n.unread ? 'unread' : ''}">
                       <div style="display:flex;gap:12px;align-items:start;">
                         <div style="font-size:24px;flex-shrink:0;">${n.icon}</div>
@@ -3656,151 +3603,181 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                       </div>
                     </div>
                   `;
-                  }).join('');
-                }
-              });
-
-              container.innerHTML = html;
+                })
+                .join('');
             }
+          });
 
-            function markRead(id) {
-              event.stopPropagation();
-              const notif = notifications.find(n => n.id === id);
-              if (notif) notif.unread = false;
-              updateBadge();
-              renderNotifications();
-            }
+          container.textContent = html;
+        }
 
-            function markAllRead() {
-              event.stopPropagation();
-              notifications.forEach(n => n.unread = false);
-              updateBadge();
-              renderNotifications();
-              showSuccess('All notifications marked as read');
-            }
+        function markRead(id) {
+          event.stopPropagation();
+          const notif = notifications.find(n => n.id === id);
+          if (notif) notif.unread = false;
+          updateBadge();
+          renderNotifications();
+        }
 
-            function deleteNotification(id) {
-              event.stopPropagation();
-              notifications = notifications.filter(n => n.id !== id);
-              updateBadge();
-              renderNotifications();
-            }
+        function markAllRead() {
+          event.stopPropagation();
+          notifications.forEach(n => (n.unread = false));
+          updateBadge();
+          renderNotifications();
+          showSuccess('All notifications marked as read');
+        }
 
-            function clearAllNotifications() {
-              event.stopPropagation();
-              if (confirm('Clear all notifications? This cannot be undone.')) {
-                notifications = [];
-                updateBadge();
-                renderNotifications();
-                showSuccess('All notifications cleared');
-              }
-            }
+        function deleteNotification(id) {
+          event.stopPropagation();
+          notifications = notifications.filter(n => n.id !== id);
+          updateBadge();
+          renderNotifications();
+        }
 
-            function setNotifFilter(filter) {
-              event.stopPropagation();
-              notifFilter = filter;
-              document.querySelectorAll('.notif-filter').forEach(btn => {
-                btn.classList.remove('active');
-                btn.style.background = 'transparent';
-              });
-              const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
-              if (activeBtn) {
-                activeBtn.classList.add('active');
-                activeBtn.style.background = 'rgba(0,255,255,0.2)';
-              }
-              renderNotifications();
-            }
+        function clearAllNotifications() {
+          event.stopPropagation();
+          if (confirm('Clear all notifications? This cannot be undone.')) {
+            notifications = [];
+            updateBadge();
+            renderNotifications();
+            showSuccess('All notifications cleared');
+          }
+        }
 
-            function filterNotifications() {
-              renderNotifications();
-            }
+        function setNotifFilter(filter) {
+          event.stopPropagation();
+          notifFilter = filter;
+          document.querySelectorAll('.notif-filter').forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.background = 'transparent';
+          });
+          const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
+          if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.style.background = 'rgba(0,255,255,0.2)';
+          }
+          renderNotifications();
+        }
 
-            function toggleNotifSound() {
-              event.stopPropagation();
-              notifSoundEnabled = !notifSoundEnabled;
-              const btn = document.getElementById('sound-btn');
-              btn.textContent = notifSoundEnabled ? '🔔' : '🔕';
-              btn.style.opacity = notifSoundEnabled ? '1' : '0.5';
-              showSuccess(notifSoundEnabled ? 'Notification sound enabled' : 'Notification sound disabled');
-            }
+        function filterNotifications() {
+          renderNotifications();
+        }
 
-            function loadMoreNotifications() {
-              event.stopPropagation();
-              const newNotifs = [
-                { id: Date.now(), type: 'like', user: 'user_' + Math.floor(Math.random()*1000), text: 'liked your post', time: 'Just now', timestamp: Date.now(), unread: true, icon: '❤️', group: 'today' },
-                { id: Date.now()+1, type: 'comment', user: 'dev_' + Math.floor(Math.random()*1000), text: 'commented on your video', time: 'Just now', timestamp: Date.now(), unread: true, icon: '💬', group: 'today' }
+        function toggleNotifSound() {
+          event.stopPropagation();
+          notifSoundEnabled = !notifSoundEnabled;
+          const btn = document.getElementById('sound-btn');
+          btn.textContent = notifSoundEnabled ? '🔔' : '🔕';
+          btn.style.opacity = notifSoundEnabled ? '1' : '0.5';
+          showSuccess(
+            notifSoundEnabled ? 'Notification sound enabled' : 'Notification sound disabled'
+          );
+        }
+
+        function loadMoreNotifications() {
+          event.stopPropagation();
+          const newNotifs = [
+            {
+              id: Date.now(),
+              type: 'like',
+              user: 'user_' + Math.floor(Math.random() * 1000),
+              text: 'liked your post',
+              time: 'Just now',
+              timestamp: Date.now(),
+              unread: true,
+              icon: '❤️',
+              group: 'today',
+            },
+            {
+              id: Date.now() + 1,
+              type: 'comment',
+              user: 'dev_' + Math.floor(Math.random() * 1000),
+              text: 'commented on your video',
+              time: 'Just now',
+              timestamp: Date.now(),
+              unread: true,
+              icon: '💬',
+              group: 'today',
+            },
+          ];
+          notifications = [...newNotifs, ...notifications];
+          updateBadge();
+          renderNotifications();
+          if (notifSoundEnabled) playNotificationSound();
+          showSuccess('Loaded 2 new notifications');
+        }
+
+        function playNotificationSound() {
+          const audio = new Audio(
+            'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUBELTKXh8bllHAU2jdXvzn0pBSh+zPDajzsKElyx6OyrWBUIQ5zd8sFuJAUuhM/z24k2CBhku+zooVARC0yl4fG5ZRwFNo3V7859KQUofsz'
+          );
+          audio.volume = 0.3;
+          audio.play().catch(() => {});
+        }
+
+        function updateBadge() {
+          const unreadCount = notifications.filter(n => n.unread).length;
+          const badge = document.getElementById('notif-badge');
+          if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.style.display = 'flex';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+
+        function simulateRealTimeNotifications() {
+          setInterval(() => {
+            if (Math.random() > 0.7) {
+              const types = ['like', 'comment', 'follow', 'mention'];
+              const icons = ['❤️', '💬', '👤', '@'];
+              const texts = [
+                'liked your post',
+                'commented on your video',
+                'started following you',
+                'mentioned you',
               ];
-              notifications = [...newNotifs, ...notifications];
+              const idx = Math.floor(Math.random() * types.length);
+
+              const newNotif = {
+                id: Date.now(),
+                type: types[idx],
+                user: 'user_' + Math.floor(Math.random() * 1000),
+                text: texts[idx],
+                time: 'Just now',
+                timestamp: Date.now(),
+                unread: true,
+                icon: icons[idx],
+                group: 'today',
+              };
+
+              notifications.unshift(newNotif);
               updateBadge();
-              renderNotifications();
-              if (notifSoundEnabled) playNotificationSound();
-              showSuccess('Loaded 2 new notifications');
-            }
-
-            function playNotificationSound() {
-              const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUBELTKXh8bllHAU2jdXvzn0pBSh+zPDajzsKElyx6OyrWBUIQ5zd8sFuJAUuhM/z24k2CBhku+zooVARC0yl4fG5ZRwFNo3V7859KQUofsz');
-              audio.volume = 0.3;
-              audio.play().catch(() => {});
-            }
-
-            function updateBadge() {
-              const unreadCount = notifications.filter(n => n.unread).length;
-              const badge = document.getElementById('notif-badge');
-              if (unreadCount > 0) {
-                badge.textContent = unreadCount;
-                badge.style.display = 'flex';
-              } else {
-                badge.style.display = 'none';
-              }
-            }
-
-            function simulateRealTimeNotifications() {
-              setInterval(() => {
-                if (Math.random() > 0.7) {
-                  const types = ['like', 'comment', 'follow', 'mention'];
-                  const icons = ['❤️', '💬', '👤', '@'];
-                  const texts = ['liked your post', 'commented on your video', 'started following you', 'mentioned you'];
-                  const idx = Math.floor(Math.random() * types.length);
-
-                  const newNotif = {
-                    id: Date.now(),
-                    type: types[idx],
-                    user: 'user_' + Math.floor(Math.random()*1000),
-                    text: texts[idx],
-                    time: 'Just now',
-                    timestamp: Date.now(),
-                    unread: true,
-                    icon: icons[idx],
-                    group: 'today'
-                  };
-
-                  notifications.unshift(newNotif);
-                  updateBadge();
-                  const dropdown = document.getElementById('notif-dropdown');
-                  if (dropdown && dropdown.style.display === 'flex') {
-                    renderNotifications();
-                  }
-                  if (notifSoundEnabled) playNotificationSound();
-                }
-              }, 30000);
-            }
-
-            document.addEventListener('click', (e) => {
               const dropdown = document.getElementById('notif-dropdown');
-              const notifBtn = e.target.closest('button[onclick="toggleNotifications()"]');
-              const insideDropdown = e.target.closest('#notif-dropdown');
-
-              if (dropdown && !insideDropdown && !notifBtn) {
-                dropdown.style.display = 'none';
+              if (dropdown && dropdown.style.display === 'flex') {
+                renderNotifications();
               }
-            });
+              if (notifSoundEnabled) playNotificationSound();
+            }
+          }, 30000);
+        }
 
-            document.addEventListener('DOMContentLoaded', () => {
-              connectWebSocket();
-              startMockUpdates();
-              updateBadge();
-              simulateRealTimeNotifications();
-            });
+        document.addEventListener('click', e => {
+          const dropdown = document.getElementById('notif-dropdown');
+          const notifBtn = e.target.closest('button[onclick="toggleNotifications()"]');
+          const insideDropdown = e.target.closest('#notif-dropdown');
+
+          if (dropdown && !insideDropdown && !notifBtn) {
+            dropdown.style.display = 'none';
+          }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+          connectWebSocket();
+          startMockUpdates();
+          updateBadge();
+          simulateRealTimeNotifications();
+        });
       </script>
       <div class="main-content"></div>
     </div>
@@ -3872,49 +3849,35 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
   // Add CSS animations
   const style = document.createElement('style');
   style.textContent = `
-      .cyber-particles {
-        position: fixed;
+      .cyber-particles { position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1; }
+
+      .matrix-rain { position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         pointer-events: none;
         z-index: 1;
-      }
+        opacity: 0.3; }
 
-      .matrix-rain {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        opacity: 0.3;
-      }
-
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
         25% { transform: translateY(-20px) rotate(90deg); opacity: 1; }
         50% { transform: translateY(-10px) rotate(180deg); opacity: 0.7; }
-        75% { transform: translateY(-30px) rotate(270deg); opacity: 0.9; }
-      }
+        75% { transform: translateY(-30px) rotate(270deg); opacity: 0.9; } }
 
-      @keyframes matrixFall {
-        0% {
-          transform: translateY(-100vh);
+      @keyframes matrixFall { 0% { transform: translateY(-100vh);
           opacity: 1;
-          color: #00ff41;
-        }
-        50% {
-          color: #00d4ff;
-        }
-        100% {
-          transform: translateY(100vh);
+          color: #00ff41; }
+        50% { color: #00d4ff; }
+        100% { transform: translateY(100vh);
           opacity: 0;
-          color: #7b68ee;
-        }
-      }
+          color: #7b68ee; } }
     `;
   document.head.appendChild(style);
 
@@ -3941,19 +3904,25 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
         fontSize: 14,
         wordWrap: 'on',
         automaticLayout: true,
-        scrollBeyondLastLine: false
+        scrollBeyondLastLine: false,
       });
 
       monaco.editor.defineTheme('cyber', {
         base: 'vs-dark',
         inherit: true,
         rules: [{ token: '', foreground: '00ffff' }],
-        colors: { 'editor.foreground': '#00ff00', 'editor.background': '#1e1e1e' }
+        colors: { 'editor.foreground': '#00ff00', 'editor.background': '#1e1e1e' },
       });
       monaco.editor.setTheme('cyber');
 
-      document.getElementById('language').addEventListener('change', (e) => {
-        const langMap = { JavaScript: 'javascript', Python: 'python', HTML: 'html', CSS: 'css', JSON: 'json' };
+      document.getElementById('language').addEventListener('change', e => {
+        const langMap = {
+          JavaScript: 'javascript',
+          Python: 'python',
+          HTML: 'html',
+          CSS: 'css',
+          JSON: 'json',
+        };
         monaco.editor.setModelLanguage(editor.getModel(), langMap[e.target.value]);
       });
 
@@ -3974,7 +3943,11 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
             }
           })();
           console.log = originalLog;
-          output.textContent = logs.length ? logs.join('\n') : (result !== undefined ? String(result) : 'Executed!');
+          output.textContent = logs.length
+            ? logs.join('\n')
+            : result !== undefined
+              ? String(result)
+              : 'Executed!';
           output.style.color = '#00ff00';
         } catch (error) {
           output.textContent = 'Error: ' + error.message;
@@ -3990,7 +3963,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
       window.saveCode = () => {
         const code = editor.getValue();
         const lang = document.getElementById('language').value.toLowerCase();
-        const ext = { javascript: 'js', python: 'py', html: 'html', css: 'css', json: 'json' }[lang] || 'txt';
+        const ext =
+          { javascript: 'js', python: 'py', html: 'html', css: 'css', json: 'json' }[lang] || 'txt';
         const blob = new Blob([code], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');

@@ -1,0 +1,3580 @@
+CODE SCAN REPORT
+================================================================================
+Timestamp: 2025-12-31T04:02:38.657Z
+Directory: c:\Users\12182\Projects\my-local-repo\apps\frontend\html-pages
+Files Scanned: 501
+Errors: 27
+Warnings: 3016
+================================================================================
+
+ERRORS (27):
+--------------------------------------------------------------------------------
+📛 electron-code-editor\enhancements.js
+   Security: Potential XSS via innerHTML at line 65
+
+📛 electron-code-editor\node_modules\@types\node\crypto.d.ts
+   Security: Hardcoded credential detected at line 9
+   Security: Hardcoded credential detected at line 785
+   Security: Hardcoded credential detected at line 829
+   Security: Hardcoded credential detected at line 861
+   Security: Hardcoded credential detected at line 1045
+   Security: Hardcoded credential detected at line 1087
+   Security: Hardcoded credential detected at line 1111
+
+📛 electron-code-editor\node_modules\@types\node\fs.d.ts
+   Try block without catch - errors will be silently ignored at line 3415
+   Try block without catch - errors will be silently ignored at line 3441
+   Try block without catch - errors will be silently ignored at line 3461
+   Try block without catch - errors will be silently ignored at line 3490
+   Try block without catch - errors will be silently ignored at line 3702
+   Try block without catch - errors will be silently ignored at line 3728
+   Try block without catch - errors will be silently ignored at line 3755
+   Try block without catch - errors will be silently ignored at line 3781
+
+📛 electron-code-editor\node_modules\@types\node\fs\promises.d.ts
+   Try block without catch - errors will be silently ignored at line 353
+   Try block without catch - errors will be silently ignored at line 479
+
+📛 electron-code-editor\node_modules\@types\node\url.d.ts
+   Security: Hardcoded credential detected at line 561
+
+📛 electron-code-editor\node_modules\cacheable-lookup\source\index.js
+   Try block without catch - errors will be silently ignored at line 209
+
+📛 electron-code-editor\node_modules\define-data-property\tsconfig.json
+   Invalid JSON: Expected property name or '}' in JSON at position 29 (line 3 column 5)
+
+📛 electron-code-editor\node_modules\es-define-property\tsconfig.json
+   Invalid JSON: Expected double-quoted property name in JSON at position 79 (line 5 column 2)
+
+📛 electron-code-editor\node_modules\es-errors\tsconfig.json
+   Invalid JSON: Expected property name or '}' in JSON at position 26 (line 3 column 3)
+
+📛 electron-code-editor\node_modules\gopd\tsconfig.json
+   Invalid JSON: Expected double-quoted property name in JSON at position 79 (line 5 column 2)
+
+📛 electron-code-editor\node_modules\graceful-fs\polyfills.js
+   Try block without catch - errors will be silently ignored at line 194
+   Try block without catch - errors will be silently ignored at line 232
+
+📛 load-header.js
+   Security: Potential XSS via innerHTML at line 7
+
+WARNINGS (3016):
+--------------------------------------------------------------------------------
+⚠️  electron-code-editor\advanced-features.js
+   High complexity: 56 control structures - consider refactoring
+   Magic number 48771 at line 151 - use named constant
+   Nested ternary operator - hard to read at line 151
+
+⚠️  electron-code-editor\ai-agent-panel.js
+   await without nearby try-catch at line 60 - ensure error handling
+   Event listener without error handling at line 47
+   Event listener without error handling at line 105
+   High complexity: 30 control structures - consider refactoring
+   Magic number 9999 at line 22 - use named constant
+
+⚠️  electron-code-editor\ai-assistant.js
+   await without nearby try-catch at line 281 - ensure error handling
+   await without nearby try-catch at line 307 - ensure error handling
+   await without nearby try-catch at line 328 - ensure error handling
+   await without nearby try-catch at line 514 - ensure error handling
+   await without nearby try-catch at line 527 - ensure error handling
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 84 control structures - consider refactoring
+   Magic number 152 at line 50 - use named constant
+   Magic number 180 at line 70 - use named constant
+
+⚠️  electron-code-editor\cloud-sync.js
+   await without nearby try-catch at line 22 - ensure error handling
+   await without nearby try-catch at line 196 - ensure error handling
+   await without nearby try-catch at line 231 - ensure error handling
+   High complexity: 60 control structures - consider refactoring
+   Magic number 152 at line 49 - use named constant
+   Magic number 666 at line 125 - use named constant
+   Magic number 44336 at line 141 - use named constant
+   Magic number 44336 at line 159 - use named constant
+
+⚠️  electron-code-editor\cross-integration.js
+   Variable 'getConditionalValuezgfd' is declared but never used
+   High complexity: 33 control structures - consider refactoring
+   Magic number 259 at line 110 - use named constant
+
+⚠️  electron-code-editor\cursor-ui.js
+   await without nearby try-catch at line 77 - ensure error handling
+   await without nearby try-catch at line 81 - ensure error handling
+   Event listener without error handling at line 112
+   High complexity: 54 control structures - consider refactoring
+   Magic number 9998 at line 21 - use named constant
+   Magic number 9999 at line 37 - use named constant
+   Magic number 44336 at line 90 - use named constant
+
+⚠️  electron-code-editor\enhancements.js
+   High complexity: 50 control structures - consider refactoring
+   Magic number 252526 at line 43 - use named constant
+   Magic number 969696 at line 104 - use named constant
+
+⚠️  electron-code-editor\enterprise.js
+   High complexity: 38 control structures - consider refactoring
+   Magic number 150 at line 187 - use named constant
+   Magic number 175 at line 254 - use named constant
+
+⚠️  electron-code-editor\error-handler.js
+   Empty if statement at line 271
+   Avoid Function constructor at line 293
+   High complexity: 59 control structures - consider refactoring
+   Magic number 581 at line 61 - use named constant
+   Magic number 2196 at line 171 - use named constant
+   Magic number 44336 at line 174 - use named constant
+   Magic number 9999 at line 194 - use named constant
+   Magic number 255 at line 269 - use named constant
+
+⚠️  electron-code-editor\fallback-handlers.js
+   High complexity: 50 control structures - consider refactoring
+
+⚠️  electron-code-editor\feature-expansions.js
+   Empty if statement at line 243
+   await without nearby try-catch at line 114 - ensure error handling
+   await without nearby try-catch at line 331 - ensure error handling
+   High complexity: 74 control structures - consider refactoring
+   Magic number 3002 at line 191 - use named constant
+   Nested ternary operator - hard to read at line 180
+   Nested ternary operator - hard to read at line 393
+
+⚠️  electron-code-editor\integration-commands.js
+   await without nearby try-catch at line 27 - ensure error handling
+   await without nearby try-catch at line 33 - ensure error handling
+   await without nearby try-catch at line 41 - ensure error handling
+   await without nearby try-catch at line 62 - ensure error handling
+   await without nearby try-catch at line 66 - ensure error handling
+   await without nearby try-catch at line 73 - ensure error handling
+   await without nearby try-catch at line 78 - ensure error handling
+   await without nearby try-catch at line 82 - ensure error handling
+   await without nearby try-catch at line 86 - ensure error handling
+   await without nearby try-catch at line 90 - ensure error handling
+   await without nearby try-catch at line 96 - ensure error handling
+   await without nearby try-catch at line 162 - ensure error handling
+   await without nearby try-catch at line 174 - ensure error handling
+   await without nearby try-catch at line 179 - ensure error handling
+   await without nearby try-catch at line 232 - ensure error handling
+   High complexity: 60 control structures - consider refactoring
+
+⚠️  electron-code-editor\lsp-client.js
+   JSON.parse without try-catch at line 120
+   JSON.parse without try-catch at line 174
+   High complexity: 42 control structures - consider refactoring
+
+⚠️  electron-code-editor\main.js
+   High complexity: 27 control structures - consider refactoring
+
+⚠️  electron-code-editor\monaco-extensions.js
+   Use const/let instead of var at line 73
+   High complexity: 46 control structures - consider refactoring
+   Magic number 2020 at line 49 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\http-cache-semantics\index.d.ts
+   High complexity: 28 control structures - consider refactoring
+   Magic number 304 at line 57 - use named constant
+   Magic number 8246 at line 105 - use named constant
+   Magic number 304 at line 156 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\keyv\index.d.ts
+   High complexity: 27 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\assert.d.ts
+   Use const/let instead of var at line 58
+   Use === instead of == at line 356
+   Use === instead of == at line 397
+   Use === instead of == at line 404
+   Use === instead of == at line 406
+   Use === instead of == at line 411
+   Use === instead of == at line 413
+   Use !== instead of != at line 430
+   Use !== instead of != at line 440
+   Use !== instead of != at line 443
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 900 - ensure error handling
+   await without nearby try-catch at line 912 - ensure error handling
+   await without nearby try-catch at line 926 - ensure error handling
+   await without nearby try-catch at line 979 - ensure error handling
+   await without nearby try-catch at line 984 - ensure error handling
+   High complexity: 206 control structures - consider refactoring
+   Magic number 123 at line 355 - use named constant
+   Magic number 123 at line 359 - use named constant
+   Magic number 123 at line 362 - use named constant
+   Magic number 123 at line 1020 - use named constant
+   Magic number 123 at line 1043 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\async_hooks.d.ts
+   Variable 'result' is declared but never used
+   Callback with err parameter but no check at line 25
+   Callback with err parameter but no check at line 66
+   High complexity: 66 control structures - consider refactoring
+   Magic number 8080 at line 354 - use named constant
+   Magic number 8080 at line 356 - use named constant
+   Magic number 8080 at line 357 - use named constant
+   Magic number 123 at line 387 - use named constant
+   Magic number 123 at line 401 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\buffer.buffer.d.ts
+   Use const/let instead of var at line 455
+   Code comment requires attention at line 442
+   Variable 'bufA' is declared but never used
+   High complexity: 63 control structures - consider refactoring
+   Magic number 255 at line 39 - use named constant
+   Magic number 255 at line 210 - use named constant
+   Magic number 255 at line 211 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\buffer.d.ts
+   Use const/let instead of var at line 1850
+   Use const/let instead of var at line 1889
+   Use const/let instead of var at line 1897
+   Variable 'buf4' is declared but never used
+   Variable 'buf5' is declared but never used
+   Variable 'buf6' is declared but never used
+   Variable 'buf7' is declared but never used
+   Variable 'newBuf' is declared but never used
+   Variable 'arr' is declared but never used
+   Variable 'len' is declared but never used
+   Possible unhandled Promise rejection - add .catch
+   JSON.parse without try-catch at line 454
+   High complexity: 301 control structures - consider refactoring
+   Magic number 255 at line 38 - use named constant
+   Magic number 255 at line 38 - use named constant
+   Magic number 116 at line 43 - use named constant
+   Magic number 195 at line 43 - use named constant
+   Magic number 169 at line 43 - use named constant
+   Magic number 115 at line 43 - use named constant
+   Magic number 116 at line 43 - use named constant
+   Magic number 104 at line 182 - use named constant
+   Magic number 101 at line 182 - use named constant
+   Magic number 108 at line 182 - use named constant
+   Magic number 108 at line 182 - use named constant
+   Magic number 111 at line 182 - use named constant
+   Magic number 101 at line 281 - use named constant
+   Magic number 97374 at line 427 - use named constant
+   Magic number 4294967295 at line 797 - use named constant
+   Magic number 9078563412 at line 860 - use named constant
+   Magic number 1234567890 at line 884 - use named constant
+   Magic number 546 at line 908 - use named constant
+   Magic number 1234567890 at line 925 - use named constant
+   Magic number 254 at line 949 - use named constant
+   Magic number 3412 at line 973 - use named constant
+   Magic number 5634 at line 975 - use named constant
+   Magic number 1234 at line 999 - use named constant
+   Magic number 3456 at line 1001 - use named constant
+   Magic number 78563412 at line 1023 - use named constant
+   Magic number 12345678 at line 1047 - use named constant
+   Magic number 1280 at line 1090 - use named constant
+   Magic number 83886080 at line 1126 - use named constant
+   Magic number 539989614439558 at line 1160 - use named constant
+   Magic number 387939260590663 at line 1177 - use named constant
+   Magic number 447603722011605 at line 1192 - use named constant
+   Magic number 270 at line 1192 - use named constant
+   Magic number 20788039913184 at line 1209 - use named constant
+   Magic number 304 at line 1209 - use named constant
+   Magic number 123 at line 1588 - use named constant
+   Magic number 456 at line 1588 - use named constant
+   Magic number 123 at line 1607 - use named constant
+   Magic number 456 at line 1607 - use named constant
+   Magic number 255 at line 1639 - use named constant
+   Magic number 255 at line 1640 - use named constant
+   Magic number 255 at line 1686 - use named constant
+   Magic number 255 at line 1715 - use named constant
+   Magic number 255 at line 1782 - use named constant
+   Magic number 8859 at line 1853 - use named constant
+   Magic number 8859 at line 1868 - use named constant
+   Single letter variable 'b' at line 1626 - use descriptive name
+   Single letter variable 'c' at line 1632 - use descriptive name
+   Single letter variable 'b' at line 1724 - use descriptive name
+   Single letter variable 'b' at line 1791 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\child_process.d.ts
+   Code comment requires attention at line 889
+   Code comment requires attention at line 1054
+   await without nearby try-catch at line 960 - ensure error handling
+   await without nearby try-catch at line 1095 - ensure error handling
+   High complexity: 388 control structures - consider refactoring
+   Magic number 1337 at line 377 - use named constant
+   Magic number 125 at line 419 - use named constant
+   Magic number 127 at line 419 - use named constant
+   Magic number 1337 at line 426 - use named constant
+   Single letter variable 'n' at line 317 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\cluster.d.ts
+   High complexity: 126 control structures - consider refactoring
+   Magic number 3596 at line 42 - use named constant
+   Magic number 4324 at line 43 - use named constant
+   Magic number 4520 at line 44 - use named constant
+   Magic number 6056 at line 45 - use named constant
+   Magic number 5644 at line 46 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\compatibility\iterators.d.ts
+   Commented out code at line 5 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\console.d.ts
+   Use const/let instead of var at line 443
+   High complexity: 132 control structures - consider refactoring
+   Magic number 132 at line 25 - use named constant
+   Magic number 309 at line 26 - use named constant
+   Magic number 101 at line 84 - use named constant
+   Magic number 101 at line 155 - use named constant
+   Magic number 3869 at line 260 - use named constant
+   Magic number 869 at line 260 - use named constant
+   Magic number 104 at line 261 - use named constant
+   Magic number 225 at line 273 - use named constant
+   Magic number 438 at line 273 - use named constant
+   Magic number 104 at line 275 - use named constant
+   Magic number 365 at line 287 - use named constant
+   Magic number 227 at line 287 - use named constant
+   Magic number 248 at line 304 - use named constant
+   Magic number 287 at line 305 - use named constant
+   Magic number 412 at line 307 - use named constant
+   Magic number 169 at line 309 - use named constant
+   Magic number 210 at line 310 - use named constant
+   Magic number 549 at line 311 - use named constant
+   Magic number 826 at line 312 - use named constant
+   Magic number 104 at line 314 - use named constant
+   Magic number 132 at line 377 - use named constant
+   Magic number 309 at line 378 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\crypto.d.ts
+   Use const/let instead of var at line 4524
+   Use === instead of == at line 3387
+   Empty function body at line 1935
+   Empty function body at line 2054
+   Variable 'key1' is declared but never used
+   Variable 'key2' is declared but never used
+   Variable 'uncompressedKey' is declared but never used
+   await without nearby try-catch at line 7 - ensure error handling
+   await without nearby try-catch at line 37 - ensure error handling
+   await without nearby try-catch at line 50 - ensure error handling
+   await without nearby try-catch at line 63 - ensure error handling
+   await without nearby try-catch at line 209 - ensure error handling
+   await without nearby try-catch at line 254 - ensure error handling
+   await without nearby try-catch at line 298 - ensure error handling
+   await without nearby try-catch at line 322 - ensure error handling
+   await without nearby try-catch at line 335 - ensure error handling
+   await without nearby try-catch at line 363 - ensure error handling
+   await without nearby try-catch at line 423 - ensure error handling
+   await without nearby try-catch at line 449 - ensure error handling
+   await without nearby try-catch at line 462 - ensure error handling
+   await without nearby try-catch at line 576 - ensure error handling
+   await without nearby try-catch at line 579 - ensure error handling
+   await without nearby try-catch at line 782 - ensure error handling
+   await without nearby try-catch at line 826 - ensure error handling
+   await without nearby try-catch at line 858 - ensure error handling
+   await without nearby try-catch at line 1042 - ensure error handling
+   await without nearby try-catch at line 1084 - ensure error handling
+   await without nearby try-catch at line 1108 - ensure error handling
+   await without nearby try-catch at line 1227 - ensure error handling
+   await without nearby try-catch at line 1253 - ensure error handling
+   await without nearby try-catch at line 1358 - ensure error handling
+   await without nearby try-catch at line 1383 - ensure error handling
+   await without nearby try-catch at line 1553 - ensure error handling
+   await without nearby try-catch at line 1699 - ensure error handling
+   await without nearby try-catch at line 1738 - ensure error handling
+   await without nearby try-catch at line 1779 - ensure error handling
+   await without nearby try-catch at line 1821 - ensure error handling
+   await without nearby try-catch at line 1849 - ensure error handling
+   await without nearby try-catch at line 1865 - ensure error handling
+   await without nearby try-catch at line 1906 - ensure error handling
+   await without nearby try-catch at line 1918 - ensure error handling
+   await without nearby try-catch at line 1928 - ensure error handling
+   await without nearby try-catch at line 1946 - ensure error handling
+   await without nearby try-catch at line 1963 - ensure error handling
+   await without nearby try-catch at line 1992 - ensure error handling
+   await without nearby try-catch at line 2022 - ensure error handling
+   await without nearby try-catch at line 2099 - ensure error handling
+   await without nearby try-catch at line 2146 - ensure error handling
+   await without nearby try-catch at line 2235 - ensure error handling
+   await without nearby try-catch at line 2247 - ensure error handling
+   await without nearby try-catch at line 2271 - ensure error handling
+   await without nearby try-catch at line 2290 - ensure error handling
+   await without nearby try-catch at line 2332 - ensure error handling
+   await without nearby try-catch at line 2666 - ensure error handling
+   await without nearby try-catch at line 2841 - ensure error handling
+   await without nearby try-catch at line 3466 - ensure error handling
+   await without nearby try-catch at line 3502 - ensure error handling
+   await without nearby try-catch at line 3589 - ensure error handling
+   Callback with err parameter but no check at line 1935
+   Callback with err parameter but no check at line 2054
+   Callback with err parameter but no check at line 2855
+   High complexity: 1031 control structures - consider refactoring
+   Magic number 628449 at line 14 - use named constant
+   Magic number 5102 at line 14 - use named constant
+   Magic number 516 at line 14 - use named constant
+   Magic number 959 at line 14 - use named constant
+   Magic number 6658 at line 14 - use named constant
+   Magic number 4507 at line 131 - use named constant
+   Magic number 1305 at line 141 - use named constant
+   Magic number 20943931 at line 309 - use named constant
+   Magic number 9834 at line 309 - use named constant
+   Magic number 43489 at line 309 - use named constant
+   Magic number 30726962 at line 309 - use named constant
+   Magic number 576 at line 309 - use named constant
+   Magic number 3993 at line 309 - use named constant
+   Magic number 20943931 at line 342 - use named constant
+   Magic number 9834 at line 342 - use named constant
+   Magic number 43489 at line 342 - use named constant
+   Magic number 30726962 at line 342 - use named constant
+   Magic number 576 at line 342 - use named constant
+   Magic number 3993 at line 342 - use named constant
+   Magic number 636 at line 434 - use named constant
+   Magic number 450 at line 434 - use named constant
+   Magic number 841 at line 434 - use named constant
+   Magic number 9418 at line 434 - use named constant
+   Magic number 5825 at line 434 - use named constant
+   Magic number 518115 at line 434 - use named constant
+   Magic number 45971 at line 434 - use named constant
+   Magic number 636 at line 469 - use named constant
+   Magic number 450 at line 469 - use named constant
+   Magic number 841 at line 469 - use named constant
+   Magic number 9418 at line 469 - use named constant
+   Magic number 5825 at line 469 - use named constant
+   Magic number 518115 at line 469 - use named constant
+   Magic number 45971 at line 469 - use named constant
+   Magic number 840 at line 595 - use named constant
+   Magic number 113549 at line 595 - use named constant
+   Magic number 840 at line 596 - use named constant
+   Magic number 113549 at line 596 - use named constant
+   Magic number 840 at line 597 - use named constant
+   Magic number 10040 at line 597 - use named constant
+   Magic number 840 at line 598 - use named constant
+   Magic number 10045 at line 598 - use named constant
+   Magic number 25519 at line 599 - use named constant
+   Magic number 101 at line 599 - use named constant
+   Magic number 110 at line 599 - use named constant
+   Magic number 448 at line 600 - use named constant
+   Magic number 101 at line 600 - use named constant
+   Magic number 111 at line 600 - use named constant
+   Magic number 25519 at line 601 - use named constant
+   Magic number 101 at line 601 - use named constant
+   Magic number 112 at line 601 - use named constant
+   Magic number 448 at line 602 - use named constant
+   Magic number 101 at line 602 - use named constant
+   Magic number 113 at line 602 - use named constant
+   Magic number 840 at line 603 - use named constant
+   Magic number 113549 at line 603 - use named constant
+   Magic number 7517 at line 633 - use named constant
+   Magic number 7517 at line 635 - use named constant
+   Magic number 5208 at line 643 - use named constant
+   Magic number 5208 at line 643 - use named constant
+   Magic number 1421 at line 643 - use named constant
+   Magic number 1421 at line 643 - use named constant
+   Magic number 192 at line 683 - use named constant
+   Magic number 192 at line 684 - use named constant
+   Magic number 192 at line 685 - use named constant
+   Magic number 1305 at line 686 - use named constant
+   Magic number 1305 at line 686 - use named constant
+   Magic number 1305 at line 698 - use named constant
+   Magic number 1305 at line 710 - use named constant
+   Magic number 192 at line 712 - use named constant
+   Magic number 1305 at line 751 - use named constant
+   Magic number 1305 at line 754 - use named constant
+   Magic number 1305 at line 755 - use named constant
+   Magic number 192 at line 788 - use named constant
+   Magic number 192 at line 788 - use named constant
+   Magic number 192 at line 832 - use named constant
+   Magic number 192 at line 832 - use named constant
+   Magic number 192 at line 864 - use named constant
+   Magic number 192 at line 864 - use named constant
+   Magic number 1305 at line 954 - use named constant
+   Magic number 1305 at line 970 - use named constant
+   Magic number 192 at line 972 - use named constant
+   Magic number 1305 at line 1011 - use named constant
+   Magic number 1305 at line 1014 - use named constant
+   Magic number 1305 at line 1015 - use named constant
+   Magic number 192 at line 1046 - use named constant
+   Magic number 192 at line 1047 - use named constant
+   Magic number 5915 at line 1068 - use named constant
+   Magic number 212 at line 1068 - use named constant
+   Magic number 5520 at line 1068 - use named constant
+   Magic number 44480993 at line 1068 - use named constant
+   Magic number 622 at line 1068 - use named constant
+   Magic number 5915 at line 1121 - use named constant
+   Magic number 212 at line 1121 - use named constant
+   Magic number 5520 at line 1121 - use named constant
+   Magic number 44480993 at line 1121 - use named constant
+   Magic number 622 at line 1121 - use named constant
+   Magic number 1305 at line 1199 - use named constant
+   Magic number 620 at line 1231 - use named constant
+   Magic number 509 at line 1288 - use named constant
+   Magic number 1363 at line 1319 - use named constant
+   Magic number 239 at line 1361 - use named constant
+   Magic number 2412 at line 1702 - use named constant
+   Magic number 2412 at line 1702 - use named constant
+   Magic number 3526 at line 1702 - use named constant
+   Magic number 3526 at line 1702 - use named constant
+   Magic number 768 at line 1705 - use named constant
+   Magic number 1536 at line 1707 - use named constant
+   Magic number 132 at line 1772 - use named constant
+   Magic number 132 at line 1772 - use named constant
+   Magic number 3745 at line 1783 - use named constant
+   Magic number 132 at line 1814 - use named constant
+   Magic number 132 at line 1814 - use named constant
+   Magic number 3745 at line 1824 - use named constant
+   Magic number 132 at line 2086 - use named constant
+   Magic number 132 at line 2086 - use named constant
+   Magic number 3745 at line 2104 - use named constant
+   Magic number 3745 at line 2109 - use named constant
+   Magic number 132 at line 2133 - use named constant
+   Magic number 132 at line 2133 - use named constant
+   Magic number 3745 at line 2150 - use named constant
+   Magic number 3745 at line 2153 - use named constant
+   Magic number 754 at line 2458 - use named constant
+   Magic number 25519 at line 2468 - use named constant
+   Magic number 448 at line 2468 - use named constant
+   Magic number 25519 at line 2468 - use named constant
+   Magic number 448 at line 2468 - use named constant
+   Magic number 25519 at line 2479 - use named constant
+   Magic number 448 at line 2480 - use named constant
+   Magic number 25519 at line 2481 - use named constant
+   Magic number 448 at line 2482 - use named constant
+   Magic number 25519 at line 2611 - use named constant
+   Magic number 448 at line 2620 - use named constant
+   Magic number 25519 at line 2629 - use named constant
+   Magic number 448 at line 2638 - use named constant
+   Magic number 25519 at line 2653 - use named constant
+   Magic number 448 at line 2653 - use named constant
+   Magic number 25519 at line 2653 - use named constant
+   Magic number 448 at line 2653 - use named constant
+   Magic number 25519 at line 2690 - use named constant
+   Magic number 448 at line 2690 - use named constant
+   Magic number 25519 at line 2690 - use named constant
+   Magic number 448 at line 2690 - use named constant
+   Magic number 25519 at line 2761 - use named constant
+   Magic number 25519 at line 2762 - use named constant
+   Magic number 25519 at line 2765 - use named constant
+   Magic number 25519 at line 2766 - use named constant
+   Magic number 25519 at line 2769 - use named constant
+   Magic number 25519 at line 2770 - use named constant
+   Magic number 25519 at line 2773 - use named constant
+   Magic number 25519 at line 2774 - use named constant
+   Magic number 25519 at line 2776 - use named constant
+   Magic number 25519 at line 2776 - use named constant
+   Magic number 448 at line 2778 - use named constant
+   Magic number 448 at line 2779 - use named constant
+   Magic number 448 at line 2782 - use named constant
+   Magic number 448 at line 2783 - use named constant
+   Magic number 448 at line 2786 - use named constant
+   Magic number 448 at line 2787 - use named constant
+   Magic number 448 at line 2790 - use named constant
+   Magic number 448 at line 2791 - use named constant
+   Magic number 448 at line 2793 - use named constant
+   Magic number 448 at line 2793 - use named constant
+   Magic number 25519 at line 2795 - use named constant
+   Magic number 25519 at line 2796 - use named constant
+   Magic number 25519 at line 2799 - use named constant
+   Magic number 25519 at line 2800 - use named constant
+   Magic number 25519 at line 2803 - use named constant
+   Magic number 25519 at line 2804 - use named constant
+   Magic number 25519 at line 2807 - use named constant
+   Magic number 25519 at line 2808 - use named constant
+   Magic number 25519 at line 2810 - use named constant
+   Magic number 25519 at line 2810 - use named constant
+   Magic number 448 at line 2812 - use named constant
+   Magic number 448 at line 2813 - use named constant
+   Magic number 448 at line 2816 - use named constant
+   Magic number 448 at line 2817 - use named constant
+   Magic number 448 at line 2820 - use named constant
+   Magic number 448 at line 2821 - use named constant
+   Magic number 448 at line 2824 - use named constant
+   Magic number 448 at line 2825 - use named constant
+   Magic number 448 at line 2827 - use named constant
+   Magic number 448 at line 2827 - use named constant
+   Magic number 25519 at line 2830 - use named constant
+   Magic number 448 at line 2830 - use named constant
+   Magic number 25519 at line 2830 - use named constant
+   Magic number 448 at line 2830 - use named constant
+   Magic number 25519 at line 2865 - use named constant
+   Magic number 448 at line 2865 - use named constant
+   Magic number 25519 at line 2865 - use named constant
+   Magic number 448 at line 2865 - use named constant
+   Magic number 25519 at line 2968 - use named constant
+   Magic number 25519 at line 2969 - use named constant
+   Magic number 25519 at line 2973 - use named constant
+   Magic number 25519 at line 2974 - use named constant
+   Magic number 25519 at line 2978 - use named constant
+   Magic number 25519 at line 2979 - use named constant
+   Magic number 25519 at line 2983 - use named constant
+   Magic number 25519 at line 2984 - use named constant
+   Magic number 25519 at line 2988 - use named constant
+   Magic number 25519 at line 2989 - use named constant
+   Magic number 448 at line 2993 - use named constant
+   Magic number 448 at line 2994 - use named constant
+   Magic number 448 at line 2998 - use named constant
+   Magic number 448 at line 2999 - use named constant
+   Magic number 448 at line 3003 - use named constant
+   Magic number 448 at line 3004 - use named constant
+   Magic number 448 at line 3008 - use named constant
+   Magic number 448 at line 3009 - use named constant
+   Magic number 448 at line 3013 - use named constant
+   Magic number 448 at line 3014 - use named constant
+   Magic number 25519 at line 3018 - use named constant
+   Magic number 25519 at line 3019 - use named constant
+   Magic number 25519 at line 3023 - use named constant
+   Magic number 25519 at line 3024 - use named constant
+   Magic number 25519 at line 3028 - use named constant
+   Magic number 25519 at line 3029 - use named constant
+   Magic number 25519 at line 3033 - use named constant
+   Magic number 25519 at line 3034 - use named constant
+   Magic number 25519 at line 3038 - use named constant
+   Magic number 25519 at line 3039 - use named constant
+   Magic number 448 at line 3043 - use named constant
+   Magic number 448 at line 3044 - use named constant
+   Magic number 448 at line 3048 - use named constant
+   Magic number 448 at line 3049 - use named constant
+   Magic number 448 at line 3053 - use named constant
+   Magic number 448 at line 3054 - use named constant
+   Magic number 448 at line 3058 - use named constant
+   Magic number 448 at line 3059 - use named constant
+   Magic number 448 at line 3063 - use named constant
+   Magic number 448 at line 3064 - use named constant
+   Magic number 25519 at line 3188 - use named constant
+   Magic number 25519 at line 3189 - use named constant
+   Magic number 25519 at line 3195 - use named constant
+   Magic number 25519 at line 3196 - use named constant
+   Magic number 25519 at line 3202 - use named constant
+   Magic number 25519 at line 3203 - use named constant
+   Magic number 25519 at line 3209 - use named constant
+   Magic number 25519 at line 3210 - use named constant
+   Magic number 25519 at line 3216 - use named constant
+   Magic number 25519 at line 3217 - use named constant
+   Magic number 448 at line 3220 - use named constant
+   Magic number 448 at line 3221 - use named constant
+   Magic number 448 at line 3227 - use named constant
+   Magic number 448 at line 3228 - use named constant
+   Magic number 448 at line 3234 - use named constant
+   Magic number 448 at line 3235 - use named constant
+   Magic number 448 at line 3241 - use named constant
+   Magic number 448 at line 3242 - use named constant
+   Magic number 448 at line 3247 - use named constant
+   Magic number 448 at line 3247 - use named constant
+   Magic number 25519 at line 3249 - use named constant
+   Magic number 25519 at line 3250 - use named constant
+   Magic number 25519 at line 3256 - use named constant
+   Magic number 25519 at line 3257 - use named constant
+   Magic number 25519 at line 3263 - use named constant
+   Magic number 25519 at line 3264 - use named constant
+   Magic number 25519 at line 3270 - use named constant
+   Magic number 25519 at line 3271 - use named constant
+   Magic number 25519 at line 3277 - use named constant
+   Magic number 25519 at line 3278 - use named constant
+   Magic number 448 at line 3281 - use named constant
+   Magic number 448 at line 3282 - use named constant
+   Magic number 448 at line 3288 - use named constant
+   Magic number 448 at line 3289 - use named constant
+   Magic number 448 at line 3295 - use named constant
+   Magic number 448 at line 3296 - use named constant
+   Magic number 448 at line 3302 - use named constant
+   Magic number 448 at line 3303 - use named constant
+   Magic number 448 at line 3308 - use named constant
+   Magic number 448 at line 3308 - use named constant
+   Magic number 25519 at line 3313 - use named constant
+   Magic number 448 at line 3313 - use named constant
+   Magic number 25519 at line 3335 - use named constant
+   Magic number 448 at line 3335 - use named constant
+   Magic number 448 at line 3364 - use named constant
+   Magic number 25519 at line 3364 - use named constant
+   Magic number 3493287 at line 3382 - use named constant
+   Magic number 831 at line 3382 - use named constant
+   Magic number 438811 at line 3382 - use named constant
+   Magic number 5869 at line 3455 - use named constant
+   Magic number 24156 at line 3470 - use named constant
+   Magic number 5391653 at line 3470 - use named constant
+   Magic number 255 at line 3478 - use named constant
+   Magic number 16320 at line 3479 - use named constant
+   Magic number 5869 at line 3490 - use named constant
+   Magic number 24156 at line 3505 - use named constant
+   Magic number 5391653 at line 3505 - use named constant
+   Magic number 255 at line 3512 - use named constant
+   Magic number 16320 at line 3513 - use named constant
+   Magic number 4122 at line 3557 - use named constant
+   Magic number 4122 at line 3557 - use named constant
+   Magic number 509 at line 3562 - use named constant
+   Magic number 509 at line 3585 - use named constant
+   Magic number 509 at line 3596 - use named constant
+   Magic number 509 at line 3607 - use named constant
+   Magic number 509 at line 3620 - use named constant
+   Magic number 2021 at line 3640 - use named constant
+   Magic number 44532 at line 3640 - use named constant
+   Magic number 2021 at line 3640 - use named constant
+   Magic number 44532 at line 3640 - use named constant
+   Magic number 509 at line 3683 - use named constant
+   Magic number 509 at line 3698 - use named constant
+   Magic number 509 at line 3740 - use named constant
+   Magic number 2818 at line 3752 - use named constant
+   Magic number 2818 at line 3752 - use named constant
+   Magic number 509 at line 3763 - use named constant
+   Magic number 5280 at line 3767 - use named constant
+   Magic number 5280 at line 3767 - use named constant
+   Magic number 509 at line 3783 - use named constant
+   Magic number 509 at line 3788 - use named constant
+   Magic number 509 at line 3789 - use named constant
+   Magic number 509 at line 3794 - use named constant
+   Magic number 509 at line 3803 - use named constant
+   Magic number 448 at line 4043 - use named constant
+   Magic number 536 at line 4136 - use named constant
+   Magic number 4122 at line 4141 - use named constant
+   Magic number 4122 at line 4141 - use named constant
+   Magic number 25519 at line 4236 - use named constant
+   Magic number 448 at line 4236 - use named constant
+   Magic number 25519 at line 4242 - use named constant
+   Magic number 448 at line 4243 - use named constant
+   Magic number 25519 at line 4268 - use named constant
+   Magic number 448 at line 4269 - use named constant
+   Magic number 384 at line 4290 - use named constant
+   Magic number 7517 at line 4324 - use named constant
+   Magic number 25519 at line 4342 - use named constant
+   Magic number 448 at line 4343 - use named constant
+   Magic number 25519 at line 4345 - use named constant
+   Magic number 448 at line 4346 - use named constant
+   Magic number 25519 at line 4416 - use named constant
+   Magic number 448 at line 4417 - use named constant
+   Magic number 448 at line 4422 - use named constant
+   Magic number 25519 at line 4447 - use named constant
+   Magic number 448 at line 4448 - use named constant
+   Magic number 25519 at line 4450 - use named constant
+   Magic number 448 at line 4451 - use named constant
+   Magic number 25519 at line 4485 - use named constant
+   Magic number 448 at line 4486 - use named constant
+   Magic number 448 at line 4491 - use named constant
+   Single letter variable 'n' at line 1920 - use descriptive name
+   Single letter variable 'n' at line 1930 - use descriptive name
+   Single letter variable 'a' at line 1965 - use descriptive name
+   Single letter variable 'b' at line 1969 - use descriptive name
+   Single letter variable 'c' at line 1973 - use descriptive name
+   Single letter variable 'a' at line 2024 - use descriptive name
+   Single letter variable 'b' at line 2030 - use descriptive name
+   Single letter variable 'c' at line 2036 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\dgram.d.ts
+   High complexity: 123 control structures - consider refactoring
+   Magic number 41234 at line 21 - use named constant
+   Magic number 41234 at line 22 - use named constant
+   Magic number 1234 at line 116 - use named constant
+   Magic number 224 at line 117 - use named constant
+   Magic number 114 at line 117 - use named constant
+   Magic number 41234 at line 149 - use named constant
+   Magic number 41234 at line 168 - use named constant
+   Magic number 41234 at line 169 - use named constant
+   Magic number 127 at line 191 - use named constant
+   Magic number 127 at line 278 - use named constant
+   Magic number 41234 at line 307 - use named constant
+   Magic number 127 at line 312 - use named constant
+   Magic number 41234 at line 321 - use named constant
+   Magic number 41234 at line 339 - use named constant
+   Magic number 4007 at line 399 - use named constant
+   Magic number 4007 at line 399 - use named constant
+   Magic number 1234 at line 426 - use named constant
+   Magic number 1234 at line 436 - use named constant
+   Magic number 1234 at line 448 - use named constant
+   Magic number 255 at line 470 - use named constant
+   Magic number 255 at line 499 - use named constant
+   Magic number 101 at line 503 - use named constant
+   Single letter variable 's' at line 115 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\diagnostics_channel.d.ts
+   Variable 'channelsByName' is declared but never used
+   Variable 'channelsByCollection' is declared but never used
+   High complexity: 77 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\dns.d.ts
+   Callback with err parameter but no check at line 14
+   Callback with err parameter but no check at line 123
+   Callback with err parameter but no check at line 146
+   Callback with err parameter but no check at line 152
+   Callback with err parameter but no check at line 202
+   Callback with err parameter but no check at line 333
+   Callback with err parameter but no check at line 850
+   High complexity: 148 control structures - consider refactoring
+   Magic number 184 at line 16 - use named constant
+   Magic number 216 at line 16 - use named constant
+   Magic number 2606 at line 148 - use named constant
+   Magic number 220 at line 148 - use named constant
+   Magic number 248 at line 148 - use named constant
+   Magic number 1893 at line 148 - use named constant
+   Magic number 1946 at line 148 - use named constant
+   Magic number 2606 at line 154 - use named constant
+   Magic number 220 at line 154 - use named constant
+   Magic number 248 at line 154 - use named constant
+   Magic number 1893 at line 154 - use named constant
+   Magic number 1946 at line 154 - use named constant
+   Magic number 127 at line 202 - use named constant
+   Magic number 125 at line 437 - use named constant
+   Magic number 104 at line 437 - use named constant
+   Magic number 125 at line 437 - use named constant
+   Magic number 105 at line 437 - use named constant
+   Magic number 125 at line 437 - use named constant
+   Magic number 106 at line 437 - use named constant
+   Magic number 2013101809 at line 593 - use named constant
+   Magic number 21223 at line 622 - use named constant
+   Magic number 127 at line 688 - use named constant
+   Magic number 299 at line 688 - use named constant
+   Magic number 156696742 at line 696 - use named constant
+   Magic number 8482 at line 704 - use named constant
+   Magic number 8482 at line 704 - use named constant
+   Magic number 5952 at line 737 - use named constant
+   Magic number 5952 at line 737 - use named constant
+   Magic number 2001 at line 743 - use named constant
+   Magic number 4860 at line 743 - use named constant
+   Magic number 4860 at line 743 - use named constant
+   Magic number 8888 at line 743 - use named constant
+   Magic number 1053 at line 744 - use named constant
+   Magic number 2001 at line 745 - use named constant
+   Magic number 4860 at line 745 - use named constant
+   Magic number 4860 at line 745 - use named constant
+   Magic number 8888 at line 745 - use named constant
+   Magic number 1053 at line 745 - use named constant
+   Magic number 5952 at line 761 - use named constant
+   Magic number 5952 at line 761 - use named constant
+   Magic number 5952 at line 765 - use named constant
+   Magic number 5952 at line 765 - use named constant
+   Magic number 2001 at line 772 - use named constant
+   Magic number 4860 at line 772 - use named constant
+   Magic number 4860 at line 772 - use named constant
+   Magic number 8888 at line 772 - use named constant
+   Magic number 1053 at line 773 - use named constant
+   Magic number 2001 at line 774 - use named constant
+   Magic number 4860 at line 774 - use named constant
+   Magic number 4860 at line 774 - use named constant
+   Magic number 8888 at line 774 - use named constant
+   Magic number 1053 at line 774 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\dns\promises.d.ts
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 429 - ensure error handling
+   await without nearby try-catch at line 431 - ensure error handling
+   High complexity: 63 control structures - consider refactoring
+   Magic number 5952 at line 26 - use named constant
+   Magic number 5952 at line 26 - use named constant
+   Magic number 2001 at line 33 - use named constant
+   Magic number 4860 at line 33 - use named constant
+   Magic number 4860 at line 33 - use named constant
+   Magic number 8888 at line 33 - use named constant
+   Magic number 1053 at line 34 - use named constant
+   Magic number 2001 at line 35 - use named constant
+   Magic number 4860 at line 35 - use named constant
+   Magic number 4860 at line 35 - use named constant
+   Magic number 8888 at line 35 - use named constant
+   Magic number 1053 at line 35 - use named constant
+   Magic number 2606 at line 72 - use named constant
+   Magic number 220 at line 72 - use named constant
+   Magic number 248 at line 72 - use named constant
+   Magic number 1893 at line 72 - use named constant
+   Magic number 1946 at line 72 - use named constant
+   Magic number 2606 at line 78 - use named constant
+   Magic number 220 at line 78 - use named constant
+   Magic number 248 at line 78 - use named constant
+   Magic number 1893 at line 78 - use named constant
+   Magic number 1946 at line 78 - use named constant
+   Magic number 127 at line 99 - use named constant
+   Magic number 125 at line 149 - use named constant
+   Magic number 104 at line 149 - use named constant
+   Magic number 125 at line 149 - use named constant
+   Magic number 105 at line 149 - use named constant
+   Magic number 125 at line 149 - use named constant
+   Magic number 106 at line 149 - use named constant
+   Magic number 127 at line 177 - use named constant
+   Magic number 299 at line 177 - use named constant
+   Magic number 156696742 at line 185 - use named constant
+   Magic number 2013101809 at line 267 - use named constant
+   Magic number 21223 at line 290 - use named constant
+   Magic number 5952 at line 346 - use named constant
+   Magic number 5952 at line 346 - use named constant
+   Magic number 2001 at line 352 - use named constant
+   Magic number 4860 at line 352 - use named constant
+   Magic number 4860 at line 352 - use named constant
+   Magic number 8888 at line 352 - use named constant
+   Magic number 1053 at line 353 - use named constant
+   Magic number 2001 at line 354 - use named constant
+   Magic number 4860 at line 354 - use named constant
+   Magic number 4860 at line 354 - use named constant
+   Magic number 8888 at line 354 - use named constant
+   Magic number 1053 at line 354 - use named constant
+   Magic number 5952 at line 368 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\domain.d.ts
+   JSON.parse without try-catch at line 119
+   JSON.parse without try-catch at line 152
+   High complexity: 63 control structures - consider refactoring
+   Single letter variable 'd' at line 68 - use descriptive name
+   Single letter variable 'd' at line 114 - use descriptive name
+   Single letter variable 'd' at line 140 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\events.d.ts
+   await without nearby try-catch at line 123 - ensure error handling
+   await without nearby try-catch at line 200 - ensure error handling
+   await without nearby try-catch at line 231 - ensure error handling
+   await without nearby try-catch at line 258 - ensure error handling
+   High complexity: 142 control structures - consider refactoring
+   Magic number 101 at line 664 - use named constant
+   Nested ternary operator - hard to read at line 72
+   Nested ternary operator - hard to read at line 77
+   Commented out code at line 203 - remove if not needed
+   Commented out code at line 234 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\fs.d.ts
+   Code comment requires attention at line 2601
+   Code comment requires attention at line 2604
+   Code comment requires attention at line 4093
+   Code comment requires attention at line 4140
+   Variable 'ab' is declared but never used
+   await without nearby try-catch at line 4181 - ensure error handling
+   await without nearby try-catch at line 4182 - ensure error handling
+   Callback with err parameter but no check at line 873
+   Callback with err parameter but no check at line 902
+   Callback with err parameter but no check at line 1107
+   Callback with err parameter but no check at line 1156
+   Callback with err parameter but no check at line 1186
+   Callback with err parameter but no check at line 1316
+   Callback with err parameter but no check at line 1416
+   Callback with err parameter but no check at line 1484
+   Callback with err parameter but no check at line 1972
+   Callback with err parameter but no check at line 2251
+   Callback with err parameter but no check at line 2394
+   Callback with err parameter but no check at line 2609
+   Callback with err parameter but no check at line 2721
+   Callback with err parameter but no check at line 2742
+   Callback with err parameter but no check at line 2747
+   Callback with err parameter but no check at line 2760
+   High complexity: 973 control structures - consider refactoring
+   Magic number 2114 at line 85 - use named constant
+   Magic number 48064969 at line 86 - use named constant
+   Magic number 33188 at line 87 - use named constant
+   Magic number 527 at line 92 - use named constant
+   Magic number 2011 at line 99 - use named constant
+   Magic number 2011 at line 100 - use named constant
+   Magic number 2011 at line 101 - use named constant
+   Magic number 2011 at line 102 - use named constant
+   Magic number 2114 at line 109 - use named constant
+   Magic number 48064969 at line 110 - use named constant
+   Magic number 33188 at line 111 - use named constant
+   Magic number 527 at line 116 - use named constant
+   Magic number 2011 at line 127 - use named constant
+   Magic number 2011 at line 128 - use named constant
+   Magic number 2011 at line 129 - use named constant
+   Magic number 2011 at line 130 - use named constant
+   Magic number 1397114950 at line 163 - use named constant
+   Magic number 121938943 at line 165 - use named constant
+   Magic number 61058895 at line 166 - use named constant
+   Magic number 61058895 at line 167 - use named constant
+   Magic number 999 at line 168 - use named constant
+   Magic number 1397114950 at line 177 - use named constant
+   Magic number 121938943 at line 179 - use named constant
+   Magic number 61058895 at line 180 - use named constant
+   Magic number 61058895 at line 181 - use named constant
+   Magic number 999 at line 182 - use named constant
+   Magic number 775 at line 798 - use named constant
+   Magic number 16777220 at line 913 - use named constant
+   Magic number 16877 at line 914 - use named constant
+   Magic number 501 at line 916 - use named constant
+   Magic number 14214262 at line 920 - use named constant
+   Magic number 1561174653071 at line 923 - use named constant
+   Magic number 963 at line 923 - use named constant
+   Magic number 1561174614583 at line 924 - use named constant
+   Magic number 3518 at line 924 - use named constant
+   Magic number 1561174626623 at line 925 - use named constant
+   Magic number 5366 at line 925 - use named constant
+   Magic number 1561174126937 at line 926 - use named constant
+   Magic number 2893 at line 926 - use named constant
+   Magic number 2019 at line 927 - use named constant
+   Magic number 2019 at line 928 - use named constant
+   Magic number 583 at line 928 - use named constant
+   Magic number 2019 at line 929 - use named constant
+   Magic number 624 at line 929 - use named constant
+   Magic number 2019 at line 930 - use named constant
+   Magic number 937 at line 930 - use named constant
+   Magic number 16777220 at line 934 - use named constant
+   Magic number 33188 at line 935 - use named constant
+   Magic number 501 at line 937 - use named constant
+   Magic number 14214074 at line 941 - use named constant
+   Magic number 1561174616618 at line 944 - use named constant
+   Magic number 8555 at line 944 - use named constant
+   Magic number 1561174614584 at line 945 - use named constant
+   Magic number 1561174614583 at line 946 - use named constant
+   Magic number 8145 at line 946 - use named constant
+   Magic number 1561174007710 at line 947 - use named constant
+   Magic number 7478 at line 947 - use named constant
+   Magic number 2019 at line 948 - use named constant
+   Magic number 619 at line 948 - use named constant
+   Magic number 2019 at line 949 - use named constant
+   Magic number 584 at line 949 - use named constant
+   Magic number 2019 at line 950 - use named constant
+   Magic number 584 at line 950 - use named constant
+   Magic number 2019 at line 951 - use named constant
+   Magic number 711 at line 951 - use named constant
+   Magic number 777 at line 1685 - use named constant
+   Magic number 777 at line 1736 - use named constant
+   Magic number 777 at line 1753 - use named constant
+   Magic number 777 at line 1761 - use named constant
+   Magic number 777 at line 1770 - use named constant
+   Magic number 777 at line 1782 - use named constant
+   Magic number 777 at line 1797 - use named constant
+   Magic number 777 at line 1821 - use named constant
+   Magic number 777 at line 1836 - use named constant
+   Magic number 123 at line 1879 - use named constant
+   Magic number 123 at line 1888 - use named constant
+   Magic number 666 at line 2260 - use named constant
+   Magic number 666 at line 2269 - use named constant
+   Magic number 666 at line 2279 - use named constant
+   Magic number 666 at line 2287 - use named constant
+   Magic number 666 at line 2298 - use named constant
+   Magic number 123456789 at line 2306 - use named constant
+   Magic number 666 at line 3041 - use named constant
+   Magic number 666 at line 3140 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\fs\promises.d.ts
+   Code comment requires attention at line 98
+   Variable 'createDir' is declared but never used
+   await without nearby try-catch at line 157 - ensure error handling
+   await without nearby try-catch at line 183 - ensure error handling
+   await without nearby try-catch at line 261 - ensure error handling
+   await without nearby try-catch at line 263 - ensure error handling
+   await without nearby try-catch at line 265 - ensure error handling
+   await without nearby try-catch at line 318 - ensure error handling
+   await without nearby try-catch at line 320 - ensure error handling
+   High complexity: 291 control structures - consider refactoring
+   Magic number 262 at line 377 - use named constant
+   Magic number 666 at line 571 - use named constant
+   Magic number 777 at line 637 - use named constant
+   Magic number 777 at line 652 - use named constant
+   Magic number 123456789 at line 892 - use named constant
+   Magic number 262 at line 977 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\globals.d.ts
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 74
+   High complexity: 32 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\globals.typedarray.d.ts
+   Commented out code at line 22 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\http.d.ts
+   Variable 'hasContentType' is declared but never used
+   Variable 'parsedData' is declared but never used
+   Callback with err parameter but no check at line 1625
+   High complexity: 468 control structures - consider refactoring
+   Magic number 123 at line 13 - use named constant
+   Magic number 123456 at line 33 - use named constant
+   Magic number 123 at line 34 - use named constant
+   Magic number 503 at line 392 - use named constant
+   Magic number 408 at line 411 - use named constant
+   Magic number 120 at line 414 - use named constant
+   Magic number 408 at line 458 - use named constant
+   Magic number 120 at line 461 - use named constant
+   Magic number 7895 at line 769 - use named constant
+   Magic number 8828 at line 769 - use named constant
+   Magic number 47747 at line 769 - use named constant
+   Magic number 667 at line 769 - use named constant
+   Magic number 103 at line 844 - use named constant
+   Magic number 102 at line 940 - use named constant
+   Magic number 127 at line 1269 - use named constant
+   Magic number 8080 at line 1270 - use named constant
+   Magic number 127 at line 1311 - use named constant
+   Magic number 9110 at line 1321 - use named constant
+   Magic number 127 at line 1337 - use named constant
+   Magic number 127 at line 1360 - use named constant
+   Magic number 2616 at line 1802 - use named constant
+   Nested ternary operator - hard to read at line 1414
+
+⚠️  electron-code-editor\node_modules\@types\node\http2.d.ts
+   Variable 'contentType' is declared but never used
+   Variable 'hasContentType' is declared but never used
+   Callback with err parameter but no check at line 781
+   High complexity: 367 control structures - consider refactoring
+   Magic number 7540 at line 2 - use named constant
+   Magic number 304 at line 565 - use named constant
+   Magic number 304 at line 573 - use named constant
+   Magic number 7838 at line 1074 - use named constant
+   Magic number 7838 at line 1074 - use named constant
+   Magic number 7838 at line 1107 - use named constant
+   Magic number 8336 at line 1113 - use named constant
+   Magic number 8336 at line 1113 - use named constant
+   Magic number 9113 at line 1306 - use named constant
+   Magic number 9113 at line 1306 - use named constant
+   Magic number 127 at line 1661 - use named constant
+   Magic number 127 at line 1712 - use named constant
+   Magic number 7540 at line 1962 - use named constant
+   Magic number 304 at line 2107 - use named constant
+   Magic number 103 at line 2136 - use named constant
+   Magic number 7540 at line 2495 - use named constant
+   Magic number 8443 at line 2580 - use named constant
+   Nested ternary operator - hard to read at line 1780
+
+⚠️  electron-code-editor\node_modules\@types\node\https.d.ts
+   High complexity: 55 control structures - consider refactoring
+   Magic number 443 at line 370 - use named constant
+   Magic number 443 at line 393 - use named constant
+   Magic number 443 at line 411 - use named constant
+   Magic number 443 at line 446 - use named constant
+   Magic number 302 at line 510 - use named constant
+   Magic number 657 at line 520 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\inspector.d.ts
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 181 - ensure error handling
+   await without nearby try-catch at line 182 - ensure error handling
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 40 control structures - consider refactoring
+   Magic number 127 at line 59 - use named constant
+   Magic number 9229 at line 59 - use named constant
+   Magic number 166 at line 59 - use named constant
+   Magic number 272 at line 59 - use named constant
+   Magic number 127 at line 61 - use named constant
+   Magic number 9229 at line 61 - use named constant
+   Magic number 166 at line 61 - use named constant
+   Magic number 272 at line 61 - use named constant
+   Magic number 54519839 at line 64 - use named constant
+   Magic number 54519839 at line 66 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\inspector.generated.d.ts
+   High complexity: 1187 control structures - consider refactoring
+   Magic number 1970 at line 1709 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\module.d.ts
+   Use const/let instead of var at line 308
+   Use const/let instead of var at line 849
+   Use const/let instead of var at line 858
+   Use const/let instead of var at line 864
+   Use const/let instead of var at line 869
+   Use const/let instead of var at line 873
+   Use === instead of == at line 689
+   Variable 'buffer' is declared but never used
+   Variable 'dependencyAsset' is declared but never used
+   Possible unhandled Promise rejection - add .catch
+   High complexity: 188 control structures - consider refactoring
+   Magic number 426 at line 499 - use named constant
+   Magic number 426 at line 524 - use named constant
+   Single letter variable 'a' at line 286 - use descriptive name
+   Single letter variable 'a' at line 295 - use descriptive name
+   Commented out code at line 308 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\net.d.ts
+   Code comment requires attention at line 47
+   High complexity: 241 control structures - consider refactoring
+   Magic number 12346 at line 222 - use named constant
+   Magic number 127 at line 222 - use named constant
+   Magic number 192 at line 298 - use named constant
+   Magic number 168 at line 298 - use named constant
+   Magic number 192 at line 298 - use named constant
+   Magic number 168 at line 298 - use named constant
+   Magic number 125 at line 323 - use named constant
+   Magic number 127 at line 323 - use named constant
+   Magic number 2001 at line 323 - use named constant
+   Magic number 4860 at line 323 - use named constant
+   Magic number 511 at line 586 - use named constant
+   Magic number 12346 at line 634 - use named constant
+   Magic number 127 at line 634 - use named constant
+   Magic number 123 at line 782 - use named constant
+   Magic number 123 at line 782 - use named constant
+   Magic number 123 at line 782 - use named constant
+   Magic number 123 at line 782 - use named constant
+   Magic number 8592 at line 784 - use named constant
+   Magic number 757 at line 784 - use named constant
+   Magic number 192 at line 815 - use named constant
+   Magic number 168 at line 815 - use named constant
+   Magic number 192 at line 817 - use named constant
+   Magic number 168 at line 817 - use named constant
+   Magic number 192 at line 817 - use named constant
+   Magic number 168 at line 817 - use named constant
+   Magic number 1122 at line 848 - use named constant
+   Magic number 1122 at line 848 - use named constant
+   Magic number 8124 at line 858 - use named constant
+   Magic number 8124 at line 872 - use named constant
+   Magic number 8124 at line 879 - use named constant
+   Magic number 250 at line 947 - use named constant
+   Magic number 250 at line 954 - use named constant
+   Magic number 127 at line 965 - use named constant
+   Magic number 127 at line 966 - use named constant
+   Magic number 127 at line 967 - use named constant
+   Magic number 127 at line 978 - use named constant
+   Magic number 127 at line 979 - use named constant
+   Magic number 127 at line 980 - use named constant
+   Magic number 127 at line 999 - use named constant
+   Magic number 123 at line 1043 - use named constant
+   Magic number 1234 at line 1043 - use named constant
+   Magic number 1234 at line 1043 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\os.d.ts
+   High complexity: 70 control structures - consider refactoring
+   Magic number 860 at line 91 - use named constant
+   Magic number 2926 at line 92 - use named constant
+   Magic number 252020 at line 94 - use named constant
+   Magic number 30340 at line 96 - use named constant
+   Magic number 1070356870 at line 97 - use named constant
+   Magic number 860 at line 102 - use named constant
+   Magic number 2926 at line 103 - use named constant
+   Magic number 306960 at line 105 - use named constant
+   Magic number 26980 at line 107 - use named constant
+   Magic number 1071569080 at line 108 - use named constant
+   Magic number 860 at line 113 - use named constant
+   Magic number 2926 at line 114 - use named constant
+   Magic number 248450 at line 116 - use named constant
+   Magic number 21750 at line 118 - use named constant
+   Magic number 1070919370 at line 119 - use named constant
+   Magic number 860 at line 124 - use named constant
+   Magic number 2926 at line 125 - use named constant
+   Magic number 256880 at line 127 - use named constant
+   Magic number 19430 at line 129 - use named constant
+   Magic number 1070905480 at line 130 - use named constant
+   Magic number 127 at line 183 - use named constant
+   Magic number 255 at line 184 - use named constant
+   Magic number 127 at line 188 - use named constant
+   Magic number 192 at line 202 - use named constant
+   Magic number 168 at line 202 - use named constant
+   Magic number 108 at line 202 - use named constant
+   Magic number 255 at line 203 - use named constant
+   Magic number 255 at line 203 - use named constant
+   Magic number 255 at line 203 - use named constant
+   Magic number 192 at line 207 - use named constant
+   Magic number 168 at line 207 - use named constant
+   Magic number 108 at line 207 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\path.d.ts
+   High complexity: 52 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\perf_hooks.d.ts
+   Use const/let instead of var at line 893
+   Use const/let instead of var at line 903
+   Use const/let instead of var at line 913
+   Use const/let instead of var at line 923
+   Use const/let instead of var at line 933
+   Use const/let instead of var at line 943
+   Use const/let instead of var at line 953
+   Code comment requires attention at line 130
+   High complexity: 385 control structures - consider refactoring
+   Magic number 250 at line 363 - use named constant
+   Magic number 465639 at line 433 - use named constant
+   Magic number 860064 at line 440 - use named constant
+   Magic number 545991 at line 476 - use named constant
+   Magic number 518931 at line 490 - use named constant
+   Magic number 897834 at line 527 - use named constant
+   Magic number 350146 at line 534 - use named constant
+   Single letter variable 'n' at line 578 - use descriptive name
+   Single letter variable 'h' at line 846 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\process.d.ts
+   Use const/let instead of var at line 122
+   Variable 'NS_PER_SEC' is declared but never used
+   Variable 'startUsage' is declared but never used
+   High complexity: 427 control structures - consider refactoring
+   Magic number 390 at line 283 - use named constant
+   Magic number 1800216 at line 374 - use named constant
+   Magic number 552 at line 378 - use named constant
+   Magic number 1000000552 at line 380 - use named constant
+   Magic number 191051479007711 at line 396 - use named constant
+   Magic number 191052633396993 at line 400 - use named constant
+   Magic number 1154389282 at line 402 - use named constant
+   Magic number 5858 at line 741 - use named constant
+   Magic number 56338 at line 781 - use named constant
+   Magic number 56338 at line 789 - use named constant
+   Magic number 56338 at line 796 - use named constant
+   Magic number 56338 at line 826 - use named constant
+   Magic number 501 at line 1088 - use named constant
+   Magic number 501 at line 1131 - use named constant
+   Magic number 501 at line 1173 - use named constant
+   Magic number 501 at line 1216 - use named constant
+   Magic number 297 at line 1239 - use named constant
+   Magic number 501 at line 1260 - use named constant
+   Magic number 115 at line 1352 - use named constant
+   Magic number 2023 at line 1359 - use named constant
+   Magic number 244 at line 1364 - use named constant
+   Magic number 104 at line 1504 - use named constant
+   Magic number 38579 at line 1585 - use named constant
+   Magic number 6986 at line 1585 - use named constant
+   Magic number 514883 at line 1592 - use named constant
+   Magic number 11226 at line 1592 - use named constant
+   Magic number 82872 at line 1841 - use named constant
+   Magic number 4143 at line 1842 - use named constant
+   Magic number 33164 at line 1843 - use named constant
+   Magic number 2469 at line 1847 - use named constant
+   Magic number 26598 at line 1877 - use named constant
+   Nested ternary operator - hard to read at line 1943
+
+⚠️  electron-code-editor\node_modules\@types\node\punycode.d.ts
+   Magic number 3492 at line 14 - use named constant
+   Magic number 3492 at line 14 - use named constant
+   Magic number 3492 at line 31 - use named constant
+   Magic number 3492 at line 42 - use named constant
+   Magic number 3492 at line 53 - use named constant
+   Magic number 3492 at line 53 - use named constant
+   Magic number 3492 at line 67 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\querystring.d.ts
+   High complexity: 48 control structures - consider refactoring
+   Magic number 123 at line 86 - use named constant
+   Magic number 123 at line 91 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\readline.d.ts
+   Variable 'values' is declared but never used
+   await without nearby try-catch at line 25 - ensure error handling
+   await without nearby try-catch at line 491 - ensure error handling
+   High complexity: 134 control structures - consider refactoring
+   Magic number 104 at line 51 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\readline\promises.d.ts
+   await without nearby try-catch at line 34 - ensure error handling
+   await without nearby try-catch at line 45 - ensure error handling
+   High complexity: 25 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\repl.d.ts
+   Variable 'firstInstance' is declared but never used
+   Variable 'secondInstance' is declared but never used
+   High complexity: 88 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\sea.d.ts
+   High complexity: 29 control structures - consider refactoring
+   Magic number 680 at line 63 - use named constant
+   Magic number 467 at line 63 - use named constant
+   Magic number 1996 at line 63 - use named constant
+   Magic number 680 at line 72 - use named constant
+   Magic number 467 at line 72 - use named constant
+   Magic number 1996 at line 72 - use named constant
+   Magic number 680 at line 77 - use named constant
+   Magic number 467 at line 77 - use named constant
+   Magic number 1996 at line 77 - use named constant
+   Magic number 680 at line 82 - use named constant
+   Magic number 467 at line 82 - use named constant
+   Magic number 1996 at line 82 - use named constant
+   Magic number 680 at line 87 - use named constant
+   Magic number 467 at line 87 - use named constant
+   Magic number 1996 at line 87 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\sqlite.d.ts
+   Variable 'totalPagesTransferred' is declared but never used
+   await without nearby try-catch at line 663 - ensure error handling
+   High complexity: 106 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\stream.d.ts
+   Avoid with statement at line 365
+   Code comment requires attention at line 1629
+   Possible unhandled Promise rejection - add .catch
+   High complexity: 396 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 164
+   Nested ternary operator - hard to read at line 797
+
+⚠️  electron-code-editor\node_modules\@types\node\stream\consumers.d.ts
+   JSON.parse without try-catch at line 27
+
+⚠️  electron-code-editor\node_modules\@types\node\stream\promises.d.ts
+   High complexity: 31 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\stream\web.d.ts
+   Use const/let instead of var at line 439
+   Use const/let instead of var at line 449
+   Use const/let instead of var at line 469
+   Use const/let instead of var at line 478
+   Use const/let instead of var at line 500
+   Use const/let instead of var at line 510
+   Use const/let instead of var at line 519
+   Use const/let instead of var at line 529
+   Use const/let instead of var at line 539
+   Use const/let instead of var at line 549
+   Use const/let instead of var at line 559
+   Use const/let instead of var at line 568
+   Use const/let instead of var at line 577
+   Use const/let instead of var at line 586
+   Use const/let instead of var at line 596
+   Use const/let instead of var at line 605
+   Use const/let instead of var at line 615
+   High complexity: 225 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\string_decoder.d.ts
+   Variable 'cent' is declared but never used
+   Variable 'euro' is declared but never used
+
+⚠️  electron-code-editor\node_modules\@types\node\test.d.ts
+   Code comment requires attention at line 177
+   Code comment requires attention at line 202
+   Code comment requires attention at line 895
+   Code comment requires attention at line 1118
+   Code comment requires attention at line 1124
+   Code comment requires attention at line 1129
+   Code comment requires attention at line 1313
+   Code comment requires attention at line 1314
+   await without nearby try-catch at line 106 - ensure error handling
+   await without nearby try-catch at line 1096 - ensure error handling
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 448 control structures - consider refactoring
+   Magic number 1234 at line 1842 - use named constant
+   Magic number 1970 at line 1872 - use named constant
+   Magic number 9999 at line 1932 - use named constant
+   Magic number 9999 at line 1937 - use named constant
+   Magic number 9999 at line 1975 - use named constant
+   Magic number 9999 at line 1981 - use named constant
+   Magic number 9999 at line 1983 - use named constant
+   Magic number 9999 at line 2003 - use named constant
+   Magic number 8888 at line 2007 - use named constant
+   Magic number 8888 at line 2008 - use named constant
+   Magic number 9999 at line 2015 - use named constant
+   Commented out code at line 43 - remove if not needed
+   Commented out code at line 49 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\timers.d.ts
+   Code comment requires attention at line 69
+   High complexity: 29 control structures - consider refactoring
+   Magic number 2147483647 at line 185 - use named constant
+   Magic number 2147483647 at line 216 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\timers\promises.d.ts
+   await without nearby try-catch at line 24 - ensure error handling
+   await without nearby try-catch at line 40 - ensure error handling
+   await without nearby try-catch at line 59 - ensure error handling
+   await without nearby try-catch at line 84 - ensure error handling
+
+⚠️  electron-code-editor\node_modules\@types\node\tls.d.ts
+   High complexity: 426 control structures - consider refactoring
+   Magic number 509 at line 13 - use named constant
+   Magic number 509 at line 51 - use named constant
+   Magic number 192 at line 290 - use named constant
+   Magic number 5929 at line 295 - use named constant
+   Magic number 5929 at line 295 - use named constant
+   Magic number 192 at line 316 - use named constant
+   Magic number 5929 at line 321 - use named constant
+   Magic number 5929 at line 321 - use named constant
+   Magic number 509 at line 441 - use named constant
+   Magic number 509 at line 446 - use named constant
+   Magic number 509 at line 446 - use named constant
+   Magic number 509 at line 448 - use named constant
+   Magic number 509 at line 453 - use named constant
+   Magic number 509 at line 453 - use named constant
+   Magic number 802 at line 456 - use named constant
+   Magic number 120 at line 559 - use named constant
+   Magic number 4279 at line 588 - use named constant
+   Magic number 4279 at line 622 - use named constant
+   Magic number 384 at line 872 - use named constant
+   Magic number 521 at line 899 - use named constant
+   Magic number 384 at line 899 - use named constant
+   Magic number 509 at line 1017 - use named constant
+   Magic number 2021 at line 1027 - use named constant
+   Magic number 44531 at line 1027 - use named constant
+   Magic number 2021 at line 1027 - use named constant
+   Magic number 44531 at line 1027 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\trace_events.d.ts
+   Variable 't3' is declared but never used
+   High complexity: 34 control structures - consider refactoring
+   Magic number 130 at line 82 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\ts5.6\buffer.buffer.d.ts
+   Use const/let instead of var at line 451
+   Variable 'bufA' is declared but never used
+   High complexity: 62 control structures - consider refactoring
+   Magic number 255 at line 37 - use named constant
+   Magic number 255 at line 207 - use named constant
+   Magic number 255 at line 208 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\tty.d.ts
+   High complexity: 68 control structures - consider refactoring
+   Magic number 777 at line 136 - use named constant
+   Magic number 216 at line 136 - use named constant
+   Magic number 777 at line 150 - use named constant
+   Magic number 216 at line 150 - use named constant
+
+⚠️  electron-code-editor\node_modules\@types\node\url.d.ts
+   Use const/let instead of var at line 925
+   Use const/let instead of var at line 935
+   Variable 'otherBlob' is declared but never used
+   Variable 'isValid' is declared but never used
+   Variable 'isNotValid' is declared but never used
+   Variable 'idnURL' is declared but never used
+   Variable 'myURLs' is declared but never used
+   High complexity: 195 control structures - consider refactoring
+   Magic number 678487 at line 74 - use named constant
+   Magic number 5891 at line 255 - use named constant
+   Magic number 228 at line 266 - use named constant
+   Magic number 231 at line 337 - use named constant
+   Magic number 251 at line 359 - use named constant
+   Magic number 251 at line 364 - use named constant
+   Magic number 262 at line 463 - use named constant
+   Magic number 262 at line 465 - use named constant
+   Magic number 251 at line 548 - use named constant
+   Magic number 251 at line 550 - use named constant
+   Magic number 123 at line 561 - use named constant
+   Magic number 123 at line 562 - use named constant
+   Magic number 123 at line 578 - use named constant
+   Magic number 65535 at line 588 - use named constant
+   Magic number 8888 at line 606 - use named constant
+   Magic number 443 at line 609 - use named constant
+   Magic number 443 at line 610 - use named constant
+   Magic number 1234 at line 614 - use named constant
+   Magic number 1234 at line 615 - use named constant
+   Magic number 1234 at line 616 - use named constant
+   Magic number 1234 at line 620 - use named constant
+   Magic number 5678 at line 623 - use named constant
+   Magic number 5678 at line 624 - use named constant
+   Magic number 1234 at line 627 - use named constant
+   Magic number 5678 at line 627 - use named constant
+   Magic number 1234 at line 628 - use named constant
+   Magic number 1234 at line 633 - use named constant
+   Magic number 567 at line 643 - use named constant
+   Magic number 567 at line 644 - use named constant
+   Magic number 123 at line 667 - use named constant
+   Magic number 123 at line 708 - use named constant
+   Magic number 123 at line 709 - use named constant
+   Magic number 123 at line 755 - use named constant
+   Magic number 123 at line 758 - use named constant
+   Magic number 123 at line 896 - use named constant
+   Commented out code at line 766 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\util.d.ts
+   Use const/let instead of var at line 1632
+   Use const/let instead of var at line 1642
+   Use !== instead of != at line 2189
+   Code comment requires attention at line 107
+   Variable 'actualString' is declared but never used
+   Variable 'expectedString' is declared but never used
+   Variable 'actualArray' is declared but never used
+   Variable 'expectedArray' is declared but never used
+   Variable 'o' is declared but never used
+   Variable 'weakSet' is declared but never used
+   Variable 'thousand' is declared but never used
+   Variable 'million' is declared but never used
+   Variable 'bigNumber' is declared but never used
+   Variable 'bigDecimal' is declared but never used
+   Variable 'successMessage' is declared but never used
+   Variable 'decoder' is declared but never used
+   Variable 'u8arr' is declared but never used
+   Variable 'uint8array' is declared but never used
+   await without nearby try-catch at line 1309 - ensure error handling
+   Callback with err parameter but no check at line 1157
+   Callback with err parameter but no check at line 1195
+   Callback with err parameter but no check at line 1198
+   Callback with err parameter but no check at line 1285
+   High complexity: 456 control structures - consider refactoring
+   Magic number 150 at line 538 - use named constant
+   Magic number 123 at line 603 - use named constant
+   Magic number 456 at line 603 - use named constant
+   Magic number 789 at line 603 - use named constant
+   Magic number 234 at line 605 - use named constant
+   Magic number 123 at line 605 - use named constant
+   Magic number 4179 at line 719 - use named constant
+   Magic number 2015 at line 773 - use named constant
+   Magic number 123 at line 796 - use named constant
+   Magic number 123 at line 812 - use named constant
+   Magic number 3245 at line 819 - use named constant
+   Magic number 123 at line 819 - use named constant
+   Magic number 3245 at line 822 - use named constant
+   Magic number 2333 at line 831 - use named constant
+   Magic number 3257 at line 838 - use named constant
+   Magic number 2333 at line 838 - use named constant
+   Magic number 12936 at line 1748 - use named constant
+   Magic number 123 at line 2099 - use named constant
+   Magic number 123 at line 2102 - use named constant
+   Magic number 123 at line 2103 - use named constant
+   Magic number 123 at line 2104 - use named constant
+   Magic number 262 at line 2337 - use named constant
+   Magic number 262 at line 2349 - use named constant
+   Magic number 262 at line 2366 - use named constant
+   Single letter variable 'o' at line 495 - use descriptive name
+   Nested ternary operator - hard to read at line 1766
+   Nested ternary operator - hard to read at line 1772
+   Commented out code at line 423 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\@types\node\v8.d.ts
+   Use === instead of == at line 19
+   Use === instead of == at line 19
+   Variable 'b' is declared but never used
+   High complexity: 140 control structures - consider refactoring
+   Magic number 3947234607 at line 61 - use named constant
+   Magic number 183726201 at line 66 - use named constant
+   Magic number 7326976 at line 98 - use named constant
+   Magic number 7326976 at line 100 - use named constant
+   Magic number 1152656 at line 101 - use named constant
+   Magic number 3476208 at line 102 - use named constant
+   Magic number 1535115264 at line 103 - use named constant
+   Magic number 1127496 at line 105 - use named constant
+   Magic number 3296 at line 110 - use named constant
+   Magic number 318824 at line 111 - use named constant
+   Magic number 152 at line 128 - use named constant
+   Magic number 152 at line 142 - use named constant
+   Magic number 128864 at line 181 - use named constant
+   Magic number 673576 at line 202 - use named constant
+   Magic number 33378 at line 202 - use named constant
+   Magic number 2063872 at line 211 - use named constant
+   Magic number 951112 at line 212 - use named constant
+   Magic number 80824 at line 213 - use named constant
+   Magic number 2063872 at line 214 - use named constant
+   Magic number 3090560 at line 218 - use named constant
+   Magic number 2493792 at line 219 - use named constant
+   Magic number 3090560 at line 221 - use named constant
+   Magic number 1260160 at line 225 - use named constant
+   Magic number 644256 at line 226 - use named constant
+   Magic number 960 at line 227 - use named constant
+   Magic number 1260160 at line 228 - use named constant
+   Magic number 1094160 at line 232 - use named constant
+   Magic number 201608 at line 233 - use named constant
+   Magic number 1094160 at line 235 - use named constant
+   Magic number 1490980608 at line 241 - use named constant
+   Magic number 6079122 at line 389 - use named constant
+   Magic number 17612 at line 389 - use named constant
+   Magic number 3348 at line 389 - use named constant
+   Magic number 170866 at line 389 - use named constant
+   Magic number 212208 at line 394 - use named constant
+   Magic number 161368 at line 395 - use named constant
+   Magic number 1410794 at line 396 - use named constant
+   Magic number 8859 at line 404 - use named constant
+   Magic number 8859 at line 405 - use named constant
+   Magic number 8859 at line 408 - use named constant
+   Magic number 1674059033862 at line 604 - use named constant
+   Magic number 5005312 at line 610 - use named constant
+   Magic number 5226496 at line 612 - use named constant
+   Magic number 4341325216 at line 613 - use named constant
+   Magic number 2112 at line 615 - use named constant
+   Magic number 4883840 at line 616 - use named constant
+   Magic number 4345298944 at line 617 - use named constant
+   Magic number 254128 at line 618 - use named constant
+   Magic number 225138 at line 619 - use named constant
+   Magic number 181760 at line 620 - use named constant
+   Magic number 1574 at line 632 - use named constant
+   Magic number 6053888 at line 635 - use named constant
+   Magic number 5500928 at line 637 - use named constant
+   Magic number 4341101384 at line 638 - use named constant
+   Magic number 2112 at line 640 - use named constant
+   Magic number 4059096 at line 641 - use named constant
+   Magic number 4345298944 at line 642 - use named constant
+   Magic number 254128 at line 643 - use named constant
+   Magic number 225138 at line 644 - use named constant
+   Magic number 181760 at line 645 - use named constant
+   Magic number 1674059036865 at line 659 - use named constant
+   Single letter variable 'a' at line 286 - use descriptive name
+   Single letter variable 'b' at line 292 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\vm.d.ts
+   Use const/let instead of var at line 27
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 737 - ensure error handling
+   await without nearby try-catch at line 745 - ensure error handling
+   await without nearby try-catch at line 944 - ensure error handling
+   await without nearby try-catch at line 945 - ensure error handling
+   JSON.parse without try-catch at line 912
+   High complexity: 243 control structures - consider refactoring
+   Magic number 8124 at line 565 - use named constant
+   Magic number 2418479 at line 614 - use named constant
+   Magic number 2418479 at line 614 - use named constant
+   Magic number 2745799 at line 614 - use named constant
+   Magic number 2574732 at line 626 - use named constant
+   Magic number 2574732 at line 627 - use named constant
+   Magic number 2904372 at line 627 - use named constant
+   Magic number 2438996 at line 630 - use named constant
+   Magic number 2438996 at line 631 - use named constant
+   Magic number 2768636 at line 631 - use named constant
+   Magic number 135736 at line 635 - use named constant
+   Magic number 135736 at line 636 - use named constant
+   Magic number 465376 at line 636 - use named constant
+   Magic number 262 at line 660 - use named constant
+   Magic number 262 at line 755 - use named constant
+   Magic number 262 at line 767 - use named constant
+   Magic number 262 at line 780 - use named constant
+   Magic number 262 at line 797 - use named constant
+   Magic number 262 at line 814 - use named constant
+   Magic number 262 at line 814 - use named constant
+   Magic number 262 at line 837 - use named constant
+   Magic number 262 at line 841 - use named constant
+   Magic number 262 at line 843 - use named constant
+   Magic number 262 at line 845 - use named constant
+   Magic number 262 at line 848 - use named constant
+   Magic number 262 at line 848 - use named constant
+   Magic number 262 at line 875 - use named constant
+   Single letter variable 'x' at line 22 - use descriptive name
+   Single letter variable 'y' at line 27 - use descriptive name
+   Single letter variable 'x' at line 348 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\wasi.d.ts
+   Code comment requires attention at line 159
+   Code comment requires attention at line 169
+   Code comment requires attention at line 176
+   await without nearby try-catch at line 24 - ensure error handling
+   await without nearby try-catch at line 25 - ensure error handling
+   await without nearby try-catch at line 27 - ensure error handling
+   High complexity: 34 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\abortcontroller.d.ts
+   Use const/let instead of var at line 19
+   Use const/let instead of var at line 26
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\domexception.d.ts
+   Use const/let instead of var at line 37
+   High complexity: 61 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\events.d.ts
+   Use const/let instead of var at line 76
+   Use const/let instead of var at line 83
+   Use const/let instead of var at line 92
+   High complexity: 34 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\fetch.d.ts
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 25
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 35
+   Use const/let instead of var at line 40
+   Use const/let instead of var at line 45
+   Possible unhandled HTTP request error - add .catch or try-catch
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\navigator.d.ts
+   Use const/let instead of var at line 15
+   Use const/let instead of var at line 21
+
+⚠️  electron-code-editor\node_modules\@types\node\web-globals\storage.d.ts
+   Use const/let instead of var at line 17
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 23
+
+⚠️  electron-code-editor\node_modules\@types\node\worker_threads.d.ts
+   Use const/let instead of var at line 751
+   Use const/let instead of var at line 761
+   Use const/let instead of var at line 771
+   await without nearby try-catch at line 25 - ensure error handling
+   await without nearby try-catch at line 468 - ensure error handling
+   High complexity: 161 control structures - consider refactoring
+   Single letter variable 'c' at line 541 - use descriptive name
+   Single letter variable 'n' at line 545 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\@types\node\zlib.d.ts
+   High complexity: 119 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\buffer-crc32\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 67
+   Use const/let instead of var at line 84
+   Use const/let instead of var at line 94
+   Use const/let instead of var at line 95
+   Single letter variable 'n' at line 95 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\cacheable-lookup\index.d.ts
+   High complexity: 31 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\cacheable-lookup\source\index.js
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 198 - ensure error handling
+   await without nearby try-catch at line 238 - ensure error handling
+   await without nearby try-catch at line 327 - ensure error handling
+   await without nearby try-catch at line 330 - ensure error handling
+   await without nearby try-catch at line 339 - ensure error handling
+   High complexity: 82 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\cacheable-request\src\index.js
+   await without nearby try-catch at line 117 - ensure error handling
+   High complexity: 46 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\debug\src\browser.js
+   Code comment requires attention at line 111
+   Code comment requires attention at line 209
+   Code comment requires attention at line 225
+   Code comment requires attention at line 254
+   High complexity: 78 control structures - consider refactoring
+   Magic number 3333 at line 44 - use named constant
+   Magic number 3333 at line 45 - use named constant
+   Magic number 3366 at line 46 - use named constant
+   Magic number 3366 at line 47 - use named constant
+   Magic number 3399 at line 48 - use named constant
+   Magic number 3399 at line 49 - use named constant
+   Magic number 6633 at line 58 - use named constant
+   Magic number 6633 at line 59 - use named constant
+   Magic number 9933 at line 64 - use named constant
+   Magic number 9933 at line 65 - use named constant
+   Magic number 3333 at line 75 - use named constant
+   Magic number 3366 at line 76 - use named constant
+   Magic number 3399 at line 77 - use named constant
+   Magic number 6633 at line 81 - use named constant
+   Magic number 9933 at line 83 - use named constant
+   Magic number 3333 at line 93 - use named constant
+   Magic number 3366 at line 94 - use named constant
+   Magic number 3399 at line 95 - use named constant
+   Magic number 6633 at line 99 - use named constant
+   Magic number 9933 at line 101 - use named constant
+   Single letter variable 'c' at line 161 - use descriptive name
+   Nested ternary operator - hard to read at line 130
+   Nested ternary operator - hard to read at line 150
+
+⚠️  electron-code-editor\node_modules\debug\src\common.js
+   Code comment requires attention at line 120
+   Code comment requires attention at line 280
+   Code comment requires attention at line 281
+   High complexity: 59 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\debug\src\node.js
+   High complexity: 35 control structures - consider refactoring
+   Magic number 112 at line 68 - use named constant
+   Magic number 113 at line 69 - use named constant
+   Magic number 129 at line 71 - use named constant
+   Magic number 134 at line 72 - use named constant
+   Magic number 135 at line 73 - use named constant
+   Magic number 148 at line 74 - use named constant
+   Magic number 149 at line 75 - use named constant
+   Magic number 160 at line 76 - use named constant
+   Magic number 161 at line 77 - use named constant
+   Magic number 162 at line 78 - use named constant
+   Magic number 163 at line 79 - use named constant
+   Magic number 164 at line 80 - use named constant
+   Magic number 165 at line 81 - use named constant
+   Magic number 166 at line 82 - use named constant
+   Magic number 167 at line 83 - use named constant
+   Magic number 168 at line 84 - use named constant
+   Magic number 169 at line 85 - use named constant
+   Magic number 170 at line 86 - use named constant
+   Magic number 171 at line 87 - use named constant
+   Magic number 172 at line 88 - use named constant
+   Magic number 173 at line 89 - use named constant
+   Magic number 178 at line 90 - use named constant
+   Magic number 179 at line 91 - use named constant
+   Magic number 184 at line 92 - use named constant
+   Magic number 185 at line 93 - use named constant
+   Magic number 196 at line 94 - use named constant
+   Magic number 197 at line 95 - use named constant
+   Magic number 198 at line 96 - use named constant
+   Magic number 199 at line 97 - use named constant
+   Magic number 202 at line 100 - use named constant
+   Magic number 203 at line 101 - use named constant
+   Magic number 205 at line 103 - use named constant
+   Magic number 206 at line 104 - use named constant
+   Magic number 207 at line 105 - use named constant
+   Magic number 208 at line 106 - use named constant
+   Magic number 209 at line 107 - use named constant
+   Magic number 214 at line 108 - use named constant
+   Magic number 215 at line 109 - use named constant
+   Magic number 220 at line 110 - use named constant
+   Magic number 221 at line 111 - use named constant
+   Single letter variable 'c' at line 171 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\decompress-response\index.js
+   Code comment requires attention at line 13
+
+⚠️  electron-code-editor\node_modules\define-data-property\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 35
+   Use const/let instead of var at line 36
+   Use const/let instead of var at line 37
+   Use const/let instead of var at line 38
+   Use const/let instead of var at line 41
+   High complexity: 37 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 45
+
+⚠️  electron-code-editor\node_modules\define-data-property\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 12
+   Use const/let instead of var at line 64
+   Use const/let instead of var at line 68
+   Use const/let instead of var at line 93
+   Use const/let instead of var at line 160
+   Use const/let instead of var at line 192
+   Use const/let instead of var at line 236
+   Use const/let instead of var at line 303
+   Use const/let instead of var at line 321
+   Use const/let instead of var at line 356
+   Single letter variable 'v' at line 4 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\define-properties\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 34
+   Use const/let instead of var at line 35
+   Use const/let instead of var at line 36
+   Use const/let instead of var at line 40
+
+⚠️  electron-code-editor\node_modules\electron\electron.d.ts
+   Use === instead of == at line 21844
+   Use === instead of == at line 21848
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 6293 control structures - consider refactoring
+   Magic number 260 at line 1676 - use named constant
+   Magic number 1324 at line 2691 - use named constant
+   Magic number 255 at line 3094 - use named constant
+   Magic number 255 at line 3094 - use named constant
+   Magic number 255 at line 3094 - use named constant
+   Magic number 255 at line 3097 - use named constant
+   Magic number 255 at line 3097 - use named constant
+   Magic number 255 at line 3097 - use named constant
+   Magic number 2004 at line 3149 - use named constant
+   Magic number 255 at line 3990 - use named constant
+   Magic number 255 at line 3990 - use named constant
+   Magic number 255 at line 3990 - use named constant
+   Magic number 255 at line 3993 - use named constant
+   Magic number 255 at line 3993 - use named constant
+   Magic number 255 at line 3993 - use named constant
+   Magic number 1324 at line 5397 - use named constant
+   Magic number 255 at line 5846 - use named constant
+   Magic number 255 at line 5846 - use named constant
+   Magic number 255 at line 5846 - use named constant
+   Magic number 255 at line 5849 - use named constant
+   Magic number 255 at line 5849 - use named constant
+   Magic number 255 at line 5849 - use named constant
+   Magic number 2004 at line 5913 - use named constant
+   Magic number 301 at line 6629 - use named constant
+   Magic number 709 at line 6894 - use named constant
+   Magic number 470 at line 6894 - use named constant
+   Magic number 170 at line 6894 - use named constant
+   Magic number 240 at line 6894 - use named constant
+   Magic number 2020 at line 6894 - use named constant
+   Magic number 709 at line 6898 - use named constant
+   Magic number 470 at line 6898 - use named constant
+   Magic number 470 at line 6898 - use named constant
+   Magic number 170 at line 6898 - use named constant
+   Magic number 240 at line 6898 - use named constant
+   Magic number 2020 at line 6898 - use named constant
+   Magic number 428 at line 6898 - use named constant
+   Magic number 431 at line 6898 - use named constant
+   Magic number 3213 at line 6898 - use named constant
+   Magic number 709 at line 6906 - use named constant
+   Magic number 709 at line 6906 - use named constant
+   Magic number 170 at line 6906 - use named constant
+   Magic number 240 at line 6906 - use named constant
+   Magic number 61966 at line 6906 - use named constant
+   Magic number 1361 at line 6906 - use named constant
+   Magic number 2020 at line 6906 - use named constant
+   Magic number 2020 at line 6906 - use named constant
+   Magic number 428 at line 6906 - use named constant
+   Magic number 20320 at line 7228 - use named constant
+   Magic number 127 at line 7291 - use named constant
+   Magic number 180 at line 7827 - use named constant
+   Magic number 270 at line 7827 - use named constant
+   Magic number 24427 at line 8728 - use named constant
+   Magic number 260 at line 9118 - use named constant
+   Magic number 360 at line 9612 - use named constant
+   Magic number 4217 at line 10879 - use named constant
+   Magic number 3986 at line 11116 - use named constant
+   Magic number 1428430 at line 11313 - use named constant
+   Magic number 1428476 at line 11344 - use named constant
+   Magic number 1428747 at line 11355 - use named constant
+   Magic number 255 at line 15158 - use named constant
+   Magic number 255 at line 15158 - use named constant
+   Magic number 255 at line 15158 - use named constant
+   Magic number 255 at line 15161 - use named constant
+   Magic number 255 at line 15161 - use named constant
+   Magic number 255 at line 15161 - use named constant
+   Magic number 302 at line 16038 - use named constant
+   Magic number 302 at line 16912 - use named constant
+   Magic number 353 at line 17489 - use named constant
+   Magic number 240 at line 17644 - use named constant
+   Magic number 240 at line 17791 - use named constant
+   Magic number 6454 at line 18256 - use named constant
+   Magic number 8859 at line 18360 - use named constant
+   Magic number 302 at line 18839 - use named constant
+   Magic number 9218 at line 19826 - use named constant
+   Magic number 2246 at line 19894 - use named constant
+   Magic number 8484 at line 19945 - use named constant
+   Magic number 407 at line 20689 - use named constant
+   Magic number 150 at line 22494 - use named constant
+   Magic number 150 at line 22495 - use named constant
+   Magic number 820 at line 23072 - use named constant
+   Magic number 820 at line 23072 - use named constant
+   Magic number 820 at line 23248 - use named constant
+   Magic number 820 at line 23248 - use named constant
+
+⚠️  electron-code-editor\node_modules\electron\install.js
+   High complexity: 56 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\end-of-stream\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 11
+   Use const/let instead of var at line 15
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 23
+   Use const/let instead of var at line 24
+   Use const/let instead of var at line 25
+   Use const/let instead of var at line 27
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 36
+   Use const/let instead of var at line 41
+   Use const/let instead of var at line 45
+   Use const/let instead of var at line 49
+   Use const/let instead of var at line 53
+   Use const/let instead of var at line 59
+   Empty function body at line 3
+   High complexity: 31 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\env-paths\index.d.ts
+   Code comment requires attention at line 95
+   High complexity: 29 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\env-paths\index.js
+   Code comment requires attention at line 73
+
+⚠️  electron-code-editor\node_modules\es-define-property\index.js
+   Use const/let instead of var at line 4
+
+⚠️  electron-code-editor\node_modules\es-define-property\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 14
+   Single letter variable 'o' at line 14 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\es-errors\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+
+⚠️  electron-code-editor\node_modules\es6-error\es6\index.js
+   Use const/let instead of var at line 30
+   Use const/let instead of var at line 34
+   Use const/let instead of var at line 39
+
+⚠️  electron-code-editor\node_modules\es6-error\lib\index.js
+   Use const/let instead of var at line 36
+   Use const/let instead of var at line 40
+   Use const/let instead of var at line 45
+
+⚠️  electron-code-editor\node_modules\extract-zip\cli.js
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+
+⚠️  electron-code-editor\node_modules\extract-zip\index.js
+   await without nearby try-catch at line 22 - ensure error handling
+   await without nearby try-catch at line 170 - ensure error handling
+   await without nearby try-catch at line 171 - ensure error handling
+   High complexity: 33 control structures - consider refactoring
+   Magic number 755 at line 146 - use named constant
+   Magic number 644 at line 154 - use named constant
+
+⚠️  electron-code-editor\node_modules\fd-slicer\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 38
+   Use const/let instead of var at line 60
+   Use const/let instead of var at line 94
+   Use const/let instead of var at line 97
+   Use const/let instead of var at line 109
+   Use const/let instead of var at line 152
+   Use const/let instead of var at line 156
+   Use const/let instead of var at line 197
+   Use const/let instead of var at line 198
+   Use const/let instead of var at line 199
+   Use const/let instead of var at line 215
+   Use const/let instead of var at line 223
+   Use const/let instead of var at line 224
+   Use const/let instead of var at line 226
+   Use const/let instead of var at line 246
+   Use const/let instead of var at line 248
+   Use const/let instead of var at line 257
+   Use const/let instead of var at line 259
+   Use === instead of == at line 143
+   Use === instead of == at line 250
+   Use !== instead of != at line 98
+   Callback with err parameter but no check at line 30
+   Callback with err parameter but no check at line 32
+   Callback with err parameter but no check at line 40
+   Callback with err parameter but no check at line 42
+   High complexity: 39 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\fd-slicer\test\test.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 11
+   Use const/let instead of var at line 12
+   Use const/let instead of var at line 13
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 17
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 23
+   Use const/let instead of var at line 47
+   Use const/let instead of var at line 48
+   Use const/let instead of var at line 49
+   Use const/let instead of var at line 51
+   Use const/let instead of var at line 68
+   Use const/let instead of var at line 69
+   Use const/let instead of var at line 70
+   Use const/let instead of var at line 71
+   Use const/let instead of var at line 72
+   Use const/let instead of var at line 73
+   Use const/let instead of var at line 74
+   Use const/let instead of var at line 75
+   Use const/let instead of var at line 76
+   Use const/let instead of var at line 77
+   Use const/let instead of var at line 112
+   Use const/let instead of var at line 113
+   Use const/let instead of var at line 114
+   Use const/let instead of var at line 117
+   Use const/let instead of var at line 118
+   Use const/let instead of var at line 133
+   Use const/let instead of var at line 134
+   Use const/let instead of var at line 135
+   Use const/let instead of var at line 136
+   Use const/let instead of var at line 137
+   Use const/let instead of var at line 138
+   Use const/let instead of var at line 139
+   Use const/let instead of var at line 140
+   Use const/let instead of var at line 141
+   Use const/let instead of var at line 142
+   Use const/let instead of var at line 162
+   Use const/let instead of var at line 163
+   Use const/let instead of var at line 177
+   Use const/let instead of var at line 188
+   Use const/let instead of var at line 189
+   Use const/let instead of var at line 201
+   Use const/let instead of var at line 202
+   Use const/let instead of var at line 211
+   Use const/let instead of var at line 212
+   Use const/let instead of var at line 224
+   Use const/let instead of var at line 225
+   Use const/let instead of var at line 226
+   Use const/let instead of var at line 227
+   Use const/let instead of var at line 237
+   Use const/let instead of var at line 247
+   Use const/let instead of var at line 248
+   Use const/let instead of var at line 258
+   Use const/let instead of var at line 259
+   Use const/let instead of var at line 271
+   Use const/let instead of var at line 272
+   Use const/let instead of var at line 283
+   Use const/let instead of var at line 294
+   Use const/let instead of var at line 302
+   Use const/let instead of var at line 303
+   Use const/let instead of var at line 304
+   Use const/let instead of var at line 316
+   Use const/let instead of var at line 317
+   Use const/let instead of var at line 318
+   Use const/let instead of var at line 319
+   Use const/let instead of var at line 320
+   Use const/let instead of var at line 329
+   Use const/let instead of var at line 330
+   Use const/let instead of var at line 340
+   Use const/let instead of var at line 341
+   Use const/let instead of var at line 342
+   Callback with err parameter but no check at line 79
+   Callback with err parameter but no check at line 85
+   Callback with err parameter but no check at line 91
+   High complexity: 89 control structures - consider refactoring
+   Magic number 1001 at line 194 - use named constant
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\copy-sync\copy-sync.js
+   High complexity: 41 control structures - consider refactoring
+   Magic number 269 at line 21 - use named constant
+   Nested ternary operator - hard to read at line 15
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\copy\copy.js
+   Empty function body at line 18
+   Possible unhandled Promise rejection - add .catch
+   High complexity: 58 control structures - consider refactoring
+   Magic number 269 at line 27 - use named constant
+   Function has 6 parameters at line 53 - use object parameter
+   Function has 6 parameters at line 78 - use object parameter
+   Function has 6 parameters at line 124 - use object parameter
+   Function has 6 parameters at line 155 - use object parameter
+   Nested ternary operator - hard to read at line 21
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\copy\index.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\empty\index.js
+   Empty function body at line 10
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\ensure\file.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\ensure\link.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\ensure\symlink-paths.js
+   High complexity: 25 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\ensure\symlink-type.js
+   Nested ternary operator - hard to read at line 6
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\ensure\symlink.js
+   Single letter variable 'u' at line 3 - use descriptive name
+   Nested ternary operator - hard to read at line 21
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\fs\index.js
+   Single letter variable 'u' at line 4 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\json\index.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\json\jsonfile.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\mkdirs\index.js
+   Single letter variable 'u' at line 2 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\mkdirs\mkdirs-sync.js
+   Magic number 777 at line 24 - use named constant
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\mkdirs\mkdirs.js
+   Empty function body at line 31
+   High complexity: 21 control structures - consider refactoring
+   Magic number 777 at line 27 - use named constant
+   Commented out code at line 53 - remove if not needed
+   Commented out code at line 54 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\mkdirs\win32.js
+   Code comment requires attention at line 13
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\move\index.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\output\index.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\path-exists\index.js
+   Single letter variable 'u' at line 2 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\remove\index.js
+   Single letter variable 'u' at line 3 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\remove\rimraf.js
+   High complexity: 81 control structures - consider refactoring
+   Magic number 666 at line 120 - use named constant
+   Magic number 666 at line 147 - use named constant
+   Single letter variable 'n' at line 203 - use descriptive name
+   Nested ternary operator - hard to read at line 122
+   Commented out code at line 182 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\util\stat.js
+   High complexity: 57 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\fs-extra\lib\util\utimes.js
+   Magic number 141 at line 14 - use named constant
+   Magic number 141 at line 27 - use named constant
+   Single letter variable 'd' at line 13 - use descriptive name
+   Single letter variable 'd' at line 26 - use descriptive name
+   Commented out code at line 56 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\get-stream\index.d.ts
+   Use === instead of == at line 49
+   Code comment requires attention at line 104
+
+⚠️  electron-code-editor\node_modules\get-stream\index.js
+   Code comment requires attention at line 56
+   await without nearby try-catch at line 26 - ensure error handling
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\bin\semver.js
+   High complexity: 69 control structures - consider refactoring
+   Single letter variable 'a' at line 42 - use descriptive name
+   Nested ternary operator - hard to read at line 95
+   Nested ternary operator - hard to read at line 126
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\classes\comparator.js
+   High complexity: 38 control structures - consider refactoring
+   Single letter variable 'r' at line 37 - use descriptive name
+   Nested ternary operator - hard to read at line 37
+   Commented out code at line 49 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\classes\range.js
+   Use === instead of == at line 299
+   Use === instead of == at line 306
+   Code comment requires attention at line 490
+   High complexity: 123 control structures - consider refactoring
+   Single letter variable 'r' at line 289 - use descriptive name
+   Single letter variable 'r' at line 334 - use descriptive name
+   Single letter variable 'z' at line 335 - use descriptive name
+   Single letter variable 'r' at line 395 - use descriptive name
+   Nested ternary operator - hard to read at line 289
+   Commented out code at line 52 - remove if not needed
+   Commented out code at line 60 - remove if not needed
+   Commented out code at line 150 - remove if not needed
+   Commented out code at line 151 - remove if not needed
+   Commented out code at line 192 - remove if not needed
+   Commented out code at line 407 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\classes\semver.js
+   High complexity: 133 control structures - consider refactoring
+   Single letter variable 'a' at line 151 - use descriptive name
+   Single letter variable 'b' at line 152 - use descriptive name
+   Single letter variable 'a' at line 175 - use descriptive name
+   Single letter variable 'b' at line 176 - use descriptive name
+   Nested ternary operator - hard to read at line 37
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\functions\clean.js
+   Single letter variable 's' at line 5 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\functions\cmp.js
+   Use === instead of == at line 32
+   Use !== instead of != at line 35
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\functions\coerce.js
+   Nested ternary operator - hard to read at line 24
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\functions\diff.js
+   Nested ternary operator - hard to read at line 15
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\functions\valid.js
+   Single letter variable 'v' at line 5 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\internal\constants.js
+   Magic number 9007199254740991 at line 9 - use named constant
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\internal\identifiers.js
+   Nested ternary operator - hard to read at line 6
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\internal\re.js
+   Use === instead of == at line 200
+   High complexity: 72 control structures - consider refactoring
+   Single letter variable 't' at line 16 - use descriptive name
+   Nested ternary operator - hard to read at line 49
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\preload.js
+   Code comment requires attention at line 3
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\ranges\simplify.js
+   Single letter variable 'v' at line 12 - use descriptive name
+   Nested ternary operator - hard to read at line 47
+
+⚠️  electron-code-editor\node_modules\global-agent\node_modules\semver\ranges\subset.js
+   High complexity: 131 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 150
+   Commented out code at line 146 - remove if not needed
+   Commented out code at line 204 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\global-agent\src\classes\Agent.js
+   High complexity: 26 control structures - consider refactoring
+   Magic number 443 at line 63 - use named constant
+
+⚠️  electron-code-editor\node_modules\global-agent\src\classes\HttpsProxyAgent.js
+   Magic number 443 at line 17 - use named constant
+
+⚠️  electron-code-editor\node_modules\global-agent\src\factories\createGlobalProxyAgent.js
+   High complexity: 21 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 64
+
+⚠️  electron-code-editor\node_modules\global-agent\src\types.js
+   High complexity: 23 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\global-agent\src\utilities\isUrlMatchingNoProxy.js
+   Nested ternary operator - hard to read at line 19
+
+⚠️  electron-code-editor\node_modules\globalthis\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 11
+
+⚠️  electron-code-editor\node_modules\globalthis\polyfill.js
+   Use const/let instead of var at line 3
+
+⚠️  electron-code-editor\node_modules\globalthis\shim.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 10
+
+⚠️  electron-code-editor\node_modules\globalthis\test\implementation.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+
+⚠️  electron-code-editor\node_modules\globalthis\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+
+⚠️  electron-code-editor\node_modules\globalthis\test\native.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 10
+
+⚠️  electron-code-editor\node_modules\globalthis\test\shimmed.js
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 21
+
+⚠️  electron-code-editor\node_modules\globalthis\test\tests.js
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 29
+
+⚠️  electron-code-editor\node_modules\gopd\index.js
+   Use const/let instead of var at line 4
+
+⚠️  electron-code-editor\node_modules\gopd\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 14
+
+⚠️  electron-code-editor\node_modules\graceful-fs\clone.js
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 16
+
+⚠️  electron-code-editor\node_modules\graceful-fs\graceful-fs.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 32
+   Use const/let instead of var at line 37
+   Use const/let instead of var at line 45
+   Use const/let instead of var at line 109
+   Use const/let instead of var at line 129
+   Use const/let instead of var at line 149
+   Use const/let instead of var at line 170
+   Use const/let instead of var at line 192
+   Use const/let instead of var at line 194
+   Use const/let instead of var at line 199
+   Use const/let instead of var at line 235
+   Use const/let instead of var at line 240
+   Use const/let instead of var at line 246
+   Use const/let instead of var at line 274
+   Use const/let instead of var at line 285
+   Use const/let instead of var at line 305
+   Use const/let instead of var at line 328
+   Use const/let instead of var at line 348
+   Use const/let instead of var at line 378
+   Use const/let instead of var at line 384
+   Use const/let instead of var at line 385
+   Use const/let instead of var at line 405
+   Use const/let instead of var at line 406
+   Use const/let instead of var at line 407
+   Use const/let instead of var at line 409
+   Use const/let instead of var at line 410
+   Use const/let instead of var at line 411
+   Use const/let instead of var at line 421
+   Use const/let instead of var at line 426
+   Use const/let instead of var at line 429
+   Use const/let instead of var at line 432
+   High complexity: 87 control structures - consider refactoring
+   Commented out code at line 413 - remove if not needed
+   Commented out code at line 438 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\graceful-fs\legacy-streams.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 30
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 32
+   Use const/let instead of var at line 92
+   Use const/let instead of var at line 93
+   Use const/let instead of var at line 94
+   Magic number 438 at line 24 - use named constant
+   Magic number 438 at line 86 - use named constant
+
+⚠️  electron-code-editor\node_modules\graceful-fs\polyfills.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 102
+   Use const/let instead of var at line 103
+   Use const/let instead of var at line 132
+   Use const/let instead of var at line 134
+   Use const/let instead of var at line 153
+   Use const/let instead of var at line 188
+   Use const/let instead of var at line 192
+   Use const/let instead of var at line 193
+   Use const/let instead of var at line 229
+   Use const/let instead of var at line 230
+   Use const/let instead of var at line 231
+   Use const/let instead of var at line 324
+   Use const/let instead of var at line 353
+   Empty function body at line 80
+   Empty function body at line 86
+   Empty function body at line 251
+   High complexity: 109 control structures - consider refactoring
+   Function has 6 parameters at line 131 - use object parameter
+   Commented out code at line 75 - remove if not needed
+   Commented out code at line 128 - remove if not needed
+   Commented out code at line 337 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\has-property-descriptors\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+
+⚠️  electron-code-editor\node_modules\has-property-descriptors\test\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 13
+   Use const/let instead of var at line 15
+   Use const/let instead of var at line 44
+   Use const/let instead of var at line 46
+   Single letter variable 'o' at line 15 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\http-cache-semantics\index.js
+   Use === instead of == at line 247
+   Use !== instead of != at line 791
+   Use !== instead of != at line 850
+   Use !== instead of != at line 902
+   Code comment requires attention at line 130
+   High complexity: 288 control structures - consider refactoring
+   Magic number 7231 at line 17 - use named constant
+   Magic number 203 at line 22 - use named constant
+   Magic number 206 at line 24 - use named constant
+   Magic number 301 at line 26 - use named constant
+   Magic number 308 at line 27 - use named constant
+   Magic number 405 at line 29 - use named constant
+   Magic number 410 at line 30 - use named constant
+   Magic number 414 at line 31 - use named constant
+   Magic number 501 at line 32 - use named constant
+   Magic number 206 at line 37 - use named constant
+   Magic number 203 at line 42 - use named constant
+   Magic number 301 at line 45 - use named constant
+   Magic number 302 at line 46 - use named constant
+   Magic number 303 at line 47 - use named constant
+   Magic number 307 at line 48 - use named constant
+   Magic number 308 at line 49 - use named constant
+   Magic number 405 at line 51 - use named constant
+   Magic number 410 at line 52 - use named constant
+   Magic number 414 at line 53 - use named constant
+   Magic number 501 at line 54 - use named constant
+   Magic number 502 at line 63 - use named constant
+   Magic number 503 at line 64 - use named constant
+   Magic number 504 at line 65 - use named constant
+   Magic number 5861 at line 108 - use named constant
+   Magic number 113 at line 552 - use named constant
+   Magic number 7234 at line 552 - use named constant
+   Magic number 304 at line 757 - use named constant
+   Magic number 206 at line 794 - use named constant
+   Magic number 304 at line 850 - use named constant
+   Magic number 304 at line 902 - use named constant
+   Single letter variable 'n' at line 102 - use descriptive name
+   Single letter variable 'v' at line 149 - use descriptive name
+   Commented out code at line 623 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\http2-wrapper\source\agent.js
+   Code comment requires attention at line 163
+   Code comment requires attention at line 370
+   Code comment requires attention at line 500
+   High complexity: 106 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\http2-wrapper\source\auto.js
+   await without nearby try-catch at line 45 - ensure error handling
+   await without nearby try-catch at line 135 - ensure error handling
+   High complexity: 24 control structures - consider refactoring
+   Magic number 443 at line 121 - use named constant
+
+⚠️  electron-code-editor\node_modules\http2-wrapper\source\client-request.js
+   High complexity: 89 control structures - consider refactoring
+   Magic number 443 at line 117 - use named constant
+
+⚠️  electron-code-editor\node_modules\http2-wrapper\source\utils\url-to-options.js
+   Magic number 91293 at line 2 - use named constant
+   Magic number 403046 at line 2 - use named constant
+   Magic number 249 at line 2 - use named constant
+   Magic number 1257 at line 2 - use named constant
+
+⚠️  electron-code-editor\node_modules\json-buffer\index.js
+   Use const/let instead of var at line 15
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 20
+   Use const/let instead of var at line 21
+   Use === instead of == at line 6
+   Use === instead of == at line 21
+   Use === instead of == at line 27
+   Code comment requires attention at line 1
+   JSON.parse without try-catch at line 49
+   High complexity: 33 control structures - consider refactoring
+   Single letter variable 's' at line 15 - use descriptive name
+   Nested ternary operator - hard to read at line 17
+   Commented out code at line 3 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\json-buffer\test\index.js
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 49
+   Use const/let instead of var at line 51
+   Empty function body at line 41
+   JSON.parse without try-catch at line 6
+   JSON.parse without try-catch at line 51
+   Magic number 3145 at line 14 - use named constant
+   Single letter variable 's' at line 49 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\json-stringify-safe\stringify.js
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 18
+   Use === instead of == at line 11
+   Use === instead of == at line 25
+   Nested ternary operator - hard to read at line 19
+
+⚠️  electron-code-editor\node_modules\json-stringify-safe\test\stringify_test.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 41
+   Use const/let instead of var at line 50
+   Use const/let instead of var at line 64
+   Use const/let instead of var at line 67
+   Use const/let instead of var at line 72
+   Use const/let instead of var at line 83
+   Use const/let instead of var at line 84
+   Use const/let instead of var at line 95
+   Use const/let instead of var at line 96
+   Use const/let instead of var at line 97
+   Use const/let instead of var at line 102
+   Use const/let instead of var at line 106
+   Use const/let instead of var at line 107
+   Use const/let instead of var at line 120
+   Use const/let instead of var at line 122
+   Use const/let instead of var at line 123
+   Use const/let instead of var at line 141
+   Use const/let instead of var at line 144
+   Use const/let instead of var at line 145
+   Use const/let instead of var at line 161
+   Use const/let instead of var at line 165
+   Use const/let instead of var at line 166
+   Use const/let instead of var at line 177
+   Use const/let instead of var at line 190
+   Use const/let instead of var at line 202
+   Use const/let instead of var at line 204
+   Use const/let instead of var at line 212
+   Use const/let instead of var at line 216
+   Use const/let instead of var at line 229
+   Use const/let instead of var at line 232
+   Use const/let instead of var at line 233
+   Use === instead of == at line 245
+   High complexity: 60 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\jsonfile\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 19
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 53
+   Use const/let instead of var at line 55
+   Use const/let instead of var at line 61
+   Use const/let instead of var at line 75
+   Use const/let instead of var at line 76
+   Use const/let instead of var at line 86
+   Use const/let instead of var at line 97
+   Use const/let instead of var at line 99
+   Use const/let instead of var at line 113
+   Use const/let instead of var at line 115
+   Use const/let instead of var at line 127
+   Use === instead of == at line 9
+   Use === instead of == at line 92
+   Callback with err parameter but no check at line 104
+   High complexity: 34 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 33
+
+⚠️  electron-code-editor\node_modules\keyv\src\index.d.ts
+   High complexity: 36 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\keyv\src\index.js
+   Possible unhandled Promise rejection - add .catch
+   await without nearby try-catch at line 66 - ensure error handling
+   await without nearby try-catch at line 69 - ensure error handling
+   await without nearby try-catch at line 246 - ensure error handling
+   High complexity: 60 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 121
+   Nested ternary operator - hard to read at line 148
+
+⚠️  electron-code-editor\node_modules\ms\index.js
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 53
+   Use const/let instead of var at line 59
+   Use const/let instead of var at line 60
+   Use const/let instead of var at line 114
+   Use const/let instead of var at line 139
+   Use const/let instead of var at line 160
+   High complexity: 75 control structures - consider refactoring
+   Magic number 365 at line 10 - use named constant
+   Single letter variable 's' at line 5 - use descriptive name
+   Single letter variable 'h' at line 7 - use descriptive name
+   Single letter variable 'd' at line 8 - use descriptive name
+   Single letter variable 'w' at line 9 - use descriptive name
+   Single letter variable 'y' at line 10 - use descriptive name
+   Single letter variable 'n' at line 59 - use descriptive name
+   Nested ternary operator - hard to read at line 53
+
+⚠️  electron-code-editor\node_modules\normalize-url\index.d.ts
+   High complexity: 50 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\normalize-url\index.js
+   High complexity: 89 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 12
+   Nested ternary operator - hard to read at line 59
+   Nested ternary operator - hard to read at line 96
+   Nested ternary operator - hard to read at line 160
+
+⚠️  electron-code-editor\node_modules\object-keys\implementation.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 11
+   Use const/let instead of var at line 12
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 25
+   Use const/let instead of var at line 50
+   Use const/let instead of var at line 53
+   Use const/let instead of var at line 68
+   Use const/let instead of var at line 81
+   Use const/let instead of var at line 82
+   Use const/let instead of var at line 83
+   Use const/let instead of var at line 84
+   Use const/let instead of var at line 85
+   Use const/let instead of var at line 91
+   Use const/let instead of var at line 93
+   Use const/let instead of var at line 99
+   Use const/let instead of var at line 103
+   Use const/let instead of var at line 111
+   Use const/let instead of var at line 113
+   Empty function body at line 11
+   High complexity: 48 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\object-keys\index.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 13
+   Use const/let instead of var at line 15
+
+⚠️  electron-code-editor\node_modules\object-keys\isArguments.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+
+⚠️  electron-code-editor\node_modules\once\once.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 32
+   Use const/let instead of var at line 38
+   Single letter variable 'f' at line 22 - use descriptive name
+   Single letter variable 'f' at line 32 - use descriptive name
+
+⚠️  electron-code-editor\node_modules\pend\index.js
+   Use const/let instead of var at line 33
+   Use const/let instead of var at line 43
+
+⚠️  electron-code-editor\node_modules\pend\test.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 26
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 43
+   Use const/let instead of var at line 44
+   Use const/let instead of var at line 67
+   Use const/let instead of var at line 68
+   Use const/let instead of var at line 99
+   Use const/let instead of var at line 111
+   Use const/let instead of var at line 130
+   Variable 'testCount' is declared but never used
+
+⚠️  electron-code-editor\node_modules\progress\lib\node-progress.js
+   Use const/let instead of var at line 49
+   Use const/let instead of var at line 123
+   Use const/let instead of var at line 124
+   Use const/let instead of var at line 131
+   Use const/let instead of var at line 134
+   Use const/let instead of var at line 135
+   Use const/let instead of var at line 136
+   Use const/let instead of var at line 137
+   Use const/let instead of var at line 138
+   Use const/let instead of var at line 141
+   Use const/let instead of var at line 151
+   Use const/let instead of var at line 156
+   Use const/let instead of var at line 171
+   Use const/let instead of var at line 196
+   Use const/let instead of var at line 197
+   Use === instead of == at line 48
+   Use === instead of == at line 88
+   Use === instead of == at line 92
+   Use === instead of == at line 137
+   Use !== instead of != at line 54
+   Use !== instead of != at line 55
+   Empty function body at line 70
+   Code comment requires attention at line 158
+   High complexity: 48 control structures - consider refactoring
+   Magic number 2011 at line 3 - use named constant
+   Nested ternary operator - hard to read at line 144
+
+⚠️  electron-code-editor\node_modules\pump\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 11
+   Use const/let instead of var at line 12
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 24
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 31
+   Use const/let instead of var at line 42
+   Use const/let instead of var at line 57
+   Use const/let instead of var at line 61
+   Use const/let instead of var at line 65
+   Use const/let instead of var at line 66
+   Use const/let instead of var at line 67
+   Use const/let instead of var at line 72
+   Use const/let instead of var at line 73
+   Use const/let instead of var at line 74
+   Use const/let instead of var at line 75
+   Empty function body at line 11
+   High complexity: 29 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 12
+
+⚠️  electron-code-editor\node_modules\pump\test-browser.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 17
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 29
+   Use const/let instead of var at line 30
+   Use const/let instead of var at line 32
+   Use const/let instead of var at line 48
+   Use const/let instead of var at line 62
+
+⚠️  electron-code-editor\node_modules\pump\test-node.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 17
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 19
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 37
+   Use const/let instead of var at line 50
+
+⚠️  electron-code-editor\node_modules\resolve-alpn\index.js
+   await without nearby try-catch at line 10 - ensure error handling
+   await without nearby try-catch at line 19 - ensure error handling
+
+⚠️  electron-code-editor\node_modules\semver-compare\example\cmp.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Variable 'cmp' is declared but never used
+   Variable 'versions' is declared but never used
+
+⚠️  electron-code-editor\node_modules\semver-compare\example\lex.js
+   Use const/let instead of var at line 1
+   Variable 'versions' is declared but never used
+
+⚠️  electron-code-editor\node_modules\semver-compare\index.js
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+
+⚠️  electron-code-editor\node_modules\semver-compare\test\cmp.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 4
+
+⚠️  electron-code-editor\node_modules\semver\bin\semver.js
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 12
+   Use const/let instead of var at line 14
+   Use const/let instead of var at line 16
+   Use const/let instead of var at line 18
+   Use const/let instead of var at line 20
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 24
+   Use const/let instead of var at line 26
+   Use const/let instead of var at line 28
+   Use const/let instead of var at line 30
+   Use const/let instead of var at line 37
+   Use const/let instead of var at line 38
+   Use const/let instead of var at line 90
+   Use const/let instead of var at line 100
+   Use const/let instead of var at line 117
+   Empty function body at line 124
+   High complexity: 58 control structures - consider refactoring
+   Single letter variable 'a' at line 37 - use descriptive name
+   Nested ternary operator - hard to read at line 82
+   Nested ternary operator - hard to read at line 117
+
+⚠️  electron-code-editor\node_modules\semver\semver.js
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 10
+   Use const/let instead of var at line 22
+   Use const/let instead of var at line 23
+   Use const/let instead of var at line 27
+   Use const/let instead of var at line 29
+   Use const/let instead of var at line 32
+   Use const/let instead of var at line 33
+   Use const/let instead of var at line 34
+   Use const/let instead of var at line 35
+   Use const/let instead of var at line 36
+   Use const/let instead of var at line 42
+   Use const/let instead of var at line 50
+   Use const/let instead of var at line 57
+   Use const/let instead of var at line 58
+   Use const/let instead of var at line 59
+   Use const/let instead of var at line 216
+   Use const/let instead of var at line 232
+   Use const/let instead of var at line 254
+   Use const/let instead of var at line 278
+   Use const/let instead of var at line 314
+   Use const/let instead of var at line 328
+   Use const/let instead of var at line 334
+   Use const/let instead of var at line 369
+   Use const/let instead of var at line 400
+   Use const/let instead of var at line 458
+   Use const/let instead of var at line 460
+   Use const/let instead of var at line 461
+   Use const/let instead of var at line 482
+   Use const/let instead of var at line 484
+   Use const/let instead of var at line 485
+   Use const/let instead of var at line 576
+   Use const/let instead of var at line 628
+   Use const/let instead of var at line 629
+   Use const/let instead of var at line 630
+   Use const/let instead of var at line 633
+   Use const/let instead of var at line 635
+   Use const/let instead of var at line 648
+   Use const/let instead of var at line 650
+   Use const/let instead of var at line 651
+   Use const/let instead of var at line 697
+   Use const/let instead of var at line 698
+   Use const/let instead of var at line 829
+   Use const/let instead of var at line 831
+   Use const/let instead of var at line 832
+   Use const/let instead of var at line 885
+   Use const/let instead of var at line 901
+   Use const/let instead of var at line 904
+   Use const/let instead of var at line 907
+   Use const/let instead of var at line 908
+   Use const/let instead of var at line 911
+   Use const/let instead of var at line 915
+   Use const/let instead of var at line 990
+   Use const/let instead of var at line 992
+   Use const/let instead of var at line 1011
+   Use const/let instead of var at line 1012
+   Use const/let instead of var at line 1053
+   Use const/let instead of var at line 1054
+   Use const/let instead of var at line 1055
+   Use const/let instead of var at line 1111
+   Use const/let instead of var at line 1114
+   Use const/let instead of var at line 1152
+   Use const/let instead of var at line 1155
+   Use const/let instead of var at line 1211
+   Use const/let instead of var at line 1214
+   Use const/let instead of var at line 1215
+   Use const/let instead of var at line 1216
+   Use const/let instead of var at line 1217
+   Use const/let instead of var at line 1336
+   Use const/let instead of var at line 1345
+   Use const/let instead of var at line 1364
+   Use const/let instead of var at line 1392
+   Use const/let instead of var at line 1393
+   Use const/let instead of var at line 1395
+   Use const/let instead of var at line 1414
+   Use const/let instead of var at line 1415
+   Use const/let instead of var at line 1417
+   Use const/let instead of var at line 1438
+   Use const/let instead of var at line 1449
+   Use const/let instead of var at line 1450
+   Use const/let instead of var at line 1454
+   Use const/let instead of var at line 1516
+   Use const/let instead of var at line 1544
+   Use const/let instead of var at line 1545
+   Use const/let instead of var at line 1547
+   Use const/let instead of var at line 1548
+   Use const/let instead of var at line 1583
+   Use const/let instead of var at line 1610
+   Use const/let instead of var at line 1622
+   Use === instead of == at line 246
+   Use === instead of == at line 770
+   Use === instead of == at line 1121
+   Use === instead of == at line 1128
+   Use !== instead of != at line 773
+   Empty function body at line 15
+   High complexity: 415 control structures - consider refactoring
+   Magic number 9007199254740991 at line 24 - use named constant
+   Single letter variable 't' at line 35 - use descriptive name
+   Single letter variable 'r' at line 314 - use descriptive name
+   Single letter variable 'v' at line 328 - use descriptive name
+   Single letter variable 's' at line 334 - use descriptive name
+   Single letter variable 'a' at line 460 - use descriptive name
+   Single letter variable 'b' at line 461 - use descriptive name
+   Single letter variable 'a' at line 484 - use descriptive name
+   Single letter variable 'b' at line 485 - use descriptive name
+   Single letter variable 'r' at line 831 - use descriptive name
+   Single letter variable 'r' at line 1111 - use descriptive name
+   Single letter variable 'r' at line 1152 - use descriptive name
+   Single letter variable 'r' at line 1211 - use descriptive name
+   Nested ternary operator - hard to read at line 314
+   Commented out code at line 843 - remove if not needed
+   Commented out code at line 1223 - remove if not needed
+   Commented out code at line 1322 - remove if not needed
+
+⚠️  electron-code-editor\node_modules\serialize-error\index.js
+   High complexity: 26 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\sprintf-js\src\sprintf.js
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 34
+   Use const/let instead of var at line 142
+   Use const/let instead of var at line 149
+   Use const/let instead of var at line 160
+   Use === instead of == at line 44
+   High complexity: 80 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 17
+   Nested ternary operator - hard to read at line 81
+
+⚠️  electron-code-editor\node_modules\sumchecker\index.d.ts
+   Magic number 2019 at line 2 - use named constant
+
+⚠️  electron-code-editor\node_modules\sumchecker\index.js
+   await without nearby try-catch at line 105 - ensure error handling
+   Magic number 2016 at line 2 - use named constant
+   Magic number 2017 at line 2 - use named constant
+   Magic number 2019 at line 2 - use named constant
+
+⚠️  electron-code-editor\node_modules\sumchecker\index.test-d.ts
+   await without nearby try-catch at line 31 - ensure error handling
+   Magic number 2019 at line 2 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\async-return-type.d.ts
+   Possible unhandled Promise rejection - add .catch
+   Magic number 35998 at line 8 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\basic.d.ts
+   Code comment requires attention at line 3
+   Code comment requires attention at line 16
+
+⚠️  electron-code-editor\node_modules\type-fest\source\except.d.ts
+   Magic number 30825 at line 6 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\literal-union.d.ts
+   Magic number 29729 at line 8 - use named constant
+   Magic number 29729 at line 8 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\merge-exclusive.d.ts
+   Magic number 14094 at line 7 - use named constant
+   Magic number 373782604 at line 7 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\opaque.d.ts
+   Variable 'thingTwo' is declared but never used
+   Variable 'newAccountNumber' is declared but never used
+   Magic number 15408 at line 9 - use named constant
+   Magic number 15408 at line 9 - use named constant
+   Magic number 15807 at line 10 - use named constant
+   Magic number 15807 at line 10 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\package-json.d.ts
+   High complexity: 149 control structures - consider refactoring
+   Magic number 2018 at line 272 - use named constant
+   Magic number 390 at line 519 - use named constant
+   Magic number 390 at line 530 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\partial-deep.d.ts
+   High complexity: 24 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\type-fest\source\promisable.d.ts
+   Variable 'entry' is declared but never used
+   Magic number 31394 at line 8 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\promise-value.d.ts
+   await without nearby try-catch at line 13 - ensure error handling
+
+⚠️  electron-code-editor\node_modules\type-fest\source\readonly-deep.d.ts
+   High complexity: 37 control structures - consider refactoring
+   Magic number 13923 at line 8 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\require-exactly-one.d.ts
+   Code comment requires attention at line 1
+
+⚠️  electron-code-editor\node_modules\type-fest\source\stringified.d.ts
+   Magic number 101 at line 17 - use named constant
+
+⚠️  electron-code-editor\node_modules\type-fest\source\tsconfig-json.d.ts
+   High complexity: 169 control structures - consider refactoring
+   Magic number 2015 at line 14 - use named constant
+   Magic number 2015 at line 23 - use named constant
+   Magic number 2015 at line 38 - use named constant
+   Magic number 2016 at line 39 - use named constant
+   Magic number 2017 at line 40 - use named constant
+   Magic number 2018 at line 41 - use named constant
+   Magic number 2019 at line 42 - use named constant
+   Magic number 2020 at line 43 - use named constant
+   Magic number 2015 at line 49 - use named constant
+   Magic number 2016 at line 50 - use named constant
+   Magic number 2017 at line 51 - use named constant
+   Magic number 2018 at line 52 - use named constant
+   Magic number 2019 at line 53 - use named constant
+   Magic number 2020 at line 54 - use named constant
+   Magic number 2015 at line 61 - use named constant
+   Magic number 2015 at line 62 - use named constant
+   Magic number 2015 at line 63 - use named constant
+   Magic number 2015 at line 64 - use named constant
+   Magic number 2015 at line 65 - use named constant
+   Magic number 2015 at line 66 - use named constant
+   Magic number 2015 at line 67 - use named constant
+   Magic number 2015 at line 68 - use named constant
+   Magic number 2015 at line 69 - use named constant
+   Magic number 2015 at line 70 - use named constant
+   Magic number 2016 at line 71 - use named constant
+   Magic number 2016 at line 72 - use named constant
+   Magic number 2017 at line 73 - use named constant
+   Magic number 2017 at line 74 - use named constant
+   Magic number 2017 at line 75 - use named constant
+   Magic number 2017 at line 76 - use named constant
+   Magic number 2017 at line 77 - use named constant
+   Magic number 2017 at line 78 - use named constant
+   Magic number 2018 at line 79 - use named constant
+   Magic number 2018 at line 80 - use named constant
+   Magic number 2018 at line 81 - use named constant
+   Magic number 2018 at line 82 - use named constant
+   Magic number 2018 at line 83 - use named constant
+   Magic number 2019 at line 84 - use named constant
+   Magic number 2019 at line 85 - use named constant
+   Magic number 2019 at line 86 - use named constant
+   Magic number 2019 at line 87 - use named constant
+   Magic number 2019 at line 88 - use named constant
+   Magic number 2020 at line 89 - use named constant
+   Magic number 2020 at line 90 - use named constant
+   Magic number 2020 at line 91 - use named constant
+   Magic number 2015 at line 107 - use named constant
+   Magic number 2015 at line 108 - use named constant
+   Magic number 2015 at line 109 - use named constant
+   Magic number 2015 at line 110 - use named constant
+   Magic number 2015 at line 111 - use named constant
+   Magic number 2015 at line 112 - use named constant
+   Magic number 2015 at line 113 - use named constant
+   Magic number 2015 at line 114 - use named constant
+   Magic number 2015 at line 115 - use named constant
+   Magic number 2015 at line 116 - use named constant
+   Magic number 2016 at line 117 - use named constant
+   Magic number 2016 at line 118 - use named constant
+   Magic number 2017 at line 119 - use named constant
+   Magic number 2017 at line 120 - use named constant
+   Magic number 2017 at line 121 - use named constant
+   Magic number 2017 at line 122 - use named constant
+   Magic number 2017 at line 123 - use named constant
+   Magic number 2017 at line 124 - use named constant
+   Magic number 2018 at line 125 - use named constant
+   Magic number 2018 at line 126 - use named constant
+   Magic number 2018 at line 127 - use named constant
+   Magic number 2018 at line 128 - use named constant
+   Magic number 2018 at line 129 - use named constant
+   Magic number 2019 at line 130 - use named constant
+   Magic number 2019 at line 131 - use named constant
+   Magic number 2019 at line 132 - use named constant
+   Magic number 2019 at line 133 - use named constant
+   Magic number 2019 at line 134 - use named constant
+   Magic number 2020 at line 135 - use named constant
+   Magic number 2020 at line 136 - use named constant
+   Magic number 2020 at line 137 - use named constant
+   Magic number 2015 at line 266 - use named constant
+   Magic number 2015 at line 266 - use named constant
+   Nested ternary operator - hard to read at line 268
+   Nested ternary operator - hard to read at line 488
+
+⚠️  electron-code-editor\node_modules\type-fest\source\union-to-intersection.d.ts
+   Magic number 50375286 at line 4 - use named constant
+   Magic number 2172153 at line 4 - use named constant
+   Nested ternary operator - hard to read at line 51
+
+⚠️  electron-code-editor\node_modules\type-fest\source\value-of.d.ts
+   Magic number 31438 at line 4 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\client.d.ts
+   Code comment requires attention at line 35
+   Code comment requires attention at line 45
+   Code comment requires attention at line 61
+   Code comment requires attention at line 69
+   Code comment requires attention at line 71
+   Code comment requires attention at line 73
+   Code comment requires attention at line 75
+   Code comment requires attention at line 77
+   High complexity: 45 control structures - consider refactoring
+   Magic number 7230 at line 63 - use named constant
+   Magic number 7230 at line 63 - use named constant
+   Magic number 8305 at line 81 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\dispatcher.d.ts
+   High complexity: 93 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 220
+
+⚠️  electron-code-editor\node_modules\undici-types\fetch.d.ts
+   await without nearby try-catch at line 45 - ensure error handling
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 83 control structures - consider refactoring
+   Magic number 301 at line 191 - use named constant
+   Magic number 302 at line 191 - use named constant
+   Magic number 303 at line 191 - use named constant
+   Magic number 307 at line 191 - use named constant
+   Magic number 308 at line 191 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\file.d.ts
+   Magic number 1970 at line 13 - use named constant
+   Magic number 1970 at line 34 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\formdata.d.ts
+   Possible unhandled HTTP request error - add .catch or try-catch
+   High complexity: 35 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\undici-types\index.d.ts
+   Use const/let instead of var at line 40
+   Use const/let instead of var at line 41
+   Use const/let instead of var at line 42
+   Use const/let instead of var at line 43
+   Use const/let instead of var at line 44
+   Use const/let instead of var at line 45
+   Use const/let instead of var at line 46
+   Use const/let instead of var at line 47
+   Use const/let instead of var at line 48
+   Use const/let instead of var at line 49
+   Use const/let instead of var at line 50
+   Use const/let instead of var at line 51
+   Use const/let instead of var at line 52
+   Use const/let instead of var at line 53
+   Use const/let instead of var at line 54
+   Use const/let instead of var at line 55
+   Use const/let instead of var at line 56
+   Use const/let instead of var at line 57
+   Use const/let instead of var at line 58
+   Use const/let instead of var at line 59
+   Use const/let instead of var at line 60
+   Use const/let instead of var at line 61
+   Use const/let instead of var at line 62
+   Use const/let instead of var at line 63
+   Use const/let instead of var at line 64
+   Use const/let instead of var at line 65
+   Use const/let instead of var at line 66
+   Use const/let instead of var at line 67
+   Use const/let instead of var at line 68
+   Use const/let instead of var at line 69
+   Use const/let instead of var at line 70
+
+⚠️  electron-code-editor\node_modules\undici-types\mock-interceptor.d.ts
+   High complexity: 21 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\undici-types\retry-handler.d.ts
+   Magic number 502 at line 107 - use named constant
+   Magic number 503 at line 107 - use named constant
+   Magic number 504 at line 107 - use named constant
+   Magic number 429 at line 107 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\webidl.d.ts
+   Code comment requires attention at line 204
+   High complexity: 22 control structures - consider refactoring
+   Magic number 262 at line 39 - use named constant
+
+⚠️  electron-code-editor\node_modules\undici-types\websocket.d.ts
+   High complexity: 60 control structures - consider refactoring
+
+⚠️  electron-code-editor\node_modules\universalify\index.js
+   Possible unhandled Promise rejection - add .catch
+
+⚠️  electron-code-editor\node_modules\wrappy\wrappy.js
+   Use const/let instead of var at line 20
+   Use const/let instead of var at line 21
+   Use const/let instead of var at line 24
+   Use const/let instead of var at line 25
+
+⚠️  electron-code-editor\node_modules\yauzl\index.js
+   Use const/let instead of var at line 1
+   Use const/let instead of var at line 2
+   Use const/let instead of var at line 3
+   Use const/let instead of var at line 4
+   Use const/let instead of var at line 5
+   Use const/let instead of var at line 6
+   Use const/let instead of var at line 7
+   Use const/let instead of var at line 8
+   Use const/let instead of var at line 9
+   Use const/let instead of var at line 56
+   Use const/let instead of var at line 73
+   Use const/let instead of var at line 86
+   Use const/let instead of var at line 104
+   Use const/let instead of var at line 105
+   Use const/let instead of var at line 106
+   Use const/let instead of var at line 107
+   Use const/let instead of var at line 108
+   Use const/let instead of var at line 111
+   Use const/let instead of var at line 114
+   Use const/let instead of var at line 118
+   Use const/let instead of var at line 125
+   Use const/let instead of var at line 128
+   Use const/let instead of var at line 130
+   Use const/let instead of var at line 131
+   Use const/let instead of var at line 137
+   Use const/let instead of var at line 147
+   Use const/let instead of var at line 148
+   Use const/let instead of var at line 158
+   Use const/let instead of var at line 162
+   Use const/let instead of var at line 193
+   Use const/let instead of var at line 240
+   Use const/let instead of var at line 251
+   Use const/let instead of var at line 255
+   Use const/let instead of var at line 257
+   Use const/let instead of var at line 300
+   Use const/let instead of var at line 305
+   Use const/let instead of var at line 306
+   Use const/let instead of var at line 308
+   Use const/let instead of var at line 310
+   Use const/let instead of var at line 311
+   Use const/let instead of var at line 312
+   Use const/let instead of var at line 313
+   Use const/let instead of var at line 315
+   Use const/let instead of var at line 338
+   Use const/let instead of var at line 339
+   Use const/let instead of var at line 340
+   Use const/let instead of var at line 349
+   Use const/let instead of var at line 380
+   Use const/let instead of var at line 381
+   Use const/let instead of var at line 394
+   Use const/let instead of var at line 409
+   Use const/let instead of var at line 415
+   Use const/let instead of var at line 425
+   Use const/let instead of var at line 436
+   Use const/let instead of var at line 438
+   Use const/let instead of var at line 439
+   Use const/let instead of var at line 491
+   Use const/let instead of var at line 496
+   Use const/let instead of var at line 510
+   Use const/let instead of var at line 512
+   Use const/let instead of var at line 515
+   Use const/let instead of var at line 516
+   Use const/let instead of var at line 526
+   Use const/let instead of var at line 527
+   Use const/let instead of var at line 537
+   Use const/let instead of var at line 541
+   Use const/let instead of var at line 543
+   Use const/let instead of var at line 544
+   Use const/let instead of var at line 595
+   Use const/let instead of var at line 596
+   Use const/let instead of var at line 597
+   Use const/let instead of var at line 599
+   Use const/let instead of var at line 600
+   Use const/let instead of var at line 601
+   Use const/let instead of var at line 602
+   Use const/let instead of var at line 644
+   Use const/let instead of var at line 651
+   Use const/let instead of var at line 666
+   Use const/let instead of var at line 680
+   Use const/let instead of var at line 681
+   Use const/let instead of var at line 683
+   Use const/let instead of var at line 689
+   Use const/let instead of var at line 691
+   Use const/let instead of var at line 692
+   Use const/let instead of var at line 704
+   Use const/let instead of var at line 722
+   Use const/let instead of var at line 723
+   Use const/let instead of var at line 724
+   Use const/let instead of var at line 757
+   Use const/let instead of var at line 762
+   Use const/let instead of var at line 763
+   Use const/let instead of var at line 774
+   Use const/let instead of var at line 775
+   Use const/let instead of var at line 783
+   Use === instead of == at line 26
+   Use === instead of == at line 27
+   Use === instead of == at line 28
+   Use === instead of == at line 29
+   Use === instead of == at line 30
+   Use === instead of == at line 31
+   Use === instead of == at line 32
+   Use === instead of == at line 47
+   Use === instead of == at line 48
+   Use === instead of == at line 49
+   Use === instead of == at line 50
+   Use === instead of == at line 51
+   Use === instead of == at line 52
+   Use === instead of == at line 53
+   Use === instead of == at line 66
+   Use === instead of == at line 68
+   Use === instead of == at line 69
+   Use === instead of == at line 70
+   Use === instead of == at line 71
+   Use === instead of == at line 82
+   Use === instead of == at line 83
+   Use === instead of == at line 84
+   Use === instead of == at line 85
+   Use === instead of == at line 87
+   Use === instead of == at line 88
+   Use === instead of == at line 89
+   Use === instead of == at line 346
+   Use === instead of == at line 440
+   Use !== instead of != at line 415
+   Use !== instead of != at line 426
+   Use !== instead of != at line 445
+   Use !== instead of != at line 454
+   Use !== instead of != at line 462
+   Use !== instead of != at line 462
+   Use !== instead of != at line 470
+   Use !== instead of != at line 475
+   Use !== instead of != at line 522
+   Code comment requires attention at line 571
+   Callback with err parameter but no check at line 37
+   High complexity: 216 control structures - consider refactoring
+   Magic number 754 at line 92 - use named constant
+   Magic number 437 at line 757 - use named constant
+   Magic number 437 at line 764 - use named constant
+   Function has 10 parameters at line 192 - use object parameter
+   Function has 6 parameters at line 621 - use object parameter
+
+⚠️  electron-code-editor\package-manager.js
+   await without nearby try-catch at line 90 - ensure error handling
+   await without nearby try-catch at line 256 - ensure error handling
+   await without nearby try-catch at line 364 - ensure error handling
+   High complexity: 55 control structures - consider refactoring
+   Magic number 666 at line 182 - use named constant
+   Magic number 666 at line 197 - use named constant
+   Magic number 44336 at line 220 - use named constant
+   Magic number 44336 at line 344 - use named constant
+
+⚠️  electron-code-editor\performance-optimizer.js
+   High complexity: 48 control structures - consider refactoring
+
+⚠️  electron-code-editor\platform-integration.js
+   High complexity: 122 control structures - consider refactoring
+   Magic number 350 at line 323 - use named constant
+   Magic number 44336 at line 333 - use named constant
+   Magic number 2196 at line 335 - use named constant
+
+⚠️  electron-code-editor\plugin-api.js
+   Variable 'getConditionalValue95us' is declared but never used
+   High complexity: 35 control structures - consider refactoring
+
+⚠️  electron-code-editor\plugin-system.js
+   High complexity: 48 control structures - consider refactoring
+   Magic number 666 at line 176 - use named constant
+   Magic number 175 at line 209 - use named constant
+   Magic number 44336 at line 222 - use named constant
+
+⚠️  electron-code-editor\quick-setup.js
+   await without nearby try-catch at line 175 - ensure error handling
+   await without nearby try-catch at line 181 - ensure error handling
+   await without nearby try-catch at line 206 - ensure error handling
+   await without nearby try-catch at line 213 - ensure error handling
+   await without nearby try-catch at line 227 - ensure error handling
+   await without nearby try-catch at line 228 - ensure error handling
+   High complexity: 29 control structures - consider refactoring
+   Magic number 2020 at line 39 - use named constant
+   Magic number 2021 at line 231 - use named constant
+
+⚠️  electron-code-editor\renderer-manager.js
+   High complexity: 24 control structures - consider refactoring
+   Nested ternary operator - hard to read at line 91
+
+⚠️  electron-code-editor\security-compliance.js
+   await without nearby try-catch at line 24 - ensure error handling
+   await without nearby try-catch at line 32 - ensure error handling
+   await without nearby try-catch at line 50 - ensure error handling
+   await without nearby try-catch at line 56 - ensure error handling
+   await without nearby try-catch at line 118 - ensure error handling
+   High complexity: 51 control structures - consider refactoring
+
+⚠️  electron-code-editor\ui-enhancements.js
+   High complexity: 78 control structures - consider refactoring
+   Magic number 272822 at line 11 - use named constant
+   Magic number 282 at line 12 - use named constant
+   Magic number 666 at line 108 - use named constant
+   Magic number 255 at line 163 - use named constant
+   Magic number 255 at line 163 - use named constant
+   Magic number 255 at line 163 - use named constant
+   Magic number 255 at line 172 - use named constant
+   Magic number 255 at line 172 - use named constant
+   Magic number 255 at line 172 - use named constant
+
+⚠️  electron-code-editor\web-bridge.js
+   await without nearby try-catch at line 15 - ensure error handling
+   High complexity: 91 control structures - consider refactoring
+
+⚠️  lazy-init.js
+   Remove console.log before production at line 50
+   Event listener without error handling at line 48
+
+⚠️  lazy-load-manager.js
+   High complexity: 45 control structures - consider refactoring
+
+⚠️  libs\video.min.js
+   Code comment requires attention at line 37
+   Code comment requires attention at line 41
+   Code comment requires attention at line 45
+
+⚠️  scripts\apexcharts-config.js
+   Variable 'ApexChartsConfig' is declared but never used
+   Magic number 250 at line 24 - use named constant
+   Magic number 350 at line 37 - use named constant
+
+⚠️  scripts\d3-charts.js
+   Variable 'D3Charts' is declared but never used
+   Single letter variable 'x' at line 16 - use descriptive name
+   Single letter variable 'y' at line 17 - use descriptive name
+
+⚠️  scripts\plotly-graphs.js
+   Variable 'PlotlyGraphs' is declared but never used
+
+⚠️  scripts\rate-limiter.js
+   Variable 'RateLimiter' is declared but never used
+
+⚠️  scripts\sanitizer.js
+   Variable 'Sanitizer' is declared but never used
+   Event listener without error handling at line 20
+
+⚠️  sw.js
+   Variable 'CACHE_VERSION' is declared but never used
+   Possible unhandled Promise rejection - add .catch
+   Possible unhandled HTTP request error - add .catch or try-catch
+   Event listener without error handling at line 12
+

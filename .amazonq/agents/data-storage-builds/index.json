@@ -1,0 +1,71 @@
+{
+  "category": "Data Storage and Management Builds",
+  "description": "Databases and data structures - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Key-Value Store",
+      "file": "key-value-store.c",
+      "language": "C",
+      "lines": 62,
+      "features": ["Hash table", "Get/Put operations", "Collision handling"],
+      "compile": "gcc key-value-store.c -o kvstore",
+      "run": "./kvstore",
+      "tutorial": "https://en.wikipedia.org/wiki/Hash_table",
+      "agent": "DataStorageQ"
+    },
+    {
+      "name": "SQL Database",
+      "file": "sql-database.py",
+      "language": "Python",
+      "lines": 38,
+      "features": ["CREATE TABLE", "INSERT", "SELECT", "SQL parsing"],
+      "run": "python sql-database.py",
+      "tutorial": "https://cstack.github.io/db_tutorial/",
+      "agent": "DataStorageQ"
+    },
+    {
+      "name": "LRU Cache",
+      "file": "lru-cache.js",
+      "language": "JavaScript",
+      "lines": 42,
+      "features": ["Least Recently Used", "Eviction policy", "O(1) operations"],
+      "run": "node lru-cache.js",
+      "tutorial": "https://leetcode.com/problems/lru-cache/",
+      "agent": "DataStorageQ"
+    },
+    {
+      "name": "B-Tree",
+      "file": "btree.py",
+      "language": "Python",
+      "lines": 58,
+      "features": ["Balanced tree", "Insert", "Search", "Disk-based indexing"],
+      "run": "python btree.py",
+      "tutorial": "https://www.geeksforgeeks.org/introduction-of-b-tree-2/",
+      "agent": "DataStorageQ"
+    },
+    {
+      "name": "Document Database",
+      "file": "document-db.js",
+      "language": "JavaScript",
+      "lines": 68,
+      "features": ["JSON storage", "CRUD operations", "Query filtering", "Persistence"],
+      "run": "node document-db.js",
+      "tutorial": "https://www.mongodb.com/",
+      "agent": "DataStorageQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates data-storage-builds",
+    "generate": "@DataStorageQ Generate minimal code for key-value store in C",
+    "test": "Compile and run each template"
+  },
+  "dependencies": {
+    "from": "networking-communication-builds",
+    "uses": ["Network protocols for distributed storage"],
+    "feeds": "WebAppServerQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Web and Application Server Builds",
+    "agent": "WebAppServerQ"
+  }
+}

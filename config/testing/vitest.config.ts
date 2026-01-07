@@ -1,5 +1,1 @@
-export default {
-  test: {
-    globals: true,
-  },
-};
+export default { test: { globals: true, }, };

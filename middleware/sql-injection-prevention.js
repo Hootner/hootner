@@ -1,10 +1,11 @@
 /**
  * A03:2021 Injection - SQL Injection Prevention
- *//
-const { HTTP_STATUS, MISC } = require('../constants');
+ */
+const { HTTP_STATUS, LIMITS } = require('../constants');
+
 /**
- * DANGEROUS_PATTERNS
- *//
+ * Dangerous SQL patterns
+ */
 const DANGEROUS_PATTERNS = [
   /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|DECLARE)\b)/i,
   /(--|;|\/\*|\*\/|xp_|sp_)/i,
@@ -13,15 +14,17 @@ const DANGEROUS_PATTERNS = [
 ];
 
 /**
- * logSQLAttempt
- *//
+ * Log SQL injection attempt
+ */
 const logSQLAttempt = (path, value) => {
   console.warn(`SQL injection attempt in ${path}:`, value.substring(0, 50));
 };
 
 /**
- * detectSQLInjection
- *//
+ * Detect SQL injection patterns
+ * @param {string} input - Input to check
+ * @returns {boolean} True if SQL injection detected
+ */
 export const detectSQLInjection = (input) => {
   if (!input || typeof input !== 'string') {
     return false;
@@ -31,27 +34,27 @@ export const detectSQLInjection = (input) => {
 };
 
 /**
- * sqlInjectionProtection middleware
+ * SQL injection protection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _sqlInjectionProtection = (req, res, next) => {
   const checkObject = (obj, path = '') => {
     try {
       for (const [key, value] of Object.entries(obj)) {
-        const currentPath = path ? `${path} catch (error) {
-    console.error(error);
-    throw error;
-  }.${key}` : key;
-`
+        const currentPath = path ? `${path}.${key}` : key;
+
         if (typeof value === 'string' && detectSQLInjection(value)) {
           logSQLAttempt(currentPath, value);
-          return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid input detected', field: currentPath });
+          return res.status(400).json({
+            error: 'Invalid input detected',
+            field: currentPath,
+          });
         }
 
         if (typeof value === 'object' && value !== null) {
-          const _operationResult = checkObject(value, currentPath);
+          const result = checkObject(value, currentPath);
           if (result) {
             return result;
           }
@@ -67,10 +70,7 @@ export const _sqlInjectionProtection = (req, res, next) => {
     if (req.body) {
       checkObject(req.body, 'body');
     }
-     catch (error) {
-    console.error(error);
-    throw error;
-  }if (req.query) {
+    if (req.query) {
       checkObject(req.query, 'query');
     }
     if (req.params) {
@@ -80,13 +80,15 @@ export const _sqlInjectionProtection = (req, res, next) => {
     next();
   } catch (error) {
     console.error('SQL injection protection error:', error.message);
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 /**
- * sanitizeForSQL
- *//
+ * Sanitize input for SQL (use parameterized queries instead)
+ * @param {string} input - Input to sanitize
+ * @returns {string} Sanitized input
+ */
 export const _sanitizeForSQL = (input) => {
   if (!input || typeof input !== 'string') {
     return input;

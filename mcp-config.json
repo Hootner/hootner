@@ -1,22 +1,10 @@
-{
-  "mcpServers": {
-    "hootner-deployment": {
-      "command": "node",
+{ "mcpServers": { "hootner-deployment": { "command": "node",
       "args": ["mcp-server.js"],
       "cwd": "c:\\Users\\12182\\Projects\\my-local-repo",
-      "env": {
-        "HOOTNER_ENV": "development",
+      "env": { "HOOTNER_ENV": "development",
         "FASTMCP_LOG_LEVEL": "ERROR",
-        "NODE_ENV": "production"
-      }
-    },
-    "aws-cdk": {
-      "command": "uvx",
+        "NODE_ENV": "production" } },
+    "aws-cdk": { "command": "uvx",
       "args": ["awslabs.cdk-mcp-server@latest"],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR",
-        "AWS_PROFILE": "default"
-      }
-    }
-  }
-}
+      "env": { "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_PROFILE": "default" } } } }

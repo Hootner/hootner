@@ -3,8 +3,7 @@
  * @module constants/timeouts
  */
 
-const TIMEOUTS = {
-  ONE_SECOND: 1000,
+const TIMEOUTS = { ONE_SECOND: 1000,
   TWO_SECONDS: 2000,
   FIVE_SECONDS: 5000,
   TEN_SECONDS: 10000,
@@ -14,7 +13,6 @@ const TIMEOUTS = {
   ONE_HOUR: 3600000,
   ONE_DAY: 86400000,
   ONE_YEAR_SECONDS: 31536000,
-  ONE_YEAR_MS: 31536000000
-};
+  ONE_YEAR_MS: 31536000000 };
 
 export default TIMEOUTS;

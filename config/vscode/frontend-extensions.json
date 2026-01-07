@@ -1,5 +1,4 @@
-{
-  "recommendations": [
+{ "recommendations": [
     "amazonwebservices.amazon-q-vscode",
     "davidanson.vscode-markdownlint",
     "amazonwebservices.aws-toolkit-vscode",
@@ -14,5 +13,4 @@
     "christian-kohler.npm-intellisense",
     "ms-python.python",
     "ms-vscode-remote.remote-wsl"
-  ]
-}
+  ] }

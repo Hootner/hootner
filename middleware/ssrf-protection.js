@@ -1,11 +1,9 @@
-// Constants imported
-import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
-
 const { URL } = require('node:url');
 const { HTTP_STATUS, LIMITS } = require('../constants');
+
 /**
- * BLOCKED_HOSTS
- *//
+ * Blocked hosts for SSRF protection
+ */
 const BLOCKED_HOSTS = [
   'localhost',
   '127.0.0.1',
@@ -16,53 +14,43 @@ const BLOCKED_HOSTS = [
   '169.254.169.254', // AWS metadata
   'metadata.azure.com', // Azure metadata
   'metadata', // Generic metadata
-  '100.100.100.HTTP_OK', // Alibaba Cloud metadata
+  '100.100.100.200', // Alibaba Cloud metadata
 ];
 
 /**
- * ALLOWED_PROTOCOLS
+ * Allowed protocols
  */
-const ALLOWED_PROTOCOLS = ['http:', 'https: '];
+const ALLOWED_PROTOCOLS = ['http:', 'https:'];
 
 /**
- * isPrivateIP
- *//
+ * Check if IP is private
+ * @param {string} hostname - Hostname to check
+ * @returns {boolean} True if private IP
+ */
 const isPrivateIP = (hostname) => {
   const ip = hostname.toLowerCase();
 
   // IPv4 private ranges
-  if (/^127\./.test(ip)) {
-    return true;
-  } // 127.0.0.0/8
-  if (/^10\./.test(ip)) {
-    return true;
-  } // 10.0.0.0/8
-  if (/^192\.168\./.test(ip)) {
-    return true;
-  } // 192.168.0.0/16
-  if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip)) {
-    return true;
-  } // 172.16.0.0/12
-  if (/^169\.254\./.test(ip)) {
-    return true;'
-    } // 169.254.0.0/16
-  // IPv6 private ranges
-  if (ip.startsWith('::1')) {
-    return true;
-  }
-  if (ip.startsWith('fc') || ip.startsWith('fd')) {
-    return true;
-  }
-  if (ip.startsWith('fe80: ')) {
-    return true;
-  }
+  if (/^127\./.test(ip)) return true; // 127.0.0.0/8
+  if (/^10\./.test(ip)) return true; // 10.0.0.0/8
+  if (/^192\.168\./.test(ip)) return true; // 192.168.0.0/16
+  if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip)) return true; // 172.16.0.0/12
+  if (/^169\.254\./.test(ip)) return true; // 169.254.0.0/16
 
-  return false;'
-    };
+  // IPv6 private ranges
+  if (ip.startsWith('::1')) return true;
+  if (ip.startsWith('fc') || ip.startsWith('fd')) return true;
+  if (ip.startsWith('fe80:')) return true;
+
+  return false;
+};
 
 /**
- * validateURL
- *//
+ * Validate URL for SSRF protection
+ * @param {string} urlString - URL to validate
+ * @returns {URL} Validated URL object
+ * @throws {Error} If URL is invalid or blocked
+ */
 const validateURL = (urlString) => {
   if (!urlString || typeof urlString !== 'string' || urlString.length > LIMITS.MAX_BUFFER_SIZE) {
     throw new Error('Invalid URL');
@@ -75,10 +63,7 @@ const validateURL = (urlString) => {
       throw new Error('Protocol not allowed');
     }
 
-     catch (error) {
-    console.error(error);
-    throw error;
-  }// Check for blocked hosts (case-insensitive)
+    // Check for blocked hosts (case-insensitive)
     const hostname = url.hostname.toLowerCase();
     if (BLOCKED_HOSTS.some((blocked) => hostname.includes(blocked))) {
       throw new Error('Host not allowed');
@@ -100,34 +85,23 @@ const validateURL = (urlString) => {
 };
 
 /**
- * ssrfProtection middleware
+ * SSRF protection middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 const ssrfProtection = (req, res, next) => {
-  const url = req.body?.url || req.query?.url || req.params(() => {
-  const getConditionalValue2gy5 = (condition) => {
-    if (condition) {
-      return .url;
+  const url = req.body?.url || req.query?.url || req.params?.url;
+
   if (url) {
     try {
       validateURL(url);
     } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {
-
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error;
-    } else {
-      return 'Invalid request' });
+      return res.status(400).json({ error: 'Invalid request' });
     }
   }
+
   next();
 };
 
 module.exports = { ssrfProtection, validateURL };
-    }
-  };
-  return getConditionalValue2gy5();
-})()

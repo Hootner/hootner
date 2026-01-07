@@ -1,43 +1,34 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎨 Design Showcase - Hootner</title>
+    <title>?? Design Showcase - Hootner</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
       /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
+      body { padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important; }
+      nav { height: 70px !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
+        z-index: 1000 !important; }
+      .main-content { margin-top: 0 !important;
+        padding: 20px !important; }
     </style>
 
     <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
+      html { font-size: 12px !important; }
+      body { zoom: 0.75 !important;
         transform: scale(0.75) !important;
         transform-origin: 0 0 !important;
-        width: 133% !important;
-      }
+        width: 133% !important; }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
   <body
     style="
       min-height: 100vh;
@@ -71,7 +62,7 @@
               text-decoration: none;
               margin-left: 0;
             "
-            >🦉 HOOTNER</a
+            >?? HOOTNER</a
           >
           <div style="position: relative">
             <button
@@ -87,7 +78,7 @@
               "
               title="Notifications"
             >
-              🔔
+              ??
               <span
                 id="notif-badge"
                 style="
@@ -158,7 +149,7 @@
                       "
                       title="Toggle sound"
                     >
-                      🔔
+                      ??
                     </button>
                     <button
                       onclick="clearAllNotifications()"
@@ -171,7 +162,7 @@
                       "
                       title="Clear all"
                     >
-                      🗑️
+                      ???
                     </button>
                     <button
                       onclick="markAllRead()"
@@ -191,7 +182,7 @@
                   type="text"
                   id="notif-search"
                   oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
+                  placeholder="?? Search notifications..."
                   style="
                     width: 100%;
                     padding: 8px;
@@ -234,7 +225,7 @@
                       cursor: pointer;
                     "
                   >
-                    ❤️ Likes
+                    ?? Likes
                   </button>
                   <button
                     class="notif-filter"
@@ -250,7 +241,7 @@
                       cursor: pointer;
                     "
                   >
-                    💬 Comments
+                    ?? Comments
                   </button>
                   <button
                     class="notif-filter"
@@ -266,7 +257,7 @@
                       cursor: pointer;
                     "
                   >
-                    👤 Follows
+                    ?? Follows
                   </button>
                   <button
                     class="notif-filter"
@@ -282,7 +273,7 @@
                       cursor: pointer;
                     "
                   >
-                    ⚠️ System
+                    ?? System
                   </button>
                 </div>
               </div>
@@ -318,7 +309,7 @@
                 >
                   Load more
                 </button>
-                <span style="color: #6b7280">•</span>
+                <span style="color: #6b7280">�</span>
                 <a href="#" style="color: #00ffff; font-size: 13px; text-decoration: none"
                   >View all</a
                 >
@@ -331,92 +322,78 @@
             href="profile.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >👤 Profile</a
+            >?? Profile</a
           >
           <a
             href="design-showcase.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-green-400 font-medium"
-            >🎨 Design</a
+            >?? Design</a
           >
           <a
             href="feed.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📰 Social</a
+            >?? Social</a
           >
           <a
             href="marketplace.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🛒 Marketplace</a
+            >?? Marketplace</a
           >
           <a
             href="dashboard.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📈 Dashboard</a
+            >?? Dashboard</a
           >
           <a
             href="video-player.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >▶️ Video</a
+            >?? Video</a
           >
           <a
             href="auto-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
+            >?? Editor</a
           >
           <a
             href="code-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >💻 Code</a
+            >?? Code</a
           >
           <a
             href="settings.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >⚙️ Settings</a
+            >?? Settings</a
           >
           <a
             href="login.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🔐 Login</a
+            >?? Login</a
           >
         </div>
       </div>
     </nav>
     <style>
-      .notif-item {
-        padding: 12px 16px;
+      .notif-item { padding: 12px 16px;
         border-bottom: 1px solid rgba(0, 255, 0, 0.1);
         cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 0, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.05);
-        border-left: 3px solid #00ffff;
-      }
-      #notif-dropdown::-webkit-scrollbar {
-        width: 6px;
-      }
-      #notif-dropdown::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-      }
-      #notif-dropdown::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
-      a:hover {
-        color: #ff00ff !important;
-      }
+        transition: background 0.2s; }
+      .notif-item:hover { background: rgba(0, 255, 0, 0.05); }
+      .notif-item.unread { background: rgba(0, 255, 255, 0.05);
+        border-left: 3px solid #00ffff; }
+      #notif-dropdown::-webkit-scrollbar { width: 6px; }
+      #notif-dropdown::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1); }
+      #notif-dropdown::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+        border-radius: 3px; }
+      a:hover { color: #ff00ff !important; }
     </style>
     <div style="max-width: 1400px; margin: 0 auto; padding: 32px">
       <div style="text-align: center; margin-bottom: 48px">
@@ -430,7 +407,7 @@
             margin: 0 0 16px;
           "
         >
-          🎨 Hootner Design Showcase
+          ?? Hootner Design Showcase
         </h1>
         <p style="font-size: 20px; color: #00ffff">
           Modern, responsive webpage designs ready for production
@@ -462,7 +439,7 @@
         "
       >
         <h2 style="font-size: 28px; font-weight: bold; color: #00ff00; margin: 0 0 24px">
-          🎯 Design Features
+          ?? Design Features
         </h2>
         <div
           style="
@@ -473,7 +450,7 @@
         >
           <div>
             <h3 style="font-weight: 600; color: #00ffff; margin: 0 0 12px; font-size: 16px">
-              ✨ Modern UI Patterns
+              ? Modern UI Patterns
             </h3>
             <ul
               style="
@@ -485,15 +462,15 @@
                 line-height: 1.8;
               "
             >
-              <li>• Glassmorphism & gradient backgrounds</li>
-              <li>• Card-based layouts with hover effects</li>
-              <li>• Smooth transitions & animations</li>
-              <li>• Dark mode support ready</li>
+              <li>� Glassmorphism & gradient backgrounds</li>
+              <li>� Card-based layouts with hover effects</li>
+              <li>� Smooth transitions & animations</li>
+              <li>� Dark mode support ready</li>
             </ul>
           </div>
           <div>
             <h3 style="font-weight: 600; color: #00ffff; margin: 0 0 12px; font-size: 16px">
-              📱 Responsive Design
+              ?? Responsive Design
             </h3>
             <ul
               style="
@@ -505,15 +482,15 @@
                 line-height: 1.8;
               "
             >
-              <li>• Mobile-first approach</li>
-              <li>• Tailwind CSS utility classes</li>
-              <li>• Flexible grid systems</li>
-              <li>• Touch-friendly interactions</li>
+              <li>� Mobile-first approach</li>
+              <li>� Tailwind CSS utility classes</li>
+              <li>� Flexible grid systems</li>
+              <li>� Touch-friendly interactions</li>
             </ul>
           </div>
           <div>
             <h3 style="font-weight: 600; color: #00ffff; margin: 0 0 12px; font-size: 16px">
-              ⚡ Performance
+              ? Performance
             </h3>
             <ul
               style="
@@ -525,15 +502,15 @@
                 line-height: 1.8;
               "
             >
-              <li>• Lazy loading components</li>
-              <li>• Optimized bundle sizes</li>
-              <li>• Virtual scrolling for feeds</li>
-              <li>• PWA-ready architecture</li>
+              <li>� Lazy loading components</li>
+              <li>� Optimized bundle sizes</li>
+              <li>� Virtual scrolling for feeds</li>
+              <li>� PWA-ready architecture</li>
             </ul>
           </div>
           <div>
             <h3 style="font-weight: 600; color: #00ffff; margin: 0 0 12px; font-size: 16px">
-              🔒 Security & Trust
+              ?? Security & Trust
             </h3>
             <ul
               style="
@@ -545,10 +522,10 @@
                 line-height: 1.8;
               "
             >
-              <li>• Visual security indicators</li>
-              <li>• AI moderation badges</li>
-              <li>• Verified user markers</li>
-              <li>• Secure payment UI</li>
+              <li>� Visual security indicators</li>
+              <li>� AI moderation badges</li>
+              <li>� Verified user markers</li>
+              <li>� Secure payment UI</li>
             </ul>
           </div>
         </div>
@@ -557,79 +534,59 @@
 
     <script>
       const pages = [
-        {
-          name: 'Landing',
+        { name: 'Landing',
           path: 'enhanced-landing.html',
           desc: 'Modern hero with glassmorphism',
           gradient: 'linear-gradient(135deg,#00ff00,#00ffff)',
-          icon: '🚀',
-        },
-        {
-          name: 'Social Hub',
+          icon: '??', },
+        { name: 'Social Hub',
           path: 'enhanced-feed.html',
           desc: 'Feed, messages & profile',
           gradient: 'linear-gradient(135deg,#00ffff,#ff00ff)',
-          icon: '📰',
-        },
-        {
-          name: 'Profile',
+          icon: '??', },
+        { name: 'Profile',
           path: 'enhanced-profile.html',
           desc: 'User profile with tabs',
           gradient: 'linear-gradient(135deg,#ff00ff,#ffff00)',
-          icon: '👤',
-        },
-        {
-          name: 'Marketplace',
+          icon: '??', },
+        { name: 'Marketplace',
           path: 'enhanced-marketplace.html',
           desc: 'Product cards with Stripe',
           gradient: 'linear-gradient(135deg,#ffff00,#00ff00)',
-          icon: '🛒',
-        },
-        {
-          name: 'Dashboard',
+          icon: '??', },
+        { name: 'Dashboard',
           path: 'dashboard.html',
           desc: 'Analytics & moderation',
           gradient: 'linear-gradient(135deg,#00ff00,#00ffff)',
-          icon: '📊',
-        },
-        {
-          name: 'Video Player',
+          icon: '??', },
+        { name: 'Video Player',
           path: 'video-player.html',
           desc: 'Theater mode player',
           gradient: 'linear-gradient(135deg,#00ffff,#ff00ff)',
-          icon: '▶️',
-        },
-        {
-          name: 'Auto Editor',
+          icon: '??', },
+        { name: 'Auto Editor',
           path: 'auto-editor.html',
           desc: 'AI-powered video editing',
           gradient: 'linear-gradient(135deg,#ff00ff,#ffff00)',
-          icon: '✂️',
-        },
-        {
-          name: 'Code Editor',
+          icon: '??', },
+        { name: 'Code Editor',
           path: 'code-editor.html',
           desc: 'Split-pane code editor',
           gradient: 'linear-gradient(135deg,#00ff00,#00ffff)',
-          icon: '💻',
-        },
-        {
-          name: 'Settings',
+          icon: '??', },
+        { name: 'Settings',
           path: 'settings.html',
           desc: 'User preferences & security',
           gradient: 'linear-gradient(135deg,#ffff00,#ff00ff)',
-          icon: '⚙️',
-        },
-        {
-          name: 'Auth',
+          icon: '??', },
+        { name: 'Auth',
           path: 'auth.html',
           desc: 'Login & register toggle',
           gradient: 'linear-gradient(135deg,#00ffff,#00ff00)',
-          icon: '🔐',
-        },
+          icon: '??', },
       ];
 
-      document.getElementById('pages').innerHTML = pages
+      document.getElementById('pages').textContent = pages
         .map(
           page => `
       <a href="${page.path}" style="background:rgba(10,10,15,0.8);border-radius:12px;box-shadow:0 0 20px rgba(0,255,0,0.3);overflow:hidden;text-decoration:none;display:block;transition:all 0.3s;border:2px solid transparent;background-image:linear-gradient(rgba(10,10,15,0.8),rgba(10,10,15,0.8)),linear-gradient(135deg,#00ff00,#00ffff,#ff00ff,#ffff00);background-origin:border-box;background-clip:padding-box,border-box;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 30px rgba(0,255,0,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 20px rgba(0,255,0,0.3)'">
@@ -649,73 +606,58 @@
 
       // Notification system
       let notifications = [
-        {
-          id: 1,
+        { id: 1,
           type: 'like',
           user: 'sarah_dev',
           text: 'liked your post',
           time: '5m ago',
           unread: true,
-          icon: '❤️',
-          group: 'today',
-        },
-        {
-          id: 2,
+          icon: '??',
+          group: 'today', },
+        { id: 2,
           type: 'comment',
           user: 'alex_codes',
           text: 'commented on your video',
           time: '1h ago',
           unread: true,
-          icon: '💬',
-          group: 'today',
-        },
-        {
-          id: 3,
+          icon: '??',
+          group: 'today', },
+        { id: 3,
           type: 'follow',
           user: 'tech_guru',
           text: 'started following you',
           time: '2h ago',
           unread: true,
-          icon: '👤',
-          group: 'today',
-        },
+          icon: '??',
+          group: 'today', },
       ];
       let notifFilter = 'all';
       let notifSoundEnabled = true;
 
-      function toggleNotifications() {
-        const dropdown = document.getElementById('notif-dropdown');
+      function toggleNotifications() { const dropdown = document.getElementById('notif-dropdown');
         const isVisible = dropdown.style.display === 'flex';
         dropdown.style.display = isVisible ? 'none' : 'flex';
-        if (!isVisible) renderNotifications();
-      }
+        if (!isVisible) renderNotifications(); }
 
-      function renderNotifications() {
-        const container = document.getElementById('notif-list');
+      function renderNotifications() { const container = document.getElementById('notif-list');
         if (!container) return;
         const searchInput = document.getElementById('notif-search');
         const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
-        let filtered = notifications.filter(n => {
-          if (notifFilter !== 'all' && n.type !== notifFilter) return false;
+        let filtered = notifications.filter(n => { if (notifFilter !== 'all' && n.type !== notifFilter) return false;
           if (
             searchQuery &&
             !n.text.toLowerCase().includes(searchQuery) &&
             !n.user.toLowerCase().includes(searchQuery)
           )
             return false;
-          return true;
-        });
-        if (filtered.length === 0) {
-          container.innerHTML =
+          return true; });
+        if (filtered.length === 0) { container.textContent =
             '<div style="padding:40px 20px;text-align:center;color:#6b7280;font-size:13px;">No notifications found</div>';
-          return;
-        }
+          return; }
         const grouped = { today: [], yesterday: [], older: [] };
         filtered.forEach(n => grouped[n.group].push(n));
         let html = '';
-        ['today', 'yesterday', 'older'].forEach(group => {
-          if (grouped[group].length > 0) {
-            html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
+        ['today', 'yesterday', 'older'].forEach(group => { if (grouped[group].length > 0) { html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
             html += grouped[group]
               .map(
                 n => `
@@ -729,117 +671,80 @@
                 </div>
                 <div style="display:flex;gap:4px;flex-shrink:0;">
                   ${n.unread ? '<div style="width:8px;height:8px;background:#00ffff;border-radius:50%;margin-top:6px;"></div>' : ''}
-                  <button onclick="deleteNotification(${n.id});event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;opacity:0.5;" title="Delete">✕</button>
+                  <button onclick="deleteNotification(${n.id});event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;opacity:0.5;" title="Delete">?</button>
                 </div>
               </div>
             </div>
           `
               )
-              .join('');
-          }
-        });
-        container.innerHTML = html;
-      }
+              .join(''); } });
+        container.textContent = html; }
 
-      function markRead(id) {
-        event.stopPropagation();
+      function markRead(id) { event.stopPropagation();
         const notif = notifications.find(n => n.id === id);
         if (notif) notif.unread = false;
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function markAllRead() {
-        event.stopPropagation();
+      function markAllRead() { event.stopPropagation();
         notifications.forEach(n => (n.unread = false));
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function deleteNotification(id) {
-        event.stopPropagation();
+      function deleteNotification(id) { event.stopPropagation();
         notifications = notifications.filter(n => n.id !== id);
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function clearAllNotifications() {
-        event.stopPropagation();
-        if (confirm('Clear all notifications? This cannot be undone.')) {
-          notifications = [];
+      function clearAllNotifications() { event.stopPropagation();
+        if (confirm('Clear all notifications? This cannot be undone.')) { notifications = [];
           updateBadge();
-          renderNotifications();
-        }
-      }
+          renderNotifications(); } }
 
-      function setNotifFilter(filter) {
-        event.stopPropagation();
+      function setNotifFilter(filter) { event.stopPropagation();
         notifFilter = filter;
-        document.querySelectorAll('.notif-filter').forEach(btn => {
-          btn.classList.remove('active');
-          btn.style.background = 'transparent';
-        });
+        document.querySelectorAll('.notif-filter').forEach(btn => { btn.classList.remove('active');
+          btn.style.background = 'transparent'; });
         const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
-        if (activeBtn) {
-          activeBtn.classList.add('active');
-          activeBtn.style.background = 'rgba(0,255,255,0.2)';
-        }
-        renderNotifications();
-      }
+        if (activeBtn) { activeBtn.classList.add('active');
+          activeBtn.style.background = 'rgba(0,255,255,0.2)'; }
+        renderNotifications(); }
 
-      function filterNotifications() {
-        renderNotifications();
-      }
+      function filterNotifications() { renderNotifications(); }
 
-      function toggleNotifSound() {
-        event.stopPropagation();
+      function toggleNotifSound() { event.stopPropagation();
         notifSoundEnabled = !notifSoundEnabled;
         const btn = document.getElementById('sound-btn');
-        btn.textContent = notifSoundEnabled ? '🔔' : '🔕';
-        btn.style.opacity = notifSoundEnabled ? '1' : '0.5';
-      }
+        btn.textContent = notifSoundEnabled ? '??' : '??';
+        btn.style.opacity = notifSoundEnabled ? '1' : '0.5'; }
 
-      function loadMoreNotifications() {
-        event.stopPropagation();
+      function loadMoreNotifications() { event.stopPropagation();
         const newNotifs = [
-          {
-            id: Date.now(),
+          { id: Date.now(),
             type: 'like',
             user: 'user_' + Math.floor(Math.random() * 1000),
             text: 'liked your post',
             time: 'Just now',
             unread: true,
-            icon: '❤️',
-            group: 'today',
-          },
+            icon: '??',
+            group: 'today', },
         ];
         notifications = [...newNotifs, ...notifications];
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function updateBadge() {
-        const unreadCount = notifications.filter(n => n.unread).length;
+      function updateBadge() { const unreadCount = notifications.filter(n => n.unread).length;
         const badge = document.getElementById('notif-badge');
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount;
-          badge.style.display = 'flex';
-        } else {
-          badge.style.display = 'none';
-        }
-      }
+        if (unreadCount > 0) { badge.textContent = unreadCount;
+          badge.style.display = 'flex'; } else { badge.style.display = 'none'; } }
 
-      document.addEventListener('click', e => {
-        const dropdown = document.getElementById('notif-dropdown');
+      document.addEventListener('click', e => { const dropdown = document.getElementById('notif-dropdown');
         const notifBtn = e.target.closest('button[onclick="toggleNotifications()"]');
         const insideDropdown = e.target.closest('#notif-dropdown');
-        if (dropdown && !insideDropdown && !notifBtn) {
-          dropdown.style.display = 'none';
-        }
-      });
+        if (dropdown && !insideDropdown && !notifBtn) { dropdown.style.display = 'none'; } });
 
       updateBadge();
     </script>
     <div class="main-content"></div>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

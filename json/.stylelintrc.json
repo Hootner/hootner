@@ -1,28 +1,22 @@
-{
-  "extends": ["stylelint-config-standard"],
-  "rules": {
-    "color-named": "never",
+{ "extends": ["stylelint-config-standard"],
+  "rules": { "color-named": "never",
     "declaration-no-important": true,
     "function-url-quotes": "always",
     "font-weight-notation": "numeric",
     "comment-whitespace-inside": "always",
     "rule-empty-line-before": [
       "always-multi-line",
-      {
-        "except": ["first-nested"],
-        "ignore": ["after-comment"]
-      }
+      { "except": ["first-nested"],
+        "ignore": ["after-comment"] }
     ],
     "property-no-vendor-prefix": null,
     "alpha-value-notation": null,
     "color-function-notation": null,
     "media-feature-range-notation": null,
-    "declaration-block-no-redundant-longhand-properties": null
-  },
+    "declaration-block-no-redundant-longhand-properties": null },
   "ignoreFiles": [
     "node_modules/**/*",
     "dist/**/*",
     "build/**/*",
     "**/*.min.css"
-  ]
-}
+  ] }

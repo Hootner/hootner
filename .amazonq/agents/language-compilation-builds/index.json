@@ -1,0 +1,112 @@
+{
+  "category": "Language and Compilation Builds",
+  "description": "Tools for Creating and Optimizing Code - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Programming Language",
+      "file": "language.py",
+      "language": "Python",
+      "lines": 35,
+      "features": ["Lisp-like syntax", "Tokenizer", "Parser", "Evaluator"],
+      "run": "python language.py",
+      "tutorial": "https://norvig.com/lispy.html",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Compiler",
+      "file": "compiler.js",
+      "language": "JavaScript",
+      "lines": 50,
+      "features": ["Tokenizer", "Parser", "AST", "Code generation"],
+      "run": "node compiler.js",
+      "tutorial": "https://github.com/jamiebuilds/the-super-tiny-compiler",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Compiler Extended",
+      "file": "compiler-extended.js",
+      "language": "JavaScript",
+      "lines": 75,
+      "features": ["Operators", "Variables", "C code generation"],
+      "run": "node compiler-extended.js",
+      "tutorial": "https://github.com/jamiebuilds/the-super-tiny-compiler",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "LLVM IR Compiler",
+      "file": "compiler-llvm.js",
+      "language": "JavaScript",
+      "lines": 65,
+      "features": ["LLVM IR", "SSA form", "Register allocation"],
+      "run": "node compiler-llvm.js",
+      "tutorial": "https://llvm.org/docs/tutorial/",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "JIT Compiler",
+      "file": "jit-compiler.c",
+      "language": "C",
+      "lines": 42,
+      "features": ["x86 code generation", "Executable memory", "Runtime compilation"],
+      "compile": "gcc jit-compiler.c -o jit",
+      "run": "./jit",
+      "tutorial": "https://blog.reverberate.org/2012/12/hello-jit-world-joy-of-simple-jits.html",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Garbage Collector",
+      "file": "garbage-collector.c",
+      "language": "C",
+      "lines": 68,
+      "features": ["Mark-sweep", "Object graph", "Memory management"],
+      "compile": "gcc garbage-collector.c -o gc",
+      "run": "./gc",
+      "tutorial": "http://journal.stuffwithstuff.com/2013/12/08/babys-first-garbage-collector/",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Regex Engine",
+      "file": "regex-engine.js",
+      "language": "JavaScript",
+      "lines": 28,
+      "features": ["Pattern matching", "Wildcards", "Quantifiers"],
+      "run": "node regex-engine.js",
+      "tutorial": "https://nickdrane.com/build-your-own-regex/",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Scripting Language",
+      "file": "scripting-language.py",
+      "language": "Python",
+      "lines": 48,
+      "features": ["Tokenizer", "Arithmetic", "Expression evaluation"],
+      "run": "python scripting-language.py",
+      "tutorial": "https://ruslanspivak.com/lsbasi-part1/",
+      "agent": "LanguageCompilerQ"
+    },
+    {
+      "name": "Query Language",
+      "file": "query-language.py",
+      "language": "Python",
+      "lines": 45,
+      "features": ["Boolean queries", "AND/OR operators", "Set operations"],
+      "run": "python query-language.py",
+      "tutorial": "https://blog.logrocket.com/build-query-language-python/",
+      "agent": "LanguageCompilerQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates language-compilation-builds",
+    "generate": "@LanguageCompilerQ Generate minimal code for compiler in JavaScript",
+    "test": "Run each template to verify parsing and execution"
+  },
+  "dependencies": {
+    "from": "foundational-builds",
+    "uses": ["Assembler output", "Disassembler for debugging"],
+    "feeds": "VirtualizationRuntimeQ for custom runtimes"
+  },
+  "nextLayer": {
+    "category": "Operating System and Kernel Builds",
+    "agent": "OSKernelQ"
+  }
+}

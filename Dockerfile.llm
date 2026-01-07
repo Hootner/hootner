@@ -1,0 +1,15 @@
+FROM node:18-slim
+
+RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY services/llm-requirements.txt ./
+RUN pip3 install --no-cache-dir -r llm-requirements.txt
+
+COPY services/llm-service.py services/llm-api-server.js ./
+COPY llm-model.json ./
+
+EXPOSE 3100
+
+CMD ["node", "llm-api-server.js"]

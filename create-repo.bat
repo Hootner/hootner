@@ -1,3 +1,0 @@
-@echo off
-echo Creating GitHub repository...
-gh repo create hootner --public --source=. --remote=origin --push

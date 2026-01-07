@@ -19,18 +19,15 @@
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-      :root {
-        --neon-green: #00ff41;
+      :root { --neon-green: #00ff41;
         --neon-cyan: #00ffff;
         --neon-magenta: #ff00ff;
         --neon-yellow: #ffff00;
         --text-primary: #00ff41;
         --text-secondary: #00ffff;
-        --bg-dark: #0a0a0f;
-      }
+        --bg-dark: #0a0a0f; }
 
-      body {
-        background: #0a0a0f;
+      body { background: #0a0a0f;
         color: #00ff41;
         font-family:
           'Inter',
@@ -38,27 +35,77 @@
           -apple-system,
           sans-serif;
         margin: 0;
-        padding: 0;
-      }
+        padding: 0; }
 
-      nav {
-        height: 80px;
+      nav { height: 80px;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 1000;
-      }
+        z-index: 1000; }
 
-      .main-content {
-        margin-top: 80px;
-        padding: 20px;
-      }
+      .main-content { margin-top: 80px;
+        padding: 20px; }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
 
   <body>
-    <nav class="bg-slate-900 border-b border-slate-700">
+<style>
+:root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+.dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+.dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+.dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+.dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+.nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+.notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+.notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+.notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+.notification-dropdown.show{display:block}
+.notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+.notification-item:hover{background:var(--dashboard-hover)}
+.notification-item:last-child{border-bottom:none}
+</style>
+<div class="dashboard-header">
+<nav class="dashboard-nav">
+<div style="display:flex;gap:1rem;flex-wrap:wrap">
+<a href="dashboard.html" class="nav-btn">Dashboard</a>
+<a href="video-player.html" class="nav-btn">Video Player</a>
+<a href="code-editor.html" class="nav-btn">Code Editor</a>
+<a href="marketplace.html" class="nav-btn">Marketplace</a>
+<a href="profile.html" class="nav-btn">Profile</a>
+<a href="settings.html" class="nav-btn">Settings</a>
+<a href="feed-react.html" class="nav-btn active">Feed</a>
+<a href="login.html" class="nav-btn">Login</a>
+<a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+<a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+<a href="design-showcase.html" class="nav-btn">Showcase</a>
+<a href="test-page-clean.html" class="nav-btn">Test</a>
+</div>
+<div style="position:relative">
+<div class="notification-bell" onclick="toggleNotifications()">
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+</svg>
+<span class="notification-badge">3</span>
+</div>
+<div class="notification-dropdown" id="notificationDropdown">
+<div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+<div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+<div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+</div>
+</div>
+</nav>
+</div>
+<script>
+(function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+</script>
+<nav class="bg-slate-900 border-b border-slate-700" style="display:none">
       <div
         style="
           padding: 12px 40px;
@@ -185,8 +232,7 @@
     <script type="text/babel">
       const { useState, useEffect } = React;
 
-      const NotificationBell = () => {
-        const [showNotifications, setShowNotifications] = useState(false);
+      const NotificationBell = () => { const [showNotifications, setShowNotifications] = useState(false);
         const [notificationCount, setNotificationCount] = useState(3);
 
         const notifications = [
@@ -195,29 +241,24 @@
           { id: 3, text: 'New comment received', time: '10m ago' },
         ];
 
-        const handleBellClick = () => {
-          setShowNotifications(!showNotifications);
-          if (!showNotifications) setNotificationCount(0);
-        };
+        const handleBellClick = () => { setShowNotifications(!showNotifications);
+          if (!showNotifications) setNotificationCount(0); };
 
         return (
           <div style={{ position: 'relative' }}>
             <span
               onClick={handleBellClick}
-              style={{
-                color: '#00ffff',
+              style={{ color: '#00ffff',
                 cursor: 'pointer',
                 fontSize: '20px',
                 padding: '8px',
                 position: 'relative',
-                display: 'inline-block',
-              }}
+                display: 'inline-block', }}
             >
               🔔
               {notificationCount > 0 && (
                 <span
-                  style={{
-                    position: 'absolute',
+                  style={{ position: 'absolute',
                     top: '-2px',
                     right: '2px',
                     background: '#ef4444',
@@ -229,8 +270,7 @@
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontWeight: 'bold',
-                  }}
+                    fontWeight: 'bold', }}
                 >
                   {notificationCount}
                 </span>
@@ -238,8 +278,7 @@
             </span>
             {showNotifications && (
               <div
-                style={{
-                  position: 'absolute',
+                style={{ position: 'absolute',
                   top: '100%',
                   right: '0',
                   background: '#1e293b',
@@ -247,36 +286,29 @@
                   borderRadius: '8px',
                   width: '300px',
                   zIndex: 1001,
-                  marginTop: '8px',
-                }}
+                  marginTop: '8px', }}
               >
                 <div
-                  style={{
-                    padding: '12px',
+                  style={{ padding: '12px',
                     borderBottom: '1px solid #334155',
                     color: '#00ff41',
-                    fontWeight: 'bold',
-                  }}
+                    fontWeight: 'bold', }}
                 >
                   Notifications
                 </div>
                 {notifications.map(notif => (
                   <div
                     key={notif.id}
-                    style={{
-                      padding: '12px',
+                    style={{ padding: '12px',
                       borderBottom: '1px solid #334155',
                       color: '#00ffff',
-                      fontSize: '14px',
-                    }}
+                      fontSize: '14px', }}
                   >
                     <div>{notif.text}</div>
                     <div
-                      style={{
-                        color: '#64748b',
+                      style={{ color: '#64748b',
                         fontSize: '12px',
-                        marginTop: '4px',
-                      }}
+                        marginTop: '4px', }}
                     >
                       {notif.time}
                     </div>
@@ -285,39 +317,32 @@
               </div>
             )}
           </div>
-        );
-      };
+        ); };
 
       const PostCard = ({ post, onLike, onShare }) => (
         <article
-          style={{
-            background: 'rgba(10,10,15,0.8)',
+          style={{ background: 'rgba(10,10,15,0.8)',
             borderRadius: '12px',
             border: '2px solid rgba(0,255,65,0.3)',
             padding: '40px',
             marginBottom: '24px',
-            boxShadow: '0 0 20px rgba(0,255,65,0.3)',
-          }}
+            boxShadow: '0 0 20px rgba(0,255,65,0.3)', }}
         >
           <div
-            style={{
-              display: 'flex',
+            style={{ display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              marginBottom: '16px',
-            }}
+              marginBottom: '16px', }}
           >
             <div
-              style={{
-                width: '40px',
+              style={{ width: '40px',
                 height: '40px',
                 background: 'linear-gradient(135deg,#00ff41,#00ffff)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '20px',
-              }}
+                fontSize: '20px', }}
             >
               🦉
             </div>
@@ -336,25 +361,21 @@
           <div style={{ display: 'flex', gap: '16px' }}>
             <button
               onClick={() => onLike(post.id)}
-              style={{
-                background: 'none',
+              style={{ background: 'none',
                 border: 'none',
                 color: post.liked ? '#ff00ff' : '#00ffff',
                 cursor: 'pointer',
-                fontSize: '14px',
-              }}
+                fontSize: '14px', }}
             >
               ❤️ {post.likes}
             </button>
             <button
               onClick={() => onShare(post.id)}
-              style={{
-                background: 'none',
+              style={{ background: 'none',
                 border: 'none',
                 color: '#00ffff',
                 cursor: 'pointer',
-                fontSize: '14px',
-              }}
+                fontSize: '14px', }}
             >
               🔗 {post.shares}
             </button>
@@ -362,44 +383,33 @@
         </article>
       );
 
-      const Feed = () => {
-        const [posts, setPosts] = useState([]);
+      const Feed = () => { const [posts, setPosts] = useState([]);
 
-        useEffect(() => {
-          const initialPosts = Array.from({ length: 10 }, (_, i) => ({
-            id: i + 1,
+        useEffect(() => { const initialPosts = Array.from({ length: 10 }, (_, i) => ({ id: i + 1,
             author: `User ${i + 1}`,
             content: `Post #${i + 1}. This is a sample post with some content.`,
             time: `${Math.floor(Math.random() * 24)}h ago`,
             likes: Math.floor(Math.random() * 500),
             shares: Math.floor(Math.random() * 20),
-            liked: false,
-          }));
-          setPosts(initialPosts);
-        }, []);
+            liked: false, }));
+          setPosts(initialPosts); }, []);
 
-        const handleLike = id => {
-          setPosts(prev =>
+        const handleLike = id => { setPosts(prev =>
             prev.map(post =>
               post.id === id
-                ? {
-                    ...post,
+                ? { ...post,
                     liked: !post.liked,
-                    likes: post.likes + (post.liked ? -1 : 1),
-                  }
+                    likes: post.likes + (post.liked ? -1 : 1), }
                 : post
             )
-          );
-        };
+          ); };
 
-        const handleShare = id => {
-          setPosts(prev =>
+        const handleShare = id => { setPosts(prev =>
             prev.map(post =>
               post.id === id ? { ...post, shares: post.shares + 1 } : post
             )
           );
-          alert('🔗 Link copied!');
-        };
+          alert('🔗 Link copied!'); };
 
         return (
           <div
@@ -414,10 +424,9 @@
               />
             ))}
           </div>
-        );
-      };
+        ); };
 
       ReactDOM.render(<Feed />, document.getElementById('root'));
     </script>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

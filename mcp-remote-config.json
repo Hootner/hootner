@@ -1,31 +1,15 @@
-{
-  "mcpServers": {
-    "hootner-remote": {
-      "transport": "http",
+{ "mcpServers": { "hootner-remote": { "transport": "http",
       "url": "https://your-mcp.hootner.com/v1/sse",
-      "headers": {
-        "Authorization": "Bearer ${HOOTNER_MCP_TOKEN}",
-        "Content-Type": "application/json"
-      },
-      "timeout": 30000
-    },
-    "hootner-local": {
-      "transport": "stdio",
+      "headers": { "Authorization": "Bearer ${HOOTNER_MCP_TOKEN}",
+        "Content-Type": "application/json" },
+      "timeout": 30000 },
+    "hootner-local": { "transport": "stdio",
       "command": "node",
       "args": ["mcp-server.js"],
       "cwd": "${workspaceFolder}",
-      "env": {
-        "HOOTNER_ENV": "development"
-      }
-    }
-  },
-  "toolPermissions": {
-    "hootner-remote": {
-      "deploy_service": "ask",
+      "env": { "HOOTNER_ENV": "development" } } },
+  "toolPermissions": { "hootner-remote": { "deploy_service": "ask",
       "chaos_test": "ask",
       "system_health": "always",
       "backup_system": "ask",
-      "security_scan": "always"
-    }
-  }
-}
+      "security_scan": "always" } } }

@@ -3,8 +3,7 @@
  * @module constants/limits
  */
 
-const LIMITS = {
-  MAX_STRING_LENGTH: 1000,
+const LIMITS = { MAX_STRING_LENGTH: 1000,
   MAX_PORT: 65535,
   MAX_FILE_SIZE_MB: 100,
   MAX_BUFFER_SIZE: 2048,
@@ -17,7 +16,6 @@ const LIMITS = {
   RATE_LIMIT_MIN: 10,
   RATE_LIMIT_MAX: 100,
   LIGHTHOUSE_MAX_SIZE: 10240,
-  LIGHTHOUSE_WIDTH: 940
-};
+  LIGHTHOUSE_WIDTH: 940 };
 
 export default LIMITS;

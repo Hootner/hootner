@@ -26,5 +26,6 @@
     "no-empty": "warn",
     "no-useless-catch": "warn",
     "no-useless-escape": "warn"
-  }
+  },
+  "root": true
 }

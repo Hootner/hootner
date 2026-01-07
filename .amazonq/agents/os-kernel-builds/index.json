@@ -1,0 +1,85 @@
+{
+  "category": "Operating System and Kernel Builds",
+  "description": "OS kernels and management systems - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Bootloader",
+      "file": "bootloader.asm",
+      "language": "Assembly",
+      "lines": 25,
+      "features": ["x86 boot", "BIOS interrupts", "VGA text mode"],
+      "compile": "nasm -f bin bootloader.asm -o boot.bin",
+      "run": "qemu-system-i386 -drive format=raw,file=boot.bin",
+      "tutorial": "https://wiki.osdev.org/Bare_Bones",
+      "agent": "OSKernelQ"
+    },
+    {
+      "name": "Kernel",
+      "file": "kernel.c",
+      "language": "C",
+      "lines": 18,
+      "features": ["VGA output", "Kernel entry", "Halt loop"],
+      "compile": "gcc -m32 -ffreestanding -c kernel.c -o kernel.o",
+      "tutorial": "https://wiki.osdev.org/Bare_Bones",
+      "agent": "OSKernelQ"
+    },
+    {
+      "name": "Process Scheduler",
+      "file": "scheduler.c",
+      "language": "C",
+      "lines": 42,
+      "features": ["Round-robin", "Time quantum", "Process queue"],
+      "compile": "gcc scheduler.c -o scheduler",
+      "run": "./scheduler",
+      "tutorial": "https://www.geeksforgeeks.org/program-round-robin-scheduling-set-1/",
+      "agent": "OSKernelQ"
+    },
+    {
+      "name": "Memory Manager",
+      "file": "memory-manager.c",
+      "language": "C",
+      "lines": 55,
+      "features": ["Heap allocation", "Free list", "Block management"],
+      "compile": "gcc memory-manager.c -o memmgr",
+      "run": "./memmgr",
+      "tutorial": "https://arjunsreedharan.org/post/148675821737/memory-allocators-101-write-a-simple-memory",
+      "agent": "OSKernelQ"
+    },
+    {
+      "name": "Shell",
+      "file": "shell.c",
+      "language": "C",
+      "lines": 45,
+      "features": ["Command parsing", "Process execution", "Fork/exec"],
+      "compile": "gcc shell.c -o shell",
+      "run": "./shell",
+      "tutorial": "https://brennan.io/2015/01/16/write-a-shell-in-c/",
+      "agent": "OSKernelQ"
+    },
+    {
+      "name": "Filesystem",
+      "file": "filesystem.c",
+      "language": "C",
+      "lines": 72,
+      "features": ["File creation", "Read/write", "Directory listing"],
+      "compile": "gcc filesystem.c -o fs",
+      "run": "./fs",
+      "tutorial": "https://www.cs.nmsu.edu/~pfeiffer/fuse-tutorial/",
+      "agent": "OSKernelQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates os-kernel-builds",
+    "generate": "@OSKernelQ Generate minimal code for bootloader in Assembly",
+    "test": "Compile and run each template (requires QEMU for bootloader)"
+  },
+  "dependencies": {
+    "from": "foundational-builds",
+    "uses": ["Assembler for bootloader", "Debugger for kernel"],
+    "feeds": "VirtualizationRuntimeQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Virtualization and Runtime Builds",
+    "agent": "VirtualizationRuntimeQ"
+  }
+}

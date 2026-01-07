@@ -1,0 +1,28 @@
+hootner mcp server setup with 24 tools
+pm2 process management for 24/7 availability
+cross-platform compatibility for windows and linux
+security hardening with whitelisting and audit logs
+health checks and diagnostics for system monitoring
+mcp server uses stdio transport protocol
+process manager pm2 with windows auto-startup
+script whitelist for security
+destructive action blocking
+audit logging for all operations
+project has 9 servers and 50 npm scripts
+24 mcp tools implemented for deployment and monitoring
+getprojectinfo listservices getservicestatus startservice stopservice
+restartservice readlogs deployservice runscript getmetrics
+securityscan backupdata restorebackup chaostest healthcheck
+updatedependencies gitstatus createbranch commitchanges pushchanges
+pullchanges getenvironment setenvironment listbackups
+pm2 status online with 24/7 availability
+security audit shows 0 vulnerabilities
+system memory management for amazon q indexing
+eslint code quality checks across project
+git version control with branch management
+environment configuration management
+backup and restore functionality
+chaos engineering for resilience testing
+metrics collection and monitoring
+deployment automation with scripts
+service orchestration and management

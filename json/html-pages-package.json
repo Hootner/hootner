@@ -1,15 +1,7 @@
-{
-  "name": "@hootner/video-player-server",
+{ "name": "@hootner/video-player-server",
   "version": "1.0.0",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "start": "node video-player-server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
-  }
-}
+  "engines": { "node": ">=18.0.0" },
+  "scripts": { "start": "node video-player-server.js" },
+  "dependencies": { "express": "^4.18.2",
+    "cors": "^2.8.5" } }

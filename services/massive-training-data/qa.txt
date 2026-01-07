@@ -1,0 +1,30 @@
+Question: How do I reverse a string in JavaScript?
+Answer: Use string.split("").reverse().join("") or spread operator [...string].reverse().join("")
+
+Question: What is the difference between let and const?
+Answer: let allows reassignment, const prevents reassignment but allows mutation of objects and arrays
+
+Question: How do I make an HTTP request?
+Answer: Use fetch API, axios library, or XMLHttpRequest for making HTTP requests in JavaScript
+
+Question: What is a closure?
+Answer: A closure is a function that has access to variables in its outer scope even after the outer function has returned
+
+Question: How do I sort an array?
+Answer: Use array.sort() with optional compare function for custom sorting logic
+
+Question: What is async await?
+Answer: Async await is syntactic sugar for promises that makes asynchronous code look synchronous
+
+Question: How do I handle errors?
+Answer: Use try catch blocks for synchronous code and catch method for promises
+
+Question: What is the event loop?
+Answer: The event loop handles asynchronous operations by processing callbacks from the callback queue
+
+Question: How do I optimize performance?
+Answer: Use profiling, reduce complexity, cache results, lazy load, and minimize network requests
+
+Question: What is REST API?
+Answer: REST is an architectural style using HTTP methods for CRUD operations on resources
+

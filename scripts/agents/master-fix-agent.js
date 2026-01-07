@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
+import { execSync } from 'node:childProcess';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,10 +12,4 @@ const agents = [
   'fix-snake-case.js'
 ];
 
-agents.forEach(file => {
-  try {
-    execSync(`node "${path.join(__dirname, file)}"`, { stdio: 'inherit' });
-  } catch (error) {
-    console.error(`Failed to run ${file}:`, error.message);
-  }
-});
+agents.forEach(file => { try { execSync(`node "${path.join(__dirname, file)}"`, { stdio: 'inherit' }); }  });

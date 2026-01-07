@@ -1,0 +1,70 @@
+{
+  "category": "Foundational Builds",
+  "description": "Hardware and Low-Level Emulation - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "CPU Emulator",
+      "file": "cpu-emulator.cpp",
+      "language": "C++",
+      "lines": 45,
+      "features": ["CHIP-8 VM", "Registers", "Memory", "Opcode execution"],
+      "compile": "g++ cpu-emulator.cpp -o emulator",
+      "run": "./emulator",
+      "tutorial": "https://austinmorlan.com/posts/chip8_emulator/",
+      "agent": "FoundationalQ"
+    },
+    {
+      "name": "Assembler",
+      "file": "assembler.py",
+      "language": "Python",
+      "lines": 35,
+      "features": ["Opcode mapping", "Label resolution", "Binary output"],
+      "run": "python assembler.py input.asm output.bin",
+      "tutorial": "https://blog.tigris.fr/2019/09/22/starting-an-assembler/",
+      "agent": "FoundationalQ"
+    },
+    {
+      "name": "Linker",
+      "file": "linker.rs",
+      "language": "Rust",
+      "lines": 40,
+      "features": ["Object parsing", "Section merging", "Symbol resolution"],
+      "compile": "rustc linker.rs",
+      "run": "./linker",
+      "tutorial": "https://github.com/kaizsv/byo-linker",
+      "agent": "FoundationalQ"
+    },
+    {
+      "name": "Disassembler",
+      "file": "disassembler.c",
+      "language": "C",
+      "lines": 30,
+      "features": ["Opcode decoding", "Instruction printing"],
+      "compile": "gcc disassembler.c -o disasm",
+      "run": "./disasm binary.bin",
+      "tutorial": "https://blog.yossarian.net/2020/06/19/Writing-a-simple-x86-disassembler",
+      "agent": "FoundationalQ"
+    },
+    {
+      "name": "Debugger",
+      "file": "debugger.rs",
+      "language": "Rust",
+      "lines": 38,
+      "features": ["Process attach", "Debug events", "Breakpoints"],
+      "compile": "cargo build",
+      "run": "cargo run",
+      "tutorial": "https://www.timdbg.com/posts/writing-a-debugger-from-scratch-part-1/",
+      "agent": "FoundationalQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:list",
+    "generate": "@FoundationalQ Generate minimal code for CPU emulator in C++",
+    "test": "Compile and run each template to verify basic functionality"
+  },
+  "nextLayer": {
+    "category": "Language and Compilation Builds",
+    "dependencies": ["Assembler output feeds into Linker", "Debugger uses Disassembler"],
+    "agent": "LanguageCompilerQ"
+  }
+}

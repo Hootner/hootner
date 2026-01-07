@@ -1,0 +1,152 @@
+{
+  "category": "Phase 2 Advanced",
+  "description": "Advanced distributed systems, networking, and infrastructure templates",
+  "templates": [
+    {
+      "name": "Microkernel",
+      "file": "microkernel.js",
+      "description": "Minimal kernel with IPC and process management",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Process management", "IPC messaging", "Round-robin scheduler", "Process states"]
+    },
+    {
+      "name": "Router",
+      "file": "router.js",
+      "description": "Network router with routing table and NAT",
+      "language": "JavaScript",
+      "lines": 98,
+      "features": ["Routing table", "Packet forwarding", "NAT translation", "Network matching"]
+    },
+    {
+      "name": "Firewall",
+      "file": "firewall.js",
+      "description": "Packet filtering firewall with stateful inspection",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["Rule-based filtering", "Stateful connections", "IP/subnet matching", "Statistics"]
+    },
+    {
+      "name": "Cryptocurrency",
+      "file": "cryptocurrency.js",
+      "description": "Blockchain with mining and transactions",
+      "language": "JavaScript",
+      "lines": 118,
+      "features": ["Blockchain", "Proof of work", "Transactions", "Balance tracking"]
+    },
+    {
+      "name": "Consensus (Raft)",
+      "file": "consensus-raft.js",
+      "description": "Raft consensus with leader election and log replication",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Leader election", "Log replication", "Term management", "Voting"]
+    },
+    {
+      "name": "Distributed Cache",
+      "file": "distributed-cache.js",
+      "description": "Cache with consistent hashing and replication",
+      "language": "JavaScript",
+      "lines": 125,
+      "features": ["Consistent hashing", "Virtual nodes", "Replication", "Node failure handling"]
+    },
+    {
+      "name": "CDN",
+      "file": "cdn.js",
+      "description": "Content delivery network with edge caching",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Edge servers", "Cache hit/miss", "Geographic routing", "Invalidation"]
+    },
+    {
+      "name": "Load Balancer",
+      "file": "load-balancer.js",
+      "description": "Load balancer with multiple algorithms",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Round robin", "Least connections", "Health checks", "Statistics"]
+    },
+    {
+      "name": "Message Queue",
+      "file": "message-queue.js",
+      "description": "Pub/sub message queue with DLQ",
+      "language": "JavaScript",
+      "lines": 98,
+      "features": ["Pub/sub", "Subscribers", "Dead letter queue", "Retry logic"]
+    },
+    {
+      "name": "API Gateway",
+      "file": "api-gateway.js",
+      "description": "API gateway with rate limiting and circuit breaker",
+      "language": "JavaScript",
+      "lines": 115,
+      "features": ["Routing", "Authentication", "Rate limiting", "Circuit breaker"]
+    },
+    {
+      "name": "Service Mesh",
+      "file": "service-mesh.js",
+      "description": "Service mesh with traffic management",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["Service discovery", "Traffic splitting", "Retry logic", "Metrics"]
+    },
+    {
+      "name": "Event Sourcing",
+      "file": "event-sourcing.js",
+      "description": "Event store with projections and snapshots",
+      "language": "JavaScript",
+      "lines": 98,
+      "features": ["Event store", "State rebuild", "Snapshots", "Projections"]
+    },
+    {
+      "name": "Saga Pattern",
+      "file": "saga-pattern.js",
+      "description": "Distributed transactions with compensation",
+      "language": "JavaScript",
+      "lines": 115,
+      "features": ["Transaction steps", "Compensation", "Rollback", "Error handling"]
+    },
+    {
+      "name": "CQRS",
+      "file": "cqrs.js",
+      "description": "Command/Query separation with event bus",
+      "language": "JavaScript",
+      "lines": 125,
+      "features": ["Command bus", "Query bus", "Event bus", "Read/write models"]
+    },
+    {
+      "name": "Time-Series DB",
+      "file": "timeseries-db.js",
+      "description": "Time-series database with aggregations",
+      "language": "JavaScript",
+      "lines": 118,
+      "features": ["Time-series storage", "Aggregations", "Downsampling", "Retention policies"]
+    },
+    {
+      "name": "Vector DB",
+      "file": "vector-db.js",
+      "description": "Vector database for similarity search",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Vector storage", "Cosine similarity", "Euclidean distance", "K-NN search"]
+    },
+    {
+      "name": "Stream Processor",
+      "file": "stream-processor.js",
+      "description": "Real-time stream processing engine",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Map/filter", "Windowing", "Aggregations", "Sinks"]
+    },
+    {
+      "name": "Rate Limiter",
+      "file": "rate-limiter.js",
+      "description": "Rate limiting with multiple algorithms",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["Token bucket", "Leaky bucket", "Sliding window", "Configurable limits"]
+    }
+  ],
+  "totalTemplates": 18,
+  "status": "Complete"
+}

@@ -1,0 +1,82 @@
+{
+  "category": "Advanced and Specialized Builds",
+  "description": "ML, blockchain, and advanced applications - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Neural Network",
+      "file": "neural-network.py",
+      "language": "Python",
+      "lines": 52,
+      "features": ["Feedforward", "Backpropagation", "Sigmoid activation", "Training loop"],
+      "run": "python neural-network.py",
+      "tutorial": "https://www.3blue1brown.com/topics/neural-networks",
+      "agent": "AdvancedSpecializedQ"
+    },
+    {
+      "name": "Blockchain",
+      "file": "blockchain.js",
+      "language": "JavaScript",
+      "lines": 78,
+      "features": ["Proof of work", "Mining", "Chain validation", "SHA-256 hashing"],
+      "run": "node blockchain.js",
+      "tutorial": "https://www.savjee.be/2017/07/Writing-tiny-blockchain-in-JavaScript/",
+      "agent": "AdvancedSpecializedQ"
+    },
+    {
+      "name": "Cryptography Library",
+      "file": "cryptography.py",
+      "language": "Python",
+      "lines": 68,
+      "features": ["Caesar cipher", "XOR cipher", "RSA encryption", "Hashing"],
+      "run": "python cryptography.py",
+      "tutorial": "https://cryptography.io/",
+      "agent": "AdvancedSpecializedQ"
+    },
+    {
+      "name": "Distributed System",
+      "file": "distributed-system.py",
+      "language": "Python",
+      "lines": 72,
+      "features": ["Node communication", "Data replication", "Peer-to-peer", "Socket programming"],
+      "run": "python distributed-system.py",
+      "tutorial": "https://en.wikipedia.org/wiki/Distributed_computing",
+      "agent": "AdvancedSpecializedQ"
+    },
+    {
+      "name": "Search Engine",
+      "file": "search-engine.js",
+      "language": "JavaScript",
+      "lines": 78,
+      "features": ["Inverted index", "TF-IDF ranking", "Query processing", "Relevance scoring"],
+      "run": "node search-engine.js",
+      "tutorial": "https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html",
+      "agent": "AdvancedSpecializedQ"
+    },
+    {
+      "name": "Recommendation Engine",
+      "file": "recommendation-engine.py",
+      "language": "Python",
+      "lines": 68,
+      "features": ["Collaborative filtering", "Cosine similarity", "User-based recommendations"],
+      "run": "python recommendation-engine.py",
+      "tutorial": "https://en.wikipedia.org/wiki/Recommender_system",
+      "agent": "AdvancedSpecializedQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates advanced-specialized-builds",
+    "generate": "@AdvancedSpecializedQ Generate minimal code for neural network in Python",
+    "test": "Run each template to see advanced algorithms in action"
+  },
+  "dependencies": {
+    "from": "dev-tools-workflow-builds",
+    "uses": ["All previous layers as foundation"],
+    "feeds": "Complete - All 11 categories finished!"
+  },
+  "completion": {
+    "totalCategories": 11,
+    "totalTemplates": 61,
+    "totalAgents": 11,
+    "status": "COMPLETE"
+  }
+}

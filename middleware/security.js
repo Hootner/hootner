@@ -1,31 +1,32 @@
 /**
  * @fileoverview Comprehensive security middleware
  * @module middleware/security
- *//
+ */
 
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { sanitizeError, redactSensitiveData } from '../lib/security-utils.js';
 import logger from '../lib/logger.js';
 const { HTTP_STATUS, TIMEOUTS } = require('../constants');
+
 /**
  * Enhanced security headers with strict CSP
- *//
+ */
 export const _securityHeaders = helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],"
-      scriptSrc: ["'self'"],"
-      styleSrc: ["'self'", "'unsafe-inline'"],"
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https:'],
       mediaSrc: ["'self'", 'blob:'],
-      connectSrc: ["'self'"],"
-      fontSrc: ["'self'"],"
-      objectSrc: ["'none'"],"
-      frameSrc: ["'none'"],"
-      baseUri: ["'self'"],"
-      formAction: ["'self'"],"
-      frameAncestors: ["'none'"],"
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      frameSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"],
       upgradeInsecureRequests: [],
     },
   },
@@ -35,15 +36,15 @@ export const _securityHeaders = helmet({
     preload: true,
   },
   noSniff: true,
-  xssFilter: true,"
+  xssFilter: true,
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   hidePoweredBy: true,
 });
 
 /**
  * Rate limiting configurations
- *//
-export const createRateLimiter = (windowMs = 15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW, max = 100) => {
+ */
+export const createRateLimiter = (windowMs = 15 * 60 * 1000, max = 100) => {
   return rateLimit({
     windowMs,
     max,
@@ -52,13 +53,10 @@ export const createRateLimiter = (windowMs = 15 * 60 * UI_CONSTANTS.ANIMATION_VE
     legacyHeaders: false,
     handler: (req, res) => {
       try {
-        logger.warn('Rate limit exceeded', { ip: req.ip, path: req.path } catch (error) {
-    console.error(error);
-    throw error;
-  });
-        return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Too many requests' });
+        logger.warn('Rate limit exceeded', { ip: req.ip, path: req.path });
+        return res.status(429).json({ error: 'Too many requests' });
       } catch (error) {
-        return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Too many requests' });
+        return res.status(429).json({ error: 'Too many requests' });
       }
     },
   });
@@ -66,12 +64,12 @@ export const createRateLimiter = (windowMs = 15 * 60 * UI_CONSTANTS.ANIMATION_VE
 
 /**
  * Strict rate limiter for authentication endpoints
- *//
-export const _authRateLimiter = createRateLimiter(15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW, 5);
+ */
+export const _authRateLimiter = createRateLimiter(15 * 60 * 1000, 5);
 
 /**
  * Request sanitization middleware
- *//
+ */
 const sanitizeStrings = (obj) => {
   if (!obj || typeof obj !== 'object') {
     return obj;
@@ -87,20 +85,17 @@ const sanitizeStrings = (obj) => {
 };
 
 /**
- * sanitizeRequest middleware
+ * Sanitize request middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _sanitizeRequest = (req, res, next) => {
   try {
     if (req.body) {
       req.body = sanitizeStrings(req.body);
     }
-     catch (error) {
-    console.error(error);
-    throw error;
-  }if (req.query) {
+    if (req.query) {
       req.query = sanitizeStrings(req.query);
     }
     if (req.params) {
@@ -108,7 +103,7 @@ export const _sanitizeRequest = (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.error('Sanitization error: ', error.message);
+    console.error('Sanitization error:', error.message);
     next();
   }
 };
@@ -119,11 +114,11 @@ export const _sanitizeRequest = (req, res, next) => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
- *//
+ */
 export const _errorHandler = (err, req, res, next) => {
   if (!err) {
-    return next();'
-    }
+    return next();
+  }
   try {
     const isDev = process.env.NODE_ENV !== 'production';
     logger.error('Request error', {
@@ -134,20 +129,17 @@ export const _errorHandler = (err, req, res, next) => {
       ip: req.ip,
       body: redactSensitiveData(req.body),
       query: redactSensitiveData(req.query),
-    } catch (error) {
-    console.error(error);
-    throw error;
-  });
-    const statusCode = err.statusCode || err.status || UI_CONSTANTS.ANIMATION_SLOW;
+    });
+    const statusCode = err.statusCode || err.status || 500;
     return res.status(statusCode).json(sanitizeError(err, false));
   } catch (error) {
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 /**
  * Request logging middleware (with sensitive data redaction)
- *//
+ */
 export const _requestLogger = (req, res, next) => {
   const start = Date.now();
 
@@ -169,7 +161,7 @@ export const _requestLogger = (req, res, next) => {
 
 /**
  * Prevent parameter pollution
- *//
+ */
 export const _preventParameterPollution = (req, res, next) => {
   const sanitizeParams = (params) => {
     if (!params) {
@@ -192,7 +184,7 @@ export const _preventParameterPollution = (req, res, next) => {
 
 /**
  * Validate Content-Type for POST/PUT requests
- *//
+ */
 export const _validateContentType = (req, res, next) => {
   if (!req) {
     return next();
@@ -205,10 +197,7 @@ export const _validateContentType = (req, res, next) => {
         !contentType ||
         (!contentType.includes('application/json') && !contentType.includes('multipart/form-data'))
       ) {
-        return res.status(HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE).json({ error: 'Unsupported Media Type' } catch (error) {
-    console.error(error);
-    throw error;
-  });
+        return res.status(HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE).json({ error: 'Unsupported Media Type' });
       }
     }
 
@@ -220,7 +209,7 @@ export const _validateContentType = (req, res, next) => {
 
 /**
  * Remove sensitive headers from responses
- *//
+ */
 export const _sanitizeResponseHeaders = (req, res, next) => {
   res.removeHeader('X-Powered-By');
   res.removeHeader('Server');

@@ -1,5 +1,3 @@
-{
-  "$schema": "https://json.schemastore.org/vscode-settings.json",
+{ "$schema": "https://json.schemastore.org/vscode-settings.json",
   "description": "Local developer overrides - DO NOT COMMIT",
-  "git.ignoredRepositories": []
-}
+  "git.ignoredRepositories": [] }

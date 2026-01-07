@@ -1,0 +1,50 @@
+{
+  "session": "mcp-server-setup",
+  "date": "2026-01-03",
+  "topics": [
+    "MCP server creation with 24 tools",
+    "PM2 process management setup",
+    "Cross-platform compatibility fixes",
+    "Security hardening (whitelisting, audit logs)",
+    "Health checks and diagnostics"
+  ],
+  "projectContext": {
+    "name": "HOOTNER",
+    "type": "MCP integration for Amazon Q",
+    "servers": 9,
+    "scripts": 50,
+    "mcpTools": 24
+  },
+  "keyLearnings": {
+    "architecture": {
+      "mcpServer": "servers/hootner-mcp-server.js",
+      "transport": "stdio (not compatible with PM2 daemon for testing)",
+      "processManager": "PM2 with Windows auto-startup",
+      "security": "Script whitelist, destructive action blocking, audit logging"
+    },
+    "issues": {
+      "systemMemory": "< 1GB causing Amazon Q indexing stops",
+      "syntaxErrors": "~100+ ESLint errors across project",
+      "uncommittedChanges": "444 files (228 modified, 90 deleted, 126 untracked)",
+      "securityVulnerabilities": 0
+    },
+    "userPreferences": {
+      "codeStyle": "Minimal implementations, no verbose code",
+      "documentation": "Never auto-create .md files",
+      "approach": "Direct solutions without over-engineering"
+    }
+  },
+  "toolsImplemented": [
+    "getProjectInfo", "listServices", "getServiceStatus", "startService", "stopService",
+    "restartService", "readLogs", "deployService", "runScript", "getMetrics",
+    "securityScan", "backupData", "restoreBackup", "chaosTest", "healthCheck",
+    "updateDependencies", "gitStatus", "createBranch", "commitChanges", "pushChanges",
+    "pullChanges", "getEnvironment", "setEnvironment", "listBackups"
+  ],
+  "successfulSetup": {
+    "pm2Status": "online (PID 2712)",
+    "availability": "24/7",
+    "testsPassed": true,
+    "securityAudit": "0 vulnerabilities"
+  }
+}

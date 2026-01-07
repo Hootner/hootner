@@ -10,11 +10,9 @@ import ANIMATION from './animation.js';
 import CACHE from './cache.js';
 import MISC from './misc.js';
 
-export {
-  HTTP_STATUS,
+export { HTTP_STATUS,
   TIMEOUTS,
   LIMITS,
   ANIMATION,
   CACHE,
-  MISC
-};
+  MISC };

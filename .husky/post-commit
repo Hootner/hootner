@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Auto-update Amazon Q context after commits
+node scripts/update-context.js
+
+# Auto-log commit to journal
+node scripts/smart-journal.js auto

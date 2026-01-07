@@ -1,26 +1,16 @@
 /**
  * A01:2021 Broken Access Control - Role-based access control
  */
-const { HTTP_STATUS, MISC } = require('../constants');
+const { HTTP_STATUS } = require('../constants');
 /**
  * ROLES
  */
-const ROLES = {
-  ADMIN: 'admin',
-  MODERATOR: 'moderator',
-  USER: 'user',
-  GUEST: 'guest',
-};
+const ROLES = { ADMIN: 'admin', MODERATOR: 'moderator', USER: 'user', GUEST: 'guest' };
 
 /**
  * PERMISSIONS
  */
-const PERMISSIONS = {
-  READ: 'read',
-  WRITE: 'write',
-  DELETE: 'delete',
-  ADMIN: 'admin',
-};
+const PERMISSIONS = { READ: 'read', WRITE: 'write', DELETE: 'delete', ADMIN: 'admin' };
 
 /**
  * ROLE_PERMISSIONS
@@ -55,7 +45,6 @@ export const _requireRole = (...allowedRoles) => {
     }
 
     if (!allowedRoles.includes(req.user.role)) {
-
       return res.status(HTTP_STATUS.FORBIDDEN).json({ error: 'Insufficient permissions' });
     }
 
@@ -73,7 +62,7 @@ export const _requirePermission = (...requiredPermissions) => {
     }
 
     const userPermissions = ROLE_PERMISSIONS[req.user.role] || [];
-    const hasPermission = requiredPermissions.every((p) => userPermissions.includes(p));
+    const hasPermission = requiredPermissions.every(p => userPermissions.includes(p));
 
     if (!hasPermission) {
       console.warn(`Permission denied: required ${requiredPermissions.join(', ')}`);
@@ -110,7 +99,7 @@ export const _requireOwnership = (resourceIdParam = 'id') => {
       next();
     } catch (error) {
       console.error('Ownership check error:', error.message);
-      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   };
 };
@@ -136,8 +125,8 @@ export const _rateLimitByRole = (req, res, next) => {
     next();
   } catch (error) {
     console.error('Rate limit error:', error.message);
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-export { ROLES, PERMISSIONS };
+export { PERMISSIONS, ROLES };

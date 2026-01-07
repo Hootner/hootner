@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: hootner-traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=${ACME_EMAIL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/acme.json:/acme.json
+      - ./traefik/config:/config:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: hootner-frontend
+    restart: unless-stopped
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+
+  video-player:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hootner-video
+    restart: unless-stopped
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.video.rule=Host(`video.${DOMAIN}`)"
+      - "traefik.http.routers.video.entrypoints=websecure"
+      - "traefik.http.routers.video.tls.certresolver=letsencrypt"
+      - "traefik.http.services.video.loadbalancer.server.port=3000"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hootner-api
+    restart: unless-stopped
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.${DOMAIN}`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
+
+networks:
+  default:
+    name: hootner-network

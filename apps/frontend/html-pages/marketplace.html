@@ -1,4 +1,5 @@
-﻿<!doctype html>
+<!doctype html>
+<!-- Inline styles are intentional for standalone HTML structure -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,63 +7,45 @@
     <title>🛒 Marketplace - Hootner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      .notif-item {
-        padding: 12px 16px;
+      /* cspell:ignore notif */
+      .notif-item { padding: 12px 16px;
         border-bottom: 1px solid rgba(0, 255, 0, 0.1);
         cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 255, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.08);
-      }
-      .notif-filter {
-        padding: 6px 12px;
+        transition: background 0.2s; }
+      .notif-item:hover { background: rgba(0, 255, 255, 0.05); }
+      .notif-item.unread { background: rgba(0, 255, 255, 0.08); }
+      .notif-filter { padding: 6px 12px;
         border-radius: 6px;
         font-size: 12px;
         cursor: pointer;
         transition: all 0.2s;
-        border: 1px solid rgba(0, 255, 0, 0.2);
-      }
-      .notif-filter:hover {
-        background: rgba(0, 255, 255, 0.1);
-      }
+        border: 1px solid rgba(0, 255, 0, 0.2); }
+      .notif-filter:hover { background: rgba(0, 255, 255, 0.1); }
     </style>
 
     <style>
       /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
+      body { padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important; }
+      nav { height: 70px !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
+        z-index: 1000 !important; }
+      .main-content { margin-top: 0 !important;
+        padding: 20px !important; }
     </style>
 
     <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
+      html { font-size: 12px !important; }
+      body { zoom: 0.75 !important;
         transform: scale(0.75) !important;
         transform-origin: 0 0 !important;
-        width: 133% !important;
-      }
+        width: 133% !important; }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
   <body
     class="min-h-screen"
     style="
@@ -75,7 +58,61 @@
       color: #00ff00;
     "
   >
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+    <style>
+      :root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+      .dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+      .dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+      .dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+      .dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+      .dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+      .nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+      .notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+      .notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+      .notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+      @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+      .notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+      .notification-dropdown.show{display:block}
+      .notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+      .notification-item:hover{background:var(--dashboard-hover)}
+      .notification-item:last-child{border-bottom:none}
+    </style>
+    <div class="dashboard-header">
+      <nav class="dashboard-nav">
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="dashboard.html" class="nav-btn">Dashboard</a>
+          <a href="video-player.html" class="nav-btn">Video Player</a>
+          <a href="code-editor.html" class="nav-btn">Code Editor</a>
+          <a href="marketplace.html" class="nav-btn active">Marketplace</a>
+          <a href="profile.html" class="nav-btn">Profile</a>
+          <a href="settings.html" class="nav-btn">Settings</a>
+          <a href="feed-react.html" class="nav-btn">Feed</a>
+          <a href="login.html" class="nav-btn">Login</a>
+          <a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+          <a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+          <a href="design-showcase.html" class="nav-btn">Showcase</a>
+          <a href="test-page-clean.html" class="nav-btn">Test</a>
+        </div>
+        <div style="position:relative">
+          <div class="notification-bell" onclick="toggleNotifications()">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+            </svg>
+            <span class="notification-badge">3</span>
+          </div>
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+            <div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+            <div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <script>
+      (function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+      function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+      window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+    </script>
+    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="display:none">
       <div
         style="
           padding: 12px 20px;
@@ -96,7 +133,7 @@
               text-decoration: none;
               margin-left: 0;
             "
-            >🦉 HOOTNER</a
+            >?? HOOTNER</a
           >
           <div style="position: relative">
             <button
@@ -112,7 +149,7 @@
               "
               title="Notifications"
             >
-              🔔
+              ??
               <span
                 id="notif-badge"
                 style="
@@ -190,7 +227,7 @@
                       "
                       title="Toggle sound"
                     >
-                      🔔
+                      ??
                     </button>
                     <button
                       onclick="clearAllNotifications()"
@@ -203,7 +240,7 @@
                       "
                       title="Clear all"
                     >
-                      🗑️
+                      ???
                     </button>
                     <button
                       onclick="markAllRead()"
@@ -223,7 +260,7 @@
                   type="text"
                   id="notif-search"
                   oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
+                  placeholder="?? Search notifications..."
                   style="
                     width: 100%;
                     padding: 8px;
@@ -266,7 +303,7 @@
                       cursor: pointer;
                     "
                   >
-                    ❤️ Likes
+                    ?? Likes
                   </button>
                   <button
                     class="notif-filter"
@@ -282,7 +319,7 @@
                       cursor: pointer;
                     "
                   >
-                    💬 Comments
+                    ?? Comments
                   </button>
                   <button
                     class="notif-filter"
@@ -298,7 +335,7 @@
                       cursor: pointer;
                     "
                   >
-                    👤 Follows
+                    ?? Follows
                   </button>
                   <button
                     class="notif-filter"
@@ -314,7 +351,7 @@
                       cursor: pointer;
                     "
                   >
-                    ⚠️ System
+                    ?? System
                   </button>
                 </div>
               </div>
@@ -350,7 +387,7 @@
                 >
                   Load more
                 </button>
-                <span style="color: #6b7280">•</span>
+                <span style="color: #6b7280">�</span>
                 <a
                   href="#"
                   style="color: #00ffff; font-size: 13px; text-decoration: none"
@@ -365,61 +402,61 @@
             href="profile.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >👤 Profile</a
+            >?? Profile</a
           >
           <a
             href="design-showcase.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🎨 Design</a
+            >?? Design</a
           >
           <a
             href="feed.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📰 Social</a
+            >?? Social</a
           >
           <a
             href="marketplace.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-green-400 font-medium"
-            >🛒 Marketplace</a
+            >?? Marketplace</a
           >
           <a
             href="dashboard.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📈 Dashboard</a
+            >?? Dashboard</a
           >
           <a
             href="video-player.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >▶️ Video</a
+            >?? Video</a
           >
           <a
             href="auto-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
+            >?? Editor</a
           >
           <a
             href="code-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >💻 Code</a
+            >?? Code</a
           >
           <a
             href="settings.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >⚙️ Settings</a
+            >?? Settings</a
           >
           <a
             href="login.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🔐 Login</a
+            >?? Login</a
           >
         </div>
       </div>
@@ -524,84 +561,65 @@
 
     <script>
       const products = [
-        {
-          id: 1,
+        { id: 1,
           name: 'React Component Pack',
           price: 29,
           category: 'code',
           verified: true,
-          color: 'from-blue-400 to-blue-600',
-        },
-        {
-          id: 2,
+          color: 'from-blue-400 to-blue-600', },
+        { id: 2,
           name: 'UI Design System',
           price: 49,
           category: 'design',
           verified: true,
-          color: 'from-purple-400 to-purple-600',
-        },
-        {
-          id: 3,
+          color: 'from-purple-400 to-purple-600', },
+        { id: 3,
           name: 'API Integration Kit',
           price: 39,
           category: 'code',
           verified: false,
-          color: 'from-green-400 to-green-600',
-        },
-        {
-          id: 4,
+          color: 'from-green-400 to-green-600', },
+        { id: 4,
           name: 'Landing Page Template',
           price: 19,
           category: 'templates',
           verified: true,
-          color: 'from-pink-400 to-pink-600',
-        },
-        {
-          id: 5,
+          color: 'from-pink-400 to-pink-600', },
+        { id: 5,
           name: 'Analytics Dashboard',
           price: 59,
           category: 'code',
           verified: true,
-          color: 'from-indigo-400 to-indigo-600',
-        },
-        {
-          id: 6,
+          color: 'from-indigo-400 to-indigo-600', },
+        { id: 6,
           name: 'Icon Pack Pro',
           price: 15,
           category: 'design',
           verified: true,
-          color: 'from-yellow-400 to-orange-600',
-        },
-        {
-          id: 7,
+          color: 'from-yellow-400 to-orange-600', },
+        { id: 7,
           name: 'Auth Plugin',
           price: 25,
           category: 'plugins',
           verified: false,
-          color: 'from-red-400 to-red-600',
-        },
-        {
-          id: 8,
+          color: 'from-red-400 to-red-600', },
+        { id: 8,
           name: 'E-commerce Template',
           price: 79,
           category: 'templates',
           verified: true,
-          color: 'from-teal-400 to-teal-600',
-        },
-        {
-          id: 9,
+          color: 'from-teal-400 to-teal-600', },
+        { id: 9,
           name: 'Payment Gateway Plugin',
           price: 45,
           category: 'plugins',
           verified: true,
-          color: 'from-cyan-400 to-cyan-600',
-        },
+          color: 'from-cyan-400 to-cyan-600', },
       ];
 
       let currentCategory = 'all';
 
-      function renderProducts() {
-        const filtered =
+      function renderProducts() { const filtered =
           currentCategory === 'all'
             ? products
             : products.filter(p => p.category === currentCategory);
@@ -626,39 +644,31 @@
         </div>
       `
           )
-          .join('');
-      }
+          .join(''); }
 
-      function setCategory(cat) {
-        currentCategory = cat;
-        document.querySelectorAll('.category-btn').forEach(btn => {
-          btn.className =
+      function setCategory(cat) { currentCategory = cat;
+        document.querySelectorAll('.category-btn').forEach(btn => { btn.className =
             'category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition';
           btn.style.background = 'rgba(0,255,255,0.2)';
           btn.style.color = '#00ffff';
-          btn.style.border = '1px solid rgba(0,255,255,0.3)';
-        });
+          btn.style.border = '1px solid rgba(0,255,255,0.3)'; });
         event.target.className =
           'category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition';
         event.target.style.background =
           'linear-gradient(135deg, #00ffff, #ff00ff)';
         event.target.style.color = 'white';
         event.target.style.border = 'none';
-        renderProducts();
-      }
+        renderProducts(); }
 
-      function buyNow(id) {
-        const product = products.find(p => p.id === id);
+      function buyNow(id) { const product = products.find(p => p.id === id);
         alert(
           `Purchasing: ${product.name} for ${product.price}\n\nStripe checkout would open here.`
-        );
-      }
+        ); }
 
       renderProducts();
 
       let notifications = [
-        {
-          id: 1,
+        { id: 1,
           type: 'like',
           user: 'john_dev',
           text: 'liked your product "React Component Pack"',
@@ -666,10 +676,8 @@
           timestamp: Date.now() - 300000,
           unread: true,
           icon: '❤️',
-          group: 'today',
-        },
-        {
-          id: 2,
+          group: 'today', },
+        { id: 2,
           type: 'comment',
           user: 'sarah_designer',
           text: 'commented on "UI Design System"',
@@ -677,10 +685,8 @@
           timestamp: Date.now() - 3600000,
           unread: true,
           icon: '💬',
-          group: 'today',
-        },
-        {
-          id: 3,
+          group: 'today', },
+        { id: 3,
           type: 'follow',
           user: 'mike_coder',
           text: 'started following you',
@@ -688,10 +694,8 @@
           timestamp: Date.now() - 7200000,
           unread: true,
           icon: '👤',
-          group: 'today',
-        },
-        {
-          id: 4,
+          group: 'today', },
+        { id: 4,
           type: 'mention',
           user: 'react_master',
           text: 'mentioned you in a post',
@@ -699,10 +703,8 @@
           timestamp: Date.now() - 10800000,
           unread: false,
           icon: '@',
-          group: 'today',
-        },
-        {
-          id: 5,
+          group: 'today', },
+        { id: 5,
           type: 'system',
           user: 'HOOTNER',
           text: 'Your product "API Integration Kit" has a new review',
@@ -710,10 +712,8 @@
           timestamp: Date.now() - 18000000,
           unread: false,
           icon: '⚠️',
-          group: 'today',
-        },
-        {
-          id: 6,
+          group: 'today', },
+        { id: 6,
           type: 'like',
           user: 'dev_master',
           text: 'and 5 others liked your product',
@@ -721,10 +721,8 @@
           timestamp: Date.now() - 86400000,
           unread: false,
           icon: '❤️',
-          group: 'yesterday',
-        },
-        {
-          id: 7,
+          group: 'yesterday', },
+        { id: 7,
           type: 'follow',
           user: 'code_ninja',
           text: 'started following you',
@@ -732,64 +730,48 @@
           timestamp: Date.now() - 90000000,
           unread: false,
           icon: '👤',
-          group: 'yesterday',
-        },
-        {
-          id: 8,
+          group: 'yesterday', },
+        { id: 8,
           type: 'system',
           user: 'HOOTNER',
           text: 'New feature: Bulk discounts now available!',
           time: '2d ago',
           timestamp: Date.now() - 172800000,
           unread: false,
-          icon: '🎉',
-          group: 'older',
-        },
+          icon: '⚠️',
+          group: 'older', },
       ];
       let notifFilter = 'all';
       let notifSoundEnabled = true;
 
-      function toggleNotifications() {
-        const dropdown = document.getElementById('notif-dropdown');
+      function toggleNotifications() { const dropdown = document.getElementById('notif-dropdown');
         const isVisible = dropdown.style.display === 'flex';
-        if (isVisible) {
-          dropdown.style.display = 'none';
-        } else {
-          dropdown.style.display = 'flex';
-          renderNotifications();
-        }
-      }
+        if (isVisible) { dropdown.style.display = 'none'; } else { dropdown.style.display = 'flex';
+          renderNotifications(); } }
 
-      function renderNotifications() {
-        const container = document.getElementById('notif-list');
+      function renderNotifications() { const container = document.getElementById('notif-list');
         if (!container) return;
         const searchInput = document.getElementById('notif-search');
         const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
 
-        let filtered = notifications.filter(n => {
-          if (notifFilter !== 'all' && n.type !== notifFilter) return false;
+        let filtered = notifications.filter(n => { if (notifFilter !== 'all' && n.type !== notifFilter) return false;
           if (
             searchQuery &&
             !n.text.toLowerCase().includes(searchQuery) &&
             !n.user.toLowerCase().includes(searchQuery)
           )
             return false;
-          return true;
-        });
+          return true; });
 
-        if (filtered.length === 0) {
-          container.innerHTML =
+        if (filtered.length === 0) { container.textContent =
             '<div style="padding:40px 20px;text-align:center;color:#6b7280;font-size:13px;">No notifications found</div>';
-          return;
-        }
+          return; }
 
         const grouped = { today: [], yesterday: [], older: [] };
         filtered.forEach(n => grouped[n.group].push(n));
 
         let html = '';
-        ['today', 'yesterday', 'older'].forEach(group => {
-          if (grouped[group].length > 0) {
-            html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
+        ['today', 'yesterday', 'older'].forEach(group => { if (grouped[group].length > 0) { html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
             html += grouped[group]
               .map(
                 n => `
@@ -803,89 +785,64 @@
                 </div>
                 <div style="display:flex;gap:4px;flex-shrink:0;">
                   ${n.unread ? '<div style="width:8px;height:8px;background:#00ffff;border-radius:50%;margin-top:6px;"></div>' : ''}
-                  <button onclick="deleteNotification(${n.id});event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;opacity:0.5;" title="Delete">✕</button>
+                  <button onclick="deleteNotification(${n.id});event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;opacity:0.5;" title="Delete">?</button>
                 </div>
               </div>
             </div>
           `
               )
-              .join('');
-          }
-        });
+              .join(''); } });
 
-        container.innerHTML = html;
-      }
+        container.innerHTML = html; }
 
-      function markRead(id) {
-        event.stopPropagation();
+      function markRead(id) { event.stopPropagation();
         const notif = notifications.find(n => n.id === id);
         if (notif) notif.unread = false;
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function markAllRead() {
-        event.stopPropagation();
+      function markAllRead() { event.stopPropagation();
         notifications.forEach(n => (n.unread = false));
         updateBadge();
         renderNotifications();
-        alert('All notifications marked as read');
-      }
+        alert('All notifications marked as read'); }
 
-      function deleteNotification(id) {
-        event.stopPropagation();
+      function deleteNotification(id) { event.stopPropagation();
         notifications = notifications.filter(n => n.id !== id);
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function clearAllNotifications() {
-        event.stopPropagation();
-        if (confirm('Clear all notifications? This cannot be undone.')) {
-          notifications = [];
+      function clearAllNotifications() { event.stopPropagation();
+        if (confirm('Clear all notifications? This cannot be undone.')) { notifications = [];
           updateBadge();
           renderNotifications();
-          alert('All notifications cleared');
-        }
-      }
+          alert('All notifications cleared'); } }
 
-      function setNotifFilter(filter) {
-        event.stopPropagation();
+      function setNotifFilter(filter) { event.stopPropagation();
         notifFilter = filter;
-        document.querySelectorAll('.notif-filter').forEach(btn => {
-          btn.classList.remove('active');
-          btn.style.background = 'transparent';
-        });
+        document.querySelectorAll('.notif-filter').forEach(btn => { btn.classList.remove('active');
+          btn.style.background = 'transparent'; });
         const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
-        if (activeBtn) {
-          activeBtn.classList.add('active');
-          activeBtn.style.background = 'rgba(0,255,255,0.2)';
-        }
-        renderNotifications();
-      }
+        if (activeBtn) { activeBtn.classList.add('active');
+          activeBtn.style.background = 'rgba(0,255,255,0.2)'; }
+        renderNotifications(); }
 
-      function filterNotifications() {
-        renderNotifications();
-      }
+      function filterNotifications() { renderNotifications(); }
 
-      function toggleNotifSound() {
-        event.stopPropagation();
+      function toggleNotifSound() { event.stopPropagation();
         notifSoundEnabled = !notifSoundEnabled;
         const btn = document.getElementById('sound-btn');
-        btn.textContent = notifSoundEnabled ? '🔔' : '🔕';
+        btn.textContent = notifSoundEnabled ? '??' : '??';
         btn.style.opacity = notifSoundEnabled ? '1' : '0.5';
         alert(
           notifSoundEnabled
             ? 'Notification sound enabled'
             : 'Notification sound disabled'
-        );
-      }
+        ); }
 
-      function loadMoreNotifications() {
-        event.stopPropagation();
+      function loadMoreNotifications() { event.stopPropagation();
         const newNotifs = [
-          {
-            id: Date.now(),
+          { id: Date.now(),
             type: 'like',
             user: 'user_' + Math.floor(Math.random() * 1000),
             text: 'liked your product',
@@ -893,10 +850,8 @@
             timestamp: Date.now(),
             unread: true,
             icon: '❤️',
-            group: 'today',
-          },
-          {
-            id: Date.now() + 1,
+            group: 'today', },
+          { id: Date.now() + 1,
             type: 'comment',
             user: 'dev_' + Math.floor(Math.random() * 1000),
             text: 'commented on your listing',
@@ -904,39 +859,26 @@
             timestamp: Date.now(),
             unread: true,
             icon: '💬',
-            group: 'today',
-          },
+            group: 'today', },
         ];
         notifications = [...newNotifs, ...notifications];
         updateBadge();
         renderNotifications();
         if (notifSoundEnabled) playNotificationSound();
-        alert('Loaded 2 new notifications');
-      }
+        alert('Loaded 2 new notifications'); }
 
-      function playNotificationSound() {
-        const audio = new Audio(
+      function playNotificationSound() { const audio = new Audio(
           'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUBELTKXh8bllHAU2jdXvzn0pBSh+zPDajzsKElyx6OyrWBUIQ5zd8sFuJAUuhM/z24k2CBhku+zooVARC0yl4fG5ZRwFNo3V7859KQUofsz'
         );
         audio.volume = 0.3;
-        audio.play().catch(() => {});
-      }
+        audio.play().catch(() => {}); }
 
-      function updateBadge() {
-        const unreadCount = notifications.filter(n => n.unread).length;
+      function updateBadge() { const unreadCount = notifications.filter(n => n.unread).length;
         const badge = document.getElementById('notif-badge');
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount;
-          badge.style.display = 'flex';
-        } else {
-          badge.style.display = 'none';
-        }
-      }
+        if (unreadCount > 0) { badge.textContent = unreadCount;
+          badge.style.display = 'flex'; } else { badge.style.display = 'none'; } }
 
-      function simulateRealTimeNotifications() {
-        setInterval(() => {
-          if (Math.random() > 0.7) {
-            const types = ['like', 'comment', 'follow', 'mention'];
+      function simulateRealTimeNotifications() { setInterval(() => { if (Math.random() > 0.7) { const types = ['like', 'comment', 'follow', 'mention'];
             const icons = ['❤️', '💬', '👤', '@'];
             const texts = [
               'liked your product',
@@ -946,8 +888,7 @@
             ];
             const idx = Math.floor(Math.random() * types.length);
 
-            const newNotif = {
-              id: Date.now(),
+            const newNotif = { id: Date.now(),
               type: types[idx],
               user: 'user_' + Math.floor(Math.random() * 1000),
               text: texts[idx],
@@ -955,37 +896,25 @@
               timestamp: Date.now(),
               unread: true,
               icon: icons[idx],
-              group: 'today',
-            };
+              group: 'today', };
 
             notifications.unshift(newNotif);
             updateBadge();
             const dropdown = document.getElementById('notif-dropdown');
-            if (dropdown && dropdown.style.display === 'flex') {
-              renderNotifications();
-            }
-            if (notifSoundEnabled) playNotificationSound();
-          }
-        }, 30000);
-      }
+            if (dropdown && dropdown.style.display === 'flex') { renderNotifications(); }
+            if (notifSoundEnabled) playNotificationSound(); } }, 30000); }
 
-      document.addEventListener('click', e => {
-        const dropdown = document.getElementById('notif-dropdown');
+      document.addEventListener('click', e => { const dropdown = document.getElementById('notif-dropdown');
         const notifBtn = e.target.closest(
           'button[onclick="toggleNotifications()"]'
         );
         const insideDropdown = e.target.closest('#notif-dropdown');
 
-        if (dropdown && !insideDropdown && !notifBtn) {
-          dropdown.style.display = 'none';
-        }
-      });
+        if (dropdown && !insideDropdown && !notifBtn) { dropdown.style.display = 'none'; } });
 
-      document.addEventListener('DOMContentLoaded', () => {
-        updateBadge();
-        simulateRealTimeNotifications();
-      });
+      document.addEventListener('DOMContentLoaded', () => { updateBadge();
+        simulateRealTimeNotifications(); });
     </script>
     <div class="main-content"></div>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

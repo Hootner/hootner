@@ -1,13 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🦉 HOOTNER - Syncing dependencies..."
+echo "🦉 HOOTNER - Auto-checking dependencies..."
 
-# Check if package.json or package-lock.json changed
-changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+# Auto-detect and run npm if needed
+node scripts/auto-npm.js
 
-if echo "$changed_files" | grep -q "package-lock.json\|package.json"; then
-  echo "📦 Dependencies changed, running npm install..."
-  npm install
-  echo "✅ Dependencies synced!"
-fi
+# Update context
+node scripts/update-context.js > /dev/null 2>&1
+
+echo "✅ Ready!"

@@ -1,0 +1,89 @@
+{
+  "agents": [
+    {
+      "name": "FoundationalQ",
+      "description": "Generate minimal code for hardware emulation and low-level tools.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "unit-test"],
+      "promptTemplate": "Create minimal viable code skeleton for {project} (e.g., basic CPU emulator loop in C++). Include core functions, headers, and a simple test. Keep it under 200 lines total."
+    },
+    {
+      "name": "LanguageCompilerQ",
+      "description": "Generate minimal code for languages, compilers, and optimizers.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "parser-sim"],
+      "promptTemplate": "Build minimal code for {project} (e.g., simple parser for a scripting language in Rust). Focus on basic syntax and execution; add one example script and test."
+    },
+    {
+      "name": "OSKernelQ",
+      "description": "Generate minimal code for OS kernels and management systems.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "boot-sim"],
+      "promptTemplate": "Produce minimal kernel code for {project} (e.g., basic bootloader in Assembly/C). Include entry point and simple scheduler; test boot sequence."
+    },
+    {
+      "name": "VirtualizationRuntimeQ",
+      "description": "Generate minimal code for VMs, containers, and runtimes.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "container-test"],
+      "promptTemplate": "Create minimal runtime code for {project} (e.g., basic container isolation in Go). Include namespace setup and a hello-world test container."
+    },
+    {
+      "name": "NetworkingCommunicationQ",
+      "description": "Generate minimal code for protocols and servers.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "socket-test"],
+      "promptTemplate": "Build minimal networking code for {project} (e.g., simple TCP server in Python). Handle basic connections and echo; include unit test."
+    },
+    {
+      "name": "DataStorageQ",
+      "description": "Generate minimal code for databases and data structures.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "query-test"],
+      "promptTemplate": "Create minimal DB code for {project} (e.g., in-memory key-value store in C++). Support get/set operations and a basic test."
+    },
+    {
+      "name": "WebAppServerQ",
+      "description": "Generate minimal code for web servers and frameworks.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "http-test"],
+      "promptTemplate": "Produce minimal server code for {project} (e.g., basic HTTP handler in Node.js). Route one endpoint and test response."
+    },
+    {
+      "name": "BrowserUIQ",
+      "description": "Generate minimal code for browsers and UI toolkits.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "render-test"],
+      "promptTemplate": "Build minimal UI code for {project} (e.g., simple HTML renderer in JavaScript). Parse basic tags and display; add test page."
+    },
+    {
+      "name": "GamesGraphicsQ",
+      "description": "Generate minimal code for game engines and graphics.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "canvas-test"],
+      "promptTemplate": "Create minimal graphics code for {project} (e.g., basic rasterizer in Python). Draw a simple shape and test output."
+    },
+    {
+      "name": "DevToolsQ",
+      "description": "Generate minimal code for package managers and CI/CD.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "pipeline-test"],
+      "promptTemplate": "Produce minimal tool code for {project} (e.g., basic CLI package manager in Bash/Python). Handle install/list; include test script."
+    },
+    {
+      "name": "AdvancedSpecializedQ",
+      "description": "Generate minimal code for ML, blockchain, and advanced apps.",
+      "model": "Claude Sonnet 4",
+      "tools": ["code-gen", "ml-test"],
+      "promptTemplate": "Build minimal advanced code for {project} (e.g., simple blockchain ledger in Rust). Add block creation and validation; test chain."
+    }
+  ],
+  "scaling": {
+    "parallel": ["FoundationalQ", "NetworkingCommunicationQ", "DataStorageQ", "WebAppServerQ", "BrowserUIQ", "GamesGraphicsQ", "DevToolsQ", "AdvancedSpecializedQ"],
+    "chaining": [
+      {"from": "FoundationalQ", "to": "OSKernelQ"},
+      {"from": "LanguageCompilerQ", "to": "VirtualizationRuntimeQ"}
+    ],
+    "maxConcurrent": 4
+  }
+}

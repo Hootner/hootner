@@ -69,11 +69,7 @@ node scripts/agents/master-fix-agent.js
 Add to package.json:
 
 ```json
-{
-  "scripts": {
-    "scan": "node scripts/analysis/advanced-code-scanner.js",
+{ "scripts": { "scan": "node scripts/analysis/advanced-code-scanner.js",
     "fix": "node scripts/agents/master-fix-agent.js",
-    "scan:fix": "npm run scan && npm run fix && npm run scan"
-  }
-}
+    "scan:fix": "npm run scan && npm run fix && npm run scan" } }
 ```

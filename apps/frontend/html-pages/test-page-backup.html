@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page - HOOTNER</title>
+  <link rel="stylesheet" href="design-system.css">
+  <style>
+    /* Inline styles block 1 - Layout */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+    }
+    
+    .header {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+    
+    .nav a:hover {
+      background: #334155;
+      color: #f1f5f9;
+    }
+  </style>
+  
+  <style>
+    /* Inline styles block 2 - Components */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .card {
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #334155;
+      border: 1px solid #475569;
+    }
+    
+    .btn-secondary:hover {
+      background: #475569;
+    }
+  </style>
+  
+  <style>
+    /* Inline styles block 3 - Forms */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      background: #334155;
+      border: 1px solid #475569;
+      border-radius: 0.5rem;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with inline styles -->
+  <div class="header">
+    <h1 style="margin: 0; font-size: 1.5rem;">HOOTNER Test</h1>
+    <nav class="nav">
+      <a href="#" style="font-weight: 500;">Dashboard</a>
+      <a href="#">Settings</a>
+      <a href="#">Profile</a>
+    </nav>
+  </div>
+
+  <!-- Main content -->
+  <div class="container">
+    <h2 style="margin-bottom: 1.5rem; font-size: 2rem;">Test Page</h2>
+    
+    <!-- Cards with mixed inline and class styles -->
+    <div class="grid">
+      <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+        <h3 style="margin-top: 0; color: #3b82f6;">Card 1</h3>
+        <p style="color: #cbd5e1; line-height: 1.6;">This card has inline styles mixed with classes.</p>
+        <button class="btn" style="margin-top: 1rem;">Action</button>
+      </div>
+      
+      <div class="card">
+        <h3 style="margin-top: 0;">Card 2</h3>
+        <p>This card uses mostly classes.</p>
+        <button class="btn-secondary btn">Secondary</button>
+      </div>
+      
+      <div class="card">
+        <h3 style="margin-top: 0; color: #10b981;">Card 3</h3>
+        <p style="color: #94a3b8;">Mixed approach here too.</p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <button class="btn">Save</button>
+          <button class="btn-secondary btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Form section -->
+    <div class="card" style="margin-top: 2rem;">
+      <h3 style="margin-top: 0;">Form Example</h3>
+      <form>
+        <div class="form-group">
+          <label class="label" for="name">Name</label>
+          <input type="text" id="name" class="input" placeholder="Enter name">
+        </div>
+        
+        <div class="form-group">
+          <label class="label" for="email">Email</label>
+          <input type="email" id="email" class="input" placeholder="Enter email">
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn-secondary btn">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Inline script example
+    console.log('Test page loaded');
+    
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (e.target.textContent !== 'Submit') {
+          e.preventDefault();
+          console.log('Button clicked:', e.target.textContent);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

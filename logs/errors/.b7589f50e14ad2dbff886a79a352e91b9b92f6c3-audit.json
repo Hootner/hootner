@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "c:\\Users\\12182\\Projects\\my-local-repo\\logs\\errors\\.b7589f50e14ad2dbff886a79a352e91b9b92f6c3-audit.json",
+    "files": [
+        {
+            "date": 1767450836772,
+            "name": "c:\\Users\\12182\\Projects\\my-local-repo\\logs\\errors\\hootner-error-2026-01-03.log",
+            "hash": "201cd0a3692faef6486d4a7eb9e1e0cf32eec01bc410aa1818540a5a8fb0773e"
+        }
+    ],
+    "hashType": "sha256"
+}

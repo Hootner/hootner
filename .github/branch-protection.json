@@ -1,16 +1,10 @@
-{
-  "required_status_checks": {
-    "strict": false,
-    "contexts": []
-  },
+{ "required_status_checks": { "strict": false,
+    "contexts": [] },
   "enforce_admins": false,
-  "required_pull_request_reviews": {
-    "required_approving_review_count": 0,
+  "required_pull_request_reviews": { "required_approving_review_count": 0,
     "dismiss_stale_reviews": false,
-    "require_code_owner_reviews": false
-  },
+    "require_code_owner_reviews": false },
   "required_conversation_resolution": false,
   "restrictions": null,
   "allow_force_pushes": false,
-  "allow_deletions": false
-}
+  "allow_deletions": false }

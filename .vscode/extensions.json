@@ -1,6 +1,4 @@
-{
-  "recommendations": [
+{ "recommendations": [
     "gruntfuggly.todo-tree",
     "wayou.vscode-todo-highlight"
-  ]
-}
+  ] }

@@ -1,0 +1,99 @@
+programming languages python javascript typescript java cpp csharp ruby go rust swift kotlin scala php perl lua haskell erlang elixir clojure dart r matlab julia fortran cobol assembly bash powershell sql html css xml json yaml toml
+
+data structures array list vector stack queue deque heap tree binary search balanced avl red black graph directed undirected weighted adjacency matrix linked singly doubly circular hash table map dictionary set hashmap hashset treemap treeset priority queue trie prefix suffix bloom filter disjoint union find segment tree fenwick binary indexed skiplist
+
+algorithms sorting bubble insertion selection merge quick heap radix counting bucket shell searching linear binary interpolation exponential jump fibonacci ternary recursion iteration dynamic programming memoization tabulation greedy divide conquer backtracking branch bound brute force heuristic approximation randomized probabilistic
+
+complexity analysis big notation time space worst average best amortized asymptotic polynomial exponential logarithmic linear quadratic cubic factorial constant
+
+design patterns creational singleton factory abstract builder prototype structural adapter bridge composite decorator facade flyweight proxy behavioral chain responsibility command interpreter iterator mediator memento observer state strategy template visitor
+
+object oriented programming class object instance method function procedure subroutine attribute property field member variable encapsulation inheritance polymorphism abstraction interface abstract composition aggregation association dependency coupling cohesion
+
+functional programming pure function immutable side effect higher order lambda closure currying partial application recursion tail call optimization monad functor applicative map filter reduce fold scan zip
+
+concurrent programming thread process coroutine fiber green async await promise future callback synchronous asynchronous parallel concurrent race condition deadlock livelock starvation mutex semaphore lock spinlock monitor condition variable atomic compare swap barrier latch countdown event
+
+memory management heap stack allocation deallocation malloc free new delete garbage collection reference counting mark sweep generational copying compacting conservative precise incremental concurrent parallel stop world leak fragmentation alignment padding
+
+networking protocol tcp udp http https ftp smtp pop imap dns dhcp arp icmp ip ipv4 ipv6 socket client server request response header body status code port address localhost loopback subnet mask gateway router switch hub bridge firewall proxy load balancer cdn cache reverse forward
+
+web development frontend backend fullstack html css javascript dom bom ajax fetch xhr websocket sse rest graphql soap api endpoint route controller view model template component props state lifecycle hook effect ref context provider consumer reducer action dispatch middleware thunk saga
+
+database relational nosql sql mysql postgresql sqlite oracle mssql mongodb redis cassandra dynamodb couchdb neo4j graph document key value column family acid transaction commit rollback isolation serializable repeatable read committed uncommitted dirty phantom lost update index primary foreign unique composite clustered nonclustered btree hash full text spatial join inner outer left right cross natural self union intersect except subquery correlated nested derived cte recursive view materialized stored procedure trigger function aggregate window partition rank dense row number lead lag first last
+
+frameworks libraries react vue angular svelte next nuxt gatsby express fastify koa nest django flask fastapi rails spring boot laravel symfony codeigniter yii zend hibernate sequelize typeorm prisma mongoose knex bookshelf objection
+
+testing unit integration end system acceptance regression smoke sanity exploratory manual automated black white grey box functional nonfunctional performance load stress spike volume soak scalability reliability availability security usability accessibility compatibility localization internationalization
+
+devops cicd continuous integration deployment delivery pipeline build test deploy release artifact repository docker container kubernetes pod service deployment statefulset daemonset job cronjob configmap secret volume persistent claim ingress namespace helm chart terraform ansible puppet chef jenkins gitlab github actions circleci travis bitbucket azure devops aws codepipeline
+
+cloud computing iaas paas saas serverless lambda function edge computing fog distributed microservices monolithic service oriented event driven message queue pub sub kafka rabbitmq activemq zeromq nats redis streams
+
+security authentication authorization oauth jwt saml ldap active directory kerberos encryption decryption hashing salting pepper symmetric asymmetric public private key rsa aes des triple blowfish twofish certificate authority ssl tls https ssh vpn firewall ids ips waf ddos mitigation xss csrf sql injection buffer overflow race condition privilege escalation man middle replay session hijacking phishing social engineering penetration testing vulnerability assessment threat modeling zero trust least privilege defense depth
+
+version control git svn mercurial cvs branch merge rebase cherry pick stash commit push pull fetch clone fork upstream downstream origin master main develop feature hotfix release tag annotated lightweight head detached conflict resolution diff patch blame log reflog
+
+compilers interpreters lexer tokenizer parser syntax semantic analysis abstract tree intermediate representation optimization code generation linking loading runtime virtual machine bytecode machine native assembly jit ahead time garbage collector
+
+operating systems kernel user space system call interrupt exception context switch scheduling preemptive cooperative priority round robin multilevel feedback queue shortest job first longest remaining time earliest deadline process thread fork exec wait signal pipe socket file descriptor inode superblock boot loader init systemd
+
+algorithms graph traversal depth first breadth search dijkstra bellman ford floyd warshall kruskal prim topological sort strongly connected components tarjan kosaraju articulation point bridge eulerian hamiltonian path cycle minimum spanning tree shortest path longest common subsequence substring edit distance knapsack traveling salesman vehicle routing bin packing job scheduling task assignment matching bipartite maximum flow minimum cut ford fulkerson edmonds karp dinic push relabel
+
+machine learning supervised unsupervised reinforcement semi transfer active online batch gradient descent stochastic mini adam rmsprop adagrad momentum nesterov learning rate decay regularization l1 l2 elastic dropout batch normalization layer weight initialization xavier he uniform normal bias variance tradeoff overfitting underfitting cross validation train test split stratified kfold leave one out bootstrap bagging boosting random forest gradient boosting xgboost lightgbm catboost adaboost decision tree regression classification clustering dimensionality reduction principal component analysis independent linear discriminant tsne umap autoencoder variational generative adversarial network convolutional recurrent lstm gru transformer attention self multi head positional encoding feedforward residual skip connection activation function sigmoid tanh relu leaky elu selu gelu swish softmax loss function mean squared error absolute cross entropy binary categorical hinge huber
+
+data science analytics statistics probability distribution normal uniform binomial poisson exponential gaussian chi square student fisher hypothesis testing null alternative significance level confidence interval type error false positive negative true sensitivity specificity precision recall f1 score accuracy roc auc curve confusion matrix correlation causation regression linear logistic polynomial ridge lasso elastic net support vector machine kernel radial basis polynomial sigmoid naive bayes gaussian multinomial bernoulli knn nearest neighbors euclidean manhattan cosine jaccard hamming distance similarity metric
+
+software engineering requirements analysis design implementation testing maintenance waterfall agile scrum kanban lean extreme programming pair mob code review refactoring technical debt clean code solid principles single responsibility open closed liskov substitution interface segregation dependency inversion dry kiss yagni separation concerns
+
+api rest restful graphql soap grpc websocket webhook endpoint resource collection item query mutation subscription resolver schema type field argument directive fragment variable operation definition introspection
+
+mobile development ios android react native flutter ionic cordova phonegap xamarin swift objective kotlin java dart responsive adaptive progressive web app pwa service worker manifest push notification geolocation camera microphone accelerometer gyroscope touch gesture swipe pinch zoom rotate
+
+game development engine unity unreal godot cocos phaser three babylon webgl opengl vulkan directx metal shader vertex fragment geometry compute texture sprite mesh polygon collision physics rigid body soft constraint joint ragdoll particle system animation skeletal blend tree state machine ai pathfinding navmesh behavior tree finite state machine
+
+blockchain cryptocurrency bitcoin ethereum smart contract solidity vyper web3 decentralized application dapp consensus proof work stake authority delegated byzantine fault tolerance mining node validator transaction block hash merkle tree nonce difficulty target wallet public private key address gas fee token nft fungible erc20 erc721 erc1155
+
+tools ide editor vscode visual studio intellij eclipse netbeans atom sublime vim emacs nano debugger profiler linter formatter prettier eslint tslint pylint rubocop stylelint package manager npm yarn pnpm pip poetry cargo composer maven gradle bundler webpack rollup parcel vite esbuild babel typescript compiler transpiler minifier uglify terser
+
+protocols http https websocket tcp udp ip icmp dns dhcp ftp sftp ssh telnet smtp pop imap mqtt amqp stomp xmpp sip rtp rtsp rtmp hls dash grpc thrift protobuf avro messagepack capnproto flatbuffers
+
+architecture patterns mvc mvp mvvm viper clean hexagonal onion layered microservices event sourcing cqrs saga choreography orchestration
+
+performance optimization caching memoization lazy loading eager prefetching debouncing throttling batching compression minification bundling code splitting tree shaking dead elimination inlining loop unrolling vectorization parallelization concurrency asynchronous nonblocking
+
+monitoring logging metrics tracing alerting dashboard grafana prometheus elk elasticsearch logstash kibana splunk datadog new relic sentry rollbar bugsnag
+
+documentation readme changelog contributing license api reference tutorial guide howto faq troubleshooting jsdoc javadoc pydoc rustdoc godoc doxygen sphinx mkdocs
+
+accessibility wcag aria semantic html keyboard navigation screen reader contrast ratio focus management skip links landmark regions
+
+internationalization localization i18n l10n translation locale language region timezone currency date time format number plural gender
+
+responsive design mobile first desktop breakpoint media query viewport flexible grid flexbox css layout float position absolute relative fixed sticky z-index transform transition animation keyframe
+
+seo search engine optimization meta tags title description keywords canonical robots sitemap structured data schema markup open graph twitter card
+
+performance metrics ttfb first contentful paint largest speed index cumulative layout shift interaction next paint core web vitals lighthouse pagespeed insights webpagetest
+
+build tools make cmake ninja meson bazel buck pants scons waf autotools configure automake libtool pkg-config
+
+package formats deb rpm apk snap flatpak appimage dmg pkg msi exe jar war ear aar
+
+virtualization hypervisor type bare metal hosted vmware virtualbox kvm qemu xen hyper parallels vagrant
+
+containers docker podman containerd cri-o runc rkt lxc lxd
+
+orchestration kubernetes k8s openshift rancher nomad mesos swarm ecs fargate
+
+service mesh istio linkerd consul envoy traefik nginx haproxy
+
+infrastructure code terraform pulumi cloudformation arm bicep ansible salt puppet chef
+
+observability metrics logs traces spans baggage context propagation distributed tracing jaeger zipkin opentelemetry
+
+chaos engineering fault injection latency packet loss resource exhaustion dependency failure
+
+disaster recovery backup restore replication failover high availability redundancy clustering sharding partitioning
+
+the hootner platform uses all these programming concepts and technologies

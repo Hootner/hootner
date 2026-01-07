@@ -1,0 +1,160 @@
+{
+  "category": "Phase 3 Specialized",
+  "description": "Advanced specialized templates: quantum, actor model, functional programming, and formal methods",
+  "templates": [
+    {
+      "name": "Actor Model",
+      "file": "actor-model.js",
+      "description": "Message-passing concurrency with supervision",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Actors", "Mailboxes", "Message passing", "Supervision"]
+    },
+    {
+      "name": "Quantum Simulator",
+      "file": "quantum-simulator.js",
+      "description": "Quantum computing with qubits and gates",
+      "language": "JavaScript",
+      "lines": 118,
+      "features": ["Qubits", "Hadamard gate", "CNOT gate", "Measurement", "Bell states"]
+    },
+    {
+      "name": "Constraint Solver",
+      "file": "constraint-solver.js",
+      "description": "CSP solver with backtracking",
+      "language": "JavaScript",
+      "lines": 115,
+      "features": ["Variables", "Constraints", "Backtracking", "N-Queens", "Map coloring"]
+    },
+    {
+      "name": "Dataflow Programming",
+      "file": "dataflow-programming.js",
+      "description": "Reactive dataflow execution",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Nodes", "Edges", "Reactive execution", "Parallel branches"]
+    },
+    {
+      "name": "Reactive Programming",
+      "file": "reactive-programming.js",
+      "description": "Observables and operators",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Observable", "Subject", "Map/filter", "Debounce", "Merge"]
+    },
+    {
+      "name": "Genetic Algorithm",
+      "file": "genetic-algorithm.js",
+      "description": "Evolution-based optimization",
+      "language": "JavaScript",
+      "lines": 85,
+      "features": ["Selection", "Crossover", "Mutation", "Fitness evaluation"]
+    },
+    {
+      "name": "Logic Programming",
+      "file": "logic-programming.js",
+      "description": "Prolog-like unification and queries",
+      "language": "JavaScript",
+      "lines": 88,
+      "features": ["Facts", "Rules", "Unification", "Queries"]
+    },
+    {
+      "name": "Finite State Machine",
+      "file": "finite-state-machine.js",
+      "description": "FSM with guards and handlers",
+      "language": "JavaScript",
+      "lines": 78,
+      "features": ["States", "Transitions", "Guards", "Enter/exit handlers"]
+    },
+    {
+      "name": "Petri Net",
+      "file": "petri-net.js",
+      "description": "Concurrent systems modeling",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Places", "Transitions", "Tokens", "Firing rules", "Simulation"]
+    },
+    {
+      "name": "Symbolic Execution",
+      "file": "symbolic-execution.js",
+      "description": "Path exploration with constraints",
+      "language": "JavaScript",
+      "lines": 88,
+      "features": ["Symbolic values", "Path forking", "Constraints", "Program analysis"]
+    },
+    {
+      "name": "Model Checker",
+      "file": "model-checker.js",
+      "description": "Temporal logic verification",
+      "language": "JavaScript",
+      "lines": 85,
+      "features": ["LTL", "State space", "Always/Eventually", "Until operator"]
+    },
+    {
+      "name": "AST Interpreter",
+      "file": "ast-interpreter.js",
+      "description": "Tree-walking interpreter",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["AST nodes", "Evaluation", "Environment", "Control flow"]
+    },
+    {
+      "name": "CPS Transformer",
+      "file": "cps-transformer.js",
+      "description": "Continuation-passing style",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Continuations", "CPS transform", "Async control", "call/cc"]
+    },
+    {
+      "name": "Lazy Evaluation",
+      "file": "lazy-evaluation.js",
+      "description": "Thunks and infinite sequences",
+      "language": "JavaScript",
+      "lines": 118,
+      "features": ["Thunks", "Memoization", "Lazy lists", "Infinite sequences"]
+    },
+    {
+      "name": "Monad",
+      "file": "monad.js",
+      "description": "Maybe, Either, IO, List monads",
+      "language": "JavaScript",
+      "lines": 125,
+      "features": ["Functor", "Applicative", "Monad", "Composition"]
+    },
+    {
+      "name": "Type Inference",
+      "file": "type-inference.js",
+      "description": "Hindley-Milner type system",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Type variables", "Unification", "Lambda calculus", "Type checking"]
+    },
+    {
+      "name": "Parser Combinators",
+      "file": "parser-combinators.js",
+      "description": "Functional parsing library",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["Combinators", "Map/flatMap", "Alternatives", "Sequences"]
+    },
+    {
+      "name": "Coroutines",
+      "file": "coroutines.js",
+      "description": "Cooperative multitasking",
+      "language": "JavaScript",
+      "lines": 98,
+      "features": ["Yield/resume", "Generators", "Scheduler", "Cooperative tasks"]
+    },
+    {
+      "name": "STM",
+      "file": "stm.js",
+      "description": "Software transactional memory",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["TVar", "Transactions", "ACID", "Conflict detection", "Retry"]
+    }
+  ],
+  "totalTemplates": 19,
+  "status": "Complete"
+}

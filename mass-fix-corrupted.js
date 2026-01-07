@@ -4,8 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const fixes = {
-  'apps/frontend/html-pages/electron-code-editor/main.js': (c) => c.replace(/return next\(\);'\n    }/g, "return next();\n    }"),
+const fixes = { 'apps/frontend/html-pages/electron-code-editor/main.js': (c) => c.replace(/return next\(\);'\n }/g, "return next();\n }"),
   'servers/mcp-server.js': (c) => c.replace(/require\('@modelcontextprotocol\/sdk\/server\/stdio\.js'\n/g, "require('@modelcontextprotocol/sdk/server/stdio.js');\n"),
   'tests/setup.ts': (c) => c.replace(/from 'vitest'\n/g, "from 'vitest';\n"),
   'tools/health/healthcheck.js': (c) => c.replace(/require\('\.\.\/constants'\n/g, "require('../constants');\n"),
@@ -14,8 +13,8 @@ const fixes = {
   'scripts/auto-fix-syntax.js': (c) => c.replace(/\$\{file\}\.\.\.'\n/g, "${file}...`);\n"),
   'scripts/fix-critical-errors.js': (c) => c.replace(/'Fixing:', file\);'\n/g, "'Fixing:', file);\n"),
   'servers/html-pages-server.js': (c) => c.replace(/\(path\.join\(__dirname, '\.\.\/apps\/frontend\/html-pages'\)\);/g, "(path.join(__dirname, '../apps/frontend/html-pages'));"),
-  'test-mcp-ide.js': (c) => c.replace(/console\.log\(\n  \./g, "console.log("),
-  'scripts/utilities/port-scanner.js': (c) => c.replace(/console\.log\(`Port \$\{port\} is/g, "console.log(`Port ${port} is"),
+  'test-mcp-ide.js': (c) => c.replace(/console\.log\(\n  \./g, ",
+  'scripts/utilities/port-scanner.js': (c) => c.replace(/console\.log\(`Port \$\{port\} is/g, ",
   'scripts/find-unterminated-regex.js': (c) => c.replace(/const line = lines\[i\];/g, "const line = lines[i] || '';"),
   'scripts/fix-syntax-errors.js': (c) => c.replace(/\} catch \(e\) \{/g, "} catch (err) {"),
   'scripts/analysis/code-scanner.js': (c) => c.replace(/\} catch \(/g, "} catch (err) {"),
@@ -27,27 +26,17 @@ const fixes = {
   'tools/analysis/audit-node-modules.js': (c) => c.replace(/\} catch \(/g, "} catch (err) {"),
   'mcp-http-server.js': (c) => c.replace(/^\/\*\*! /gm, "/** "),
   'mcp-tools-test.js': (c) => c.replace(/^\/\*\*! /gm, "/** "),
-  'tools/system-health.js': (c) => c.replace(/^\/\*\*! /gm, "/** ")
-};
+  'tools/system-health.js': (c) => c.replace(/^\/\*\*! /gm, "/** ") };
 
 let fixed = 0;
-Object.entries(fixes).forEach(([file, fixFn]) => {
-  const filePath = path.join(__dirname, file);
+Object.entries(fixes).forEach(([file, fixFn]) => { const filePath = path.join(__dirname, file);
   if (!fs.existsSync(filePath)) return;
-  
-  try {
-    let content = fs.readFileSync(filePath, 'utf8');
+
+  try { let content = fs.readFileSync(filePath, 'utf8');
     const original = content;
     content = fixFn(content);
-    
-    if (content !== original) {
-      fs.writeFileSync(filePath, content, 'utf8');
-      fixed++;
-      console.log(`Fixed: ${file}`);
-    }
-  } catch (err) {
-    console.error(`Error: ${file}`, err.message);
-  }
-});
 
-console.log(`\nFixed ${fixed} files`);
+    if (content !== original) { fs.writeFileSync(filePath, content, 'utf8');
+      fixed++; } } catch (err) { console.error(err);
+    throw err; } });
+

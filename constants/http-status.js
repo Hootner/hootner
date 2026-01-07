@@ -3,8 +3,7 @@
  * @module constants/http-status
  */
 
-const HTTP_STATUS = {
-  OK: 200,
+const HTTP_STATUS = { OK: 200,
   PARTIAL_CONTENT: 206,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
@@ -15,7 +14,6 @@ const HTTP_STATUS = {
   TOO_MANY_REQUESTS: 429,
   INTERNAL_SERVER_ERROR: 500,
   SERVICE_UNAVAILABLE: 503,
-  GATEWAY_TIMEOUT: 504
-};
+  GATEWAY_TIMEOUT: 504 };
 
 export default HTTP_STATUS;

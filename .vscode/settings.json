@@ -3,7 +3,7 @@
     "hootner-deployment": {
       "transport": "stdio",
       "command": "node",
-      "args": ["mcp-server.js"],
+      "args": ["servers/hootner-mcp-server.js"],
       "cwd": "${workspaceFolder}",
       "env": {
         "HOOTNER_ENV": "development",
@@ -11,7 +11,7 @@
       }
     },
     "aws-cdk": {
-      "transport": "stdio", 
+      "transport": "stdio",
       "command": "uvx",
       "args": ["awslabs.cdk-mcp-server@latest"],
       "env": {
@@ -22,7 +22,7 @@
   "amazonQ.mcp.toolPermissions": {
     "hootner-deployment": {
       "deploy_service": "ask",
-      "run_chaos_test": "ask", 
+      "run_chaos_test": "ask",
       "check_system_health": "always",
       "backup_system": "ask",
       "security_audit": "always"
@@ -339,6 +339,8 @@
   "todohighlight.maxFilesForSearch": 5120,
   "todohighlight.toggleURI": false,
   "terminal.integrated.enablePersistentSessions": false,
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
@@ -363,12 +365,9 @@
     "*.yaml": "yaml",
     "*.yml": "yaml"
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.workingDirectories": ["${workspaceFolder}"],
+  "eslint.nodePath": "${workspaceFolder}/node_modules",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "emmet.includeLanguages": {
@@ -394,6 +393,32 @@
   },
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
+  "python.analysis.extraPaths": ["C:\\Program Files\\Python312\\Lib\\site-packages"],
+  "python.autoComplete.extraPaths": ["C:\\Program Files\\Python312\\Lib\\site-packages"],
+  "cSpell.words": [
+    "HOOTNER",
+    "hootner",
+    "pytorch",
+    "transformers",
+    "tokenizer",
+    "microservices",
+    "kubernetes",
+    "graphql",
+    "websocket",
+    "mongodb",
+    "redis",
+    "prometheus",
+    "grafana",
+    "istio",
+    "traefik",
+    "runbooks",
+    "autoregressively",
+    "Multihead",
+    "GELU",
+    "triu",
+    "backpropagation",
+    "bleu"
+  ],
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -401,5 +426,7 @@
     "**/.next": true,
     "**/coverage": true,
     "**/*.lock": true
-  }
+  },
+  "todo-tree.tree.scanMode": "workspace only",
+  "npm.packageManager": "npm"
 }

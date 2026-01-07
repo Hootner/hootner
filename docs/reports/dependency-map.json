@@ -1,0 +1,105 @@
+{
+  "frontend": {
+    "deps": [
+      "servers",
+      "middleware"
+    ],
+    "files": [
+      "html-pages\\lazy-images.js",
+      "html-pages\\lazy-init.js",
+      "html-pages\\lazy-load-manager.js",
+      "html-pages\\load-header.js",
+      "html-pages\\sw.js",
+      "html-pages\\electron-code-editor\\advanced-features.js",
+      "html-pages\\electron-code-editor\\ai-agent-panel.js",
+      "html-pages\\electron-code-editor\\ai-assistant.js",
+      "html-pages\\electron-code-editor\\cloud-sync.js",
+      "html-pages\\electron-code-editor\\cross-integration.js"
+    ]
+  },
+  "servers": {
+    "deps": [
+      "services",
+      "middleware",
+      "lib"
+    ],
+    "files": [
+      "collab-server.js",
+      "electron-code-editor-server.js",
+      "hootner-mcp-server.js",
+      "html-pages-server.js",
+      "hub-app.js",
+      "mcp-server.js",
+      "secure-server.js",
+      "video-player-server.js"
+    ]
+  },
+  "services": {
+    "deps": [
+      "lib",
+      "middleware"
+    ],
+    "files": [
+      "improved-tokenizer.py",
+      "integration-demo.js",
+      "llm-api-server.js",
+      "llm-service.py",
+      "marketplace-service.js",
+      "payment-service.js",
+      "rewards-service.js",
+      "staking-service.js",
+      "test-llm-api.js",
+      "transformer-llm-service.py"
+    ]
+  },
+  "middleware": {
+    "deps": [
+      "lib"
+    ],
+    "files": [
+      "access-control.js",
+      "api-rate-limits.js",
+      "auth.js",
+      "chaos.js",
+      "compression.js",
+      "correlation-id.js",
+      "csp.js",
+      "csrf.js",
+      "dependency-check-fixed.js",
+      "dependency-check.js"
+    ]
+  },
+  "lib": {
+    "deps": [],
+    "files": [
+      "apexcharts-config.js",
+      "cleanup-manager.js",
+      "csp-reporter.js",
+      "csrf-protection.js",
+      "d3-charts.js",
+      "data-utils.js",
+      "date-utils.js",
+      "graceful-shutdown.js",
+      "http-client.js",
+      "logger.js"
+    ]
+  },
+  "scripts": {
+    "deps": [
+      "lib",
+      "services"
+    ],
+    "files": [
+      "aggregate-massive-data.js",
+      "analyze-css.js",
+      "auto-fix-all.js",
+      "auto-fix-syntax.js",
+      "auto-npm.js",
+      "check-mining.js",
+      "check-services.js",
+      "cleanup-experiment.js",
+      "clear-logs.js",
+      "collect-training-data.js"
+    ]
+  }
+}

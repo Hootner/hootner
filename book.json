@@ -1,5 +1,4 @@
-{
-  "title": "HOOTNER Documentation",
+{ "title": "HOOTNER Documentation",
   "description": "The Owl Never Sleeps - Ultimate Video Player & Social Platform",
   "author": "HOOTNER Team",
   "language": "en",
@@ -15,22 +14,9 @@
     "back-to-top-button",
     "theme-comscore"
   ],
-  "pluginsConfig": {
-    "github": {
-      "url": "https://github.com/yourusername/hootner"
-    },
-    "edit-link": {
-      "base": "https://github.com/yourusername/hootner/edit/main",
-      "label": "Edit This Page"
-    },
-    "theme-default": {
-      "showLevel": true
-    }
-  },
-  "links": {
-    "sidebar": {
-      "GitHub": "https://github.com/yourusername/hootner",
-      "Support": "mailto:support@hootner.com"
-    }
-  }
-}
+  "pluginsConfig": { "github": { "url": "https://github.com/yourusername/hootner" },
+    "edit-link": { "base": "https://github.com/yourusername/hootner/edit/main",
+      "label": "Edit This Page" },
+    "theme-default": { "showLevel": true } },
+  "links": { "sidebar": { "GitHub": "https://github.com/yourusername/hootner",
+      "Support": "mailto:support@hootner.com" } } }

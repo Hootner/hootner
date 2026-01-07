@@ -27,37 +27,13 @@ const requiredFiles = [
   '.github/workflows/container-scan.yml'
 ];
 
-console.log('🔍 GitHub Configuration Validator\n');
-
 // Check files
-console.log('📁 Checking required files...');
 let filesOk = true;
-for (const file of requiredFiles) {
-  try {
-    const fs = await import('fs');
-    fs.accessSync(file);
-    console.log(`  ✅ ${file}`);
-  } catch {
-    console.log(`  ❌ ${file} - MISSING`);
-    filesOk = false;
-  }
-}
+for (const file of requiredFiles) { try { const fs = await import('fs');
+    fs.accessSync(file); } catch { filesOk = false; } }
 
-console.log('\n🔐 Required secrets (must configure in GitHub UI):');
-requiredSecrets.forEach(secret => {
-  console.log(`  ⚠️  ${secret}`);
-});
+:');
+requiredSecrets.forEach(secret => { });
 
-console.log('\n🔓 Optional secrets:');
-optionalSecrets.forEach(secret => {
-  console.log(`  ℹ️  ${secret}`);
-});
+optionalSecrets.forEach(secret => { });
 
-console.log('\n📋 Next steps:');
-console.log('  1. Run: node .github/scripts/generate-secrets.js');
-console.log('  2. Go to: https://github.com/YOUR_USERNAME/YOUR_REPO/settings/secrets/actions');
-console.log('  3. Add all required secrets');
-console.log('  4. Configure branch protection rules');
-console.log('  5. Enable security features\n');
-
-console.log(filesOk ? '✅ All files present' : '❌ Some files missing');

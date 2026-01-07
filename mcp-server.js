@@ -14,115 +14,59 @@ import { systemHealth } from './tools/system-health.js';
 import { backupSystem } from './tools/backup-system.js';
 import { securityScan } from './tools/security-scan.js';
 
-class HootnerMCPServer {
-  constructor() {
-    this.server = new Server(
-      {
-        name: 'hootner-mcp-server',
-        version: '1.0.0',
-      },
-      {
-        capabilities: {
-          tools: {},
-        },
-      }
+class HootnerMCPServer { constructor() { this.server = new Server(
+      { name: 'hootner-mcp-server',
+        version: '1.0.0', },
+      { capabilities: { tools: {}, }, }
     );
 
     this.setupTools();
-    this.setupErrorHandling();
-  }
+    this.setupErrorHandling(); }
 
-  setupTools() {
-    // Register tools list handler
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: [
-        {
-          name: 'deployService',
+  setupTools() { // Register tools list handler
+    this.server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [
+        { name: 'deployService',
           description: 'Deploy HOOTNER microservices',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              service: { type: 'string', description: 'Service name' },
-              environment: { 
-                type: 'string', 
+          inputSchema: { type: 'object',
+            properties: { service: { type: 'string', description: 'Service name' },
+              environment: { type: 'string',
                 enum: ['dev', 'prod', 'staging', 'blue-green'],
-                description: 'Deployment environment' 
-              }
-            },
-            required: ['environment']
-          }
-        },
-        {
-          name: 'chaos_test',
+                description: 'Deployment environment' } },
+            required: ['environment'] } },
+        { name: 'chaos_test',
           description: 'Run chaos engineering tests',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              scenario: { 
-                type: 'string',
+          inputSchema: { type: 'object',
+            properties: { scenario: { type: 'string',
                 enum: ['chaos-monkey', 'load-test', 'spike-test', 'recovery-test'],
-                description: 'Chaos test scenario' 
-              },
-              duration: { type: 'number', description: 'Duration in minutes' }
-            },
-            required: ['scenario']
-          }
-        },
-        {
-          name: 'systemHealth',
+                description: 'Chaos test scenario' },
+              duration: { type: 'number', description: 'Duration in minutes' } },
+            required: ['scenario'] } },
+        { name: 'systemHealth',
           description: 'Check HOOTNER system health',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              component: { 
-                type: 'string',
+          inputSchema: { type: 'object',
+            properties: { component: { type: 'string',
                 enum: ['all', 'frontend', 'backend', 'database'],
-                description: 'Component to check' 
-              }
-            }
-          }
-        },
-        {
-          name: 'backupSystem',
+                description: 'Component to check' } } } },
+        { name: 'backupSystem',
           description: 'Trigger system backup',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              type: { 
-                type: 'string',
+          inputSchema: { type: 'object',
+            properties: { type: { type: 'string',
                 enum: ['full', 'incremental', 'pitr'],
-                description: 'Backup type' 
-              }
-            },
-            required: ['type']
-          }
-        },
-        {
-          name: 'securityScan',
+                description: 'Backup type' } },
+            required: ['type'] } },
+        { name: 'securityScan',
           description: 'Run security audit',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              scanType: { 
-                type: 'string',
+          inputSchema: { type: 'object',
+            properties: { scanType: { type: 'string',
                 enum: ['full', 'dependencies', 'secrets'],
-                description: 'Scan type' 
-              }
-            },
-            required: ['scanType']
-          }
-        }
-      ]
-    }));
+                description: 'Scan type' } },
+            required: ['scanType'] } }
+      ] }));
 
-    
     // Handle tool execution
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const { name, arguments: args } = request.params;
-      
-      try {
-        switch (name) {
-          case 'deployService':
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => { const { name, arguments: args } = request.params;
+
+      try { switch (name) { case 'deployService':
             return await deployService(args);
           case 'chaos_test':
             return await chaosTest(args);
@@ -133,33 +77,16 @@ class HootnerMCPServer {
           case 'securityScan':
             return await securityScan(args);
           default:
-            throw new Error(`Unknown tool: ${name}`);
-        }
-      } catch (error) {
-        return { error: error.message };
-      }
-    });
-  }
+            throw new Error(`Unknown tool: ${name}`); } } catch (error) { return { error: error.message }; } }); }
 
+  setupErrorHandling() { this.server.onerror = (error) => { console.error('[MCP Error]', error); };
 
+    process.on('SIGINT', async () => { await this.server.close();
+      process.exit(0); }); }
 
-  setupErrorHandling() {
-    this.server.onerror = (error) => {
-      console.error('[MCP Error]', error);
-    };
-
-    process.on('SIGINT', async () => {
-      await this.server.close();
-      process.exit(0);
-    });
-  }
-
-  async start() {
-    const transport = new StdioServerTransport();
+  async start() { const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('HOOTNER MCP Server running on stdio');
-  }
-}
+    console.error('HOOTNER MCP Server running on stdio'); } }
 
 // Start the server
 const server = new HootnerMCPServer();

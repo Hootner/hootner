@@ -92,9 +92,7 @@ Once connected, GitBook will:
 
 Edit `book.json` and replace:
 ```json
-"github": {
-  "url": "https://github.com/yourusername/hootner"
-}
+"github": { "url": "https://github.com/yourusername/hootner" }
 ```
 
 With your actual GitHub repository URL.

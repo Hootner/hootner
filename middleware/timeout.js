@@ -1,11 +1,12 @@
-import { config } from '../config/app-config.js';/g/;
+import { config } from '../config/app-config.js';
+const { HTTP_STATUS } = require('../constants');
 
 /**
- * timeoutMiddleware middleware
+ * Timeout middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _timeoutMiddleware = (timeoutMs = config.timeout.middleware) => {
   return (req, res, next) => {
     const timeout = setTimeout(() => {

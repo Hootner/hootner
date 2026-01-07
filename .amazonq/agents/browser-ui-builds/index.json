@@ -1,0 +1,90 @@
+{
+  "category": "Browser and UI Builds",
+  "description": "Browsers and UI toolkits - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "HTML Parser",
+      "file": "html-parser.js",
+      "language": "JavaScript",
+      "lines": 68,
+      "features": ["Tag parsing", "Nested elements", "Text nodes", "AST generation"],
+      "run": "node html-parser.js",
+      "tutorial": "https://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "CSS Parser",
+      "file": "css-parser.js",
+      "language": "JavaScript",
+      "lines": 48,
+      "features": ["Selector parsing", "Declaration blocks", "Property extraction"],
+      "run": "node css-parser.js",
+      "tutorial": "https://limpet.net/mbrubeck/2014/08/13/toy-layout-engine-2.html",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "DOM Implementation",
+      "file": "dom.js",
+      "language": "JavaScript",
+      "lines": 68,
+      "features": ["Node tree", "Element queries", "Attributes", "Tree traversal"],
+      "run": "node dom.js",
+      "tutorial": "https://dom.spec.whatwg.org/",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "Render Engine",
+      "file": "render-engine.py",
+      "language": "Python",
+      "lines": 58,
+      "features": ["Layout calculation", "Box model", "Tree rendering"],
+      "run": "python render-engine.py",
+      "tutorial": "https://limpet.net/mbrubeck/2014/08/23/toy-layout-engine-3-css.html",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "JavaScript Engine",
+      "file": "js-engine.js",
+      "language": "JavaScript",
+      "lines": 88,
+      "features": ["Tokenizer", "Function calls", "Basic execution"],
+      "run": "node js-engine.js",
+      "tutorial": "https://en.wikipedia.org/wiki/JavaScript_engine",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "Component Framework",
+      "file": "component-framework.js",
+      "language": "JavaScript",
+      "lines": 58,
+      "features": ["State management", "Lifecycle", "Re-rendering", "Props"],
+      "run": "node component-framework.js",
+      "tutorial": "https://reactjs.org/docs/react-component.html",
+      "agent": "BrowserUIQ"
+    },
+    {
+      "name": "Virtual DOM",
+      "file": "virtual-dom.js",
+      "language": "JavaScript",
+      "lines": 68,
+      "features": ["VNode creation", "Diffing algorithm", "Patch generation"],
+      "run": "node virtual-dom.js",
+      "tutorial": "https://github.com/Matt-Esch/virtual-dom",
+      "agent": "BrowserUIQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates browser-ui-builds",
+    "generate": "@BrowserUIQ Generate minimal code for HTML parser in JavaScript",
+    "test": "Run each template to see parsing/rendering output"
+  },
+  "dependencies": {
+    "from": "web-app-server-builds",
+    "uses": ["Server for content delivery", "Template engine"],
+    "feeds": "GamesGraphicsQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Games, Graphics, and Media Builds",
+    "agent": "GamesGraphicsQ"
+  }
+}

@@ -1,80 +1,62 @@
-{
-  "version": "2.0.0",
+{ "version": "2.0.0",
   "tasks": [
-    {
-      "label": "Install Dependencies",
+    { "label": "Install Dependencies",
       "type": "shell",
       "command": "npm install",
       "group": "build",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Start Dev Server",
+        "panel": "shared" } },
+    { "label": "Start Dev Server",
       "type": "shell",
       "command": "npm run dev",
       "group": "build",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Start Video Player",
+        "panel": "shared" } },
+    { "label": "Start Video Player",
       "type": "shell",
       "command": "node video-player-server.js",
-      "options": {
-        "cwd": "${workspaceFolder}/apps/frontend/html-pages"
-      },
+      "options": { "cwd": "${workspaceFolder}/apps/frontend/html-pages" },
       "group": "build",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Docker Build",
+        "panel": "shared" } },
+    { "label": "Docker Build",
       "type": "shell",
       "command": "docker-compose -f docker-compose.dev.yml up --build",
       "group": "build",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Run Tests",
+        "panel": "shared" } },
+    { "label": "Run Tests",
       "type": "shell",
       "command": "npm test",
       "group": "test",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Lint & Fix",
+        "panel": "shared" } },
+    { "label": "Lint & Fix",
       "type": "shell",
       "command": "npm run lint -- --fix",
       "group": "build",
-      "presentation": {
-        "echo": true,
+      "presentation": { "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared"
-      }
-    }
-  ]
-}
+        "panel": "shared" } },
+    { "label": "Auto Journal Watcher",
+      "type": "shell",
+      "command": "node scripts/update-context.js",
+      "isBackground": true,
+      "runOptions": { "runOn": "folderOpen" },
+      "problemMatcher": [],
+      "presentation": { "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "shared" } }
+  ] }

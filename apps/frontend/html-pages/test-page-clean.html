@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page - HOOTNER</title>
+  <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+<!-- HOOTNER Unified Dashboard Header -->
+<style>
+  .dashboard-header {
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .dashboard-nav {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .nav-btn {
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+  }
+  
+  .nav-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  
+  .nav-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  
+  .notification-bell {
+    position: relative;
+    margin-left: auto;
+    padding: var(--space-sm);
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .notification-bell:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--color-error);
+    color: white;
+    border-radius: var(--radius-full);
+    padding: 1px 4px;
+    font-size: 0.5rem;
+    font-weight: bold;
+    min-width: 12px;
+    text-align: center;
+  }
+  
+  .notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--space-sm);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+  }
+  
+  .notification-dropdown.show {
+    display: block;
+  }
+  
+  .notification-item {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+  
+  .notification-item:hover {
+    background: var(--color-bg-tertiary);
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+  
+  .notification-item.unread {
+    background: rgba(59, 130, 246, 0.05);
+  }
+  
+  .notification-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+  }
+  
+  .notification-text {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+  }
+  
+  .notification-time {
+    font-size: 0.5rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+</style>
+
+<div class="dashboard-header">
+  <nav class="dashboard-nav">
+    <a href="dashboard.html" class="nav-btn">Dashboard</a>
+    <a href="video-player.html" class="nav-btn">Video Player</a>
+    <a href="code-editor.html" class="nav-btn">Code Editor</a>
+    <a href="marketplace.html" class="nav-btn">Marketplace</a>
+    <a href="profile.html" class="nav-btn">Profile</a>
+    <a href="settings.html" class="nav-btn">Settings</a>
+    <a href="feed-react.html" class="nav-btn">Feed</a>
+    <a href="login.html" class="nav-btn">Login</a>
+    <a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+    <a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+    <a href="design-showcase.html" class="nav-btn">Showcase</a>
+    <a href="test-page-clean.html" class="nav-btn">Test</a>
+    
+    <div class="notification-bell" id="notificationBell">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+      <span class="notification-badge" id="notificationCount">3</span>
+      
+      <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-item unread">
+          <div class="notification-title">New deployment ready</div>
+          <div class="notification-text">Your production build is ready to deploy</div>
+          <div class="notification-time">2 minutes ago</div>
+        </div>
+        <div class="notification-item unread">
+          <div class="notification-title">Security scan complete</div>
+          <div class="notification-text">No vulnerabilities found in latest scan</div>
+          <div class="notification-time">15 minutes ago</div>
+        </div>
+        <div class="notification-item unread">
+          <div class="notification-title">Backup completed</div>
+          <div class="notification-text">Database backup finished successfully</div>
+          <div class="notification-time">1 hour ago</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<script>
+(function() {
+  const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    if (btn.getAttribute('href') === currentPage) {
+      btn.classList.add('active');
+    }
+  });
+  
+  const bell = document.getElementById('notificationBell');
+  const dropdown = document.getElementById('notificationDropdown');
+  const badge = document.getElementById('notificationCount');
+  
+  bell.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('show');
+  });
+  
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('show');
+  });
+  
+  document.querySelectorAll('.notification-item').forEach(item => {
+    item.addEventListener('click', function() {
+      this.classList.remove('unread');
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'block' : 'none';
+    });
+  });
+})();
+</script>
+
+  <!-- Old Header - Remove this -->
+  <!--
+  <div class="flex justify-between items-center bg-secondary p-lg">
+    <h1 class="text-xl">HOOTNER Test</h1>
+    <nav class="flex gap-md">
+      <a href="#" class="font-medium">Dashboard</a>
+      <a href="#">Settings</a>
+      <a href="#">Profile</a>
+    </nav>
+  -->
+
+  <!-- Main content -->
+  <div class="container">
+    <h2 class="text-2xl mb-lg">Test Page</h2>
+    
+    <!-- Cards -->
+    <div class="grid grid-3 gap-md">
+      <div class="card">
+        <h3 class="text-primary">Card 1</h3>
+        <p class="text-secondary">This card uses design system classes.</p>
+        <button class="btn mt-md">Action</button>
+      </div>
+      
+      <div class="card">
+        <h3>Card 2</h3>
+        <p>Clean and simple.</p>
+        <button class="btn btn-secondary">Secondary</button>
+      </div>
+      
+      <div class="card">
+        <h3 class="text-success">Card 3</h3>
+        <p class="text-muted">All utility classes.</p>
+        <div class="flex gap-sm mt-md">
+          <button class="btn">Save</button>
+          <button class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Form -->
+    <div class="card mt-xl">
+      <h3>Form Example</h3>
+      <form>
+        <div class="form-group">
+          <label class="label" for="name">Name</label>
+          <input type="text" id="name" class="input" placeholder="Enter name">
+        </div>
+        
+        <div class="form-group">
+          <label class="label" for="email">Email</label>
+          <input type="email" id="email" class="input" placeholder="Enter email">
+        </div>
+        
+        <div class="flex gap-md">
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn btn-secondary">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    console.log('Test page loaded');
+    
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (e.target.textContent !== 'Submit') {
+          e.preventDefault();
+          console.log('Button clicked:', e.target.textContent);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

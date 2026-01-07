@@ -1,0 +1,31 @@
+{
+  "total_entries": 3566,
+  "vocab_size": 3307,
+  "categories": 11,
+  "sources": [
+    "platform",
+    "educational",
+    "journal",
+    "logs"
+  ],
+  "types": [
+    "video_content",
+    "tutorial_content",
+    "developer_notes",
+    "developer_interaction"
+  ],
+  "avg_length": 57,
+  "category_distribution": {
+    "video": 26,
+    "general": 1775,
+    "social": 42,
+    "tutorial": 516,
+    "systems": 747,
+    "ai": 221,
+    "security": 30,
+    "networking": 103,
+    "data": 60,
+    "graphics": 33,
+    "blockchain": 13
+  }
+}

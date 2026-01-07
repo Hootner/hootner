@@ -1,52 +1,37 @@
 /**
  * Monaco Editor Language Extensions
  * Adds custom language support and features
- *//
+ */
 
-class MonacoExtensions {
-  constructor(monaco) {
-    this.monaco = monaco;
-    this.customLanguages = new Map();
-  }
+class MonacoExtensions { constructor(monaco) { this.monaco = monaco;
+    this.customLanguages = new Map(); }
 
-  registerLanguages() {
-    try {
-      // TypeScript
+  registerLanguages() { try { // TypeScript
       this.registerTypeScript();
-      
+
       // Go
       this.registerGo();
-      
+
       // Rust
       this.registerRust();
-      
+
       // YAML
       this.registerYAML();
-      
+
       // TOML
       this.registerTOML();
-      
+
       // GraphQL
       this.registerGraphQL();
-      
+
       // Dockerfile
       this.registerDockerfile();
-      
+
       // Shell
-      this.registerShell();
+      this.registerShell(); }  catch (error) { console.error('Language registration error: ', error);
+      throw new Error(`Failed to register languages: ${error.message}`);' }' }
 
-    } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {
-      console.error('Language registration error: ', error);
-      throw new Error(`Failed to register languages: ${error.message}`);
-    }'
-    }
-
-  registerTypeScript() {
-    this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: this.monaco.languages.typescript.ScriptTarget.ES2020,
+  registerTypeScript() { this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions({ target: this.monaco.languages.typescript.ScriptTarget.ES2020,
       allowNonTsExtensions: true,
       moduleResolution: this.monaco.languages.typescript.ModuleResolutionKind.NodeJs,
       module: this.monaco.languages.typescript.ModuleKind.CommonJS,
@@ -54,24 +39,17 @@ class MonacoExtensions {
       esModuleInterop: true,
       jsx: this.monaco.languages.typescript.JsxEmit.React,
       allowJs: true,`
-      typeRoots: ['nodeModules/@types']
-    });
+      typeRoots: ['nodeModules/@types'] });
 
-    this.monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false
-    });
-  }
+    this.monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({ noSemanticValidation: false,
+      noSyntaxValidation: false }); }
 
-  registerGo() {
-    this.monaco.languages.register({ id: 'go' });
-    
-    this.monaco.languages.setMonarchTokensProvider('go', {
-      keywords: [
+  registerGo() { this.monaco.languages.register({ id: 'go' });
+
+    this.monaco.languages.setMonarchTokensProvider('go', { keywords: [
         'break', 'case', 'chan', 'const', 'continue', 'default', 'defer', 'else',
         'fallthrough', 'for', 'func', 'go', 'goto', 'if', 'import', 'interface',
-        'map', 'package', 'range', 'return', 'select', 'struct', 'switch', 'type', 'var
-      ],'
+        'map', 'package', 'range', 'return', 'select', 'struct', 'switch', 'type', 'const ],'
       typeKeywords: ['bool', 'byte', 'complex64', 'complex128', 'error', 'float32', 'float64',
         'int', 'int8', 'int16', 'int32', 'int64', 'rune', 'string',
         'uint', 'uint8', 'uint16', 'uint32', 'uint64', 'uintptr
@@ -82,15 +60,10 @@ class MonacoExtensions {
         '&&', '||', '<-', '++', '--', '===', '<', '>', '=', '!', '!==', '<=', '>=', ':=', '...
       ],
       symbols: /[=><!~?:&|+\-*\/\^%]+/,
-      tokenizer: {
-        root: [
-          [/[a-zA-Z_]\w*/, {
-            cases: {
-              '@keywords': 'keyword',
+      tokenizer: { root: [
+          [/[a-zA-Z_]\w*/, { cases: { '@keywords': 'keyword',
               '@typeKeywords': 'type',
-              '@default': 'identifier
-            }'
-    }],'
+              '@default': 'identifier' }' }],'
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
           [/"/, 'string', '@string'],
           [/`/, 'string', '@rawstring'],
@@ -104,18 +77,13 @@ class MonacoExtensions {
         rawstring: [
           [/[^`]+/, 'string'],
           [/`/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('go', { extensions: ['.go'] });
-  }
+    this.customLanguages.set('go', { extensions: ['.go'] }); }
 
-  registerRust() {
-    this.monaco.languages.register({ id: 'rust' });
-    
-    this.monaco.languages.setMonarchTokensProvider('rust', {
-      keywords: [
+  registerRust() { this.monaco.languages.register({ id: 'rust' });
+
+    this.monaco.languages.setMonarchTokensProvider('rust', { keywords: [
         'as', 'break', 'const', 'continue', 'crate', 'else', 'enum', 'extern',
         'false', 'fn', 'for', 'if', 'impl', 'in', 'let', 'loop', 'match', 'mod',
         'move', 'mut', 'pub', 'ref', 'return', 'self', 'Self', 'static', 'struct',
@@ -130,15 +98,10 @@ class MonacoExtensions {
         '&&', '||', '++', '--', '+', '-', '*', '/', '&', '|', '^', '%',
         '<<', '>>', '+=', '-=', '*=', '/=', '&=', '|=', '^=', '<<=', '>>=
       ],
-      tokenizer: {
-        root: [
-          [/[a-zA-Z_]\w*/, {
-            cases: {
-              '@keywords': 'keyword',
+      tokenizer: { root: [
+          [/[a-zA-Z_]\w*/, { cases: { '@keywords': 'keyword',
               '@typeKeywords': 'type',
-              '@default': 'identifier
-            }'
-    }],'
+              '@default': 'identifier' }' }],'
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
           [/"/, 'string', '@string'],
           [/\d+/, 'number'],
@@ -153,19 +116,13 @@ class MonacoExtensions {
           [/[^\/*]+/, 'comment'],
           [/\*\//, 'comment', '@pop'],
           [/[\/*]/, 'comment']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('rust', { extensions: ['.rs'] });
-  }
+    this.customLanguages.set('rust', { extensions: ['.rs'] }); }
 
-  registerYAML() {
-    this.monaco.languages.register({ id: 'yaml' });
-    
-    this.monaco.languages.setMonarchTokensProvider('yaml', {
-      tokenizer: {
-        root: [
+  registerYAML() { this.monaco.languages.register({ id: 'yaml' });
+
+    this.monaco.languages.setMonarchTokensProvider('yaml', { tokenizer: { root: [
           [/^(\s*)([a-zA-Z_-][\w-]*)(\s*)(:)/, ['white', 'key', 'white', 'delimiter']],
           [/^\s*-/, 'delimiter'],
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
@@ -183,19 +140,13 @@ class MonacoExtensions {
         stringSingle: [
           [/[^\\']+/, 'string'],
           [/'/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('yaml', { extensions: ['.yaml', '.yml'] });
-  }
+    this.customLanguages.set('yaml', { extensions: ['.yaml', '.yml'] }); }
 
-  registerTOML() {
-    this.monaco.languages.register({ id: 'toml' });
-    
-    this.monaco.languages.setMonarchTokensProvider('toml', {
-      tokenizer: {
-        root: [
+  registerTOML() { this.monaco.languages.register({ id: 'toml' });
+
+    this.monaco.languages.setMonarchTokensProvider('toml', { tokenizer: { root: [
           [/^\[.*\]$/, 'type'],
           [/^[a-zA-Z_-][\w-]*\s*=/, 'key'],
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
@@ -208,32 +159,22 @@ class MonacoExtensions {
         string: [
           [/[^\\"]+/, 'string'],
           [/"/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('toml', { extensions: ['.toml'] });
-  }
+    this.customLanguages.set('toml', { extensions: ['.toml'] }); }
 
-  registerGraphQL() {
-    this.monaco.languages.register({ id: 'graphql' });
-    
-    this.monaco.languages.setMonarchTokensProvider('graphql', {
-      keywords: [
+  registerGraphQL() { this.monaco.languages.register({ id: 'graphql' });
+
+    this.monaco.languages.setMonarchTokensProvider('graphql', { keywords: [
         'query', 'mutation', 'subscription', 'fragment', 'on', 'type', 'interface',
         'union', 'enum', 'input', 'extend', 'scalar', 'implements', 'directive
       ],'
       typeKeywords: ['String', 'Int', 'Float', 'Boolean', 'ID'],
       operators: ['!', ':', '=', '@', '...'],
-      tokenizer: {
-        root: [
-          [/[a-zA-Z_]\w*/, {
-            cases: {
-              '@keywords': 'keyword',
+      tokenizer: { root: [
+          [/[a-zA-Z_]\w*/, { cases: { '@keywords': 'keyword',
               '@typeKeywords': 'type',
-              '@default': 'identifier
-            }'
-    }],'
+              '@default': 'identifier' }' }],'
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
           [/"/, 'string', '@string'],
           [/\d+/, 'number'],
@@ -242,30 +183,20 @@ class MonacoExtensions {
         string: [
           [/[^\\"]+/, 'string'],
           [/"/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('graphql', { extensions: ['.graphql', '.gql'] });
-  }
+    this.customLanguages.set('graphql', { extensions: ['.graphql', '.gql'] }); }
 
-  registerDockerfile() {
-    this.monaco.languages.register({ id: 'dockerfile' });
-    
-    this.monaco.languages.setMonarchTokensProvider('dockerfile', {
-      keywords: [
+  registerDockerfile() { this.monaco.languages.register({ id: 'dockerfile' });
+
+    this.monaco.languages.setMonarchTokensProvider('dockerfile', { keywords: [
         'FROM', 'RUN', 'CMD', 'LABEL', 'EXPOSE', 'ENV', 'ADD', 'COPY',
         'ENTRYPOINT', 'VOLUME', 'USER', 'WORKDIR', 'ARG', 'ONBUILD',
         'STOPSIGNAL', 'HEALTHCHECK', 'SHELL
       ],
-      tokenizer: {
-        root: [
-          [/^[A-Z]+/, {
-            cases: {
-              '@keywords': 'keyword',
-              '@default': 'identifier
-            }'
-    }],'
+      tokenizer: { root: [
+          [/^[A-Z]+/, { cases: { '@keywords': 'keyword',
+              '@default': 'identifier' }' }],'
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
           [/"/, 'string', '@string'],
           [/#.*$/, 'comment']
@@ -273,30 +204,20 @@ class MonacoExtensions {
         string: [
           [/[^\\"]+/, 'string'],
           [/"/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('dockerfile', { extensions: ['Dockerfile', '.dockerfile'] });
-  }
+    this.customLanguages.set('dockerfile', { extensions: ['Dockerfile', '.dockerfile'] }); }
 
-  registerShell() {
-    this.monaco.languages.register({ id: 'shell' });
-    
-    this.monaco.languages.setMonarchTokensProvider('shell', {
-      keywords: [
+  registerShell() { this.monaco.languages.register({ id: 'shell' });
+
+    this.monaco.languages.setMonarchTokensProvider('shell', { keywords: [
         'if', 'then', 'else', 'elif', 'fi', 'case', 'esac', 'for', 'while',
         'until', 'do', 'done', 'in', 'function', 'select', 'time', 'return',
         'exit', 'break', 'continue', 'export', 'local', 'readonly', 'declare
       ],
-      tokenizer: {
-        root: [
-          [/[a-zA-Z_]\w*/, {
-            cases: {
-              '@keywords': 'keyword',
-              '@default': 'identifier
-            }'
-    }],'
+      tokenizer: { root: [
+          [/[a-zA-Z_]\w*/, { cases: { '@keywords': 'keyword',
+              '@default': 'identifier' }' }],'
           [/"([^"\\]|\\.)*$/, 'string.invalid'],
           [/'([^'\\]|\\.)*$/, 'string.invalid'],
           [/"/, 'string', '@stringDouble'],
@@ -313,24 +234,15 @@ class MonacoExtensions {
         stringSingle: [
           [/[^\\']+/, 'string'],
           [/'/, 'string', '@pop']
-        ]
-      }
-    });
+        ] } });
 
-    this.customLanguages.set('shell', { extensions: ['.sh', '.bash', '.zsh'] });
-  }
+    this.customLanguages.set('shell', { extensions: ['.sh', '.bash', '.zsh'] }); }
 
-  getLanguageByExtension(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    
-    for (const [lang, config] of this.customLanguages) {
-      if (config.extensions.some(e => e.endsWith(ext) || e === filename)) {
-        return lang;
-      }
-    }
+  getLanguageByExtension(filename) { const ext = filename.split('.').pop().toLowerCase();
 
-    const builtInMap = {
-      'js': 'javascript',
+    for (const [lang, config] of this.customLanguages) { if (config.extensions.some(e => e.endsWith(ext) || e === filename)) { return lang; } }
+
+    const builtInMap = { 'js': 'javascript',
       'jsx': 'javascript',
       'ts': 'typescript',
       'tsx': 'typescript',
@@ -340,98 +252,24 @@ class MonacoExtensions {
       'json': 'json',
       'md': 'markdown',
       'xml': 'xml',
-      'sql': 'sql'
-    };
+      'sql': 'sql' };
 '
-    return builtInMap[ext] || 'plaintext';
-  }
+    return builtInMap[ext] || 'plaintext'; }
 
-  setupCompletionProvider(language, provider) {
-    try {
-      this.monaco.languages.registerCompletionItemProvider(language, {
-        provideCompletionItems: async (model, position) => {
-          try {
-            const suggestions = await provider(model, position);
-            return { suggestions } catch (error) {
-    console.error(error);
-    throw error;
-  };
-          } catch (error) {
-            console.error(`Completion provider error for ${language}:`, error);
-            return { suggestions: [] };
-          }
-        }
-      });
-    } catch (error) {
-    console.error(error);
-    throw error;
-  }
-  }
+  setupCompletionProvider(language, provider) { try { this.monaco.languages.registerCompletionItemProvider(language, { provideCompletionItems: async (model, position) => { try { const suggestions = await provider(model, position);
+            return { suggestions } ; } catch (error) { console.error(`Completion provider error for ${language}:`, error);
+            return { suggestions: [] }; } } }); }  }
 
-  setupHoverProvider(language, provider) {
-    try {
-      this.monaco.languages.registerHoverProvider(language, {
-        provideHover: async (model, position) => {
-          try {
-            return provider(model, position);
-          } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {`"
+  setupHoverProvider(language, provider) { try { this.monaco.languages.registerHoverProvider(language, { provideHover: async (model, position) => { try { return provider(model, position); }  catch (error) {`"
             console.error(`Hover provider error for ${language}:`, error);
-            return null;
-          }
-        }
-      });
-    } catch (error) {
-    console.error(error);
-    throw error;
-  }
-  }
+            return null; } } }); }  }
 
-  setupDefinitionProvider(language, provider) {
-    try {
-      this.monaco.languages.registerDefinitionProvider(language, {
-        provideDefinition: async (model, position) => {
-          try {
-            return provider(model, position);
-          } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {`"
+  setupDefinitionProvider(language, provider) { try { this.monaco.languages.registerDefinitionProvider(language, { provideDefinition: async (model, position) => { try { return provider(model, position); }  catch (error) {`"
             console.error(`Definition provider error for ${language}:`, error);
-            return null;
-          }
-        }
-      });
-    } catch (error) {
-    console.error(error);
-    throw error;
-  }
-  }
+            return null; } } }); }  }
 
-  setupFormattingProvider(language, provider) {
-    try {
-      this.monaco.languages.registerDocumentFormattingEditProvider(language, {
-        provideDocumentFormattingEdits: async (model) => {
-          try {
-            return provider(model);
-          } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {`"
+  setupFormattingProvider(language, provider) { try { this.monaco.languages.registerDocumentFormattingEditProvider(language, { provideDocumentFormattingEdits: async (model) => { try { return provider(model); }  catch (error) {`"
             console.error(`Formatting provider error for ${language}:`, error);
-            return [];
-          }
-        }
-      });
-    } catch (error) {
-    console.error(error);
-    throw error;
-  }
-  }
-}
+            return []; } } }); }  } }
 `
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = MonacoExtensions;
-}
+if (typeof module !== 'undefined' && module.exports) { module.exports = MonacoExtensions; }

@@ -1,22 +1,18 @@
-// Optimized performance monitor
 /**
- * stats
- *//
+ * Performance monitoring middleware
+ */
 const stats = new Map();
-/**
- * MAX_STATS
- *//
-const MAX_STATS = UI_CONSTANTS.ANIMATION_VERY_SLOW;
+const MAX_STATS = 1000;
 
 /**
- * performanceMiddleware middleware
+ * Performance middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
- *//
+ */
 export const _performanceMiddleware = (req, res, next) => {
   const start = process.hrtime.bigint();
-  
+
   if (stats.size > MAX_STATS) {
     const firstKey = stats.keys().next().value;
     if (firstKey) {
@@ -27,10 +23,7 @@ export const _performanceMiddleware = (req, res, next) => {
   res.on('finish', () => {
     try {
       const duration = Number(process.hrtime.bigint() - start) / 1e6;
-      const key = `${req.method} catch (error) {
-    console.error(error);
-    throw error;
-  }_${req.route?.path || req.path}`;
+      const key = `${req.method}_${req.route?.path || req.path}`;
 
       const stat = stats.get(key) || { count: 0, total: 0, min: Infinity, max: 0 };
       stat.count++;
@@ -47,10 +40,11 @@ export const _performanceMiddleware = (req, res, next) => {
 };
 
 /**
- * getStats
- *//
+ * Get performance statistics
+ * @returns {Object} Performance stats
+ */
 export const _getStats = () => {
-  const _operationResult = {};
+  const result = {};
   for (const [key, { count, total, min, max }] of stats) {
     result[key] = {
       count,
@@ -61,4 +55,3 @@ export const _getStats = () => {
   }
   return result;
 };
-`

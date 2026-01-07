@@ -1,6 +1,5 @@
 export default [
-  {
-    ignores: [
+  { ignores: [
       'nodeModules/**',
       'dist/**',
       'build/**',
@@ -8,15 +7,11 @@ export default [
       '**/*.min.js',
       '.turbo/**',
       'docs/api/**',
-    ],
-  },
-  {
-    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
-    languageOptions: {
-      ecmaVersion: 'latest',
+    ], },
+  { files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
+    languageOptions: { ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: {
-        console: 'readonly',
+      globals: { console: 'readonly',
         process: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
@@ -24,11 +19,8 @@ export default [
         setTimeout: 'readonly',
         setInterval: 'readonly',
         clearTimeout: 'readonly',
-        clearInterval: 'readonly',
-      },
-    },
-    rules: {
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+        clearInterval: 'readonly', }, },
+    rules: { 'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
       eqeqeq: ['error', 'always'],
       curly: ['error', 'all'],
@@ -40,7 +32,5 @@ export default [
       'no-throw-literal': 'error',
       'no-async-promise-executor': 'error',
       'require-await': 'warn',
-      'no-return-await': 'error',
-    },
-  },
+      'no-return-await': 'error', }, },
 ];

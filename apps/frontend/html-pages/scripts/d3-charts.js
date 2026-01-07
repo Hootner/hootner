@@ -2,9 +2,7 @@
  * D3.js Advanced Chart Implementations for Dashboard
  */
 
-const D3Charts = {
-  lineChart(selector, data) {
-    const margin = {top: 20, right: 30, bottom: 30, left: 40};
+const D3Charts = { lineChart(selector, data) { const margin = {top: 20, right: 30, bottom: 30, left: 40};
     const width = 600 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
@@ -24,11 +22,9 @@ const D3Charts = {
       .attr('d', d3.line().x(d => x(d.date)).y(d => y(d.value)));
 
     svg.append('g').attr('transform', `translate(0,${height})`).call(d3.axisBottom(x));
-    svg.append('g').call(d3.axisLeft(y));
-  },
+    svg.append('g').call(d3.axisLeft(y)); },
 
-  networkGraph(selector, nodes, links) {
-    const width = 800, height = 600;
+  networkGraph(selector, nodes, links) { const width = 800, height = 600;
     const svg = d3.select(selector).append('svg').attr('width', width).attr('height', height);
 
     const simulation = d3.forceSimulation(nodes)
@@ -42,10 +38,6 @@ const D3Charts = {
     const node = svg.append('g').selectAll('circle').data(nodes).enter().append('circle')
       .attr('r', 10).attr('fill', '#00ff00');
 
-    simulation.on('tick', () => {
-      link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+    simulation.on('tick', () => { link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
           .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-      node.attr('cx', d => d.x).attr('cy', d => d.y);
-    });
-  }
-};
+      node.attr('cx', d => d.x).attr('cy', d => d.y); }); } };

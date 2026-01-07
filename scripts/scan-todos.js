@@ -13,18 +13,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const TAGS = [
-  'TODO', 'FIXME', 'BUG', 'HACK', 'XXX', 'NOTE', 
+  'TODO', 'FIXME', 'BUG', 'HACK', 'XXX', 'NOTE',
   'OPTIMIZE', 'REFACTOR', 'SECURITY', 'PERFORMANCE',
   'DEPRECATED', 'REVIEW', 'CLEANUP', 'TEST', 'DOCS'
 ];
 
 const EXCLUDE_DIRS = [
-  'node_modules', 'dist', 'build', 'out', '.next', 
+  'node_modules', 'dist', 'build', 'out', '.next',
   'coverage', '.git', 'vendor'
 ];
 
 const INCLUDE_EXTS = [
-  '.js', '.jsx', '.ts', '.tsx', '.html', '.css', 
+  '.js', '.jsx', '.ts', '.tsx', '.html', '.css',
   '.scss', '.json', '.md', '.yml', '.yaml'
 ];
 
@@ -33,7 +33,7 @@ function scanFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
-    
+
     lines.forEach((line, index) => {
       TAGS.forEach(tag => {
         const regex = new RegExp(`(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*(${tag})\\s*:?\\s*(.*)`, 'i');
@@ -57,10 +57,10 @@ function scanFile(filePath) {
 
 function scanDirectory(dir, todos = []) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
-    
+
     if (entry.isDirectory()) {
       if (!EXCLUDE_DIRS.includes(entry.name)) {
         scanDirectory(fullPath, todos);
@@ -73,30 +73,30 @@ function scanDirectory(dir, todos = []) {
       }
     }
   }
-  
+
   return todos;
 }
 
 function generateReport(todos) {
   const byTag = {};
   const byFile = {};
-  
+
   todos.forEach(todo => {
     if (!byTag[todo.tag]) byTag[todo.tag] = [];
     if (!byFile[todo.file]) byFile[todo.file] = [];
     byTag[todo.tag].push(todo);
     byFile[todo.file].push(todo);
   });
-  
+
   let report = `# HOOTNER TODO Report\n`;
   report += `Generated: ${new Date().toISOString()}\n`;
   report += `Total Items: ${todos.length}\n\n`;
-  
+
   report += `## Summary by Tag\n\n`;
   Object.keys(byTag).sort().forEach(tag => {
     report += `- **${tag}**: ${byTag[tag].length}\n`;
   });
-  
+
   report += `\n## Details by Tag\n\n`;
   Object.keys(byTag).sort().forEach(tag => {
     report += `### ${tag} (${byTag[tag].length})\n\n`;
@@ -106,7 +106,7 @@ function generateReport(todos) {
     });
     report += `\n`;
   });
-  
+
   report += `## Details by File\n\n`;
   Object.keys(byFile).sort().forEach(file => {
     const relPath = path.relative(process.cwd(), file);
@@ -116,32 +116,28 @@ function generateReport(todos) {
     });
     report += `\n`;
   });
-  
+
   return report;
 }
 
 // Main execution
-console.log('🦉 HOOTNER TODO Scanner\n');
-console.log('Scanning workspace...\n');
-
 const rootDir = process.cwd();
-const todos = scanDirectory(rootDir);
+const allTodos = scanDirectory(rootDir);
 
-console.log(`Found ${todos.length} items\n`);
-
-const report = generateReport(todos);
+const report = generateReport(allTodos);
 const reportPath = path.join(rootDir, 'TODO_REPORT.md');
 fs.writeFileSync(reportPath, report);
 
-console.log(`✅ Report saved to: ${reportPath}\n`);
+console.log(`\n✅ TODO Report generated: ${reportPath}`);
+console.log(`📊 Total items found: ${allTodos.length}\n`);
 
 // Print summary
 const byTag = {};
-todos.forEach(todo => {
+allTodos.forEach(todo => {
   byTag[todo.tag] = (byTag[todo.tag] || 0) + 1;
 });
 
-console.log('Summary:');
+console.log('Summary by Tag:');
 Object.keys(byTag).sort().forEach(tag => {
   console.log(`  ${tag}: ${byTag[tag]}`);
 });

@@ -1,7 +1,10 @@
 import compression from 'compression';
 
 /**
- * shouldCompress
+ * Determine if response should be compressed
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @returns {boolean} Whether to compress
  */
 const shouldCompress = (req, res) => {
   if (req.headers['x-no-compression']) {
@@ -16,7 +19,7 @@ const shouldCompress = (req, res) => {
   try {
     return /json|text|javascript|css|xml|svg/.test(type);
   } catch (error) {
-    console.error('Compression filter error: ', error);
+    console.error('Compression filter error:', error);
     return false;
   }
 };
@@ -24,5 +27,5 @@ const shouldCompress = (req, res) => {
 export default compression({
   filter: shouldCompress,
   level: 6,
-  threshold: 1024
+  threshold: 1024,
 });

@@ -5,21 +5,14 @@ import security from 'eslint-plugin-security';
 import reactHooks from 'eslint-plugin-react-hooks';
 
 export default [
-  {
-    ignores: ['dist/**', 'nodeModules/**', 'eslint.*.config.js'],
-  },
+  { ignores: ['dist/**', 'nodeModules/**', 'eslint.*.config.js'], },
   js.configs.recommended,
-  {
-    files: ['src/**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: tsparser,
-      parserOptions: {
-        ecmaVersion: 'latest',
+  { files: ['src/**/*.{ts,tsx}'],
+    languageOptions: { parser: tsparser,
+      parserOptions: { ecmaVersion: 'latest',
         sourceType: 'module',
-        ecmaFeatures: { jsx: true },
-      },
-      globals: {
-        console: 'readonly',
+        ecmaFeatures: { jsx: true }, },
+      globals: { console: 'readonly',
         document: 'readonly',
         window: 'readonly',
         localStorage: 'readonly',
@@ -27,16 +20,11 @@ export default [
         alert: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
-        React: 'readonly',
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint,
+        React: 'readonly', }, },
+    plugins: { '@typescript-eslint': tseslint,
       security: security,
-      'react-hooks': reactHooks,
-    },
-    rules: {
-      // Security rules (OWASP Top 10 focused)
+      'react-hooks': reactHooks, },
+    rules: { // Security rules (OWASP Top 10 focused)
       'security/detect-object-injection': 'error',
       'security/detect-non-literal-regexp': 'error',
       'security/detect-unsafe-regex': 'error',
@@ -51,7 +39,5 @@ export default [
       'security/detect-non-literal-fs-filename': 'warn',
       'security/detect-non-literal-require': 'error',
       // TypeScript security (basic rules only)
-      '@typescript-eslint/no-explicit-any': 'error',
-    },
-  },
+      '@typescript-eslint/no-explicit-any': 'error', }, },
 ];

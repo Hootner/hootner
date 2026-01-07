@@ -1,5 +1,4 @@
-{
-  "recommendations": [
+{ "recommendations": [
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
@@ -9,5 +8,4 @@
     "formulahendry.auto-rename-tag",
     "christian-kohler.path-intellisense",
     "ms-vscode.vscode-json"
-  ]
-}
+  ] }

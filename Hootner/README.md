@@ -22,9 +22,9 @@ Learn more about this pattern at Serverless Land Patterns: [https://serverlessla
 
 If you download this pattern as part of the AWS Toolkit for your IDE, the toolkit downloads the files into the directory you specify.
 
-To download the patterns yourself: 
+To download the patterns yourself:
 1. Create a new directory, navigate to that directory in a terminal and clone the GitHub repository:
-    ``` 
+    ```
     git clone https://github.com/aws-samples/serverless-patterns
     ```
 1. Change directory to the pattern directory:
@@ -50,30 +50,24 @@ To download the patterns yourself:
     Once you have run `sam deploy -guided` mode once and saved arguments to a configuration file `samconfig.toml`, you can use `sam deploy` in future to use these defaults.
 
 1. Note the outputs from the AWS SAM deployment process. These contain the resource names and/or ARNs to use for testing.
-   
+
 ## Example event payload from SQS to Lambda
 
 ```
-{
-    "Records": [
-        {
-            "messageId": "fa2012345678e816-0a49-4681-ba8f-1234567890",
+{ "Records": [
+        { "messageId": "fa2012345678e816-0a49-4681-ba8f-1234567890",
             "receiptHandle": "1234567890NmjC1234567890qODTr1234567890/XPPk/f0qU4tJtQ1234567890ihWDp8YHKhDr3V1234567890e9amjZhgg1234567890RodR1234567890lwDGpf6oLa8/B/1234567890/Pq+xP/1234567890/1234567890fIV6nFUGs71234567890zsj616CBx912M12345678908rxtUEj1234567890J8d1234567890yDcI9E12345678905mTyYZ41S2cP01NCA1234567890jcalHD1234567890Kio+HFQp1234567890OI7bTs5I7pZJ4pu+BnM8Bcki1234567890aNML5B7S12345678904eYKKcrunp1234567890Qhz7BUWPG41",
             "body": "Test message",
-            "attributes": {
-                "ApproximateReceiveCount": "1",
+            "attributes": { "ApproximateReceiveCount": "1",
                 "SentTimestamp": "1612966720445",
                 "SenderId": "AIDAIENQZJOLO23YVJ4VO",
-                "ApproximateFirstReceiveTimestamp": "1612966720455"
-            },
+                "ApproximateFirstReceiveTimestamp": "1612966720455" },
             "messageAttributes": {},
             "md5OfBody": "82dfa5549ebc91234567890ece5f",
             "eventSource": "aws:sqs",
             "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:patterns-sqs-to-lambda-MySqsQueue-1234567890",
-            "awsRegion": "us-east-1"
-        }
-    ]
-}
+            "awsRegion": "us-east-1" }
+    ] }
 
 ```
 There is also a sample file `\events\test-event.json` which contains a sample event payload with 10 items.
@@ -100,7 +94,7 @@ sam logs -n ENTER_YOUR_CONSUMER_FUNCTION_NAME
 ```
 
 ## Cleanup
- 
+
 1. Delete the stack
     ```bash
     sam delete --stack-name STACK_NAME

@@ -1,5 +1,4 @@
-{
-  "editor.formatOnSave": true,
+{ "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.validate": [
     "javascript",
@@ -19,12 +18,8 @@
   ],
   "html.validate.scripts": true,
   "html.validate.styles": true,
-  "files.associations": {
-    "*.html": "html"
-  },
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact"
-  },
+  "files.associations": { "*.html": "html" },
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
   "editor.rulers": [
     80,
     120
@@ -42,40 +37,26 @@
   "typescript.disableAutomaticTypeAcquisition": false,
   "git.autofetch": true,
   "search.followSymlinks": false,
-  "files.watcherExclude": {
-    "**/node_modules/**": true,
+  "files.watcherExclude": { "**/node_modules/**": true,
     "**/.git/**": true,
     "**/dist/**": true,
-    "**/build/**": true
-  },
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true
-  },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-  "files.exclude": {
-    "**/.DS_Store": true,
+    "**/build/**": true },
+  "[python]": { "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true },
+  "[dockerfile]": { "editor.defaultFormatter": "ms-azuretools.vscode-docker" },
+  "[yaml]": { "editor.defaultFormatter": "redhat.vscode-yaml" },
+  "files.exclude": { "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/*.pyc": true,
-    "**/__pycache__": true
-  },
-  "search.exclude": {
-    "**/node_modules": true,
+    "**/__pycache__": true },
+  "search.exclude": { "**/node_modules": true,
     "**/dist": true,
     "**/build": true,
     "**/.venv": true,
-    "**/coverage": true
-  },
+    "**/coverage": true },
   "javascript.preferences.importModuleSpecifier": "relative",
   "typescript.preferences.importModuleSpecifier": "relative",
-  "editor.quickSuggestions": {
-    "strings": true
-  },
+  "editor.quickSuggestions": { "strings": true },
   "editor.inlineSuggest.enabled": true,
   "amazonQ.telemetry": false,
   "editor.suggestSelection": "first",
@@ -136,24 +117,18 @@
   "problems.showCurrentInStatus": true,
   "security.workspace.trust.enabled": false,
   "json.schemas": [
-    {
-      "fileMatch": [
+    { "fileMatch": [
         "package.json"
       ],
-      "url": "https://json.schemastore.org/package.json"
-    },
-    {
-      "fileMatch": [
+      "url": "https://json.schemastore.org/package.json" },
+    { "fileMatch": [
         "tsconfig.json"
       ],
-      "url": "https://json.schemastore.org/tsconfig.json"
-    },
-    {
-      "fileMatch": [
+      "url": "https://json.schemastore.org/tsconfig.json" },
+    { "fileMatch": [
         "docker-compose*.yml"
       ],
-      "url": "https://json.schemastore.org/docker-compose.json"
-    }
+      "url": "https://json.schemastore.org/docker-compose.json" }
   ],
   "npm.enableRunFromFolder": true,
   "npm.scriptExplorerAction": "run",
@@ -169,16 +144,31 @@
   "typescript.autoClosingTags": true,
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
-  "github.copilot.enable": {
-    "*": true,
+  "github.copilot.enable": { "*": true,
     "yaml": true,
     "plaintext": true,
-    "markdown": true
-  },
+    "markdown": true },
   "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.editor.enableCodeActions": true,
   "amazonQ.enableCodeSuggestions": true,
   "amazonQ.shareContentWithAWS": false,
+  "amazonQ.customAgents": {
+    "enabled": true,
+    "configPath": ".amazonq/agents/q-agents-config.json",
+    "agents": [
+      "FoundationalQ",
+      "LanguageCompilerQ",
+      "OSKernelQ",
+      "VirtualizationRuntimeQ",
+      "NetworkingCommunicationQ",
+      "DataStorageQ",
+      "WebAppServerQ",
+      "BrowserUIQ",
+      "GamesGraphicsQ",
+      "DevToolsQ",
+      "AdvancedSpecializedQ"
+    ]
+  },
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   "vsintellicode.features.python.deepLearning": "enabled",
   "vsintellicode.features.typescript.deepLearning": "enabled",
@@ -218,15 +208,11 @@
   "editor.suggest.matchOnWordStartOnly": false,
   "editor.tabCompletion": "on",
   "editor.semanticHighlighting.enabled": true,
-  "editor.semanticTokenColorCustomizations": {
-    "enabled": true
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
+  "editor.semanticTokenColorCustomizations": { "enabled": true },
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit",
     "source.organizeImports": "explicit",
-    "source.addMissingImports": "explicit"
-  },
+    "source.addMissingImports": "explicit" },
   "editor.lightbulb.enabled": "on",
   "editor.gotoLocation.multipleDefinitions": "goto",
   "editor.gotoLocation.multipleImplementations": "goto",
@@ -278,26 +264,14 @@
   "files.hotExit": "onExitAndWindowClose",
   "files.defaultLanguage": "javascript",
   "files.eol": "\n",
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.quickSuggestions": {
-      "strings": true
-    }
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.wordWrap": "on",
-    "editor.quickSuggestions": {
-      "comments": "on",
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.quickSuggestions": { "strings": true } },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.wordWrap": "on",
+    "editor.quickSuggestions": { "comments": "on",
       "strings": "on",
-      "other": "on"
-    }
-  },
-  "[shellscript]": {
-    "files.eol": "\n"
-  },
+      "other": "on" } },
+  "[shellscript]": { "files.eol": "\n" },
   "typescript.tsserver.maxTsServerMemory": 4096,
   "typescript.preferences.quoteStyle": "single",
   "typescript.suggest.completeFunctionCalls": true,
@@ -320,9 +294,7 @@
   "eslint.run": "onType",
   "eslint.lintTask.enable": true,
   "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
+    { "mode": "auto" }
   ],
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
@@ -356,11 +328,9 @@
   "terminal.integrated.persistentSessionReviveProcess": "onExitAndWindowClose",
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.gpuAcceleration": "on",
-  "yaml.schemas": {
-    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
+  "yaml.schemas": { "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
     "https://raw.githubusercontent.com/docker/compose/master/compose/config/compose_spec.json": "docker-compose*.yml",
-    "https://json.schemastore.org/kustomization.json": "kustomization.yaml"
-  },
+    "https://json.schemastore.org/kustomization.json": "kustomization.yaml" },
   "yaml.customTags": [],
   "yaml.format.enable": true,
   "yaml.validate": true,
@@ -383,13 +353,10 @@
   "search.mode": "view",
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "merge-conflict.diffViewPosition": "Below",
-  "notebook.cellToolbarLocation": {
-    "default": "right"
-  },
+  "notebook.cellToolbarLocation": { "default": "right" },
   "notebook.lineNumbers": "on",
   "notebook.output.textLineLimit": 1000,
   "settingsSync.ignoredSettings": [],
   "workbench.commandPalette.history": 50,
   "workbench.quickOpen.closeOnFocusLost": false,
-  "workbench.tips.enabled": false
-}
+  "workbench.tips.enabled": false }

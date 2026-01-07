@@ -1,67 +1,37 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { HTTP_STATUS, LIMITS } from '../constants/index.js';
-/**
- * MAX_EMAIL_LENGTH
- */
+
 const MAX_EMAIL_LENGTH = LIMITS.MAX_IP_OCTET;
-/**
- * MAX_URL_LENGTH
- */
 const MAX_URL_LENGTH = LIMITS.MAX_BUFFER_SIZE;
-/**
- * OBJECTID_LENGTH
- */
 const OBJECTID_LENGTH = 24;
-/**
- * MIN_USERNAME_LENGTH
- */
 const MIN_USERNAME_LENGTH = 3;
-/**
- * MAX_USERNAME_LENGTH
- */
 const MAX_USERNAME_LENGTH = 50;
-/**
- * EMAIL_REGEX
- */
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-/**
- * OBJECTID_REGEX
- */
 const OBJECTID_REGEX = /^[0-9a-fA-F]{24}$/;
-/**
- * USERNAME_REGEX
- */
 const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
-/**
- * ALLOWED_PROTOCOLS
- */
 const ALLOWED_PROTOCOLS = ['http:', 'https:'];
 
 /**
- * schemas
+ * Validation schemas
  */
 export const schemas = {
-  string:
-    (min = 1, max = 1000) =>
-    (val) => {
-      if (typeof val !== 'string') {
-        throw new Error('Must be string');
-      }
-      const trimmed = val.trim();
-      if (trimmed.length < min || trimmed.length > max) {
-        throw new Error(`Length ${min}-${max}`);
-      }
-      return DOMPurify.sanitize(trimmed, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
-    },
-  number:
-    (min = 0, max = Number.MAX_SAFE_INTEGER) =>
-    (val) => {
-      const num = Number(val);
-      if (Number.isNaN(num) || !Number.isFinite(num) || num < min || num > max) {
-        throw new Error(`Number ${min}-${max}`);
-      }
-      return num;
-    },
+  string: (min = 1, max = 1000) => (val) => {
+    if (typeof val !== 'string') {
+      throw new Error('Must be string');
+    }
+    const trimmed = val.trim();
+    if (trimmed.length < min || trimmed.length > max) {
+      throw new Error(`Length ${min}-${max}`);
+    }
+    return DOMPurify.sanitize(trimmed, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+  },
+  number: (min = 0, max = Number.MAX_SAFE_INTEGER) => (val) => {
+    const num = Number(val);
+    if (Number.isNaN(num) || !Number.isFinite(num) || num < min || num > max) {
+      throw new Error(`Number ${min}-${max}`);
+    }
+    return num;
+  },
   email: () => (val) => {
     if (typeof val !== 'string' || val.length > MAX_EMAIL_LENGTH) {
       throw new Error('Invalid email length');
@@ -92,9 +62,11 @@ export const schemas = {
     return val;
   },
   username: () => (val) => {
-    if (typeof val !== 'string' ||
-        val.length < MIN_USERNAME_LENGTH ||
-        val.length > MAX_USERNAME_LENGTH) {
+    if (
+      typeof val !== 'string' ||
+      val.length < MIN_USERNAME_LENGTH ||
+      val.length > MAX_USERNAME_LENGTH
+    ) {
       throw new Error(`Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters`);
     }
     if (!USERNAME_REGEX.test(val)) {
@@ -102,18 +74,16 @@ export const schemas = {
     }
     return val;
   },
-  enum:
-    (...allowed) =>
-    (val) => {
-      if (!allowed.includes(val)) {
-        throw new Error(`Must be: ${allowed.join(', ')}`);
-      }
-      return val;
-    },
+  enum: (...allowed) => (val) => {
+    if (!allowed.includes(val)) {
+      throw new Error(`Must be: ${allowed.join(', ')}`);
+    }
+    return val;
+  },
 };
 
 /**
- * validate middleware
+ * Validate middleware
  * @param {Object} req - Express request
  * @param {Object} res - Express response
  * @param {Function} next - Next middleware
@@ -131,7 +101,6 @@ export const validate = (schema) => (req, res, next) => {
     next();
   } catch (err) {
     const errorMsg = err?.message || 'Validation failed';
-
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: errorMsg });
+    return res.status(400).json({ error: errorMsg });
   }
 };

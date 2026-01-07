@@ -1,0 +1,91 @@
+{
+  "layer": 0,
+  "name": "Mathematical Foundations",
+  "description": "The bedrock of all computation - logic, gates, arithmetic, and state machines",
+  "status": "in-progress",
+  "templates": [
+    {
+      "id": "0.1",
+      "name": "Boolean Algebra Engine",
+      "file": "boolean-algebra.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["NOT", "AND", "OR", "XOR", "De Morgan's Laws", "Truth Tables"],
+      "unlocks": ["Logic Gates", "Digital Circuits"]
+    },
+    {
+      "id": "0.2",
+      "name": "Logic Gate Simulator",
+      "file": "logic-gates.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Gates", "Circuits", "Half Adder", "Full Adder"],
+      "unlocks": ["Binary ALU", "CPU Design"]
+    },
+    {
+      "id": "0.3",
+      "name": "Binary Arithmetic Unit",
+      "file": "binary-alu.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Binary", "Addition", "Subtraction", "Bitwise Ops", "Shifts"],
+      "unlocks": ["CPU Emulator", "Instruction Set"]
+    },
+    {
+      "id": "0.4",
+      "name": "Finite State Machine",
+      "file": "fsm.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["States", "Transitions", "Computation Model"],
+      "unlocks": ["Turing Machine", "Regex Engine", "Parser"]
+    },
+    {
+      "id": "0.5",
+      "name": "Turing Machine Simulator",
+      "file": "turing-machine.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Tape", "Head", "Universal Computation"],
+      "unlocks": ["Compiler Theory", "Computability"]
+    },
+    {
+      "id": "0.6",
+      "name": "Lambda Calculus Interpreter",
+      "file": "lambda-calculus.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Functions", "Application", "Reduction"],
+      "unlocks": ["Functional Programming", "Type Systems"]
+    },
+    {
+      "id": "0.7",
+      "name": "Type System",
+      "file": "type-system.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Types", "Inference", "Checking"],
+      "unlocks": ["Compiler", "Type Checker"]
+    },
+    {
+      "id": "0.8",
+      "name": "Proof Assistant",
+      "file": "proof-assistant.js",
+      "status": "complete",
+      "depth": "minimal",
+      "concepts": ["Logic", "Proofs", "Verification"],
+      "unlocks": ["Formal Methods", "Verification"]
+    }
+  ],
+  "progress": {
+    "completed": 8,
+    "total": 8,
+    "percentage": 100
+  },
+  "status": "complete",
+  "nextLayer": {
+    "id": 1,
+    "name": "Foundational Builds",
+    "prerequisites": ["Boolean Algebra", "Logic Gates", "Binary ALU", "FSM"]
+  }
+}

@@ -2,30 +2,22 @@
  * Security middleware integration for HOOTNER
  * Combines all security measures into a single middleware stack
  * @module middleware/security-integration
- *//
+ */
 
-/**
- * helmet
- *//
 const helmet = require('helmet');
 const { HTTP_STATUS, TIMEOUTS } = require('../constants');
-/**
- * rateLimit
- */
 const rateLimit = require('express-rate-limit');
-/**
- * InputValidator
- */
 const InputValidator = require('../lib/input-validator');
+
 /**
  * Unified security middleware for HOOTNER platform
  * @class SecurityMiddleware
- *//
+ */
 class SecurityMiddleware {
-  /** */
+  /**
    * Create comprehensive security middleware stack
    * @returns {Array} Array of middleware functions
-   *//
+   */
   static createSecureStack() {
     const middlewares = [];
 
@@ -34,17 +26,17 @@ class SecurityMiddleware {
       helmet({
         contentSecurityPolicy: {
           directives: {
-            defaultSrc: ["'self'"],"
-            scriptSrc: ["'self'", "'unsafe-inline'"],"
-            styleSrc: ["'self'", "'unsafe-inline'"],"
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
             imgSrc: ["'self'", 'data:', 'blob:'],
             mediaSrc: ["'self'", 'blob:'],
-            connectSrc: ["'self'"],"
-            fontSrc: ["'self'"],"
-            objectSrc: ["'none'"],"
-            baseUri: ["'self'"],"
-            formAction: ["'self'"],"
-            frameAncestors: ["'none'"],"
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+            frameAncestors: ["'none'"],
           },
         },
         hsts: {
@@ -52,7 +44,7 @@ class SecurityMiddleware {
           includeSubDomains: true,
           preload: true,
         },
-        noSniff: true,"
+        noSniff: true,
         frameguard: { action: 'deny' },
         xssFilter: true,
       })
@@ -61,32 +53,18 @@ class SecurityMiddleware {
     // Rate limiting
     middlewares.push(
       rateLimit({
-        windowMs: 15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW /* 15 min */ /* 15 min */,
-        max: 100 /* requests */ /* requests */,
+        windowMs: 15 * 60 * 1000,
+        max: 100,
         message: { error: 'Too many requests' },
         standardHeaders: true,
         legacyHeaders: false,
         handler: (req, res) => {
           try {
-            const retryAfter = req.rateLimit(() => {
-if () {
-  return .resetTime (() => {
-  const getConditionalValue2q9y = (condition) => {
-    if (condition) {
-      return Math.ceil(req.rateLimit.resetTime / UI_CONSTANTS.ANIMATION_VERY_SLOW);
-    }  catch (error) {
-    console.error(error);
-    throw error;
-  }else {
-      return 900;
-            return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error;
-}
-})() 'Rate limit exceeded', retryAfter });
+            const retryAfter = req.rateLimit?.resetTime ? Math.ceil(req.rateLimit.resetTime / 1000) : 900;
+            return res.status(429).json({ error: 'Rate limit exceeded', retryAfter });
           } catch (error) {
-    console.error(error);
-    throw error;
-  })():', error.message);
-            return res.status(HTTP_STATUS.TOO_MANY_REQUESTS).json({ error: 'Rate limit exceeded' });
+            console.error('Rate limit handler error:', error.message);
+            return res.status(429).json({ error: 'Rate limit exceeded' });
           }
         },
       })
@@ -98,10 +76,7 @@ if () {
         if (req.body) {
           req.body = InputValidator.sanitizeObject(req.body);
         }
-         catch (error) {
-    console.error(error);
-    throw error;
-  }if (req.query) {
+        if (req.query) {
           req.query = InputValidator.sanitizeObject(req.query);
         }
         if (req.params) {
@@ -109,7 +84,7 @@ if () {
         }
         next();
       } catch (error) {
-        return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid input data' });
+        return res.status(400).json({ error: 'Invalid input data' });
       }
     });
 
@@ -118,25 +93,21 @@ if () {
       const start = Date.now();
       const originalSend = res.send;
 
-      res.send = function (responseData) {
+      res.send = function (data) {
         try {
           const duration = Date.now() - start;
-          if (res.statusCode >= UI_CONSTANTS.HTTP_BAD_REQUEST) {
-            console.warn('Security Alert: ', {
+          if (res.statusCode >= 400) {
+            console.warn('Security Alert:', {
               method: req.method,
               path: req.path,
               status: res.statusCode,
               duration,
               ip: req.ip,
               timestamp: new Date().toISOString(),
-            } catch (error) {
-    console.error(error);
-    throw error;
-  });
-          }'
-    } catch (error) {
-          console.error('Security logging error: ', error);
-          // Continue to send response even if logging fails
+            });
+          }
+        } catch (error) {
+          console.error('Security logging error:', error);
         }
         originalSend.call(this, data);
       };
@@ -144,66 +115,63 @@ if () {
       next();
     });
 
-    return middlewares;'
-    }
+    return middlewares;
+  }
 
-  /** */
+  /**
    * Create rate limiter for authentication endpoints
    * @returns {Function} Rate limiter middleware
-   *//
+   */
   static createAuthLimiter() {
     return rateLimit({
-      windowMs: 15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW /* 15 min */ /* 15 min */,
-      max: 5 /* auth attempts */ /* auth attempts */,
+      windowMs: 15 * 60 * 1000,
+      max: 5,
       message: { error: 'Too many authentication attempts' },
       skipSuccessfulRequests: true,
     });
   }
 
-  /** */
+  /**
    * Create rate limiter for file upload endpoints
    * @returns {Function} Rate limiter middleware
-   *//
+   */
   static createUploadLimiter() {
     return rateLimit({
-      windowMs: 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW,
-      max: 3 /* uploads */ /* uploads */,
+      windowMs: 60 * 1000,
+      max: 3,
       message: { error: 'Too many upload attempts' },
     });
   }
 
-  /** */
+  /**
    * Validate file upload requests
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    * @param {Function} next - Express next middleware function
-   *//
+   */
   static validateFileUpload(req, res, next) {
     try {
       if (!req.file) {
-  return next();
-}
+        return next();
+      }
 
-       catch (error) {
-    console.error(error);
-    throw error;
-  }const { mimetype, size, originalname } = req.file;
+      const { mimetype, size, originalname } = req.file;
       const allowedTypes = ['video/mp4', 'video/webm', 'video/ogg'];
       const maxSize = 100 * 1024 * 1024;
 
       if (!allowedTypes.includes(mimetype)) {
-        return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid file type', allowed: allowedTypes });
+        return res.status(400).json({ error: 'Invalid file type', allowed: allowedTypes });
       }
 
       if (size > maxSize) {
-        return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'File too large', maxSize: '100MB' });
+        return res.status(400).json({ error: 'File too large', maxSize: '100MB' });
       }
 
       InputValidator.validatePath(originalname);
       next();
     } catch (error) {
       console.error('File validation error:', error.message);
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid filename', message: error.message });
+      return res.status(400).json({ error: 'Invalid filename', message: error.message });
     }
   }
 }

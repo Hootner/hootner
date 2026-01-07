@@ -4,69 +4,51 @@ import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECON
 /**
  * App Config - Browser Compatible
  * Minimal configuration for browser environment
- *//
+ */
 
-const AppConfig = {
-  // Editor Settings
-  editor: {
-    theme: 'vs-dark',
+const AppConfig = { // Editor Settings
+  editor: { theme: 'vs-dark',
     fontSize: 14,
     tabSize: 2,
     wordWrap: 'on',
     minimap: true,
-    autoSave: true
-  },
+    autoSave: true },
 
   // Platform Integration
-  platform: {
-    baseUrl: 'http://localhost:DEFAULT_PORT',
+  platform: { baseUrl: 'http://localhost:3000',
     apiUrl: 'http://localhost:SECONDARY_PORT/api',
     syncInterval: UI_CONSTANTS.TIMEOUT_EXTENDED,
-    autoSync: true
-  },
+    autoSync: true },
 
   // Cloud Settings
-  cloud: {
-    provider: 'jsonbin',
+  cloud: { provider: 'jsonbin',
     autoBackup: true,
-    backupInterval: 300000
-  },
+    backupInterval: 300000 },
 
   // AI Settings
-  ai: {
-    model: 'gpt-3.5-turbo',
+  ai: { model: 'gpt-3.5-turbo',
     maxTokens: 500,
     temperature: 0.7,
-    enabled: true
-  },
+    enabled: true },
 
   // Security
-  security: {
-    maxFileSize: 10 * 1024 * 1024,
+  security: { maxFileSize: 10 * 1024 * 1024,
     allowedExtensions: ['.js', '.ts', '.html', '.css', '.json', '.md'],
-    scanInterval: UI_CONSTANTS.TIMEOUT_EXTENDED
-  },
+    scanInterval: UI_CONSTANTS.TIMEOUT_EXTENDED },
 
   // Performance
-  performance: {
-    memoryThreshold: 100 * 1024 * 1024,
+  performance: { memoryThreshold: 100 * 1024 * 1024,
     gcInterval: UI_CONSTANTS.TIMEOUT_MAX,
-    lazyLoadDelay: 100
-  },
+    lazyLoadDelay: 100 },
 
   // Features
-  features: {
-    collaboration: true,
+  features: { collaboration: true,
     analytics: true,
     plugins: true,
     cloudSync: true,
-    aiAssistant: true
-  }
-};
+    aiAssistant: true } };
 
 // Global config
 window.AppConfig = AppConfig;
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = AppConfig;
-}
+if (typeof module !== 'undefined' && module.exports) { module.exports = AppConfig; }

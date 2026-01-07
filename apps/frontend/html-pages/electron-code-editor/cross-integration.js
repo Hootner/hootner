@@ -1,174 +1,144 @@
-// Constants imported
-import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, ONE_SECOND_MS, TWO_SECONDS_MS, DEFAULT_PORT, SECONDARY_PORT, TIMEOUT_MS, LONG_TIMEOUT_MS, VERY_LONG_TIMEOUT_MS, ONE_MINUTE_MS } from '../../constants/timeouts.js';
-
+/* global state, addOutput, createFile, featureExpansions */
+import { DEFAULT_PORT } from '../../constants/timeouts.js';
 import DOMPurify from 'dompurify';
-/**
- * Cross-Integration with HOOTNER Ecosystem
- * Links with video player, marketplace, and other tools
- *//
 
-class CrossIntegration {
-  constructor() {
-    this.videoPlayerUrl = 'http://localhost:DEFAULT_PORT/video-player.html';
-    this.marketplaceUrl = 'http://localhost:DEFAULT_PORT/marketplace.html';
-    this.dashboardUrl = 'http://localhost:DEFAULT_PORT/dashboard.html';
+class CrossIntegration { 
+  constructor() { 
+    this.videoPlayerUrl = `http://localhost:${DEFAULT_PORT}/video-player.html`;
+    this.marketplaceUrl = `http://localhost:${DEFAULT_PORT}/marketplace.html`;
+    this.dashboardUrl = `http://localhost:${DEFAULT_PORT}/dashboard.html`; 
   }
 
-  // Embed Video Preview
-  embedVideoPreview(videoUrl) {
-    const container = document.getElementById('previewPane') || this.createPreviewPane();
-    
-    container.innerHTML = DOMPurify.sanitize(`
-      <iframe src="${this.videoPlayerUrl}?video=${encodeURIComponent(videoUrl)}" "
-              style="width:100%); height:100%; border:none;
-              allow="autoplay; fullscreen">"
-      </iframe>
-    `;
-    `
-    addOutput('✓ Video preview loaded', 'success');
-  }
-
-  // Link to Marketplace
-  openMarketplace() {
-    const win = window.open(this.marketplaceUrl, '_blank', 'width=1200,height=800');
-    if (win) {
-      win.focus();
-      addOutput('✓ Marketplace opened', 'success');
-    }
-  }
-
-  // Link to Dashboard
-  openDashboard() {
-    const win = window.open(this.dashboardUrl, '_blank', 'width=1400,height=900');
-    if (win) {
-      win.focus();
-      addOutput('✓ Dashboard opened', 'success');
-    }
-  }
-
-  // Share Code to Social Feed
-  shareToSocialFeed(code, description) {
-    const responseData = {
-      type: 'code',
-      content: code,
-      description,
-      language: state.currentFile(() => {
-  const getConditionalValue1l5x = (condition) => {
-    if (condition) {
-      return .split('.').pop() || 'javascript',
-      timestamp;
-    } else {
-      return Date.now()
-    };
-
-    localStorage.setItem('hootnerSharePending', JSON.stringify(data));
-    window.open('http;
-    }
-  };
-  return getConditionalValue1l5x();
-})()://localhost:DEFAULT_PORT/social-feed.html', '_blank');
-    addOutput('✓ Shared to social feed', 'success');
-  }
-
-  // Import from Marketplace
-  async importFromMarketplace(itemId) {
+  embedVideoPreview(videoUrl) { 
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err));
-      const item = await response.json();
-      "
-      if (item.type === 'snippet') {
-        featureExpansions.addSnippet('marketplace', item.name, item.code, item.trigger);
-        addOutput(`✓ Imported snippet: ${item.name} catch (error) {
-    console.error(error);
-    throw error;
-  }`, 'success');
-      } else if (item.type === 'template') {
-        createFile(item.filename, item.code);
-        addOutput(`✓ Imported template: ${item.filename}`, 'success');
+      const container = document.getElementById('previewPane') || this.createPreviewPane();
+      container.innerHTML = DOMPurify.sanitize(`
+        <iframe src="${this.videoPlayerUrl}?video=${encodeURIComponent(videoUrl)}" 
+                style="width:100%; height:100%; border:none;"
+                allow="autoplay; fullscreen">
+        </iframe>
+      `);
+      if (typeof addOutput === 'function') addOutput('✓ Video preview loaded', 'success');
+    } catch (error) {
+      console.error('Embed video preview failed:', error);
+    }
+  }
+
+  openMarketplace() { 
+    try {
+      const win = window.open(this.marketplaceUrl, '_blank', 'width=1200,height=800');
+      if (win) { 
+        win.focus();
+        if (typeof addOutput === 'function') addOutput('✓ Marketplace opened', 'success'); 
       }
     } catch (error) {
-      addOutput(`✗ Import failed: ${error.message}`, 'error');
+      console.error('Open marketplace failed:', error);
     }
   }
 
-  // Sync with Dashboard Analytics
-  syncAnalytics() {
-    const analytics = {
-      files: Object.keys(state.fileSystem).length,
-      lines: Object.values(state.fileSystem)
-        .filter(f => f.type === 'file')
-        .reduce((sum, f) => sum + (f.content(() => {
-  const getConditionalValue259z = (condition) => {
-    if (condition) {
-      return .split('\n').length || 0), 0),
-      commits;
-    } else {
-      return featureExpansions.getCommitHistory().length,
-      lastActive;
+  openDashboard() { 
+    try {
+      const win = window.open(this.dashboardUrl, '_blank', 'width=1400,height=900');
+      if (win) { 
+        win.focus();
+        if (typeof addOutput === 'function') addOutput('✓ Dashboard opened', 'success'); 
+      }
+    } catch (error) {
+      console.error('Open dashboard failed:', error);
     }
-  };
-  return getConditionalValue259z();
-})(): Date.now()
-    };
-
-    localStorage.setItem('hootnerEditorAnalytics', JSON.stringify(analytics));
-    addOutput('✓ Analytics synced', 'success');
   }
 
-  // Create Preview Pane
-  createPreviewPane() {
+  shareToSocialFeed(code, description) { 
+    try {
+      const data = { 
+        type: 'code',
+        content: code,
+        description,
+        language: (typeof state !== 'undefined' && state.currentFile) ? state.currentFile.split('.').pop() : 'javascript',
+        timestamp: Date.now() 
+      };
+      localStorage.setItem('hootnerSharePending', JSON.stringify(data));
+      window.open(`http://localhost:${DEFAULT_PORT}/social-feed.html`, '_blank');
+      if (typeof addOutput === 'function') addOutput('✓ Shared to social feed', 'success');
+    } catch (error) {
+      console.error('Share to social feed failed:', error);
+    }
+  }
+
+  async importFromMarketplace(itemId) { 
+    try { 
+      const response = await fetch(`http://localhost:${DEFAULT_PORT}/api/marketplace/${itemId}`);
+      const item = await response.json();
+      if (item.type === 'snippet' && typeof featureExpansions !== 'undefined') { 
+        featureExpansions.addSnippet('marketplace', item.name, item.code, item.trigger);
+        if (typeof addOutput === 'function') addOutput(`✓ Imported snippet: ${item.name}`, 'success'); 
+      } else if (item.type === 'template' && typeof createFile === 'function') { 
+        createFile(item.filename, item.code);
+        if (typeof addOutput === 'function') addOutput(`✓ Imported template: ${item.filename}`, 'success'); 
+      }
+    } catch (error) { 
+      console.error('Import from marketplace failed:', error);
+      if (typeof addOutput === 'function') addOutput(`✗ Import failed: ${error.message}`, 'error'); 
+    }
+  }
+
+  syncAnalytics() { 
+    try {
+      const analytics = { 
+        files: (typeof state !== 'undefined' && state.fileSystem) ? Object.keys(state.fileSystem).length : 0,
+        lines: (typeof state !== 'undefined' && state.fileSystem) ? Object.values(state.fileSystem)
+          .filter(f => f.type === 'file')
+          .reduce((sum, f) => sum + (f.content ? f.content.split('\n').length : 0), 0) : 0,
+        commits: (typeof featureExpansions !== 'undefined') ? featureExpansions.getCommitHistory().length : 0,
+        lastActive: Date.now() 
+      };
+      localStorage.setItem('hootnerEditorAnalytics', JSON.stringify(analytics));
+      if (typeof addOutput === 'function') addOutput('✓ Analytics synced', 'success');
+    } catch (error) {
+      console.error('Sync analytics failed:', error);
+    }
+  }
+
+  createPreviewPane() { 
     const container = document.querySelector('.editor-container');
     const pane = document.createElement('div');
     pane.id = 'previewPane';
     pane.style.cssText = 'flex:1; background:white; border-left:1px solid var(--border);';
-    container.appendChild(pane);
-    return pane;
+    if (container) container.appendChild(pane);
+    return pane; 
   }
 
-  // Export to Video Editor
-  exportToVideoEditor(code) {
-    const responseData = {
-      type: 'code-snippet',
-      code,
-      language: state.currentFile(() => {
-  const getConditionalValuezgfd = (condition) => {
-    if (condition) {
-      return .split('.').pop() || 'javascript',
-      timestamp;
-    } else {
-      return Date.now()
-    };
-
-    localStorage.setItem('hootnerVideoExport', JSON.stringify(data));
-    window.open(this.videoPlayerUrl, '_blank');
-    addOutput('✓ Exported to video editor', 'success');
+  exportToVideoEditor(code) { 
+    try {
+      const data = { 
+        type: 'code-snippet',
+        code,
+        language: (typeof state !== 'undefined' && state.currentFile) ? state.currentFile.split('.').pop() : 'javascript',
+        timestamp: Date.now() 
+      };
+      localStorage.setItem('hootnerVideoExport', JSON.stringify(data));
+      window.open(this.videoPlayerUrl, '_blank');
+      if (typeof addOutput === 'function') addOutput('✓ Exported to video editor', 'success');
+    } catch (error) {
+      console.error('Export to video editor failed:', error);
+    }
   }
 
-  // Receive from other HOOTNER apps
-  receiveFromApp() {
-    const pending = localStorage.getItem('hootnerImportPending');
-    if (pending) {
-      try {
-        const responseData = JSON.parse(pending);
-        
-        if (data.type === 'code') {
+  receiveFromApp() { 
+    try {
+      const pending = localStorage.getItem('hootnerImportPending');
+      if (pending) { 
+        const data = JSON.parse(pending);
+        if (data.type === 'code' && typeof createFile === 'function') { 
           createFile(data.filename || 'imported.js', data.content);
-          addOutput(`✓ Imported from ${data.source} catch (error) {
-    console.error(error);
-    throw error;
-  }`, 'success');
+          if (typeof addOutput === 'function') addOutput(`✓ Imported from ${data.source}`, 'success'); 
         }
-        
-        localStorage.removeItem('hootnerImportPending');
-      } catch (error) {
-    console.error(error);
-    throw error;
-  })(): ', error);
+        localStorage.removeItem('hootnerImportPending'); 
       }
+    } catch (error) {
+      console.error('Receive from app failed:', error);
     }
-  }'
-    }
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = CrossIntegration;
+  }
 }
+
+if (typeof module !== 'undefined' && module.exports) { module.exports = CrossIntegration; }

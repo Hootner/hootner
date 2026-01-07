@@ -1,0 +1,83 @@
+{
+  "category": "Web and Application Server Builds",
+  "description": "Web servers and frameworks - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Web Framework",
+      "file": "web-framework.py",
+      "language": "Python",
+      "lines": 42,
+      "features": ["Routing", "Decorators", "JSON responses", "Regex patterns"],
+      "run": "python web-framework.py",
+      "test": "curl http://localhost:8000/user/alice",
+      "tutorial": "https://flask.palletsprojects.com/",
+      "agent": "WebAppServerQ"
+    },
+    {
+      "name": "MVC Framework",
+      "file": "mvc-framework.js",
+      "language": "JavaScript",
+      "lines": 55,
+      "features": ["Model-View-Controller", "Routing", "Data binding"],
+      "run": "node mvc-framework.js",
+      "test": "curl http://localhost:3000",
+      "tutorial": "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller",
+      "agent": "WebAppServerQ"
+    },
+    {
+      "name": "Template Engine",
+      "file": "template-engine.js",
+      "language": "JavaScript",
+      "lines": 48,
+      "features": ["Variable interpolation", "Conditionals", "Loops", "Mustache-like syntax"],
+      "run": "node template-engine.js",
+      "tutorial": "https://mustache.github.io/",
+      "agent": "WebAppServerQ"
+    },
+    {
+      "name": "Static File Server",
+      "file": "static-server.py",
+      "language": "Python",
+      "lines": 28,
+      "features": ["File serving", "MIME types", "Directory listing"],
+      "run": "python static-server.py",
+      "test": "curl http://localhost:8080",
+      "tutorial": "https://docs.python.org/3/library/http.server.html",
+      "agent": "WebAppServerQ"
+    },
+    {
+      "name": "Middleware System",
+      "file": "middleware.js",
+      "language": "JavaScript",
+      "lines": 38,
+      "features": ["Chain of responsibility", "Request/response pipeline", "next() pattern"],
+      "run": "node middleware.js",
+      "tutorial": "https://expressjs.com/en/guide/using-middleware.html",
+      "agent": "WebAppServerQ"
+    },
+    {
+      "name": "Session Manager",
+      "file": "session-manager.py",
+      "language": "Python",
+      "lines": 52,
+      "features": ["Session creation", "Timeout handling", "Data persistence", "Cleanup"],
+      "run": "python session-manager.py",
+      "tutorial": "https://en.wikipedia.org/wiki/Session_(computer_science)",
+      "agent": "WebAppServerQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates web-app-server-builds",
+    "generate": "@WebAppServerQ Generate minimal code for web framework in Python",
+    "test": "Run each server and test with curl"
+  },
+  "dependencies": {
+    "from": "data-storage-builds",
+    "uses": ["Database for persistence", "Cache for sessions"],
+    "feeds": "BrowserUIQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Browser and UI Builds",
+    "agent": "BrowserUIQ"
+  }
+}

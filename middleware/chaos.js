@@ -13,20 +13,20 @@ export const _chaosMiddleware = (req, res, next) => {
     return next();
   }
 
-  const [type, value] = (chaosHeader || '').split(': ');
+  const [type, value] = (chaosHeader || '').split(':');
   if (!type) {
-    return next();'
-    }
+    return next();
+  }
 
   switch (type) {
     case 'latency': {
-      const delay = Number.parseInt(value, 10) || UI_CONSTANTS.ANIMATION_VERY_SLOW;
+      const delay = Number.parseInt(value, 10) || 1000;
       setTimeout(next, delay);
       return;
     }
 
     case 'error': {
-      const code = Number.parseInt(value, 10) || UI_CONSTANTS.ANIMATION_SLOW;
+      const code = Number.parseInt(value, 10) || 500;
       return res.status(code).json({ error: 'Chaos experiment: forced error' });
     }
 
@@ -36,7 +36,7 @@ export const _chaosMiddleware = (req, res, next) => {
 
     case 'partial':
       if (Math.random() < 0.5) {
-        return res.status(HTTP_STATUS.SERVICE_UNAVAILABLE).json({ error: 'Chaos experiment: random failure' });
+        return res.status(503).json({ error: 'Chaos experiment: random failure' });
       }
       return next();
 

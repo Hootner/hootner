@@ -34,92 +34,64 @@
 </div>
 
 <style>
-  .command-item {
-    padding: 12px 16px;
+  .command-item { padding: 12px 16px;
     cursor: pointer;
     border-bottom: 1px solid var(--border);
-    transition: background 0.2s;
-  }
+    transition: background 0.2s; }
   .command-item:hover,
-  .command-item.selected {
-    background: var(--hover);
-  }
-  .command-item strong {
-    color: var(--accent);
-  }
+  .command-item.selected { background: var(--hover); }
+  .command-item strong { color: var(--accent); }
 </style>
 
 <script>
-  const commandPalette = {
-    visible: false,
+  const commandPalette = { visible: false,
     selectedIndex: 0,
     commands: [
       { name: 'Git: Commit', cmd: 'git commit', desc: 'Commit staged changes' },
-      {
-        name: 'Git: Switch Branch',
+      { name: 'Git: Switch Branch',
         cmd: 'git branch',
-        desc: 'Switch to another branch',
-      },
+        desc: 'Switch to another branch', },
       { name: 'Git: View Log', cmd: 'git log', desc: 'Show commit history' },
-      {
-        name: 'AI: Refactor Code',
+      { name: 'AI: Refactor Code',
         cmd: 'ai refactor',
-        desc: 'Refactor current code',
-      },
-      {
-        name: 'Plugin: Install',
+        desc: 'Refactor current code', },
+      { name: 'Plugin: Install',
         cmd: 'plugin install',
-        desc: 'Browse plugin marketplace',
-      },
+        desc: 'Browse plugin marketplace', },
       { name: 'Theme: Dark', cmd: 'theme dark', desc: 'Switch to dark theme' },
-      {
-        name: 'Theme: Light',
+      { name: 'Theme: Light',
         cmd: 'theme light',
-        desc: 'Switch to light theme',
-      },
-      {
-        name: 'View: Zen Mode',
+        desc: 'Switch to light theme', },
+      { name: 'View: Zen Mode',
         cmd: 'zen mode',
-        desc: 'Toggle distraction-free mode',
-      },
-      {
-        name: 'Format: Document',
+        desc: 'Toggle distraction-free mode', },
+      { name: 'Format: Document',
         cmd: 'format code',
-        desc: 'Format current document',
-      },
+        desc: 'Format current document', },
     ],
 
-    toggle() {
-      this.visible = !this.visible;
+    toggle() { this.visible = !this.visible;
       const palette = document.getElementById('commandPalette');
       palette.style.display = this.visible ? 'block' : 'none';
 
-      if (this.visible) {
-        document.getElementById('commandInput').focus();
-        this.render(this.commands);
-      }
-    },
+      if (this.visible) { document.getElementById('commandInput').focus();
+        this.render(this.commands); } },
 
-    render(commands) {
-      const results = document.getElementById('commandResults');
-      results.innerHTML = commands
+    render(commands) { const results = document.getElementById('commandResults');
+      results.textContent = commands
         .map(
           (cmd, i) => `
-        <div class="command-item ${i === this.selectedIndex ? 'selected' : ''}" 
+        <div class="command-item ${i === this.selectedIndex ? 'selected' : ''}"
              onclick="commandPalette.execute('${cmd.cmd}')">
           <strong>${cmd.name}</strong>
           <div style="font-size:12px; color:var(--text-muted);">${cmd.desc}</div>
         </div>
       `
         )
-        .join('');
-    },
+        .join(''); },
 
-    search(query) {
-      if (!query) {
-        this.render(this.commands);
-        return;
-      }
+    search(query) { if (!query) { this.render(this.commands);
+        return; }
 
       const filtered = featureExpansions
         .fuzzySearch(
@@ -130,19 +102,14 @@
         .filter(Boolean);
 
       this.selectedIndex = 0;
-      this.render(filtered.length > 0 ? filtered : this.commands);
-    },
+      this.render(filtered.length > 0 ? filtered : this.commands); },
 
-    execute(cmd) {
-      featureExpansions.executeCommand(cmd);
-      this.toggle();
-    },
+    execute(cmd) { featureExpansions.executeCommand(cmd);
+      this.toggle(); },
 
-    handleKey(e) {
-      if (!this.visible) return;
+    handleKey(e) { if (!this.visible) return;
 
-      switch (e.key) {
-        case 'ArrowDown':
+      switch (e.key) { case 'ArrowDown':
           e.preventDefault();
           this.selectedIndex = Math.min(this.selectedIndex + 1, this.commands.length - 1);
           this.render(this.commands);
@@ -159,20 +126,11 @@
           break;
         case 'Escape':
           this.toggle();
-          break;
-      }
-    },
-  };
+          break; } }, };
 
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') {
-      e.preventDefault();
-      commandPalette.toggle();
-    }
-    commandPalette.handleKey(e);
-  });
+  document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') { e.preventDefault();
+      commandPalette.toggle(); }
+    commandPalette.handleKey(e); });
 
-  document.getElementById('commandInput')?.addEventListener('input', e => {
-    commandPalette.search(e.target.value);
-  });
+  document.getElementById('commandInput')?.addEventListener('input', e => { commandPalette.search(e.target.value); });
 </script>

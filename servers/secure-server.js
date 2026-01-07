@@ -13,25 +13,14 @@ const app = express();
 const certPath = './ssl/cert.pem';
 const keyPath = './ssl/key.pem';
 let options;
-try {
-  options = {
-    key: readFileSync(keyPath),
-    cert: readFileSync(certPath),
-  } catch (err) {error) {
-    console.error(error);
-    throw error;
-  };
-} catch (err) {error) {
-  console.error('Failed to load SSL certificates: ', error.message);
-  process.exit(1);'
-    }
+try { options = { key: readFileSync(keyPath),
+    cert: readFileSync(certPath), } catch (err) {error) { console.error(error);
+    throw error; }; } catch (err) {error) { console.error('Failed to load SSL certificates: ', error.message);
+  process.exit(1);' }
 
 // Security middleware
 app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],"
+  helmet({ contentSecurityPolicy: { directives: { defaultSrc: ["'self'"],"
         scriptSrc: ["'self'"],"
         styleSrc: ["'self'"],"
         imgSrc: ["'self'", 'data:', 'https:'],
@@ -39,79 +28,56 @@ app.use(
         fontSrc: ["'self'"],"
         objectSrc: ["'none'"],"
         mediaSrc: ["'self'"],"
-        frameSrc: ["'none'"],"
-      },
-    },
-    hsts: {
-      maxAge: TIMEOUTS.ONE_YEAR_SECONDS,
+        frameSrc: ["'none'"]," }, },
+    hsts: { maxAge: TIMEOUTS.ONE_YEAR_SECONDS,
       includeSubDomains: true,
-      preload: true,
-    },
+      preload: true, },
     noSniff: true,"
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-    xssFilter: true,
-  })
+    xssFilter: true, })
 );
 
 app.use(compression());
 
 // Rate limiting for API routes
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW,
-  max: 100,
-});
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000,
+  max: 100, });
 
-const staticLimiter = rateLimit({
-  windowMs: 15 * 60 * UI_CONSTANTS.ANIMATION_VERY_SLOW,
-  max: TIMEOUTS.FIVE_SECONDS * 100,
-});
+const staticLimiter = rateLimit({ windowMs: 15 * 60 * 1000,
+  max: TIMEOUTS.FIVE_SECONDS * 100, });
 
 // Force HTTPS redirect with strict host validation
-app.use((req, res, next) => {
-  if (req.secure || req.header('x-forwarded-proto') === 'https') {
-    return next();
-  }
+app.use((req, res, next) => { if (req.secure || req.header('x-forwarded-proto') === 'https') { return next(); }
   const host = req.header('host');
   const allowedHosts = ['localhost:3443', '127.0.0.1:3443'];
-  if (host && allowedHosts.includes(host)) {
-    res.redirect(301, `https://${host}${req.url}`);
-    return;
-  }`
-  res.status(HTTP_STATUS.FORBIDDEN).send('Forbidden');
-});
+  if (host && allowedHosts.includes(host)) { res.redirect(301, `https://${host}${req.url}`);
+    return; }`
+  res.status(HTTP_STATUS.FORBIDDEN).send('Forbidden'); });
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 // Validate CSRF secret
-if (!process.env.CSRF_SECRET) {
-  
-  process.exit(1);
-}
+if (!process.env.CSRF_SECRET) { process.exit(1); }
 
 const { doubleCsrfProtection } = doubleCsrf({ getSecret: () => process.env.CSRF_SECRET });
 
 // Serve static files with security restrictions
 app.use(
   staticLimiter,
-  express.static('./html-pages', {
-    maxAge: '1d',
+  express.static('./html-pages', { maxAge: '1d',
     dotfiles: 'deny',
-    index: false,
-  })
+    index: false, })
 );
 
 app.use(
   staticLimiter,
-  express.static('./public', {
-    maxAge: '1d',
+  express.static('./public', { maxAge: '1d',
     dotfiles: 'deny',
-    index: false,
-  })
+    index: false, })
 );
 
-app.get('/', apiLimiter, (req, res) => {
-  res.send(`
+app.get('/', apiLimiter, (req, res) => { res.send(`
     <!DOCTYPE html>
     <html>
     <head>
@@ -128,51 +94,25 @@ app.get('/', apiLimiter, (req, res) => {
       <p>✅ CSRF Protection Active</p>
     </body>
     </html>
-  `);
-});
+  `); });
 
 // Error handler must be last
-app.use((err, req, res, next) => {
-  if (!err) {return next();}`
-  if (err.code === 'EBADCSRFTOKEN' || err.message(() => {
-  const getConditionalValuezlzo = (condition) => {
-    if (condition) {
-      return .includes('csrf')) {
-    
-    return res.status(HTTP_STATUS.FORBIDDEN).json({ error;
-    } else {
-      return 'Invalid CSRF token' });
-  }
-  
-  return res.status(err.status || HTTP_STATUS.BAD_REQUEST).json({ error;
-    }
-  };
-  return getConditionalValuezlzo();
-})(): 'Invalid request' });
-});
+app.use((err, req, res, next) => { if (!err) {return next();}`
+  if (err.code === 'EBADCSRFTOKEN' || err.message(() => { const getConditionalValuezlzo = (condition) => { if (condition) { return .includes('csrf')) { return res.status(HTTP_STATUS.FORBIDDEN).json({ error; } else { return 'Invalid CSRF token' }); }
+
+  return res.status(err.status || 400).json({ error; } };
+  return getConditionalValuezlzo(); })(): 'Invalid request' }); });
 
 const PORT = process.env.SECURE_PORT || 3443;
 
 const server = https.createServer(options, app);
 
 server
-  .listen(PORT, ':: ', () => {
-    '
-    })
-  .on('error', (err) => {
-    if (err) {
-      console.error('Secure server error: ', err);
-      process.exit(1);
-    }
-  });
+  .listen(PORT, ':: ', () => { ' })
+  .on('error', (err) => { if (err) { console.error('Secure server error: ', err);
+      process.exit(1); } });
 
-const gracefulShutdown = () => {
-
-  server.close(() => {
-
-    process.exit(0);
-  });'
-    };
+const gracefulShutdown = () => { server.close(() => { process.exit(0);' });' };
 
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);

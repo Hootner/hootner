@@ -1,0 +1,88 @@
+{
+  "category": "Phase 5 Testing",
+  "description": "Advanced testing frameworks: property-based, mutation, fuzzing, chaos, coverage, load, snapshot, contract testing",
+  "templates": [
+    {
+      "name": "Property-Based Testing",
+      "file": "property-testing.js",
+      "description": "Generative testing with shrinking",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Generators", "Shrinking", "Properties", "Random inputs"]
+    },
+    {
+      "name": "Mutation Testing",
+      "file": "mutation-testing.js",
+      "description": "Test quality assessment via mutations",
+      "language": "JavaScript",
+      "lines": 115,
+      "features": ["Mutation operators", "Test effectiveness", "Mutation score", "Shrinking"]
+    },
+    {
+      "name": "Fuzzer",
+      "file": "fuzzer.js",
+      "description": "Automated bug finding with random inputs",
+      "language": "JavaScript",
+      "lines": 98,
+      "features": ["Input generation", "Crash detection", "Mutation", "Coverage tracking"]
+    },
+    {
+      "name": "Chaos Engineering",
+      "file": "chaos-engineering.js",
+      "description": "Resilience testing with fault injection",
+      "language": "JavaScript",
+      "lines": 125,
+      "features": ["Latency injection", "Failure injection", "Resource exhaustion", "Chaos Monkey"]
+    },
+    {
+      "name": "Coverage Analyzer",
+      "file": "coverage-analyzer.js",
+      "description": "Line, branch, function coverage tracking",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["Code instrumentation", "Coverage metrics", "Visual map", "Reports"]
+    },
+    {
+      "name": "Load Testing",
+      "file": "load-testing.js",
+      "description": "Performance testing with concurrent users",
+      "language": "JavaScript",
+      "lines": 108,
+      "features": ["Concurrent users", "Ramp-up", "Latency metrics", "Throughput"]
+    },
+    {
+      "name": "Snapshot Testing",
+      "file": "snapshot-testing.js",
+      "description": "Regression detection via snapshots",
+      "language": "JavaScript",
+      "lines": 115,
+      "features": ["Serialization", "Comparison", "Diff", "Update mode"]
+    },
+    {
+      "name": "Contract Testing",
+      "file": "contract-testing.js",
+      "description": "API compatibility validation",
+      "language": "JavaScript",
+      "lines": 118,
+      "features": ["Schema validation", "Provider/consumer", "Type checking", "Required fields"]
+    },
+    {
+      "name": "Visual Regression Testing",
+      "file": "visual-regression.js",
+      "description": "UI screenshot comparison",
+      "language": "JavaScript",
+      "lines": 95,
+      "features": ["Screenshot capture", "Pixel diff", "Baseline management", "Threshold"]
+    },
+    {
+      "name": "Performance Profiler",
+      "file": "performance-profiler.js",
+      "description": "Runtime performance analysis",
+      "language": "JavaScript",
+      "lines": 105,
+      "features": ["CPU profiling", "Memory tracking", "Flame graphs", "Bottleneck detection"]
+    }
+  ],
+  "totalTemplates": 10,
+  "status": "Complete"
+}

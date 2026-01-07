@@ -1,0 +1,90 @@
+{
+  "category": "Games, Graphics, and Media Builds",
+  "description": "Game engines, graphics, and media processing - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "2D Game Engine",
+      "file": "game-engine.js",
+      "language": "JavaScript",
+      "lines": 58,
+      "features": ["Game loop", "Entity system", "Update/render cycle", "Delta time"],
+      "run": "node game-engine.js",
+      "tutorial": "https://developer.mozilla.org/en-US/docs/Games/Anatomy",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "Physics Engine",
+      "file": "physics-engine.js",
+      "language": "JavaScript",
+      "lines": 88,
+      "features": ["Rigid bodies", "Forces", "Collision detection", "Gravity"],
+      "run": "node physics-engine.js",
+      "tutorial": "https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "3D Rasterizer",
+      "file": "rasterizer.py",
+      "language": "Python",
+      "lines": 78,
+      "features": ["3D projection", "Line drawing", "Triangle rendering", "Perspective"],
+      "run": "python rasterizer.py",
+      "tutorial": "https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "Ray Tracer",
+      "file": "ray-tracer.py",
+      "language": "Python",
+      "lines": 88,
+      "features": ["Ray casting", "Sphere intersection", "3D rendering", "Vector math"],
+      "run": "python ray-tracer.py",
+      "tutorial": "https://raytracing.github.io/",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "Audio Synthesizer",
+      "file": "audio-synth.js",
+      "language": "JavaScript",
+      "lines": 78,
+      "features": ["Waveform generation", "ADSR envelope", "Mixing", "Multiple waveforms"],
+      "run": "node audio-synth.js",
+      "tutorial": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "Video Codec",
+      "file": "video-codec.py",
+      "language": "Python",
+      "lines": 68,
+      "features": ["Frame encoding", "Run-length encoding", "Motion vectors", "Compression"],
+      "run": "python video-codec.py",
+      "tutorial": "https://en.wikipedia.org/wiki/Video_codec",
+      "agent": "GamesGraphicsQ"
+    },
+    {
+      "name": "Image Processor",
+      "file": "image-processor.py",
+      "language": "Python",
+      "lines": 72,
+      "features": ["Grayscale", "Blur", "Edge detection", "Pixel manipulation"],
+      "run": "python image-processor.py",
+      "tutorial": "https://en.wikipedia.org/wiki/Digital_image_processing",
+      "agent": "GamesGraphicsQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates games-graphics-media-builds",
+    "generate": "@GamesGraphicsQ Generate minimal code for game engine in JavaScript",
+    "test": "Run each template to see graphics/physics output"
+  },
+  "dependencies": {
+    "from": "browser-ui-builds",
+    "uses": ["Canvas rendering", "DOM for display"],
+    "feeds": "DevToolsQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Development Tools and Workflow Builds",
+    "agent": "DevToolsQ"
+  }
+}

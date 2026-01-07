@@ -13,3 +13,6 @@ node_modules/
 # Generated files
 coverage/
 .next/
+
+# Training data
+services/massive-training-data/

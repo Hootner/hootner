@@ -1,0 +1,62 @@
+{
+  "category": "Virtualization and Runtime Builds",
+  "description": "VMs, containers, and runtimes - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Virtual Machine",
+      "file": "virtual-machine.c",
+      "language": "C",
+      "lines": 62,
+      "features": ["Stack-based VM", "Bytecode execution", "Basic opcodes"],
+      "compile": "gcc virtual-machine.c -o vm",
+      "run": "./vm",
+      "tutorial": "https://en.wikipedia.org/wiki/Stack_machine",
+      "agent": "VirtualizationRuntimeQ"
+    },
+    {
+      "name": "Container",
+      "file": "container.go",
+      "language": "Go",
+      "lines": 48,
+      "features": ["Namespaces", "Chroot", "Process isolation"],
+      "compile": "go build container.go",
+      "run": "sudo ./container run /bin/bash",
+      "tutorial": "https://www.infoq.com/articles/build-a-container-golang/",
+      "agent": "VirtualizationRuntimeQ"
+    },
+    {
+      "name": "Bytecode VM",
+      "file": "bytecode-vm.py",
+      "language": "Python",
+      "lines": 58,
+      "features": ["Stack machine", "Variables", "Arithmetic ops"],
+      "run": "python bytecode-vm.py",
+      "tutorial": "https://csl.name/post/vm/",
+      "agent": "VirtualizationRuntimeQ"
+    },
+    {
+      "name": "Docker-like Runtime",
+      "file": "docker-like.sh",
+      "language": "Bash",
+      "lines": 52,
+      "features": ["Image management", "Container lifecycle", "Namespace isolation"],
+      "run": "./docker-like.sh create myimage",
+      "tutorial": "https://ericchiang.github.io/post/containers-from-scratch/",
+      "agent": "VirtualizationRuntimeQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates virtualization-runtime-builds",
+    "generate": "@VirtualizationRuntimeQ Generate minimal code for VM in C",
+    "test": "Compile and run each template"
+  },
+  "dependencies": {
+    "from": "language-compilation-builds",
+    "uses": ["Bytecode from compiler", "Runtime execution"],
+    "feeds": "NetworkingCommunicationQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Networking and Communication Builds",
+    "agent": "NetworkingCommunicationQ"
+  }
+}

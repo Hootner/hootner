@@ -1,0 +1,430 @@
+git init creates new repository
+git clone url downloads repository
+git add file stages changes
+git commit message saves changes
+git push uploads to remote
+git pull downloads updates
+git branch lists branches
+git checkout branch switches branch
+git merge branch combines branches
+git status shows current state
+git log shows commit history
+git diff shows changes
+
+npm install installs dependencies
+npm start runs application
+npm test runs tests
+npm run build creates production build
+npm init creates package json
+npm install package adds dependency
+npm uninstall package removes dependency
+npm update updates packages
+npm audit checks security
+npm run script executes custom script
+
+docker build builds image
+docker run starts container
+docker ps lists containers
+docker stop stops container
+docker rm removes container
+docker images lists images
+docker pull downloads image
+docker push uploads image
+docker compose up starts services
+docker compose down stops services
+docker exec runs command in container
+docker logs shows container logs
+
+kubectl get pods lists pods
+kubectl apply file creates resources
+kubectl delete removes resources
+kubectl describe shows details
+kubectl logs shows pod logs
+kubectl exec runs command in pod
+kubectl port forward exposes port
+kubectl scale changes replicas
+kubectl rollout manages deployments
+kubectl get services lists services
+
+console log prints to console
+console error prints error
+console warn prints warning
+console table prints table
+console time starts timer
+console timeEnd ends timer
+
+const variable declares constant
+let variable declares mutable
+var variable declares function scoped
+function name defines function
+arrow function shorthand syntax
+async function returns promise
+await waits for promise
+try catch handles errors
+throw error raises error
+return value exits function
+
+if condition executes conditionally
+else alternative branch
+else if multiple conditions
+switch case multiple branches
+for loop iterates count
+while loop iterates condition
+do while executes then checks
+for of iterates values
+for in iterates keys
+break exits loop
+continue skips iteration
+
+array push adds element
+array pop removes last
+array shift removes first
+array unshift adds first
+array slice copies portion
+array splice modifies array
+array map transforms elements
+array filter selects elements
+array reduce accumulates value
+array find finds element
+array includes checks existence
+array sort orders elements
+array reverse reverses order
+array join combines to string
+array split divides string
+
+object keys gets keys
+object values gets values
+object entries gets pairs
+object assign copies properties
+object freeze prevents changes
+object seal prevents additions
+spread operator copies object
+destructuring extracts properties
+
+string length gets length
+string toUpperCase converts uppercase
+string toLowerCase converts lowercase
+string trim removes whitespace
+string split divides to array
+string replace changes text
+string includes checks substring
+string startsWith checks prefix
+string endsWith checks suffix
+string substring extracts portion
+string indexOf finds position
+string slice extracts section
+template literals embed expressions
+
+promise then handles success
+promise catch handles error
+promise finally runs always
+promise all waits for all
+promise race waits for first
+promise resolve creates resolved
+promise reject creates rejected
+
+async await simplifies promises
+fetch makes http request
+axios makes http request
+response json parses json
+response text gets text
+request headers sets headers
+request body sends data
+
+express app creates server
+app get defines route
+app post handles post
+app put handles update
+app delete handles delete
+app use adds middleware
+app listen starts server
+req params gets url params
+req query gets query params
+req body gets request body
+res send sends response
+res json sends json
+res status sets status code
+res redirect redirects request
+
+react useState manages state
+react useEffect runs side effects
+react useContext accesses context
+react useRef creates reference
+react useMemo memoizes value
+react useCallback memoizes function
+react useReducer manages complex state
+jsx syntax combines html javascript
+props passes data to components
+state manages component data
+component renders ui
+hooks add functionality
+
+sql select retrieves data
+sql insert adds data
+sql update modifies data
+sql delete removes data
+sql where filters rows
+sql join combines tables
+sql inner join matches both
+sql left join includes left
+sql right join includes right
+sql group by aggregates data
+sql order by sorts results
+sql limit restricts count
+sql count counts rows
+sql sum adds values
+sql avg calculates average
+sql max finds maximum
+sql min finds minimum
+
+mongodb find queries documents
+mongodb insertOne adds document
+mongodb updateOne modifies document
+mongodb deleteOne removes document
+mongodb aggregate pipelines data
+mongodb match filters documents
+mongodb group aggregates data
+mongodb sort orders results
+mongodb limit restricts count
+mongodb skip skips documents
+mongodb project selects fields
+
+redis set stores value
+redis get retrieves value
+redis del deletes key
+redis expire sets expiration
+redis incr increments number
+redis lpush adds to list
+redis rpush appends to list
+redis lpop removes from list
+redis sadd adds to set
+redis smembers gets set members
+redis hset sets hash field
+redis hget gets hash field
+
+python print outputs text
+python input gets user input
+python len gets length
+python range creates sequence
+python list creates list
+python dict creates dictionary
+python set creates set
+python tuple creates tuple
+python append adds element
+python extend adds multiple
+python remove deletes element
+python pop removes element
+python sort orders list
+python reverse reverses list
+python split divides string
+python join combines strings
+python strip removes whitespace
+python replace changes text
+python format formats string
+python open opens file
+python read reads file
+python write writes file
+python close closes file
+python with manages resources
+python try except handles errors
+python raise throws error
+python class defines class
+python def defines function
+python return exits function
+python import includes module
+python from imports specific
+python as renames import
+python if conditional
+python elif alternative condition
+python else default branch
+python for iterates sequence
+python while loops condition
+python break exits loop
+python continue skips iteration
+python pass does nothing
+python lambda creates function
+python map transforms sequence
+python filter selects elements
+python reduce accumulates value
+
+java public class defines class
+java private restricts access
+java protected limits access
+java static belongs to class
+java final prevents change
+java void returns nothing
+java return exits method
+java new creates object
+java this refers to instance
+java super refers to parent
+java extends inherits class
+java implements uses interface
+java interface defines contract
+java abstract requires implementation
+java override replaces method
+java try catch handles errors
+java throw raises exception
+java finally runs always
+java import includes package
+java package organizes classes
+java main entry point
+java system out println prints
+java scanner reads input
+java arraylist dynamic array
+java hashmap key value store
+java hashset unique values
+java string text data
+java integer number wrapper
+java boolean true false
+java if conditional
+java else alternative
+java for loop iteration
+java while loop condition
+java switch multiple branches
+java break exits loop
+java continue skips iteration
+
+error cannot find module missing dependency
+error port already in use change port
+error permission denied use sudo
+error syntax error check syntax
+error undefined variable declare variable
+error null pointer check null
+error type error check types
+error network error check connection
+error timeout increase timeout
+error out of memory increase memory
+error stack overflow reduce recursion
+error file not found check path
+error access denied check permissions
+error connection refused check server
+error invalid json check format
+
+npm err missing script add script
+npm err peer dependency install peer
+npm err enoent no such file check path
+npm err code elifecycle build failed
+docker error cannot connect check daemon
+docker error port in use change port
+git error merge conflict resolve conflict
+git error permission denied check ssh
+kubernetes error imagepullbackoff check image
+kubernetes error crashloopbackoff check logs
+
+package json defines project
+package json dependencies lists packages
+package json scripts defines commands
+package json main entry point
+package json version project version
+tsconfig json typescript config
+tsconfig json compilerOptions compiler settings
+eslintrc json linting rules
+prettierrc json formatting rules
+dockerfile defines image
+docker compose yml defines services
+kubernetes yaml defines resources
+gitignore excludes files
+readme md project documentation
+license md legal terms
+contributing md contribution guide
+changelog md version history
+
+function returns value exits function
+async function returns promise
+arrow function concise syntax
+callback function passed as argument
+higher order function takes function
+closure function remembers scope
+recursion function calls itself
+pure function no side effects
+impure function has side effects
+memoization caches results
+currying partial application
+composition combines functions
+pipe chains functions
+debounce delays execution
+throttle limits frequency
+
+class blueprint for objects
+constructor initializes object
+method function in class
+property data in object
+inheritance extends class
+polymorphism multiple forms
+encapsulation hides details
+abstraction simplifies complexity
+interface defines contract
+abstract class partial implementation
+static method belongs to class
+instance method belongs to object
+getter retrieves property
+setter modifies property
+private hidden from outside
+public accessible everywhere
+protected accessible in hierarchy
+
+array ordered collection
+object key value pairs
+set unique values
+map key value with any key
+stack last in first out
+queue first in first out
+linked list connected nodes
+tree hierarchical structure
+graph connected nodes
+hash table fast lookup
+heap priority queue
+trie prefix tree
+
+algorithm step by step solution
+time complexity execution time
+space complexity memory usage
+big o notation growth rate
+constant o1 same time
+logarithmic olog n divides half
+linear on proportional to n
+quadratic on2 nested loops
+exponential o2n doubles each
+sorting arranges order
+searching finds element
+recursion calls itself
+iteration repeats steps
+dynamic programming stores results
+greedy chooses best now
+divide conquer splits problem
+backtracking tries possibilities
+brute force tries everything
+
+rest api uses http methods
+get retrieves data
+post creates data
+put updates data
+delete removes data
+patch partially updates
+status 200 success
+status 201 created
+status 400 bad request
+status 401 unauthorized
+status 403 forbidden
+status 404 not found
+status 500 server error
+json data format
+xml data format
+authentication verifies identity
+authorization checks permissions
+jwt json web token
+oauth delegated authorization
+api key simple authentication
+bearer token authorization header
+cors cross origin requests
+rate limiting prevents abuse
+pagination splits results
+caching stores responses
+versioning manages changes
+
+the hootner platform uses these common patterns and commands throughout the codebase
+developers can reference these examples when building features
+the training data helps the ai understand practical usage
+code snippets demonstrate real world applications
+error messages help with troubleshooting
+commands enable automation and workflows

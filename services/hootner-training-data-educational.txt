@@ -1,0 +1,217 @@
+foundational builds hardware and low level emulation
+build your own cpu emulator tutorial series
+learn assembly language programming from scratch
+how to create a linker step by step guide
+debugging techniques for low level code
+understanding machine code and disassembly
+
+language and compilation builds
+creating your first programming language tutorial
+compiler design fundamentals explained
+interpreter vs compiler which to build first
+just in time compilation deep dive
+garbage collection algorithms comparison
+regex engine implementation guide
+building a scripting language for beginners
+
+operating system and kernel builds
+operating system development from scratch
+writing a bootloader in assembly
+microkernel vs monolithic kernel design
+process scheduling algorithms explained
+memory management and allocation strategies
+file system implementation tutorial
+building a unix like shell
+
+virtualization and runtime builds
+virtual machine architecture overview
+hypervisor development guide
+container runtime internals explained
+kubernetes orchestration tutorial
+building a javascript runtime like nodejs
+sandboxing untrusted code safely
+
+networking and communication builds
+tcp ip stack implementation guide
+building a dns server from scratch
+software defined networking tutorial
+firewall development and packet filtering
+iot protocol design patterns
+message broker architecture like kafka
+api gateway implementation guide
+load balancing algorithms explained
+
+data storage and management builds
+relational database internals
+building a key value store like redis
+nosql database design patterns
+graph database implementation guide
+distributed file system architecture
+orm design and implementation
+bloom filter data structure tutorial
+hash table collision resolution strategies
+
+web and application server builds
+http server implementation from scratch
+web framework design patterns
+static site generator tutorial
+template engine internals
+oauth2 authentication flow explained
+rate limiting strategies and algorithms
+background job processing with task queues
+
+browser and ui builds
+browser rendering engine architecture
+virtual dom implementation guide
+building a text editor from scratch
+gui toolkit design patterns
+window manager development
+ide features and implementation
+
+games graphics and media builds
+game engine architecture overview
+3d rendering pipeline explained
+physics engine implementation guide
+audio processing fundamentals
+vr rendering techniques
+voxel engine like minecraft tutorial
+computer vision basics
+
+development tools and workflow builds
+package manager design patterns
+version control system internals like git
+ci cd pipeline implementation
+code profiling and optimization
+static analysis tool development
+monitoring and metrics collection
+logging framework architecture
+
+advanced and specialized builds
+search engine indexing algorithms
+machine learning framework from scratch
+neural network implementation guide
+recommendation system algorithms
+blockchain technology explained
+consensus algorithms comparison
+smart contract development
+cryptocurrency implementation guide
+encryption algorithm design
+compression techniques overview
+quantum computing simulation
+actor model concurrency patterns
+bittorrent protocol implementation
+
+learning path suggestions
+start with cpu emulator to understand execution
+build assembler and linker for toolchain
+create simple interpreter before compiler
+implement basic os kernel after understanding assembly
+add networking stack to enable communication
+build database for persistent storage
+create web server to serve applications
+develop browser engine for rendering
+implement game engine for graphics
+build ml framework for ai features
+
+project progression examples
+beginner build cpu emulator then assembler
+intermediate create programming language with compiler
+advanced develop full operating system with networking
+expert build distributed system with blockchain
+
+tutorial series ideas
+from assembly to operating system complete guide
+building a full stack web framework series
+game engine development step by step
+machine learning from scratch tutorial
+blockchain and cryptocurrency implementation course
+
+common learning questions
+how do i start building a compiler
+what order should i learn these projects
+which project teaches the most fundamentals
+how long does it take to build an os
+what prerequisites do i need for each project
+
+skill progression tracking
+completed cpu emulator ready for assembler
+finished compiler moving to os kernel
+built web server now learning databases
+implemented ml framework exploring neural networks
+
+project dependencies explained
+compiler requires understanding of parsing
+os needs knowledge of assembly and memory
+web framework builds on networking stack
+game engine uses graphics and physics
+blockchain combines cryptography and networking
+
+troubleshooting common issues
+debugging assembly code techniques
+fixing memory leaks in os kernel
+optimizing compiler performance
+resolving networking stack bugs
+database query optimization strategies
+
+best practices and patterns
+modular design for maintainability
+test driven development for reliability
+documentation standards for clarity
+version control workflow for collaboration
+code review process for quality
+
+community collaboration opportunities
+open source project contributions
+pair programming on complex builds
+code review and feedback exchange
+knowledge sharing through tutorials
+mentoring beginners on foundational projects
+
+real world applications
+how these projects apply to industry
+career paths for systems programmers
+portfolio building with custom projects
+interview preparation through building
+understanding production systems deeply
+
+advanced topics and research
+cutting edge compiler optimizations
+novel consensus algorithms
+quantum resistant cryptography
+next generation networking protocols
+ai powered development tools
+
+integration and ecosystem
+connecting multiple projects together
+building full application stacks
+microservices architecture patterns
+distributed systems design
+cloud native development practices
+
+performance and optimization
+profiling and benchmarking techniques
+algorithmic complexity analysis
+memory optimization strategies
+parallel processing patterns
+caching and performance tuning
+
+security considerations
+secure coding practices
+vulnerability prevention
+cryptographic implementations
+authentication and authorization
+threat modeling and mitigation
+
+the hootner platform enables creators to share these educational journeys
+learn by building real projects from scratch
+follow structured learning paths with video tutorials
+collaborate with other learners in real time
+track your progress through project milestones
+get ai powered recommendations for next projects
+access code examples and implementations
+join live coding sessions and workshops
+build portfolio with completed projects
+connect with mentors and experts
+share your own tutorials and guides
+participate in coding challenges
+explore advanced topics at your pace

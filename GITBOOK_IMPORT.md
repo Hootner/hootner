@@ -77,9 +77,7 @@ After import:
 Before publishing, update your GitHub URL in `book.json`:
 
 ```json
-"github": {
-  "url": "https://github.com/YOUR-USERNAME/hootner"
-}
+"github": { "url": "https://github.com/YOUR-USERNAME/hootner" }
 ```
 
 Replace `YOUR-USERNAME` with your actual GitHub username.
@@ -111,7 +109,7 @@ https://docs.hootner.com
 
 ## 💡 Pro Tips
 
-1. **Enable Auto-Sync**: 
+1. **Enable Auto-Sync**:
    - Settings → Integrations → GitHub
    - Enable "Sync on push"
 

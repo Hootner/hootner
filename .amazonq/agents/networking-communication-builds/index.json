@@ -1,0 +1,85 @@
+{
+  "category": "Networking and Communication Builds",
+  "description": "Protocols and servers - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "TCP Server",
+      "file": "tcp-server.py",
+      "language": "Python",
+      "lines": 24,
+      "features": ["Socket programming", "Echo server", "Connection handling"],
+      "run": "python tcp-server.py",
+      "test": "telnet localhost 8080",
+      "tutorial": "https://realpython.com/python-sockets/",
+      "agent": "NetworkingCommunicationQ"
+    },
+    {
+      "name": "HTTP Server",
+      "file": "http-server.js",
+      "language": "JavaScript",
+      "lines": 22,
+      "features": ["HTTP protocol", "Routing", "JSON responses"],
+      "run": "node http-server.js",
+      "test": "curl http://localhost:3000",
+      "tutorial": "https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/",
+      "agent": "NetworkingCommunicationQ"
+    },
+    {
+      "name": "WebSocket Server",
+      "file": "websocket-server.py",
+      "language": "Python",
+      "lines": 26,
+      "features": ["WebSocket protocol", "Broadcasting", "Async handling"],
+      "run": "python websocket-server.py",
+      "requires": "pip install websockets",
+      "tutorial": "https://websockets.readthedocs.io/",
+      "agent": "NetworkingCommunicationQ"
+    },
+    {
+      "name": "DNS Resolver",
+      "file": "dns-resolver.py",
+      "language": "Python",
+      "lines": 52,
+      "features": ["DNS queries", "UDP sockets", "Packet parsing"],
+      "run": "python dns-resolver.py",
+      "tutorial": "https://implement-dns.wizardzines.com/",
+      "agent": "NetworkingCommunicationQ"
+    },
+    {
+      "name": "Chat Server",
+      "file": "chat-server.js",
+      "language": "JavaScript",
+      "lines": 35,
+      "features": ["Multi-client", "Broadcasting", "TCP sockets"],
+      "run": "node chat-server.js",
+      "test": "telnet localhost 9000",
+      "tutorial": "https://nodejs.org/api/net.html",
+      "agent": "NetworkingCommunicationQ"
+    },
+    {
+      "name": "REST API",
+      "file": "rest-api.js",
+      "language": "JavaScript",
+      "lines": 48,
+      "features": ["CRUD operations", "JSON API", "HTTP methods"],
+      "run": "node rest-api.js",
+      "test": "curl http://localhost:4000/items",
+      "tutorial": "https://restfulapi.net/",
+      "agent": "NetworkingCommunicationQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates networking-communication-builds",
+    "generate": "@NetworkingCommunicationQ Generate minimal code for TCP server in Python",
+    "test": "Run each server and test with curl/telnet"
+  },
+  "dependencies": {
+    "from": "virtualization-runtime-builds",
+    "uses": ["Runtime for server execution"],
+    "feeds": "DataStorageQ for next layer"
+  },
+  "nextLayer": {
+    "category": "Data Storage and Management Builds",
+    "agent": "DataStorageQ"
+  }
+}

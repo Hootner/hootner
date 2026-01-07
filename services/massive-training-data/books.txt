@@ -1,0 +1,20 @@
+Structure and Interpretation of Computer Programs teaches fundamental programming concepts
+The Art of Computer Programming by Donald Knuth covers algorithms comprehensively
+Clean Code by Robert Martin explains writing maintainable code
+Design Patterns by Gang of Four documents reusable object oriented solutions
+Introduction to Algorithms provides comprehensive algorithm analysis
+The Pragmatic Programmer offers practical software development advice
+Code Complete covers software construction best practices
+Refactoring improves existing code without changing behavior
+Working Effectively with Legacy Code helps maintain old systems
+Domain Driven Design connects software to business domains
+Test Driven Development writes tests before implementation
+Continuous Delivery automates software release process
+Site Reliability Engineering ensures system reliability
+Building Microservices designs distributed systems
+Designing Data Intensive Applications handles big data
+The Phoenix Project teaches DevOps through narrative
+The Mythical Man Month discusses software project management
+Peopleware addresses human factors in software development
+The Lean Startup applies lean principles to startups
+Zero to One discusses building innovative companies

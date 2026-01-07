@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,56 +7,33 @@
     <link rel="stylesheet" href="shared-styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      * {
-        margin: 0;
+      * { margin: 0;
         padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Segoe UI', sans-serif;
+        box-sizing: border-box; }
+      body { font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
         min-height: 100vh;
-        margin: 0;
-      }
-      .notif-item {
-        padding: 12px 16px;
+        margin: 0; }
+      .notif-item { padding: 12px 16px;
         border-bottom: 1px solid rgba(0, 255, 0, 0.1);
         cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 0, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.05);
-        border-left: 3px solid #00ffff;
-      }
-      #notif-dropdown::-webkit-scrollbar {
-        width: 6px;
-      }
-      #notif-dropdown::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-      }
-      #notif-dropdown::-webkit-scrollbar-thumb {
-        background: rgba(0, 255, 0, 0.5);
-        border-radius: 3px;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      h1 {
-        font-size: 32px;
+        transition: background 0.2s; }
+      .notif-item:hover { background: rgba(0, 255, 0, 0.05); }
+      .notif-item.unread { background: rgba(0, 255, 255, 0.05);
+        border-left: 3px solid #00ffff; }
+      #notif-dropdown::-webkit-scrollbar { width: 6px; }
+      #notif-dropdown::-webkit-scrollbar-track { background: rgba(0, 255, 0, 0.1); }
+      #notif-dropdown::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.5);
+        border-radius: 3px; }
+      .container { max-width: 1200px;
+        margin: 0 auto; }
+      h1 { font-size: 32px;
         margin-bottom: 32px;
         color: #00ff00;
-        text-shadow: 0 0 10px #00ff00;
-      }
-      .layout {
-        display: flex;
-        gap: 24px;
-      }
-      .sidebar {
-        width: 256px;
+        text-shadow: 0 0 10px #00ff00; }
+      .layout { display: flex;
+        gap: 24px; }
+      .sidebar { width: 256px;
         background: rgba(10, 10, 15, 0.8);
         border-radius: 8px;
         box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
@@ -66,10 +43,8 @@
           linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
-        background-clip: padding-box, border-box;
-      }
-      .nav-item {
-        width: 100%;
+        background-clip: padding-box, border-box; }
+      .nav-item { width: 100%;
         text-align: left;
         padding: 12px 16px;
         border: none;
@@ -78,18 +53,12 @@
         cursor: pointer;
         font-size: 14px;
         color: #00ff00;
-        transition: all 0.3s;
-      }
-      .nav-item:hover {
-        background: rgba(0, 255, 0, 0.2);
-      }
-      .nav-item.active {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        transition: all 0.3s; }
+      .nav-item:hover { background: rgba(0, 255, 0, 0.2); }
+      .nav-item.active { background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: white;
-        font-weight: 600;
-      }
-      .content {
-        flex: 1;
+        font-weight: 600; }
+      .content { flex: 1;
         background: rgba(10, 10, 15, 0.8);
         border-radius: 8px;
         box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
@@ -99,25 +68,17 @@
           linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
-        background-clip: padding-box, border-box;
-      }
-      .content h2 {
-        font-size: 20px;
+        background-clip: padding-box, border-box; }
+      .content h2 { font-size: 20px;
         margin-bottom: 16px;
-        color: #00ff00;
-      }
-      .form-group {
-        margin-bottom: 16px;
-      }
-      label {
-        display: block;
+        color: #00ff00; }
+      .form-group { margin-bottom: 16px; }
+      label { display: block;
         font-size: 14px;
         font-weight: 500;
         margin-bottom: 4px;
-        color: #00ffff;
-      }
-      input {
-        width: 100%;
+        color: #00ffff; }
+      input { width: 100%;
         padding: 10px 12px;
         border: 2px solid transparent;
         background-image:
@@ -127,112 +88,118 @@
         background-clip: padding-box, border-box;
         border-radius: 4px;
         font-size: 14px;
-        color: #00ff00;
-      }
-      .save-btn {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: #00ff00; }
+      .save-btn { background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: white;
         padding: 10px 16px;
         border: none;
         border-radius: 6px;
         cursor: pointer;
         margin-top: 8px;
-        transition: all 0.3s;
-      }
-      .save-btn:hover {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-      }
-      .error {
-        color: #ff00ff;
+        transition: all 0.3s; }
+      .save-btn:hover { background: linear-gradient(135deg, #ff00ff, #ffff00); }
+      .error { color: #ff00ff;
         font-size: 14px;
-        margin-bottom: 8px;
-      }
-      .hidden {
-        display: none;
-      }
-      .bg-slate-900 {
-        background-color: rgb(15 23 42);
-      }
-      .border-b {
-        border-bottom-width: 1px;
-      }
-      .border-slate-700 {
-        border-color: rgb(51 65 85);
-      }
-      .sticky {
-        position: sticky;
-      }
-      .top-0 {
-        top: 0;
-      }
-      .z-50 {
-        z-index: 50;
-      }
-      .flex {
-        display: flex;
-      }
-      .gap-2 {
-        gap: 0.5rem;
-      }
-      .items-center {
-        align-items: center;
-      }
-      .px-3 {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-      }
-      .py-2 {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-      }
-      .text-slate-300 {
-        color: rgb(203 213 225);
-      }
-      .hover\:text-white:hover {
-        color: rgb(255 255 255);
-      }
-      .text-green-400 {
-        color: rgb(74 222 128);
-      }
-      .font-medium {
-        font-weight: 500;
-      }
+        margin-bottom: 8px; }
+      .hidden { display: none; }
+      .bg-slate-900 { background-color: rgb(15 23 42); }
+      .border-b { border-bottom-width: 1px; }
+      .border-slate-700 { border-color: rgb(51 65 85); }
+      .sticky { position: sticky; }
+      .top-0 { top: 0; }
+      .z-50 { z-index: 50; }
+      .flex { display: flex; }
+      .gap-2 { gap: 0.5rem; }
+      .items-center { align-items: center; }
+      .px-3 { padding-left: 0.75rem;
+        padding-right: 0.75rem; }
+      .py-2 { padding-top: 0.5rem;
+        padding-bottom: 0.5rem; }
+      .text-slate-300 { color: rgb(203 213 225); }
+      .hover\:text-white:hover { color: rgb(255 255 255); }
+      .text-green-400 { color: rgb(74 222 128); }
+      .font-medium { font-weight: 500; }
     </style>
 
     <style>
       /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
+      body { padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important; }
+      nav { height: 70px !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
+        z-index: 1000 !important; }
+      .main-content { margin-top: 0 !important;
+        padding: 20px !important; }
     </style>
 
     <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
+      html { font-size: 12px !important; }
+      body { zoom: 0.75 !important;
         transform: scale(0.75) !important;
         transform-origin: 0 0 !important;
-        width: 133% !important;
-      }
+        width: 133% !important; }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
   <body>
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+<style>
+:root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+.dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+.dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+.dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+.dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+.nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+.notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+.notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+.notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+.notification-dropdown.show{display:block}
+.notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+.notification-item:hover{background:var(--dashboard-hover)}
+.notification-item:last-child{border-bottom:none}
+</style>
+<div class="dashboard-header">
+<nav class="dashboard-nav">
+<div style="display:flex;gap:1rem;flex-wrap:wrap">
+<a href="dashboard.html" class="nav-btn">Dashboard</a>
+<a href="video-player.html" class="nav-btn">Video Player</a>
+<a href="code-editor.html" class="nav-btn">Code Editor</a>
+<a href="marketplace.html" class="nav-btn">Marketplace</a>
+<a href="profile.html" class="nav-btn">Profile</a>
+<a href="settings.html" class="nav-btn active">Settings</a>
+<a href="feed-react.html" class="nav-btn">Feed</a>
+<a href="login.html" class="nav-btn">Login</a>
+<a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+<a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+<a href="design-showcase.html" class="nav-btn">Showcase</a>
+<a href="test-page-clean.html" class="nav-btn">Test</a>
+</div>
+<div style="position:relative">
+<div class="notification-bell" onclick="toggleNotifications()">
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+</svg>
+<span class="notification-badge">3</span>
+</div>
+<div class="notification-dropdown" id="notificationDropdown">
+<div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+<div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+<div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+</div>
+</div>
+</nav>
+</div>
+<script>
+(function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+</script>
+<nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="display:none">
       <div
         style="
           padding: 12px 20px;
@@ -253,7 +220,7 @@
               text-decoration: none;
               margin-left: 0;
             "
-            >🦉 HOOTNER</a
+            >?? HOOTNER</a
           >
           <div style="position: relative">
             <button
@@ -269,7 +236,7 @@
               "
               title="Notifications"
             >
-              🔔
+              ??
               <span
                 id="notif-badge"
                 style="
@@ -347,7 +314,7 @@
                       "
                       title="Toggle sound"
                     >
-                      🔔
+                      ??
                     </button>
                     <button
                       onclick="clearAllNotifications()"
@@ -360,7 +327,7 @@
                       "
                       title="Clear all"
                     >
-                      🗑️
+                      ???
                     </button>
                     <button
                       onclick="markAllRead()"
@@ -380,7 +347,7 @@
                   type="text"
                   id="notif-search"
                   oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
+                  placeholder="?? Search notifications..."
                   style="
                     width: 100%;
                     padding: 8px;
@@ -423,7 +390,7 @@
                       cursor: pointer;
                     "
                   >
-                    ❤️ Likes
+                    ?? Likes
                   </button>
                   <button
                     class="notif-filter"
@@ -439,7 +406,7 @@
                       cursor: pointer;
                     "
                   >
-                    💬 Comments
+                    ?? Comments
                   </button>
                   <button
                     class="notif-filter"
@@ -455,7 +422,7 @@
                       cursor: pointer;
                     "
                   >
-                    👤 Follows
+                    ?? Follows
                   </button>
                   <button
                     class="notif-filter"
@@ -471,7 +438,7 @@
                       cursor: pointer;
                     "
                   >
-                    ⚠️ System
+                    ?? System
                   </button>
                 </div>
               </div>
@@ -507,7 +474,7 @@
                 >
                   Load more
                 </button>
-                <span style="color: #6b7280">•</span>
+                <span style="color: #6b7280">�</span>
                 <a
                   href="#"
                   style="color: #00ffff; font-size: 13px; text-decoration: none"
@@ -522,61 +489,61 @@
             href="profile.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >👤 Profile</a
+            >?? Profile</a
           >
           <a
             href="design-showcase.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🎨 Design</a
+            >?? Design</a
           >
           <a
             href="feed.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📰 Social</a
+            >?? Social</a
           >
           <a
             href="marketplace.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🛒 Marketplace</a
+            >?? Marketplace</a
           >
           <a
             href="dashboard.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >📈 Dashboard</a
+            >?? Dashboard</a
           >
           <a
             href="video-player.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >▶️ Video</a
+            >?? Video</a
           >
           <a
             href="auto-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
+            >?? Editor</a
           >
           <a
             href="code-editor.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >💻 Code</a
+            >?? Code</a
           >
           <a
             href="settings.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-green-400 font-medium"
-            >⚙️ Settings</a
+            >?? Settings</a
           >
           <a
             href="login.html"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
-            >🔐 Login</a
+            >?? Login</a
           >
         </div>
       </div>
@@ -704,47 +671,35 @@
     </div>
 
     <script>
-      function showTab(tab) {
-        document
+      function showTab(tab) { document
           .querySelectorAll('.nav-item')
           .forEach(el => el.classList.remove('active'));
         event.target.classList.add('active');
         document
           .querySelectorAll('[id$="-tab"]')
           .forEach(el => el.classList.add('hidden'));
-        document.getElementById(tab + '-tab').classList.remove('hidden');
-      }
+        document.getElementById(tab + '-tab').classList.remove('hidden'); }
 
-      function saveProfile() {
-        const username = document.getElementById('username').value;
+      function saveProfile() { const username = document.getElementById('username').value;
         const email = document.getElementById('email').value;
         const error = document.getElementById('error');
 
         error.classList.add('hidden');
 
-        if (username && !/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-          error.textContent = 'Invalid username format';
+        if (username && !/^[a-zA-Z0-9_]{3,30}$/.test(username)) { error.textContent = 'Invalid username format';
           error.classList.remove('hidden');
-          return;
-        }
+          return; }
 
-        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          error.textContent = 'Invalid email format';
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { error.textContent = 'Invalid email format';
           error.classList.remove('hidden');
-          return;
-        }
+          return; }
 
-        alert('Settings saved!');
-      }
+        alert('Settings saved!'); }
 
-      function sendResetLink() {
-        const email = document.getElementById('reset-email').value;
-        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          document.getElementById('reset-success').classList.remove('hidden');
-          document.getElementById('reset-email').value = '';
-        }
-      }
+      function sendResetLink() { const email = document.getElementById('reset-email').value;
+        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('reset-success').classList.remove('hidden');
+          document.getElementById('reset-email').value = ''; } }
     </script>
     <div class="main-content"><script src="notifications.js"></script></div>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

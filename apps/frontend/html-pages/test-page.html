@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Test Page - HOOTNER</title>
+ <link rel="stylesheet" href="design-system.css">
+
+</head>
+<body>
+ <!-- Header with inline styles -->
+ <div class="header">
+ <h1>HOOTNER Test</h1>
+ <nav class="nav">
+ <a href="#">Dashboard</a>
+ <a href="#">Settings</a>
+ <a href="#">Profile</a>
+ </nav>
+ </div>
+
+ <!-- Main content -->
+ <div class="container">
+ <h2>Test Page</h2>
+ 
+ <!-- Cards with mixed inline and class styles -->
+ <div class="grid">
+ <div class="card">
+ <h3>Card 1</h3>
+ <p>This card has inline styles mixed with classes.</p>
+ <button class="btn">Action</button>
+ </div>
+ 
+ <div class="card">
+ <h3>Card 2</h3>
+ <p>This card uses mostly classes.</p>
+ <button class="btn-secondary btn">Secondary</button>
+ </div>
+ 
+ <div class="card">
+ <h3>Card 3</h3>
+ <p>Mixed approach here too.</p>
+ <div>
+ <button class="btn">Save</button>
+ <button class="btn-secondary btn">Cancel</button>
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Form section -->
+ <div class="card">
+ <h3>Form Example</h3>
+ <form>
+ <div class="form-group">
+ <label class="label" for="name">Name</label>
+ <input type="text" id="name" class="input" placeholder="Enter name">
+ </div>
+ 
+ <div class="form-group">
+ <label class="label" for="email">Email</label>
+ <input type="email" id="email" class="input" placeholder="Enter email">
+ </div>
+ 
+ <div>
+ <button type="submit" class="btn">Submit</button>
+ <button type="button" class="btn-secondary btn">Reset</button>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <script>
+ // Inline script example
+ console.log('Test page loaded');
+ 
+ document.querySelectorAll('.btn').forEach(btn => {
+ btn.addEventListener('click', (e) => {
+ if (e.target.textContent !== 'Submit') {
+ e.preventDefault();
+ console.log('Button clicked:', e.target.textContent);
+ }
+ });
+ });
+ </script>
+</body>
+</html>

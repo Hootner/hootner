@@ -1,6 +1,4 @@
-{
-  "security": {
-    "enabled": true,
+{ "security": { "enabled": true,
     "standards": ["OWASP Top 10", "AWS Best Practices", "CWE Top 25"],
     "checks": [
       "SQL Injection",
@@ -13,21 +11,13 @@
       "Insecure Dependencies",
       "Insufficient Logging",
       "Server-Side Request Forgery"
-    ]
-  },
-  "compliance": {
-    "frameworks": ["OWASP", "AWS Well-Architected", "NIST"],
+    ] },
+  "compliance": { "frameworks": ["OWASP", "AWS Well-Architected", "NIST"],
     "autoFix": true,
-    "severity": {
-      "critical": "block",
+    "severity": { "critical": "block",
       "high": "warn",
       "medium": "info",
-      "low": "info"
-    }
-  },
-  "scanSchedule": {
-    "onCommit": true,
+      "low": "info" } },
+  "scanSchedule": { "onCommit": true,
     "onPR": true,
-    "periodic": "weekly"
-  }
-}
+    "periodic": "weekly" } }

@@ -1,7 +1,7 @@
 /**
  * Electron Renderer Process
  * Modular structure with memory profiling
- *//
+ */
 
 // Initialize memory profiler
 const memoryProfiler = new MemoryProfiler();
@@ -11,40 +11,11 @@ memoryProfiler.start();
 window.memoryProfiler = memoryProfiler;
 
 // Auto-clear cache on high memory
-setInterval(async () => {
-  const usage = await memoryProfiler.getUsage();
-  if (usage.heapUsed > 150 * 1024 * 1024) {
-    await memoryProfiler.clearCache();
-  }
-}, UI_CONSTANTS.TIMEOUT_MAX);
+setInterval(async () => { const usage = await memoryProfiler.getUsage();
+  if (usage.heapUsed > 150 * 1024 * 1024) { await memoryProfiler.clearCache(); } }, UI_CONSTANTS.TIMEOUT_MAX);
 
 // Performance monitoring
-window.addEventListener('load', (event) => {
-        try {
-          (()(event);
-        } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-      }) => {
-  const loadTime = performance.now();
-  }ms`);'
-    });
+window.addEventListener('load', (event) => { try { (()(event); }   }) => { const loadTime = performance.now(); }ms`);' });
 
 // Cleanup on unload`
-window.addEventListener('beforeunload', (event) => {
-        try {
-          (()(event);
-        } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-      }) => {
-  memoryProfiler.stop();'
-    });
+window.addEventListener('beforeunload', (event) => { try { (()(event); }   }) => { memoryProfiler.stop();' });

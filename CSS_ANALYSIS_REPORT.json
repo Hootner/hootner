@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "totalFiles": 13,
+    "totalStyleBlocks": 30,
+    "totalLines": 2347,
+    "averageLinesPerFile": 181
+  },
+  "files": [
+    {
+      "file": "video-player.html",
+      "styleBlocks": 3,
+      "totalLines": 672,
+      "hasInlineStyles": true,
+      "hasTailwind": false,
+      "commonClasses": [
+        "btn",
+        "card",
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "dashboard.html",
+      "styleBlocks": 3,
+      "totalLines": 550,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "btn",
+        "card",
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "code-editor.html",
+      "styleBlocks": 1,
+      "totalLines": 375,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "container",
+        "flex"
+      ]
+    },
+    {
+      "file": "ultra-editor.html",
+      "styleBlocks": 1,
+      "totalLines": 185,
+      "hasInlineStyles": true,
+      "hasTailwind": false,
+      "commonClasses": [
+        "container",
+        "btn",
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "auto-editor.html",
+      "styleBlocks": 4,
+      "totalLines": 168,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "settings.html",
+      "styleBlocks": 3,
+      "totalLines": 134,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "container",
+        "flex"
+      ]
+    },
+    {
+      "file": "login.html",
+      "styleBlocks": 3,
+      "totalLines": 94,
+      "hasInlineStyles": true,
+      "hasTailwind": false,
+      "commonClasses": [
+        "flex"
+      ]
+    },
+    {
+      "file": "profile.html",
+      "styleBlocks": 3,
+      "totalLines": 44,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "btn",
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "marketplace.html",
+      "styleBlocks": 3,
+      "totalLines": 35,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "design-showcase.html",
+      "styleBlocks": 3,
+      "totalLines": 34,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "feed-react.html",
+      "styleBlocks": 1,
+      "totalLines": 29,
+      "hasInlineStyles": true,
+      "hasTailwind": true,
+      "commonClasses": [
+        "flex"
+      ]
+    },
+    {
+      "file": "code-scan-report-formatted.html",
+      "styleBlocks": 1,
+      "totalLines": 23,
+      "hasInlineStyles": true,
+      "hasTailwind": false,
+      "commonClasses": [
+        "container",
+        "flex",
+        "grid"
+      ]
+    },
+    {
+      "file": "shared-header.html",
+      "styleBlocks": 1,
+      "totalLines": 4,
+      "hasInlineStyles": true,
+      "hasTailwind": false,
+      "commonClasses": [
+        "flex"
+      ]
+    }
+  ],
+  "timestamp": "2026-01-02T05:15:18.654Z"
+}

@@ -11,47 +11,30 @@ const PORTS = [
   { port: 27017, service: 'MongoDB' },
 ];
 
-const scanPort = (host, port, timeout = 2000) => {
-  return new Promise(resolve => {
-    const socket = new net.Socket();
+const scanPort = (host, port, timeout = 2000) => { return new Promise(resolve => { const socket = new net.Socket();
     socket.setTimeout(timeout);
 
-    socket.on('connect', () => {
-      socket.destroy();
-      resolve({ port, open: true });
-    });
+    socket.on('connect', () => { socket.destroy();
+      resolve({ port, open: true }); });
 
-    socket.on('timeout', () => {
-      socket.destroy();
-      resolve({ port, open: false });
-    });
+    socket.on('timeout', () => { socket.destroy();
+      resolve({ port, open: false }); });
 
-    socket.on('error', () => {
-      resolve({ port, open: false });
-    });
+    socket.on('error', () => { resolve({ port, open: false }); });
 
-    socket.connect(port, host);
-  });
-};
+    socket.connect(port, host); }); };
 
-const scan = async (host = 'localhost') => {
-  
-  const results = await Promise.all(
-    PORTS.map(async ({ port, service }) => {
-      const result = await scanPort(host, port);
-      return { ...result, service };
-    })
+const scan = async (host = 'localhost') => { const results = await Promise.all(
+    PORTS.map(async ({ port, service }) => { const result = await scanPort(host, port);
+      return { ...result, service }; })
   );
 
-    results.forEach(({ port, service, open }) => {
-    const status = open ? '✅ OPEN' : '❌ CLOSED';
-    `);
-  });
+    results.forEach(({ port, service, open }) => { const status = open ? '✅ OPEN' : '❌ CLOSED';
+    `); });
 
   const openPorts = results.filter(r => r.open);
-  
-  return results;
-};
+
+  return results; };
 
 const host = process.argv[2] || 'localhost';
 scan(host).catch(console.error);

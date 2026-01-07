@@ -40,52 +40,96 @@
     .btn-enhanced:hover::before{width:300px;height:300px;}
     @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
     @keyframes glow{0%,100%{box-shadow:0 0 5px currentColor}50%{box-shadow:0 0 20px currentColor,0 0 30px currentColor}}
-    @media (max-width: 1024px) {
-      .profile-grid{grid-template-columns:1fr !important;}
+    @media (max-width: 1024px) { .profile-grid{grid-template-columns:1fr !important;}
       .sidebar{order:2;}
       .main-content{order:1;}
-      .tab-container{position:sticky;top:60px;z-index:40;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);padding:12px 16px;margin:-20px -16px 20px;border-bottom:2px solid rgba(0,255,0,0.3);}
-    }
-    @media (max-width: 768px) {
-      .profile-header{flex-direction:column !important;align-items:center !important;text-align:center;}
+      .tab-container{position:sticky;top:60px;z-index:40;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);padding:12px 16px;margin:-20px -16px 20px;border-bottom:2px solid rgba(0,255,0,0.3);} }
+    @media (max-width: 768px) { .profile-header{flex-direction:column !important;align-items:center !important;text-align:center;}
       .profile-avatar{margin-top:-80px !important;}
       .profile-info{padding-top:20px !important;}
       .profile-actions{width:100%;justify-content:center;}
       .stats-grid{grid-template-columns:repeat(2,1fr) !important;}
-      #content{grid-template-columns:1fr !important;}
-    }
-    @media (max-width: 480px) {
-      .tab-btn{padding:8px 12px !important;font-size:13px !important;}
-      .profile-actions button{padding:8px 16px !important;font-size:13px !important;}
-    }
+      #content{grid-template-columns:1fr !important;} }
+    @media (max-width: 480px) { .tab-btn{padding:8px 12px !important;font-size:13px !important;}
+      .profile-actions button{padding:8px 16px !important;font-size:13px !important;} }
   </style>
 
 <style>
 /* Content size fixes */
-body {
-  padding-top: 80px !important;
-  min-height: calc(100vh - 80px) !important;
-}
-nav {
-  height: 70px !important;
+body { padding-top: 80px !important;
+  min-height: calc(100vh - 80px) !important; }
+nav { height: 70px !important;
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 1000 !important;
-}
-.main-content {
-  margin-top: 0 !important;
-  padding: 20px !important;
-}
+  z-index: 1000 !important; }
+.main-content { margin-top: 0 !important;
+  padding: 20px !important; }
 </style>
 
 <style>
 html { font-size: 12px !important; }
 body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origin: 0 0 !important; width: 133% !important; }
 </style>
+  <link rel="stylesheet" href="design-system.css">
 </head>
-<body class="min-h-screen" style="background:#0a0a0f;"><nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+<body class="min-h-screen" style="background:#0a0a0f;">
+<style>
+:root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+.dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+.dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+.dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+.dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+.nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+.notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+.notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+.notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+.notification-dropdown.show{display:block}
+.notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+.notification-item:hover{background:var(--dashboard-hover)}
+.notification-item:last-child{border-bottom:none}
+</style>
+<div class="dashboard-header">
+<nav class="dashboard-nav">
+<div style="display:flex;gap:1rem;flex-wrap:wrap">
+<a href="dashboard.html" class="nav-btn">Dashboard</a>
+<a href="video-player.html" class="nav-btn">Video Player</a>
+<a href="code-editor.html" class="nav-btn">Code Editor</a>
+<a href="marketplace.html" class="nav-btn">Marketplace</a>
+<a href="profile.html" class="nav-btn active">Profile</a>
+<a href="settings.html" class="nav-btn">Settings</a>
+<a href="feed-react.html" class="nav-btn">Feed</a>
+<a href="login.html" class="nav-btn">Login</a>
+<a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+<a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+<a href="design-showcase.html" class="nav-btn">Showcase</a>
+<a href="test-page-clean.html" class="nav-btn">Test</a>
+</div>
+<div style="position:relative">
+<div class="notification-bell" onclick="toggleNotifications()">
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+</svg>
+<span class="notification-badge">3</span>
+</div>
+<div class="notification-dropdown" id="notificationDropdown">
+<div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+<div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+<div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+</div>
+</div>
+</nav>
+</div>
+<script>
+(function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+</script>
+<nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="display:none">
     <div style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;">
       <div style="display:flex;align-items:center;gap:24px;">
         <a href="index.html" style="font-size:14px;font-weight:bold;background:linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;margin-left:0;">🦉 HOOTNER</a>
@@ -137,8 +181,8 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
     <div class="max-w-6xl mx-auto px-6 py-8">
       <div class="profile-header flex items-end gap-6">
         <div class="profile-avatar relative">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" 
-               alt="Mike Developer" 
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+               alt="Mike Developer"
                class="w-32 h-32 rounded-full border-4 border-green-400 shadow-lg">
           <div class="absolute -bottom-2 -right-2 bg-green-400 text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✓</div>
         </div>
@@ -195,7 +239,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <!-- Post 1 -->
           <div class="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
             <div class="flex items-center gap-3 mb-4">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
                    alt="Mike" class="w-10 h-10 rounded-full">
               <div>
                 <div class="font-semibold text-white">Mike Developer</div>
@@ -219,7 +263,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <!-- Post 2 -->
           <div class="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
             <div class="flex items-center gap-3 mb-4">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
                    alt="Mike" class="w-10 h-10 rounded-full">
               <div>
                 <div class="font-semibold text-white">Mike Developer</div>
@@ -375,7 +419,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <h3 class="text-lg font-bold text-white mb-4">Recent Followers</h3>
           <div class="space-y-3">
             <div class="flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face" 
+              <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face"
                    alt="Sarah" class="w-8 h-8 rounded-full">
               <div class="flex-1">
                 <div class="text-sm font-medium text-white">Sarah Chen</div>
@@ -384,7 +428,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
               <button class="text-xs bg-green-500 text-black px-2 py-1 rounded font-semibold">Follow</button>
             </div>
             <div class="flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" 
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face"
                    alt="Alex" class="w-8 h-8 rounded-full">
               <div class="flex-1">
                 <div class="text-sm font-medium text-white">Alex Rodriguez</div>
@@ -393,7 +437,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
               <button class="text-xs bg-green-500 text-black px-2 py-1 rounded font-semibold">Follow</button>
             </div>
             <div class="flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" 
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face"
                    alt="Emma" class="w-8 h-8 rounded-full">
               <div class="flex-1">
                 <div class="text-sm font-medium text-white">Emma Wilson</div>
@@ -443,23 +487,16 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
     let currentFilter = 'all';
     let soundEnabled = true;
 
-    function toggleNotifications() {
-      const dropdown = document.getElementById('notif-dropdown');
+    function toggleNotifications() { const dropdown = document.getElementById('notif-dropdown');
       const isVisible = dropdown.style.display !== 'none';
-      
-      if (isVisible) {
-        dropdown.style.display = 'none';
-      } else {
-        dropdown.style.display = 'flex';
-        renderNotifications();
-      }
-    }
 
-    function renderNotifications() {
-      const list = document.getElementById('notif-list');
+      if (isVisible) { dropdown.style.display = 'none'; } else { dropdown.style.display = 'flex';
+        renderNotifications(); } }
+
+    function renderNotifications() { const list = document.getElementById('notif-list');
       const filtered = notifications.filter(n => currentFilter === 'all' || n.type === currentFilter);
-      
-      list.innerHTML = filtered.map(notif => `
+
+      list.textContent = filtered.map(notif => `
         <div class="notif-item ${notif.unread ? 'unread' : ''}" onclick="markAsRead(${notif.id})">
           <div style="display:flex;align-items:center;gap:12px;">
             <img src="${notif.avatar}" alt="${notif.user}" style="width:32px;height:32px;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -472,106 +509,72 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           </div>
         </div>
       `).join('');
-      
-      updateBadge();
-    }
 
-    function updateBadge() {
-      const badge = document.getElementById('notif-badge');
+      updateBadge(); }
+
+    function updateBadge() { const badge = document.getElementById('notif-badge');
       const unreadCount = notifications.filter(n => n.unread).length;
       badge.textContent = unreadCount;
-      badge.style.display = unreadCount > 0 ? 'flex' : 'none';
-    }
+      badge.style.display = unreadCount > 0 ? 'flex' : 'none'; }
 
-    function markAsRead(id) {
-      const notif = notifications.find(n => n.id === id);
+    function markAsRead(id) { const notif = notifications.find(n => n.id === id);
       if (notif) notif.unread = false;
-      renderNotifications();
-    }
+      renderNotifications(); }
 
-    function markAllRead() {
-      notifications.forEach(n => n.unread = false);
-      renderNotifications();
-    }
+    function markAllRead() { notifications.forEach(n => n.unread = false);
+      renderNotifications(); }
 
-    function clearAllNotifications() {
-      notifications = [];
-      renderNotifications();
-    }
+    function clearAllNotifications() { notifications = [];
+      renderNotifications(); }
 
-    function setNotifFilter(filter) {
-      currentFilter = filter;
-      document.querySelectorAll('.notif-filter').forEach(btn => {
-        btn.classList.remove('active');
+    function setNotifFilter(filter) { currentFilter = filter;
+      document.querySelectorAll('.notif-filter').forEach(btn => { btn.classList.remove('active');
         btn.style.background = 'transparent';
-        btn.style.borderColor = 'rgba(0,255,0,0.3)';
-      });
-      
+        btn.style.borderColor = 'rgba(0,255,0,0.3)'; });
+
       const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
       activeBtn.classList.add('active');
       activeBtn.style.background = 'rgba(0,255,255,0.2)';
       activeBtn.style.borderColor = 'rgba(0,255,255,0.3)';
-      
-      renderNotifications();
-    }
 
-    function filterNotifications() {
-      const search = document.getElementById('notif-search').value.toLowerCase();
+      renderNotifications(); }
+
+    function filterNotifications() { const search = document.getElementById('notif-search').value.toLowerCase();
       const items = document.querySelectorAll('.notif-item');
-      
-      items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(search) ? 'block' : 'none';
-      });
-    }
 
-    function toggleNotifSound() {
-      soundEnabled = !soundEnabled;
+      items.forEach(item => { const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(search) ? 'block' : 'none'; }); }
+
+    function toggleNotifSound() { soundEnabled = !soundEnabled;
       const btn = document.getElementById('sound-btn');
       btn.textContent = soundEnabled ? '🔔' : '🔕';
-      btn.title = soundEnabled ? 'Disable sound' : 'Enable sound';
-    }
+      btn.title = soundEnabled ? 'Disable sound' : 'Enable sound'; }
 
-    function loadMoreNotifications() {
-      // Simulate loading more notifications
-      console.log('Loading more notifications...');
-    }
+    function loadMoreNotifications() { // Simulate loading more notifications }
 
     // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        
+    document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => { const tab = btn.dataset.tab;
+
         // Update button states
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('bg-green-500', 'text-black');
-          b.classList.add('text-slate-400');
-        });
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('bg-green-500', 'text-black');
+          b.classList.add('text-slate-400'); });
         btn.classList.add('bg-green-500', 'text-black');
         btn.classList.remove('text-slate-400');
-        
+
         // Show/hide content
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.add('hidden');
-        });
-        document.getElementById(`${tab}-content`).classList.remove('hidden');
-      });
-    });
+        document.querySelectorAll('.tab-content').forEach(content => { content.classList.add('hidden'); });
+        document.getElementById(`${tab}-content`).classList.remove('hidden'); }); });
 
     // Close notifications when clicking outside
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('notif-dropdown');
+    document.addEventListener('click', (e) => { const dropdown = document.getElementById('notif-dropdown');
       const button = e.target.closest('[onclick="toggleNotifications()"]');
-      
-      if (!dropdown.contains(e.target) && !button) {
-        dropdown.style.display = 'none';
-      }
-    });
+
+      if (!dropdown.contains(e.target) && !button) { dropdown.style.display = 'none'; } });
 
     // Initialize
     updateBadge();
   </script>
-</body>
+<script src="load-header.js"></script></body>
 </html>:4px 8px;" class="text-slate-100 hover:text-white">🛒 Marketplace</a>
         <a href="dashboard.html" style="font-size:20px;text-decoration:none;padding:4px 8px;" class="text-slate-100 hover:text-white">📈 Dashboard</a>
         <a href="video-player.html" style="font-size:20px;text-decoration:none;padding:4px 8px;" class="text-slate-100 hover:text-white">▶️ Video</a>
@@ -966,15 +969,11 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
     </div>
   </div>
   <script>
-    window.toggleNotifications = function() {
-      const dropdown = document.getElementById('notif-dropdown');
+    window.toggleNotifications = function() { const dropdown = document.getElementById('notif-dropdown');
       dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
-      renderNotifications();
-    }
+      renderNotifications(); }
 
-    function createParticles(btn) {
-      for(let i=0;i<8;i++) {
-        const p = document.createElement('div');
+    function createParticles(btn) { for(let i=0;i<8;i++) { const p = document.createElement('div');
         const angle = (i/8)*Math.PI*2;
         const dist = 40;
         p.style.cssText = `position:absolute;width:4px;height:4px;background:${['#00ffff','#ff00ff','#00ff00'][i%3]};border-radius:50%;pointer-events:none;left:50%;top:50%;animation:particle${i} 0.8s ease-out forwards;`;
@@ -982,14 +981,11 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
         const style = document.createElement('style');
         style.textContent = `@keyframes particle${i}{to{transform:translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px);opacity:0;}}`;
         document.head.appendChild(style);
-        setTimeout(() => {p.remove();style.remove();}, 800);
-      }
-    }
+        setTimeout(() => {p.remove();style.remove();}, 800); } }
     let currentTab = 'posts';
     let chartInterval;
 
-    function initCharts() {
-      const canvas = document.getElementById('stats-chart');
+    function initCharts() { const canvas = document.getElementById('stats-chart');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const data = [45, 52, 48, 65, 58, 72, 68];
@@ -998,33 +994,25 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       ctx.strokeStyle = '#00ffff';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      data.forEach((val, i) => {
-        const x = (i / (data.length - 1)) * canvas.width;
+      data.forEach((val, i) => { const x = (i / (data.length - 1)) * canvas.width;
         const y = canvas.height - (val / max) * canvas.height;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      });
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
       ctx.stroke();
       ctx.fillStyle = 'rgba(0,255,255,0.1)';
       ctx.lineTo(canvas.width, canvas.height);
       ctx.lineTo(0, canvas.height);
-      ctx.fill();
-    }
+      ctx.fill(); }
 
-    function toggleFollow(userId) {
-      const btn = event.target;
+    function toggleFollow(userId) { const btn = event.target;
       const isFollowing = btn.textContent.includes('Following');
       btn.textContent = isFollowing ? '+ Follow' : '✓ Following';
-      btn.style.background = isFollowing ? 'rgba(0,255,255,0.2)' : 'rgba(0,255,0,0.2)';
-    }
+      btn.style.background = isFollowing ? 'rgba(0,255,255,0.2)' : 'rgba(0,255,0,0.2)'; }
 
-    const shareStats = {
-      totalShares: parseInt(localStorage.getItem('profileShares') || '0'),
+    const shareStats = { totalShares: parseInt(localStorage.getItem('profileShares') || '0'),
       platforms: JSON.parse(localStorage.getItem('sharePlatforms') || '{}'),
-      lastShared: localStorage.getItem('lastShared')
-    };
+      lastShared: localStorage.getItem('lastShared') };
 
-    function trackShare(platform = 'unknown') {
-      shareStats.totalShares++;
+    function trackShare(platform = 'unknown') { shareStats.totalShares++;
       shareStats.platforms[platform] = (shareStats.platforms[platform] || 0) + 1;
       shareStats.lastShared = new Date().toISOString();
 
@@ -1033,31 +1021,23 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       localStorage.setItem('lastShared', shareStats.lastShared);
 
       // Send to analytics
-      const analytics = {
-        event: 'profile_shared',
+      const analytics = { event: 'profile_shared',
         platform,
         totalShares: shareStats.totalShares,
         viralScore: calculateViralScore(),
-        timestamp: new Date().toISOString()
-      };
-      console.log('Share Analytics:', analytics);
-      // fetch('/api/analytics/share', { method: 'POST', body: JSON.stringify(analytics) });
-    }
+        timestamp: new Date().toISOString() };
+            // fetch('/api/analytics/share', { method: 'POST', body: JSON.stringify(analytics) }); }
 
-    function calculateViralScore() {
-      const shares = shareStats.totalShares;
+    function calculateViralScore() { const shares = shareStats.totalShares;
       const views = 1200; // From stats
       const engagement = 0.89; // 89% engagement rate
       const viralScore = Math.min(100, Math.round((shares * 10 + views * 0.05) * engagement));
-      return viralScore;
-    }
+      return viralScore; }
 
-    function toggleMoreOptions() {
-      const menu = document.getElementById('more-options-menu');
+    function toggleMoreOptions() { const menu = document.getElementById('more-options-menu');
       const isVisible = menu.style.display === 'flex';
       menu.style.display = isVisible ? 'none' : 'flex';
-      if(!isVisible) {
-        menu.innerHTML = `
+      if(!isVisible) { menu.textContent = `
           <div style="padding:8px;">
             <button onclick="exportProfile()" style="width:100%;text-align:left;padding:10px 12px;background:none;border:none;color:#00ffff;cursor:pointer;border-radius:4px;font-size:14px;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,255,255,0.1)'" onmouseout="this.style.background='none'">📥 Export Profile</button>
             <button onclick="printProfile()" style="width:100%;text-align:left;padding:10px 12px;background:none;border:none;color:#00ffff;cursor:pointer;border-radius:4px;font-size:14px;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,255,255,0.1)'" onmouseout="this.style.background='none'">🖨️ Print Profile</button>
@@ -1069,12 +1049,9 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
             <button onclick="deleteProfile()" style="width:100%;text-align:left;padding:10px 12px;background:none;border:none;color:#ef4444;cursor:pointer;border-radius:4px;font-size:14px;transition:background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete Profile</button>
           </div>
         `;
-        menu.style.flexDirection = 'column';
-      }
-    }
+        menu.style.flexDirection = 'column'; } }
 
-    function exportProfile() {
-      const data = {name:'John Developer',bio:'Full-stack developer',followers:1200,posts:89};
+    function exportProfile() { const data = {name:'John Developer',bio:'Full-stack developer',followers:1200,posts:89};
       const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1082,25 +1059,19 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       a.download = 'profile.json';
       a.click();
       showToast('📥 Profile exported','#00ffff');
-      toggleMoreOptions();
-    }
+      toggleMoreOptions(); }
 
-    function printProfile() {
-      window.print();
-      toggleMoreOptions();
-    }
+    function printProfile() { window.print();
+      toggleMoreOptions(); }
 
-    function embedProfile() {
-      const code = `<iframe src="${window.location.href}" width="100%" height="600"></iframe>`;
+    function embedProfile() { const code = `<iframe src="${window.location.href}" width="100%" height="600"></iframe>`;
       navigator.clipboard.writeText(code);
       showToast('📎 Embed code copied','#00ffff');
-      toggleMoreOptions();
-    }
+      toggleMoreOptions(); }
 
-    function qrCode() {
-      const qrModal = document.createElement('div');
+    function qrCode() { const qrModal = document.createElement('div');
       qrModal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;';
-      qrModal.innerHTML = `
+      qrModal.textContent = `
         <div style="background:rgba(10,10,15,0.98);border:2px solid rgba(0,255,255,0.5);border-radius:16px;padding:24px;text-align:center;max-width:400px;">
           <h3 style="color:#00ffff;margin-bottom:16px;font-size:20px;">📱 Profile QR Code</h3>
           <div style="background:#fff;padding:20px;border-radius:8px;margin-bottom:16px;">
@@ -1115,36 +1086,24 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#000';
       for(let i=0;i<10;i++)for(let j=0;j<10;j++)if(Math.random()>0.5)ctx.fillRect(i*20,j*20,20,20);
-      toggleMoreOptions();
-    }
+      toggleMoreOptions(); }
 
-    function archiveProfile() {
-      if(confirm('Archive your profile? You can restore it later.')) {
-        localStorage.setItem('profile_archived', JSON.stringify({date:new Date().toISOString(),data:{name:'John Developer',posts:userPosts.length}}));
+    function archiveProfile() { if(confirm('Archive your profile? You can restore it later.')) { localStorage.setItem('profile_archived', JSON.stringify({date:new Date().toISOString(),data:{name:'John Developer',posts:userPosts.length}}));
         showToast('📦 Profile archived','#ffff00');
         toggleMoreOptions();
-        setTimeout(() => {
-          const banner = document.createElement('div');
+        setTimeout(() => { const banner = document.createElement('div');
           banner.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(255,255,0,0.95);color:#000;padding:12px 24px;border-radius:8px;font-weight:600;z-index:1001;';
-          banner.innerHTML = '📦 Profile archived. <button onclick="restoreProfile();this.parentElement.remove()" style="background:none;border:none;color:#000;text-decoration:underline;cursor:pointer;font-weight:bold;margin-left:8px;">Restore</button>';
-          document.body.appendChild(banner);
-        }, 500);
-      }
-    }
+          banner.textContent = '📦 Profile archived. <button onclick="restoreProfile();this.parentElement.remove()" style="background:none;border:none;color:#000;text-decoration:underline;cursor:pointer;font-weight:bold;margin-left:8px;">Restore</button>';
+          document.body.appendChild(banner); }, 500); } }
 
-    function restoreProfile() {
-      const archived = localStorage.getItem('profile_archived');
-      if(archived) {
-        localStorage.removeItem('profile_archived');
-        showToast('✅ Profile restored','#00ff00');
-      }
-    }
+    function restoreProfile() { const archived = localStorage.getItem('profile_archived');
+      if(archived) { localStorage.removeItem('profile_archived');
+        showToast('✅ Profile restored','#00ff00'); } }
 
-    function reportIssue() {
-      const modal = document.createElement('div');
+    function reportIssue() { const modal = document.createElement('div');
       modal.id = 'report-issue-modal';
       modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;';
-      modal.innerHTML = `
+      modal.textContent = `
         <div style="background:rgba(10,10,15,0.98);border:2px solid rgba(255,0,255,0.5);border-radius:16px;padding:24px;max-width:500px;width:90%;">
           <h3 style="color:#ff00ff;margin-bottom:16px;font-size:20px;">⚠️ Report Issue</h3>
           <select id="issue-type" style="width:100%;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,0,255,0.3);border-radius:8px;color:#ff00ff;margin-bottom:12px;">
@@ -1162,23 +1121,19 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
         </div>
       `;
       document.body.appendChild(modal);
-      toggleMoreOptions();
-    }
+      toggleMoreOptions(); }
 
-    window.submitIssue = function() {
-      const type = document.getElementById('issue-type')?.value;
+    window.submitIssue = function() { const type = document.getElementById('issue-type')?.value;
       const desc = document.getElementById('issue-desc')?.value;
       if(!desc) return showToast('⚠️ Please describe the issue','#ef4444');
       console.log('Issue reported:',{type,desc,timestamp:new Date().toISOString()});
       const modal = document.getElementById('report-issue-modal');
       if(modal) modal.remove();
-      showToast('✅ Issue reported successfully','#00ff00');
-    }
+      showToast('✅ Issue reported successfully','#00ff00'); }
 
-    function deleteProfile() {
-      const modal = document.createElement('div');
+    function deleteProfile() { const modal = document.createElement('div');
       modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:2000;display:flex;align-items:center;justify-content:center;';
-      modal.innerHTML = `
+      modal.textContent = `
         <div style="background:rgba(10,10,15,0.98);border:2px solid rgba(239,68,68,0.5);border-radius:16px;padding:24px;max-width:450px;width:90%;text-align:center;">
           <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
           <h3 style="color:#ef4444;margin-bottom:12px;font-size:22px;font-weight:bold;">Delete Profile?</h3>
@@ -1194,59 +1149,39 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
         </div>
       `;
       document.body.appendChild(modal);
-      toggleMoreOptions();
-    }
+      toggleMoreOptions(); }
 
-    function confirmDelete() {
-      const input = document.getElementById('delete-confirm');
+    function confirmDelete() { const input = document.getElementById('delete-confirm');
       if(input.value !== 'DELETE') return showToast('⚠️ Type DELETE to confirm','#ef4444');
       localStorage.clear();
       document.querySelector('div[style*="z-index:2000"]').remove();
       showToast('🗑️ Profile deleted','#ef4444');
-      setTimeout(() => window.location.href = 'index.html', 2000);
-    }
+      setTimeout(() => window.location.href = 'index.html', 2000); }
 
-    function shareProfile() {
-      const shareData = {
-        title: 'John Developer - Full-stack Developer | Hootner',
+    function shareProfile() { const shareData = { title: 'John Developer - Full-stack Developer | Hootner',
         text: 'Check out John Developer\'s profile on Hootner! Full-stack developer with amazing projects.',
-        url: window.location.href
-      };
+        url: window.location.href };
 
-      if (navigator.share) {
-        navigator.share(shareData).then(() => {
-          trackShare('native');
-          showViralPotential();
-        }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(window.location.href);
+      if (navigator.share) { navigator.share(shareData).then(() => { trackShare('native');
+          showViralPotential(); }).catch(() => {}); } else { navigator.clipboard.writeText(window.location.href);
         trackShare('clipboard');
-        alert('Profile link copied! Viral Score: ' + calculateViralScore() + '/100');
-      }
-    }
+        alert('Profile link copied! Viral Score: ' + calculateViralScore() + '/100'); } }
 
-    function showViralPotential() {
-      const score = calculateViralScore();
+    function showViralPotential() { const score = calculateViralScore();
       const badge = document.createElement('div');
       badge.style.cssText = 'position:fixed;top:80px;right:20px;background:rgba(0,255,0,0.9);color:#000;padding:12px 20px;border-radius:8px;font-weight:bold;z-index:1000;animation:slideIn 0.3s;';
-      badge.innerHTML = `🚀 Viral Score: ${score}/100`;
+      badge.textContent = `🚀 Viral Score: ${score}/100`;
       document.body.appendChild(badge);
-      setTimeout(() => badge.remove(), 3000);
-    }
+      setTimeout(() => badge.remove(), 3000); }
 
     setTimeout(initCharts, 100);
 
-    function updateViralScore() {
-      const score = calculateViralScore();
+    function updateViralScore() { const score = calculateViralScore();
       const viralScore = document.getElementById('viral-score');
-      if (viralScore) {
-        const div = viralScore.querySelector('div');
-        if (div) div.innerHTML = `🚀 ${score}`;
-      }
-    }
+      if (viralScore) { const div = viralScore.querySelector('div');
+        if (div) div.textContent = `🚀 ${score}`; } }
 
-    function showViralDetails() {
-      const score = calculateViralScore();
+    function showViralDetails() { const score = calculateViralScore();
       const details = `
         <div style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:flex;align-items:center;justify-content:center;" onclick="this.remove()">
           <div style="background:rgba(10,10,15,0.98);border-radius:16px;border:2px solid rgba(255,100,0,0.5);padding:24px;max-width:400px;width:90%;" onclick="event.stopPropagation()">
@@ -1278,8 +1213,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           </div>
         </div>
       `;
-      document.body.insertAdjacentHTML('beforeend', details);
-    }
+      document.body.insertAdjacentHTML('beforeend', details); }
 
     updateViralScore();
 
@@ -1287,8 +1221,7 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
     let draggedWidgetId = null;
     const allWidgets = ['chart','week','engagement','reach','ranking','viral','goals','notes','links'];
 
-    const widgetTemplates = {
-      chart: `<div draggable="true" data-widget="chart" style="grid-column:span 3;padding:16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid rgba(0,255,0,0.3);cursor:move;position:relative;" ondragstart="handleDragStart(event)" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+    const widgetTemplates = { chart: `<div draggable="true" data-widget="chart" style="grid-column:span 3;padding:16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid rgba(0,255,0,0.3);cursor:move;position:relative;" ondragstart="handleDragStart(event)" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
         <button onclick="removeWidget('chart');event.stopPropagation()" style="position:absolute;top:8px;right:8px;background:rgba(239,68,68,0.2);border:none;color:#ef4444;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1;">&times;</button>
         <h4 style="color:#00ff00;font-size:14px;margin:0 0 12px;">📈 Growth Chart</h4>
         <canvas id="stats-chart" width="400" height="80" style="width:100%;height:80px;"></canvas>
@@ -1332,28 +1265,20 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
         <button onclick="removeWidget('links');event.stopPropagation()" style="position:absolute;top:4px;right:4px;background:rgba(239,68,68,0.2);border:none;color:#ef4444;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;">&times;</button>
         <h4 style="color:#ff00ff;font-size:13px;margin:0 0 8px;">🔗 Links</h4>
         <div style="font-size:11px;color:#ff00ff;line-height:1.8;">🔗 Portfolio<br>🔗 GitHub<br>🔗 LinkedIn</div>
-      </div>`
-    };
+      </div>` };
 
-    function renderDashboard() {
-      const container = document.getElementById('dashboard-widgets');
-      container.innerHTML = dashboardWidgets.map(id => widgetTemplates[id]).join('');
+    function renderDashboard() { const container = document.getElementById('dashboard-widgets');
+      container.textContent = dashboardWidgets.map(id => widgetTemplates[id]).join('');
       setTimeout(initCharts, 50);
-      updateViralScore();
-    }
+      updateViralScore(); }
 
-    function handleDragStart(e) {
-      draggedWidgetId = e.target.dataset.widget;
-      e.target.style.opacity = '0.5';
-    }
+    function handleDragStart(e) { draggedWidgetId = e.target.dataset.widget;
+      e.target.style.opacity = '0.5'; }
 
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.target.closest('[data-widget]').style.opacity = '0.8';
-    }
+    function handleDragOver(e) { e.preventDefault();
+      e.target.closest('[data-widget]').style.opacity = '0.8'; }
 
-    function handleDrop(e) {
-      e.preventDefault();
+    function handleDrop(e) { e.preventDefault();
       const targetWidget = e.target.closest('[data-widget]');
       if (!targetWidget || !draggedWidgetId) return;
 
@@ -1367,29 +1292,23 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       localStorage.setItem('dashboardWidgets', JSON.stringify(dashboardWidgets));
 
       renderDashboard();
-      document.querySelectorAll('[data-widget]').forEach(el => el.style.opacity = '1');
-    }
+      document.querySelectorAll('[data-widget]').forEach(el => el.style.opacity = '1'); }
 
-    function resetDashboard() {
-      dashboardWidgets = ['chart', 'week', 'engagement', 'reach', 'ranking', 'viral'];
+    function resetDashboard() { dashboardWidgets = ['chart', 'week', 'engagement', 'reach', 'ranking', 'viral'];
       localStorage.removeItem('dashboardWidgets');
       renderDashboard();
-      showToast('🔄 Dashboard reset','#00ffff');
-    }
+      showToast('🔄 Dashboard reset','#00ffff'); }
 
-    window.removeWidget = function(widgetId) {
-      dashboardWidgets = dashboardWidgets.filter(id => id !== widgetId);
+    window.removeWidget = function(widgetId) { dashboardWidgets = dashboardWidgets.filter(id => id !== widgetId);
       localStorage.setItem('dashboardWidgets', JSON.stringify(dashboardWidgets));
       renderDashboard();
-      showToast('🗑️ Widget removed','#ef4444');
-    }
+      showToast('🗑️ Widget removed','#ef4444'); }
 
-    window.openAddWidget = function() {
-      const available = allWidgets.filter(w => !dashboardWidgets.includes(w));
+    window.openAddWidget = function() { const available = allWidgets.filter(w => !dashboardWidgets.includes(w));
       if(!available.length) return showToast('All widgets added','#ffff00');
       const modal = document.createElement('div');
       modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;';
-      modal.innerHTML = `
+      modal.textContent = `
         <div style="background:rgba(10,10,15,0.98);border:2px solid rgba(0,255,255,0.5);border-radius:12px;padding:20px;max-width:400px;width:90%;">
           <h3 style="color:#00ffff;margin:0 0 16px;font-size:18px;">Add Widget</h3>
           <div style="display:flex;flex-direction:column;gap:8px;">
@@ -1398,68 +1317,52 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;margin-top:12px;padding:8px;background:rgba(100,100,100,0.3);color:#fff;border:1px solid rgba(100,100,100,0.5);border-radius:6px;cursor:pointer;">Cancel</button>
         </div>
       `;
-      document.body.appendChild(modal);
-    }
+      document.body.appendChild(modal); }
 
-    window.addWidget = function(widgetId) {
-      if(!dashboardWidgets.includes(widgetId)) {
-        dashboardWidgets.push(widgetId);
+    window.addWidget = function(widgetId) { if(!dashboardWidgets.includes(widgetId)) { dashboardWidgets.push(widgetId);
         localStorage.setItem('dashboardWidgets', JSON.stringify(dashboardWidgets));
         renderDashboard();
-        showToast('✅ Widget added','#00ff00');
-      }
-    }
+        showToast('✅ Widget added','#00ff00'); } }
 
     renderDashboard();
 
     const aiRecommendations = [
-      {
-        type: 'collab',
+      { type: 'collab',
         icon: '🤝',
         title: 'Collaborate with @AlexDev',
         desc: 'Based on your React posts, Alex shares similar interests',
         action: () => openCollabModal('AlexDev'),
-        color: '#a855f7'
-      },
-      {
-        type: 'skill',
+        color: '#a855f7' },
+      { type: 'skill',
         icon: '🎯',
         title: 'Trending Skill: AI/ML',
         desc: '73% of top developers in your network are learning this',
         action: () => alert('Add AI/ML to your skills?'),
-        color: '#3b82f6'
-      },
-      {
-        type: 'collab',
+        color: '#3b82f6' },
+      { type: 'collab',
         icon: '👥',
         title: 'Connect with @DataScientist',
         desc: 'Your analytics posts resonate with their audience',
         action: () => openCollabModal('DataScientist'),
-        color: '#10b981'
-      },
-      {
-        type: 'content',
+        color: '#10b981' },
+      { type: 'content',
         icon: '📝',
         title: 'Post about Docker',
         desc: 'Your Docker content gets 2x more engagement',
         action: () => alert('Create Docker post?'),
-        color: '#eab308'
-      },
-      {
-        type: 'skill',
+        color: '#eab308' },
+      { type: 'skill',
         icon: '⭐',
         title: 'Add GraphQL to profile',
         desc: 'Matches 5 trending job opportunities',
         action: () => alert('Add GraphQL skill?'),
-        color: '#ec4899'
-      }
+        color: '#ec4899' }
     ];
 
-    function renderAIRecommendations() {
-      const container = document.getElementById('ai-recommendations');
+    function renderAIRecommendations() { const container = document.getElementById('ai-recommendations');
       const recommendations = aiRecommendations.slice(0, 3);
 
-      container.innerHTML = recommendations.map(rec => `
+      container.textContent = recommendations.map(rec => `
         <div style="padding:12px;background:rgba(0,0,0,0.3);border-left:3px solid ${rec.color};border-radius:8px;cursor:pointer;transition:all 0.3s;" onclick="handleRecommendation('${rec.title}')" onmouseover="this.style.background='rgba(0,0,0,0.5)'" onmouseout="this.style.background='rgba(0,0,0,0.3)'">
           <div style="display:flex;align-items:start;gap:8px;">
             <span style="font-size:20px;">${rec.icon}</span>
@@ -1469,89 +1372,62 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
             </div>
           </div>
         </div>
-      `).join('');
-    }
+      `).join(''); }
 
-    function handleRecommendation(title) {
-      const rec = aiRecommendations.find(r => r.title === title);
-      if (rec) rec.action();
-    }
+    function handleRecommendation(title) { const rec = aiRecommendations.find(r => r.title === title);
+      if (rec) rec.action(); }
 
     renderAIRecommendations();
 
-    setInterval(() => {
-      aiRecommendations.push(aiRecommendations.shift());
-      renderAIRecommendations();
-    }, 15000);
+    setInterval(() => { aiRecommendations.push(aiRecommendations.shift());
+      renderAIRecommendations(); }, 15000);
 
     window.handleRecommendation = handleRecommendation;
 
     let currentCollabUser = '';
     let currentCodeLang = 'javascript';
 
-    const codeSnippets = {
-      javascript: `// React Component Example\nfunction Welcome({ name }) {\n  return <h1>Hello, {name}!</h1>;\n}\n\nexport default Welcome;`,
+    const codeSnippets = { javascript: `// React Component Example\nfunction Welcome({ name }) {\n  return <h1>Hello, {name}!</h1>;\n}\n\nexport default Welcome;`,
       python: `# Flask API Example\nfrom flask import Flask, jsonify\n\napp = Flask(__name__)\n\n@app.route('/api/hello')\ndef hello():\n    return jsonify({'message': 'Hello World'})`,
-      typescript: `// TypeScript Interface\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst user: User = {\n  id: 1,\n  name: 'John',\n  email: 'john@example.com'\n};`
-    };
+      typescript: `// TypeScript Interface\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst user: User = {\n  id: 1,\n  name: 'John',\n  email: 'john@example.com'\n};` };
 
     window.openCollabModal = openCollabModal;
 
-    function openCollabModal(userName) {
-      currentCollabUser = userName;
+    function openCollabModal(userName) { currentCollabUser = userName;
       document.getElementById('collab-user').textContent = `Start collaborating with ${userName}`;
-      document.getElementById('collab-modal').style.display = 'flex';
-    }
+      document.getElementById('collab-modal').style.display = 'flex'; }
 
-    function closeCollabModal() {
-      document.getElementById('collab-modal').style.display = 'none';
-    }
+    function closeCollabModal() { document.getElementById('collab-modal').style.display = 'none'; }
 
-    function startDM() {
-      alert(`Opening DM with ${currentCollabUser}...`);
+    function startDM() { alert(`Opening DM with ${currentCollabUser}...`);
       closeCollabModal();
-      // window.location.href = `/messages?user=${currentCollabUser}`;
-    }
+      // window.location.href = `/messages?user=${currentCollabUser}`; }
 
-    function createSharedProject() {
-      alert(`Creating shared project with ${currentCollabUser}...`);
+    function createSharedProject() { alert(`Creating shared project with ${currentCollabUser}...`);
       closeCollabModal();
-      // window.location.href = `/projects/new?collaborator=${currentCollabUser}`;
-    }
+      // window.location.href = `/projects/new?collaborator=${currentCollabUser}`; }
 
-    function scheduleCall() {
-      alert(`Scheduling video call with ${currentCollabUser}...`);
+    function scheduleCall() { alert(`Scheduling video call with ${currentCollabUser}...`);
       closeCollabModal();
-      // window.location.href = `/calendar/schedule?with=${currentCollabUser}`;
-    }
+      // window.location.href = `/calendar/schedule?with=${currentCollabUser}`; }
 
-    function openCodeViewer() {
-      document.getElementById('code-viewer-modal').style.display = 'flex';
-      document.getElementById('code-editor').value = codeSnippets[currentCodeLang];
-    }
+    function openCodeViewer() { document.getElementById('code-viewer-modal').style.display = 'flex';
+      document.getElementById('code-editor').value = codeSnippets[currentCodeLang]; }
 
-    function closeCodeViewer() {
-      document.getElementById('code-viewer-modal').style.display = 'none';
-    }
+    function closeCodeViewer() { document.getElementById('code-viewer-modal').style.display = 'none'; }
 
-    function setCodeLang(lang) {
-      currentCodeLang = lang;
+    function setCodeLang(lang) { currentCodeLang = lang;
       document.querySelectorAll('.code-lang-btn').forEach(btn => btn.style.background = 'rgba(0,255,255,0.1)');
       event.target.style.background = 'rgba(0,255,255,0.3)';
-      document.getElementById('code-editor').value = codeSnippets[lang];
-    }
+      document.getElementById('code-editor').value = codeSnippets[lang]; }
 
-    function runCode() {
-      const output = document.getElementById('code-output');
+    function runCode() { const output = document.getElementById('code-output');
       output.style.display = 'block';
-      output.textContent = `> Running ${currentCodeLang} code...\n> Output: Code executed successfully!\n> Time: ${Date.now() % 1000}ms`;
-    }
+      output.textContent = `> Running ${currentCodeLang} code...\n> Output: Code executed successfully!\n> Time: ${Date.now() % 1000}ms`; }
 
-    function copyCode() {
-      const code = document.getElementById('code-editor').value;
+    function copyCode() { const code = document.getElementById('code-editor').value;
       navigator.clipboard.writeText(code);
-      alert('Code copied to clipboard!');
-    }
+      alert('Code copied to clipboard!'); }
 
     const allNotifications = [
       { id: 1, type: 'activity', subtype: 'endorsement', message: 'New endorsement from @expert', time: '2m ago', read: false, color: '#a855f7' },
@@ -1564,21 +1440,14 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
 
     let currentNotifFilter = 'all';
 
-
-
-    window.setNotifFilter = function(filter) {
-      currentNotifFilter = filter;
-      document.querySelectorAll('.notif-filter').forEach(btn => {
-        btn.style.background = 'transparent';
-        btn.classList.remove('active');
-      });
+    window.setNotifFilter = function(filter) { currentNotifFilter = filter;
+      document.querySelectorAll('.notif-filter').forEach(btn => { btn.style.background = 'transparent';
+        btn.classList.remove('active'); });
       event.target.style.background = 'rgba(0,255,255,0.2)';
       event.target.classList.add('active');
-      renderNotifications();
-    }
+      renderNotifications(); }
 
-    function renderNotifications() {
-      const list = document.getElementById('notif-list');
+    function renderNotifications() { const list = document.getElementById('notif-list');
       if (!list) return;
 
       const filtered = currentNotifFilter === 'all'
@@ -1587,164 +1456,111 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
 
       const unreadCount = allNotifications.filter(n => !n.read).length;
       const badge = document.getElementById('notif-badge');
-      if (badge) {
-        badge.textContent = unreadCount;
-        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
-      }
+      if (badge) { badge.textContent = unreadCount;
+        badge.style.display = unreadCount > 0 ? 'flex' : 'none'; }
 
-      list.innerHTML = filtered.length ? filtered.map(notif => `
+      list.textContent = filtered.length ? filtered.map(notif => `
         <div onclick="markNotifRead(${notif.id})" class="notif-item ${notif.read ? '' : 'unread'}" style="padding:12px 16px;border-left:4px solid ${notif.color};background:${notif.read ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.4)'};border-bottom:1px solid rgba(0,255,0,0.1);cursor:pointer;transition:background 0.2s;">
           <div style="font-size:13px;color:${notif.color};font-weight:${notif.read ? 'normal' : '600'};margin-bottom:4px;">${notif.message}</div>
           <div style="font-size:11px;color:#6b7280;">${notif.time}</div>
         </div>
-      `).join('') : '<div style="padding:40px;text-align:center;color:#6b7280;">No notifications</div>';
-    }
+      `).join('') : '<div style="padding:40px;text-align:center;color:#6b7280;">No notifications</div>'; }
 
-    window.markNotifRead = function(id) {
-      const notif = allNotifications.find(n => n.id === id);
+    window.markNotifRead = function(id) { const notif = allNotifications.find(n => n.id === id);
       if (notif) notif.read = true;
-      renderNotifications();
-    }
+      renderNotifications(); }
 
-    window.markAllRead = function() {
-      allNotifications.forEach(n => n.read = true);
-      renderNotifications();
-    }
+    window.markAllRead = function() { allNotifications.forEach(n => n.read = true);
+      renderNotifications(); }
 
-    window.clearAllNotifications = function() {
-      allNotifications.length = 0;
-      renderNotifications();
-    }
+    window.clearAllNotifications = function() { allNotifications.length = 0;
+      renderNotifications(); }
 
-    window.loadMoreNotifications = function() {
-      alert('Loading more notifications...');
-    }
+    window.loadMoreNotifications = function() { alert('Loading more notifications...'); }
 
-    window.toggleNotifSound = function() {
-      alert('Notification sound toggled');
-    }
+    window.toggleNotifSound = function() { alert('Notification sound toggled'); }
 
-    window.filterNotifications = function() {
-      const search = document.getElementById('notif-search').value.toLowerCase();
+    window.filterNotifications = function() { const search = document.getElementById('notif-search').value.toLowerCase();
       const list = document.getElementById('notif-list');
       const filtered = allNotifications.filter(n => n.message.toLowerCase().includes(search));
 
-      list.innerHTML = filtered.map(notif => `
+      list.textContent = filtered.map(notif => `
         <div onclick="markNotifRead(${notif.id})" class="notif-item ${notif.read ? '' : 'unread'}" style="padding:12px 16px;border-left:4px solid ${notif.color};background:${notif.read ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.4)'};border-bottom:1px solid rgba(0,255,0,0.1);cursor:pointer;">
           <div style="font-size:13px;color:${notif.color};font-weight:${notif.read ? 'normal' : '600'};margin-bottom:4px;">${notif.message}</div>
           <div style="font-size:11px;color:#6b7280;">${notif.time}</div>
         </div>
-      `).join('');
-    }
+      `).join(''); }
 
     let feedbackRating = 0;
     let interactionCount = 0;
 
-    function setFeedbackRating(rating) {
-      feedbackRating = rating;
+    function setFeedbackRating(rating) { feedbackRating = rating;
       const stars = document.querySelectorAll('.star-btn');
-      stars.forEach((star, i) => {
-        star.textContent = i < rating ? '⭐' : '☆';
-      });
+      stars.forEach((star, i) => { star.textContent = i < rating ? '⭐' : '☆'; });
       document.getElementById('submit-feedback-btn').disabled = false;
-      document.getElementById('submit-feedback-btn').style.opacity = '1';
-    }
+      document.getElementById('submit-feedback-btn').style.opacity = '1'; }
 
-    function submitFeedback() {
-      const comment = document.getElementById('feedback-comment').value;
-      const feedback = {
-        rating: feedbackRating,
+    function submitFeedback() { const comment = document.getElementById('feedback-comment').value;
+      const feedback = { rating: feedbackRating,
         comment,
         timestamp: new Date().toISOString(),
         page: 'profile',
-        userAgent: navigator.userAgent
-      };
-      console.log('Feedback submitted:', feedback);
-      localStorage.setItem('profileFeedbackGiven', 'true');
+        userAgent: navigator.userAgent };
+            localStorage.setItem('profileFeedbackGiven', 'true');
       document.getElementById('feedback-content').style.display = 'none';
       document.getElementById('feedback-success').style.display = 'block';
-      setTimeout(closeFeedbackModal, 1500);
-    }
+      setTimeout(closeFeedbackModal, 1500); }
 
-    function closeFeedbackModal() {
-      document.getElementById('feedback-modal').style.display = 'none';
-      localStorage.setItem('profileFeedbackGiven', 'true');
-    }
+    function closeFeedbackModal() { document.getElementById('feedback-modal').style.display = 'none';
+      localStorage.setItem('profileFeedbackGiven', 'true'); }
 
-    function trackInteraction() {
-      if (localStorage.getItem('profileFeedbackGiven')) return;
+    function trackInteraction() { if (localStorage.getItem('profileFeedbackGiven')) return;
       interactionCount++;
-      if (interactionCount >= 3) {
-        setTimeout(() => {
-          document.getElementById('feedback-modal').style.display = 'flex';
-        }, 1000);
+      if (interactionCount >= 3) { setTimeout(() => { document.getElementById('feedback-modal').style.display = 'flex'; }, 1000);
         document.removeEventListener('click', trackInteraction);
-        document.removeEventListener('scroll', trackInteraction);
-      }
-    }
+        document.removeEventListener('scroll', trackInteraction); } }
 
-    if (!localStorage.getItem('profileFeedbackGiven')) {
-      document.addEventListener('click', trackInteraction);
-      document.addEventListener('scroll', trackInteraction);
-    }
+    if (!localStorage.getItem('profileFeedbackGiven')) { document.addEventListener('click', trackInteraction);
+      document.addEventListener('scroll', trackInteraction); }
 
-    setInterval(() => {
-      const types = ['activity', 'follow', 'comment', 'like'];
+    setInterval(() => { const types = ['activity', 'follow', 'comment', 'like'];
       const subtypes = { activity: ['endorsement', 'milestone', 'collab'] };
       const colors = { activity: '#a855f7', follow: '#3b82f6', comment: '#10b981', like: '#ec4899' };
-      const messages = {
-        activity: ['New endorsement from @expert', 'Your video hit 1K views', 'Collaboration request from @DevTeam'],
+      const messages = { activity: ['New endorsement from @expert', 'Your video hit 1K views', 'Collaboration request from @DevTeam'],
         follow: ['@techguru started following you', 'New follower: @coder'],
         comment: ['New comment on your post', 'Someone replied to you'],
-        like: ['10 new likes on your video', '5 likes on your post'],
-      };
+        like: ['10 new likes on your video', '5 likes on your post'], };
       const type = types[Math.floor(Math.random() * types.length)];
-      const newNotif = {
-        id: Date.now(),
+      const newNotif = { id: Date.now(),
         type,
         message: messages[type][Math.floor(Math.random() * messages[type].length)],
         time: 'Just now',
         read: false,
-        color: colors[type]
-      };
-      if (type === 'activity') {
-        newNotif.subtype = subtypes.activity[Math.floor(Math.random() * subtypes.activity.length)];
-      }
+        color: colors[type] };
+      if (type === 'activity') { newNotif.subtype = subtypes.activity[Math.floor(Math.random() * subtypes.activity.length)]; }
       allNotifications.unshift(newNotif);
       if (allNotifications.length > 20) allNotifications.pop();
 
       const unreadCount = allNotifications.filter(n => !n.read).length;
       const badge = document.getElementById('notif-badge');
       badge.textContent = unreadCount;
-      badge.style.display = unreadCount > 0 ? 'flex' : 'none';
-    }, 30000);
+      badge.style.display = unreadCount > 0 ? 'flex' : 'none'; }, 30000);
 
     let currentAvatar = '';
     let currentFilter = 'none';
     let currentBadge = '';
 
-    window.openAvatarEditor = function() {
-      document.getElementById('avatar-editor-modal').style.display = 'flex';
-    }
+    window.openAvatarEditor = function() { document.getElementById('avatar-editor-modal').style.display = 'flex'; }
 
-    window.closeAvatarEditor = function() {
-      document.getElementById('avatar-editor-modal').style.display = 'none';
-    }
+    window.closeAvatarEditor = function() { document.getElementById('avatar-editor-modal').style.display = 'none'; }
 
-    window.handleAvatarUpload = function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          currentAvatar = event.target.result;
-          updateAvatarCanvas();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
+    window.handleAvatarUpload = function(e) { const file = e.target.files[0];
+      if (file) { const reader = new FileReader();
+        reader.onload = (event) => { currentAvatar = event.target.result;
+          updateAvatarCanvas(); };
+        reader.readAsDataURL(file); } }
 
-    window.generateAvatar = function() {
-      const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+    window.generateAvatar = function() { const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
       const emojis = ['👤', '🦉', '🎨', '💻', '🎮', '🎭', '🎪', '🎯'];
       const canvas = document.createElement('canvas');
       canvas.width = 300;
@@ -1757,41 +1573,32 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       ctx.textBaseline = 'middle';
       ctx.fillText(emojis[Math.floor(Math.random() * emojis.length)], 150, 150);
       currentAvatar = canvas.toDataURL();
-      updateAvatarCanvas();
-    }
+      updateAvatarCanvas(); }
 
-    window.setAvatarFilter = function(filter) {
-      currentFilter = filter;
+    window.setAvatarFilter = function(filter) { currentFilter = filter;
       document.querySelectorAll('.filter-btn').forEach(btn => btn.style.background = 'rgba(0,255,255,0.1)');
       event.target.style.background = 'rgba(0,255,255,0.3)';
-      updateAvatarCanvas();
-    }
+      updateAvatarCanvas(); }
 
-    window.setAvatarBadge = function(badge) {
-      currentBadge = badge;
+    window.setAvatarBadge = function(badge) { currentBadge = badge;
       document.querySelectorAll('.badge-btn').forEach(btn => btn.style.background = 'rgba(0,255,0,0.1)');
       if (badge) event.target.style.background = 'rgba(0,255,0,0.3)';
       else event.target.style.background = 'rgba(0,255,0,0.3)';
-      updateAvatarCanvas();
-    }
+      updateAvatarCanvas(); }
 
-    function updateAvatarCanvas() {
-      const canvas = document.getElementById('avatar-canvas');
+    function updateAvatarCanvas() { const canvas = document.getElementById('avatar-canvas');
       const ctx = canvas.getContext('2d');
       if (!currentAvatar) return;
 
       const img = new Image();
-      img.onload = () => {
-        ctx.clearRect(0, 0, 300, 300);
+      img.onload = () => { ctx.clearRect(0, 0, 300, 300);
 
-        const filters = {
-          none: 'none',
+        const filters = { none: 'none',
           grayscale: 'grayscale(100%)',
           sepia: 'sepia(100%)',
           blur: 'blur(2px)',
           brightness: 'brightness(1.3)',
-          contrast: 'contrast(1.5)'
-        };
+          contrast: 'contrast(1.5)' };
         ctx.filter = filters[currentFilter] || 'none';
 
         ctx.save();
@@ -1803,195 +1610,128 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
         ctx.restore();
         ctx.filter = 'none';
 
-        if (currentBadge) {
-          ctx.font = '60px Arial';
-          ctx.fillText(currentBadge, 220, 80);
-        }
-      };
-      img.src = currentAvatar;
-    }
+        if (currentBadge) { ctx.font = '60px Arial';
+          ctx.fillText(currentBadge, 220, 80); } };
+      img.src = currentAvatar; }
 
-    window.saveAvatar = function() {
-      const canvas = document.getElementById('avatar-canvas');
+    window.saveAvatar = function() { const canvas = document.getElementById('avatar-canvas');
       if (!canvas) return;
       const dataUrl = canvas.toDataURL();
-      document.getElementById('avatar-display').innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+      document.getElementById('avatar-display').textContent = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;">`;
       const editPreview = document.getElementById('edit-avatar-preview');
-      if (editPreview) editPreview.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-      closeAvatarEditor();
-    }
+      if (editPreview) editPreview.textContent = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      closeAvatarEditor(); }
 
     let editableSkills = ['JavaScript', 'React', 'Node.js', 'TypeScript', 'Docker', 'Kubernetes'];
     let editHistory = [];
     let editHistoryIndex = -1;
     let autoSaveTimer;
 
-    function openEditProfile() {
-      document.getElementById('edit-profile-modal').style.display = 'flex';
+    function openEditProfile() { document.getElementById('edit-profile-modal').style.display = 'flex';
       renderSkillsEditor();
       const avatarDisplay = document.getElementById('avatar-display').innerHTML;
-      document.getElementById('edit-avatar-preview').innerHTML = avatarDisplay;
+      document.getElementById('edit-avatar-preview').textContent = avatarDisplay;
 
       editHistory = [captureEditState()];
       editHistoryIndex = 0;
 
-      ['edit-name','edit-bio','edit-location','edit-website'].forEach(id => {
-        const el = document.getElementById(id);
-        el.addEventListener('input', () => {
-          clearTimeout(autoSaveTimer);
-          autoSaveTimer = setTimeout(() => {
-            localStorage.setItem('profile_draft', JSON.stringify(captureEditState()));
-            showAutoSaveIndicator();
-          }, 1000);
-          saveToHistory();
-        });
-      });
+      ['edit-name','edit-bio','edit-location','edit-website'].forEach(id => { const el = document.getElementById(id);
+        el.addEventListener('input', () => { clearTimeout(autoSaveTimer);
+          autoSaveTimer = setTimeout(() => { localStorage.setItem('profile_draft', JSON.stringify(captureEditState()));
+            showAutoSaveIndicator(); }, 1000);
+          saveToHistory(); }); });
 
       document.addEventListener('keydown', handleEditShortcuts);
 
       const draft = localStorage.getItem('profile_draft');
-      if(draft) {
-        const data = JSON.parse(draft);
+      if(draft) { const data = JSON.parse(draft);
         document.getElementById('edit-name').value = data.name;
         document.getElementById('edit-bio').value = data.bio;
         document.getElementById('edit-location').value = data.location;
-        document.getElementById('edit-website').value = data.website;
-      }
-    }
+        document.getElementById('edit-website').value = data.website; } }
 
-    function captureEditState() {
-      return {
-        name: document.getElementById('edit-name')?.value || '',
+    function captureEditState() { return { name: document.getElementById('edit-name')?.value || '',
         bio: document.getElementById('edit-bio')?.value || '',
         location: document.getElementById('edit-location')?.value || '',
         website: document.getElementById('edit-website')?.value || '',
-        skills: [...editableSkills]
-      };
-    }
+        skills: [...editableSkills] }; }
 
-    function saveToHistory() {
-      const state = captureEditState();
-      if(JSON.stringify(state) !== JSON.stringify(editHistory[editHistoryIndex])) {
-        editHistory = editHistory.slice(0, editHistoryIndex + 1);
+    function saveToHistory() { const state = captureEditState();
+      if(JSON.stringify(state) !== JSON.stringify(editHistory[editHistoryIndex])) { editHistory = editHistory.slice(0, editHistoryIndex + 1);
         editHistory.push(state);
         editHistoryIndex++;
-        if(editHistory.length > 20) editHistory.shift();
-      }
-    }
+        if(editHistory.length > 20) editHistory.shift(); } }
 
-    function handleEditShortcuts(e) {
-      if(document.getElementById('edit-profile-modal').style.display !== 'flex') return;
-      if(e.ctrlKey || e.metaKey) {
-        if(e.key === 'z') {
-          e.preventDefault();
-          undo();
-        } else if(e.key === 'y' || (e.shiftKey && e.key === 'z')) {
-          e.preventDefault();
-          redo();
-        } else if(e.key === 's') {
-          e.preventDefault();
-          saveProfile();
-        }
-      }
-    }
+    function handleEditShortcuts(e) { if(document.getElementById('edit-profile-modal').style.display !== 'flex') return;
+      if(e.ctrlKey || e.metaKey) { if(e.key === 'z') { e.preventDefault();
+          undo(); } else if(e.key === 'y' || (e.shiftKey && e.key === 'z')) { e.preventDefault();
+          redo(); } else if(e.key === 's') { e.preventDefault();
+          saveProfile(); } } }
 
-    function undo() {
-      if(editHistoryIndex > 0) {
-        editHistoryIndex--;
+    function undo() { if(editHistoryIndex > 0) { editHistoryIndex--;
         restoreEditState(editHistory[editHistoryIndex]);
-        showToast('⏪ Undo', '#00ffff');
-      }
-    }
+        showToast('⏪ Undo', '#00ffff'); } }
 
-    function redo() {
-      if(editHistoryIndex < editHistory.length - 1) {
-        editHistoryIndex++;
+    function redo() { if(editHistoryIndex < editHistory.length - 1) { editHistoryIndex++;
         restoreEditState(editHistory[editHistoryIndex]);
-        showToast('⏩ Redo', '#00ffff');
-      }
-    }
+        showToast('⏩ Redo', '#00ffff'); } }
 
-    function restoreEditState(state) {
-      document.getElementById('edit-name').value = state.name;
+    function restoreEditState(state) { document.getElementById('edit-name').value = state.name;
       document.getElementById('edit-bio').value = state.bio;
       document.getElementById('edit-location').value = state.location;
       document.getElementById('edit-website').value = state.website;
       editableSkills = [...state.skills];
-      renderSkillsEditor();
-    }
+      renderSkillsEditor(); }
 
-    function showAutoSaveIndicator() {
-      const indicator = document.createElement('div');
+    function showAutoSaveIndicator() { const indicator = document.createElement('div');
       indicator.style.cssText = 'position:fixed;bottom:20px;right:20px;background:rgba(0,255,0,0.9);color:#000;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;z-index:1001;';
       indicator.textContent = '💾 Auto-saved';
       document.body.appendChild(indicator);
-      setTimeout(() => indicator.remove(), 1500);
-    }
+      setTimeout(() => indicator.remove(), 1500); }
 
-    function showToast(msg, color) {
-      const toast = document.createElement('div');
+    function showToast(msg, color) { const toast = document.createElement('div');
       toast.style.cssText = `position:fixed;top:80px;right:20px;background:${color};color:#000;padding:10px 16px;border-radius:6px;font-weight:600;z-index:1001;`;
       toast.textContent = msg;
       document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 1500);
-    }
+      setTimeout(() => toast.remove(), 1500); }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && e.target.id === 'new-skill') {
-        e.preventDefault();
-        addSkill();
-      }
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.id === 'new-skill') { e.preventDefault();
+        addSkill(); } });
 
-    window.closeEditProfile = function() {
-      document.getElementById('edit-profile-modal').style.display = 'none';
+    window.closeEditProfile = function() { document.getElementById('edit-profile-modal').style.display = 'none';
       document.removeEventListener('keydown', handleEditShortcuts);
-      clearTimeout(autoSaveTimer);
-    }
+      clearTimeout(autoSaveTimer); }
 
-    function renderSkillsEditor() {
-      const container = document.getElementById('skills-editor');
+    function renderSkillsEditor() { const container = document.getElementById('skills-editor');
       if (!container) return;
-      container.innerHTML = editableSkills.map((skill, i) => `
+      container.textContent = editableSkills.map((skill, i) => `
         <span style="padding:6px 12px;background:rgba(0,255,255,0.2);color:#00ffff;border-radius:16px;font-size:13px;border:1px solid rgba(0,255,255,0.3);display:inline-flex;align-items:center;gap:6px;">
           ${skill}
           <button onclick="removeSkill(${i})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;line-height:1;padding:0;">&times;</button>
         </span>
-      `).join('');
-    }
+      `).join(''); }
 
-    window.addSkill = function() {
-      const input = document.getElementById('new-skill');
+    window.addSkill = function() { const input = document.getElementById('new-skill');
       if (!input) return;
       const skill = input.value.trim();
-      if (skill && !editableSkills.includes(skill)) {
-        editableSkills.push(skill);
+      if (skill && !editableSkills.includes(skill)) { editableSkills.push(skill);
         renderSkillsEditor();
         input.value = '';
-        input.focus();
-      }
-    }
+        input.focus(); } }
 
-    window.removeSkill = function(index) {
-      editableSkills.splice(index, 1);
-      renderSkillsEditor();
-    }
+    window.removeSkill = function(index) { editableSkills.splice(index, 1);
+      renderSkillsEditor(); }
 
-    window.saveProfile = function() {
-      const name = document.getElementById('edit-name').value.trim();
+    window.saveProfile = function() { const name = document.getElementById('edit-name').value.trim();
       const bio = document.getElementById('edit-bio').value.trim();
       const location = document.getElementById('edit-location').value.trim();
       const website = document.getElementById('edit-website').value.trim();
 
-      if(!name) {
-        showToast('⚠️ Name is required', '#ef4444');
+      if(!name) { showToast('⚠️ Name is required', '#ef4444');
         document.getElementById('edit-name').focus();
-        return;
-      }
-      if(bio.length > 200) {
-        showToast('⚠️ Bio too long (max 200 chars)', '#ef4444');
-        return;
-      }
+        return; }
+      if(bio.length > 200) { showToast('⚠️ Bio too long (max 200 chars)', '#ef4444');
+        return; }
 
       document.querySelector('.profile-info h1').textContent = name;
       document.querySelector('.profile-info p').textContent = bio;
@@ -2004,18 +1744,15 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       if (websiteSpan) websiteSpan.textContent = `🔗 ${website}`;
 
       const skillsContainer = document.querySelector('.sidebar').querySelectorAll('div')[1].querySelector('div');
-      skillsContainer.innerHTML = editableSkills.map(skill => {
-        const colors = ['rgba(0,255,255,0.2)', 'rgba(0,255,0,0.2)', 'rgba(255,0,255,0.2)', 'rgba(255,255,0,0.2)'];
+      skillsContainer.textContent = editableSkills.map(skill => { const colors = ['rgba(0,255,255,0.2)', 'rgba(0,255,0,0.2)', 'rgba(255,0,255,0.2)', 'rgba(255,255,0,0.2)'];
         const borderColors = ['rgba(0,255,255,0.3)', 'rgba(0,255,0,0.3)', 'rgba(255,0,255,0.3)', 'rgba(255,255,0,0.3)'];
         const textColors = ['#00ffff', '#00ff00', '#ff00ff', '#ffff00'];
         const idx = Math.floor(Math.random() * colors.length);
-        return `<span style="padding:6px 12px;background:${colors[idx]};color:${textColors[idx]};border-radius:16px;font-size:13px;border:1px solid ${borderColors[idx]};">${skill}</span>`;
-      }).join('');
+        return `<span style="padding:6px 12px;background:${colors[idx]};color:${textColors[idx]};border-radius:16px;font-size:13px;border:1px solid ${borderColors[idx]};">${skill}</span>`; }).join('');
 
       localStorage.removeItem('profile_draft');
       closeEditProfile();
-      showToast('✅ Profile updated successfully!', 'rgba(0,255,0,0.9)');
-    }
+      showToast('✅ Profile updated successfully!', 'rgba(0,255,0,0.9)'); }
     let pinnedPostId = 1;
     let userPosts = [
       {id: 1, title: '🚀 Building a Real-Time Chat App', content: 'Just finished implementing WebSocket connections with Socket.io. The performance is incredible!', likes: 234, comments: 45, shares: 12, time: '2 hours ago', image: 'https://picsum.photos/400/300?random=1', pinned: true},
@@ -2025,84 +1762,56 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       {id: 5, title: '🔐 Security Best Practices', content: 'Implementing JWT authentication with refresh tokens and secure HTTP-only cookies', likes: 345, comments: 54, shares: 34, time: '3 days ago', image: 'https://picsum.photos/400/300?random=5'},
       {id: 6, title: '🌐 Microservices Architecture', content: 'Migrated our monolith to microservices using Kubernetes and Istio service mesh', likes: 678, comments: 98, shares: 78, time: '4 days ago', image: 'https://picsum.photos/400/300?random=6'}
     ];
-    const tabContent = {
-      posts: userPosts,
+    const tabContent = { posts: userPosts,
       marketplace: [1,2,3].map(i => ({title: `Product ${i}`, desc: `${i*10}.99`, color: 'from-blue-200 to-purple-300'})),
       code: [1,2,3,4].map(i => ({title: `Repository ${i}`, desc: 'JavaScript • React', color: 'from-green-200 to-teal-300', hasCode: true})),
-      analytics: [{title: '1.2K', desc: 'Total Views', color: 'from-blue-200 to-blue-300'}, {title: '543', desc: 'Engagements', color: 'from-purple-200 to-purple-300'}, {title: '89', desc: 'Posts', color: 'from-pink-200 to-pink-300'}]
-    };
-    function setTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.style.color = '#00ffff';
-        btn.style.borderBottom = 'none';
-      });
+      analytics: [{title: '1.2K', desc: 'Total Views', color: 'from-blue-200 to-blue-300'}, {title: '543', desc: 'Engagements', color: 'from-purple-200 to-purple-300'}, {title: '89', desc: 'Posts', color: 'from-pink-200 to-pink-300'}] };
+    function setTab(tab) { currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => { btn.style.color = '#00ffff';
+        btn.style.borderBottom = 'none'; });
       event.target.style.color = '#00ff00';
       event.target.style.borderBottom = '2px solid #00ff00';
-      renderContent();
-    }
-    const allActivities = Array.from({ length: 50 }, (_, i) => ({
-      text: ['Posted a new video', 'Gained 50 new followers', 'Sold a product', 'Unlocked achievement'][i % 4],
+      renderContent(); }
+    const allActivities = Array.from({ length: 50 }, (_, i) => ({ text: ['Posted a new video', 'Gained 50 new followers', 'Sold a product', 'Unlocked achievement'][i % 4],
       time: `${i + 1} hours ago`,
       color: ['#00ffff', '#00ff00', '#ff00ff', '#ffff00'][i % 4],
-      bg: ['rgba(0,255,255,0.05)', 'rgba(0,255,0,0.05)', 'rgba(255,0,255,0.05)', 'rgba(255,255,0,0.05)'][i % 4]
-    }));
+      bg: ['rgba(0,255,255,0.05)', 'rgba(0,255,0,0.05)', 'rgba(255,0,255,0.05)', 'rgba(255,255,0,0.05)'][i % 4] }));
 
     let activityPage = 0;
     const activityPerPage = 5;
 
-    function loadMoreActivities() {
-      const feed = document.getElementById('activity-feed');
+    function loadMoreActivities() { const feed = document.getElementById('activity-feed');
       const start = activityPage * activityPerPage;
       const end = start + activityPerPage;
       const items = allActivities.slice(start, end);
 
-      items.forEach(activity => {
-        const div = document.createElement('div');
+      items.forEach(activity => { const div = document.createElement('div');
         div.style.cssText = `padding:12px;background:${activity.bg};border-left:3px solid ${activity.color};border-radius:4px;`;
-        div.innerHTML = `
+        div.textContent = `
           <div style="font-size:13px;color:${activity.color};margin-bottom:4px;">${activity.text}</div>
           <div style="font-size:11px;color:#6b7280;">${activity.time}</div>
         `;
-        feed.appendChild(div);
-      });
+        feed.appendChild(div); });
 
       activityPage++;
-      if (end >= allActivities.length) {
-        feed.removeEventListener('scroll', handleActivityScroll);
-      }
-    }
+      if (end >= allActivities.length) { feed.removeEventListener('scroll', handleActivityScroll); } }
 
-    function handleActivityScroll(e) {
-      const el = e.target;
-      if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50) {
-        loadMoreActivities();
-      }
-    }
+    function handleActivityScroll(e) { const el = e.target;
+      if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50) { loadMoreActivities(); } }
 
     document.getElementById('activity-feed').addEventListener('scroll', handleActivityScroll);
     loadMoreActivities();
 
-    function lazyLoadImages() {
-      const images = document.querySelectorAll('img[data-src]');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
+    function lazyLoadImages() { const images = document.querySelectorAll('img[data-src]');
+      const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { const img = entry.target;
             img.src = img.dataset.src;
             img.removeAttribute('data-src');
-            observer.unobserve(img);
-          }
-        });
-      }, { threshold: 0.01, rootMargin: '50px' });
+            observer.unobserve(img); } }); }, { threshold: 0.01, rootMargin: '50px' });
 
-      images.forEach(img => observer.observe(img));
-    }
+      images.forEach(img => observer.observe(img)); }
 
-    function renderContent() {
-      const items = tabContent[currentTab];
-      if (currentTab === 'posts') {
-        document.getElementById('content').innerHTML = items.map((post) => `
+    function renderContent() { const items = tabContent[currentTab];
+      if (currentTab === 'posts') { document.getElementById('content').textContent = items.map((post) => `
           <div onclick="openPost(${post.id})" style="background:linear-gradient(135deg,rgba(0,255,255,0.05),rgba(0,255,0,0.05));border-radius:12px;border:2px solid rgba(0,255,0,0.4);padding:0;box-shadow:0 4px 30px rgba(0,255,0,0.2);transition:all 0.3s;overflow:hidden;cursor:pointer;" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 8px 40px rgba(0,255,0,0.4)'" onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 4px 30px rgba(0,255,0,0.2)'">
             <img data-src="${post.image}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23111' width='400' height='300'/%3E%3C/svg%3E" style="height:200px;width:100%;object-fit:cover;" alt="${post.title}">
             <div style="padding:16px;">
@@ -2127,31 +1836,24 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
               </div>
             </div>
           </div>
-        `).join('');
-      } else {
-        document.getElementById('content').innerHTML = items.map((item, i) => `
+        `).join(''); } else { document.getElementById('content').textContent = items.map((item, i) => `
           <div style="background:rgba(10,10,15,0.8);border-radius:8px;border:2px solid rgba(0,255,0,0.3);padding:16px;box-shadow:0 0 20px rgba(0,255,0,0.3);transition:all 0.3s;cursor:pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
             <img data-src="https://picsum.photos/400/300?random=${i+10}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23333' width='400' height='300'/%3E%3C/svg%3E" style="height:160px;width:100%;object-fit:cover;border-radius:8px;margin-bottom:12px;" alt="Item ${i}">
             <h3 style="font-weight:600;color:#00ff00;margin-bottom:4px;">${item.title}</h3>
             <p style="font-size:14px;color:#00ffff;margin-bottom:${item.hasCode ? '8px' : '0'};">${item.desc}</p>
             ${item.hasCode ? '<button onclick="openCodeViewer();event.stopPropagation()" style="padding:6px 12px;background:rgba(0,255,255,0.2);color:#00ffff;border:1px solid rgba(0,255,255,0.3);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">💻 View Code</button>' : ''}
           </div>
-        `).join('');
-      }
-      lazyLoadImages();
-    }
+        `).join(''); }
+      lazyLoadImages(); }
     renderContent();
     renderPinnedPost();
 
-    function renderPinnedPost() {
-      const pinnedPost = userPosts.find(p => p.id === pinnedPostId);
+    function renderPinnedPost() { const pinnedPost = userPosts.find(p => p.id === pinnedPostId);
       const section = document.getElementById('pinned-post-section');
-      if(!pinnedPost) {
-        section.style.display = 'none';
-        return;
-      }
+      if(!pinnedPost) { section.style.display = 'none';
+        return; }
       section.style.display = 'block';
-      document.getElementById('pinned-post-content').innerHTML = `
+      document.getElementById('pinned-post-content').textContent = `
         <h4 style="color:#00ff00;font-weight:600;margin:0 0 8px;">${pinnedPost.title}</h4>
         <p style="color:#00ffff;font-size:14px;margin:0 0 12px;">${pinnedPost.content}</p>
         <div style="display:flex;gap:16px;font-size:13px;color:#6b7280;">
@@ -2160,59 +1862,41 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <span>🔄 ${pinnedPost.shares}</span>
           <span>👁️ 1.2K</span>
         </div>
-      `;
-    }
+      `; }
 
-    window.pinPost = function(postId) {
-      userPosts.forEach(p => p.pinned = false);
+    window.pinPost = function(postId) { userPosts.forEach(p => p.pinned = false);
       const post = userPosts.find(p => p.id === postId);
-      if(post) {
-        post.pinned = true;
+      if(post) { post.pinned = true;
         pinnedPostId = postId;
         renderPinnedPost();
-        showToast('📌 Post pinned','#ffd700');
-      }
-    }
+        showToast('📌 Post pinned','#ffd700'); } }
 
-    window.unpinPost = function() {
-      const post = userPosts.find(p => p.id === pinnedPostId);
+    window.unpinPost = function() { const post = userPosts.find(p => p.id === pinnedPostId);
       if(post) post.pinned = false;
       pinnedPostId = null;
       renderPinnedPost();
-      showToast('📌 Post unpinned','#ffd700');
-    }
+      showToast('📌 Post unpinned','#ffd700'); }
 
-    window.openCreatePost = function() {
-      document.getElementById('create-post-modal').style.display = 'flex';
-    }
+    window.openCreatePost = function() { document.getElementById('create-post-modal').style.display = 'flex'; }
 
-    window.closeCreatePost = function() {
-      document.getElementById('create-post-modal').style.display = 'none';
+    window.closeCreatePost = function() { document.getElementById('create-post-modal').style.display = 'none';
       document.getElementById('post-title').value = '';
-      document.getElementById('post-content').value = '';
-    }
+      document.getElementById('post-content').value = ''; }
 
-    window.addPostMedia = function(type) {
-      alert(`Adding ${type} to post...`);
-    }
+    window.addPostMedia = function(type) { alert(`Adding ${type} to post...`); }
 
-    window.publishPost = function() {
-      const title = document.getElementById('post-title').value;
+    window.publishPost = function() { const title = document.getElementById('post-title').value;
       const content = document.getElementById('post-content').value;
-      if (!title && !content) {
-        alert('Please add a title or content');
-        return;
-      }
-      const newPost = {
-        id: Date.now(),
+      if (!title && !content) { alert('Please add a title or content');
+        return; }
+      const newPost = { id: Date.now(),
         title: title || '📝 New Post',
         content: content || 'No content provided',
         likes: 0,
         comments: 0,
         shares: 0,
         time: 'Just now',
-        image: `https://picsum.photos/400/300?random=${Date.now()}`
-      };
+        image: `https://picsum.photos/400/300?random=${Date.now()}` };
       userPosts.unshift(newPost);
       tabContent.posts = userPosts;
       if (currentTab === 'posts') renderContent();
@@ -2221,37 +1905,27 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
       toast.textContent = '✅ Post published successfully!';
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 2500);
-      closeCreatePost();
-    }
+      closeCreatePost(); }
 
-    window.toggleLike = function(postId) {
-      const post = userPosts.find(p => p.id === postId);
-      if (post) {
-        post.likes++;
+    window.toggleLike = function(postId) { const post = userPosts.find(p => p.id === postId);
+      if (post) { post.likes++;
         const btn = document.getElementById(`like-${postId}`);
-        btn.innerHTML = `<span style="font-size:16px;">❤️</span><span>${post.likes}</span>`;
-        btn.style.animation = 'pulse 0.3s';
-      }
-    }
+        btn.textContent = `<span style="font-size:16px;">❤️</span><span>${post.likes}</span>`;
+        btn.style.animation = 'pulse 0.3s'; } }
 
     let currentPostId = null;
     const postComments = {};
 
-    window.openComments = function(postId) {
-      currentPostId = postId;
+    window.openComments = function(postId) { currentPostId = postId;
       if(!postComments[postId]) postComments[postId] = [];
       document.getElementById('comments-modal').style.display = 'flex';
-      renderComments();
-    }
+      renderComments(); }
 
-    window.closeComments = function() {
-      document.getElementById('comments-modal').style.display = 'none';
-      currentPostId = null;
-    }
+    window.closeComments = function() { document.getElementById('comments-modal').style.display = 'none';
+      currentPostId = null; }
 
-    function renderComments() {
-      const comments = postComments[currentPostId] || [];
-      document.getElementById('comments-list').innerHTML = comments.length ? comments.map(c => `
+    function renderComments() { const comments = postComments[currentPostId] || [];
+      document.getElementById('comments-list').textContent = comments.length ? comments.map(c => `
         <div style="padding:12px;background:rgba(0,255,255,0.1);border-radius:8px;border-left:3px solid #00ffff;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
             <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff00ff,#00ffff);"></div>
@@ -2260,60 +1934,42 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           </div>
           <p style="color:#00ffff;font-size:14px;margin:0;">${c.text}</p>
         </div>
-      `).join('') : '<p style="color:#6b7280;text-align:center;padding:20px;">No comments yet. Be the first!</p>';
-    }
+      `).join('') : '<p style="color:#6b7280;text-align:center;padding:20px;">No comments yet. Be the first!</p>'; }
 
-    window.addComment = function() {
-      const input = document.getElementById('comment-input');
+    window.addComment = function() { const input = document.getElementById('comment-input');
       const text = input.value.trim();
       if(!text) return;
       if(!postComments[currentPostId]) postComments[currentPostId] = [];
       postComments[currentPostId].push({text, time: 'Just now'});
       const post = userPosts.find(p => p.id === currentPostId);
-      if(post) {
-        post.comments++;
+      if(post) { post.comments++;
         if(currentTab === 'posts') renderContent();
-        if(post.pinned) renderPinnedPost();
-      }
+        if(post.pinned) renderPinnedPost(); }
       showToast('💬 Comment added','#00ffff');
-      closeComments();
-    }
+      closeComments(); }
 
-    window.sharePost = function(postId) {
-      const post = userPosts.find(p => p.id === postId);
-      if (post) {
-        post.shares++;
+    window.sharePost = function(postId) { const post = userPosts.find(p => p.id === postId);
+      if (post) { post.shares++;
         renderContent();
         const toast = document.createElement('div');
         toast.style.cssText = 'position:fixed;top:80px;right:20px;background:rgba(255,255,0,0.9);color:#000;padding:12px 20px;border-radius:8px;font-weight:bold;z-index:1000;';
         toast.textContent = '🔄 Post shared!';
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
-      }
-    }
+        setTimeout(() => toast.remove(), 2000); } }
 
-    window.openFollowersModal = function() {
-      document.getElementById('followers-modal').style.display = 'flex';
-    }
+    window.openFollowersModal = function() { document.getElementById('followers-modal').style.display = 'flex'; }
 
-    window.closeFollowersModal = function() {
-      document.getElementById('followers-modal').style.display = 'none';
-    }
+    window.closeFollowersModal = function() { document.getElementById('followers-modal').style.display = 'none'; }
 
-    window.openFollowingModal = function() {
-      document.getElementById('following-modal').style.display = 'flex';
-    }
+    window.openFollowingModal = function() { document.getElementById('following-modal').style.display = 'flex'; }
 
-    window.closeFollowingModal = function() {
-      document.getElementById('following-modal').style.display = 'none';
-    }
+    window.closeFollowingModal = function() { document.getElementById('following-modal').style.display = 'none'; }
 
-    window.openPost = function(postId) {
-      const post = userPosts.find(p => p.id === postId);
+    window.openPost = function(postId) { const post = userPosts.find(p => p.id === postId);
       if(!post) return;
       const modal = document.createElement('div');
       modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:2000;display:flex;align-items:center;justify-content:center;';
-      modal.innerHTML = `
+      modal.textContent = `
         <div style="background:rgba(10,10,15,0.98);border:2px solid rgba(0,255,0,0.5);border-radius:16px;padding:24px;max-width:800px;width:90%;max-height:90vh;overflow-y:auto;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
             <h2 style="color:#00ff00;font-size:24px;font-weight:700;margin:0;">${post.title}</h2>
@@ -2330,21 +1986,14 @@ body { zoom: 0.75 !important; transform: scale(0.75) !important; transform-origi
           <button onclick="openComments(${post.id});this.closest('div[style*=fixed]').remove()" style="width:100%;padding:12px;background:rgba(0,255,255,0.3);color:#00ffff;border:1px solid rgba(0,255,255,0.5);border-radius:8px;cursor:pointer;font-weight:600;">💬 View Comments</button>
         </div>
       `;
-      document.body.appendChild(modal);
-    }
+      document.body.appendChild(modal); }
   </script>
 <div class="main-content"><script>
-    document.addEventListener('click', (e) => {
-      const notifDropdown = document.getElementById('notif-dropdown');
-      if (!e.target.closest('[onclick*="toggleNotifications"]') && !e.target.closest('#notif-dropdown')) {
-        notifDropdown.style.display = 'none';
-      }
+    document.addEventListener('click', (e) => { const notifDropdown = document.getElementById('notif-dropdown');
+      if (!e.target.closest('[onclick*="toggleNotifications"]') && !e.target.closest('#notif-dropdown')) { notifDropdown.style.display = 'none'; }
       const moreMenu = document.getElementById('more-options-menu');
-      if (moreMenu && !e.target.closest('[onclick*="toggleMoreOptions"]') && !e.target.closest('#more-options-menu')) {
-        moreMenu.style.display = 'none';
-      }
-    });
+      if (moreMenu && !e.target.closest('[onclick*="toggleMoreOptions"]') && !e.target.closest('#more-options-menu')) { moreMenu.style.display = 'none'; } });
   </script>
   <script src="notifications.js"></script>
-</div></body>
+</div><script src="load-header.js"></script></body>
 </html>

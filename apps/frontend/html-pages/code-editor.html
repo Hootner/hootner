@@ -20,8 +20,7 @@
     <script src="cross-integration.js"></script>
 
     <style>
-      :root {
-        --bg: #1e1e1e;
+      :root { --bg: #1e1e1e;
         --sidebar-bg: #252526;
         --tab-bg: #2d2d30;
         --accent: #007acc;
@@ -29,32 +28,22 @@
         --text-muted: #969696;
         --border: #3c3c3c;
         --hover: #2a2d2e;
-        --active: #37373d;
-      }
-      * {
-        margin: 0;
+        --active: #37373d; }
+      * { margin: 0;
         padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background: var(--bg);
         color: var(--text);
         height: 100vh;
-        overflow: hidden;
-      }
-      .container {
-        display: flex;
+        overflow: hidden; }
+      .container { display: flex;
         flex-direction: column;
-        height: 100vh;
-      }
-      .main-content {
-        display: flex;
+        height: 100vh; }
+      .main-content { display: flex;
         flex: 1;
-        overflow: hidden;
-      }
-      .top-bar {
-        background: #323233;
+        overflow: hidden; }
+      .top-bar { background: #323233;
         height: 38px;
         display: flex;
         align-items: center;
@@ -62,32 +51,24 @@
         padding: 0 16px;
         border-bottom: 1px solid var(--border);
         font-size: 13px;
-        color: var(--text-muted);
-      }
-      .top-bar button {
-        background: none;
+        color: var(--text-muted); }
+      .top-bar button { background: none;
         border: none;
         color: var(--text);
         padding: 6px 12px;
         cursor: pointer;
         border-radius: 4px;
-        transition: background 0.2s;
-      }
-      .top-bar button:hover {
-        background: var(--hover);
-      }
-      .activity-bar {
-        width: 50px;
+        transition: background 0.2s; }
+      .top-bar button:hover { background: var(--hover); }
+      .activity-bar { width: 50px;
         background: #333333;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding-top: 8px;
         border-right: 1px solid var(--border);
-        gap: 4px;
-      }
-      .activity-icon {
-        width: 40px;
+        gap: 4px; }
+      .activity-icon { width: 40px;
         height: 40px;
         display: flex;
         align-items: center;
@@ -95,61 +76,43 @@
         font-size: 22px;
         cursor: pointer;
         border-radius: 6px;
-        transition: all 0.2s;
-      }
-      .activity-icon:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .activity-icon.active {
-        color: white;
-        position: relative;
-      }
-      .activity-icon.active::before {
-        content: '';
+        transition: all 0.2s; }
+      .activity-icon:hover { background: rgba(255, 255, 255, 0.1); }
+      .activity-icon.active { color: white;
+        position: relative; }
+      .activity-icon.active::before { content: '';
         position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
         width: 3px;
-        background: var(--accent);
-      }
-      .sidebar {
-        width: 280px;
+        background: var(--accent); }
+      .sidebar { width: 280px;
         background: var(--sidebar-bg);
         border-right: 1px solid var(--border);
         display: flex;
-        flex-direction: column;
-      }
-      .sidebar-header {
-        padding: 10px 12px;
+        flex-direction: column; }
+      .sidebar-header { padding: 10px 12px;
         font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.8px;
         color: #858585;
         display: flex;
         justify-content: space-between;
-        align-items: center;
-      }
-      .sidebar-actions button {
-        background: none;
+        align-items: center; }
+      .sidebar-actions button { background: none;
         border: none;
         color: var(--text-muted);
         font-size: 16px;
         padding: 4px;
         cursor: pointer;
-        border-radius: 4px;
-      }
-      .sidebar-actions button:hover {
-        color: white;
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .file-tree {
-        flex: 1;
+        border-radius: 4px; }
+      .sidebar-actions button:hover { color: white;
+        background: rgba(255, 255, 255, 0.1); }
+      .file-tree { flex: 1;
         overflow-y: auto;
-        padding: 4px 0;
-      }
-      .file-item {
-        padding: 3px 8px;
+        padding: 4px 0; }
+      .file-item { padding: 3px 8px;
         cursor: pointer;
         font-size: 13.5px;
         display: flex;
@@ -157,44 +120,26 @@
         gap: 6px;
         border-radius: 4px;
         margin: 0 6px;
-        transition: background 0.2s;
-      }
-      .file-item:hover {
-        background: var(--hover);
-      }
-      .file-item.active {
-        background: var(--active);
-        color: white;
-      }
-      .file-item.folder {
-        font-weight: 500;
-      }
-      .file-item.nested {
-        padding-left: 28px;
-      }
-      .file-icon {
-        font-size: 15px;
+        transition: background 0.2s; }
+      .file-item:hover { background: var(--hover); }
+      .file-item.active { background: var(--active);
+        color: white; }
+      .file-item.folder { font-weight: 500; }
+      .file-item.nested { padding-left: 28px; }
+      .file-icon { font-size: 15px;
         width: 18px;
-        text-align: center;
-      }
-      .editor-container {
-        flex: 1;
+        text-align: center; }
+      .editor-container { flex: 1;
         display: flex;
         flex-direction: column;
-        background: var(--bg);
-      }
-      .tabs {
-        display: flex;
+        background: var(--bg); }
+      .tabs { display: flex;
         background: var(--tab-bg);
         height: 36px;
         overflow-x: auto;
-        border-bottom: 1px solid var(--border);
-      }
-      .tabs::-webkit-scrollbar {
-        height: 0;
-      }
-      .tab {
-        padding: 0 16px;
+        border-bottom: 1px solid var(--border); }
+      .tabs::-webkit-scrollbar { height: 0; }
+      .tab { padding: 0 16px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -203,63 +148,37 @@
         cursor: pointer;
         min-width: fit-content;
         border-right: 1px solid var(--border);
-        transition: all 0.2s;
-      }
-      .tab.active {
-        background: var(--bg);
-        color: white;
-      }
-      .tab:hover:not(.active) {
-        background: var(--hover);
-      }
-      .tab-close {
-        opacity: 0;
+        transition: all 0.2s; }
+      .tab.active { background: var(--bg);
+        color: white; }
+      .tab:hover:not(.active) { background: var(--hover); }
+      .tab-close { opacity: 0;
         font-size: 18px;
         padding: 4px;
         border-radius: 4px;
-        transition: all 0.2s;
-      }
-      .tab:hover .tab-close {
-        opacity: 1;
-      }
-      .tab-close:hover {
-        background: rgba(255, 0, 0, 0.4);
-        color: white;
-      }
-      .unsaved-dot {
-        width: 8px;
+        transition: all 0.2s; }
+      .tab:hover .tab-close { opacity: 1; }
+      .tab-close:hover { background: rgba(255, 0, 0, 0.4);
+        color: white; }
+      .unsaved-dot { width: 8px;
         height: 8px;
         background: #ff9800;
-        border-radius: 50%;
-      }
-      #editor {
-        flex: 1;
-      }
-      .split-view {
+        border-radius: 50%; }
+      #editor { flex: 1; }
+      .split-view { display: flex;
+        flex: 1; }
+      .editor-pane { flex: 1;
         display: flex;
-        flex: 1;
-      }
-      .editor-pane {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-      .preview-pane {
-        flex: 1;
+        flex-direction: column; }
+      .preview-pane { flex: 1;
         background: white;
-        border-left: 1px solid var(--border);
-      }
-      .preview-iframe {
-        width: 100%;
+        border-left: 1px solid var(--border); }
+      .preview-iframe { width: 100%;
         height: 100%;
-        border: none;
-      }
-      .terminal-container {
-        height: 100%;
-        background: #000;
-      }
-      .ai-panel {
-        position: fixed;
+        border: none; }
+      .terminal-container { height: 100%;
+        background: #000; }
+      .ai-panel { position: fixed;
         right: 0;
         top: 38px;
         bottom: 0;
@@ -270,38 +189,24 @@
         transition: transform 0.3s;
         z-index: 50;
         display: flex;
-        flex-direction: column;
-      }
-      .ai-panel.open {
-        transform: translateX(0);
-      }
-      .ai-chat {
-        flex: 1;
+        flex-direction: column; }
+      .ai-panel.open { transform: translateX(0); }
+      .ai-chat { flex: 1;
         overflow-y: auto;
-        padding: 12px;
-      }
-      .ai-message {
-        margin: 8px 0;
+        padding: 12px; }
+      .ai-message { margin: 8px 0;
         padding: 8px;
-        border-radius: 8px;
-      }
-      .ai-message.user {
-        background: var(--accent);
+        border-radius: 8px; }
+      .ai-message.user { background: var(--accent);
         color: white;
-        margin-left: 20px;
-      }
-      .ai-message.assistant {
-        background: var(--hover);
-        margin-right: 20px;
-      }
-      .ai-input {
-        display: flex;
+        margin-left: 20px; }
+      .ai-message.assistant { background: var(--hover);
+        margin-right: 20px; }
+      .ai-input { display: flex;
         padding: 12px;
         gap: 8px;
-        border-top: 1px solid var(--border);
-      }
-      .git-status {
-        position: fixed;
+        border-top: 1px solid var(--border); }
+      .git-status { position: fixed;
         bottom: 80px;
         left: 50px;
         right: 0;
@@ -310,30 +215,18 @@
         border-top: 1px solid var(--border);
         transform: translateY(100%);
         transition: transform 0.3s;
-        z-index: 40;
-      }
-      .git-status.open {
-        transform: translateY(0);
-      }
-      .collab-cursor {
-        position: absolute;
+        z-index: 40; }
+      .git-status.open { transform: translateY(0); }
+      .collab-cursor { position: absolute;
         width: 2px;
         height: 20px;
         background: #ff00ff;
-        animation: blink 1s infinite;
-      }
-      @keyframes blink {
-        0%,
-        50% {
-          opacity: 1;
-        }
+        animation: blink 1s infinite; }
+      @keyframes blink { 0%,
+        50% { opacity: 1; }
         51%,
-        100% {
-          opacity: 0;
-        }
-      }
-      .snippet-panel {
-        position: fixed;
+        100% { opacity: 0; } }
+      .snippet-panel { position: fixed;
         left: 330px;
         top: 38px;
         width: 300px;
@@ -343,41 +236,27 @@
         border-radius: 8px;
         display: none;
         z-index: 100;
-        flex-direction: column;
-      }
-      .snippet-item {
-        padding: 8px 12px;
+        flex-direction: column; }
+      .snippet-item { padding: 8px 12px;
         cursor: pointer;
-        border-bottom: 1px solid var(--border);
-      }
-      .snippet-item:hover {
-        background: var(--hover);
-      }
-      .diff-viewer {
-        position: fixed;
+        border-bottom: 1px solid var(--border); }
+      .snippet-item:hover { background: var(--hover); }
+      .diff-viewer { position: fixed;
         inset: 50px;
         background: var(--bg);
         border: 2px solid var(--accent);
         border-radius: 8px;
         display: none;
         z-index: 200;
-        flex-direction: column;
-      }
-      .diff-side {
-        flex: 1;
+        flex-direction: column; }
+      .diff-side { flex: 1;
         overflow: auto;
         padding: 12px;
         font-family: monospace;
-        font-size: 13px;
-      }
-      .diff-add {
-        background: rgba(0, 255, 0, 0.1);
-      }
-      .diff-remove {
-        background: rgba(255, 0, 0, 0.1);
-      }
-      .perf-overlay {
-        position: fixed;
+        font-size: 13px; }
+      .diff-add { background: rgba(0, 255, 0, 0.1); }
+      .diff-remove { background: rgba(255, 0, 0, 0.1); }
+      .perf-overlay { position: fixed;
         top: 38px;
         right: 10px;
         background: rgba(0, 0, 0, 0.8);
@@ -386,63 +265,43 @@
         border-radius: 4px;
         font-family: monospace;
         font-size: 11px;
-        z-index: 150;
-      }
-      .plugin-badge {
-        position: absolute;
+        z-index: 150; }
+      .plugin-badge { position: absolute;
         top: 2px;
         right: 2px;
         background: #ff0;
         color: #000;
         font-size: 8px;
         padding: 2px 4px;
-        border-radius: 3px;
-      }
-      .panel {
-        height: 220px;
+        border-radius: 3px; }
+      .panel { height: 220px;
         background: var(--bg);
         border-top: 1px solid var(--border);
         display: flex;
         flex-direction: column;
-        transition: height 0.3s;
-      }
-      .panel-header {
-        padding: 6px 12px;
+        transition: height 0.3s; }
+      .panel-header { padding: 6px 12px;
         background: var(--sidebar-bg);
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 12px;
-      }
-      .panel-tab {
-        padding: 4px 10px;
+        font-size: 12px; }
+      .panel-tab { padding: 4px 10px;
         cursor: pointer;
         border-radius: 4px;
-        transition: all 0.2s;
-      }
-      .panel-tab.active {
-        background: var(--accent);
-        color: white;
-      }
-      .panel-content {
-        flex: 1;
+        transition: all 0.2s; }
+      .panel-tab.active { background: var(--accent);
+        color: white; }
+      .panel-content { flex: 1;
         padding: 12px;
         overflow-y: auto;
         font-family: 'Consolas', monospace;
         font-size: 13px;
-        line-height: 1.5;
-      }
-      .output-line {
-        margin: 2px 0;
-      }
-      .output-line.error {
-        color: #f48771;
-      }
-      .output-line.success {
-        color: #4ec9b0;
-      }
-      .status-bar {
-        background: linear-gradient(135deg, #0e639c, #1177bb);
+        line-height: 1.5; }
+      .output-line { margin: 2px 0; }
+      .output-line.error { color: #f48771; }
+      .output-line.success { color: #4ec9b0; }
+      .status-bar { background: linear-gradient(135deg, #0e639c, #1177bb);
         color: white;
         padding: 0 24px;
         font-size: 14px;
@@ -451,10 +310,8 @@
         align-items: center;
         height: 120px;
         box-shadow: 0 -4px 16px rgba(0, 122, 204, 0.5);
-        font-weight: 500;
-      }
-      .status-bar select {
-        background: rgba(0, 0, 0, 0.4);
+        font-weight: 500; }
+      .status-bar select { background: rgba(0, 0, 0, 0.4);
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: white;
         padding: 12px 18px;
@@ -462,71 +319,49 @@
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
-        transition: all 0.2s;
-      }
-      .status-bar select:hover {
-        background: rgba(0, 0, 0, 0.6);
-        border-color: rgba(255, 255, 255, 0.4);
-      }
-      .status-bar span {
-        cursor: pointer;
+        transition: all 0.2s; }
+      .status-bar select:hover { background: rgba(0, 0, 0, 0.6);
+        border-color: rgba(255, 255, 255, 0.4); }
+      .status-bar span { cursor: pointer;
         padding: 8px 12px;
         border-radius: 6px;
         transition: all 0.2s;
-        font-size: 14px;
-      }
-      .status-bar span:hover {
-        background: rgba(255, 255, 255, 0.15);
-      }
-      .sidebar.hidden {
-        display: none;
-      }
+        font-size: 14px; }
+      .status-bar span:hover { background: rgba(255, 255, 255, 0.15); }
+      .sidebar.hidden { display: none; }
       .zen-mode .activity-bar,
       .zen-mode .sidebar,
       .zen-mode .panel,
-      .zen-mode .status-bar {
-        display: none !important;
-      }
-      .zen-mode .editor-container {
-        flex: 1;
-      }
-      .welcome-screen {
-        position: fixed;
+      .zen-mode .status-bar { display: none !important; }
+      .zen-mode .editor-container { flex: 1; }
+      .welcome-screen { position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.97);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        backdrop-filter: blur(10px);
-      }
-      .welcome-content {
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        backdrop-filter: blur(10px); }
+      .welcome-content { background: linear-gradient(135deg, #1a1a2e, #16213e);
         padding: 48px 80px;
         border-radius: 20px;
         text-align: center;
         border: 2px solid var(--accent);
         box-shadow: 0 20px 80px rgba(0, 0, 0, 0.9);
-        max-width: 680px;
-      }
-      .welcome-content h2 {
-        font-size: 40px;
+        max-width: 680px; }
+      .welcome-content h2 { font-size: 40px;
         background: linear-gradient(90deg, #00ff99, #00ffff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 20px;
-      }
-      .quick-actions {
-        position: fixed;
+        margin-bottom: 20px; }
+      .quick-actions { position: fixed;
         bottom: 28px;
         right: 28px;
         display: flex;
         flex-direction: column;
         gap: 12px;
-        z-index: 100;
-      }
-      .quick-btn {
-        width: 58px;
+        z-index: 100; }
+      .quick-btn { width: 58px;
         height: 58px;
         border-radius: 50%;
         background: linear-gradient(135deg, #0e639c, #1177bb);
@@ -535,23 +370,17 @@
         font-size: 26px;
         cursor: pointer;
         box-shadow: 0 8px 24px rgba(0, 122, 204, 0.5);
-        transition: all 0.3s ease;
-      }
-      .quick-btn:hover {
-        transform: scale(1.18) rotate(12deg);
-        box-shadow: 0 12px 32px rgba(0, 122, 204, 0.7);
-      }
-      .enterprise-bar {
-        background: #2d2d30;
+        transition: all 0.3s ease; }
+      .quick-btn:hover { transform: scale(1.18) rotate(12deg);
+        box-shadow: 0 12px 32px rgba(0, 122, 204, 0.7); }
+      .enterprise-bar { background: #2d2d30;
         height: 32px;
         display: flex;
         align-items: center;
         gap: 4px;
         padding: 0 12px;
-        border-bottom: 1px solid var(--border);
-      }
-      .enterprise-btn {
-        background: none;
+        border-bottom: 1px solid var(--border); }
+      .enterprise-btn { background: none;
         border: 1px solid var(--border);
         color: var(--text);
         padding: 4px 12px;
@@ -561,15 +390,67 @@
         transition: all 0.2s;
         display: flex;
         align-items: center;
-        gap: 6px;
-      }
-      .enterprise-btn:hover {
-        background: var(--hover);
-        border-color: var(--accent);
-      }
+        gap: 6px; }
+      .enterprise-btn:hover { background: var(--hover);
+        border-color: var(--accent); }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
   <body>
+    <style>
+      :root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+      .dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+      .dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+      .dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+      .dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+      .dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+      .nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+      .notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+      .notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+      .notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+      @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+      .notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+      .notification-dropdown.show{display:block}
+      .notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+      .notification-item:hover{background:var(--dashboard-hover)}
+      .notification-item:last-child{border-bottom:none}
+    </style>
+    <div class="dashboard-header">
+      <nav class="dashboard-nav">
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="dashboard.html" class="nav-btn">Dashboard</a>
+          <a href="video-player.html" class="nav-btn">Video Player</a>
+          <a href="code-editor.html" class="nav-btn active">Code Editor</a>
+          <a href="marketplace.html" class="nav-btn">Marketplace</a>
+          <a href="profile.html" class="nav-btn">Profile</a>
+          <a href="settings.html" class="nav-btn">Settings</a>
+          <a href="feed-react.html" class="nav-btn">Feed</a>
+          <a href="login.html" class="nav-btn">Login</a>
+          <a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+          <a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+          <a href="design-showcase.html" class="nav-btn">Showcase</a>
+          <a href="test-page-clean.html" class="nav-btn">Test</a>
+        </div>
+        <div style="position:relative">
+          <div class="notification-bell" onclick="toggleNotifications()">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+            </svg>
+            <span class="notification-badge">3</span>
+          </div>
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+            <div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+            <div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <script>
+      (function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+      function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+      window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+    </script>
     <div class="container">
       <div class="top-bar">
         <div>File Edit View Run Tools</div>
@@ -804,35 +685,27 @@
       let securityCompliance;
       let crossIntegration;
 
-      const state = {
-        fileSystem: {},
+      const state = { fileSystem: {},
         currentFile: null,
         openTabs: [],
         unsavedChanges: new Set(),
         expandedFolders: new Set(),
         originalContent: {},
         lspConnected: false,
-        documentVersion: 0,
-      };
+        documentVersion: 0, };
 
-      function checkV8Compatibility() {
-        const v8Version = process.versions.v8.split('.').map(Number);
+      function checkV8Compatibility() { const v8Version = process.versions.v8.split('.').map(Number);
         const minVersion = [9, 0, 0];
         const isCompatible =
           v8Version[0] > minVersion[0] ||
           (v8Version[0] === minVersion[0] && v8Version[1] >= minVersion[1]);
 
-        if (!isCompatible) {
-          alert(`Warning: V8 ${process.versions.v8} detected. Minimum v9.0 recommended.`);
-        }
-        return isCompatible;
-      }
+        if (!isCompatible) { alert(`Warning: V8 ${process.versions.v8} detected. Minimum v9.0 recommended.`); }
+        return isCompatible; }
 
-      window.onload = async () => {
-        const initStart = performance.now();
+      window.onload = async () => { const initStart = performance.now();
 
-        try {
-          perfOptimizer = new PerformanceOptimizer();
+        try { perfOptimizer = new PerformanceOptimizer();
           perfOptimizer.startMemoryMonitoring();
           perfOptimizer.optimizeForLongSession();
 
@@ -857,50 +730,33 @@
           crossIntegration.receiveFromApp();
 
           // Auto-update listener (Electron)
-          if (typeof require !== 'undefined') {
-            try {
-              const { ipcRenderer } = require('electron');
+          if (typeof require !== 'undefined') { try { const { ipcRenderer } = require('electron');
 
-              ipcRenderer.on('update-available', (event, info) => {
-                errorHandler.showNotification(`Update available: v${info.version}`, 'info');
-              });
+              ipcRenderer.on('update-available', (event, info) => { errorHandler.showNotification(`Update available: v${info.version}`, 'info'); });
 
-              ipcRenderer.on('update-downloaded', () => {
-                const install = confirm('Update downloaded. Install now?');
-                if (install) ipcRenderer.send('install-update');
-              });
-            } catch (e) {
-              // Not in Electron environment
-            }
-          }
+              ipcRenderer.on('update-downloaded', () => { const install = confirm('Update downloaded. Install now?');
+                if (install) ipcRenderer.send('install-update'); }); } catch (e) { // Not in Electron environment } }
 
           checkV8Compatibility();
           document.getElementById('v8Version').textContent =
             `V8: ${process.versions.v8} | Node: ${process.versions.node}`;
 
-          await errorHandler.tryCatch(async () => {
-            loadState();
-            if (Object.keys(state.fileSystem).length === 0) {
-              createFile('untitled.js', `console.log('Welcome to HOOTNER! 🦉');`);
-            }
-          }, 'Load state');
+          await errorHandler.tryCatch(async () => { loadState();
+            if (Object.keys(state.fileSystem).length === 0) { createFile('untitled.js', `console.log('Welcome to HOOTNER! 🦉');`); } }, 'Load state');
 
           const monaco = await perfOptimizer.measureOperation('Monaco Load', () =>
             perfOptimizer.lazyLoadMonaco()
           );
           window.monaco = monaco;
 
-          await perfOptimizer.measureOperation('Editor Init', async () => {
-            try {
-              // Initialize Monaco Extensions
+          await perfOptimizer.measureOperation('Editor Init', async () => { try { // Initialize Monaco Extensions
               monacoExtensions = new MonacoExtensions(monaco);
               monacoExtensions.registerLanguages();
 
               // Initialize LSP Client
               lspClient = new LSPClient();
 
-              editor = monaco.editor.create(document.getElementById('editor'), {
-                value: '',
+              editor = monaco.editor.create(document.getElementById('editor'), { value: '',
                 language: 'javascript',
                 theme: 'vs-dark',
                 automaticLayout: true,
@@ -912,55 +768,30 @@
                 suggestOnTriggerCharacters: true,
                 parameterHints: { enabled: true },
                 formatOnPaste: true,
-                formatOnType: true,
-              });
+                formatOnType: true, });
 
-              editor.onDidChangeCursorPosition(() => {
-                try {
-                  const pos = editor.getPosition();
+              editor.onDidChangeCursorPosition(() => { try { const pos = editor.getPosition();
                   document.getElementById('cursorPos').textContent =
-                    `Ln ${pos.lineNumber}, Col ${pos.column}`;
-                } catch (error) {
-                  errorHandler.handleError({
-                    type: 'monaco',
+                    `Ln ${pos.lineNumber}, Col ${pos.column}`; } catch (error) { errorHandler.handleError({ type: 'monaco',
                     message: error.message,
-                    error,
-                  });
-                }
-              });
+                    error, }); } });
 
-              editor.onDidChangeModelContent(() => {
-                try {
-                  if (state.currentFile) {
-                    const current = editor.getValue();
-                    if (current !== state.originalContent[state.currentFile]) {
-                      state.unsavedChanges.add(state.currentFile);
-                    } else {
-                      state.unsavedChanges.delete(state.currentFile);
-                    }
+              editor.onDidChangeModelContent(() => { try { if (state.currentFile) { const current = editor.getValue();
+                    if (current !== state.originalContent[state.currentFile]) { state.unsavedChanges.add(state.currentFile); } else { state.unsavedChanges.delete(state.currentFile); }
                     renderTabs();
                     saveState();
 
                     // Notify LSP of changes
-                    if (state.lspConnected) {
-                      const lang = monacoExtensions.getLanguageByExtension(state.currentFile);
+                    if (state.lspConnected) { const lang = monacoExtensions.getLanguageByExtension(state.currentFile);
                       state.documentVersion++;
                       lspClient.notifyDidChange(
                         lang,
                         `file:///${state.currentFile}`,
                         current,
                         state.documentVersion
-                      );
-                    }
-                  }
-                } catch (error) {
-                  errorHandler.handleError({
-                    type: 'monaco',
+                      ); } } } catch (error) { errorHandler.handleError({ type: 'monaco',
                     message: error.message,
-                    error,
-                  });
-                }
-              });
+                    error, }); } });
 
               // Setup LSP providers
               setupLSPProviders();
@@ -979,89 +810,48 @@
               errorHandler.showNotification(
                 `HOOTNER Ready! (${initTime.toFixed(0)}ms) 🦉`,
                 'success'
-              );
-            } catch (error) {
-              errorHandler.handleError({
-                type: 'critical',
+              ); } catch (error) { errorHandler.handleError({ type: 'critical',
                 message: 'Editor initialization failed',
-                error,
-              });
-            }
-          });
-        } catch (error) {
-          console.error('Fatal initialization error:', error);
-          alert('Failed to initialize editor. Please refresh the page.');
-        }
-      };
+                error, }); } }); } catch (error) { console.error('Fatal initialization error:', error);
+          alert('Failed to initialize editor. Please refresh the page.'); } };
 
-      async function setupLSPProviders() {
-        try {
-          // Try to connect to LSP servers (optional)
-          const servers = {
-            javascript: 'ws://localhost:3001/lsp/javascript',
+      async function setupLSPProviders() { try { // Try to connect to LSP servers (optional)
+          const servers = { javascript: 'ws://localhost:3001/lsp/javascript',
             typescript: 'ws://localhost:3001/lsp/typescript',
-            python: 'ws://localhost:3001/lsp/python',
-          };
+            python: 'ws://localhost:3001/lsp/python', };
 
-          for (const [lang, url] of Object.entries(servers)) {
-            try {
-              await errorHandler.withTimeout(
+          for (const [lang, url] of Object.entries(servers)) { try { await errorHandler.withTimeout(
                 () => lspClient.connect(lang, url),
                 2000,
                 `LSP ${lang} connection`
               );
-              state.lspConnected = true;
-              console.log(`✓ LSP connected: ${lang}`);
-            } catch (error) {
-              console.warn(`LSP ${lang} not available:`, error.message);
-            }
-          }
+              state.lspConnected = true; } catch (error) { console.warn(`LSP ${lang} not available:`, error.message); } }
 
           // Setup completion providers with LSP fallback
-          ['javascript', 'typescript', 'python'].forEach(lang => {
-            monacoExtensions.setupCompletionProvider(lang, async (model, position) => {
-              if (state.lspConnected) {
-                const items = await lspClient.getCompletions(lang, model.uri.toString(), position);
-                return items.map(item => ({
-                  label: item.label,
+          ['javascript', 'typescript', 'python'].forEach(lang => { monacoExtensions.setupCompletionProvider(lang, async (model, position) => { if (state.lspConnected) { const items = await lspClient.getCompletions(lang, model.uri.toString(), position);
+                return items.map(item => ({ label: item.label,
                   kind:
                     monaco.languages.CompletionItemKind[item.kind] ||
                     monaco.languages.CompletionItemKind.Text,
                   insertText: item.insertText || item.label,
-                  documentation: item.documentation,
-                }));
-              }
-              return [];
-            });
+                  documentation: item.documentation, })); }
+              return []; });
 
-            monacoExtensions.setupHoverProvider(lang, async (model, position) => {
-              if (state.lspConnected) {
-                return await lspClient.getHover(lang, model.uri.toString(), position);
-              }
-              return null;
-            });
-          });
-        } catch (error) {
-          console.warn('LSP setup failed:', error);
-        }
-      }
+            monacoExtensions.setupHoverProvider(lang, async (model, position) => { if (state.lspConnected) { return await lspClient.getHover(lang, model.uri.toString(), position); }
+              return null; }); }); } catch (error) { console.warn('LSP setup failed:', error); } }
 
-      function updateProblemsPanel(error) {
-        if (error.type === 'cleared') {
-          return;
-        }
+      function updateProblemsPanel(error) { if (error.type === 'cleared') { return; }
 
         const panel = document.getElementById('output');
-        if (panel && document.querySelector('.panel-tab.active')?.textContent === 'Problems') {
-          const stats = errorHandler.getErrorStats();
-          panel.innerHTML = `
+        if (panel && document.querySelector('.panel-tab.active')?.textContent === 'Problems') { const stats = errorHandler.getErrorStats();
+          panel.textContent = `
           <div style="padding: 8px; border-bottom: 1px solid var(--border);">
             <strong>Problems (${stats.total})</strong>
           </div>
           ${stats.recent
             .map(
               err => `
-            <div style="padding: 8px; border-bottom: 1px solid var(--border); cursor: pointer;" 
+            <div style="padding: 8px; border-bottom: 1px solid var(--border); cursor: pointer;"
                  onclick="showErrorDetails('${err.id}')">
               <div style="color: #f48771; font-weight: 500;">${err.type.toUpperCase()}</div>
               <div style="font-size: 13px; margin-top: 4px;">${errorHandler.escapeHtml(err.message)}</div>
@@ -1072,75 +862,47 @@
           `
             )
             .join('')}
-        `;
-        }
-      }
+        `; } }
 
-      window.updateProblems = diagnostics => {
-        diagnostics.forEach(diag => {
-          errorHandler.handleError({
-            type: 'lsp',
+      window.updateProblems = diagnostics => { diagnostics.forEach(diag => { errorHandler.handleError({ type: 'lsp',
             message: diag.message,
             line: diag.range?.start?.line,
             column: diag.range?.start?.character,
-            timestamp: Date.now(),
-          });
-        });
-      };
+            timestamp: Date.now(), }); }); };
 
-      function createFile(name = prompt('File name:', 'new-file.js'), content = '') {
-        try {
-          if (!securityCompliance.hasPermission('write')) {
-            errorHandler.showNotification('Permission denied: write access required', 'error');
-            return;
-          }
+      function createFile(name = prompt('File name:', 'new-file.js'), content = '') { try { if (!securityCompliance.hasPermission('write')) { errorHandler.showNotification('Permission denied: write access required', 'error');
+            return; }
 
           if (!name) return;
 
           const validation = errorHandler.validateFile(name);
-          if (!validation.valid) {
-            errorHandler.showNotification(validation.errors[0], 'error');
-            return;
-          }
+          if (!validation.valid) { errorHandler.showNotification(validation.errors[0], 'error');
+            return; }
 
-          if (state.fileSystem[name]) {
-            errorHandler.showNotification('File already exists!', 'warning');
-            return;
-          }
+          if (state.fileSystem[name]) { errorHandler.showNotification('File already exists!', 'warning');
+            return; }
 
-          state.fileSystem[name] = {
-            type: 'file',
+          state.fileSystem[name] = { type: 'file',
             content,
             mode: monacoExtensions ? monacoExtensions.getLanguageByExtension(name) : getMode(name),
-            parent: null,
-          };
+            parent: null, };
 
           openFile(name);
           renderFileTree();
           saveState();
           securityCompliance.logAudit('file_created', { filename: name });
-          errorHandler.showNotification(`File created: ${name}`, 'success');
-        } catch (error) {
-          errorHandler.handleError({
-            type: 'file',
+          errorHandler.showNotification(`File created: ${name}`, 'success'); } catch (error) { errorHandler.handleError({ type: 'file',
             message: `Failed to create file: ${error.message}`,
-            error,
-          });
-        }
-      }
+            error, }); } }
 
-      function createFolder() {
-        const name = prompt('Folder name:', 'new-folder');
+      function createFolder() { const name = prompt('Folder name:', 'new-folder');
         if (!name || state.fileSystem[name]) return alert('Invalid or exists');
         state.fileSystem[name] = { type: 'folder', parent: null };
         state.expandedFolders.add(name);
         renderFileTree();
-        saveState();
-      }
+        saveState(); }
 
-      function openFile(name) {
-        try {
-          if (state.fileSystem[name]?.type !== 'file') return;
+      function openFile(name) { try { if (state.fileSystem[name]?.type !== 'file') return;
           if (!state.openTabs.includes(name)) state.openTabs.push(name);
           state.currentFile = name;
           const file = state.fileSystem[name];
@@ -1158,265 +920,165 @@
           state.documentVersion = 1;
 
           // Notify LSP
-          if (state.lspConnected) {
-            lspClient.notifyDidOpen(language, `file:///${name}`, file.content || '');
-          }
+          if (state.lspConnected) { lspClient.notifyDidOpen(language, `file:///${name}`, file.content || ''); }
 
           renderTabs();
-          renderFileTree();
-        } catch (error) {
-          errorHandler.handleError({
-            type: 'file',
+          renderFileTree(); } catch (error) { errorHandler.handleError({ type: 'file',
             message: `Failed to open file: ${error.message}`,
-            error,
-          });
-        }
-      }
+            error, }); } }
 
-      function closeTab(name) {
-        state.openTabs = state.openTabs.filter(t => t !== name);
-        if (state.currentFile === name) {
-          const next =
+      function closeTab(name) { state.openTabs = state.openTabs.filter(t => t !== name);
+        if (state.currentFile === name) { const next =
             state.openTabs[state.openTabs.length - 1] ||
             Object.keys(state.fileSystem).find(k => state.fileSystem[k].type === 'file');
           state.currentFile = next || null;
           if (next) openFile(next);
-          else editor.setValue('');
-        }
+          else editor.setValue(''); }
         renderTabs();
-        saveState();
-      }
+        saveState(); }
 
-      function renderTabs() {
-        const container = document.getElementById('tabs');
+      function renderTabs() { const container = document.getElementById('tabs');
         const tabsHTML = state.openTabs
-          .map(name => {
-            const unsaved = state.unsavedChanges.has(name) ? '<div class="unsaved-dot"></div>' : '';
+          .map(name => { const unsaved = state.unsavedChanges.has(name) ? '<div class="unsaved-dot"></div>' : '';
             const active = name === state.currentFile ? 'active' : '';
             return `
           <div class="tab ${active}" onclick="openFile('${name}')" role="tab">
             <span>${unsaved}<span class="file-icon">📄</span>${name}</span>
             <span class="tab-close" onclick="event.stopPropagation(); closeTab('${name}')">×</span>
-          </div>`;
-          })
+          </div>`; })
           .join('');
-        container.innerHTML =
-          tabsHTML || '<div style="padding:16px; color:#666;">No open editors</div>';
-      }
+        container.textContent =
+          tabsHTML || '<div style="padding:16px; color:#666;">No open editors</div>'; }
 
-      function renderFileTree() {
-        const tree = document.getElementById('fileTree');
-        const build = (parent = null, level = 0) => {
-          return Object.keys(state.fileSystem)
+      function renderFileTree() { const tree = document.getElementById('fileTree');
+        const build = (parent = null, level = 0) => { return Object.keys(state.fileSystem)
             .filter(k => state.fileSystem[k].parent === parent)
             .sort((a, b) => (state.fileSystem[b].type === 'folder' ? 1 : -1))
-            .map(key => {
-              const item = state.fileSystem[key];
+            .map(key => { const item = state.fileSystem[key];
               const isFolder = item.type === 'folder';
               const expanded = state.expandedFolders.has(key);
               const icon = isFolder ? (expanded ? '📂' : '📁') : '📄';
               const indent = level * 20 + 8;
               return `
               <div>
-                <div class="file-item ${key === state.currentFile ? 'active' : ''} ${isFolder ? 'folder' : ''}" 
+                <div class="file-item ${key === state.currentFile ? 'active' : ''} ${isFolder ? 'folder' : ''}"
                      style="padding-left:${indent}px"
                      onclick="${isFolder ? `toggleFolder('${key}')` : `openFile('${key}')`}">
                   <span class="file-icon">${icon}</span>
                   <span>${key}</span>
                 </div>
                 ${isFolder && expanded ? build(key, level + 1) : ''}
-              </div>`;
-            })
-            .join('');
-        };
-        tree.innerHTML =
+              </div>`; })
+            .join(''); };
+        tree.textContent =
           build() ||
-          '<div style="padding:20px; color:#666; text-align:center;">No files or folders</div>';
-      }
+          '<div style="padding:20px; color:#666; text-align:center;">No files or folders</div>'; }
 
-      function toggleFolder(name) {
-        state.expandedFolders.has(name)
+      function toggleFolder(name) { state.expandedFolders.has(name)
           ? state.expandedFolders.delete(name)
           : state.expandedFolders.add(name);
         renderFileTree();
-        saveState();
-      }
+        saveState(); }
 
-      function getMode(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const map = {
-          js: 'javascript',
+      function getMode(filename) { const ext = filename.split('.').pop().toLowerCase();
+        const map = { js: 'javascript',
           py: 'python',
           html: 'htmlmixed',
           css: 'css',
           md: 'markdown',
-          json: 'application/json',
-        };
-        return map[ext] || 'javascript';
-      }
+          json: 'application/json', };
+        return map[ext] || 'javascript'; }
 
-      function changeLanguage() {
-        const mode = document.getElementById('languageSelect').value;
-        const langMap = {
-          javascript: 'javascript',
+      function changeLanguage() { const mode = document.getElementById('languageSelect').value;
+        const langMap = { javascript: 'javascript',
           python: 'python',
           htmlmixed: 'html',
           css: 'css',
-          markdown: 'markdown',
-        };
+          markdown: 'markdown', };
         monaco.editor.setModelLanguage(editor.getModel(), langMap[mode] || 'javascript');
         if (state.currentFile) state.fileSystem[state.currentFile].mode = mode;
-        saveState();
-      }
+        saveState(); }
 
-      function changeTheme() {
-        const theme = document.getElementById('themeSelect').value;
-        if (uiEnhancer) {
-          uiEnhancer.applyTheme(theme);
-        }
-      }
+      function changeTheme() { const theme = document.getElementById('themeSelect').value;
+        if (uiEnhancer) { uiEnhancer.applyTheme(theme); } }
 
-      function toggleZenMode() {
-        document.body.classList.toggle('zen-mode');
-        if (editor) editor.layout();
-      }
+      function toggleZenMode() { document.body.classList.toggle('zen-mode');
+        if (editor) editor.layout(); }
 
-      function toggleMinimap() {
-        if (editor) {
-          const current = editor.getOptions().get(monaco.editor.EditorOption.minimap).enabled;
-          editor.updateOptions({ minimap: { enabled: !current } });
-        }
-      }
+      function toggleMinimap() { if (editor) { const current = editor.getOptions().get(monaco.editor.EditorOption.minimap).enabled;
+          editor.updateOptions({ minimap: { enabled: !current } }); } }
 
-      async function runCode() {
-        try {
-          securityCompliance.logAudit('code_executed', {
-            file: state.currentFile,
-          });
+      async function runCode() { try { securityCompliance.logAudit('code_executed', { file: state.currentFile, });
 
           showPanel('output');
           const output = document.getElementById('output');
-          output.innerHTML = '';
+          output.textContent = '';
           const code = editor.getValue();
 
           const validation = errorHandler.validateCode(code, 'javascript');
-          if (!validation.valid) {
-            addOutput('✗ Validation failed: ' + validation.error, 'error');
-            return;
-          }
+          if (!validation.valid) { addOutput('✗ Validation failed: ' + validation.error, 'error');
+            return; }
 
           await errorHandler.withTimeout(
-            async () => {
-              const tempConsole = {
-                log: (...args) => addOutput(args.join(' '), 'log'),
+            async () => { const tempConsole = { log: (...args) => addOutput(args.join(' '), 'log'),
                 error: (...args) => addOutput(args.join(' '), 'error'),
-                warn: (...args) => addOutput(args.join(' '), 'warn'),
-              };
+                warn: (...args) => addOutput(args.join(' '), 'warn'), };
               vm.runInNewContext(code, { console: tempConsole });
-              addOutput('✓ Execution completed', 'success');
-            },
+              addOutput('✓ Execution completed', 'success'); },
             10000,
             'Code execution'
-          );
-        } catch (error) {
-          addOutput('✗ ' + error.message, 'error');
-          errorHandler.handleError({
-            type: 'runtime',
+          ); } catch (error) { addOutput('✗ ' + error.message, 'error');
+          errorHandler.handleError({ type: 'runtime',
             message: error.message,
-            error,
-          });
-        }
-      }
+            error, }); } }
 
-      function addOutput(text, type = '') {
-        const line = document.createElement('div');
+      function addOutput(text, type = '') { const line = document.createElement('div');
         line.className = `output-line ${type}`;
         line.textContent = text;
         document.getElementById('output').appendChild(line);
-        line.scrollIntoView({ behavior: 'smooth' });
-      }
+        line.scrollIntoView({ behavior: 'smooth' }); }
 
-      function saveCode() {
-        if (!state.currentFile) return;
+      function saveCode() { if (!state.currentFile) return;
         const blob = new Blob([editor.getValue()], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = state.currentFile;
-        a.click();
-      }
+        a.click(); }
 
-      function exportProject() {
-        const zip = new JSZip();
-        Object.entries(state.fileSystem).forEach(([name, item]) => {
-          if (item.type === 'file') zip.file(name, item.content);
-        });
-        zip.generateAsync({ type: 'blob' }).then(blob => {
-          const a = document.createElement('a');
+      function exportProject() { const zip = new JSZip();
+        Object.entries(state.fileSystem).forEach(([name, item]) => { if (item.type === 'file') zip.file(name, item.content); });
+        zip.generateAsync({ type: 'blob' }).then(blob => { const a = document.createElement('a');
           a.href = URL.createObjectURL(blob);
           a.download = 'hootner-project.zip';
-          a.click();
-        });
-      }
+          a.click(); }); }
 
       let terminal;
-      function showPanel(panel) {
-        try {
-          document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+      function showPanel(panel) { try { document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
           if (event?.target) event.target.classList.add('active');
           document.getElementById('panel').style.height = '220px';
           document.getElementById('panel').style.display = 'flex';
           document.getElementById('output').style.display = 'none';
           document.getElementById('terminal').style.display = 'none';
 
-          if (panel === 'output') {
-            document.getElementById('output').style.display = 'block';
-          } else if (panel === 'terminal') {
-            document.getElementById('terminal').style.display = 'block';
-            if (!terminal && window.Terminal) {
-              terminal = new Terminal({
-                theme: { background: '#000', foreground: '#fff' },
-              });
+          if (panel === 'output') { document.getElementById('output').style.display = 'block'; } else if (panel === 'terminal') { document.getElementById('terminal').style.display = 'block';
+            if (!terminal && window.Terminal) { terminal = new Terminal({ theme: { background: '#000', foreground: '#fff' }, });
               terminal.open(document.getElementById('terminal'));
               terminal.writeln('HOOTNER Terminal v1.0');
               terminal.writeln('Type commands...');
-              terminal.onData(data => {
-                if (data === '\r') {
-                  terminal.writeln('');
-                  terminal.write('$ ');
-                } else {
-                  terminal.write(data);
-                }
-              });
-              terminal.write('$ ');
-            }
-          } else if (panel === 'problems') {
-            document.getElementById('output').style.display = 'block';
+              terminal.onData(data => { if (data === '\r') { terminal.writeln('');
+                  terminal.write('$ '); } else { terminal.write(data); } });
+              terminal.write('$ '); } } else if (panel === 'problems') { document.getElementById('output').style.display = 'block';
             const stats = errorHandler.getErrorStats();
-            if (stats.total === 0) {
-              document.getElementById('output').innerHTML =
-                '<div style="color:#858585; padding: 12px;">✓ No problems detected.</div>';
-            } else {
-              updateProblemsPanel({});
-            }
-          }
-        } catch (error) {
-          console.error('Show panel error:', error);
-        }
-      }
+            if (stats.total === 0) { document.getElementById('output').textContent =
+                '<div style="color:#858585; padding: 12px;">✓ No problems detected.</div>'; } else { updateProblemsPanel({}); } } } catch (error) { console.error('Show panel error:', error); } }
 
-      function showErrorDetails(errorId) {
-        const error = errorHandler.errors.find(e => e.id == errorId);
-        if (error) {
-          alert(
+      function showErrorDetails(errorId) { const error = errorHandler.errors.find(e => e.id === errorId);
+        if (error) { alert(
             `${error.type.toUpperCase()}\n\n${error.message}\n\n${error.stack || 'No stack trace'}`
-          );
-        }
-      }
+          ); } }
 
-      function togglePreview() {
-        const previewPane = document.getElementById('previewPane');
-        if (!previewPane) {
-          const container = document.querySelector('.editor-container');
+      function togglePreview() { const previewPane = document.getElementById('previewPane');
+        if (!previewPane) { const container = document.querySelector('.editor-container');
           const pane = document.createElement('div');
           pane.id = 'previewPane';
           pane.className = 'preview-pane';
@@ -1427,31 +1089,18 @@
           pane.appendChild(frame);
 
           updatePreview();
-          addOutput('✓ Live preview enabled', 'success');
-        } else {
-          previewPane.remove();
-          addOutput('✓ Live preview disabled', 'success');
-        }
-      }
+          addOutput('✓ Live preview enabled', 'success'); } else { previewPane.remove();
+          addOutput('✓ Live preview disabled', 'success'); } }
 
-      function updatePreview() {
-        const code = editor.getValue();
+      function updatePreview() { const code = editor.getValue();
         const ext = state.currentFile?.split('.').pop();
 
-        if (ext === 'html') {
-          featureExpansions.updateLivePreview(code, '', '');
-        } else if (ext === 'md') {
-          const html = featureExpansions.renderMarkdown(code);
-          featureExpansions.updateLivePreview(html, '', '');
-        }
-      }
+        if (ext === 'html') { featureExpansions.updateLivePreview(code, '', ''); } else if (ext === 'md') { const html = featureExpansions.renderMarkdown(code);
+          featureExpansions.updateLivePreview(html, '', ''); } }
 
-      function toggleAI() {
-        document.getElementById('aiPanel').classList.toggle('open');
-      }
+      function toggleAI() { document.getElementById('aiPanel').classList.toggle('open'); }
 
-      async function sendAI() {
-        const input = document.getElementById('aiInput');
+      async function sendAI() { const input = document.getElementById('aiInput');
         const chat = document.getElementById('aiChat');
         const msg = input.value.trim();
         if (!msg) return;
@@ -1459,16 +1108,12 @@
         chat.innerHTML += `<div class="ai-message user">${msg}</div>`;
         input.value = '';
 
-        try {
-          const code = editor.getValue();
+        try { const code = editor.getValue();
 
           // Try real AI first
-          if (featureExpansions.aiApiKey) {
-            chat.innerHTML += `<div class="ai-message assistant">🤖 Thinking...</div>`;
+          if (featureExpansions.aiApiKey) { chat.innerHTML += `<div class="ai-message assistant">🤖 Thinking...</div>`;
             const response = await featureExpansions.queryAI(msg, code);
-            chat.lastChild.innerHTML = `🤖 ${response}`;
-          } else {
-            // Fallback to local analysis
+            chat.lastChild.textContent = `🤖 ${response}`; } else { // Fallback to local analysis
             const analysis = await perfOptimizer.measureOperation('AI Analysis', () =>
               rendererManager.offloadToWorker('ai', 'analyze', { code })
             );
@@ -1479,26 +1124,19 @@
               'Consider using async/await for better readability.',
               `I found ${analysis.classes} classes in your code.`,
             ];
-            chat.innerHTML += `<div class="ai-message assistant">🤖 ${responses[Math.floor(Math.random() * responses.length)]}</div>`;
-          }
+            chat.innerHTML += `<div class="ai-message assistant">🤖 ${responses[Math.floor(Math.random() * responses.length)]}</div>`; }
 
           chat.scrollTop = chat.scrollHeight;
-          perfOptimizer.triggerGarbageCollection();
-        } catch (error) {
-          chat.innerHTML += `<div class="ai-message assistant">🤖 Error: ${error.message}</div>`;
-        }
-      }
+          perfOptimizer.triggerGarbageCollection(); } catch (error) { chat.innerHTML += `<div class="ai-message assistant">🤖 Error: ${error.message}</div>`; } }
 
-      function toggleGit() {
-        const panel = document.getElementById('gitPanel');
+      function toggleGit() { const panel = document.getElementById('gitPanel');
         panel.classList.toggle('open');
-        if (panel.classList.contains('open')) {
-          const content = document.getElementById('gitContent');
+        if (panel.classList.contains('open')) { const content = document.getElementById('gitContent');
           const files = Object.keys(state.fileSystem).filter(
             k => state.fileSystem[k].type === 'file'
           );
 
-          content.innerHTML = `
+          content.textContent = `
           <div style="display:flex; gap:8px; margin-bottom:12px;">
             <button onclick="gitCommit()" style="background: var(--accent); border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Commit</button>
             <button onclick="gitPush()" style="background: #4ec9b0; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Push</button>
@@ -1513,54 +1151,36 @@
           <div id="gitGraph" style="margin-top:12px;"></div>
         `;
 
-          featureExpansions.renderGitGraph('gitGraph');
-        }
-      }
+          featureExpansions.renderGitGraph('gitGraph'); } }
 
-      async function gitCommit() {
-        const msg = prompt('Commit message:', 'Update files');
-        if (msg) {
-          await featureExpansions.gitCommit(msg);
+      async function gitCommit() { const msg = prompt('Commit message:', 'Update files');
+        if (msg) { await featureExpansions.gitCommit(msg);
           state.unsavedChanges.clear();
           renderTabs();
-          if (document.getElementById('gitPanel').classList.contains('open')) {
-            featureExpansions.renderGitGraph('gitGraph');
-          }
-        }
-      }
+          if (document.getElementById('gitPanel').classList.contains('open')) { featureExpansions.renderGitGraph('gitGraph'); } } }
 
-      function gitPush() {
-        addOutput('✓ Pushed to remote', 'success');
-      }
+      function gitPush() { addOutput('✓ Pushed to remote', 'success'); }
 
-      const snippets = {
-        for: 'for (let i = 0; i < array.length; i++) {\n  \n}',
+      const snippets = { for: 'for (let i = 0; i < array.length; i++) {\n  \n}',
         func: 'function name(params) {\n  \n}',
         arrow: 'const name = (params) => {\n  \n};',
-        class: 'class ClassName {\n  constructor() {\n    \n  }\n}',
+        class: 'class ClassName {\n  constructor() {\n    \n }\n}',
         try: 'try {\n  \n} catch (error) {\n  console.error(error);\n}',
         async:
-          'async function name() {\n  try {\n    const result = await promise;\n  } catch (error) {\n    console.error(error);\n  }\n}',
+          'async function name() {\n  try {\n    const result = await promise;\n } catch (error) {\n    console.error(error);\n }\n}',
         react:
           'import React from "react";\n\nfunction Component() {\n  return <div></div>;\n}\n\nexport default Component;',
         express:
-          'const express = require("express");\nconst app = express();\n\napp.get("/", (req, res) => {\n  res.send("Hello");\n});\n\napp.listen(3000);',
-      };
+          'const express = require("express");\nconst app = express();\n\napp.get("/", (req, res) => {\n  res.send("Hello");\n});\n\napp.listen(3000);', };
 
-      function toggleSnippets() {
-        const panel = document.getElementById('snippetPanel');
+      function toggleSnippets() { const panel = document.getElementById('snippetPanel');
         panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-        if (panel.style.display === 'flex') {
-          const list = document.getElementById('snippetList');
+        if (panel.style.display === 'flex') { const list = document.getElementById('snippetList');
 
           const allSnippets = { ...snippets };
-          Object.entries(featureExpansions.customSnippets).forEach(([cat, snips]) => {
-            snips.forEach(s => {
-              allSnippets[`${cat}:${s.name}`] = s.code;
-            });
-          });
+          Object.entries(featureExpansions.customSnippets).forEach(([cat, snips]) => { snips.forEach(s => { allSnippets[`${cat}:${s.name}`] = s.code; }); });
 
-          list.innerHTML = Object.keys(allSnippets)
+          list.textContent = Object.keys(allSnippets)
             .map(
               key =>
                 `<div class="snippet-item" onclick="insertSnippet('${key}')">
@@ -1568,124 +1188,85 @@
             <small style="color: var(--text-muted);">${allSnippets[key].split('\n')[0]}</small>
           </div>`
             )
-            .join('');
-        }
-      }
+            .join(''); } }
 
-      function insertSnippet(key) {
-        const snippet = snippets[key];
+      function insertSnippet(key) { const snippet = snippets[key];
         const selection = editor.getSelection();
         editor.executeEdits('', [
-          {
-            range: selection,
-            text: snippet,
-          },
+          { range: selection,
+            text: snippet, },
         ]);
         toggleSnippets();
-        addOutput(`✓ Inserted snippet: ${key}`, 'success');
-      }
+        addOutput(`✓ Inserted snippet: ${key}`, 'success'); }
 
       let collabMode = false;
-      function toggleCollab() {
-        collabMode = !collabMode;
-        if (collabMode) {
-          addOutput(
+      function toggleCollab() { collabMode = !collabMode;
+        if (collabMode) { addOutput(
             '👥 Collaboration mode enabled! Share link: hootner.dev/collab/' +
               Math.random().toString(36).substr(2, 9),
             'success'
           );
-          simulateCollabCursor();
-        } else {
-          addOutput('👥 Collaboration mode disabled', 'log');
-        }
-      }
+          simulateCollabCursor(); } else { addOutput('👥 Collaboration mode disabled', 'log'); } }
 
-      function simulateCollabCursor() {
-        if (!collabMode) return;
+      function simulateCollabCursor() { if (!collabMode) return;
         const colors = ['#ff00ff', '#00ffff', '#ffff00'];
-        setTimeout(() => {
-          addOutput(`👤 User${Math.floor(Math.random() * 3) + 1} joined`, 'log');
-          simulateCollabCursor();
-        }, 5000);
-      }
+        setTimeout(() => { addOutput(`👤 User${Math.floor(Math.random() * 3) + 1} joined`, 'log');
+          simulateCollabCursor(); }, 5000); }
 
-      async function showDiff() {
-        try {
-          const viewer = document.getElementById('diffViewer');
+      async function showDiff() { try { const viewer = document.getElementById('diffViewer');
           viewer.style.display = 'flex';
 
           const current = editor.getValue();
           const original = state.originalContent[state.currentFile] || '';
 
           const changes = await perfOptimizer.measureOperation('Diff Computation', () =>
-            rendererManager.offloadToWorker('diff', 'diff', {
-              original,
-              current,
-            })
+            rendererManager.offloadToWorker('diff', 'diff', { original,
+              current, })
           );
 
-          document.getElementById('diffLeft').innerHTML =
+          document.getElementById('diffLeft').textContent =
             '<h4>Original</h4><pre>' +
             original
               .split('\n')
-              .map((line, i) => {
-                const change = changes.find(c => c.line === i + 1);
+              .map((line, i) => { const change = changes.find(c => c.line === i + 1);
                 const cls =
                   change?.type === 'removed' || change?.type === 'modified' ? 'diff-remove' : '';
-                return `<div class="${cls}">${i + 1}: ${line || ' '}</div>`;
-              })
+                return `<div class="${cls}">${i + 1}: ${line || ' '}</div>`; })
               .join('') +
             '</pre>';
 
-          document.getElementById('diffRight').innerHTML =
+          document.getElementById('diffRight').textContent =
             '<h4>Current</h4><pre>' +
             current
               .split('\n')
-              .map((line, i) => {
-                const change = changes.find(c => c.line === i + 1);
+              .map((line, i) => { const change = changes.find(c => c.line === i + 1);
                 const cls =
                   change?.type === 'added' || change?.type === 'modified' ? 'diff-add' : '';
-                return `<div class="${cls}">${i + 1}: ${line || ' '}</div>`;
-              })
+                return `<div class="${cls}">${i + 1}: ${line || ' '}</div>`; })
               .join('') +
             '</pre>';
 
-          perfOptimizer.triggerGarbageCollection();
-        } catch (error) {
-          errorHandler.handleError({
-            type: 'runtime',
+          perfOptimizer.triggerGarbageCollection(); } catch (error) { errorHandler.handleError({ type: 'runtime',
             message: 'Diff failed',
-            error,
-          });
-        }
-      }
+            error, }); } }
 
       let perfInterval;
-      function togglePerf() {
-        const overlay = document.getElementById('perfOverlay');
+      function togglePerf() { const overlay = document.getElementById('perfOverlay');
         overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
 
-        if (overlay.style.display === 'block') {
-          let lastTime = performance.now();
+        if (overlay.style.display === 'block') { let lastTime = performance.now();
           let frames = 0;
 
-          perfInterval = setInterval(() => {
-            frames++;
+          perfInterval = setInterval(() => { frames++;
             const now = performance.now();
-            if (now >= lastTime + 1000) {
-              document.getElementById('fps').textContent = frames;
+            if (now >= lastTime + 1000) { document.getElementById('fps').textContent = frames;
               frames = 0;
-              lastTime = now;
-            }
+              lastTime = now; }
 
-            if (performance.memory) {
-              const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+            if (performance.memory) { const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
               document.getElementById('memory').textContent = memMB;
 
-              if (performance.memory.usedJSHeapSize > perfOptimizer.memoryThreshold) {
-                perfOptimizer.triggerGarbageCollection();
-              }
-            }
+              if (performance.memory.usedJSHeapSize > perfOptimizer.memoryThreshold) { perfOptimizer.triggerGarbageCollection(); } }
 
             const files = Object.keys(state.fileSystem).filter(
               k => state.fileSystem[k].type === 'file'
@@ -1696,18 +1277,10 @@
               (sum, k) => sum + (state.fileSystem[k].content?.split('\n').length || 0),
               0
             );
-            document.getElementById('lineCount').textContent = lines;
-          }, 100);
-        } else {
-          clearInterval(perfInterval);
-        }
-      }
+            document.getElementById('lineCount').textContent = lines; }, 100); } else { clearInterval(perfInterval); } }
 
-      window.showPerfMetrics = () => {
-        const metrics = perfOptimizer.getMetrics();
-        console.log('📊 Performance Metrics:', metrics);
-        alert(JSON.stringify(metrics, null, 2));
-      };
+      window.showPerfMetrics = () => { const metrics = perfOptimizer.getMetrics();
+                alert(JSON.stringify(metrics, null, 2)); };
 
       const plugins = [
         { name: 'Prettier', desc: 'Code formatter', icon: '✨' },
@@ -1718,39 +1291,26 @@
         { name: 'Debugger', desc: 'Debug JavaScript', icon: '🐛' },
       ];
 
-      function installPlugin() {
-        showPanel('output');
-        featureExpansions.renderPluginMarketplace('output');
-      }
+      function installPlugin() { showPanel('output');
+        featureExpansions.renderPluginMarketplace('output'); }
 
-      function connectAPI(service) {
-        const apis = {
-          prettier: { name: 'Prettier', icon: '✨' },
+      function connectAPI(service) { const apis = { prettier: { name: 'Prettier', icon: '✨' },
           eslint: { name: 'ESLint', icon: '🔍' },
           github: { name: 'GitHub', icon: '🐙' },
           aws: { name: 'AWS', icon: '☁️' },
-          docker: { name: 'Docker', icon: '🐳' },
-        };
+          docker: { name: 'Docker', icon: '🐳' }, };
         const api = apis[service];
         addOutput(`${api.icon} Connecting to ${api.name}...`, 'log');
-        setTimeout(() => {
-          addOutput(`✓ ${api.name} connected successfully!`, 'success');
-        }, 800);
-      }
+        setTimeout(() => { addOutput(`✓ ${api.name} connected successfully!`, 'success'); }, 800); }
 
-      function togglePanel() {
-        const panel = document.getElementById('panel');
-        panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-      }
+      function togglePanel() { const panel = document.getElementById('panel');
+        panel.style.display = panel.style.display === 'none' ? 'flex' : 'none'; }
 
-      function newFile() {
-        createFile();
-      }
+      function newFile() { createFile(); }
 
-      function showWelcome() {
-        const div = document.createElement('div');
+      function showWelcome() { const div = document.createElement('div');
         div.className = 'welcome-screen';
-        div.innerHTML = `
+        div.textContent = `
         <div class="welcome-content">
           <h2>Welcome to HOOTNER</h2>
           <p style="font-size:18px; margin:20px 0; color:#ccc;">The most powerful in-browser code editor.</p>
@@ -1760,73 +1320,40 @@
             Start Coding 🚀
           </button>
         </div>`;
-        document.body.appendChild(div);
-      }
+        document.body.appendChild(div); }
 
-      async function saveState() {
-        const stateData = {
-          fileSystem: state.fileSystem,
+      async function saveState() { const stateData = { fileSystem: state.fileSystem,
           currentFile: state.currentFile,
           openTabs: state.openTabs,
           expandedFolders: [...state.expandedFolders],
-          originalContent: state.originalContent,
-        };
+          originalContent: state.originalContent, };
 
         localStorage.setItem('hootner_state', JSON.stringify(stateData));
 
         // Auto-encrypt backup if password is set
         const password = localStorage.getItem('hootner_backup_password');
-        if (password) {
-          try {
-            await securityCompliance.encryptBackup(password);
-          } catch (error) {
-            console.warn('Auto-backup encryption failed:', error);
-          }
-        }
+        if (password) { try { await securityCompliance.encryptBackup(password); } catch (error) { console.warn('Auto-backup encryption failed:', error); } }
 
-        securityCompliance.logAudit('state_saved', {
-          files: Object.keys(state.fileSystem).length,
-        });
-      }
+        securityCompliance.logAudit('state_saved', { files: Object.keys(state.fileSystem).length, }); }
 
-      function loadState() {
-        const saved = localStorage.getItem('hootner_state');
-        if (saved) {
-          try {
-            const data = JSON.parse(saved);
+      function loadState() { const saved = localStorage.getItem('hootner_state');
+        if (saved) { try { const data = JSON.parse(saved);
             Object.assign(state, data);
             state.expandedFolders = new Set(data.expandedFolders || []);
-            state.unsavedChanges = new Set();
-          } catch (e) {
-            console.error('Failed to load state', e);
-            if (errorHandler) {
-              errorHandler.handleError({
-                type: 'file',
+            state.unsavedChanges = new Set(); } catch (e) { console.error('Failed to load state', e);
+            if (errorHandler) { errorHandler.handleError({ type: 'file',
                 message: 'Failed to load saved state',
-                error: e,
-              });
-            }
-          }
-        }
-      }
+                error: e, }); } } } }
 
       // Cleanup on page unload
-      window.addEventListener('beforeunload', () => {
-        if (lspClient) lspClient.disconnectAll();
+      window.addEventListener('beforeunload', () => { if (lspClient) lspClient.disconnectAll();
         if (perfOptimizer) perfOptimizer.stopMemoryMonitoring();
-        if (rendererManager) rendererManager.terminateAll();
-      });
+        if (rendererManager) rendererManager.terminateAll(); });
 
       // Periodic cache clearing
-      setInterval(() => {
-        if (perfOptimizer && performance.memory) {
-          const sessionTime = performance.now() / 1000 / 60;
-          if (sessionTime > 30) {
-            perfOptimizer.clearCache();
-            console.log('🧹 Periodic cache clear (30min session)');
-          }
-        }
-      }, 600000);
+      setInterval(() => { if (perfOptimizer && performance.memory) { const sessionTime = performance.now() / 1000 / 60;
+          if (sessionTime > 30) { perfOptimizer.clearCache();
+            console.log('🧹 Periodic cache clear (30min session)'); } } }, 600000);
     </script>
     <script src="../../../../lib/lazy-loader.js"></script>
     <script src="../../../../lib/memory-profiler.js"></script>
@@ -1836,33 +1363,23 @@
     <script src="../../../../lib/compliance-dashboard.js"></script>
     <script>
       // Initialize all systems
-      if (typeof MemoryProfiler !== 'undefined') {
-        const memoryProfiler = new MemoryProfiler();
+      if (typeof MemoryProfiler !== 'undefined') { const memoryProfiler = new MemoryProfiler();
         memoryProfiler.start();
-        window.memoryProfiler = memoryProfiler;
-      }
+        window.memoryProfiler = memoryProfiler; }
 
-      if (typeof VisualDesigner !== 'undefined') {
-        const visualDesigner = new VisualDesigner();
+      if (typeof VisualDesigner !== 'undefined') { const visualDesigner = new VisualDesigner();
         visualDesigner.init();
-        window.visualDesigner = visualDesigner;
-      }
+        window.visualDesigner = visualDesigner; }
 
-      if (typeof DebugEnhancer !== 'undefined') {
-        const debugEnhancer = new DebugEnhancer();
-        window.debugEnhancer = debugEnhancer;
-      }
+      if (typeof DebugEnhancer !== 'undefined') { const debugEnhancer = new DebugEnhancer();
+        window.debugEnhancer = debugEnhancer; }
 
-      if (typeof SustainabilityMonitor !== 'undefined') {
-        const sustainabilityMonitor = new SustainabilityMonitor();
+      if (typeof SustainabilityMonitor !== 'undefined') { const sustainabilityMonitor = new SustainabilityMonitor();
         setInterval(() => sustainabilityMonitor.trackEnergy(), 60000);
-        window.sustainabilityMonitor = sustainabilityMonitor;
-      }
+        window.sustainabilityMonitor = sustainabilityMonitor; }
 
-      if (typeof ComplianceDashboard !== 'undefined') {
-        const complianceDashboard = new ComplianceDashboard();
-        window.complianceDashboard = complianceDashboard;
-      }
+      if (typeof ComplianceDashboard !== 'undefined') { const complianceDashboard = new ComplianceDashboard();
+        window.complianceDashboard = complianceDashboard; }
 
       // Fast startup with lazy loading
       const lazyLoader = new LazyLoader();
@@ -1877,21 +1394,17 @@
       // Lazy load non-critical modules
       const lazyModules = [
         { name: 'advanced', path: 'advanced-features.js' },
-        {
-          name: 'orchestrator',
-          path: '../../../../lib/multi-agent-orchestrator.js',
-        },
+        { name: 'orchestrator',
+          path: '../../../../lib/multi-agent-orchestrator.js', },
         { name: 'ai-panel', path: 'ai-agent-panel.js' },
         { name: 'cursor-modes', path: '../../../../lib/cursor-ai-modes.js' },
         { name: 'cursor-ui', path: 'cursor-ui.js' },
         { name: 'collab', path: '../../../../lib/realtime-collab.js' },
       ];
 
-      Promise.all(criticalModules.map(m => lazyLoader.loadModule(m.name, m.path))).then(() => {
-        console.log(`⚡ Startup: ${lazyLoader.getStartupTime().toFixed(2)}ms`);
+      Promise.all(criticalModules.map(m => lazyLoader.loadModule(m.name, m.path))).then(() => { console.log(`⚡ Startup: ${lazyLoader.getStartupTime().toFixed(2)}ms`);
         // Load rest in background
-        lazyLoader.loadOnDemand(lazyModules);
-      });
+        lazyLoader.loadOnDemand(lazyModules); });
     </script>
 
     <script>
@@ -1900,15 +1413,14 @@
         'beforeend',
         `
       <div id="commandPalette" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); width:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.5); z-index:10000;">
-        <input type="text" id="commandInput" placeholder="Type a command (Ctrl+Shift+P)..." 
+        <input type="text" id="commandInput" placeholder="Type a command (Ctrl+Shift+P)..."
                style="width:100%; padding:16px; background:var(--bg); border:none; border-bottom:1px solid var(--border); color:var(--text); font-size:16px; outline:none;">
         <div id="commandResults" style="max-height:400px; overflow-y:auto;"></div>
       </div>
     `
       );
 
-      const commandPalette = {
-        visible: false,
+      const commandPalette = { visible: false,
         commands: [
           { name: 'Git: Commit', cmd: 'git commit' },
           { name: 'Git: Switch Branch', cmd: 'git branch' },
@@ -1952,182 +1464,67 @@
           { name: 'Compliance: Export Report', cmd: 'comply export' },
         ],
 
-        toggle() {
-          this.visible = !this.visible;
+        toggle() { this.visible = !this.visible;
           const palette = document.getElementById('commandPalette');
           palette.style.display = this.visible ? 'block' : 'none';
-          if (this.visible) document.getElementById('commandInput').focus();
-        },
+          if (this.visible) document.getElementById('commandInput').focus(); },
 
-        async execute(cmd) {
-          if (cmd === 'compliance report') {
-            featureExpansions.generateComplianceReport();
-          } else if (cmd === 'audit export') {
-            const format = prompt('Export format (csv/json):', 'csv');
-            if (format === 'csv') {
-              securityCompliance.exportLogsCSV();
-            } else {
-              securityCompliance.exportLogsJSON();
-            }
-          } else if (cmd === 'encrypt backup') {
-            const password = prompt('Enter backup password:');
-            if (password) {
-              await securityCompliance.encryptBackup(password);
+        async execute(cmd) { if (cmd === 'compliance report') { featureExpansions.generateComplianceReport(); } else if (cmd === 'audit export') { const format = prompt('Export format (csv/json):', 'csv');
+            if (format === 'csv') { securityCompliance.exportLogsCSV(); } else { securityCompliance.exportLogsJSON(); } } else if (cmd === 'encrypt backup') { const password = prompt('Enter backup password:');
+            if (password) { await securityCompliance.encryptBackup(password);
               localStorage.setItem('hootner_backup_password', password);
-              addOutput('✓ Backup encrypted', 'success');
-            }
-          } else if (cmd === 'set role') {
-            const role = prompt('Enter role (admin/editor/viewer/guest):', 'viewer');
-            try {
-              securityCompliance.setUserRole(role);
+              addOutput('✓ Backup encrypted', 'success'); } } else if (cmd === 'set role') { const role = prompt('Enter role (admin/editor/viewer/guest):', 'viewer');
+            try { securityCompliance.setUserRole(role);
               addOutput(`✓ Role set to: ${role}`, 'success');
-              location.reload();
-            } catch (error) {
-              addOutput(`✗ ${error.message}`, 'error');
-            }
-          } else if (cmd === 'security status') {
-            const status = securityCompliance.getSecurityStatus();
-            addOutput(JSON.stringify(status, null, 2), 'log');
-          } else if (cmd === 'video preview') {
-            const url = prompt('Enter video URL:');
-            if (url) crossIntegration.embedVideoPreview(url);
-          } else if (cmd === 'open marketplace') {
-            crossIntegration.openMarketplace();
-          } else if (cmd === 'open dashboard') {
-            crossIntegration.openDashboard();
-          } else if (cmd === 'share social') {
-            const code = editor.getValue();
+              location.reload(); } catch (error) { addOutput(`✗ ${error.message}`, 'error'); } } else if (cmd === 'security status') { const status = securityCompliance.getSecurityStatus();
+            addOutput(JSON.stringify(status, null, 2), 'log'); } else if (cmd === 'video preview') { const url = prompt('Enter video URL:');
+            if (url) crossIntegration.embedVideoPreview(url); } else if (cmd === 'open marketplace') { crossIntegration.openMarketplace(); } else if (cmd === 'open dashboard') { crossIntegration.openDashboard(); } else if (cmd === 'share social') { const code = editor.getValue();
             const desc = prompt('Description:');
-            if (desc) crossIntegration.shareToSocialFeed(code, desc);
-          } else if (cmd === 'sync analytics') {
-            crossIntegration.syncAnalytics();
-          } else if (cmd === 'ai panel') {
-            if (window.aiAgentUI) window.aiAgentUI.toggle();
-          } else if (cmd === 'ai refactor') {
-            if (window.aiAgentUI) window.aiAgentUI.quickAction('refactor');
-          } else if (cmd === 'ai debug') {
-            if (window.aiAgentUI) window.aiAgentUI.quickAction('debug');
-          } else if (cmd === 'ai optimize') {
-            if (window.aiAgentUI) window.aiAgentUI.quickAction('optimize');
-          } else if (cmd === 'cursor chat') {
-            if (window.cursorUI) window.cursorUI.setMode('chat');
-          } else if (cmd === 'cursor write') {
-            if (window.cursorUI) window.cursorUI.setMode('write');
-          } else if (cmd === 'cursor refactor') {
-            if (window.cursorUI) window.cursorUI.setMode('refactor');
-          } else if (cmd === 'cursor modernize') {
-            if (window.cursorUI) window.cursorUI.setMode('modernize');
-          } else if (cmd === 'collab start') {
-            if (!window.collabSession) {
-              window.collabSession = new RealtimeCollaboration(editor);
+            if (desc) crossIntegration.shareToSocialFeed(code, desc); } else if (cmd === 'sync analytics') { crossIntegration.syncAnalytics(); } else if (cmd === 'ai panel') { if (window.aiAgentUI) window.aiAgentUI.toggle(); } else if (cmd === 'ai refactor') { if (window.aiAgentUI) window.aiAgentUI.quickAction('refactor'); } else if (cmd === 'ai debug') { if (window.aiAgentUI) window.aiAgentUI.quickAction('debug'); } else if (cmd === 'ai optimize') { if (window.aiAgentUI) window.aiAgentUI.quickAction('optimize'); } else if (cmd === 'cursor chat') { if (window.cursorUI) window.cursorUI.setMode('chat'); } else if (cmd === 'cursor write') { if (window.cursorUI) window.cursorUI.setMode('write'); } else if (cmd === 'cursor refactor') { if (window.cursorUI) window.cursorUI.setMode('refactor'); } else if (cmd === 'cursor modernize') { if (window.cursorUI) window.cursorUI.setMode('modernize'); } else if (cmd === 'collab start') { if (!window.collabSession) { window.collabSession = new RealtimeCollaboration(editor);
               window.collabSession.connect();
-              addOutput('✓ Collaboration started', 'success');
-            }
-          } else if (cmd === 'collab join') {
-            const roomId = prompt('Enter room ID:');
-            if (roomId && !window.collabSession) {
-              window.collabSession = new RealtimeCollaboration(editor);
-              window.collabSession.connect();
-            }
-          } else if (cmd === 'collab disconnect') {
-            if (window.collabSession) {
-              window.collabSession.disconnect();
+              addOutput('✓ Collaboration started', 'success'); } } else if (cmd === 'collab join') { const roomId = prompt('Enter room ID:');
+            if (roomId && !window.collabSession) { window.collabSession = new RealtimeCollaboration(editor);
+              window.collabSession.connect(); } } else if (cmd === 'collab disconnect') { if (window.collabSession) { window.collabSession.disconnect();
               window.collabSession = null;
-              addOutput('✓ Disconnected', 'success');
-            }
-          } else if (cmd === 'perf memory') {
-            if (window.memoryProfiler) {
-              const report = window.memoryProfiler.getReport();
-              addOutput(JSON.stringify(report, null, 2), 'log');
-            }
-          } else if (cmd === 'perf clear') {
-            if (window.memoryProfiler) {
-              await window.memoryProfiler.clearCache();
-              addOutput('✓ Cache cleared', 'success');
-            }
-          } else if (cmd === 'designer open') {
-            if (window.visualDesigner) window.visualDesigner.open();
-          } else if (cmd === 'debug breakpoint') {
-            const line = prompt('Line number:');
-            if (line && window.debugEnhancer) {
-              window.debugEnhancer.addBreakpoint(state.currentFile, parseInt(line));
-              addOutput(`✓ Breakpoint added at line ${line}`, 'success');
-            }
-          } else if (cmd === 'debug snooze') {
-            const suggestion = prompt('Suggestion to snooze:');
-            if (suggestion && window.debugEnhancer) {
-              window.debugEnhancer.snoozeSuggestion(suggestion);
-              addOutput('✓ Suggestion snoozed for 1 hour', 'success');
-            }
-          } else if (cmd === 'debug export') {
-            if (window.debugEnhancer) {
-              const sessions = window.debugEnhancer.exportSessions();
-              addOutput(JSON.stringify(sessions, null, 2), 'log');
-            }
-          } else if (cmd === 'sustain report') {
-            if (window.sustainabilityMonitor) {
-              const report = window.sustainabilityMonitor.getReport();
-              addOutput(JSON.stringify(report, null, 2), 'log');
-            }
-          } else if (cmd === 'comply ai') {
-            if (window.complianceDashboard) {
-              const report = window.complianceDashboard.generateReport('AI_ETHICS');
+              addOutput('✓ Disconnected', 'success'); } } else if (cmd === 'perf memory') { if (window.memoryProfiler) { const report = window.memoryProfiler.getReport();
+              addOutput(JSON.stringify(report, null, 2), 'log'); } } else if (cmd === 'perf clear') { if (window.memoryProfiler) { await window.memoryProfiler.clearCache();
+              addOutput('✓ Cache cleared', 'success'); } } else if (cmd === 'designer open') { if (window.visualDesigner) window.visualDesigner.open(); } else if (cmd === 'debug breakpoint') { const line = prompt('Line number:');
+            if (line && window.debugEnhancer) { window.debugEnhancer.addBreakpoint(state.currentFile, parseInt(line));
+              addOutput(`✓ Breakpoint added at line ${line}`, 'success'); } } else if (cmd === 'debug snooze') { const suggestion = prompt('Suggestion to snooze:');
+            if (suggestion && window.debugEnhancer) { window.debugEnhancer.snoozeSuggestion(suggestion);
+              addOutput('✓ Suggestion snoozed for 1 hour', 'success'); } } else if (cmd === 'debug export') { if (window.debugEnhancer) { const sessions = window.debugEnhancer.exportSessions();
+              addOutput(JSON.stringify(sessions, null, 2), 'log'); } } else if (cmd === 'sustain report') { if (window.sustainabilityMonitor) { const report = window.sustainabilityMonitor.getReport();
+              addOutput(JSON.stringify(report, null, 2), 'log'); } } else if (cmd === 'comply ai') { if (window.complianceDashboard) { const report = window.complianceDashboard.generateReport('AI_ETHICS');
               addOutput(
                 `AI Ethics Score: ${report.score.toFixed(1)}%\n${JSON.stringify(report.checks, null, 2)}`,
                 'log'
-              );
-            }
-          } else if (cmd === 'comply gdpr') {
-            if (window.complianceDashboard) {
-              const report = window.complianceDashboard.generateReport('GDPR');
+              ); } } else if (cmd === 'comply gdpr') { if (window.complianceDashboard) { const report = window.complianceDashboard.generateReport('GDPR');
               addOutput(
                 `GDPR Score: ${report.score.toFixed(1)}%\n${JSON.stringify(report.checks, null, 2)}`,
                 'log'
-              );
-            }
-          } else if (cmd === 'comply export') {
-            if (window.complianceDashboard) {
-              const report = window.complianceDashboard.exportReport('json');
-              addOutput(report, 'log');
-            }
-          } else {
-            featureExpansions.executeCommand(cmd);
-          }
-          this.toggle();
-        },
-      };
+              ); } } else if (cmd === 'comply export') { if (window.complianceDashboard) { const report = window.complianceDashboard.exportReport('json');
+              addOutput(report, 'log'); } } else { featureExpansions.executeCommand(cmd); }
+          this.toggle(); }, };
 
-      document.addEventListener('keydown', e => {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') {
-          e.preventDefault();
-          commandPalette.toggle();
-        }
-      });
+      document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') { e.preventDefault();
+          commandPalette.toggle(); } });
 
-      document.getElementById('commandInput')?.addEventListener('input', e => {
-        const query = e.target.value.toLowerCase();
+      document.getElementById('commandInput')?.addEventListener('input', e => { const query = e.target.value.toLowerCase();
         const filtered = commandPalette.commands.filter(c => c.name.toLowerCase().includes(query));
-        document.getElementById('commandResults').innerHTML = filtered
+        document.getElementById('commandResults').textContent = filtered
           .map(
             c =>
-              `<div style="padding:12px; cursor:pointer; border-bottom:1px solid var(--border);" 
-              onmouseover="this.style.background='var(--hover)'" 
+              `<div style="padding:12px; cursor:pointer; border-bottom:1px solid var(--border);"
+              onmouseover="this.style.background='var(--hover)'"
               onmouseout="this.style.background='transparent'"
               onclick="commandPalette.execute('${c.cmd}')">
           <strong>${c.name}</strong>
         </div>`
           )
-          .join('');
-      });
+          .join(''); });
 
       // Auto-update preview on change
-      if (editor) {
-        editor.onDidChangeModelContent(() => {
-          if (document.getElementById('previewPane')) {
-            updatePreview();
-          }
-        });
-      }
+      if (editor) { editor.onDidChangeModelContent(() => { if (document.getElementById('previewPane')) { updatePreview(); } }); }
     </script>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

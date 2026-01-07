@@ -22,7 +22,7 @@ npm run detect:jsdoc
 ## What Was Fixed
 
 ### 1. Unterminated Regex (113 instances)
-**Before**: `/g/` at end of lines  
+**Before**: `/g/` at end of lines
 **After**: Removed
 
 **Example**:
@@ -35,7 +35,7 @@ npm run detect:jsdoc
 ```
 
 ### 2. Malformed JSDoc (2 instances)
-**Before**: `/**/` or missing asterisks  
+**Before**: `/**/` or missing asterisks
 **After**: Proper JSDoc format
 
 **Example**:
@@ -52,15 +52,15 @@ npm run detect:jsdoc
 ```
 
 ### 3. Import Statements
-**Before**: `import X from 'Y';';`  
+**Before**: `import X from 'Y';';`
 **After**: `import X from 'Y';`
 
 ### 4. Empty Strings
-**Before**: `.value = ';`  
+**Before**: `.value = ';`
 **After**: `.value = '';`
 
 ### 5. CSS Syntax
-**Before**: `position:fixed)`  
+**Before**: `position:fixed)`
 **After**: `position:fixed`
 
 ## Scripts Created

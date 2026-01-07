@@ -1,0 +1,80 @@
+# Programming language
+
+A programming language is an artificial language for expressing computer programs.
+
+# Algorithm
+
+In mathematics and computer science, an algorithm is a finite sequence of mathematically rigorous instructions, typically used to solve a class of specific problems or to perform a computation. Algorithms are used as specifications for performing calculations and data processing. More advanced algorithms can use conditionals to divert the code execution through various routes and deduce valid inferences.
+
+# Data structure
+
+In computer science, a data structure is a data organization and storage format that is usually chosen for efficient access to data. More precisely, a data structure is a collection of data values, the relationships among them, and the functions or operations that can be applied to the data, i.e., it is an algebraic structure about data.
+
+# Software engineering
+
+Software engineering is a branch of both computer science and engineering focused on designing, developing, testing, and maintaining software applications. It involves applying engineering principles and computer programming expertise to develop software systems that meet user needs.
+
+# Computer science
+
+Computer science is the study of computation, information, and automation. Included broadly in the sciences, computer science spans theoretical disciplines to applied disciplines. An expert in the field is known as a computer scientist.
+
+# Machine learning
+
+Machine learning (ML) is a field of study in artificial intelligence concerned with the development and study of statistical algorithms that can learn from data and generalise to unseen data, and thus perform tasks without explicit instructions. Within a subdiscipline in machine learning, advances in the field of deep learning have allowed neural networks, a class of statistical algorithms, to surpass many previous machine learning approaches in performance.
+
+# Artificial intelligence
+
+Artificial intelligence (AI) is the capability of computational systems to perform tasks typically associated with human intelligence, such as learning, reasoning, problem-solving, perception, and decision-making. It is a field of research in computer science that develops and studies methods and software that enable machines to perceive their environment and use learning and intelligence to take actions that maximize their chances of achieving defined goals.
+
+# Web development
+
+Web development is the work involved in developing a website for the Internet or an intranet. Web development can range from developing a simple single static page of plain text to complex web applications, electronic businesses, and social network services. A more comprehensive list of tasks to which Web development commonly refers, may include Web engineering, Web design, Web content development, client liaison, client-side/server-side scripting, Web server and network security configuration, and e-commerce development.
+
+# Database
+
+In computing, a database is an organized collection of data or a type of data store based on the use of a database management system (DBMS), the software that interacts with end users, applications, and the database itself to capture and analyze the data. The DBMS additionally encompasses the core facilities provided to administer the database. The sum total of the database, the DBMS and the associated applications can be referred to as a database system. Often the term "database" is also used loosely to refer to any of the DBMS, the database system or an application associated with the database.
+
+# Operating system
+
+An operating system (OS) is system software that manages computer hardware and software resources, and provides common services for computer programs.
+
+# Computer network
+
+In computer science, computer engineering, and telecommunications, a network is a group of communicating computers and peripherals known as hosts, which communicate data to other hosts via communication protocols, as facilitated by networking hardware.
+
+# Cryptography
+
+Cryptography, or cryptology, is the practice and study of techniques for secure communication in the presence of adversarial behavior. More generally, cryptography is about constructing and analyzing protocols that prevent third parties or the public from reading private messages. Modern cryptography exists at the intersection of the disciplines of mathematics, computer science, information security, electrical engineering, digital signal processing, physics, and others. Core concepts related to information security are also central to cryptography. Practical applications of cryptography include electronic commerce, chip-based payment cards, digital currencies, computer passwords and military communications.
+
+# Video game development
+
+Video game development is the process of creating a video game. It is a multidisciplinary practice, involving programming, design, art, audio, user interface, and writing. Each of those may be made up of more specialized skills; art includes 3D modeling of objects, character modeling, animation, visual effects, and so on. Development is supported by project management, production, and quality assurance. Teams can be many hundreds of people, a small group, or even a single person.
+
+# Mobile app development
+
+Mobile app development is the act or process by which a mobile app is developed for one or more mobile devices, which can include personal digital assistants (PDA), enterprise digital assistants (EDA), or mobile phones. Such software applications are specifically designed to run on mobile devices, after considering many hardware constraints. Common constraints include central processing unit (CPU) architecture and speeds, available random-access memory (RAM), limited data storage capacities, and considerable variation in displays and input methods. These applications can be pre-installed on phones during manufacturing or delivered as web applications, using server-side or client-side processing to provide an "application-like" experience within a web browser.
+
+# Cloud computing
+
+Cloud computing is defined by the ISO as "a paradigm for enabling network access to a scalable and elastic pool of shareable physical or virtual resources with self-service provisioning and administration on demand". It is commonly referred to as "the cloud".
+
+# DevOps
+
+DevOps is the integration and automation of the software development and information technology operations. DevOps encompasses necessary tasks of software development and can lead to shortening development time and improving the development life cycle. According to Neal Ford, DevOps, particularly through continuous delivery, employs the "Bring the pain forward" principle, tackling tough tasks early, fostering automation and swift issue detection. Software programmers and architects should use fitness functions to keep their software in check.
+
+# Microservices
+
+In software engineering, a microservice architecture is an architectural pattern that organizes an application into a collection of loosely coupled, fine-grained services that communicate through lightweight protocols. This pattern is characterized by the ability to develop and deploy services independently, improving modularity, scalability, and adaptability. However, it introduces additional complexity, particularly in managing distributed systems and inter-service communication, making the initial implementation more challenging compared to a monolithic architecture.
+
+# Blockchain
+
+A blockchain is a distributed ledger with growing lists of records (blocks) that are securely linked together via cryptographic hashes. Each block contains a cryptographic hash of the previous block, a timestamp, and transaction data. Since each block contains information about the previous block, they effectively form a chain, with each additional block linking to the ones before it. Consequently, blockchain transactions are resistant to alteration because, once recorded, the data in any given block cannot be changed retroactively without altering all subsequent blocks and obtaining network consensus to accept these changes.
+
+# Quantum computing
+
+A quantum computer is a computer that exploits superposed and entangled states. Quantum computers can be viewed as sampling from quantum systems that evolve in ways that may be described as operating on an enormous number of possibilities simultaneously, though still subject to strict computational constraints. By contrast, ordinary ("classical") computers operate according to deterministic rules. It is widely believed that a quantum computer could perform some calculations exponentially faster than any classical computer. For example, a large-scale quantum computer could break some widely used public-key cryptographic schemes and aid physicists in performing physical simulations. However, current hardware implementations of quantum computation are largely experimental and only suitable for specialized tasks.
+
+# Compiler
+
+In computing, a compiler is software that translates computer code written in one programming language into another language. The name "compiler" is primarily used for programs that translate source code from a high-level programming language to a low-level programming language to create an executable program.
+

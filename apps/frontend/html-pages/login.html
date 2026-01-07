@@ -5,21 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Auth - HOOTNER</title>
     <style>
-      * {
-        margin: 0;
+      * { margin: 0;
         padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Segoe UI', sans-serif;
+        box-sizing: border-box; }
+      body { font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
         min-height: 100vh;
         display: flex;
         align-items: center;
-        justify-content: center;
-      }
-      .auth-form {
-        background: rgba(10, 10, 15, 0.9);
+        justify-content: center; }
+      .auth-form { background: rgba(10, 10, 15, 0.9);
         padding: 40px;
         border-radius: 12px;
         box-shadow: 0 0 40px rgba(0, 255, 0, 0.5);
@@ -30,45 +25,33 @@
           linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
           linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
         background-origin: border-box;
-        background-clip: padding-box, border-box;
-      }
-      h2 {
-        text-align: center;
+        background-clip: padding-box, border-box; }
+      h2 { text-align: center;
         margin-bottom: 24px;
         color: #00ff00;
-        text-shadow: 0 0 10px #00ff00;
-      }
-      .toggle {
-        display: flex;
+        text-shadow: 0 0 10px #00ff00; }
+      .toggle { display: flex;
         margin-bottom: 24px;
         border-radius: 6px;
-        overflow: hidden;
-      }
-      .toggle button {
-        flex: 1;
+        overflow: hidden; }
+      .toggle button { flex: 1;
         padding: 12px;
         border: none;
         background: rgba(0, 255, 255, 0.2);
         color: #00ffff;
         cursor: pointer;
-        transition: all 0.3s;
-      }
-      .toggle button.active {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: white;
-      }
-      .error-message {
-        background: rgba(255, 0, 255, 0.2);
+        transition: all 0.3s; }
+      .toggle button.active { background: linear-gradient(135deg, #00ffff, #ff00ff);
+        color: white; }
+      .error-message { background: rgba(255, 0, 255, 0.2);
         color: #ff00ff;
         padding: 12px;
         border-radius: 6px;
         margin-bottom: 16px;
         font-size: 14px;
         border: 1px solid #ff00ff;
-        display: none;
-      }
-      input {
-        width: 100%;
+        display: none; }
+      input { width: 100%;
         padding: 12px;
         border: 2px solid transparent;
         background-image:
@@ -79,14 +62,10 @@
         border-radius: 6px;
         margin-bottom: 16px;
         font-size: 14px;
-        color: #00ff00;
-      }
-      input:focus {
-        outline: none;
-        box-shadow: 0 0 10px #00ff00;
-      }
-      button[type='submit'] {
-        width: 100%;
+        color: #00ff00; }
+      input:focus { outline: none;
+        box-shadow: 0 0 10px #00ff00; }
+      button[type='submit'] { width: 100%;
         padding: 12px;
         background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: white;
@@ -95,50 +74,90 @@
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s;
-      }
-      button[type='submit']:hover {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-      }
-      .hidden {
-        display: none;
-      }
+        transition: all 0.3s; }
+      button[type='submit']:hover { background: linear-gradient(135deg, #ff00ff, #ffff00); }
+      .hidden { display: none; }
     </style>
 
     <style>
       /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
+      body { padding-top: 80px !important;
+        min-height: calc(100vh - 80px) !important; }
+      nav { height: 70px !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
+        z-index: 1000 !important; }
+      .main-content { margin-top: 0 !important;
+        padding: 20px !important; }
     </style>
 
     <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
+      html { font-size: 12px !important; }
+      body { zoom: 0.75 !important;
         transform: scale(0.75) !important;
         transform-origin: 0 0 !important;
-        width: 133% !important;
-      }
+        width: 133% !important; }
     </style>
-  </head>
+    <link rel="stylesheet" href="design-system.css">
+</head>
   <body>
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+<style>
+:root{--dashboard-header-bg:#1a1a2e;--dashboard-nav-bg:#16213e;--dashboard-accent:#00d4ff;--dashboard-text:#e0e0e0;--dashboard-hover:rgba(0,212,255,0.1);--dashboard-border:rgba(0,212,255,0.2)}
+.dashboard-header{background:linear-gradient(135deg,var(--dashboard-header-bg),var(--dashboard-nav-bg));padding:1rem 2rem;box-shadow:0 4px 20px rgba(0,0,0,0.3);position:sticky;top:0;z-index:1000;border-bottom:2px solid var(--dashboard-accent)}
+.dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.dashboard-nav a{color:var(--dashboard-text);text-decoration:none;padding:0.5rem 1rem;border-radius:8px;transition:all 0.3s;font-weight:500;position:relative}
+.dashboard-nav a:hover{background:var(--dashboard-hover);color:var(--dashboard-accent);transform:translateY(-2px)}
+.dashboard-nav a.active{background:var(--dashboard-accent);color:#000;box-shadow:0 4px 15px rgba(0,212,255,0.4)}
+.nav-btn{display:inline-flex;align-items:center;gap:0.5rem}
+.notification-bell{position:relative;cursor:pointer;padding:0.5rem;border-radius:50%;transition:all 0.3s}
+.notification-bell:hover{background:var(--dashboard-hover);transform:scale(1.1)}
+.notification-badge{position:absolute;top:-5px;right:-5px;background:#ff4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.notification-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--dashboard-nav-bg);border:1px solid var(--dashboard-border);border-radius:8px;min-width:300px;max-height:400px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1001}
+.notification-dropdown.show{display:block}
+.notification-item{padding:1rem;border-bottom:1px solid var(--dashboard-border);transition:background 0.2s}
+.notification-item:hover{background:var(--dashboard-hover)}
+.notification-item:last-child{border-bottom:none}
+</style>
+<div class="dashboard-header">
+<nav class="dashboard-nav">
+<div style="display:flex;gap:1rem;flex-wrap:wrap">
+<a href="dashboard.html" class="nav-btn">Dashboard</a>
+<a href="video-player.html" class="nav-btn">Video Player</a>
+<a href="code-editor.html" class="nav-btn">Code Editor</a>
+<a href="marketplace.html" class="nav-btn">Marketplace</a>
+<a href="profile.html" class="nav-btn">Profile</a>
+<a href="settings.html" class="nav-btn">Settings</a>
+<a href="feed-react.html" class="nav-btn">Feed</a>
+<a href="login.html" class="nav-btn active">Login</a>
+<a href="auto-editor.html" class="nav-btn">Auto Editor</a>
+<a href="ultra-editor.html" class="nav-btn">Ultra Editor</a>
+<a href="design-showcase.html" class="nav-btn">Showcase</a>
+<a href="test-page-clean.html" class="nav-btn">Test</a>
+</div>
+<div style="position:relative">
+<div class="notification-bell" onclick="toggleNotifications()">
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+</svg>
+<span class="notification-badge">3</span>
+</div>
+<div class="notification-dropdown" id="notificationDropdown">
+<div class="notification-item"><strong>New Feature</strong><br><small>Code collaboration is now live!</small></div>
+<div class="notification-item"><strong>Update Available</strong><br><small>Version 2.0 ready to install</small></div>
+<div class="notification-item"><strong>Tip</strong><br><small>Try Ctrl+K for AI chat mode</small></div>
+</div>
+</div>
+</nav>
+</div>
+<script>
+(function(){const p=window.location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.nav-btn').forEach(l=>{if(l.getAttribute('href')===p){l.classList.add('active')}})})();
+function toggleNotifications(){document.getElementById('notificationDropdown').classList.toggle('show')}
+window.addEventListener('click',function(e){if(!e.target.closest('.notification-bell')&&!e.target.closest('.notification-dropdown')){document.getElementById('notificationDropdown').classList.remove('show')}})
+</script>
+<nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="display:none">
       <div
         style="
           padding: 12px 20px;
@@ -490,91 +509,68 @@
 
     <script>
       let notifications = [
-        {
-          id: 1,
+        { id: 1,
           type: 'like',
           user: 'Alice',
           message: 'liked your video',
           time: '2m ago',
-          read: false,
-        },
-        {
-          id: 2,
+          read: false, },
+        { id: 2,
           type: 'comment',
           user: 'Bob',
           message: 'commented on your post',
           time: '5m ago',
-          read: false,
-        },
-        {
-          id: 3,
+          read: false, },
+        { id: 3,
           type: 'follow',
           user: 'Charlie',
           message: 'started following you',
           time: '10m ago',
-          read: true,
-        },
+          read: true, },
       ];
       let soundEnabled = true;
       let currentFilter = 'all';
 
-      function toggleNotifications() {
-        const dropdown = document.getElementById('notif-dropdown');
+      function toggleNotifications() { const dropdown = document.getElementById('notif-dropdown');
         dropdown.style.display =
           dropdown.style.display === 'none' ? 'flex' : 'none';
-        if (dropdown.style.display === 'flex') renderNotifications();
-      }
+        if (dropdown.style.display === 'flex') renderNotifications(); }
 
-      function toggleNotifSound() {
-        soundEnabled = !soundEnabled;
+      function toggleNotifSound() { soundEnabled = !soundEnabled;
         document.getElementById('sound-btn').textContent = soundEnabled
           ? '🔊'
-          : '🔇';
-      }
+          : '🔇'; }
 
-      function clearAllNotifications() {
-        notifications = [];
+      function clearAllNotifications() { notifications = [];
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function markAllRead() {
-        notifications.forEach(n => (n.read = true));
+      function markAllRead() { notifications.forEach(n => (n.read = true));
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function filterNotifications() {
-        renderNotifications();
-      }
+      function filterNotifications() { renderNotifications(); }
 
-      function setNotifFilter(filter) {
-        currentFilter = filter;
-        document.querySelectorAll('.notif-filter').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.filter === filter);
+      function setNotifFilter(filter) { currentFilter = filter;
+        document.querySelectorAll('.notif-filter').forEach(btn => { btn.classList.toggle('active', btn.dataset.filter === filter);
           btn.style.background = btn.classList.contains('active')
             ? 'rgba(0,255,255,0.2)'
-            : 'transparent';
-        });
-        renderNotifications();
-      }
+            : 'transparent'; });
+        renderNotifications(); }
 
-      function renderNotifications() {
-        const list = document.getElementById('notif-list');
+      function renderNotifications() { const list = document.getElementById('notif-list');
         const search = document
           .getElementById('notif-search')
           .value.toLowerCase();
 
-        let filtered = notifications.filter(n => {
-          const matchesSearch =
+        let filtered = notifications.filter(n => { const matchesSearch =
             n.user.toLowerCase().includes(search) ||
             n.message.toLowerCase().includes(search);
           const matchesFilter =
             currentFilter === 'all' || n.type === currentFilter;
-          return matchesSearch && matchesFilter;
-        });
+          return matchesSearch && matchesFilter; });
 
-        list.innerHTML = filtered
+        list.textContent = filtered
           .map(
             n => `
     <div style="padding:12px;border-bottom:1px solid rgba(0,255,0,0.1);${!n.read ? 'background:rgba(0,255,0,0.05);' : ''}" onclick="markRead(${n.id})">
@@ -589,47 +585,34 @@
     </div>
   `
           )
-          .join('');
-      }
+          .join(''); }
 
-      function markRead(id) {
-        const notif = notifications.find(n => n.id === id);
+      function markRead(id) { const notif = notifications.find(n => n.id === id);
         if (notif) notif.read = true;
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      function updateBadge() {
-        const unread = notifications.filter(n => !n.read).length;
+      function updateBadge() { const unread = notifications.filter(n => !n.read).length;
         const badge = document.getElementById('notif-badge');
         badge.textContent = unread;
-        badge.style.display = unread > 0 ? 'flex' : 'none';
-      }
+        badge.style.display = unread > 0 ? 'flex' : 'none'; }
 
-      function loadMoreNotifications() {
-        const newNotifs = [
-          {
-            id: Date.now(),
+      function loadMoreNotifications() { const newNotifs = [
+          { id: Date.now(),
             type: 'system',
             user: 'System',
             message: 'Backup completed',
             time: 'now',
-            read: false,
-          },
+            read: false, },
         ];
         notifications.push(...newNotifs);
         updateBadge();
-        renderNotifications();
-      }
+        renderNotifications(); }
 
-      document.addEventListener('click', e => {
-        if (
+      document.addEventListener('click', e => { if (
           !e.target.closest('#notif-dropdown') &&
           !e.target.closest('button[onclick="toggleNotifications()"]')
-        ) {
-          document.getElementById('notif-dropdown').style.display = 'none';
-        }
-      });
+        ) { document.getElementById('notif-dropdown').style.display = 'none'; } });
 
       updateBadge();
     </script>
@@ -702,38 +685,29 @@
       </div>
 
       <script>
-        function showLogin() {
-          document
+        function showLogin() { document
             .querySelectorAll('.toggle button')
             .forEach(b => b.classList.remove('active'));
           event.target.classList.add('active');
           document.getElementById('login-form').classList.remove('hidden');
           document.getElementById('register-form').classList.add('hidden');
-          document.getElementById('error').style.display = 'none';
-        }
+          document.getElementById('error').style.display = 'none'; }
 
-        function showRegister() {
-          document
+        function showRegister() { document
             .querySelectorAll('.toggle button')
             .forEach(b => b.classList.remove('active'));
           event.target.classList.add('active');
           document.getElementById('login-form').classList.add('hidden');
           document.getElementById('register-form').classList.remove('hidden');
-          document.getElementById('error').style.display = 'none';
-        }
+          document.getElementById('error').style.display = 'none'; }
 
-        function handleLogin(e) {
-          e.preventDefault();
+        function handleLogin(e) { e.preventDefault();
           const username = document.getElementById('login-username').value;
           const password = document.getElementById('login-password').value;
-          if (username && password) {
-            alert('Login successful!');
-            window.location.href = 'dashboard.html';
-          }
-        }
+          if (username && password) { alert('Login successful!');
+            window.location.href = 'dashboard.html'; } }
 
-        function handleRegister(e) {
-          e.preventDefault();
+        function handleRegister(e) { e.preventDefault();
           const error = document.getElementById('error');
           const email = document.getElementById('reg-email').value;
           const username = document.getElementById('reg-username').value;
@@ -742,29 +716,22 @@
 
           error.style.display = 'none';
 
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            error.textContent = 'Invalid email format';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { error.textContent = 'Invalid email format';
             error.style.display = 'block';
-            return;
-          }
+            return; }
 
-          if (!/^[a-zA-Z0-9_-]{3,30}$/.test(username)) {
-            error.textContent =
+          if (!/^[a-zA-Z0-9_-]{3,30}$/.test(username)) { error.textContent =
               'Username must be 3-30 characters, alphanumeric with _ or -';
             error.style.display = 'block';
-            return;
-          }
+            return; }
 
-          if (password !== confirm) {
-            error.textContent = 'Passwords must match';
+          if (password !== confirm) { error.textContent = 'Passwords must match';
             error.style.display = 'block';
-            return;
-          }
+            return; }
 
           alert('Registration successful!');
-          window.location.href = 'dashboard.html';
-        }
+          window.location.href = 'dashboard.html'; }
       </script>
     </div>
-  </body>
+  <script src="load-header.js"></script></body>
 </html>

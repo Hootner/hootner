@@ -1,0 +1,80 @@
+{
+  "category": "Development Tools and Workflow Builds",
+  "description": "Package managers, build tools, and CI/CD - Minimal starter implementations",
+  "projects": [
+    {
+      "name": "Package Manager",
+      "file": "package-manager.py",
+      "language": "Python",
+      "lines": 62,
+      "features": ["Install/uninstall", "Registry", "Version tracking", "Package listing"],
+      "run": "python package-manager.py",
+      "tutorial": "https://classic.yarnpkg.com/blog/2017/07/11/lets-dev-a-package-manager/",
+      "agent": "DevToolsQ"
+    },
+    {
+      "name": "Build Tool",
+      "file": "build-tool.js",
+      "language": "JavaScript",
+      "lines": 58,
+      "features": ["Task dependencies", "Async execution", "Configuration", "Task runner"],
+      "run": "node build-tool.js",
+      "tutorial": "https://gulpjs.com/",
+      "agent": "DevToolsQ"
+    },
+    {
+      "name": "Version Control",
+      "file": "version-control.py",
+      "language": "Python",
+      "lines": 78,
+      "features": ["Commits", "File hashing", "History", "HEAD tracking"],
+      "run": "python version-control.py",
+      "tutorial": "https://wyag.thb.lt/",
+      "agent": "DevToolsQ"
+    },
+    {
+      "name": "CI/CD Pipeline",
+      "file": "ci-cd-pipeline.js",
+      "language": "JavaScript",
+      "lines": 68,
+      "features": ["Stages", "Jobs", "Steps", "Pipeline execution"],
+      "run": "node ci-cd-pipeline.js",
+      "tutorial": "https://docs.github.com/en/actions",
+      "agent": "DevToolsQ"
+    },
+    {
+      "name": "Test Runner",
+      "file": "test-runner.js",
+      "language": "JavaScript",
+      "lines": 72,
+      "features": ["Test suites", "Assertions", "Pass/fail tracking", "Async tests"],
+      "run": "node test-runner.js",
+      "tutorial": "https://jestjs.io/",
+      "agent": "DevToolsQ"
+    },
+    {
+      "name": "Code Formatter",
+      "file": "code-formatter.py",
+      "language": "Python",
+      "lines": 58,
+      "features": ["JS formatting", "CSS formatting", "JSON formatting", "Indentation"],
+      "run": "python code-formatter.py",
+      "tutorial": "https://prettier.io/",
+      "agent": "DevToolsQ"
+    }
+  ],
+  "usage": {
+    "invoke": "npm run q:agents:templates dev-tools-workflow-builds",
+    "generate": "@DevToolsQ Generate minimal code for package manager in Python",
+    "test": "Run each tool to see workflow automation"
+  },
+  "dependencies": {
+    "from": "games-graphics-media-builds",
+    "uses": ["Build tools for asset compilation"],
+    "feeds": "AdvancedSpecializedQ for final layer"
+  },
+  "nextLayer": {
+    "category": "Advanced and Specialized Builds",
+    "agent": "AdvancedSpecializedQ"
+  }
+}

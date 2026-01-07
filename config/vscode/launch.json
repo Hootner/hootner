@@ -1,46 +1,32 @@
-{
-  "version": "0.2.0",
+{ "version": "0.2.0",
   "configurations": [
-    {
-      "type": "node",
+    { "type": "node",
       "request": "launch",
       "name": "Debug Server",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/server.js",
-      "env": {
-        "NODE_ENV": "development"
-      }
-    },
-    {
-      "type": "node",
+      "env": { "NODE_ENV": "development" } },
+    { "type": "node",
       "request": "attach",
       "name": "Attach to Process",
       "port": 9229,
-      "restart": true
-    },
-    {
-      "type": "node",
+      "restart": true },
+    { "type": "node",
       "request": "launch",
       "name": "Debug Auth Service",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/services/auth-service.js",
-      "env": {
-        "NODE_ENV": "development",
-        "PORT": "3001"
-      }
-    },
-    {
-      "type": "node",
+      "env": { "NODE_ENV": "development",
+        "PORT": "3001" } },
+    { "type": "node",
       "request": "launch",
       "name": "Debug Tests",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": ["--runInBand", "--no-cache"],
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "type": "node",
+      "internalConsoleOptions": "neverOpen" },
+    { "type": "node",
       "request": "attach",
       "name": "Docker: Attach to Node",
       "remoteRoot": "/app",
@@ -48,14 +34,10 @@
       "port": 9229,
       "address": "localhost",
       "restart": true,
-      "skipFiles": ["<node_internals>/**"]
-    }
+      "skipFiles": ["<node_internals>/**"] }
   ],
   "compounds": [
-    {
-      "name": "Debug All Services",
+    { "name": "Debug All Services",
       "configurations": ["Debug Server", "Debug Auth Service"],
-      "stopAll": true
-    }
-  ]
-}
+      "stopAll": true }
+  ] }
