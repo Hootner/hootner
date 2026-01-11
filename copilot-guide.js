@@ -14,14 +14,14 @@ console.log('node copilot-delegate.js monitor');
 console.log(chalk.cyan('\n✅ Complete Tasks:'));
 console.log('node copilot-delegate.js complete 1234567890');
 
-console.log(chalk.purple('\n🎯 Copilot Workflow:'));
+console.log(chalk.cyan('\n🎯 Copilot Workflow:'));
 console.log('1. Delegate task → Get Copilot instructions');
 console.log('2. Use @workspace /fix in your IDE');
 console.log('3. Add // COPILOT: comments to your changes');
 console.log('4. Monitor shows progress automatically');
 console.log('5. Mark complete when done');
 
-console.log(chalk.magenta('\n⚡ Pro Tips:'));
+console.log(chalk.yellow('\n⚡ Pro Tips:'));
 console.log('• Tasks auto-monitor every 30 minutes via GitHub Actions');
 console.log('• Use specific file names for targeted fixes');
 console.log('• Copilot works best with clear, specific descriptions');

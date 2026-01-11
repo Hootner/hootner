@@ -9,3 +9,6 @@ coverage/
 .aws/
 .pm2/
 logs/
+
+# Copilot working files
+copilot-tasks.json
