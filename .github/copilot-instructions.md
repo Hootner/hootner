@@ -2,7 +2,7 @@
 
 Purpose: give an AI agent the exact, actionable signals it needs to be productive in this repository (architecture, key files, developer workflows, and conventions).
 
-- **Big picture**: HOOTNER is a monorepo-style full-stack platform (video player, AI services, microservices) organized around a hexarchy (see `hexarchy/`) and framework folders (`frameworks/`). The runtime orchestration is handled under `orchestration/` and `services/`; AI agents live under `frameworks/ai/agents/` and are coordinated by orchestration and agent-hub modules.
+- **Big picture**: HOOTNER is a monorepo-style full-stack platform (video player, AI services, microservices) organized around a hexarchy (see `hexarchy/`) and framework folders (`frameworks/`). The runtime orchestration is handled by the main orchestrator (`index.js`) and services in `services/`; AI agents live under `frameworks/ai/agents/` and are coordinated by the enhanced agent hub and orchestration modules.
 
 - **Key files to read first**:
   - [docs/AI_AGENT_ORCHESTRATION.md](../docs/AI_AGENT_ORCHESTRATION.md) — multi-agent design and supported operations.
