@@ -6,21 +6,22 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
 
 - **Key files to read first**:
   - [docs/AI_AGENT_ORCHESTRATION.md](../docs/AI_AGENT_ORCHESTRATION.md) — multi-agent design and supported operations.
-  - [orchestration/index.js](../orchestration/index.js) — how the production orchestrator, service mesh and data pipeline are wired; shows dashboard and service registration.
-  - [enhanced-agent-hub.js](../enhanced-agent-hub.js) — the entrypoint for the 12 enhanced agents; demonstrates how agents are initialized and how requests are routed through them.
-  - [core-server.js](../core-server.js) — simple example of HTTP endpoints and runtime expectations.
+  - [index.js](../index.js) — the main orchestrator that wires hexagonal architecture layers, starts services, and provides health monitoring.
+  - [enhanced-agent-hub.js](../enhanced-agent-hub.js) — the entrypoint for the 75+ enhanced agents; demonstrates how agents are initialized and how requests are routed through them.
+  - [agent-orchestrator-cli.js](../agent-orchestrator-cli.js) — CLI for advanced agent orchestration with real-time task management.
+  - [frontend-server.js](../frontend-server.js) — HTTP server for the frontend with health check endpoints.
   - [README.md](../README.md) — project quick-start, top-level commands, and environment notes.
 
 - **Architecture summary (short)**:
   - Plan agent breaks complex tasks into steps; parallel subagents execute specific operations (refactor, debug, optimize). See `docs/AI_AGENT_ORCHESTRATION.md` for parallelism defaults (refactor=4, optimize=4, debug=2).
-  - Orchestration registers services with a service mesh and pipes logs/metrics into the data pipeline (`orchestration/index.js`).
+  - Main orchestrator (`index.js`) coordinates hexagonal architecture layers, manages service lifecycle, and provides health monitoring.
   - Enhanced agents (security, compliance, BI, etc.) are implemented as modules and accessed via `enhanced-agent-hub.js`.
 
 - **Developer workflows & commands** (use these exact commands when scripting or running tasks):
   - Install dependencies: `npm install`
   - Start dev frontend: `npm run dev`
-  - Start all servers (cross-platform): `npm run start:all` or `node scripts/start-all-servers.js`
-  - Start orchestration locally: `node orchestration/index.js` (dashboard runs on port 9000)
+  - Start all servers (cross-platform): `npm run start:all` or `node index.js`
+  - Start agent orchestrator: `npm run orchestrator:init` or `node agent-orchestrator-cli.js init`
   - Start standalone video player (dev):
     - `cd apps/frontend/html-pages`
     - `node video-player-server.js` (serves player at http://localhost:3000)
@@ -30,14 +31,14 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
 - **Conventions and patterns to follow**:
   - ES modules are the primary module system. Some legacy files use CommonJS (.cjs or `require()`); prefer ESM when adding new modules.
   - Agents live in `frameworks/ai/agents/` and expose start/monitor/process functions. `enhanced-agent-hub.js` shows the expected interface: `initialize()`, `processRequest(req,res)`, and `getStatus()`.
-  - Orchestration events: use the orchestrator event names shown in `orchestration/index.js` (`orchestration:ready`, `service:log`, `service:critical`, `metrics:collected`) when integrating with the data pipeline.
+  - Agent orchestration events: use the orchestrator event names shown in `agent-orchestrator-cli.js` (`task-started`, `task-completed`, `task-failed`, `agent-started`, `agent-stopped`) when working with agents.
   - Hexarchy directories map responsibilities; place new code in the appropriate layer (e.g., AI code in `hexarchy/2-intelligence/` or `frameworks/ai/`).
 
 - **Integration points & runtime details**:
-  - API gateway: `http://localhost:8080` (documented in orchestration console logs)
-  - Monitoring dashboard: `http://localhost:9000/dashboard` (served by orchestration)
-  - Service discovery: `http://localhost:8500` (mentioned in orchestration startup logs)
-  - ML services: Python-based under `services/video-generation/` (install via provided `install.py` script);
+  - Frontend: `http://localhost:3000` (served by frontend-server.js)
+  - GraphQL API: `http://localhost:4000/graphql` (served by api/graphql)
+  - Health checks: `http://localhost:3000/api/health` (frontend health endpoint)
+  - ML services: Python-based under `services/video-generation/` (install via provided `install.py` script)
   - Node runtime: targets modern Node (ESM first). Be careful with `.cjs` and `.mjs` boundaries.
 
 - **What to avoid / watch for**:
@@ -47,6 +48,6 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
 
 - **When creating patches**:
   - Run `npm run lint -- --fix` and `npm test` before proposing a patch.
-  - Include references to the files you changed in the PR description and run the orchestrator's local dashboard to verify side-effects (start `orchestration/index.js`).
+  - Include references to the files you changed in the PR description and test the orchestrator to verify side-effects (use `npm run start:all` or `node index.js`).
 
 If anything here is unclear or you want deeper details (examples of agent interfaces, common event payload shapes, or a short checklist for safe large-scale refactors), tell me which section to expand.

@@ -32,8 +32,9 @@ node copilot-guide.js  # View delegation guide
 1. `README.md` - Project overview and quick start
 2. `.github/copilot-instructions.md` - Detailed architecture guide
 3. `enhanced-agent-hub.js` - 75+ AI agents orchestration
-4. `orchestration/index.js` - Service mesh and data pipeline
-5. `copilot-delegate.js` - Task delegation system
+4. `index.js` - Main orchestrator and hexagonal architecture coordinator
+5. `agent-orchestrator-cli.js` - Advanced agent orchestration CLI
+6. `copilot-delegate.js` - Task delegation system
 
 ## Workflow Integration
 - **Task Delegation**: `node copilot-delegate.js delegate "task"`

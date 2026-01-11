@@ -342,14 +342,15 @@ spec:
 
 ## 🔄 Integration
 
-### With Orchestration System
+### With Main Orchestration System
 
 ```javascript
-// In orchestration/index.js
+// In index.js (main orchestrator)
 import manager from './agent-hub-manager.js';
 
-orchestrator.on('agent:status', (data) => {
-  manager.logEvent('info', `Agent status: ${data}`);
+// Log orchestration events
+orchestrator.on('service:started', (data) => {
+  manager.logEvent('info', `Service started: ${data}`);
 });
 ```
 
