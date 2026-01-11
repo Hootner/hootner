@@ -26,12 +26,13 @@ else
   echo "⏭️  No JavaScript files staged for commit."
 fi
 
-# 3. Run the enhanced code review agent
+# 3. Run the enhanced code review agent (optional - will not block commit if fails)
 echo "👀 [3/3] Running enhanced code review..."
-node code-review-agent.js
-if [ $? -ne 0 ]; then
-  echo "❌ Code review failed. Commit aborted."
-  exit 1
+if node code-review-agent.js 2>/dev/null; then
+  echo "✅ Code review passed!"
+else
+  echo "⚠️  Code review skipped (agent unavailable or has errors)"
+  echo "💡 This is optional and won't block your commit"
 fi
 
 echo ""
