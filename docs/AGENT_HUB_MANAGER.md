@@ -349,7 +349,7 @@ spec:
 import AgentHubManager from './agent-hub-manager.js';
 
 const hubManager = new AgentHubManager();
-await hubManager.initialize();
+hubManager.initialize();
 
 // Access agent hub functionality
 const status = hubManager.agentHub.getStatus();

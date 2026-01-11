@@ -7,7 +7,7 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
 - **Key files to read first**:
   - [docs/AI_AGENT_ORCHESTRATION.md](../docs/AI_AGENT_ORCHESTRATION.md) — multi-agent design and supported operations.
   - [index.js](../index.js) — the main orchestrator that wires hexagonal architecture layers, starts services, and provides health monitoring.
-  - [enhanced-agent-hub.js](../enhanced-agent-hub.js) — the entrypoint for the 75+ enhanced agents; demonstrates how agents are initialized and how requests are routed through them.
+  - [enhanced-agent-hub.js](../enhanced-agent-hub.js) — the entrypoint for the 75 enhanced agents; demonstrates how agents are initialized and how requests are routed through them.
   - [agent-orchestrator-cli.js](../agent-orchestrator-cli.js) — CLI for advanced agent orchestration with real-time task management.
   - [frontend-server.js](../frontend-server.js) — HTTP server for the frontend with health check endpoints.
   - [README.md](../README.md) — project quick-start, top-level commands, and environment notes.
