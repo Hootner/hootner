@@ -1,15 +1,38 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+import express from 'express';
+import path from 'path';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security middleware
-app.use(helmet());
-app.use(cors());
+// Security middleware with enhanced configuration
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -21,6 +44,25 @@ app.use(limiter);
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Input validation middleware
+const validateInput = (req, res, next) => {
+  const { body } = req;
+  
+  // Sanitize input to prevent XSS
+  if (body && typeof body === 'object') {
+    for (const key in body) {
+      if (typeof body[key] === 'string') {
+        body[key] = body[key].replace(/<script[^>]*>.*?<\/script>/gi, '');
+        body[key] = body[key].replace(/javascript:/gi, '');
+        body[key] = body[key].replace(/on\w+=/gi, '');
+      }
+    }
+  }
+  next();
+};
+
+app.use(validateInput);
 
 // Static files
 app.use(express.static('public'));

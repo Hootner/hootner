@@ -1,0 +1,40 @@
+# Security-hardened Dockerfile for HOOTNER Frontend
+FROM node:18-alpine AS base
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S hootner -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY --chown=hootner:nodejs . .
+
+# Install dependencies
+RUN npm ci --only=production && \
+    npm cache clean --force
+
+# Remove unnecessary packages and files
+RUN apk del --purge \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/* \
+    && rm -rf /root/.npm
+
+# Set security headers and limits
+ENV NODE_OPTIONS="--max-old-space-size=512"
+ENV NODE_ENV=production
+
+# Switch to non-root user
+USER hootner
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["node", "frontend-server.js"]

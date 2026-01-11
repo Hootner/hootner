@@ -1,8 +1,14 @@
-const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
-const { buildSchema } = require("graphql");
-const fs = require("fs");
-const path = require("path");
+import express from 'express';
+import { graphqlHTTP } from 'express-graphql';
+import { buildSchema } from 'graphql';
+import fs from 'fs';
+import path from 'path';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Validate environment variables at startup
 const { validateEnvironment } = require("./utils/validateEnv");
@@ -183,11 +189,47 @@ const root = {
 
 const app = express();
 
-// CORS and security middleware
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  },
+}));
+
+// Rate limiting for GraphQL
+const graphqlLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many GraphQL requests from this IP',
+});
+
+app.use('/graphql', graphqlLimiter);
+
+// CORS with proper configuration
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://hootner.com',
+    process.env.FRONTEND_URL
+  ].filter(Boolean);
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
 });
 
 // GraphQL endpoint with enhanced features
@@ -205,16 +247,22 @@ app.use(
           }
         : false,
     formatError: (error) => {
-      console.error("GraphQL Error:", error);
-      // Don't expose internal error details in production (CWE-200 fix)
-      if (process.env.NODE_ENV === "production") {
+      console.error('GraphQL Error:', {
+        message: error.message,
+        path: error.path,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Don't expose internal error details in production
+      if (process.env.NODE_ENV === 'production') {
         return {
-          message: "Internal server error",
+          message: 'Internal server error',
           extensions: {
-            code: error.extensions?.code || "INTERNAL_SERVER_ERROR",
+            code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
           },
         };
       }
+      
       return {
         message: error.message,
         locations: error.locations,
