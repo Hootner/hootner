@@ -83,6 +83,10 @@ services/massive-training-data/
 **/*.d.ts
 **/*.map
 
+# TypeScript files (no TypeScript parser configured)
+**/*.ts
+**/*.tsx
+
 # Documentation
 docs/
 **/*.md

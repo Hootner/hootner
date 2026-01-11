@@ -36,7 +36,7 @@ class CopilotTaskManager {
     this.saveTasks();
     
     console.log(chalk.green(`✅ Task delegated: ${description}`));
-    console.log(chalk.cyan(`📋 Copilot Instructions:`));
+    console.log(chalk.cyan('📋 Copilot Instructions:'));
     console.log(task.copilotInstructions);
     return task.id;
   }
@@ -100,10 +100,11 @@ const manager = new CopilotTaskManager();
 const [,, command, ...args] = process.argv;
 
 switch (command) {
-  case 'delegate':
+  case 'delegate': {
     const [description, ...files] = args;
     manager.delegate(description, files);
     break;
+  }
   case 'monitor':
     manager.monitor();
     break;
