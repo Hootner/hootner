@@ -1,0 +1,146 @@
+# Video Generation Service Configuration
+# Environment: Production
+# Date: 2026-01-11
+
+# ============================================================================
+# Server Configuration
+# ============================================================================
+server:
+  host: "0.0.0.0"
+  port: 5003
+  debug: false
+  workers: 4
+  
+# ============================================================================
+# Model Configuration
+# ============================================================================
+model:
+  size: "base"
+  device: "cuda"
+  timesteps: 1000
+  guidance_scale: 7.5
+  
+  checkpoint_dir: "/var/lib/video-generation/checkpoints"
+  weights_path: "/var/lib/video-generation/weights/model_v1.0.0.pt"
+  
+  # Optimization (enabled in production)
+  mixed_precision: true
+  precision_dtype: "float16"
+  compile_model: true
+  gradient_checkpointing: true
+  
+# ============================================================================
+# Sampler Configuration
+# ============================================================================
+sampler:
+  type: "dpm"
+  num_steps: 50
+  
+  dpm:
+    solver_order: 2
+    algorithm_type: "dpmsolver++"
+  
+# ============================================================================
+# Generation Defaults
+# ============================================================================
+generation:
+  default_num_frames: 16
+  default_height: 64
+  default_width: 64
+  default_fps: 8
+  default_format: "mp4"
+  
+  max_num_frames: 32
+  max_height: 256
+  max_width: 256
+  min_resolution: 32
+  max_prompt_length: 500
+  
+# ============================================================================
+# API Configuration
+# ============================================================================
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_window: 100
+    window_seconds: 60
+  
+  caching:
+    enabled: true
+    ttl_seconds: 7200
+  
+  async_jobs:
+    enabled: true
+    max_queue_size: 500
+    worker_threads: 4
+
+# ============================================================================
+# Redis Configuration
+# ============================================================================
+redis:
+  host: "redis.production.local"
+  port: 6379
+  db: 0
+  password: "${REDIS_PASSWORD}"
+  socket_timeout: 10
+
+# ============================================================================
+# Monitoring & Logging
+# ============================================================================
+monitoring:
+  logging:
+    level: "WARNING"
+    format: "json"
+    log_dir: "/var/log/video-generation"
+    
+  prometheus:
+    enabled: true
+    export_port: 9090
+  
+  profiling:
+    enabled: false
+    print_stats_on_shutdown: false
+
+# ============================================================================
+# Video Effects
+# ============================================================================
+effects:
+  enabled: true
+  
+  presets:
+    - "cinematic"
+    - "vintage"
+    - "dramatic"
+    - "dreamy"
+    - "vivid"
+  
+  post_processing:
+    temporal_smoothing: true
+    temporal_window: 3
+    auto_sharpen: true
+    sharpen_strength: 0.5
+
+# ============================================================================
+# Security
+# ============================================================================
+security:
+  cors:
+    enabled: true
+    origins:
+      - "https://hootner.com"
+      - "https://app.hootner.com"
+  
+  api_key:
+    enabled: true
+    header_name: "X-API-Key"
+    key: "${VIDEO_GEN_API_KEY}"
+
+# ============================================================================
+# Storage
+# ============================================================================
+storage:
+  output_dir: "/var/lib/video-generation/outputs"
+  cache_dir: "/var/lib/video-generation/cache"
+  max_output_size_mb: 200
+  cleanup_old_files: true
+  cleanup_age_days: 3

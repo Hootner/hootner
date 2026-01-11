@@ -884,7 +884,7 @@
       >
         <div style="display: flex; align-items: center; gap: 24px">
           <a
-            href="index.html"
+            href="/"
             style="
               font-size: 18px;
               font-weight: bold;
@@ -1150,61 +1150,61 @@
         </div>
         <div class="flex gap-2 items-center">
           <a
-            href="profile.html"
+            href="/profile"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >👤 Profile</a
           >
           <a
-            href="design-showcase.html"
+            href="/design-showcase"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >🎨 Design</a
           >
           <a
-            href="feed.html"
+            href="/feed-react"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >📰 Social</a
           >
           <a
-            href="marketplace.html"
+            href="/marketplace"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >🛒 Marketplace</a
           >
           <a
-            href="dashboard.html"
+            href="/dashboard"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-green-400 font-medium"
             >📈 Dashboard</a
           >
           <a
-            href="video-player.html"
+            href="/video-player"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >▶️ Video</a
           >
           <a
-            href="auto-editor.html"
+            href="/auto-editor"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >✂️ Editor</a
           >
           <a
-            href="code-editor.html"
+            href="/code-editor"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >💻 Code</a
           >
           <a
-            href="settings.html"
+            href="/settings"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >⚙️ Settings</a
           >
           <a
-            href="login.html"
+            href="/login"
             style="font-size: 14px; text-decoration: none; padding: 8px 12px"
             class="text-slate-300 hover:text-white"
             >🔐 Login</a
@@ -1253,6 +1253,16 @@
             <h3>Revenue</h3>
             <p id="stat-revenue">$12.4K</p>
             <div class="metric-trend trend-up">↑ 24% this week</div>
+          </div>
+          <div class="stat-card">
+            <h3>API Calls</h3>
+            <p id="stat-api">8.2K</p>
+            <div class="metric-trend trend-up">↑ 15% this hour</div>
+          </div>
+          <div class="stat-card">
+            <h3>Error Rate</h3>
+            <p id="stat-errors">0.3%</p>
+            <div class="metric-trend trend-down">↓ 0.1% today</div>
           </div>
         </div>
 
@@ -1444,6 +1454,38 @@
           <div class="activity-item" style="border-color: #10b981">
             <p><strong>API Gateway v1.8.3</strong> - Rolling update completed</p>
             <p class="time">3 hours ago • Status: ✓ Success</p>
+          </div>
+        </div>
+        <div class="grid" style="margin-top: 24px">
+          <div class="card">
+            <h2>Live Traffic <span style="font-size: 12px; color: #00ffff">(Real-time)</span></h2>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
+              <span>Requests/min</span><span id="req-per-min" style="color: #00ff00; font-weight: bold">342</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
+              <span>Active Sessions</span><span id="active-sessions" style="color: #00ffff; font-weight: bold">1,247</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
+              <span>Response Time</span><span id="response-time" style="color: #ff00ff; font-weight: bold">142ms</span>
+            </div>
+            <div style="height: 60px; background: rgba(0,255,0,0.1); border-radius: 4px; position: relative; overflow: hidden">
+              <canvas id="mini-chart" width="100" height="60" style="width: 100%; height: 100%"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Security Alerts</h2>
+            <div id="security-alerts">
+              <div style="padding: 8px; background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; margin-bottom: 8px; border-radius: 4px">
+                <div style="font-size: 12px; color: #ef4444; font-weight: bold">HIGH</div>
+                <div style="font-size: 13px; color: #00ffff">Unusual login pattern detected</div>
+                <div style="font-size: 11px; color: #6b7280">2 min ago • IP: 45.123.67.89</div>
+              </div>
+              <div style="padding: 8px; background: rgba(245,158,11,0.1); border-left: 3px solid #f59e0b; margin-bottom: 8px; border-radius: 4px">
+                <div style="font-size: 12px; color: #f59e0b; font-weight: bold">MEDIUM</div>
+                <div style="font-size: 13px; color: #00ffff">Rate limit exceeded</div>
+                <div style="font-size: 11px; color: #6b7280">5 min ago • API Key: prod_***1a2b</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2982,10 +3024,12 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
 
             function connectWebSocket() {
               try {
-                socket = io('http://localhost:3000', { transports: ['websocket', 'polling'] });
+                socket = io('http://localhost:3005', { transports: ['websocket', 'polling'] });
                 socket.on('connect', () => console.log('✓ WebSocket connected'));
                 socket.on('metrics', updateMetrics);
                 socket.on('activity', addActivity);
+                socket.on('traffic', updateTrafficChart);
+                socket.on('security', addSecurityAlert);
                 socket.on('disconnect', () => console.log('✗ WebSocket disconnected'));
               } catch (e) {
                 console.log('WebSocket unavailable, using mock data');
@@ -2998,6 +3042,8 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
               if (data.users) document.getElementById('stat-users').textContent = data.users.toLocaleString();
               if (data.engagement) document.getElementById('stat-engagement').textContent = data.engagement + '%';
               if (data.revenue) document.getElementById('stat-revenue').textContent = '$' + (data.revenue / 1000).toFixed(1) + 'K';
+              if (data.apiCalls) document.getElementById('stat-api').textContent = (data.apiCalls / 1000).toFixed(1) + 'K';
+              if (data.errorRate !== undefined) document.getElementById('stat-errors').textContent = data.errorRate.toFixed(1) + '%';
             }
 
             function addActivity(activity) {
@@ -3011,6 +3057,9 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
             }
 
             function startMockUpdates() {
+              const trafficData = [];
+              const maxPoints = 20;
+              
               setInterval(() => {
                 const cpu = Math.floor(Math.random() * 30) + 40;
                 const mem = Math.floor(Math.random() * 20) + 55;
@@ -3021,7 +3070,33 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
                 document.getElementById('mem-bar').style.width = mem + '%';
                 document.getElementById('disk-usage').textContent = disk + '%';
                 document.getElementById('disk-bar').style.width = disk + '%';
+                
+                // Update real-time metrics
+                const apiCalls = Math.floor(Math.random() * 1000) + 7500;
+                const errorRate = Math.random() * 0.5 + 0.1;
+                const users = Math.floor(Math.random() * 100) + 1200;
+                const engagement = Math.floor(Math.random() * 10) + 85;
+                const reqPerMin = Math.floor(Math.random() * 100) + 300;
+                const activeSessions = Math.floor(Math.random() * 200) + 1100;
+                const responseTime = Math.floor(Math.random() * 50) + 120;
+                
+                updateMetrics({ apiCalls, errorRate, users, engagement });
+                
+                // Update live traffic
+                document.getElementById('req-per-min').textContent = reqPerMin;
+                document.getElementById('active-sessions').textContent = activeSessions.toLocaleString();
+                document.getElementById('response-time').textContent = responseTime + 'ms';
+                
+                // Update mini chart
+                trafficData.push(reqPerMin);
+                if (trafficData.length > maxPoints) trafficData.shift();
+                drawMiniChart(trafficData);
               }, 3000);
+              
+              // Simulate security alerts
+              setInterval(() => {
+                if (Math.random() > 0.8) addRandomSecurityAlert();
+              }, 15000);
             }
 
             function runCode() {
@@ -3801,6 +3876,68 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea
               updateBadge();
               simulateRealTimeNotifications();
             });
+            
+            function drawMiniChart(data) {
+              const canvas = document.getElementById('mini-chart');
+              if (!canvas) return;
+              const ctx = canvas.getContext('2d');
+              const width = canvas.width;
+              const height = canvas.height;
+              
+              ctx.clearRect(0, 0, width, height);
+              if (data.length < 2) return;
+              
+              const max = Math.max(...data);
+              const min = Math.min(...data);
+              const range = max - min || 1;
+              
+              ctx.strokeStyle = '#00ff00';
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              
+              data.forEach((value, i) => {
+                const x = (i / (data.length - 1)) * width;
+                const y = height - ((value - min) / range) * height;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+              });
+              
+              ctx.stroke();
+            }
+            
+            function updateTrafficChart(data) {
+              if (data.requests) document.getElementById('req-per-min').textContent = data.requests;
+              if (data.sessions) document.getElementById('active-sessions').textContent = data.sessions.toLocaleString();
+              if (data.responseTime) document.getElementById('response-time').textContent = data.responseTime + 'ms';
+            }
+            
+            function addSecurityAlert(alert) {
+              const container = document.getElementById('security-alerts');
+              const severity = alert.severity || 'MEDIUM';
+              const colors = { HIGH: '#ef4444', MEDIUM: '#f59e0b', LOW: '#10b981' };
+              const color = colors[severity];
+              
+              const alertDiv = document.createElement('div');
+              alertDiv.style.cssText = `padding:8px;background:rgba(${severity === 'HIGH' ? '239,68,68' : severity === 'MEDIUM' ? '245,158,11' : '16,185,129'},0.1);border-left:3px solid ${color};margin-bottom:8px;border-radius:4px`;
+              alertDiv.innerHTML = `
+                <div style="font-size:12px;color:${color};font-weight:bold">${severity}</div>
+                <div style="font-size:13px;color:#00ffff">${sanitize(alert.message)}</div>
+                <div style="font-size:11px;color:#6b7280">${alert.time || 'Just now'} • ${sanitize(alert.details || '')}</div>
+              `;
+              
+              container.insertBefore(alertDiv, container.firstChild);
+              if (container.children.length > 5) container.removeChild(container.lastChild);
+            }
+            
+            function addRandomSecurityAlert() {
+              const alerts = [
+                { severity: 'HIGH', message: 'Suspicious login attempt', details: 'IP: ' + Math.floor(Math.random()*255) + '.123.67.89' },
+                { severity: 'MEDIUM', message: 'API rate limit exceeded', details: 'Key: prod_***' + Math.random().toString(36).substr(2,4) },
+                { severity: 'LOW', message: 'New device login', details: 'Location: Unknown' }
+              ];
+              const alert = alerts[Math.floor(Math.random() * alerts.length)];
+              addSecurityAlert(alert);
+            }
       </script>
       <div class="main-content"></div>
     </div>

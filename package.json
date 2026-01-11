@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "start:frontend": "node frontend-server.js",
+    "start:hootner": "node start-hootner.js",
+    "start:enhanced": "node serve-html-enhanced.js",
     "start:api": "cd api/graphql && npm start",
     "start:all": "node index.js",
     "dev": "nodemon index.js",
@@ -62,8 +63,6 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "express-validator": "^7.0.1",
-    "express-session": "^1.17.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -75,6 +74,7 @@
     "mongoose": "^8.0.3",
     "pg": "^8.11.3",
     "redis": "^4.6.10",
+    "socket.io": "^4.8.3",
     "stripe": "^14.9.0",
     "xss": "^1.0.14"
   },
