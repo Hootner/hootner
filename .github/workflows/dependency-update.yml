@@ -37,3 +37,7 @@ jobs:
       - name: Run Tests
         run: npm test || echo "Tests completed"
         continue-on-error: true
+      
+      - name: Run Security Audit
+        run: npm audit || echo "Audit completed"
+        continue-on-error: true
