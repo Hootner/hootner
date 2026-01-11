@@ -5,8 +5,12 @@
  * The Owl Never Sleeps - 24/7 Video Streaming Platform
  */
 
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class HootnerOrchestrator {
   constructor() {
@@ -45,9 +49,13 @@ class HootnerOrchestrator {
 
   async healthCheck(url) {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        timeout: 5000,
+        signal: AbortSignal.timeout(5000)
+      });
       return response.ok;
-    } catch {
+    } catch (error) {
+      console.warn(`Health check failed for ${url}:`, error.message);
       return false;
     }
   }
