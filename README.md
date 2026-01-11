@@ -1,790 +1,409 @@
-# 🦉 HOOTNER - The Owl Never Sleeps
+# 🦉 HOOTNER
+> **The Owl Never Sleeps** - Enterprise Video Streaming Platform
 
-## Ultimate Video Player & Social Platform
+[![Node.js](https://img.shields.io/badge/Node.js-25.2.1-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A full-stack, enterprise-grade video streaming platform with PWA capabilities, real-time features, and comprehensive DevOps infrastructure.
-
----
+Full-stack video streaming platform with AI generation, real-time collaboration, and enterprise DevOps.
 
 ## 🚀 Quick Start
 
 ```bash
-# Install dependencies
-npm install
+# One-command setup
+npm install && npm run start:all
 
-# Start development server
-npm run dev
-
-# Start video player
-cd apps/frontend/html-pages
-node video-player-server.js
+# Or step by step
+npm install              # Install dependencies
+npm run dev             # Start React app (port 5173)
+node scripts/start-all-servers.js  # Start all 9 servers
 ```
 
----
+**Ready in 30 seconds** → Open [localhost:5173](http://localhost:5173)
 
-## 📁 Project Structure
+## 📁 Architecture
 
-(")
+**Enterprise-Grade** • 300+ files • 15+ frameworks • Hexagonal architecture
+
+```
 Hootner/
 ├── apps/
-│   └── frontend/              # React + Vite frontend
-│       ├── html-pages/        # Standalone HTML pages (18 pages)
-│       │   ├── video-player.html
-│       │   ├── dashboard.html
-│       │   ├── social-feed.html
-│       │   ├── marketplace.html
-│       │   ├── analytics.html
-│       │   ├── code-editor.html
-│       │   └── ...
-│       ├── src/               # React components & features
-│       │   ├── components/
-│       │   ├── features/
-│       │   ├── pages/
-│       │   ├── hooks/
-│       │   ├── store/
-│       │   └── services/
-│       ├── public/            # Static assets
-│       ├── ssl/               # SSL certificates
-│       └── tests/             # Frontend tests
-├── api/
-│   ├── graphql/               # GraphQL API (NestJS)
-│   │   ├── src/
-│   │   │   ├── resolvers/
-│   │   │   ├── middleware/
-│   │   │   ├── monitoring/
-│   │   │   └── versioning/
-│   │   └── schema.graphql
-│   └── sdks/
-│       └── go/                # Go SDK client
-├── services/                  # Microservices
-│   ├── audit-service.js
-│   ├── backup-service.js
-│   ├── backup-monitoring-service.js
-│   ├── marketplace-service.js
-│   ├── payment-service.js
-│   ├── security-service.js
-│   ├── content-moderation-service.js
-│   ├── search-service.js
-│   ├── watcher-service.js
-│   └── police-bot-service.js
-├── infrastructure/            # Infrastructure as Code
-│   ├── k8s/
-│   ├── services/
-│   │   ├── auth/              # Auth microservice
-│   │   ├── analytics/
-│   │   ├── event-processor/
-│   │   └── shared/            # Shared utilities
-│   ├── traefik/
-│   └── scripts/
-├── k8s/                       # Kubernetes deployments
-│   ├── istio/                 # Service mesh configs
-│   ├── deployment.yaml
-│   ├── blue-green-deployment.yaml
-│   ├── chaos-experiments.yaml
-│   └── backup-cronjob.yaml
-├── scripts/                   # Automation scripts
-│   ├── backup-all.sh
-│   ├── blue-green-deploy.sh
-│   ├── chaos-test.js
-│   ├── security-audit.js
-│   ├── multi-region-sync.sh
-│   └── pitr-backup.sh
-├── tests/
-│   └── chaos/                 # Chaos engineering tests
-│       ├── chaos-monkey.js
-│       ├── load-test.js
-│       ├── spike-test.js
-│       └── game-day.js
-├── middleware/                # Express middleware
-│   ├── chaos.js
-│   ├── rate-limiter.js
-│   ├── metrics.js
-│   └── csp.js
-├── lib/                       # Shared libraries
-│   ├── circuit-breaker.js
-│   ├── retry.js
-│   ├── bulkhead.js
-│   └── graceful-shutdown.js
-├── grafana/                   # Monitoring dashboards
-│   ├── dashboards/
-│   └── datasources/
-├── prisma/                    # Database ORM
-│   └── schema.prisma
-├── docs/                      # Documentation
-│   ├── ARCHITECTURE.md
-│   ├── API_SCHEMA.md
-│   ├── CHAOS_ENGINEERING.md
-│   ├── BACKUP_STRATEGY.md
-│   └── STRIPE_INTEGRATION.md
+│   └── frontend/              # React 18 + TypeScript + Vite frontend
+│       ├── html-pages/        # 18 standalone HTML pages (video-player, dashboard, etc.)
+│       ├── src/               # React components with Apollo GraphQL
+│       ├── public/            # Static assets & PWA manifest
+│       ├── ssl/               # SSL certificates for HTTPS
+│       └── tests/             # Frontend test suites
+├── frameworks/                # 🏗️ Framework Architecture (12 categories)
+│   ├── ai/                    # AI services, agents, MCP servers
+│   │   ├── mcp/               # Model Context Protocol configurations
+│   │   ├── agents/            # AI agent orchestration
+│   │   └── services/          # AI service configurations
+│   ├── aws/                   # AWS SAM serverless applications
+│   │   └── sam-app/           # SQS-Lambda pattern with DLQ
+│   ├── backend/               # Server-side frameworks
+│   │   ├── express/           # Express.js middleware & config
+│   │   ├── nestjs/            # NestJS modules & decorators
+│   │   ├── graphql/           # GraphQL schemas & resolvers
+│   │   └── prisma/            # Prisma ORM configuration
+│   ├── frontend/              # UI framework configurations
+│   │   ├── react/             # React components & hooks
+│   │   ├── vite/              # Vite build configuration
+│   │   ├── tailwind/          # Tailwind CSS setup
+│   │   ├── typescript/        # TypeScript configurations
+│   │   └── linting/           # ESLint configurations
+│   ├── infrastructure/        # DevOps and deployment
+│   │   ├── docker/            # Docker configurations
+│   │   ├── kubernetes/        # Kubernetes manifests
+│   │   ├── istio/             # Service mesh configurations
+│   │   └── monitoring/        # Prometheus & Grafana configs
+│   ├── security/              # Authentication and security
+│   │   ├── middleware/        # Security middleware
+│   │   ├── config/            # Security configurations
+│   │   └── auth/              # Authentication frameworks
+│   └── testing/               # Testing framework configs
+│       ├── vitest/            # Unit testing configuration
+│       ├── playwright/        # E2E testing configuration
+│       └── chaos/             # Chaos engineering scenarios
+├── scripts/                   # 🔧 Server Management & Automation
+│   ├── start-all-servers.js   # Cross-platform server orchestration
+│   ├── start-all-servers.bat  # Windows batch version
+│   ├── start-all-servers.sh   # Linux/macOS shell version
+│   ├── analysis/              # Code analysis tools
+│   ├── build/                 # Build and compilation
+│   ├── deployment/            # Deployment automation
+│   ├── documentation/         # Documentation generation
+│   ├── git/                   # Git workflow automation
+│   ├── linting/               # Code quality and syntax fixes
+│   ├── monitoring/            # Performance monitoring
+│   ├── refactoring/           # Code refactoring utilities
+│   ├── testing/               # Test automation
+│   ├── ui/                    # UI development tools
+│   └── utilities/             # General utility scripts
+├── docs/                      # 📚 Comprehensive Documentation
+│   ├── readme/                # Component-specific READMEs
+│   │   ├── apps-README.md     # Frontend applications guide
+│   │   ├── services-README.md # AI video generation service
+│   │   ├── commands-README.md # Command references
+│   │   └── config-README.md   # Configuration guides
+│   ├── commands/              # Command references & quick guides
+│   │   ├── quick-reference.md # Essential commands
+│   │   ├── development.md     # Dev workflow
+│   │   ├── security.md       # Security commands
+│   │   └── ai-services.md    # AI service commands
+│   ├── reports/               # Project reports
+│   │   ├── lint/              # Linting and code quality
+│   │   ├── syntax/            # Syntax fix documentation
+│   │   └── phases/            # Project phase reports
+│   └── status/                # Status reports
+├── services/                  # 🔄 Microservices & AI Services
+│   ├── audit-service.js       # Activity logging service
+│   ├── backup-service.js      # Automated backup service
+│   ├── marketplace-service.js # Digital goods marketplace
+│   ├── payment-service.js     # Stripe payment integration
+│   ├── security-service.js    # Threat detection service
+│   ├── massive-training-data/ # AI training datasets
+│   │   └── github-repos/      # Curated algorithm repositories
+│   └── video-generation/      # AI text-to-video service
+│       ├── unet.py            # 3D U-Net diffusion model
+│       ├── generator.py       # Video generation orchestrator
+│       └── api.py             # Flask REST API
+├── runtimes/                  # 🚀 Runtime Environments
+│   ├── containers/            # Docker & Kubernetes runtime
+│   │   ├── Multi-stage builds # Production-optimized Alpine
+│   │   ├── Health checks      # 30s interval monitoring
+│   │   └── Resource limits    # 512MB memory, 1 CPU core
+│   ├── node/                  # Node.js 25.2.1 runtime
+│   │   ├── ES Modules         # Primary module system
+│   │   ├── Memory: 4GB        # Max old space size
+│   │   ├── Worker threads: 30 # Parallel processing
+│   │   └── GPU acceleration   # Where supported
+│   ├── process-managers/      # PM2, systemd configurations
+│   ├── web-servers/           # Nginx, reverse proxy configs
+│   └── performance/           # Runtime performance tuning
+├── hexarchy/                  # 🏛️ Hexagonal Architecture
+│   ├── 0-core/                # Core business logic
+│   ├── 1-foundation/          # Infrastructure layer
+│   ├── 2-intelligence/        # AI and analytics
+│   ├── 3-communication/       # External interfaces
+│   ├── 4-interface/           # User interfaces
+│   ├── 5-economy/             # Business logic
+│   ├── 6-governance/          # Policies and rules
+│   ├── 7-data/                # Data management
+│   └── 8-operations/          # DevOps and monitoring
+├── tools/                     # 🛠️ Development Tools
+│   ├── analysis/              # Code analysis
+│   ├── deployment/            # Deployment tools
+│   ├── git/                   # Git utilities
+│   ├── health/                # System health
+│   └── installers/            # Installation packages
+├── logs/                      # 📊 Organized Logging
+│   ├── system/                # System logs
+│   ├── exceptional/           # Critical logs
+│   ├── access/                # Access logs
+│   └── audit/                 # Audit trails
+├── tests/                     # 🧪 Testing Infrastructure
+│   ├── e2e/                   # End-to-end tests
+│   ├── integration/           # Integration tests
+│   ├── performance/           # Performance tests
+│   └── electron-code-editor/  # Editor tests
+├── src/                       # 💻 Source Code
+│   ├── frontend/              # Frontend source
+│   ├── legacy/                # Legacy code
+│   └── shared/                # Shared utilities
 └── .github/
     └── workflows/             # CI/CD pipelines (24 workflows)
-
-## ✨ Features
-
-### 🎬 Video Player
-
-- **Jukebox-style carousel** with vinyl record animations
-- **Touch/swipe navigation** for mobile
-- **Web Audio API effects** (reverb, delay, distortion)
-- **Offline caching** via Service Worker
-- **PWA installable** with manifest.json
-- **Upload/Download** functionality
-- **Share API** integration
-
-### 🌐 Frontend (18 HTML Pages)
-
-- **Landing Page** - Marketing homepage
-- **Video Player** - Enhanced jukebox player
-- **Dashboard** - Admin control panel
-- **Social Feed** - User posts & interactions
-- **Marketplace** - Digital goods store
-- **Analytics** - Real-time metrics
-- **Code Editor** - In-browser IDE with Cursor-style AI modes
-- **Moderation** - Content review tools
-- **Messages** - Real-time chat
-- **Profile** - User management
-- **Search** - Advanced filtering
-- **Settings** - Configuration panel
-
-### 🤖 AI-First Editing (Cursor-Style)
-
-- **Chat Mode (Ctrl+K)** - Conversational AI assistance
-- **Write Mode (Ctrl+L)** - Full code generation
-- **Refactor Mode** - Intelligent transformations
-- **Modernize Mode** - Legacy to TypeScript 7
-- **Deep Context** - Project-wide awareness
-- **Multi-Agent** - Parallel task execution
-
-### ⚡ Speed & Collaboration (Zed-Inspired)
-
-- **Fast Startup** - <100ms with lazy loading
-- **Real-time Collab** - WebSocket multi-user editing
-- **AI Conflict Resolution** - Automatic merge handling
-- **Minimalist Design** - Load only what's needed
-- **Performance Monitoring** - Built-in metrics
-
-### 🎨 Visual Designer & Debug (2025)
-
-- **Visual UI Designer** - Drag-and-drop prototyping
-- **AI Snooze** - Control suggestion noise
-- **Integrated Breakpoints** - Terminal debugging
-- **Session Logging** - Compliance audit trail
-
-### 🌱 Sustainability & Compliance (2025)
-
-- **Energy Tracking** - Power consumption monitoring
-- **AI Ethics Audits** - Automated compliance checks
-- **GDPR/SOC2** - Multi-standard support
-- **Auto-Reporting** - Generate compliance reports
-
-### 🔐 Security
-
-- JWT authentication with Firebase
-- Helmet.js security headers
-- Rate limiting per IP
-- CORS protection
-- Content Security Policy (CSP)
-- DOMPurify for XSS prevention
-- Snyk security scanning
-- Safe comparison utilities
-- Session management
-
-### 🏗️ Infrastructure
-
-- **Docker** multi-stage builds (7 Dockerfiles)
-- **Kubernetes** orchestration with Istio service mesh
-- **Blue-Green deployments** with automated rollback
-- **Chaos engineering** with 8 test scenarios
-- **Prometheus + Grafana** monitoring
-- **Automated backups** with PITR (Point-in-Time Recovery)
-- **Multi-region sync** for disaster recovery
-- **CI/CD** with 24 GitHub Actions workflows
-
-### 💳 Integrations
-
-- Stripe payment processing
-- GraphQL API with Apollo Client
-- MongoDB + Redis with Prisma ORM
-- AWS S3 for storage
-- Firebase authentication
-- Socket.io for real-time features
-
----
-
-## 🎮 Video Player Usage
-
-### Standalone HTML Player
-
-```bash
-cd apps/frontend/html-pages
-node video-player-server.js
 ```
 
-Open `http://localhost:3000/video-player.html`
+## ✨ Core Features
 
-### Features
+### 🎬 AI Video Platform
+- **Text-to-Video Generation** - 3D U-Net diffusion models, 30s generation time
+- **Jukebox Player** - Vinyl animations, touch navigation, Web Audio effects
+- **PWA Ready** - Offline caching, installable, Service Worker
+- **Real-time Streaming** - WebSocket, live collaboration
 
-- **Carousel Navigation**: Scroll or swipe through videos
-- **Keyboard Shortcuts**: Arrow keys to navigate
-- **Offline Mode**: Click 📥 to cache videos
-- **Audio Effects**: Apply reverb, delay, distortion
-- **Share**: Native Web Share API support
+### 🌐 Frontend Stack
+- **React 18 + TypeScript + Vite** - Modern development experience
+- **18 HTML Pages** - Landing, Player, Dashboard, Social, Marketplace, Analytics, Editor
+- **Apollo GraphQL** - Real-time subscriptions, Firebase auth, JWT
+- **Tailwind CSS** - Utility-first styling
 
-### PWA Installation
+### 🤖 AI-Powered Development
+- **Cursor-Style Editing** - Chat (Ctrl+K), Write (Ctrl+L), Refactor modes
+- **Zed-Inspired Speed** - <100ms startup, real-time collaboration
+- **Multi-Agent System** - 12+ specialized AI agents
+- **Visual Designer** - Drag-and-drop prototyping (2025)
+- **Sustainability** - Energy tracking, AI ethics audits (2025)
 
-1. Serve from HTTPS or localhost
-2. Click browser's "Install" prompt
-3. Uses manifest.json for app configuration
+### 🔐 Security & Compliance
+- **Multi-layer Protection** - JWT/Firebase, Helmet.js, rate limiting, CORS
+- **Injection Prevention** - SQL, XSS, NoSQL, LDAP, command injection
+- **Compliance Ready** - GDPR, SOC2, audit logging, 90-day retention
+- **Automated Scanning** - Snyk, CodeQL, dependency audits
 
----
+### 🏗️ Enterprise Infrastructure
+- **Container Runtime** - Docker Alpine, 512MB-1GB memory, health checks
+- **Node.js 25.2.1** - ES modules, 4GB memory, 30 worker threads, GPU acceleration
+- **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
+- **Monitoring Stack** - Prometheus, Grafana, 24 CI/CD workflows
+- **Resilience** - Chaos engineering (8 scenarios), PITR backups, multi-region sync
+
+### 💳 Integrations
+- **Payments** - Stripe processing, fraud detection
+- **Database** - MongoDB, Redis, Prisma ORM
+- **Cloud** - AWS S3, Firebase, Socket.io
+- **AI/ML** - PyTorch 2.0+, 3D U-Net, BERT, OpenCV
+- **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
+
+### 🤖 AI Agent Hub (12+ Agents)
+- **Security** - Threat detection, penetration testing
+- **Compliance** - DMCA/COPPA, AI ethics audits  
+- **Business Intelligence** - KPI tracking, executive dashboards
+- **Operations** - Incident management, auto-scaling
+- **Payment & Fraud** - Transaction monitoring, chargeback handling
+- **Plus 7 more** - Analytics, Support, Localization, Legal, etc.
+
+## 🎮 Usage Examples
+
+### Video Player
+```bash
+cd apps/frontend/html-pages && node video-player-server.js
+# Open http://localhost:3000/video-player.html
+```
+
+### AI Video Generation
+```bash
+cd services/video-generation
+python install.py  # Auto-install ML dependencies
+python api.py      # Start API on port 5003
+```
+
+### All Servers (9 services)
+```bash
+npm run start:all  # Cross-platform orchestration
+```
 
 ## 🛠️ Development
 
 ### Prerequisites
-
-- Node.js 18+
-- Docker & Docker Compose
-- Kubernetes (optional)
-
-### Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start Electron app
-npm start
-
-# Start collaboration server
-npm run collab
-
-# Package for distribution
-npm run package
-
-# Create installers
-npm run make
-```
+- Node.js 25.2.1, NPM 11.6.2
+- Docker & Kubernetes (optional)
+- Python 3.9+ (AI services)
+- AWS CLI (serverless)
 
 ### Environment Setup
-
 ```bash
-# Copy environment template
 cp .env.example .env
-
-# Generate secrets
 npm run generate:secrets
-
-# Configure Firebase
-# See apps/frontend/FIREBASE_SETUP_STEPS.md
+# Configure Firebase - see apps/frontend/FIREBASE_SETUP_STEPS.md
 ```
 
-### Run Services
-
+### Development Modes
 ```bash
-# Development mode
+# Development
 docker-compose -f docker-compose.dev.yml up
 
-# Production mode
+# Production
 docker-compose -f docker-compose.prod.yml up
 
 # With monitoring
 docker-compose -f docker-compose.monitoring.yml up
 
-# Blue-Green deployment
-docker-compose -f docker-compose.blue-green.yml up
-
 # Chaos testing
 docker-compose -f docker-compose.chaos.yml up
 ```
 
-### Frontend Development
+## 🧪 Testing & Quality
 
 ```bash
-cd apps/frontend
-
-# Vite dev server
-npm run dev
-
-# Secure HTTPS server
-npm run dev:secure
-
-# Hub app (standalone)
-npm run dev:hub
+npm test                    # Full test suite
+npm run test:chaos         # Chaos engineering (8 scenarios)
+npm run security:audit     # Security vulnerability scan
+npm run analyze:duplication # Code quality analysis
 ```
 
----
+### Chaos Engineering
+- Chaos Monkey, Load/Spike tests, Recovery scenarios
+- Circuit breaker testing, Service mesh validation
+- Game Day exercises, Dependency failure simulation
 
-## 🧪 Testing
-
-```bash
-# Run all tests
-npm test
-
-# Chaos engineering tests
-npm run test:chaos
-
-# Load testing
-npm run test:load
-
-# Security audit
-npm run security:audit
-
-# Smoke tests
-npm run test:smoke
-```
-
-### Chaos Engineering Tests
-
-- **Chaos Monkey** - Random service failures
-- **Load Test** - High traffic simulation
-- **Spike Test** - Sudden traffic bursts
-- **Recovery Test** - Disaster recovery
-- **Game Day** - Full system chaos
-- **Circuit Breaker** - Failure isolation
-- **Dependency Test** - Service mesh testing
-
----
-
-## 🚢 Deployment
+## 🚀 Deployment
 
 ### Docker
-
 ```bash
-# Build images
 docker build -t hootner-frontend -f Dockerfile.frontend .
 docker build -t hootner-server -f Dockerfile .
-
-# Push to registry
-docker push your-registry/hootner-frontend
-docker push your-registry/hootner-server
 ```
 
-### Kubernetes
-
+### Kubernetes + Istio
 ```bash
-# Deploy to cluster
 kubectl apply -f k8s/
-
-# Install Istio service mesh
-cd k8s/istio
-./install.sh  # Linux/Mac
-./install.bat # Windows
-
-# Blue-Green deployment
-./scripts/blue-green-deploy.sh
+cd k8s/istio && ./install.sh
+scripts/deployment/blue-green-deploy.sh
 ```
 
-### CI/CD (24 Workflows)
+### CI/CD Pipeline (24 Workflows)
+✅ Testing • 🔒 Security • 📦 Docker • 🚀 Deploy • 📊 Monitoring • 🔄 Rollback
 
-GitHub Actions workflows handle:
+## 📊 Monitoring & Observability
 
-- ✅ **Testing** - Automated test suite
-- 🔒 **Security** - CodeQL, Snyk scanning
-- 📦 **Docker** - Image builds & registry push
-- 🚀 **Deployment** - Staging/Production/Preview
-- 📊 **Monitoring** - Performance & health checks
-- 🔄 **Rollback** - Automated failure recovery
-- 🧪 **Chaos** - Scheduled chaos tests
-- 📋 **Backup** - Automated database backups
-- 🏷️ **Release** - Semantic versioning
-- 🧹 **Cleanup** - Resource management
-
----
-
-## 📊 Monitoring
-
-### Prometheus Metrics
-
-- Request rates & latencies
-- Error rates
+**Prometheus + Grafana Stack** → [localhost:3001](http://localhost:3001)
+- Request rates, latencies, error rates
 - Resource usage (CPU, memory, disk)
-- Custom business metrics
-- Chaos experiment results
+- Business metrics, chaos experiment results
+- Service health, database performance, backup status
 
-### Grafana Dashboards
+## 📚 Documentation Hub
 
-- Service health overview
-- Database performance
-- Backup status & verification
-- Real-time analytics
-- Chaos engineering metrics
+### 📝 Quick References
+- [Architecture](docs/ARCHITECTURE.md) • [API Schema](docs/API_SCHEMA.md) • [Services Guide](docs/SERVICES.md)
+- [Security Checklist](SECURITY_CHECKLIST.md) • [Injection Protection](docs/INJECTION_PROTECTION.md)
+- [JSDoc Reference](JSDOC_QUICK_REFERENCE.md) • [TODO Guidelines](docs/TODO_GUIDELINES.md)
 
-Access: `http://localhost:3001` (Grafana)
+### 🔧 Developer Resources  
+- [Codebase Fixes Plan](CODEBASE_FIXES_PLAN.md) • [Migration Guide](MIGRATION_GUIDE.md)
+- [Syntax Fixes](docs/SYNTAX_FIXES_SUMMARY.md) • [Code Quality](docs/DEDUPLICATION_GUIDE.md)
+- [Documentation Guide](docs/DOCUMENTATION_GUIDE.md) • [Type Definitions](types/services.d.ts)
 
----
+### 🤖 AI & Performance
+- [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md) • [Cursor AI Modes](docs/CURSOR_AI_MODES.md)
+- [Zed Optimization](docs/ZED_OPTIMIZATION.md) • [Visual Designer](docs/VISUAL_DESIGNER.md)
+- [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](frameworks/ai/agents/README.md)
 
-## 🔒 Security
+### 🛠️ Operations
+- [Deployment Checklist](.github/DEPLOYMENT_CHECKLIST.md) • [Chaos Engineering](docs/CHAOS_ENGINEERING.md)
+- [Backup Strategy](docs/BACKUP_STRATEGY.md) • [Blue-Green Deployment](docs/BLUE_GREEN_DEPLOYMENT.md)
+- [Stripe Integration](docs/STRIPE_INTEGRATION.md) • [Watcher Agent](docs/WATCHER.md)
 
-### Best Practices Implemented
+## 📝 Essential Commands
 
-- JWT with secure secrets
-- HTTPS/TLS encryption
-- Rate limiting per IP
-- Input validation & sanitization
-- **SQL injection prevention** (parameterized queries, input escaping)
-- **Command injection protection** (argument validation, shell escaping)
-- **XSS protection** (DOMPurify, HTML sanitization, entity escaping)
-- **NoSQL injection prevention** (query sanitization, operator filtering)
-- **LDAP injection protection** (special character escaping)
-- CSRF tokens (double-submit cookie pattern)
-- Security headers (Helmet.js with CSP)
-- Dependency scanning (Snyk)
-- Regular security audits
-- Safe comparison utilities (timing-attack resistant)
-- Session management (secure cookies)
-- Path traversal prevention
-- Prototype pollution protection
+### Server Management
+| Command | Description |
+|---------|-------------|
+| `npm run start:all` | Start all 9 servers (cross-platform) |
+| `npm run dev` | React development server (port 5173) |
+| `npm run collab` | Real-time collaboration server |
+| `npm run package` | Package Electron app |
 
-### Compliance
+### AI & Video Generation
+| Command | Description |
+|---------|-------------|
+| `cd services/video-generation && python api.py` | Start AI video API (port 5003) |
+| `node enhanced-agent-hub.js` | Start 12+ AI agents |
 
-- GDPR considerations
-- Data encryption at rest
-- Audit logging service
-- 90-day retention policy
-- Compliance reporter service
+### Code Quality & Security
+| Command | Description |
+|---------|-------------|
+| `npm run security:audit` | Security vulnerability scan |
+| `npm run analyze:duplication` | Code duplication analysis |
+| `npm run docs:generate` | Generate API documentation |
+| `npm run todos:scan` | Scan codebase for TODOs |
 
-### Injection Attack Protection
+### Infrastructure
+| Command | Description |
+|---------|-------------|
+| `./scripts/blue-green-deploy.sh` | Zero-downtime deployment |
+| `./scripts/chaos-test.js` | Chaos engineering tests |
+| `sam deploy --guided` | Deploy AWS serverless |
 
-- [Injection Protection Guide](docs/INJECTION_PROTECTION.md) ⭐ NEW
-- SQL injection prevention
-- Command injection protection
-- XSS (Cross-Site Scripting) protection
-- NoSQL injection prevention
-- LDAP injection protection
-- Path traversal prevention
-- Prototype pollution protection
+## 🌆 Tech Stack
 
----
+**Frontend** • React 18, TypeScript, Vite, Tailwind CSS  
+**Backend** • Node.js, Express, GraphQL, NestJS  
+**Database** • MongoDB, Redis, Prisma ORM  
+**Infrastructure** • Docker, Kubernetes, Istio  
+**Monitoring** • Prometheus, Grafana  
+**CI/CD** • GitHub Actions (24 workflows)  
+**Cloud** • AWS (S3, Lambda, SQS)  
+**Payments** • Stripe  
+**Auth** • Firebase, JWT
 
-## 📚 Documentation
+## 🏗️ Architecture Highlights
 
-### 📖 View Online
+### Microservices (14+ Core Services)
+- **AI Agents** - Security, Compliance, BI, Operations, Payment Fraud
+- **Core Services** - Audit, Backup, Marketplace, Payment, Content Moderation
+- **Video Generation** - PyTorch 2.0+, 3D U-Net, Flask API (port 5003)
+- **AWS Serverless** - SQS+Lambda, DLQ, CloudWatch, IAM
 
-- **GitBook**: [Setup Guide](GITBOOK_QUICK.md) - Professional documentation site (3-minute setup)
-- **GitHub**: [docs/](docs/) - Browse documentation files
-
-### Architecture & Design
-
-- [Architecture](docs/ARCHITECTURE.md)
-- [Enhanced Architecture](docs/ENHANCED_ARCHITECTURE.md)
-- [API Schema](docs/API_SCHEMA.md)
-- [API Versioning](docs/API_VERSIONING.md)
-- [Services Guide](docs/SERVICES.md)
-
-### Code Quality
-
-- [Code Duplication Solution](CODE_DUPLICATION_SOLUTION.md)
-- [Deduplication Guide](docs/DEDUPLICATION_GUIDE.md)
-- [Shared Utilities Reference](docs/SHARED_UTILITIES_REFERENCE.md)
-- [Documentation Guide](docs/DOCUMENTATION_GUIDE.md) ⭐ NEW
-- [Documentation Status](docs/DOCUMENTATION_STATUS.md) ⭐ NEW
-- [JSDoc Quick Reference](JSDOC_QUICK_REFERENCE.md) ⭐ NEW
-- [Syntax Fixes Summary](docs/SYNTAX_FIXES_SUMMARY.md) ⭐ NEW
-- [Syntax Fix Guide](docs/SYNTAX_FIX_GUIDE.md) ⭐ NEW
-- [Syntax Fixes Checklist](docs/SYNTAX_FIXES_CHECKLIST.md) ⭐ NEW
-- [Syntax Fixes Examples](docs/SYNTAX_FIXES_EXAMPLES.md) ⭐ NEW
-
-### Codebase Fixes & Migration
-
-- [Codebase Fixes Plan](CODEBASE_FIXES_PLAN.md) ⭐ NEW - Comprehensive fix plan
-- [Migration Guide](MIGRATION_GUIDE.md) ⭐ NEW - Step-by-step implementation
-- [Fixes Checklist](FIXES_CHECKLIST.md) ⭐ NEW - Progress tracking
-- [Fixes Summary](FIXES_SUMMARY.md) ⭐ NEW - Executive summary
-
-### Operations
-
-- [Deployment Checklist](.github/DEPLOYMENT_CHECKLIST.md)
-- [Chaos Engineering](docs/CHAOS_ENGINEERING.md)
-- [Backup Strategy](docs/BACKUP_STRATEGY.md)
-- [Advanced Backup](docs/ADVANCED_BACKUP.md)
-- [Blue-Green Deployment](docs/BLUE_GREEN_DEPLOYMENT.md)
-
-### Developer Resources
-
-- [Documentation Guide](docs/DOCUMENTATION_GUIDE.md) - JSDoc standards & best practices ⭐ NEW
-- [Documentation Status](docs/DOCUMENTATION_STATUS.md) - Coverage tracking ⭐ NEW
-- [JSDoc Quick Reference](JSDOC_QUICK_REFERENCE.md) - Quick syntax guide ⭐ NEW
-- [Type Definitions](types/services.d.ts) - TypeScript definitions ⭐ NEW
-- [TODO Guidelines](docs/TODO_GUIDELINES.md) - TODO comment standards ⭐ NEW
-- [TODO Quick Reference](TODO_QUICK_REFERENCE.md) - Quick TODO guide ⭐ NEW
-- [TODO Report](TODO_REPORT.md) - Current action items (368 total) ⭐ NEW
-
-### AI Features
-
-- [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md) - Multi-agent system ⭐ NEW
-- [Cursor AI Modes](docs/CURSOR_AI_MODES.md) - AI-first editing ⭐ NEW
-
-### Performance & Collaboration
-
-- [Zed Optimization](docs/ZED_OPTIMIZATION.md) - Speed & real-time collab ⭐ NEW
-- [Electron Optimization](docs/ELECTRON_OPTIMIZATION.md) - Secure, fast, <50MB builds ⭐ NEW
-
-### Visual Design & Debugging
-
-- [Visual Designer](docs/VISUAL_DESIGNER.md) - UI prototyping & debug enhancements ⭐ NEW
-- [Sustainability & Compliance](docs/SUSTAINABILITY_COMPLIANCE.md) - Energy tracking & AI ethics ⭐ NEW
-
-### Integrations
-
-- [Stripe Integration](docs/STRIPE_INTEGRATION.md)
-- [Watcher Agent](docs/WATCHER.md)
-- [Agent Guide](docs/AGENT_GUIDE.md)
-
-### Security
-
-- [Data Exposure Prevention](docs/DATA_EXPOSURE_PREVENTION.md) ⭐ NEW
-- [Security Checklist](SECURITY_CHECKLIST.md) ⭐ NEW
-- [Injection Protection Guide](docs/INJECTION_PROTECTION.md)
-- [Security Quick Reference](SECURITY_QUICK_REFERENCE.md)
-- [Injection Fixes Summary](INJECTION_FIXES_SUMMARY.md)
-
----
+### Resilience Patterns
+- Circuit Breaker, Retry Logic, Bulkhead, Timeout
+- Graceful Shutdown, Rate Limiting
+- Istio Service Mesh - Traffic management, security, observability
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+1. Fork → Create branch → Commit → Push → PR
+2. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
-### Development Workflow
+## 📜 License & Support
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open Pull Request
+**MIT License** - See [LICENSE](LICENSE)
 
----
-
-## 🔧 Git Commands Reference
-
-### Basic Operations
-
-```bash
-# Clone repository
-git clone <url>
-
-# Check status
-git status
-
-# View commit history
-git log
-
-# View changes
-git diff
-```
-
-### Staging & Committing
-
-```bash
-# Stage all changes
-git add .
-
-# Stage specific file/path
-git add <path>
-
-# Commit with message
-git commit -m "Short description"
-
-# Stage and commit tracked files
-git commit -am "Short description"
-
-# Amend last commit
-git commit -a --amend
-```
-
-### Branching
-
-```bash
-# Switch to existing branch
-git switch chshersh/branch-name
-
-# Create and switch to new branch
-git switch -c chshersh/branch-name
-
-# Delete branch
-git branch -D chshersh/branch-name
-```
-
-### Remote Operations
-
-```bash
-# Push to remote
-git push
-
-# Push and set upstream
-git push -u origin chshersh/branch-name
-
-# Pull with fast-forward only
-git pull --ff-only origin <current-branch>
-
-# Fetch from main
-git fetch origin main
-
-# Add upstream remote
-git remote add upstream <url>
-```
-
-### Reset & Revert
-
-```bash
-# Hard reset to remote
-git reset --hard origin/main
-
-# Discard local changes
-git checkout -- .
-```
-
-### Rebase & Cherry-pick
-
-```bash
-# Rebase on main
-git rebase origin/main
-
-# Interactive rebase last N commits
-git rebase -i HEAD~<N>
-
-# Rebase onto specific branch
-git rebase --onto <branch>
-
-# Cherry-pick commit
-git cherry-pick <hash>
-```
-
-### Stash
-
-```bash
-# Stash changes
-git stash
-
-# Apply and remove stash
-git stash pop
-
-# List stashes
-git stash list
-```
-
-### Advanced
-
-```bash
-# Binary search for bugs
-git bisect
-
-# View reference logs
-git reflog
-```
+**Support Channels**
+- 📧 [support@hootner.com](mailto:support@hootner.com)
+- 💬 [Discord Community](https://discord.gg/your-invite-link)
+- 🐛 [GitHub Issues](https://github.com/yourusername/hootner/issues)
+- 📝 [Documentation](docs/)
 
 ---
 
-## 📝 Scripts
+## 🦉 Why HOOTNER?
 
-| Script                           | Description                           |
-| -------------------------------- | ------------------------------------- |
-| `npm start`                      | Start production server               |
-| `npm run dev`                    | Start development server              |
-| `npm test`                       | Run test suite                        |
-| `npm run lint`                   | Lint codebase                         |
-| `npm run build`                  | Build for production                  |
-| `npm run analyze:duplication`    | Analyze code duplication              |
-| `npm run docs:generate`          | Generate API documentation ⭐ NEW     |
-| `npm run docs:serve`             | Serve documentation locally ⭐ NEW    |
-| `npm run verify:syntax`          | Verify syntax fixes ⭐ NEW            |
-| `npm run fix:all-syntax`         | Fix all syntax issues ⭐ NEW          |
-| `npm run detect:regex`           | Detect unterminated regex ⭐ NEW      |
-| `npm run detect:jsdoc`           | Detect malformed JSDoc ⭐ NEW         |
-| `npm run security:audit`         | Security vulnerability scan           |
-| `npm run security:scan`          | Scan for hardcoded credentials ⭐ NEW |
-| `npm run security:validate-env`  | Validate environment variables ⭐ NEW |
-| `npm run generate:secrets`       | Generate secure secrets ⭐ NEW        |
-| `npm run todos:scan`             | Scan codebase for TODOs ⭐ NEW        |
-| `npm run todos:export`           | Export TODO report ⭐ NEW             |
-| `node scripts/backup-manager.js` | Unified backup manager ⭐ NEW         |
-| `./scripts/backup-all.sh`        | Backup all services (deprecated)      |
-| `./scripts/blue-green-deploy.sh` | Deploy with zero downtime             |
-| `./scripts/chaos-test.js`        | Run chaos engineering tests           |
-| `./scripts/multi-region-sync.sh` | Sync backups across regions           |
-| `./scripts/pitr-backup.sh`       | Point-in-time recovery backup         |
-| `./scripts/security-audit.js`    | Comprehensive security audit          |
+🎯 **Production-Ready** • 🔄 **Zero-Downtime** • 📊 **Scalable** • 🛡️ **Secure**  
+🧪 **Tested** • 📊 **Observable** • 🔧 **Resilient** • 🌍 **Multi-Region**
+
+> **"The Owl Never Sleeps"** - 24/7 enterprise video streaming platform
 
 ---
 
-## 🌟 Key Technologies
+<div align="center">
 
-**Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Socket.io
-**Backend**: Node.js, Express, GraphQL, NestJS
-**Database**: MongoDB, Redis, Prisma ORM
-**Infrastructure**: Docker, Kubernetes, Istio, Traefik
-**Monitoring**: Prometheus, Grafana
-**CI/CD**: GitHub Actions (24 workflows)
-**Cloud**: AWS (S3, EC2)
-**Payments**: Stripe
-**Auth**: Firebase, JWT
-**Testing**: Vitest, Chaos Engineering
+**Made with 🦉 by the HOOTNER Team**
 
----
+[Documentation](docs/) • [Architecture](docs/ARCHITECTURE.md) • [Security](SECURITY_CHECKLIST.md) • [Contributing](CONTRIBUTING.md)
 
-## 🏛️ Architecture Highlights
-
-### Microservices (10+ Services)
-
-- **Audit Service** - Activity logging
-- **Backup Service** - Automated backups
-- **Backup Monitoring** - Backup verification
-- **Marketplace Service** - Digital goods
-- **Payment Service** - Stripe integration
-- **Security Service** - Threat detection
-- **Content Moderation** - AI-powered filtering
-- **Search Service** - Advanced search
-- **Watcher Service** - System monitoring
-- **Police Bot** - Automated enforcement
-
-### Resilience Patterns
-
-- **Circuit Breaker** - Failure isolation
-- **Retry Logic** - Automatic retries
-- **Bulkhead** - Resource isolation
-- **Timeout** - Request timeouts
-- **Graceful Shutdown** - Clean termination
-- **Rate Limiting** - Traffic control
-
-### Service Mesh (Istio)
-
-- Traffic management
-- Security policies
-- Observability
-- Service discovery
-- Load balancing
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
----
-
-## 🦉 About HOOTNER
-
-**"The Owl Never Sleeps"** - A 24/7 video streaming platform built with enterprise-grade architecture, designed for scale, reliability, and performance.
-
-### Why HOOTNER?
-
-- 🎯 **Production-ready** with comprehensive DevOps
-- 🔄 **Zero-downtime** deployments with blue-green strategy
-- 📈 **Scalable** microservices architecture (10+ services)
-- 🛡️ **Secure** by design with multiple security layers
-- 🧪 **Tested** with chaos engineering (8 scenarios)
-- 📊 **Observable** with full monitoring stack
-- 🔧 **Resilient** with circuit breakers & retry logic
-- 🌍 **Multi-region** backup and disaster recovery
-
----
-
-## 🆘 Support
-
-- 📧 Email: [support@hootner.com](mailto:support@hootner.com)
-- 💬 Discord: [Join our community](https://discord.gg/your-invite-link)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/hootner/issues)
-- 📖 Docs: [Full Documentation](docs/)
-
----
-
-### Made with 🦉 by the HOOTNER Team
+</div>

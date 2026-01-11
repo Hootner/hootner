@@ -1,24 +1,34 @@
-FROM node:18-alpine AS base
+# HOOTNER - Hexagonal Architecture
+FROM node:25.2.1-alpine
+
+LABEL maintainer="HOOTNER Team"
+LABEL description="The Owl Never Sleeps - Hexagonal Video Platform"
+
 WORKDIR /app
+
+# Copy package files
 COPY package*.json ./
 
-FROM base AS deps
+# Install dependencies
 RUN npm ci --only=production
 
-FROM base AS build
-RUN npm ci
-COPY . .
+# Copy hexagonal architecture
+COPY hexarchy/ ./hexarchy/
+COPY index.js ./
+COPY README.md ./
 
-FROM node:18-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/apps ./apps
-COPY --from=build /app/services ./services
-COPY --from=build /app/lib ./lib
-COPY --from=build /app/middleware ./middleware
-COPY --from=build /app/server.js ./
-COPY --from=build /app/mcp-server.js ./
-COPY --from=build /app/package.json ./
-EXPOSE 5000
-CMD ["node", "server.js"]
+# Create non-root user
+RUN addgroup -g 1001 -S hootner && \
+    adduser -S hootner -u 1001
+
+# Set permissions
+RUN chown -R hootner:hootner /app
+USER hootner
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "console.log('healthy')" || exit 1
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]

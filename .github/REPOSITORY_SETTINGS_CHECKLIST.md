@@ -85,7 +85,7 @@ Navigate to: Settings → Secrets and variables → Actions
 #### AWS Credentials
 - [ ] `AWS_ACCESS_KEY_ID` - AWS access key for deployments
 - [ ] `AWS_SECRET_ACCESS_KEY` - AWS secret key
-- [ ] `AWS_REGION` - Default: `us-east-1`
+- [ ] `AWS_REGION` - Default: `us-east-2`
 
 #### Database
 - [ ] `MONGODB_URI` - Production MongoDB connection string

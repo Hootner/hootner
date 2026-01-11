@@ -26,19 +26,34 @@ echo ""
 
 # Add generated secrets (safer stdin method)
 echo "Adding JWT_SECRET..."
-printf '%s' '8NsAncYX5W1rCyfpPcn3zHeNEvJKmOIz+B/TNOoepulkRs/J0k3xGrTMVqzC/9ki' | gh secret set JWT_SECRET --repo Hootner/hootner --body-file -
+if ! printf '%s' '8NsAncYX5W1rCyfpPcn3zHeNEvJKmOIz+B/TNOoepulkRs/J0k3xGrTMVqzC/9ki' | gh secret set JWT_SECRET --repo Hootner/hootner --body-file -; then
+    echo "❌ Failed to add JWT_SECRET"
+    exit 1
+fi
 
 echo "Adding JWT_REFRESH_SECRET..."
-printf '%s' 'sDe5/08NsGoaUwPtMjcAHM7mU7OgFNzNvezUkqJfVoRHSfSWwx/tBN4siMLi12Pn' | gh secret set JWT_REFRESH_SECRET --repo Hootner/hootner --body-file -
+if ! printf '%s' 'sDe5/08NsGoaUwPtMjcAHM7mU7OgFNzNvezUkqJfVoRHSfSWwx/tBN4siMLi12Pn' | gh secret set JWT_REFRESH_SECRET --repo Hootner/hootner --body-file -; then
+    echo "❌ Failed to add JWT_REFRESH_SECRET"
+    exit 1
+fi
 
 echo "Adding COSIGN_PASSWORD..."
-printf '%s' 'oHysj/YXH8nHnwvVwAOPsnY37WaZ2s2Y' | gh secret set COSIGN_PASSWORD --repo Hootner/hootner --body-file -
+if ! printf '%s' 'oHysj/YXH8nHnwvVwAOPsnY37WaZ2s2Y' | gh secret set COSIGN_PASSWORD --repo Hootner/hootner --body-file -; then
+    echo "❌ Failed to add COSIGN_PASSWORD"
+    exit 1
+fi
 
 echo "Adding SESSION_SECRET..."
-printf '%s' 'KUv4Mwz8UW+SAnSRnGLegjFNwUK3uMLG' | gh secret set SESSION_SECRET --repo Hootner/hootner --body-file -
+if ! printf '%s' 'KUv4Mwz8UW+SAnSRnGLegjFNwUK3uMLG' | gh secret set SESSION_SECRET --repo Hootner/hootner --body-file -; then
+    echo "❌ Failed to add SESSION_SECRET"
+    exit 1
+fi
 
 echo "Adding ENCRYPTION_KEY..."
-printf '%s' '2fTRsXvsWqyWg8Li31bcGJ4XxDThoiQJ' | gh secret set ENCRYPTION_KEY --repo Hootner/hootner --body-file -
+if ! printf '%s' '2fTRsXvsWqyWg8Li31bcGJ4XxDThoiQJ' | gh secret set ENCRYPTION_KEY --repo Hootner/hootner --body-file -; then
+    echo "❌ Failed to add ENCRYPTION_KEY"
+    exit 1
+fi
 
 echo ""
 echo "⚠️  AWS secrets require your real values:"

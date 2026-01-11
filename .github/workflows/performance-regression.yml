@@ -81,7 +81,11 @@ jobs:
           }
           EOF
 
-          lhci autorun --config=lighthouserc.json || echo "lighthouse_failed=true" >> $GITHUB_OUTPUT
+          lhci autorun --config=lighthouserc.json || {
+            echo "lighthouse_failed=true" >> $GITHUB_OUTPUT
+            echo "::error::Lighthouse CI failed"
+            exit 1
+          }
 
       - name: Parse Lighthouse Results
         run: |

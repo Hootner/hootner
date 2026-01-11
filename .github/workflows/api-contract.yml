@@ -338,7 +338,7 @@ jobs:
           exit 1
 
       - name: Fail on Test Failures
-        if: steps.contract.outputs.failed > 0
+        if: steps.contract.outputs.failed != '0' && steps.contract.outputs.failed != ''
         run: |
           echo "::error::${{ steps.contract.outputs.failed }} contract tests failed"
           exit 1
