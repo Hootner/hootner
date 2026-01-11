@@ -1,112 +1,147 @@
 /**
- * Container Management System
- * Docker/Kubernetes orchestration for all domains
+ * HOOTNER Container Manager - Docker & Kubernetes Orchestration
+ * Manages containerized services across all hexagonal domains
  */
 
-import { createLogger } from '../../0-core/utils/logger.js';
-import { eventBus } from '../../0-core/orchestration/event-bus.js';
-import { EventTypes, DomainEvent } from '../../0-core/contracts/domain-events.js';
+const EventEmitter = require('events');
+const { performance } = require('perf_hooks');
 
-const logger = createLogger('foundation', 'containers');
-
-class ContainerManager {
+class ContainerManager extends EventEmitter {
   constructor() {
+    super();
     this.containers = new Map();
+    this.services = new Map();
     this.networks = new Map();
     this.volumes = new Map();
-    this.services = new Map();
+    this.domains = [
+      'foundation', 'intelligence', 'communication', 'interface',
+      'economy', 'governance', 'data', 'operations'
+    ];
+    
+    this.initializeDomainContainers();
   }
 
-  /**
-   * Create container configuration for domain
-   */
-  createDomainContainer(domainName, config) {
+  initializeDomainContainers() {
+    // Configure containers for each hexagonal domain
+    this.domains.forEach((domain, index) => {
+      this.createDomainContainer(domain, {
+        port: 5000 + index,
+        memory: this.getDomainMemory(domain),
+        cpu: this.getDomainCPU(domain)
+      });
+    });
+    
+    console.log(`🐳 Initialized ${this.containers.size} domain containers`);
+  }
+
+  createDomainContainer(domainName, config = {}) {
     const containerConfig = {
-      name: `hexarchy-${domainName}`,
-      image: config.image || `hexarchy/${domainName}:latest`,
-      ports: config.ports || [`${5000 + this._getDomainNumber(domainName)}:3000`],
+      name: `hootner-${domainName}`,
+      image: `hootner/${domainName}:latest`,
+      ports: [`${config.port || 3000}:3000`],
       environment: {
-        NODE_ENV: config.environment || 'production',
+        NODE_ENV: 'production',
         DOMAIN_NAME: domainName,
         PORT: 3000,
+        DATABASE_URL: 'postgresql://hootner:hootner123@postgres:5432/hootner',
+        REDIS_URL: 'redis://redis:6379',
         ...config.environment
       },
-      volumes: config.volumes || [],
-      networks: ['hexarchy-network'],
-      restartPolicy: config.restartPolicy || 'unless-stopped',
+      volumes: config.volumes || [
+        `hootner-${domainName}-data:/app/data`,
+        `hootner-logs:/app/logs`
+      ],
+      networks: ['hootner-network'],
+      restart: 'unless-stopped',
       healthCheck: {
-        test: config.healthCheck?.test || `curl -f http://localhost:3000/health || exit 1`,
-        interval: config.healthCheck?.interval || '30s',
-        timeout: config.healthCheck?.timeout || '10s',
-        retries: config.healthCheck?.retries || 3
+        test: `curl -f http://localhost:3000/health || exit 1`,
+        interval: '30s',
+        timeout: '10s',
+        retries: 3,
+        startPeriod: '40s'
       },
       labels: {
-        'hexarchy.domain': domainName,
-        'hexarchy.type': 'service',
-        ...config.labels
+        'hootner.domain': domainName,
+        'hootner.type': 'service',
+        'hootner.version': '1.0.0'
       },
       resources: {
         memory: config.memory || '512M',
-        cpus: config.cpus || '0.5',
-        ...config.resources
-      }
+        cpus: config.cpu || '0.5'
+      },
+      depends_on: ['postgres', 'redis']
     };
 
     this.containers.set(domainName, containerConfig);
-
-    logger.info('Domain container configured', { domainName, image: containerConfig.image });
-
+    this.emit('containerConfigured', { domain: domainName, config: containerConfig });
+    
     return containerConfig;
   }
 
-  _getDomainNumber(domainName) {
-    const domainMap = {
-      'foundation': 1,
-      'intelligence': 2,
-      'communication': 3,
-      'interface': 4,
-      'economy': 5,
-      'governance': 6,
-      'data': 7,
-      'operations': 8
+  getDomainMemory(domain) {
+    const memoryMap = {
+      'intelligence': '1G',    // AI services need more memory
+      'data': '1G',           // Database operations
+      'economy': '512M',      // Business logic
+      'interface': '512M',    // Frontend services
+      'communication': '512M', // API services
+      'operations': '256M',   // Monitoring
+      'governance': '256M',   // Security
+      'foundation': '256M'    // Core services
     };
-    return domainMap[domainName] || 0;
+    return memoryMap[domain] || '512M';
   }
 
-  /**
-   * Generate Docker Compose configuration
-   */
+  getDomainCPU(domain) {
+    const cpuMap = {
+      'intelligence': '1.0',  // AI processing
+      'data': '0.75',         // Database operations
+      'economy': '0.5',       // Business logic
+      'interface': '0.5',     // Frontend
+      'communication': '0.5', // APIs
+      'operations': '0.25',   // Monitoring
+      'governance': '0.25',   // Security
+      'foundation': '0.25'    // Core
+    };
+    return cpuMap[domain] || '0.5';
+  }
+
+  // Generate Docker Compose configuration
   generateDockerCompose() {
     const services = {};
-    const networks = {
-      'hexarchy-network': {
-        driver: 'bridge'
-      }
-    };
-    const volumes = {
-      'hexarchy-data': {},
-      'hexarchy-logs': {},
-      'hexarchy-cache': {}
-    };
-
-    // Add database services
+    
+    // Add infrastructure services
     services.postgres = {
       image: 'postgres:15',
       environment: {
-        POSTGRES_DB: 'hexarchy',
-        POSTGRES_USER: 'hexarchy',
-        POSTGRES_PASSWORD: 'hexarchy123'
+        POSTGRES_DB: 'hootner',
+        POSTGRES_USER: 'hootner',
+        POSTGRES_PASSWORD: 'hootner123'
       },
-      volumes: ['hexarchy-data:/var/lib/postgresql/data'],
-      networks: ['hexarchy-network'],
-      ports: ['5432:5432']
+      volumes: ['postgres_data:/var/lib/postgresql/data'],
+      networks: ['hootner-network'],
+      ports: ['5432:5432'],
+      restart: 'unless-stopped',
+      healthcheck: {
+        test: 'pg_isready -U hootner -d hootner',
+        interval: '10s',
+        timeout: '5s',
+        retries: 5
+      }
     };
 
     services.redis = {
       image: 'redis:7-alpine',
-      volumes: ['hexarchy-cache:/data'],
-      networks: ['hexarchy-network'],
-      ports: ['6379:6379']
+      volumes: ['redis_data:/data'],
+      networks: ['hootner-network'],
+      ports: ['6379:6379'],
+      restart: 'unless-stopped',
+      healthcheck: {
+        test: 'redis-cli ping',
+        interval: '10s',
+        timeout: '3s',
+        retries: 3
+      }
     };
 
     // Add domain services
@@ -117,12 +152,13 @@ class ContainerManager {
         environment: config.environment,
         volumes: config.volumes,
         networks: config.networks,
-        restart: config.restartPolicy,
+        restart: config.restart,
         healthcheck: {
           test: config.healthCheck.test,
           interval: config.healthCheck.interval,
           timeout: config.healthCheck.timeout,
-          retries: config.healthCheck.retries
+          retries: config.healthCheck.retries,
+          start_period: config.healthCheck.startPeriod
         },
         labels: config.labels,
         deploy: {
@@ -130,24 +166,58 @@ class ContainerManager {
             limits: {
               memory: config.resources.memory,
               cpus: config.resources.cpus
+            },
+            reservations: {
+              memory: this.getReservationMemory(config.resources.memory),
+              cpus: this.getReservationCPU(config.resources.cpus)
             }
           }
         },
-        depends_on: ['postgres', 'redis']
+        depends_on: config.depends_on
       };
     }
 
     return {
       version: '3.8',
       services,
-      networks,
-      volumes
+      networks: {
+        'hootner-network': {
+          driver: 'bridge',
+          ipam: {
+            config: [{
+              subnet: '172.20.0.0/16'
+            }]
+          }
+        }
+      },
+      volumes: {
+        postgres_data: {},
+        redis_data: {},
+        'hootner-logs': {},
+        ...this.generateDomainVolumes()
+      }
     };
   }
 
-  /**
-   * Generate Kubernetes manifests
-   */
+  generateDomainVolumes() {
+    const volumes = {};
+    for (const domain of this.domains) {
+      volumes[`hootner-${domain}-data`] = {};
+    }
+    return volumes;
+  }
+
+  getReservationMemory(limit) {
+    const limitValue = parseInt(limit);
+    const unit = limit.replace(/[0-9]/g, '');
+    return Math.floor(limitValue * 0.5) + unit;
+  }
+
+  getReservationCPU(limit) {
+    return (parseFloat(limit) * 0.5).toString();
+  }
+
+  // Generate Kubernetes manifests
   generateKubernetesManifests() {
     const manifests = [];
 
@@ -156,47 +226,151 @@ class ContainerManager {
       apiVersion: 'v1',
       kind: 'Namespace',
       metadata: {
-        name: 'hexarchy'
+        name: 'hootner',
+        labels: {
+          'app.kubernetes.io/name': 'hootner',
+          'app.kubernetes.io/version': '1.0.0'
+        }
       }
     });
 
-    // ConfigMap for environment variables
+    // ConfigMap
     manifests.push({
       apiVersion: 'v1',
       kind: 'ConfigMap',
       metadata: {
-        name: 'hexarchy-config',
-        namespace: 'hexarchy'
+        name: 'hootner-config',
+        namespace: 'hootner'
       },
       data: {
         NODE_ENV: 'production',
-        POSTGRES_HOST: 'postgres-service',
-        REDIS_HOST: 'redis-service'
+        DATABASE_URL: 'postgresql://hootner:hootner123@postgres-service:5432/hootner',
+        REDIS_URL: 'redis://redis-service:6379'
       }
     });
 
-    // Services and Deployments for each domain
+    // Infrastructure services
+    manifests.push(...this.generateInfrastructureManifests());
+
+    // Domain services
     for (const [domainName, config] of this.containers.entries()) {
+      manifests.push(...this.generateDomainManifests(domainName, config));
+    }
+
+    return manifests;
+  }
+
+  generateInfrastructureManifests() {
+    return [
+      // PostgreSQL
+      {
+        apiVersion: 'apps/v1',
+        kind: 'Deployment',
+        metadata: {
+          name: 'postgres',
+          namespace: 'hootner'
+        },
+        spec: {
+          replicas: 1,
+          selector: { matchLabels: { app: 'postgres' } },
+          template: {
+            metadata: { labels: { app: 'postgres' } },
+            spec: {
+              containers: [{
+                name: 'postgres',
+                image: 'postgres:15',
+                ports: [{ containerPort: 5432 }],
+                env: [
+                  { name: 'POSTGRES_DB', value: 'hootner' },
+                  { name: 'POSTGRES_USER', value: 'hootner' },
+                  { name: 'POSTGRES_PASSWORD', value: 'hootner123' }
+                ],
+                volumeMounts: [{
+                  name: 'postgres-storage',
+                  mountPath: '/var/lib/postgresql/data'
+                }]
+              }],
+              volumes: [{
+                name: 'postgres-storage',
+                persistentVolumeClaim: {
+                  claimName: 'postgres-pvc'
+                }
+              }]
+            }
+          }
+        }
+      },
+      {
+        apiVersion: 'v1',
+        kind: 'Service',
+        metadata: {
+          name: 'postgres-service',
+          namespace: 'hootner'
+        },
+        spec: {
+          selector: { app: 'postgres' },
+          ports: [{ port: 5432, targetPort: 5432 }]
+        }
+      },
+      // Redis
+      {
+        apiVersion: 'apps/v1',
+        kind: 'Deployment',
+        metadata: {
+          name: 'redis',
+          namespace: 'hootner'
+        },
+        spec: {
+          replicas: 1,
+          selector: { matchLabels: { app: 'redis' } },
+          template: {
+            metadata: { labels: { app: 'redis' } },
+            spec: {
+              containers: [{
+                name: 'redis',
+                image: 'redis:7-alpine',
+                ports: [{ containerPort: 6379 }]
+              }]
+            }
+          }
+        }
+      },
+      {
+        apiVersion: 'v1',
+        kind: 'Service',
+        metadata: {
+          name: 'redis-service',
+          namespace: 'hootner'
+        },
+        spec: {
+          selector: { app: 'redis' },
+          ports: [{ port: 6379, targetPort: 6379 }]
+        }
+      }
+    ];
+  }
+
+  generateDomainManifests(domainName, config) {
+    return [
       // Deployment
-      manifests.push({
+      {
         apiVersion: 'apps/v1',
         kind: 'Deployment',
         metadata: {
           name: `${config.name}-deployment`,
-          namespace: 'hexarchy',
+          namespace: 'hootner',
           labels: config.labels
         },
         spec: {
-          replicas: 2,
+          replicas: domainName === 'interface' ? 3 : 2, // More replicas for frontend
           selector: {
-            matchLabels: {
-              app: config.name
-            }
+            matchLabels: { app: config.name }
           },
           template: {
             metadata: {
               labels: {
                 app: config.name,
+                domain: domainName,
                 ...config.labels
               }
             },
@@ -204,9 +378,7 @@ class ContainerManager {
               containers: [{
                 name: config.name,
                 image: config.image,
-                ports: [{
-                  containerPort: 3000
-                }],
+                ports: [{ containerPort: 3000 }],
                 env: Object.entries(config.environment).map(([name, value]) => ({
                   name,
                   value: String(value)
@@ -217,8 +389,8 @@ class ContainerManager {
                     cpu: config.resources.cpus
                   },
                   requests: {
-                    memory: '256M',
-                    cpu: '0.25'
+                    memory: this.getReservationMemory(config.resources.memory),
+                    cpu: this.getReservationCPU(config.resources.cpus)
                   }
                 },
                 livenessProbe: {
@@ -241,134 +413,43 @@ class ContainerManager {
             }
           }
         }
-      });
-
+      },
       // Service
-      manifests.push({
+      {
         apiVersion: 'v1',
         kind: 'Service',
         metadata: {
           name: `${config.name}-service`,
-          namespace: 'hexarchy'
+          namespace: 'hootner'
         },
         spec: {
-          selector: {
-            app: config.name
-          },
+          selector: { app: config.name },
           ports: [{
             port: 80,
             targetPort: 3000,
             protocol: 'TCP'
           }],
-          type: 'ClusterIP'
+          type: domainName === 'interface' ? 'LoadBalancer' : 'ClusterIP'
         }
-      });
-    }
-
-    return manifests;
+      }
+    ];
   }
 
-  /**
-   * Generate Helm chart values
-   */
-  generateHelmValues() {
-    const values = {
-      global: {
-        image: {
-          registry: 'registry.hexarchy.com',
-          tag: 'latest'
-        },
-        ingress: {
-          enabled: true,
-          className: 'nginx',
-          annotations: {
-            'cert-manager.io/cluster-issuer': 'letsencrypt-prod'
-          }
-        }
-      },
-      domains: {}
-    };
-
-    for (const [domainName, config] of this.containers.entries()) {
-      values.domains[domainName] = {
-        enabled: true,
-        replicaCount: 2,
-        image: {
-          repository: `hexarchy/${domainName}`,
-          tag: config.image.split(':')[1] || 'latest'
-        },
-        service: {
-          type: 'ClusterIP',
-          port: 80
-        },
-        ingress: {
-          enabled: true,
-          hosts: [`${domainName}.hexarchy.com`],
-          tls: [{
-            secretName: `${domainName}-tls`,
-            hosts: [`${domainName}.hexarchy.com`]
-          }]
-        },
-        resources: {
-          limits: {
-            cpu: config.resources.cpus,
-            memory: config.resources.memory
-          },
-          requests: {
-            cpu: '0.25',
-            memory: '256M'
-          }
-        },
-        autoscaling: {
-          enabled: true,
-          minReplicas: 2,
-          maxReplicas: 10,
-          targetCPUUtilizationPercentage: 80
-        }
-      };
-    }
-
-    return values;
-  }
-
-  /**
-   * Monitor container health
-   */
+  // Container health monitoring
   async monitorHealth() {
     const healthStatus = new Map();
 
     for (const [domainName, config] of this.containers.entries()) {
       try {
-        // In real implementation, this would check actual container status
-        const health = await this._checkContainerHealth(config);
+        const health = await this.checkContainerHealth(domainName, config);
         healthStatus.set(domainName, health);
 
         if (!health.healthy) {
-          logger.warn('Container unhealthy', { 
-            domain: domainName,
-            status: health.status 
-          });
-
-          // Publish health event
-          const healthEvent = new DomainEvent(
-            EventTypes.SYSTEM_HEALTH_CHECK,
-            {
-              domain: domainName,
-              status: health.status,
-              healthy: health.healthy,
-              lastCheck: Date.now()
-            },
-            { source: 'container-manager' }
-          );
-
-          await eventBus.publish(healthEvent);
+          console.warn(`⚠️ Container ${domainName} unhealthy:`, health.status);
+          this.emit('containerUnhealthy', { domain: domainName, health });
         }
       } catch (error) {
-        logger.error('Health check failed', {
-          domain: domainName,
-          error: error.message
-        });
-        
+        console.error(`❌ Health check failed for ${domainName}:`, error.message);
         healthStatus.set(domainName, {
           healthy: false,
           status: 'error',
@@ -380,83 +461,152 @@ class ContainerManager {
     return Object.fromEntries(healthStatus);
   }
 
-  async _checkContainerHealth(config) {
-    // Simulate health check - in real implementation would use Docker/K8s APIs
+  async checkContainerHealth(domainName, config) {
+    // Simulate health check - in production would use Docker/K8s APIs
+    const isHealthy = Math.random() > 0.1; // 90% uptime simulation
+    
     return {
-      healthy: true,
-      status: 'running',
-      uptime: Math.floor(Math.random() * 86400), // Random uptime
-      memoryUsage: '45%',
-      cpuUsage: '23%'
+      healthy: isHealthy,
+      status: isHealthy ? 'running' : 'unhealthy',
+      uptime: Math.floor(Math.random() * 86400),
+      memoryUsage: Math.floor(Math.random() * 80) + '%',
+      cpuUsage: Math.floor(Math.random() * 60) + '%',
+      lastCheck: Date.now()
     };
   }
 
-  /**
-   * Get container statistics
-   */
+  // Start all containers
+  async startAll() {
+    console.log('🚀 Starting all HOOTNER containers...');
+    
+    const results = [];
+    for (const [domainName, config] of this.containers.entries()) {
+      try {
+        const result = await this.startContainer(domainName);
+        results.push({ domain: domainName, status: 'started', ...result });
+        console.log(`✅ Started ${domainName} container`);
+      } catch (error) {
+        results.push({ domain: domainName, status: 'failed', error: error.message });
+        console.error(`❌ Failed to start ${domainName}:`, error.message);
+      }
+    }
+    
+    return results;
+  }
+
+  async startContainer(domainName) {
+    const config = this.containers.get(domainName);
+    if (!config) {
+      throw new Error(`Container configuration not found: ${domainName}`);
+    }
+
+    // Simulate container startup
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
+    
+    this.emit('containerStarted', { domain: domainName, config });
+    
+    return {
+      containerId: `container_${domainName}_${Date.now()}`,
+      image: config.image,
+      ports: config.ports
+    };
+  }
+
+  // Stop all containers
+  async stopAll() {
+    console.log('🛑 Stopping all containers...');
+    
+    for (const domainName of this.containers.keys()) {
+      try {
+        await this.stopContainer(domainName);
+        console.log(`✅ Stopped ${domainName} container`);
+      } catch (error) {
+        console.error(`❌ Failed to stop ${domainName}:`, error.message);
+      }
+    }
+  }
+
+  async stopContainer(domainName) {
+    // Simulate container stop
+    await new Promise(resolve => setTimeout(resolve, 500));
+    this.emit('containerStopped', { domain: domainName });
+  }
+
+  // Get container statistics
   getStats() {
     return {
       totalContainers: this.containers.size,
-      runningContainers: this.containers.size, // Simplified
+      domains: Array.from(this.containers.keys()),
+      totalMemoryAllocated: this.calculateTotalMemory(),
+      totalCPUAllocated: this.calculateTotalCPU(),
       networks: this.networks.size,
-      volumes: this.volumes.size,
-      domains: Array.from(this.containers.keys())
+      volumes: this.volumes.size
+    };
+  }
+
+  calculateTotalMemory() {
+    let total = 0;
+    for (const config of this.containers.values()) {
+      const memory = config.resources.memory;
+      const value = parseInt(memory);
+      total += memory.includes('G') ? value * 1024 : value;
+    }
+    return `${total}M`;
+  }
+
+  calculateTotalCPU() {
+    let total = 0;
+    for (const config of this.containers.values()) {
+      total += parseFloat(config.resources.cpus);
+    }
+    return total.toFixed(2);
+  }
+
+  // Health check endpoint
+  healthCheck() {
+    return {
+      status: 'healthy',
+      containers: this.containers.size,
+      domains: this.domains.length,
+      uptime: process.uptime()
     };
   }
 }
 
-export const containerManager = new ContainerManager();
+// Create and export container manager instance
+const containerManager = new ContainerManager();
 
-// Configure containers for all domains
-containerManager.createDomainContainer('foundation', {
-  image: 'hexarchy/foundation:latest',
-  memory: '256M',
-  cpus: '0.25'
-});
-
-containerManager.createDomainContainer('intelligence', {
-  image: 'hexarchy/intelligence:latest',
-  memory: '1G',
-  cpus: '1.0',
-  environment: {
-    PYTORCH_VERSION: '2.0'
+// Auto-start if run directly
+if (require.main === module) {
+  // Example usage
+  async function demo() {
+    try {
+      console.log('🐳 Container Manager Demo');
+      
+      // Generate Docker Compose
+      const dockerCompose = containerManager.generateDockerCompose();
+      console.log('📄 Docker Compose services:', Object.keys(dockerCompose.services).length);
+      
+      // Generate Kubernetes manifests
+      const k8sManifests = containerManager.generateKubernetesManifests();
+      console.log('☸️ Kubernetes manifests:', k8sManifests.length);
+      
+      // Show stats
+      console.log('📊 Container Stats:', containerManager.getStats());
+      
+    } catch (error) {
+      console.error('Demo failed:', error.message);
+    }
   }
-});
+  
+  demo();
+  
+  // Graceful shutdown
+  process.on('SIGINT', async () => {
+    console.log('\n🛑 Shutting down Container Manager...');
+    await containerManager.stopAll();
+    process.exit(0);
+  });
+}
 
-containerManager.createDomainContainer('communication', {
-  image: 'hexarchy/communication:latest',
-  memory: '512M',
-  cpus: '0.5'
-});
-
-containerManager.createDomainContainer('interface', {
-  image: 'hexarchy/interface:latest',
-  memory: '512M',
-  cpus: '0.5'
-});
-
-containerManager.createDomainContainer('economy', {
-  image: 'hexarchy/economy:latest',
-  memory: '512M',
-  cpus: '0.5'
-});
-
-containerManager.createDomainContainer('governance', {
-  image: 'hexarchy/governance:latest',
-  memory: '256M',
-  cpus: '0.25'
-});
-
-containerManager.createDomainContainer('data', {
-  image: 'hexarchy/data:latest',
-  memory: '1G',
-  cpus: '0.75'
-});
-
-containerManager.createDomainContainer('operations', {
-  image: 'hexarchy/operations:latest',
-  memory: '256M',
-  cpus: '0.25'
-});
-
-export default containerManager;
+module.exports = containerManager;

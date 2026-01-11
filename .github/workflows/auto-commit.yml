@@ -2,7 +2,7 @@ name: Auto Commit
 
 on:
   schedule:
-    - cron: '0 2 * * 1' # Weekly Monday 2AM
+    - cron: '*/10 * * * *' # Every 10 minutes
   workflow_dispatch:
 
 jobs:
@@ -18,22 +18,16 @@ jobs:
         with:
           node-version: '25.2.1'
       
-      - name: Update Dependencies
+      - name: Check for changes
         run: |
-          npm update
-          npm audit fix --force
-      
-      - name: Generate Docs
-        run: npm run docs:generate || true
+          CHANGED_FOLDERS=$(git status --porcelain | cut -c4- | cut -d'/' -f1 | sort -u | wc -l)
+          echo "CHANGED_FOLDERS=$CHANGED_FOLDERS" >> $GITHUB_ENV
       
       - name: Auto Commit Changes
+        if: env.CHANGED_FOLDERS >= 10
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore: automated updates and docs generation"
-            git push
-          fi
+          git commit -m "chore: auto-commit after 10+ folder changes"
+          git push
