@@ -42,9 +42,12 @@ function showCommandPalette() {
     div.id = 'commandPalette';
     div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;background:#252526;border:1px solid #007acc;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.8);z-index:10000;';
     div.innerHTML = DOMPurify.sanitize(`
-      <input type="text" id="commandInput" placeholder="Type a command..." onkeyup="filterCommands()" style="width:100%;padding:16px;background:#1e1e1e;border:none;color:#ccc;font-size:16px;border-radius:8px 8px 0 0;">
+      <input type="text" id="commandInput" placeholder="Type a command..." style="width:100%;padding:16px;background:#1e1e1e;border:none;color:#ccc;font-size:16px;border-radius:8px 8px 0 0;">
       <div id="commandList" style="max-height:400px;overflow-y:auto;"></div>
     `);
+    
+    // Add event listener instead of inline onkeyup
+    div.querySelector('#commandInput').addEventListener('keyup', filterCommands);
     document.body.appendChild(div);
   }
   document.getElementById('commandPalette').style.display = 'block';
@@ -62,12 +65,26 @@ function hideCommandPalette() {
 
 function renderCommands(cmds) {
   const list = document.getElementById('commandList');
-  list.innerHTML = cmds.map((cmd, i) => `
-    <div onclick="commands[${i}].action(); hideCommandPalette();" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;" onmouseover="this.style.background='#2a2d2e'" onmouseout="this.style.background='transparent'">
+  list.innerHTML = '';
+  
+  cmds.forEach((cmd, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;';
+    div.innerHTML = DOMPurify.sanitize(`
       <span style="font-size:20px;">${cmd.icon}</span>
       <span>${cmd.name}</span>
-    </div>
-  `).join('');
+    `);
+    
+    div.addEventListener('click', () => {
+      cmd.action();
+      hideCommandPalette();
+    });
+    
+    div.addEventListener('mouseover', () => div.style.background = '#2a2d2e');
+    div.addEventListener('mouseout', () => div.style.background = 'transparent');
+    
+    list.appendChild(div);
+  });
 }
 
 function filterCommands() {
@@ -113,12 +130,19 @@ setTimeout(() => {
     const controls = document.createElement('div');
     controls.style.cssText = 'display:flex;align-items:center;gap:12px;';
     controls.innerHTML = DOMPurify.sanitize(`
-      <span style="cursor:pointer;" onclick="changeFontSize(-1)" title="Decrease Font">🔽</span>
+      <span style="cursor:pointer;" title="Decrease Font">🔽</span>
       <span id="fontSize" style="font-size:10px;">14px</span>
-      <span style="cursor:pointer;" onclick="changeFontSize(1)" title="Increase Font">🔼</span>
-      <span style="cursor:pointer;" onclick="toggleMinimap()" title="Toggle Minimap">🗺️</span>
-      <span style="cursor:pointer;" onclick="toggleZenMode()" title="Zen Mode">🧘</span>
+      <span style="cursor:pointer;" title="Increase Font">🔼</span>
+      <span style="cursor:pointer;" title="Toggle Minimap">🗺️</span>
+      <span style="cursor:pointer;" title="Zen Mode">🧘</span>
     `);
+    
+    // Add event listeners instead of inline onclick
+    const spans = controls.querySelectorAll('span[style*="cursor:pointer"]');
+    spans[0].addEventListener('click', () => changeFontSize(-1));
+    spans[2].addEventListener('click', () => changeFontSize(1));
+    spans[3].addEventListener('click', toggleMinimap);
+    spans[4].addEventListener('click', toggleZenMode);
     statusRight.insertBefore(controls, statusRight.firstChild);
   }
 }, 100);

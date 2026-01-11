@@ -21,18 +21,25 @@ const CSRF = {
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'csrf_token';
-        input.value = this.token;
+        input.value = this.sanitizeToken(this.token);
         form.appendChild(input);
       }
     });
   },
 
+  sanitizeToken(token) {
+    if (!token || typeof token !== 'string') return '';
+    return token.replace(/[^a-zA-Z0-9]/g, '').substring(0, 64);
+  },
+
   validate(token) {
-    return token === this.token;
+    const sanitizedToken = this.sanitizeToken(token);
+    const sanitizedCurrentToken = this.sanitizeToken(this.token);
+    return sanitizedToken === sanitizedCurrentToken && sanitizedToken.length > 0;
   },
 
   getHeaders() {
-    return {'X-CSRF-Token': this.token};
+    return {'X-CSRF-Token': this.sanitizeToken(this.token)};
   }
 };
 

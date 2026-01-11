@@ -61,10 +61,31 @@ class CertificateManagement {
     return Array.from({length: 20}, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join(':').toUpperCase();
   }
 
+  generateSecureKey() {
+    // Generate cryptographically secure random key
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+    // Fallback for environments without crypto API
+    return Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  }
+
   async requestCertificate({ domain, provider = 'letsencrypt', type = 'single', keySize = 2048 }) {
+    // Validate and sanitize inputs
+    if (!domain || typeof domain !== 'string') {
+      throw new Error('Invalid domain provided');
+    }
+    
+    domain = domain.replace(/[^a-zA-Z0-9.-]/g, '').toLowerCase().substring(0, 253);
+    provider = String(provider).replace(/[^a-zA-Z0-9_-]/g, '').substring(0, 50);
+    type = String(type).replace(/[^a-zA-Z0-9_-]/g, '').substring(0, 20);
+    keySize = Math.min(Math.max(parseInt(keySize) || 2048, 1024), 4096);
+    
     console.log(`📜 Requesting certificate for ${domain} from ${provider}`);
     
-    const requestId = `req_${Date.now()}`;
+    const requestId = `req_${Date.now()}_${this.generateSecureKey().substring(0, 8)}`;
     
     const request = {
       id: requestId,
@@ -113,6 +134,11 @@ class CertificateManagement {
   async validateDomainOwnership(domain) {
     console.log(`  🔍 Validating domain ownership: ${domain}`);
     
+    // Validate domain format
+    if (!/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(domain)) {
+      throw new Error('Invalid domain format');
+    }
+    
     // Mock domain validation (DNS/HTTP challenge)
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -127,13 +153,14 @@ class CertificateManagement {
   async generateCSR(domain, keySize) {
     console.log(`  🔑 Generating CSR for ${domain} (${keySize}-bit)`);
     
-    // Mock CSR generation
+    // Mock CSR generation with secure key
     const csr = {
-      domain,
+      domain: domain.replace(/[^a-zA-Z0-9.-]/g, ''), // Sanitize domain
       keySize,
       algorithm: 'RSA',
       csrData: `-----BEGIN CERTIFICATE REQUEST-----\n<CSR_DATA>\n-----END CERTIFICATE REQUEST-----`,
-      privateKey: `-----BEGIN PRIVATE KEY-----\n<PRIVATE_KEY>\n-----END PRIVATE KEY-----`
+      privateKey: `-----BEGIN PRIVATE KEY-----\n<PRIVATE_KEY>\n-----END PRIVATE KEY-----`,
+      keyId: this.generateSecureKey()
     };
     
     return csr;

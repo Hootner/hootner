@@ -33,13 +33,27 @@ class FeedbackLoopEngine {
    * Process feedback from completed session
    */
   async processFeedback(sessionData) {
+    // Input validation
+    if (!sessionData || typeof sessionData !== 'object') {
+      throw new Error('Invalid session data provided');
+    }
+    
     const { userId, sessionId, score, duration, conceptsCovered, struggledWith } = sessionData;
+    
+    // Validate required fields
+    if (!userId || !sessionId || typeof score !== 'number') {
+      throw new Error('Missing required session data fields');
+    }
+    
+    // Sanitize user input
+    const sanitizedUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, '');
+    const sanitizedSessionId = String(sessionId).replace(/[^a-zA-Z0-9_-]/g, '');
 
-    logger.info('Processing feedback', { userId, sessionId, score });
+    logger.info('Processing feedback', { userId: sanitizedUserId, sessionId: sanitizedSessionId, score });
 
     // Get or initialize user performance data
-    if (!this.performanceData.has(userId)) {
-      this.performanceData.set(userId, {
+    if (!this.performanceData.has(sanitizedUserId)) {
+      this.performanceData.set(sanitizedUserId, {
         averageScore: 0,
         totalSessions: 0,
         conceptMastery: new Map(),
@@ -48,7 +62,7 @@ class FeedbackLoopEngine {
       });
     }
 
-    const userData = this.performanceData.get(userId);
+    const userData = this.performanceData.get(sanitizedUserId);
 
     // Update running averages
     userData.averageScore = (userData.averageScore * userData.totalSessions + score) / (userData.totalSessions + 1);
@@ -66,13 +80,13 @@ class FeedbackLoopEngine {
     
     if (adjustment.shouldAdjust) {
       logger.info('Applying learning adjustment', {
-        userId,
+        userId: sanitizedUserId,
         adjustment: adjustment.type
       });
 
       this.adjustmentHistory.push({
         id: crypto.randomUUID(),
-        userId,
+        userId: sanitizedUserId,
         timestamp: Date.now(),
         adjustment
       });
@@ -81,13 +95,13 @@ class FeedbackLoopEngine {
       const adjustmentEvent = new DomainEvent(
         EventTypes.AI_MODEL_UPDATED,
         {
-          userId,
+          userId: sanitizedUserId,
           adjustmentType: adjustment.type,
           reason: adjustment.reason,
           newDifficulty: adjustment.newDifficulty,
           newPace: adjustment.newPace
         },
-        { correlationId: sessionId, source: 'feedback-loop' }
+        { correlationId: sanitizedSessionId, source: 'feedback-loop' }
       );
 
       await eventBus.publish(adjustmentEvent);
@@ -160,7 +174,14 @@ class FeedbackLoopEngine {
    * Get personalized recommendations
    */
   getRecommendations(userId) {
-    const userData = this.performanceData.get(userId);
+    // Input validation
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('Invalid user ID provided');
+    }
+    
+    const sanitizedUserId = userId.replace(/[^a-zA-Z0-9_-]/g, '');
+    const userData = this.performanceData.get(sanitizedUserId);
+    
     if (!userData) {
       return { recommendations: [] };
     }

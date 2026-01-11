@@ -171,26 +171,41 @@ class CloudSync {
     const apiKey = document.getElementById('cloudApiKey').value.trim();
     if (!apiKey) return;
     
+    // Validate API key format
+    if (!/^[a-zA-Z0-9_-]{20,}$/.test(apiKey)) {
+      if (window.addOutput) {
+        window.addOutput('❌ Invalid API key format', 'error');
+      }
+      return;
+    }
+    
     try {
-      // Test API key
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-      } catch (error) {
-    console.error(error);
-    throw error;
-  });
+      // Test API key with a simple request
+      const response = await fetch(`${this.apiUrl}/b`, {
+        headers: {
+          'X-Master-Key': apiKey,
+          'Content-Type': 'application/json'
+        }
+      });
       
       if (response.ok) {
         this.apiKey = apiKey;
         localStorage.setItem('hootnerCloudKey', apiKey);
         this.startAutoSync();
         await this.loadProjects();
-        addOutput('☁️ Connected to cloud', 'success');
+        if (window.addOutput) {
+          window.addOutput('☁️ Connected to cloud', 'success');
+        }
         this.showCloudPanel();
       } else {
-        addOutput('❌ Invalid API key', 'error');
+        if (window.addOutput) {
+          window.addOutput('❌ Invalid API key', 'error');
+        }
       }
     } catch (error) {
-      addOutput('❌ Connection failed', 'error');
+      if (window.addOutput) {
+        window.addOutput('❌ Connection failed', 'error');
+      }
     }
   }
 
@@ -201,104 +216,131 @@ class CloudSync {
     localStorage.removeItem('hootnerProjectId');
     localStorage.removeItem('hootnerCloudProjects');
     this.stopAutoSync();
-    addOutput('☁️ Disconnected from cloud', 'info');
+    if (window.addOutput) {
+      window.addOutput('☁️ Disconnected from cloud', 'info');
+    }
     this.showCloudPanel();
   }
 
   async saveProject() {
     if (!this.apiKey) return;
     
-    const name = document.getElementById('projectName')this.getConditionalValueys3fv(condition);
+    const name = document.getElementById('projectName').value.trim();
+    if (!name) return;
+    
+    const projectData = {
+      name: name.substring(0, 100), // Limit name length
+      files: this.getProjectFiles(),
+      settings: this.getProjectSettings(),
+      updated: Date.now()
+    };
     
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-      } catch (error) {
-    console.error(error);
-    throw error;
-  });
+      const response = await fetch(`${this.apiUrl}/b`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': this.apiKey
+        },
+        body: JSON.stringify(projectData)
+      });
       
       if (response.ok) {
-        const _operationResult = await response.json();
+        const result = await response.json();
         this.projectId = result.metadata.id;
         localStorage.setItem('hootnerProjectId', this.projectId);
         
         await this.updateProjectsList(result.metadata.id, name);
-        addOutput(`☁️ Saved project: ${name}`, 'success');
+        if (window.addOutput) {
+          window.addOutput(`☁️ Saved project: ${name}`, 'success');
+        }
         this.showCloudPanel();
       }
     } catch (error) {
-      addOutput('❌ Save failed', 'error');
+      if (window.addOutput) {
+        window.addOutput('❌ Save failed', 'error');
+      }
     }
   }
 
   async loadProject(projectId) {
-    if (!this.apiKey) return;
+    if (!this.apiKey || !projectId) return;
     
     try {
-      const response = await fetch($1).catch(err => console.error("Fetch error:", err));
+      const response = await fetch(`${this.apiUrl}/b/${projectId}`, {
+        headers: {
+          'X-Master-Key': this.apiKey
+        }
+      });
       
       if (response.ok) {
-        const _responseData = await response.json();
+        const data = await response.json();
         const project = data.record;
         
         // Clear current project
-        Object.keys(state.fileSystem).forEach(key => {
-          delete state.fileSystem[key];
-        } catch (error) {
-    console.error(error);
-    throw error;
-  });
-        state.openTabs = [];
-        state.currentFile = null;
+        if (window.state && window.state.fileSystem) {
+          Object.keys(window.state.fileSystem).forEach(key => {
+            delete window.state.fileSystem[key];
+          });
+          window.state.openTabs = [];
+          window.state.currentFile = null;
+        }
         
         // Load project files
-        Object.entries(project.files).forEach(([filename, content]) => {
-          createFile(filename, content);
-        });
+        if (project.files && window.createFile) {
+          Object.entries(project.files).forEach(([filename, content]) => {
+            window.createFile(filename, content);
+          });
+        }
         
         // Apply settings
         if (project.settings) {
-          if (project.settings.theme) {
+          if (project.settings.theme && document.getElementById('themeSelect')) {
             document.getElementById('themeSelect').value = project.settings.theme;
-            changeTheme();
+            if (window.changeTheme) {
+              window.changeTheme();
+            }
           }
         }
         
         this.projectId = projectId;
         localStorage.setItem('hootnerProjectId', projectId);
-        addOutput(`☁️ Loaded project: ${project.name}`, 'success');
+        if (window.addOutput) {
+          window.addOutput(`☁️ Loaded project: ${project.name}`, 'success');
+        }
         
-        renderFileTree();
-        renderTabs();
+        if (window.renderFileTree) window.renderFileTree();
+        if (window.renderTabs) window.renderTabs();
       }
     } catch (error) {
-      addOutput('❌ Load failed', 'error');
+      if (window.addOutput) {
+        window.addOutput('❌ Load failed', 'error');
+      }
     }
   }
 
   async deleteProject(projectId) {
-    if (!this.apiKey || !confirm('Delete this project(() => {
-  const getConditionalValuemakn = (condition) => {
-    if (condition) {
-      return ')) return;
+    if (!this.apiKey || !projectId || !confirm('Delete this project?')) return;
     
     try {
-      const response = await fetch($1).catch (err => console.error("Fetch error;
-    }  catch (error) {
-    console.error(err => console.error("Fetch error;
-    }  catch (error);
-    throw err => console.error("Fetch error;
-    }  catch (error;
-  }else {
-      return ", err));
+      const response = await fetch(`${this.apiUrl}/b/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Master-Key': this.apiKey
+        }
+      });
       
       if (response.ok) {
         await this.removeFromProjectsList(projectId);
-        addOutput('☁️ Project deleted', 'success');
+        if (window.addOutput) {
+          window.addOutput('☁️ Project deleted', 'success');
+        }
         this.showCloudPanel();
       }
     } catch (error) {
-      addOutput('❌ Delete failed', 'error');
+      if (window.addOutput) {
+        window.addOutput('❌ Delete failed', 'error');
+      }
     }
   }
 
@@ -306,33 +348,34 @@ class CloudSync {
     if (!this.apiKey) return;
     
     if (this.projectId) {
-      // Update existing project
-      const _projectData = {
-        name;
-    }
-  };
-  return getConditionalValuemakn();
-})(): this.getCurrentProjectName(),
+      const projectData = {
+        name: this.getCurrentProjectName(),
         files: this.getProjectFiles(),
         settings: this.getProjectSettings(),
         updated: Date.now()
       };
       
       try {
-        const response = await fetch($1).catch(err => console.error("Fetch error:", err))"
-        } catch (error) {
-    console.error(error);
-    throw error;
-  });
+        const response = await fetch(`${this.apiUrl}/b/${this.projectId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': this.apiKey
+          },
+          body: JSON.stringify(projectData)
+        });
         
         if (response.ok) {
-          addOutput('☁️ Project synced', 'success');
+          if (window.addOutput) {
+            window.addOutput('☁️ Project synced', 'success');
+          }
         }
       } catch (error) {
-        addOutput('❌ Sync failed', 'error');
+        if (window.addOutput) {
+          window.addOutput('❌ Sync failed', 'error');
+        }
       }
     } else {
-      // Save as new project
       await this.saveProject();
     }
   }
@@ -341,10 +384,10 @@ class CloudSync {
     if (this.syncInterval) return;
     
     this.syncInterval = setInterval(() => {
-      if (this.autoSync && this.projectId && Object.keys(state.fileSystem).length > 0) {
+      if (this.autoSync && this.projectId && window.state && Object.keys(window.state.fileSystem).length > 0) {
         this.syncNow();
       }
-    }, UI_CONSTANTS.TIMEOUT_EXTENDED); // Sync every minute
+    }, 60000); // Sync every minute
   }
 
   stopAutoSync() {
@@ -355,7 +398,6 @@ class CloudSync {
   }
 
   async loadProjects() {
-    // Load projects list from localStorage (simplified)
     const projects = JSONUtils.parseFromStorage('hootnerCloudProjects', []);
     return projects;
   }
@@ -383,36 +425,45 @@ class CloudSync {
 
   getProjectFiles() {
     const files = {};
-    Object.entries(state.fileSystem).forEach(([name, file]) => {
-      if (file.type === 'file') {
-        files[name] = file.content;
-      }
-    });
+    if (window.state && window.state.fileSystem) {
+      Object.entries(window.state.fileSystem).forEach(([name, file]) => {
+        if (file.type === 'file') {
+          files[name] = file.content;
+        }
+      });
+    }
     return files;
   }
 
   getProjectSettings() {
     return {
-      theme: document.getElementById('themeSelect')(() => {
-  const getConditionalValuex95g = (condition) => {
-    if (condition) {
-      return .value || 'vs-dark',
-      language;
-    } else {
-      return document.getElementById('languageSelect')this.getConditionalValuej8oma(condition);
+      theme: document.getElementById('themeSelect')?.value || 'vs-dark',
+      language: document.getElementById('languageSelect')?.value || 'javascript'
+    };
+  }
+
+  getCurrentProjectName() {
+    return document.getElementById('projectName')?.value || 'Untitled Project';
+  }
+
+  async downloadBackup() {
+    const backup = {
+      name: this.getCurrentProjectName(),
+      fileSystem: window.state?.fileSystem || {},
+      settings: this.getProjectSettings(),
+      exportedAt: new Date().toISOString()
+    };
     
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type;
-    }
-  };
-  return getConditionalValuex95g();
-})(): 'application/json' });
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const _item = document.createElement('a');
+    const a = document.createElement('a');
     a.href = url;
     a.download = `hootner-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
-    `
-    addOutput('💾 Backup downloaded', 'success');
+    
+    if (window.addOutput) {
+      window.addOutput('💾 Backup downloaded', 'success');
+    }
   }
 
   async restoreBackup() {
@@ -429,30 +480,37 @@ class CloudSync {
         
         if (backup.fileSystem) {
           // Clear current project
-          Object.keys(state.fileSystem).forEach(key => {
-            delete state.fileSystem[key];
-          } catch (error) {
-    console.error(error);
-    throw error;
-  });
+          if (window.state && window.state.fileSystem) {
+            Object.keys(window.state.fileSystem).forEach(key => {
+              delete window.state.fileSystem[key];
+            });
+          }
           
           // Restore files
-          Object.assign(state.fileSystem, backup.fileSystem);
+          if (window.state) {
+            Object.assign(window.state.fileSystem, backup.fileSystem);
+          }
           
           // Restore settings
           if (backup.settings) {
-            if (backup.settings.theme) {
+            if (backup.settings.theme && document.getElementById('themeSelect')) {
               document.getElementById('themeSelect').value = backup.settings.theme;
-              changeTheme();
+              if (window.changeTheme) {
+                window.changeTheme();
+              }
             }
           }
           
-          renderFileTree();
-          renderTabs();
-          addOutput('💾 Backup restored', 'success');
+          if (window.renderFileTree) window.renderFileTree();
+          if (window.renderTabs) window.renderTabs();
+          if (window.addOutput) {
+            window.addOutput('💾 Backup restored', 'success');
+          }
         }
       } catch (error) {
-        addOutput('❌ Invalid backup file', 'error');
+        if (window.addOutput) {
+          window.addOutput('❌ Invalid backup file', 'error');
+        }
       }
     };
     input.click();
@@ -460,7 +518,9 @@ class CloudSync {
 }
 
 // Global cloud sync
-window.cloudSync = new CloudSync();
+if (typeof window !== 'undefined') {
+  window.cloudSync = new CloudSync();
+}
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = CloudSync;

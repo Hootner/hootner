@@ -42,7 +42,7 @@ class SecurityAuditor {
       
       // Insecure random
       insecureRandom: [
-        /Math\.random\s*\(\s*\)/g
+        /(?<!crypto\.)Math\.random\s*\(\s*\)/g
       ],
       
       // Hardcoded secrets
@@ -55,9 +55,9 @@ class SecurityAuditor {
       
       // Directory traversal
       directoryTraversal: [
-        /\.\.\//g,
-        /\.\.\\\/g,
-        /path\.join\s*\([^)]*\.\./g
+        /\.\.[\/\\]/g,
+        /path\.join\s*\([^)]*\.\./g,
+        /fs\.readFile\s*\([^)]*\.\./g
       ],
       
       // Command injection
@@ -100,7 +100,13 @@ class SecurityAuditor {
 
   async scanFile(filePath) {
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
+      // Validate file path to prevent directory traversal
+      const resolvedPath = path.resolve(filePath);
+      if (!resolvedPath.startsWith(path.resolve(process.cwd()))) {
+        throw new Error('Invalid file path detected');
+      }
+      
+      const content = fs.readFileSync(resolvedPath, 'utf8');
       this.scannedFiles++;
       
       // Scan for each vulnerability type
