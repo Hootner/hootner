@@ -45,7 +45,9 @@ If the scanner detects something that isn't actually a secret (false positive), 
 Validates JavaScript syntax and code style for:
 - All `.js`, `.jsx`, `.mjs`, `.cjs` files
 - Only staged files are checked
-- Zero warnings policy (`--max-warnings 0`)
+- Zero warnings policy (`--max-warnings 0`) for production quality
+
+**Note:** The zero warnings policy ensures high code quality by treating warnings as errors. If you need to adjust this during development, you can temporarily modify the `.husky/pre-commit` hook, but it's recommended to fix warnings instead.
 
 **How it works:**
 - Runs automatically before every commit

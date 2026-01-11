@@ -16,7 +16,7 @@ console.log('\n📝 Test 1: Secret Scanner Detection');
 console.log('-'.repeat(80));
 try {
   const testFile = 'temp-test-secret.js';
-  writeFileSync(testFile, 'const apiKey = "AKIAIOSFODNN7EXAMPLE";');
+  writeFileSync(testFile, 'const apiKey = "AKIA0000000000FAKEKEY";'); // Clearly fake AWS key
   execSync(`git add ${testFile}`);
   
   try {

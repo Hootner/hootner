@@ -48,7 +48,6 @@ const IGNORE_PATTERNS = [
   '.env.example',
   '.env.template',
   'package-lock.json',
-  'package.json',
   '.md',
   'test-commit.js',
   'SECRETS.md'
@@ -91,7 +90,9 @@ function scanFileForSecrets(filename, content) {
   const findings = [];
   
   for (const { pattern, name } of SECRET_PATTERNS) {
-    const matches = content.matchAll(pattern);
+    // Create a new regex instance to avoid state issues with global flags
+    const regex = new RegExp(pattern.source, pattern.flags);
+    const matches = content.matchAll(regex);
     for (const match of matches) {
       const matchedText = match[0];
       const potentialSecret = match[1] || matchedText;

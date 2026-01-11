@@ -14,11 +14,16 @@ fi
 
 # 2. Check syntax using ESLint
 echo "🔧 [2/3] Running ESLint syntax check..."
-npx eslint --max-warnings 0 --quiet $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|mjs|cjs)$' | xargs)
-if [ $? -ne 0 ]; then
-  echo "❌ ESLint check failed. Please fix syntax errors."
-  echo "💡 Run 'npm run lint:fix' to auto-fix some issues."
-  exit 1
+STAGED_JS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|mjs|cjs)$' || true)
+if [ -n "$STAGED_JS_FILES" ]; then
+  npx eslint --max-warnings 0 --quiet $STAGED_JS_FILES
+  if [ $? -ne 0 ]; then
+    echo "❌ ESLint check failed. Please fix syntax errors."
+    echo "💡 Run 'npm run lint:fix' to auto-fix some issues."
+    exit 1
+  fi
+else
+  echo "⏭️  No JavaScript files staged for commit."
 fi
 
 # 3. Run the enhanced code review agent
