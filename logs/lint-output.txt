@@ -1,0 +1,5 @@
+
+> @hootner/enterprise-platform@1.0.0 lint
+> eslint . --ext .js,.ts,.jsx,.tsx
+
+sh: 1: eslint: not found

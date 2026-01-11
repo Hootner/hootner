@@ -1,0 +1,249 @@
+
+> @hootner/enterprise-platform@1.0.0 lint
+> eslint . --ext .js,.ts,.jsx,.tsx
+
+
+/home/runner/work/hootner/hootner/api/graphql/cache/CacheMiddleware.js
+    6:37  error  Strings must use singlequote  quotes
+   21:26  error  Strings must use singlequote  quotes
+   28:45  error  Strings must use singlequote  quotes
+   86:26  error  Strings must use singlequote  quotes
+  123:64  error  Strings must use singlequote  quotes
+
+/home/runner/work/hootner/hootner/api/graphql/cache/GraphQLCachePlugin.js
+    6:37  error  Strings must use singlequote  quotes
+   12:7   error  Strings must use singlequote  quotes
+   13:7   error  Strings must use singlequote  quotes
+   14:7   error  Strings must use singlequote  quotes
+   15:7   error  Strings must use singlequote  quotes
+   16:7   error  Strings must use singlequote  quotes
+   17:7   error  Strings must use singlequote  quotes
+   18:7   error  Strings must use singlequote  quotes
+   19:7   error  Strings must use singlequote  quotes
+   21:52  error  Strings must use singlequote  quotes
+   35:36  error  Strings must use singlequote  quotes
+   52:59  error  Strings must use singlequote  quotes
+  101:26  error  Strings must use singlequote  quotes
+  108:44  error  Strings must use singlequote  quotes
+  158:16  error  Strings must use singlequote  quotes
+  159:23  error  Strings must use singlequote  quotes
+  160:22  error  Strings must use singlequote  quotes
+  161:17  error  Strings must use singlequote  quotes
+  162:18  error  Strings must use singlequote  quotes
+  163:26  error  Strings must use singlequote  quotes
+  164:21  error  Strings must use singlequote  quotes
+  165:20  error  Strings must use singlequote  quotes
+  166:25  error  Strings must use singlequote  quotes
+  167:22  error  Strings must use singlequote  quotes
+  170:38  error  Strings must use singlequote  quotes
+
+/home/runner/work/hootner/hootner/api/graphql/cache/GraphQLCacheService.js
+    6:23  error    Strings must use singlequote        quotes
+    7:24  error    Strings must use singlequote        quotes
+   12:55  error    Strings must use singlequote        quotes
+   16:18  error    Strings must use singlequote        quotes
+   38:14  error    Strings must use singlequote        quotes
+   38:24  error    Strings must use singlequote        quotes
+   38:41  error    Strings must use singlequote        quotes
+   39:15  error    Strings must use singlequote        quotes
+   39:26  error    Strings must use singlequote        quotes
+   39:41  error    Strings must use singlequote        quotes
+   39:61  error    Strings must use singlequote        quotes
+   40:17  error    Strings must use singlequote        quotes
+   40:30  error    Strings must use singlequote        quotes
+   41:22  error    Strings must use singlequote        quotes
+   41:45  error    Strings must use singlequote        quotes
+   51:19  error    Strings must use singlequote        quotes
+   52:19  error    Strings must use singlequote        quotes
+   55:19  error    Strings must use singlequote        quotes
+   56:21  error    Strings must use singlequote        quotes
+   59:19  error    Strings must use singlequote        quotes
+   60:19  error    Strings must use singlequote        quotes
+   63:19  error    Strings must use singlequote        quotes
+   64:19  error    Strings must use singlequote        quotes
+   72:40  error    Strings must use singlequote        quotes
+   74:19  error    Strings must use singlequote        quotes
+   76:15  error    Strings must use singlequote        quotes
+   96:21  error    Strings must use singlequote        quotes
+  114:21  error    Strings must use singlequote        quotes
+  136:21  error    Strings must use singlequote        quotes
+  153:21  error    Strings must use singlequote        quotes
+  167:52  error    Strings must use singlequote        quotes
+  174:85  error    Strings must use singlequote        quotes
+  178:21  error    Strings must use singlequote        quotes
+  206:50  warning  'result' is defined but never used  no-unused-vars
+  208:42  error    Strings must use singlequote        quotes
+  209:42  error    Strings must use singlequote        quotes
+  210:42  error    Strings must use singlequote        quotes
+  212:25  error    Strings must use singlequote        quotes
+  212:55  error    Strings must use singlequote        quotes
+  213:44  error    Strings must use singlequote        quotes
+  214:44  error    Strings must use singlequote        quotes
+  242:17  error    Strings must use singlequote        quotes
+  250:42  error    Strings must use singlequote        quotes
+  251:46  error    Strings must use singlequote        quotes
+  252:44  error    Strings must use singlequote        quotes
+  256:33  error    Strings must use singlequote        quotes
+  259:43  error    Strings must use singlequote        quotes
+  280:21  error    Strings must use singlequote        quotes
+  314:19  error    Strings must use singlequote        quotes
+  317:21  error    Strings must use singlequote        quotes
+  337:21  error    Strings must use singlequote        quotes
+  357:21  error    Strings must use singlequote        quotes
+  373:21  error    Strings must use singlequote        quotes
+  395:21  error    Strings must use singlequote        quotes
+  405:17  error    Strings must use singlequote        quotes
+
+/home/runner/work/hootner/hootner/api/graphql/resolvers/mutations.js
+    8:9   warning  'AuthenticationError' is assigned a value but never used  no-unused-vars
+    8:30  warning  'UserInputError' is assigned a value but never used       no-unused-vars
+   59:26  warning  '_' is defined but never used                             no-unused-vars
+   59:31  warning  'token' is defined but never used                         no-unused-vars
+   69:25  error    Unreachable code                                          no-unreachable
+  107:33  warning  'input' is defined but never used                         no-unused-vars
+  202:30  warning  'id' is defined but never used                            no-unused-vars
+  202:34  warning  'input' is defined but never used                         no-unused-vars
+  213:25  error    Unreachable code                                          no-unreachable
+  403:31  warning  'streamId' is defined but never used                      no-unused-vars
+  403:41  warning  'input' is defined but never used                         no-unused-vars
+  414:25  error    Unreachable code                                          no-unreachable
+  448:37  warning  'input' is defined but never used                         no-unused-vars
+  470:37  warning  'subscriptionId' is defined but never used                no-unused-vars
+  477:25  error    Unreachable code                                          no-unreachable
+
+/home/runner/work/hootner/hootner/api/graphql/resolvers/queries.js
+    8:9   warning  'AuthenticationError' is assigned a value but never used  no-unused-vars
+   41:24  warning  'limit' is assigned a value but never used                no-unused-vars
+   41:36  warning  'offset' is assigned a value but never used               no-unused-vars
+   67:25  warning  'filter' is defined but never used                        no-unused-vars
+   67:59  warning  'context' is defined but never used                       no-unused-vars
+   92:30  warning  'context' is defined but never used                       no-unused-vars
+  100:25  error    Unreachable code                                          no-unreachable
+  112:25  error    Unreachable code                                          no-unreachable
+  118:33  warning  'limit' is assigned a value but never used                no-unused-vars
+  122:25  error    Unreachable code                                          no-unreachable
+  140:25  error    Unreachable code                                          no-unreachable
+  152:25  error    Unreachable code                                          no-unreachable
+  209:43  warning  'context' is defined but never used                       no-unused-vars
+  217:25  error    Unreachable code                                          no-unreachable
+  223:27  warning  '_' is defined but never used                             no-unused-vars
+  223:30  warning  '__' is defined but never used                            no-unused-vars
+  223:34  warning  'context' is defined but never used                       no-unused-vars
+  227:25  error    Unreachable code                                          no-unreachable
+  240:21  error    Unreachable code                                          no-unreachable
+  249:21  error    Unreachable code                                          no-unreachable
+  271:21  error    Unreachable code                                          no-unreachable
+
+/home/runner/work/hootner/hootner/api/graphql/resolvers/subscriptions.js
+  18:34  warning  'context' is defined but never used  no-unused-vars
+  97:34  warning  'context' is defined but never used  no-unused-vars
+
+/home/runner/work/hootner/hootner/api/graphql/resolvers/types.js
+   12:32  warning  '_' is defined but never used        no-unused-vars
+   12:35  warning  'context' is defined but never used  no-unused-vars
+   16:29  error    Unreachable code                     no-unreachable
+   22:40  warning  '_' is defined but never used        no-unused-vars
+   22:43  warning  'context' is defined but never used  no-unused-vars
+   26:29  error    Unreachable code                     no-unreachable
+   32:33  warning  '_' is defined but never used        no-unused-vars
+   32:36  warning  'context' is defined but never used  no-unused-vars
+   36:29  error    Unreachable code                     no-unreachable
+   46:30  warning  '_' is defined but never used        no-unused-vars
+   46:33  warning  'context' is defined but never used  no-unused-vars
+   50:29  error    Unreachable code                     no-unreachable
+   56:35  warning  '_' is defined but never used        no-unused-vars
+   56:38  warning  'context' is defined but never used  no-unused-vars
+   81:30  warning  '_' is defined but never used        no-unused-vars
+   81:33  warning  'context' is defined but never used  no-unused-vars
+   85:29  error    Unreachable code                     no-unreachable
+   91:31  warning  '_' is defined but never used        no-unused-vars
+   91:34  warning  'context' is defined but never used  no-unused-vars
+  136:30  warning  '_' is defined but never used        no-unused-vars
+  136:33  warning  'context' is defined but never used  no-unused-vars
+  140:29  error    Unreachable code                     no-unreachable
+
+/home/runner/work/hootner/hootner/api/graphql/server-enhanced.js
+   83:30  warning  'msg' is defined but never used             no-unused-vars
+   83:35  warning  'args' is defined but never used            no-unused-vars
+  106:27  warning  'ctx' is defined but never used             no-unused-vars
+  109:30  warning  'ctx' is defined but never used             no-unused-vars
+  146:35  warning  'requestContext' is defined but never used  no-unused-vars
+
+/home/runner/work/hootner/hootner/api/graphql/server.js
+  4:7  warning  'fs' is assigned a value but never used    no-unused-vars
+  5:7  warning  'path' is assigned a value but never used  no-unused-vars
+
+/home/runner/work/hootner/hootner/api/graphql/test-examples.js
+   75:16  warning  'testVideoGeneration' is defined but never used                 no-unused-vars
+  126:16  warning  'testStreamStart' is defined but never used                     no-unused-vars
+  171:16  warning  'testGenerationProgressSubscription' is defined but never used  no-unused-vars
+  233:16  warning  'testStreamViewersSubscription' is defined but never used       no-unused-vars
+
+/home/runner/work/hootner/hootner/api/graphql/utils/errorBoundary.js
+  58:10  error  Parsing error: Identifier 'withErrorBoundary' has already been declared
+
+/home/runner/work/hootner/hootner/api/graphql/webhooks/stripeWebhookHandler.js
+   99:51  warning  'event' is defined but never used  no-unused-vars
+  144:51  warning  'event' is defined but never used  no-unused-vars
+  191:51  warning  'event' is defined but never used  no-unused-vars
+  234:44  warning  'event' is defined but never used  no-unused-vars
+  268:38  warning  'event' is defined but never used  no-unused-vars
+  323:47  warning  'event' is defined but never used  no-unused-vars
+  378:49  warning  'event' is defined but never used  no-unused-vars
+  407:46  warning  'event' is defined but never used  no-unused-vars
+  437:43  warning  'event' is defined but never used  no-unused-vars
+  470:43  warning  'event' is defined but never used  no-unused-vars
+  497:43  warning  'event' is defined but never used  no-unused-vars
+
+/home/runner/work/hootner/hootner/apps/frontend/src/App.tsx
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/components/VideoControls.tsx
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/components/VideoPlayer.tsx
+  8:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/components/VideoProgressBar.tsx
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/components/VideoSettings.tsx
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/components/VideoVolumeControl.tsx
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/hooks/useVideoPlayer.ts
+  7:13  error  Parsing error: Unexpected token {
+
+/home/runner/work/hootner/hootner/apps/frontend/src/types/videoPlayer.ts
+  6:8  error  Parsing error: Unexpected token interface
+
+/home/runner/work/hootner/hootner/commit-validator.js
+  51:15  error  Empty block statement  no-empty
+
+/home/runner/work/hootner/hootner/copilot-delegate.js
+   39:28  error  Strings must use singlequote                  quotes
+  104:5   error  Unexpected lexical declaration in case block  no-case-declarations
+
+/home/runner/work/hootner/hootner/dual-ai-review-agent.js
+  59:11  error  Empty block statement  no-empty
+  66:11  error  Empty block statement  no-empty
+
+/home/runner/work/hootner/hootner/frontend-server.js
+   99:26  warning  'password' is assigned a value but never used  no-unused-vars
+  183:27  warning  'next' is defined but never used               no-unused-vars
+
+/home/runner/work/hootner/hootner/index.js
+   9:7   warning  'path' is assigned a value but never used  no-unused-vars
+  18:34  warning  'reject' is defined but never used         no-unused-vars
+
+/home/runner/work/hootner/hootner/mcp-client.js
+  103:15  error  Unexpected lexical declaration in case block  no-case-declarations
+
+/home/runner/work/hootner/hootner/q-pro-review-agent.js
+  44:13  error  Empty block statement  no-empty
+
+✖ 187 problems (120 errors, 67 warnings)
+  85 errors and 0 warnings potentially fixable with the `--fix` option.
+
