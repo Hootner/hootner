@@ -22,7 +22,7 @@ class AIAgentUI {
       <div style="position:fixed; right:20px; bottom:20px; width:400px; height:600px; background:var(--sidebar-bg); border:2px solid var(--accent); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.5); z-index:9999; display:flex; flex-direction:column;">
         <div style="padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
           <h3 style="margin:0; color:var(--accent);">🤖 AI Agents</h3>
-          <button onclick="aiAgentUI.toggle()" style="background:none; border:none; color:var(--text); cursor:pointer; font-size:20px;">×</button>
+          <button style="background:none; border:none; color:var(--text); cursor:pointer; font-size:20px;">×</button>
         </div>
         <div id="agentStatus" style="padding:12px; background:var(--bg); border-bottom:1px solid var(--border); font-size:12px;">
           <span id="statusText">Ready</span> | <span id="activeOps">0 active</span>
@@ -32,14 +32,20 @@ class AIAgentUI {
           <input type="text" id="aiInput" placeholder="Ask AI to refactor, debug, optimize..." 
                  style="width:100%; padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); outline:none;">
           <div style="display:flex; gap:8px; margin-top:8px;">
-            <button onclick="aiAgentUI.quickAction('refactor')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Refactor</button>
-            <button onclick="aiAgentUI.quickAction('debug')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Debug</button>
-            <button onclick="aiAgentUI.quickAction('optimize')" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Optimize</button>
+            <button data-action="refactor" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Refactor</button>
+            <button data-action="debug" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Debug</button>
+            <button data-action="optimize" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Optimize</button>
           </div>
         </div>
       </div>
     `;
     document.body.appendChild(panel);
+    
+    // Add event listeners instead of inline onclick
+    panel.querySelector('button').addEventListener('click', () => this.toggle());
+    panel.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => this.quickAction(btn.dataset.action));
+    });
   }
 
   bindEvents() {
@@ -52,9 +58,12 @@ class AIAgentUI {
   }
 
   async sendMessage(message) {
-    if (!message.trim()) return;
+    if (!message || typeof message !== 'string' || !message.trim()) return;
     
-    this.addMessage('user', message);
+    // Sanitize message to prevent XSS
+    const sanitizedMessage = DOMPurify.sanitize(message.trim());
+    
+    this.addMessage('user', sanitizedMessage);
     document.getElementById('aiInput').value = '';
     
     const response = await this.chatPanel.processCommand(message);

@@ -17,9 +17,23 @@ const authenticateUser = (req, res, next) => {
     return res.status(401).json({ error: 'Authentication required' });
   }
   
+  // Validate token format
+  if (!/^[A-Za-z0-9\-_=]+\.[A-Za-z0-9\-_=]+\.?[A-Za-z0-9\-_.+/=]*$/.test(token)) {
+    return res.status(401).json({ error: 'Invalid token format' });
+  }
+  
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
-    req.user = decoded;
+    
+    // Validate decoded token structure
+    if (!decoded.id || typeof decoded.id !== 'string') {
+      return res.status(401).json({ error: 'Invalid token payload' });
+    }
+    
+    req.user = {
+      id: String(decoded.id).replace(/[<>"'&]/g, '').substring(0, 100),
+      email: decoded.email ? String(decoded.email).replace(/[<>"'&]/g, '').substring(0, 255) : null
+    };
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Invalid token' });
@@ -30,30 +44,43 @@ const authenticateUser = (req, res, next) => {
 router.post('/subscribe', authenticateUser, async (req, res) => {
   const { user_id, email, tier } = req.body;
   
+  // Validate and sanitize inputs
+  if (!user_id || typeof user_id !== 'string') {
+    return res.status(400).json({ error: 'Invalid user_id' });
+  }
+  
+  if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Invalid email format' });
+  }
+  
+  const sanitizedUserId = String(user_id).replace(/[<>"'&]/g, '').substring(0, 100);
+  const sanitizedEmail = String(email).replace(/[<>"'&]/g, '').substring(0, 255);
+  const sanitizedTier = String(tier).replace(/[<>"'&]/g, '').toLowerCase();
+  
   // Verify user owns the subscription
-  if (req.user.id !== user_id) {
+  if (req.user.id !== sanitizedUserId) {
     return res.status(403).json({ error: 'Access denied' });
   }
   
-  if (!['pro', 'enterprise'].includes(tier)) {
+  if (!['pro', 'enterprise'].includes(sanitizedTier)) {
     return res.status(400).json({ error: 'Invalid tier. Use "pro" or "enterprise"' });
   }
 
   try {
-    const subscription = await paymentService.createSubscription(user_id, tier, email);
+    const subscription = await paymentService.createSubscription(sanitizedUserId, sanitizedTier, sanitizedEmail);
     
     res.json({
       success: true,
       subscription_id: subscription.subscription.id,
-      tier,
-      monthly_cost: tier === 'pro' ? 10 : 100,
-      benefits: tier === 'pro' 
+      tier: sanitizedTier,
+      monthly_cost: sanitizedTier === 'pro' ? 10 : 100,
+      benefits: sanitizedTier === 'pro' 
         ? ['1000 executions/month', 'Priority support', 'No daily limits']
         : ['Unlimited executions', 'Premium support', 'Custom algorithms', 'SLA guarantee'],
       next_billing: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Subscription creation failed' });
   }
 });
 
@@ -61,19 +88,26 @@ router.post('/subscribe', authenticateUser, async (req, res) => {
 router.get('/status/:user_id', authenticateUser, async (req, res) => {
   const { user_id } = req.params;
   
+  // Validate and sanitize user_id
+  if (!user_id || typeof user_id !== 'string') {
+    return res.status(400).json({ error: 'Invalid user_id' });
+  }
+  
+  const sanitizedUserId = String(user_id).replace(/[<>"'&]/g, '').substring(0, 100);
+  
   // Verify user can access this subscription
-  if (req.user.id !== user_id) {
+  if (req.user.id !== sanitizedUserId) {
     return res.status(403).json({ error: 'Access denied' });
   }
   
   // Mock subscription status - in production, query from database
   res.json({
-    user_id,
+    user_id: sanitizedUserId,
     tier: 'free', // Default to free
     executions_used_today: 3,
     executions_remaining_today: 7,
     monthly_executions_used: 0,
-    monthly_executions_limit: tier === 'pro' ? 1000 : 'unlimited',
+    monthly_executions_limit: 'pro' === 'pro' ? 1000 : 'unlimited',
     subscription_active: false,
     upgrade_url: '/api/subscriptions/subscribe'
   });

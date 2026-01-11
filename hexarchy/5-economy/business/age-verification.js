@@ -23,10 +23,29 @@ class AgeVerification {
   }
 
   async verifyAge({ userId, birthDate, method, jurisdiction = 'US', documentData = null }) {
-    // Sanitize inputs to prevent XSS
-    userId = String(userId).replace(/[<>"'&]/g, '');
-    method = String(method).replace(/[<>"'&]/g, '');
-    jurisdiction = String(jurisdiction).replace(/[<>"'&]/g, '');
+    // Validate and sanitize inputs to prevent XSS and injection
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('Invalid user ID');
+    }
+    
+    if (!birthDate || !method) {
+      throw new Error('Missing required fields: birthDate and method');
+    }
+    
+    userId = String(userId).replace(/[<>"'&]/g, '').substring(0, 100);
+    method = String(method).replace(/[<>"'&]/g, '').substring(0, 50);
+    jurisdiction = String(jurisdiction).replace(/[<>"'&]/g, '').substring(0, 10);
+    
+    // Validate birth date format
+    const birthDateObj = new Date(birthDate);
+    if (isNaN(birthDateObj.getTime()) || birthDateObj > new Date()) {
+      throw new Error('Invalid birth date');
+    }
+    
+    // Validate method is supported
+    if (!this.verificationMethods[method]) {
+      throw new Error(`Unsupported verification method: ${method}`);
+    }
     
     console.log(`🔍 Verifying age for user: ${userId} (${method})`);
     
@@ -176,9 +195,21 @@ class AgeVerification {
   }
 
   async verify({ userId, method, jurisdiction = 'US' }) {
+    // Validate inputs
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('Invalid user ID');
+    }
+    
+    if (!method || typeof method !== 'string') {
+      throw new Error('Invalid verification method');
+    }
+    
+    userId = String(userId).replace(/[<>"'&]/g, '').substring(0, 100);
+    method = String(method).replace(/[<>"'&]/g, '').substring(0, 50);
+    
     console.log(`🔍 Age verification for user: ${userId} using ${method}`);
     
-    // Mock birth date for demonstration
+    // Mock birth date for demonstration - in production, get from secure storage
     const mockBirthDate = '1990-01-01';
     
     return await this.verifyAge({ userId, birthDate: mockBirthDate, method, jurisdiction });

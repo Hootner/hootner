@@ -62,7 +62,8 @@ jobs:
         env:
           MONGODB_URI: mongodb://test:test@localhost:27017/test
           REDIS_URL: redis://localhost:6379
-          JWT_SECRET: test-secret
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: test
 
       - name: Generate OpenAPI Spec
         run: |
@@ -126,12 +127,35 @@ jobs:
           # Create contract test suite
           cat > contract-tests.js << 'EOF'
           const axios = require('axios');
+          const rateLimit = require('express-rate-limit');
 
           const API_URL = 'http://localhost:4000/graphql';
+          const MAX_RETRIES = 3;
+          const TIMEOUT = 5000;
+
+          // Create axios instance with security headers
+          const client = axios.create({
+            timeout: TIMEOUT,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
 
           async function testQuery(query, variables = {}) {
+            // Input validation
+            if (typeof query !== 'string' || query.trim().length === 0) {
+              throw new Error('Invalid query provided');
+            }
+            
+            // Sanitize query to prevent injection
+            const sanitizedQuery = query.replace(/[<>"'&]/g, '');
+            
             try {
-              const response = await axios.post(API_URL, { query, variables });
+              const response = await client.post(API_URL, { 
+                query: sanitizedQuery, 
+                variables 
+              });
               return response.data;
             } catch (error) {
               throw new Error(`Query failed: ${error.message}`);

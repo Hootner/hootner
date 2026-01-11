@@ -2,7 +2,6 @@
 
 // Copilot Commit Agent - AI-powered commit message enhancement
 const { execSync } = require('child_process');
-const fs = require('fs');
 
 try {
   // Get staged changes

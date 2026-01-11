@@ -46,15 +46,25 @@ class AdvancedContentModeration {
   }
 
   async analyzeContent({ contentId, type, url, priority = 'normal', policies = [] }) {
-    // Sanitize inputs to prevent XSS
-    contentId = String(contentId).replace(/[<>"'&]/g, '');
-    type = String(type).replace(/[<>"'&]/g, '');
-    priority = String(priority).replace(/[<>"'&]/g, '');
+    // Validate and sanitize inputs to prevent XSS and injection
+    if (!contentId || typeof contentId !== 'string') {
+      throw new Error('Invalid content ID');
+    }
+    
+    contentId = String(contentId).replace(/[<>"'&]/g, '').substring(0, 100);
+    type = String(type).replace(/[<>"'&]/g, '').substring(0, 50);
+    priority = String(priority).replace(/[<>"'&]/g, '').substring(0, 20);
     
     // Validate URL to prevent SSRF
-    if (url && !url.match(/^https?:\/\/(content\.hootner\.com|localhost)/)) {
-      throw new Error('Invalid content URL');
+    if (url && !url.match(/^https?:\/\/(content\.hootner\.com|localhost|127\.0\.0\.1)/)) {
+      throw new Error('Invalid content URL - only allowed domains permitted');
     }
+    
+    // Validate policies array
+    if (!Array.isArray(policies)) {
+      policies = [];
+    }
+    policies = policies.filter(p => typeof p === 'string' && /^[a-zA-Z_]+$/.test(p)).slice(0, 10);
     
     console.log(`🔍 Analyzing content: ${contentId} (${type}) - Priority: ${priority}`);
     
@@ -296,9 +306,16 @@ class AdvancedContentModeration {
   }
 
   async moderate({ contentId, type, priority = 'normal', policies = [] }) {
+    // Validate inputs
+    if (!contentId || typeof contentId !== 'string') {
+      throw new Error('Invalid content ID');
+    }
+    
+    contentId = String(contentId).replace(/[<>"'&]/g, '').substring(0, 100);
+    
     console.log(`🛡️ Moderating content: ${contentId}`);
     
-    const url = `https://content.hootner.com/${contentId}`;
+    const url = `https://content.hootner.com/${encodeURIComponent(contentId)}`;
     return await this.analyzeContent({ contentId, type, url, priority, policies });
   }
 

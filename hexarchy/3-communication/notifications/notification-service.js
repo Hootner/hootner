@@ -32,22 +32,46 @@ class NotificationService {
    * Send notification through appropriate channels
    */
   async send(notification) {
+    // Input validation
+    if (!notification || typeof notification !== 'object') {
+      throw new Error('Invalid notification data');
+    }
+    
     const { userId, type, title, message, priority = 'normal', channels = ['inApp'] } = notification;
+    
+    // Validate required fields
+    if (!userId || !type || !title || !message) {
+      throw new Error('Missing required notification fields');
+    }
+    
+    // Sanitize inputs
+    const sanitizedNotification = {
+      userId: String(userId).replace(/[^a-zA-Z0-9_-]/g, ''),
+      type: String(type).replace(/[^a-zA-Z0-9_-]/g, ''),
+      title: String(title).substring(0, 100),
+      message: String(message).substring(0, 500),
+      priority,
+      channels: Array.isArray(channels) ? channels : ['inApp']
+    };
 
-    logger.info('Sending notification', { userId, type, priority });
+    logger.info('Sending notification', { 
+      userId: sanitizedNotification.userId, 
+      type: sanitizedNotification.type, 
+      priority 
+    });
 
-    const userPrefs = this._getUserPreferences(userId);
-    const enabledChannels = channels.filter(ch => 
+    const userPrefs = this._getUserPreferences(sanitizedNotification.userId);
+    const enabledChannels = sanitizedNotification.channels.filter(ch => 
       this.channels[ch]?.enabled && userPrefs.channels.includes(ch)
     );
 
     const results = await Promise.allSettled(
       enabledChannels.map(channel => 
         this.channels[channel].handler({
-          userId,
-          type,
-          title,
-          message,
+          userId: sanitizedNotification.userId,
+          type: sanitizedNotification.type,
+          title: sanitizedNotification.title,
+          message: sanitizedNotification.message,
           timestamp: Date.now()
         })
       )
@@ -57,7 +81,7 @@ class NotificationService {
     const failed = results.filter(r => r.status === 'rejected').length;
 
     logger.info('Notification sent', {
-      userId,
+      userId: sanitizedNotification.userId,
       sent,
       failed,
       channels: enabledChannels
@@ -96,6 +120,15 @@ class NotificationService {
   }
 
   _getUserPreferences(userId) {
+    // Input validation
+    if (!userId || typeof userId !== 'string') {
+      return {
+        channels: ['inApp'],
+        quietHours: { enabled: false },
+        frequency: 'all'
+      };
+    }
+    
     if (!this.userPreferences.has(userId)) {
       return {
         channels: ['inApp', 'push'],
@@ -110,8 +143,15 @@ class NotificationService {
    * Get unread notifications for user
    */
   getUnread(userId) {
+    // Input validation
+    if (!userId || typeof userId !== 'string') {
+      return [];
+    }
+    
+    const sanitizedUserId = userId.replace(/[^a-zA-Z0-9_-]/g, '');
+    
     return this.notificationQueue
-      .filter(n => n.userId === userId && !n.read)
+      .filter(n => n.userId === sanitizedUserId && !n.read)
       .sort((a, b) => b.timestamp - a.timestamp);
   }
 

@@ -195,8 +195,17 @@ class SystemMonitor {
    * Record metric
    */
   async recordMetric(type, data) {
+    // Input validation
+    if (!type || typeof type !== 'string') {
+      throw new Error('Invalid metric type');
+    }
+    
+    if (!data) {
+      throw new Error('Metric data is required');
+    }
+    
     const metric = {
-      type,
+      type: type.replace(/[^a-zA-Z0-9_-]/g, ''), // Sanitize type
       timestamp: Date.now(),
       data
     };
@@ -288,8 +297,19 @@ class SystemMonitor {
   }
 
   async _processAlert(alert) {
-    alert.id = `alert_${Date.now()}_${crypto.randomUUID().substring(0, 9)}`;
+    // Validate alert data
+    if (!alert || typeof alert !== 'object') {
+      logger.error('Invalid alert data provided');
+      return;
+    }
+    
+    alert.id = `alert_${Date.now()}_${crypto.randomUUID().substring(0, 8)}`;
     alert.timestamp = Date.now();
+    
+    // Sanitize alert message to prevent XSS
+    if (alert.message) {
+      alert.message = alert.message.replace(/[<>"'&]/g, '');
+    }
     
     this.alerts.push(alert);
 
@@ -385,6 +405,19 @@ class SystemMonitor {
    * Set custom threshold
    */
   setThreshold(metric, warning, critical, unit = '') {
+    // Input validation
+    if (!metric || typeof metric !== 'string') {
+      throw new Error('Invalid metric name');
+    }
+    
+    if (typeof warning !== 'number' || typeof critical !== 'number') {
+      throw new Error('Thresholds must be numbers');
+    }
+    
+    if (warning >= critical) {
+      throw new Error('Warning threshold must be less than critical');
+    }
+    
     this.thresholds.set(metric, { warning, critical, unit });
     logger.info('Threshold updated', { metric, warning, critical });
   }
