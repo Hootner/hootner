@@ -6,7 +6,6 @@ dist/
 build/
 coverage/
 .nyc_output/
-package-lock.json
 .aws/
 .pm2/
 logs/
