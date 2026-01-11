@@ -2,12 +2,15 @@
 
 /**
  * Enhanced Agent Hub - Orchestrates 75+ AI Agents
- * The central hub for all HOOTNER AI agents
+ * The central hub for all HOOTNER AI agents with REAL implementations
  */
+
+import { productionAgents } from './frameworks/ai/agents/production-agent-implementations.js';
 
 class EnhancedAgentHub {
   constructor() {
     this.agents = new Map();
+    this.agentInstances = new Map(); // Actual running agent instances
     this.status = {
       compliance: { dmcaRequests: 0, coppaViolations: 0 },
       security: { activeThreats: 0, vulnerabilities: 0 },
@@ -19,25 +22,73 @@ class EnhancedAgentHub {
     };
   }
 
-  initialize() {
+  async initialize() {
     console.log('🤖 Initializing Enhanced Agent Hub with 75+ agents...');
-    
+
     // Core AI Agents (12)
     this.initializeCoreAgents();
-    
+
     // Business Intelligence Agents (15)
     this.initializeBusinessAgents();
-    
+
     // Security & Compliance Agents (18)
     this.initializeSecurityAgents();
-    
+
     // Infrastructure & Operations Agents (20)
     this.initializeInfrastructureAgents();
-    
+
     // Specialized Service Agents (10)
     this.initializeServiceAgents();
-    
+
     console.log(`✅ Enhanced Agent Hub initialized with ${this.agents.size} agents`);
+
+    // Auto-start production agents
+    await this.startProductionAgents();
+  }
+
+  async startProductionAgents() {
+    console.log('🚀 Starting production agents with real functionality...');
+    let startedCount = 0;
+
+    for (const [agentName, AgentClass] of Object.entries(productionAgents)) {
+      try {
+        const instance = new AgentClass();
+        await instance.start();
+        this.agentInstances.set(agentName, instance);
+
+        // Update agent metadata
+        const agent = this.agents.get(agentName);
+        if (agent) {
+          agent.status = 'active';
+          agent.instance = instance;
+          agent.startTime = Date.now();
+        }
+
+        startedCount++;
+        console.log(`   ✅ ${agentName} - Running with real implementation`);
+      } catch (error) {
+        console.error(`   ❌ ${agentName} - Failed to start: ${error.message}`);
+      }
+    }
+
+    console.log(`✅ ${startedCount} production agents running with real functionality\n`);
+  }
+
+  async getAgentInstance(agentName) {
+    return this.agentInstances.get(agentName);
+  }
+
+  async executeAgentAction(agentName, action, ...args) {
+    const instance = this.agentInstances.get(agentName);
+    if (!instance) {
+      throw new Error(`Agent ${agentName} not found or not started`);
+    }
+
+    if (typeof instance[action] !== 'function') {
+      throw new Error(`Action ${action} not available on agent ${agentName}`);
+    }
+
+    return await instance[action](...args);
   }
 
   initializeCoreAgents() {
@@ -174,9 +225,26 @@ class EnhancedAgentHub {
       if (!agentsByType[agent.type]) {
         agentsByType[agent.type] = [];
       }
-      agentsByType[agent.type].push(name);
+      agentsByType[agent.type].push({
+        name,
+        status: agent.status,
+        hasImplementation: this.agentInstances.has(name),
+        metrics: agent.instance?.metrics || null
+      });
     });
     return agentsByType;
+  }
+
+  async shutdown() {
+    console.log('🛑 Shutting down all agents...');
+    for (const [name, instance] of this.agentInstances) {
+      try {
+        await instance.stop();
+        console.log(`   ✅ ${name} stopped`);
+      } catch (error) {
+        console.error(`   ❌ ${name} failed to stop: ${error.message}`);
+      }
+    }
   }
 }
 
