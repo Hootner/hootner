@@ -9,3 +9,4 @@ coverage/
 .aws/
 .pm2/
 logs/
+!logs/GITHUB_ISSUES_REPORT.md
