@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-import { execSync } from 'child_process';
-import fs from 'fs';
-import chalk from 'chalk';
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
+
+const isWindows = process.platform === 'win32';
 
 function runCommand(cmd) {
   try {
@@ -12,37 +15,64 @@ function runCommand(cmd) {
   }
 }
 
-console.log('🔧 Setting up Code Review Agent...');
+console.log(chalk.blue('🔧 Setting up Code Review Agent...'));
 
 try {
   // Install dependencies
+  console.log(chalk.yellow('Installing dependencies...'));
   runCommand('npm install --save-dev husky eslint chalk jsdoc');
-  
+
   // Initialize husky
+  console.log(chalk.yellow('Initializing Husky...'));
   runCommand('npx husky init');
-  
+
   // Create pre-commit hook
-  const hookContent = '#!/usr/bin/env sh\nnode dual-ai-review-agent.js\n';
+  const hookContent = isWindows
+    ? '@echo off\nnode dual-ai-review-agent.js'
+    : '#!/usr/bin/env sh\nnode dual-ai-review-agent.js';
+
   fs.writeFileSync('.husky/pre-commit', hookContent);
-  runCommand('chmod +x .husky/pre-commit');
-  
+  if (!isWindows) {
+    runCommand('chmod +x .husky/pre-commit');
+  }
+
   // Create pre-push hook
-  const pushHookContent = '#!/usr/bin/env sh\nnode pre-push-agent.js\n';
+  const pushHookContent = isWindows
+    ? '@echo off\nnode pre-push-agent.js'
+    : '#!/usr/bin/env sh\nnode pre-push-agent.js';
+
   fs.writeFileSync('.husky/pre-push', pushHookContent);
-  runCommand('chmod +x .husky/pre-push');
-  
+  if (!isWindows) {
+    runCommand('chmod +x .husky/pre-push');
+  }
+
   // Create basic ESLint config if none exists
   if (!fs.existsSync('.eslintrc.json')) {
+    console.log(chalk.yellow('Creating ESLint config...'));
     const eslintConfig = {
       'env': { 'node': true, 'es2021': true },
       'extends': ['eslint:recommended'],
-      'parserOptions': { 'ecmaVersion': 12 },
-      'rules': {}
+      'parserOptions': { 'ecmaVersion': 12, 'sourceType': 'script' },
+      'rules': {
+        'no-unused-vars': 'warn',
+        'no-console': 'off'
+      }
     };
     fs.writeFileSync('.eslintrc.json', JSON.stringify(eslintConfig, null, 2));
   }
-  
-  console.log('✅ Setup complete! Code Review Agent will run on every commit.');
+
+  // Create cache directory
+  const cacheDir = path.join(__dirname, '.cache');
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
+
+  console.log(chalk.green('\n✅ Setup complete! Code Review Agent will run on every commit.'));
+  console.log(chalk.cyan('\n💡 Features:'));
+  console.log('  • Automatic code fixing');
+  console.log('  • Parallel validation checks');
+  console.log('  • Smart caching (5min)');
+  console.log('  • Dual AI integration (Q Pro + Copilot)');
 } catch (error) {
   console.error(chalk.red('❌ Setup failed:'), error.message);
   process.exit(1);

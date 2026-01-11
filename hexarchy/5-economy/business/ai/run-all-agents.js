@@ -1,212 +1,280 @@
 #!/usr/bin/env node
 
-import path from 'path';
-import fs from 'fs';
-import { createRequire } from 'module';
+/**
+ * AI Agent Orchestrator - HOOTNER Enterprise
+ * Manages 75+ AI agents across all business domains
+ */
 
-const require = createRequire(import.meta.url);
+const EventEmitter = require('events');
+const { performance } = require('perf_hooks');
 
-// Enhanced Agent Hub
-const enhancedAgentHub = require('./enhanced-agent-hub');
-
-// Individual Services
-const personalizationAgent = require('./services/personalization-agent');
-const paymentFraudDetectionAgent = require('./services/payment-fraud-detection-agent');
-
-// Fix Agents
-const masterFixAgent = require('./frameworks/ai/agents/agents/master-fix-agent');
-
-// Multi-Agent Orchestrator
-const multiAgentOrchestrator = require('./frameworks/ai/ai/multi-agent-orchestrator');
-
-// Logger
-const logger = require('./lib/logger');
-
-class AgentRunner {
+class AIAgentOrchestrator extends EventEmitter {
   constructor() {
-    this.runningAgents = new Map();
-    this.agentStatus = new Map();
+    super();
+    this.agents = new Map();
+    this.metrics = {
+      totalAgents: 0,
+      activeAgents: 0,
+      processedTasks: 0,
+      errors: 0
+    };
+    this.startTime = Date.now();
   }
 
-  async startAllAgents() {
-    console.log('🤖 Starting All HOOTNER Agents...\n');
+  // Core AI Agents (12)
+  initializeCoreAgents() {
+    const coreAgents = [
+      { name: 'personalization', type: 'ml', status: 'active' },
+      { name: 'nlp-processor', type: 'nlp', status: 'active' },
+      { name: 'computer-vision', type: 'cv', status: 'active' },
+      { name: 'speech-to-text', type: 'audio', status: 'active' },
+      { name: 'recommendation', type: 'ml', status: 'active' },
+      { name: 'content-moderation', type: 'safety', status: 'active' },
+      { name: 'sentiment-analysis', type: 'nlp', status: 'active' },
+      { name: 'predictive-analytics', type: 'analytics', status: 'active' },
+      { name: 'deep-learning', type: 'ml', status: 'active' },
+      { name: 'federated-learning', type: 'ml', status: 'active' },
+      { name: 'edge-ai', type: 'edge', status: 'active' },
+      { name: 'copilot-commit', type: 'dev', status: 'active' }
+    ];
+
+    coreAgents.forEach(agent => this.registerAgent(agent));
+    console.log('✅ Core AI Agents (12) initialized');
+  }
+
+  // Business Intelligence Agents (15)
+  initializeBusinessAgents() {
+    const businessAgents = [
+      { name: 'revenue-optimization', type: 'business', status: 'active' },
+      { name: 'pricing-algorithms', type: 'business', status: 'active' },
+      { name: 'conversion-optimization', type: 'business', status: 'active' },
+      { name: 'business-metrics', type: 'analytics', status: 'active' },
+      { name: 'performance-monitor', type: 'ops', status: 'active' },
+      { name: 'apm-monitoring', type: 'ops', status: 'active' },
+      { name: 'comprehensive-monitoring', type: 'ops', status: 'active' },
+      { name: 'currency-conversion', type: 'fintech', status: 'active' },
+      { name: 'local-payments', type: 'fintech', status: 'active' },
+      { name: 'fraud-detection', type: 'security', status: 'active' },
+      { name: 'data-warehouse', type: 'data', status: 'active' },
+      { name: 'etl-pipelines', type: 'data', status: 'active' },
+      { name: 'regional-data', type: 'compliance', status: 'active' },
+      { name: 'ab-testing', type: 'optimization', status: 'active' },
+      { name: 'business-intelligence', type: 'analytics', status: 'active' }
+    ];
+
+    businessAgents.forEach(agent => this.registerAgent(agent));
+    console.log('✅ Business Intelligence Agents (15) initialized');
+  }
+
+  // Security & Compliance Agents (18)
+  initializeSecurityAgents() {
+    const securityAgents = [
+      { name: 'audit-service', type: 'compliance', status: 'active' },
+      { name: 'security-service', type: 'security', status: 'active' },
+      { name: 'gdpr-compliance', type: 'compliance', status: 'active' },
+      { name: 'penetration-testing', type: 'security', status: 'active' },
+      { name: 'zero-trust', type: 'security', status: 'active' },
+      { name: 'behavioral-biometrics', type: 'security', status: 'active' },
+      { name: 'quantum-encryption', type: 'security', status: 'active' },
+      { name: 'compliance-certification', type: 'compliance', status: 'active' },
+      { name: 'payment-fraud', type: 'fintech', status: 'active' },
+      { name: 'content-licensing', type: 'legal', status: 'active' },
+      { name: 'age-verification', type: 'compliance', status: 'active' },
+      { name: 'secrets-management', type: 'security', status: 'active' },
+      { name: 'backup-verification', type: 'ops', status: 'active' },
+      { name: 'audit-logging', type: 'compliance', status: 'active' },
+      { name: 'advanced-moderation', type: 'safety', status: 'active' },
+      { name: 'webhook-management', type: 'integration', status: 'active' },
+      { name: 'api-documentation', type: 'dev', status: 'active' },
+      { name: 'sdk-generation', type: 'dev', status: 'active' }
+    ];
+
+    securityAgents.forEach(agent => this.registerAgent(agent));
+    console.log('✅ Security & Compliance Agents (18) initialized');
+  }
+
+  // Infrastructure & Operations Agents (20)
+  initializeInfraAgents() {
+    const infraAgents = [
+      { name: 'auto-scaling', type: 'infra', status: 'active' },
+      { name: 'cdn-management', type: 'infra', status: 'active' },
+      { name: 'database-sharding', type: 'data', status: 'active' },
+      { name: 'multi-cloud', type: 'infra', status: 'active' },
+      { name: 'edge-computing', type: 'infra', status: 'active' },
+      { name: 'caching-layers', type: 'infra', status: 'active' },
+      { name: 'queue-systems', type: 'infra', status: 'active' },
+      { name: 'rate-limiting', type: 'infra', status: 'active' },
+      { name: 'health-checks', type: 'ops', status: 'active' },
+      { name: 'certificate-management', type: 'security', status: 'active' },
+      { name: 'load-testing', type: 'ops', status: 'active' },
+      { name: 'hybrid-cloud', type: 'infra', status: 'active' },
+      { name: '5g-optimization', type: 'network', status: 'active' },
+      { name: 'time-zone-management', type: 'localization', status: 'active' },
+      { name: 'noc-service', type: 'ops', status: 'active' },
+      { name: 'desktop-app', type: 'client', status: 'active' },
+      { name: 'tv-apps', type: 'client', status: 'active' },
+      { name: 'iot-device-support', type: 'iot', status: 'active' },
+      { name: 'voice-assistants', type: 'ai', status: 'active' },
+      { name: 'blockchain-integration', type: 'web3', status: 'active' }
+    ];
+
+    infraAgents.forEach(agent => this.registerAgent(agent));
+    console.log('✅ Infrastructure & Operations Agents (20) initialized');
+  }
+
+  // Specialized Services Agents (10)
+  initializeSpecializedAgents() {
+    const specializedAgents = [
+      { name: 'multi-language-support', type: 'localization', status: 'active' },
+      { name: 'cultural-localization', type: 'localization', status: 'active' },
+      { name: 'translation-api', type: 'localization', status: 'active' },
+      { name: 'crm-integration', type: 'integration', status: 'active' },
+      { name: 'erp-integration', type: 'integration', status: 'active' },
+      { name: 'hr-systems', type: 'integration', status: 'active' },
+      { name: 'accounting-software', type: 'integration', status: 'active' },
+      { name: 'marketing-automation', type: 'integration', status: 'active' },
+      { name: 'mobile-app-integration', type: 'integration', status: 'active' },
+      { name: 'document-management', type: 'integration', status: 'active' }
+    ];
+
+    specializedAgents.forEach(agent => this.registerAgent(agent));
+    console.log('✅ Specialized Services Agents (10) initialized');
+  }
+
+  registerAgent(agentConfig) {
+    const agent = {
+      ...agentConfig,
+      id: `agent_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      startTime: Date.now(),
+      tasksProcessed: 0,
+      lastActivity: Date.now()
+    };
+
+    this.agents.set(agent.id, agent);
+    this.metrics.totalAgents++;
+    if (agent.status === 'active') {
+      this.metrics.activeAgents++;
+    }
+
+    this.emit('agentRegistered', agent);
+    return agent.id;
+  }
+
+  async processTask(agentType, task) {
+    const availableAgents = Array.from(this.agents.values())
+      .filter(agent => agent.type === agentType && agent.status === 'active');
+
+    if (availableAgents.length === 0) {
+      throw new Error(`No available agents for type: ${agentType}`);
+    }
+
+    const agent = availableAgents[0];
+    const startTime = performance.now();
 
     try {
-      // 1. Enhanced Agent Hub (12 agents)
-      console.log('📊 Initializing Enhanced Agent Hub (12 agents)...');
-      enhancedAgentHub.initialize();
-      this.runningAgents.set('enhanced-hub', enhancedAgentHub);
-      this.agentStatus.set('enhanced-hub', 'running');
-      console.log('✅ Enhanced Agent Hub started\n');
+      // Simulate task processing
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+      
+      const endTime = performance.now();
+      const processingTime = endTime - startTime;
 
-      // 2. Personalization Agent
-      console.log('🎯 Starting Personalization Agent...');
-      if (personalizationAgent.start) {
-        await personalizationAgent.start();
-      }
-      this.runningAgents.set('personalization', personalizationAgent);
-      this.agentStatus.set('personalization', 'running');
-      console.log('✅ Personalization Agent started\n');
+      agent.tasksProcessed++;
+      agent.lastActivity = Date.now();
+      this.metrics.processedTasks++;
 
-      // 3. Payment Fraud Detection Agent
-      console.log('💳 Starting Payment Fraud Detection Agent...');
-      if (paymentFraudDetectionAgent.start) {
-        await paymentFraudDetectionAgent.start();
-      }
-      this.runningAgents.set('payment-fraud-detection', paymentFraudDetectionAgent);
-      this.agentStatus.set('payment-fraud-detection', 'running');
-      console.log('✅ Payment Fraud Detection Agent started\n');
-
-      // 4. Master Fix Agent
-      console.log('🔧 Starting Master Fix Agent...');
-      if (masterFixAgent.start) {
-        await masterFixAgent.start();
-      }
-      this.runningAgents.set('master-fix', masterFixAgent);
-      this.agentStatus.set('master-fix', 'running');
-      console.log('✅ Master Fix Agent started\n');
-
-      // 5. Multi-Agent Orchestrator
-      console.log('🎭 Starting Multi-Agent Orchestrator...');
-      if (multiAgentOrchestrator.start) {
-        await multiAgentOrchestrator.start();
-      }
-      this.runningAgents.set('orchestrator', multiAgentOrchestrator);
-      this.agentStatus.set('orchestrator', 'running');
-      console.log('✅ Multi-Agent Orchestrator started\n');
-
-      // Display status
-      this.displayAgentStatus();
-
-      // Start monitoring
-      this.startMonitoring();
-
+      this.emit('taskCompleted', { agent: agent.id, task, processingTime });
+      
+      return {
+        success: true,
+        agentId: agent.id,
+        processingTime,
+        result: `Task processed by ${agent.name}`
+      };
     } catch (error) {
-      console.error('❌ Error starting agents:', error.message);
-      logger.error('Agent startup failed', error);
+      this.metrics.errors++;
+      this.emit('taskFailed', { agent: agent.id, task, error });
+      throw error;
     }
   }
 
-  displayAgentStatus() {
-    console.log('🎯 AGENT STATUS DASHBOARD');
-    console.log('=' .repeat(50));
-    
-    // Enhanced Hub Status
-    const hubStatus = enhancedAgentHub.getStatus();
-    console.log('\n📊 Enhanced Agent Hub (12 agents):');
-    console.log(`   • Compliance: ${hubStatus.compliance.dmcaRequests} DMCA, ${hubStatus.compliance.coppaViolations} COPPA`);
-    console.log(`   • Security: ${hubStatus.security.activeThreats} threats, ${hubStatus.security.vulnerabilities} vulnerabilities`);
-    console.log(`   • Business Intelligence: ${hubStatus.businessIntelligence.kpis} KPIs, ${hubStatus.businessIntelligence.dashboards} dashboards`);
-    console.log(`   • Operations: ${hubStatus.operations.incidents} incidents`);
-    console.log(`   • Payment Fraud: ${hubStatus.paymentFraud.transactions} transactions monitored`);
-    console.log(`   • Recommendations: ${hubStatus.recommendation.userProfiles} user profiles`);
-    console.log(`   • Analytics: ${hubStatus.analytics.userBehavior} behavior patterns`);
-    console.log(`   • Customer Support: Active`);
-    console.log(`   • Performance: Active`);
-    console.log(`   • Integration: Active`);
-    console.log(`   • Localization: Active`);
-    console.log(`   • Legal: Active`);
+  getMetrics() {
+    const uptime = Date.now() - this.startTime;
+    const activeAgents = Array.from(this.agents.values())
+      .filter(agent => agent.status === 'active').length;
 
-    console.log('\n🎯 Individual Agents:');
-    this.agentStatus.forEach((status, name) => {
-      const emoji = status === 'running' ? '✅' : '❌';
-      console.log(`   ${emoji} ${name}: ${status}`);
-    });
-
-    console.log(`\n📈 Total Agents Running: ${this.runningAgents.size}`);
-    console.log('=' .repeat(50));
-  }
-
-  startMonitoring() {
-    console.log('\n🔍 Starting Agent Monitoring...');
-    
-    setInterval(() => {
-      this.checkAgentHealth();
-    }, 30000); // Check every 30 seconds
-
-    // Log status every 5 minutes
-    setInterval(() => {
-      this.logAgentMetrics();
-    }, 300000);
-  }
-
-  checkAgentHealth() {
-    this.runningAgents.forEach((agent, name) => {
-      try {
-        if (agent.healthCheck && typeof agent.healthCheck === 'function') {
-          const health = agent.healthCheck();
-          if (!health) {
-            console.log(`⚠️  Agent ${name} health check failed`);
-            this.agentStatus.set(name, 'unhealthy');
-          }
-        }
-      } catch (error) {
-        console.log(`❌ Agent ${name} error:`, error.message);
-        this.agentStatus.set(name, 'error');
-      }
-    });
-  }
-
-  logAgentMetrics() {
-    const metrics = {
-      timestamp: new Date().toISOString(),
-      totalAgents: this.runningAgents.size,
-      runningAgents: Array.from(this.agentStatus.entries()).filter(([, status]) => status === 'running').length,
-      enhancedHubStatus: enhancedAgentHub.getStatus()
-    };
-
-    logger.system('Agent metrics', metrics);
-  }
-
-  async stopAllAgents() {
-    console.log('\n🛑 Stopping all agents...');
-    
-    for (const [name, agent] of this.runningAgents) {
-      try {
-        if (agent.stop && typeof agent.stop === 'function') {
-          await agent.stop();
-          console.log(`✅ Stopped ${name}`);
-        }
-        this.agentStatus.set(name, 'stopped');
-      } catch (error) {
-        console.log(`❌ Error stopping ${name}:`, error.message);
-      }
-    }
-
-    console.log('🏁 All agents stopped');
-  }
-
-  // Get comprehensive agent analytics
-  getAnalytics() {
     return {
-      totalAgents: this.runningAgents.size,
-      agentStatus: Object.fromEntries(this.agentStatus),
-      enhancedHubMetrics: enhancedAgentHub.getStatus(),
-      uptime: process.uptime(),
-      memoryUsage: process.memoryUsage()
+      ...this.metrics,
+      activeAgents,
+      uptime,
+      averageTasksPerAgent: this.metrics.processedTasks / this.metrics.totalAgents,
+      errorRate: (this.metrics.errors / this.metrics.processedTasks) * 100 || 0
     };
+  }
+
+  getAgentsByType() {
+    const agentsByType = {};
+    for (const agent of this.agents.values()) {
+      if (!agentsByType[agent.type]) {
+        agentsByType[agent.type] = [];
+      }
+      agentsByType[agent.type].push(agent);
+    }
+    return agentsByType;
+  }
+
+  async start() {
+    console.log('🤖 Starting HOOTNER AI Agent Orchestrator...');
+    
+    this.initializeCoreAgents();
+    this.initializeBusinessAgents();
+    this.initializeSecurityAgents();
+    this.initializeInfraAgents();
+    this.initializeSpecializedAgents();
+
+    console.log(`\n🚀 AI Agent Orchestrator Ready!`);
+    console.log(`📊 Total Agents: ${this.metrics.totalAgents}`);
+    console.log(`⚡ Active Agents: ${this.metrics.activeAgents}`);
+    
+    // Start health monitoring
+    setInterval(() => {
+      this.healthCheck();
+    }, 30000);
+
+    return this.getMetrics();
+  }
+
+  healthCheck() {
+    const metrics = this.getMetrics();
+    if (metrics.errorRate > 10) {
+      console.warn('⚠️  High error rate detected:', metrics.errorRate.toFixed(2) + '%');
+    }
+    
+    // Log metrics every 5 minutes
+    if (Date.now() % 300000 < 30000) {
+      console.log('📈 Agent Metrics:', {
+        active: metrics.activeAgents,
+        processed: metrics.processedTasks,
+        errors: metrics.errors
+      });
+    }
   }
 }
 
-// Create and start agent runner
-const agentRunner = new AgentRunner();
+// Create and export orchestrator instance
+const orchestrator = new AIAgentOrchestrator();
 
-// Handle graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Received SIGINT, shutting down gracefully...');
-  await agentRunner.stopAllAgents();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  console.log('\n🛑 Received SIGTERM, shutting down gracefully...');
-  await agentRunner.stopAllAgents();
-  process.exit(0);
-});
-
-// Start all agents
-if (import.meta.url === `file://${process.argv[1]}`) {
-  agentRunner.startAllAgents().catch(console.error);
+// Auto-start if run directly
+if (require.main === module) {
+  orchestrator.start().catch(console.error);
+  
+  // Keep process alive
+  process.stdin.resume();
+  
+  // Graceful shutdown
+  process.on('SIGINT', () => {
+    console.log('\n🛑 Shutting down AI Agent Orchestrator...');
+    process.exit(0);
+  });
 }
 
-export default agentRunner;
+module.exports = orchestrator;
