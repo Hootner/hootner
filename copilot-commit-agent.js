@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 // Enhanced Copilot Commit Agent - AI-powered commit message enhancement
-import { execSync } from 'child_process';
-import chalk from 'chalk';
+const { execSync } = require('child_process');
+const chalk = require('chalk');
 
 try {
   // Get staged changes
