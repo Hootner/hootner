@@ -1,0 +1,162 @@
+# Video Generation Service Configuration
+# Environment: Development
+# Date: 2026-01-11
+
+# ============================================================================
+# Server Configuration
+# ============================================================================
+server:
+  host: "0.0.0.0"
+  port: 5003
+  debug: true
+  workers: 1
+  
+# ============================================================================
+# Model Configuration
+# ============================================================================
+model:
+  size: "base"  # Options: small, base, large
+  device: "cuda"  # Options: cuda, cpu, mps (for Apple Silicon)
+  timesteps: 1000
+  guidance_scale: 7.5
+  
+  # Model paths
+  checkpoint_dir: "./checkpoints"
+  weights_path: null  # Set to load pre-trained weights
+  
+  # Optimization
+  mixed_precision: true
+  precision_dtype: "float16"  # Options: float16, bfloat16
+  compile_model: false  # torch.compile (requires PyTorch 2.0+)
+  gradient_checkpointing: false
+  
+# ============================================================================
+# Sampler Configuration
+# ============================================================================
+sampler:
+  type: "dpm"  # Options: dpm, euler, adaptive, plms, ddim
+  num_steps: 50
+  
+  # DPM-Solver++ settings
+  dpm:
+    solver_order: 2  # Options: 1, 2, 3
+    algorithm_type: "dpmsolver++"
+  
+  # Euler settings
+  euler:
+    eta: 1.0  # Noise scale (0 = deterministic, 1 = full noise)
+  
+  # Adaptive sampler settings
+  adaptive:
+    tolerance: 0.01
+    min_steps: 10
+    max_steps: 100
+
+# ============================================================================
+# Generation Defaults
+# ============================================================================
+generation:
+  default_num_frames: 16
+  default_height: 64
+  default_width: 64
+  default_fps: 8
+  default_format: "gif"  # Options: gif, mp4
+  
+  # Limits
+  max_num_frames: 64
+  max_height: 512
+  max_width: 512
+  min_resolution: 32
+  max_prompt_length: 500
+  
+# ============================================================================
+# API Configuration
+# ============================================================================
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_window: 20
+    window_seconds: 60
+  
+  caching:
+    enabled: true
+    ttl_seconds: 3600  # 1 hour
+  
+  async_jobs:
+    enabled: true
+    max_queue_size: 100
+    worker_threads: 1
+
+# ============================================================================
+# Redis Configuration (for job queue and caching)
+# ============================================================================
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: null
+  socket_timeout: 5
+
+# ============================================================================
+# Monitoring & Logging
+# ============================================================================
+monitoring:
+  logging:
+    level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    format: "json"  # Options: json, text
+    log_dir: "./logs"
+    
+  prometheus:
+    enabled: true
+    export_port: 9090
+  
+  profiling:
+    enabled: true
+    print_stats_on_shutdown: true
+
+# ============================================================================
+# Video Effects
+# ============================================================================
+effects:
+  enabled: true
+  
+  # Default presets
+  presets:
+    - "cinematic"
+    - "vintage"
+    - "dramatic"
+    - "dreamy"
+    - "vivid"
+  
+  # Post-processing defaults
+  post_processing:
+    temporal_smoothing: true
+    temporal_window: 3
+    auto_sharpen: false
+    sharpen_strength: 0.3
+
+# ============================================================================
+# Security
+# ============================================================================
+security:
+  cors:
+    enabled: true
+    origins:
+      - "http://localhost:5173"
+      - "http://localhost:3000"
+      - "https://hootner.com"
+  
+  api_key:
+    enabled: false
+    header_name: "X-API-Key"
+    key: null  # Set in production
+
+# ============================================================================
+# Storage
+# ============================================================================
+storage:
+  output_dir: "./outputs"
+  cache_dir: "./cache"
+  max_output_size_mb: 100
+  cleanup_old_files: true
+  cleanup_age_days: 7
