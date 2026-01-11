@@ -1,12 +1,4 @@
 {
-  "remote.SSH.showLoginTerminal": false,
-  "remote.SSH.remotePlatform": {},
-  "remote.containers.defaultExtensions": [],
-  "github.codespaces.defaultExtensions": [],
-  "remote.extensionKind": {
-    "ms-vscode.remote-repositories": ["ui"]
-  },
   "git.openRepositoryInParentFolders": "never",
-  "git.remoteHubApiUrl": "",
   "workbench.startupEditor": "none"
 }
