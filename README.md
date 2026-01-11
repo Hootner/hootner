@@ -264,6 +264,28 @@ npm run security:audit     # Security vulnerability scan
 npm run lint               # Code linting
 ```
 
+### Pre-commit Validation
+
+Automated validation runs before every commit to ensure code quality and security:
+
+- **🔍 Secret Scanning** - Detects passwords, API keys, tokens
+- **🔧 ESLint** - Validates JavaScript syntax
+- **📝 Conventional Commits** - Enforces standardized commit format (feat/fix/docs)
+
+All checks exit with proper codes for CI/CD integration.
+
+**Commit Message Format:**
+```bash
+<type>(<scope>): <subject>
+
+# Examples:
+feat: add user authentication
+fix(api): resolve null pointer exception
+docs: update README with installation steps
+```
+
+See [Pre-commit Validation Documentation](docs/PRE_COMMIT_VALIDATION.md) for details.
+
 ### Load Testing
 ```bash
 # Install k6 (https://k6.io/docs/getting-started/installation/)

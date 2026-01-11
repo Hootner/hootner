@@ -12,10 +12,10 @@ import { readFileSync } from 'fs';
 // Secret patterns to detect
 const SECRET_PATTERNS = [
   // API Keys and Tokens
-  { pattern: /(?:api[_-]?key|apikey)[\s]*[=:]["']?([a-zA-Z0-9_\-]{20,})["']?/gi, name: 'API Key' },
-  { pattern: /(?:secret[_-]?key|secretkey)[\s]*[=:]["']?([a-zA-Z0-9_\-]{20,})["']?/gi, name: 'Secret Key' },
-  { pattern: /(?:access[_-]?token|accesstoken)[\s]*[=:]["']?([a-zA-Z0-9_\-]{20,})["']?/gi, name: 'Access Token' },
-  { pattern: /(?:auth[_-]?token|authtoken)[\s]*[=:]["']?([a-zA-Z0-9_\-]{20,})["']?/gi, name: 'Auth Token' },
+  { pattern: /(?:api[_-]?key|apikey)[\s]*[=:]["']?([a-zA-Z0-9_-]{20,})["']?/gi, name: 'API Key' },
+  { pattern: /(?:secret[_-]?key|secretkey)[\s]*[=:]["']?([a-zA-Z0-9_-]{20,})["']?/gi, name: 'Secret Key' },
+  { pattern: /(?:access[_-]?token|accesstoken)[\s]*[=:]["']?([a-zA-Z0-9_-]{20,})["']?/gi, name: 'Access Token' },
+  { pattern: /(?:auth[_-]?token|authtoken)[\s]*[=:]["']?([a-zA-Z0-9_-]{20,})["']?/gi, name: 'Auth Token' },
   
   // AWS
   { pattern: /AKIA[0-9A-Z]{16}/gi, name: 'AWS Access Key' },
