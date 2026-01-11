@@ -17,6 +17,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// HTML Escaping to prevent XSS (CWE-79 fix)
+function escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 // Authentication middleware
 const authenticateRequest = (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -224,14 +235,17 @@ const dashboardHTML = `
                 document.getElementById('users').textContent = data.unique_users;
                 document.getElementById('algorithms').textContent = data.algorithms_used;
                 
-                // Update recent activity
+                // Update recent activity (XSS protection with escapeHtml)
                 const activityDiv = document.getElementById('recentActivity');
-                activityDiv.innerHTML = data.recent_usage.map(usage => 
-                    \`<div style="padding: 10px; border-bottom: 1px solid #eee;">
-                        <strong>\${usage.algorithm}</strong> - \${usage.revenueImpact} 
-                        <small>(\${new Date(usage.timestamp).toLocaleString()})</small>
-                    </div>\`
-                ).join('');
+                activityDiv.innerHTML = data.recent_usage.map(usage => {
+                    const algorithm = escapeHtml(String(usage.algorithm));
+                    const revenueImpact = escapeHtml(String(usage.revenueImpact));
+                    const timestamp = escapeHtml(new Date(usage.timestamp).toLocaleString());
+                    return `<div style="padding: 10px; border-bottom: 1px solid #eee;">
+                        <strong>${algorithm}</strong> - ${revenueImpact} 
+                        <small>(${timestamp})</small>
+                    </div>`;
+                }).join('');
 
                 // Update chart
                 updateUsageChart(data.usage_by_hour || []);
@@ -284,10 +298,14 @@ const dashboardHTML = `
             
             const result = await response.json();
             document.getElementById('priceResult').style.display = 'block';
+            // XSS protection with escapeHtml
+            const optimizedPrice = escapeHtml(String(result.result));
+            const currentPrice = escapeHtml(String(price));
+            const revenueImpact = escapeHtml(String(result.revenue_impact));
             document.getElementById('priceResult').innerHTML = 
-                \`<strong>Optimized Price: $\${result.result}</strong><br>
-                 Current: $\${price} → Recommended: $\${result.result}<br>
-                 \${result.revenue_impact}\`;
+                `<strong>Optimized Price: $${optimizedPrice}</strong><br>
+                 Current: $${currentPrice} → Recommended: $${optimizedPrice}<br>
+                 ${revenueImpact}`;
             
             loadDashboard(); // Refresh metrics
         }
@@ -308,10 +326,14 @@ const dashboardHTML = `
             
             const result = await response.json();
             document.getElementById('conversionResult').style.display = 'block';
+            // XSS protection with escapeHtml
+            const conversionRate = escapeHtml(String(result.result));
+            const improvement = escapeHtml((result.result - (current_rate * 100)).toFixed(2));
+            const monthlyRevenue = escapeHtml(String(result.revenue_impact));
             document.getElementById('conversionResult').innerHTML = 
-                \`<strong>Optimized Conversion Rate: \${result.result}%</strong><br>
-                 Improvement: +\${(result.result - (current_rate * 100)).toFixed(2)}%<br>
-                 Additional Monthly Revenue: \${result.revenue_impact}\`;
+                `<strong>Optimized Conversion Rate: ${conversionRate}%</strong><br>
+                 Improvement: +${improvement}%<br>
+                 Additional Monthly Revenue: ${monthlyRevenue}`;
             
             loadDashboard();
         }

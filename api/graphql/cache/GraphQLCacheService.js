@@ -4,41 +4,32 @@
  */
 
 const Redis = require("ioredis");
-const crypto = require("crypto");
+const config = require("./shared/config");
+const {
+  generateCacheKey,
+  parseInfo,
+  calculateHitRate,
+  extractKeyCount,
+} = require("./shared/utils");
 
 class GraphQLCacheService {
   constructor(options = {}) {
-    this.redis = new Redis({
-      host: options.host || process.env.REDIS_HOST || "localhost",
-      port: options.port || process.env.REDIS_PORT || 6379,
-      password: options.password || process.env.REDIS_PASSWORD,
-      db: options.db || 0,
-      keyPrefix: "graphql:",
-      retryStrategy: (times) => {
-        const delay = Math.min(times * 50, 2000);
-        return delay;
-      },
-      maxRetriesPerRequest: 3,
-    });
+    // Merge with shared config
+    const redisConfig = { ...config.redis, ...options.redis };
+
+    this.redis = new Redis(redisConfig);
 
     // Default TTL values (in seconds)
-    this.defaultTTL = options.defaultTTL || 300; // 5 minutes
+    this.defaultTTL = options.defaultTTL || config.ttl.default;
     this.ttlByType = {
-      User: 600, // 10 minutes
-      Video: 300, // 5 minutes
-      Comment: 180, // 3 minutes
-      VideoStats: 60, // 1 minute
-      TrendingVideos: 120, // 2 minutes
-      SearchResults: 300, // 5 minutes
+      ...config.ttl.byType,
       ...options.ttlByType,
     };
 
     // Cache invalidation patterns
     this.invalidationPatterns = {
-      User: ["User:*", "UserProfile:*", "UserVideos:*"],
-      Video: ["Video:*", "VideoList:*", "TrendingVideos:*", "SearchResults:*"],
-      Comment: ["Comment:*", "VideoComments:*"],
-      Subscription: ["User:*:subscription", "SubscriptionStats:*"],
+      ...config.invalidation.patterns,
+      ...options.invalidationPatterns,
     };
 
     this.setupEventListeners();
@@ -53,7 +44,14 @@ class GraphQLCacheService {
     });
 
     this.redis.on("error", (err) => {
-      console.error("Redis error:", err);
+      // Log error with context but don't expose sensitive info
+      const errorInfo = {
+        message: err.message || "Unknown Redis error",
+        code: err.code,
+        syscall: err.syscall,
+        timestamp: new Date().toISOString(),
+      };
+      console.error("Redis error:", errorInfo);
     });
 
     this.redis.on("ready", () => {
@@ -69,14 +67,7 @@ class GraphQLCacheService {
    * Generate cache key from GraphQL query and variables
    */
   generateCacheKey(query, variables = {}, context = {}) {
-    const userId = context.user?.id || "anonymous";
-    const queryHash = crypto
-      .createHash("sha256")
-      .update(JSON.stringify({ query, variables }))
-      .digest("hex")
-      .substring(0, 16);
-
-    return `query:${userId}:${queryHash}`;
+    return generateCacheKey(query, variables, context);
   }
 
   /**
@@ -86,9 +77,22 @@ class GraphQLCacheService {
     try {
       const cached = await this.redis.get(key);
       if (cached) {
-        const parsed = JSON.parse(cached);
-        console.log(`Cache HIT: ${key}`);
-        return parsed;
+        try {
+          // Safe JSON parsing with validation
+          const parsed = JSON.parse(cached);
+          // Validate parsed data is not malicious
+          if (parsed && typeof parsed === "object") {
+            console.log(`Cache HIT: ${key}`);
+            return parsed;
+          }
+          console.warn(`Invalid cache data for key: ${key}`);
+          return null;
+        } catch (parseError) {
+          console.error(`JSON parse error for key ${key}:`, parseError.message);
+          // Delete corrupted cache entry
+          await this.redis.del(key).catch(() => {});
+          return null;
+        }
       }
       console.log(`Cache MISS: ${key}`);
       return null;
@@ -288,35 +292,14 @@ class GraphQLCacheService {
   calculateHitRate(stats) {
     const hits = parseInt(stats.keyspace_hits) || 0;
     const misses = parseInt(stats.keyspace_misses) || 0;
-    const total = hits + misses;
-
-    if (total === 0) return 0;
-    return ((hits / total) * 100).toFixed(2);
+    return calculateHitRate(hits, misses);
   }
 
   /**
    * Extract key count from keyspace info
    */
-  extractKeyCount(keyspace) {
-    const db0 = keyspace.db0;
-    if (!db0) return 0;
-
-    const match = db0.match(/keys=(\d+)/);
-    return match ? parseInt(match[1]) : 0;
-  }
-
-  /**
-   * Clear all cache
-   */
-  async clearAll() {
-    try {
-      await this.redis.flushdb();
-      console.log("Cache cleared");
-      return true;
-    } catch (error) {
-      console.error("Cache clear error:", error);
-      return false;
-    }
+  async extractKeyCount(keyspace) {
+    return extractKeyCount(keyspace);
   }
 
   /**
@@ -365,10 +348,24 @@ class GraphQLCacheService {
   async mget(keys) {
     try {
       const values = await this.redis.mget(...keys);
-      return values.map((v, i) => ({
-        key: keys[i],
-        value: v ? JSON.parse(v) : null,
-      }));
+      return values.map((v, i) => {
+        if (!v) return { key: keys[i], value: null };
+
+        try {
+          const parsed = JSON.parse(v);
+          // Validate parsed data
+          if (parsed && typeof parsed === "object") {
+            return { key: keys[i], value: parsed };
+          }
+          return { key: keys[i], value: null };
+        } catch (parseError) {
+          console.error(
+            `JSON parse error for key ${keys[i]}:`,
+            parseError.message
+          );
+          return { key: keys[i], value: null };
+        }
+      });
     } catch (error) {
       console.error("Cache mget error:", error);
       return keys.map((key) => ({ key, value: null }));

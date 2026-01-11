@@ -1,5 +1,5 @@
 {
-  "name": "hootner-code-editor",
+  "name": "@hootner/code-editor",
   "version": "1.0.0",
   "description": "HOOTNER Code Editor",
   "main": "server.js",
