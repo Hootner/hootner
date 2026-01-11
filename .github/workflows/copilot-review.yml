@@ -8,25 +8,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: "18"
+
       - name: Install dependencies
         run: npm ci
-        
-      - name: Copilot Code Analysis
-        uses: github/copilot-cli-action@v1
-        with:
-          command: 'gh copilot suggest "Review this PR for security issues and code quality"'
-          
-      - name: Auto-fix with Copilot
+
+      - name: Run ESLint
+        run: npm run lint || true
+
+      - name: Security Audit
+        run: npm audit --audit-level=high || true
+
+      - name: Auto-fix with ESLint
         run: |
-          # Use Copilot CLI to suggest fixes
-          gh copilot suggest "Fix linting errors in changed files"
-          
+          npm run lint -- --fix || true
+          git diff > fixes.patch
+          echo "Fixes available in artifact" >> $GITHUB_STEP_SUMMARY
+
       - name: Comment PR with suggestions
         uses: actions/github-script@v7
         with:
