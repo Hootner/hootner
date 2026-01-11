@@ -1,27 +1,40 @@
-name: Copilot Commit Enhancement
+name: Copilot Commit Management
+
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  enhance-commits:
+  copilot-review:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 2
+          node-version: '25.2.1'
           
-      - name: Generate Enhanced Commit Message
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Copilot Code Review
+        uses: github/copilot-cli-action@v1
+        with:
+          command: 'review'
+          
+      - name: Security Scan
+        run: npm run security:audit
+        
+      - name: Generate Commit Message
+        if: github.event_name == 'push'
         run: |
-          # Get the diff
-          DIFF=$(git diff HEAD~1 HEAD)
+          echo "COPILOT_COMMIT_MSG=$(gh copilot suggest -t commit)" >> $GITHUB_ENV
           
-          # Use Copilot to enhance commit message
-          echo "🤖 Copilot Pro Enhanced Commit Analysis:" >> commit-analysis.md
-          echo "Files changed: $(git diff --name-only HEAD~1 HEAD | wc -l)" >> commit-analysis.md
-          echo "Lines added: $(git diff --shortstat HEAD~1 HEAD)" >> commit-analysis.md
-          
-      - name: Update README with latest changes
+      - name: Auto-format Commit
+        if: github.event_name == 'push'
         run: |
-          echo "Last updated: $(date)" >> README.md
-          echo "Latest commit enhanced by Copilot Pro" >> README.md
+          git config --local user.email "copilot@hootner.com"
+          git config --local user.name "GitHub Copilot"
