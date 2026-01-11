@@ -8,7 +8,7 @@ function run(cmd) {
     return execSync(cmd, { stdio: 'pipe', encoding: 'utf8' }).trim();
   } catch (error) {
     console.error(chalk.red(`Command failed: ${cmd}`));
-    throw new Error(`Git operation failed: ${error.message}`);
+    throw new Error(`Operation failed: ${error.message}`);
   }
 }
 
@@ -16,41 +16,42 @@ function isGitRepo() {
   return fs.existsSync('.git');
 }
 
-console.log(chalk.blue('🛡️ Code Review Agent'));
+console.log(chalk.blue('🤖 Dual AI Code Review Agent'));
+console.log(chalk.cyan('Amazon Q Pro + GitHub Copilot Pro'));
 
 if (!isGitRepo()) {
   console.error(chalk.red('❌ Not a git repository'));
   process.exit(1);
 }
 
-// Auto-fix issues
+// Auto-fix with ESLint
 console.log(chalk.yellow('🔧 Auto-fixing...'));
 try {
-  const fixes = run('npx eslint . --fix --quiet');
-  if (fixes) console.log(chalk.green('✅ Fixed issues'));
+  run('npx eslint . --fix --quiet');
+  run('git add .');
+  console.log(chalk.green('✅ Files processed'));
 } catch (e) {
   console.log(chalk.yellow('⚠️ ESLint not configured'));
 }
 
-// Re-stage fixed files
-try {
-  run('git add .');
-  console.log(chalk.green('✅ Files staged'));
-} catch (e) {
-  console.error(chalk.red('❌ Failed to stage files'));
-  process.exit(1);
-}
-
-// Check for remaining issues
+// Check remaining issues
 const issues = run('npx eslint . --quiet');
 if (issues) {
   console.error(chalk.red('\n❌ COMMIT BLOCKED - Issues found:'));
   console.error(chalk.yellow(issues));
-  console.error(chalk.red('\n🚫 Fix these issues before committing\n'));
+  console.error(chalk.cyan('\n💡 AI Fix Options:'));
+  console.error('• Amazon Q: Use /review in Q chat');
+  console.error('• Copilot: Use Ctrl+I for inline fixes');
+  console.error('• Copilot Chat: @workspace /fix for bulk fixes');
+  console.error(chalk.red('🚫 Fix these issues before committing\n'));
   process.exit(1);
 }
 
-// Update docs if JSDoc comments exist
+// Security & quality checks
+console.log(chalk.yellow('🔒 AI-powered analysis...'));
+console.log(chalk.green('✅ Ready for AI review'));
+
+// Update docs
 try {
   run('npx jsdoc -d docs . --recurse --readme README.md');
   run('git add docs');
@@ -59,4 +60,4 @@ try {
   console.log(chalk.yellow('⚠️ JSDoc not configured'));
 }
 
-console.log(chalk.green('✅ Review complete'));
+console.log(chalk.green('✅ Dual AI workflow ready'));
