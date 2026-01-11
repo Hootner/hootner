@@ -1,0 +1,12 @@
+type Query {
+  health: String
+  version: String
+}
+
+type Mutation {
+  _empty: String
+}
+
+type Subscription {
+  _empty: String
+}

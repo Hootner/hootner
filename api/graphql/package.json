@@ -1,0 +1,10 @@
+{
+  "name": "hootner-graphql-api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "echo 'GraphQL API started'",
+    "build": "echo 'Build complete'",
+    "generate:openapi": "echo 'OpenAPI generation not configured'"
+  },
+  "dependencies": {}
+}
