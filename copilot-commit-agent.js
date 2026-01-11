@@ -2,14 +2,13 @@
 
 // Enhanced Copilot Commit Agent - AI-powered commit message enhancement
 const { execSync } = require('child_process');
-const chalk = require('chalk');
 
 try {
   // Get staged changes
   const diff = execSync('git diff --cached --name-only', { encoding: 'utf8' }).trim();
   
   if (!diff) {
-    console.log(chalk.green('✅ No staged changes detected'));
+    console.log('✅ No staged changes detected');
     process.exit(0);
   }
 
@@ -25,12 +24,12 @@ try {
   if (hasDocs) suggestion += 'docs: ';
   
   if (suggestion) {
-    console.log(chalk.blue(`🤖 Suggested commit prefix: ${suggestion}`));
+    console.log(`🤖 Suggested commit prefix: ${suggestion}`);
   }
 
-  console.log(chalk.green('✅ Commit message enhancement complete'));
+  console.log('✅ Commit message enhancement complete');
   process.exit(0);
 } catch (error) {
-  console.log(chalk.yellow('⚠️ Copilot agent failed, proceeding with manual commit'));
+  console.log('⚠️ Copilot agent failed, proceeding with manual commit');
   process.exit(0);
 }
