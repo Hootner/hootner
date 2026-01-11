@@ -56,14 +56,18 @@ function loadCache() {
     if (fs.existsSync(cacheFile)) {
       return JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
     }
-  } catch {}
+  } catch {
+    // Ignore cache read errors, return empty object
+  }
   return {};
 }
 
 function saveCache(data) {
   try {
     fs.writeFileSync(cacheFile, JSON.stringify(data, null, 2));
-  } catch {}
+  } catch {
+    // Ignore cache write errors
+  }
 }
 
 console.log(chalk.blue('🤖 Dual AI Code Review Agent'));

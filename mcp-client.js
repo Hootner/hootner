@@ -99,10 +99,11 @@ async function main() {
         
         try {
           switch (cmd) {
-            case 'status':
+            case 'status': {
               const result = await client.getHexarchyStatus();
               console.log(result[0].text);
               break;
+            }
               
             case 'start':
               if (args[0]) {

@@ -55,7 +55,7 @@ function withErrorBoundary(resolver, resolverName = 'Unknown') {
  * @param {string} category - Category name (Query, Mutation, etc.)
  * @returns {object} Wrapped resolvers
  */
-function withErrorBoundary(resolvers, category = 'Resolver') {
+function wrapResolvers(resolvers, category = 'Resolver') {
     const wrappedResolvers = {};
 
     for (const [key, resolver] of Object.entries(resolvers)) {
@@ -283,6 +283,7 @@ module.exports = {
     ErrorCodes,
     AppError,
     withErrorBoundary,
+    wrapResolvers,
     handleResolverError,
     formatError,
     validate,

@@ -100,10 +100,11 @@ const manager = new CopilotTaskManager();
 const [,, command, ...args] = process.argv;
 
 switch (command) {
-  case 'delegate':
+  case 'delegate': {
     const [description, ...files] = args;
     manager.delegate(description, files);
     break;
+  }
   case 'monitor':
     manager.monitor();
     break;

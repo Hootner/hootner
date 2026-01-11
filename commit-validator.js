@@ -48,7 +48,9 @@ class CommitValidator {
         if (secrets.test(content)) {
           return { valid: false, error: `Potential secret in ${file}` };
         }
-      } catch {}
+      } catch {
+        // Ignore files that cannot be read (deleted, binary, etc.)
+      }
     }
     return { valid: true };
   }

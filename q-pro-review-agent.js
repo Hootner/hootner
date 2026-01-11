@@ -41,6 +41,8 @@ try {
   run('npx jsdoc -d docs . --recurse --readme README.md');
   run('git add docs');
   console.log(chalk.green('📄 Docs updated'));
-} catch (e) {}
+} catch (e) {
+  // Ignore JSDoc errors (may not be installed or configured)
+}
 
 console.log(chalk.green('✅ Review complete - Use /review in Q chat for deeper analysis'));
