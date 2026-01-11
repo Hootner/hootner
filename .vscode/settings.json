@@ -3,7 +3,9 @@
     "hootner-deployment": {
       "transport": "stdio",
       "command": "node",
-      "args": ["mcp-server.js"],
+      "args": [
+        "mcp-server.js"
+      ],
       "cwd": "${workspaceFolder}",
       "env": {
         "HOOTNER_ENV": "development",
@@ -11,9 +13,11 @@
       }
     },
     "aws-cdk": {
-      "transport": "stdio", 
+      "transport": "stdio",
       "command": "uvx",
-      "args": ["awslabs.cdk-mcp-server@latest"],
+      "args": [
+        "awslabs.cdk-mcp-server@latest"
+      ],
       "env": {
         "AWS_PROFILE": "default"
       }
@@ -22,12 +26,28 @@
   "amazonQ.mcp.toolPermissions": {
     "hootner-deployment": {
       "deploy_service": "ask",
-      "run_chaos_test": "ask", 
+      "run_chaos_test": "ask",
       "check_system_health": "always",
       "backup_system": "ask",
       "security_audit": "always"
     }
   },
+  "amazonQ.codeWhisperer.includeCodeWithReference": true,
+  "amazonQ.codeWhisperer.shareCodeWhispererContentWithAWS": true,
+  "amazonQ.codeWhisperer.importRecommendationEnabled": true,
+  "amazonQ.codeWhisperer.optimizeImports": true,
+  "amazonQ.featureConfigurations": {
+    "codeWhisperer": true,
+    "testGeneration": true,
+    "codeTransformation": true,
+    "securityScan": true,
+    "docGeneration": true
+  },
+  "amazonQ.suppressPrompts": {
+    "codeWhispererNewWelcomeMessage": false,
+    "codeTransformationHubDisclaimerAcknowledged": false
+  },
+  "amazonQ.telemetry": true,
   "todo-tree.general.tags": [
     "TODO",
     "FIXME",
@@ -48,9 +68,22 @@
     "[x]"
   ],
   "todo-tree.general.tagGroups": {
-    "FIXME": ["FIXME", "FIX", "FIXIT"],
-    "BUG": ["BUG", "ISSUE", "ERROR"],
-    "SECURITY": ["SECURITY", "SEC", "VULN", "CVE"]
+    "FIXME": [
+      "FIXME",
+      "FIX",
+      "FIXIT"
+    ],
+    "BUG": [
+      "BUG",
+      "ISSUE",
+      "ERROR"
+    ],
+    "SECURITY": [
+      "SECURITY",
+      "SEC",
+      "VULN",
+      "CVE"
+    ]
   },
   "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
   "todo-tree.highlights.enabled": true,
@@ -183,24 +216,41 @@
   "todo-tree.filtering.scopes": [
     {
       "name": "Frontend",
-      "includeGlobs": ["**/apps/frontend/**"]
+      "includeGlobs": [
+        "**/apps/frontend/**"
+      ]
     },
     {
       "name": "Backend Services",
-      "includeGlobs": ["**/services/**", "**/api/**"]
+      "includeGlobs": [
+        "**/services/**",
+        "**/api/**"
+      ]
     },
     {
       "name": "Infrastructure",
-      "includeGlobs": ["**/infrastructure/**", "**/k8s/**"]
+      "includeGlobs": [
+        "**/infrastructure/**",
+        "**/k8s/**"
+      ]
     },
     {
       "name": "Security Only",
-      "includeGlobs": ["**/*"],
-      "tags": ["SECURITY", "BUG", "FIXME"]
+      "includeGlobs": [
+        "**/*"
+      ],
+      "tags": [
+        "SECURITY",
+        "BUG",
+        "FIXME"
+      ]
     },
     {
       "name": "Documentation",
-      "includeGlobs": ["**/docs/**", "**/*.md"]
+      "includeGlobs": [
+        "**/docs/**",
+        "**/*.md"
+      ]
     },
     {
       "name": "All"
@@ -338,7 +388,6 @@
   ],
   "todohighlight.maxFilesForSearch": 5120,
   "todohighlight.toggleURI": false,
-  "terminal.integrated.enablePersistentSessions": false,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
@@ -349,6 +398,17 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
   "editor.inlineSuggest.enabled": true,
+  "editor.suggest.preview": true,
+  "editor.suggest.showInlineDetails": true,
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.acceptSuggestionOnEnter": "smart",
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "on",
+    "strings": "on"
+  },
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "on",
   "files.autoSave": "onFocusChange",
   "files.exclude": {
     "**/node_modules": true,
@@ -376,7 +436,7 @@
     "typescript": "typescriptreact"
   },
   "git.autofetch": true,
-  "git.confirmSync": false,
+  "git.confirmSync": true,
   "git.enableSmartCommit": true,
   "docker.showStartPage": false,
   "[javascript]": {
@@ -401,5 +461,33 @@
     "**/.next": true,
     "**/coverage": true,
     "**/*.lock": true
-  }
+  },
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.showWelcome": false,
+  "terminal.integrated.shellIntegration.suggestEnabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "both",
+  "terminal.integrated.shellIntegration.history": 100,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.action.quickOpen"
+  ],
+  "terminal.integrated.enablePersistentSessions": true,
+  "terminal.integrated.detectLocale": "auto",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": "${env:windir}\\System32\\cmd.exe",
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "path": "${env:ProgramFiles}\\Git\\bin\\bash.exe",
+      "icon": "terminal-bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "cSpell.words": [
+    "Hootner"
+  ]
 }

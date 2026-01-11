@@ -1,0 +1,39 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: '0 2 * * 1' # Weekly Monday 2AM
+  workflow_dispatch:
+
+jobs:
+  auto-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.2.1'
+      
+      - name: Update Dependencies
+        run: |
+          npm update
+          npm audit fix --force
+      
+      - name: Generate Docs
+        run: npm run docs:generate || true
+      
+      - name: Auto Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: automated updates and docs generation"
+            git push
+          fi

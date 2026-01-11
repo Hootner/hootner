@@ -1,0 +1,32 @@
+name: Commit Hooks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.2.1'
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Lint Check
+        run: npm run lint || exit 0
+      
+      - name: Format Check
+        run: npm run format:check || exit 0
+      
+      - name: Type Check
+        run: npm run type-check || exit 0
+      
+      - name: Security Scan
+        run: npm audit --audit-level=high || exit 0

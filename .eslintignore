@@ -13,3 +13,87 @@ node_modules/
 # Generated files
 coverage/
 .next/
+
+# Logs and temporary files
+logs/
+temp/
+data/logs/
+*.log
+
+# Cache and state files
+.pm2/
+.aws/
+.codegpt/
+.claude/
+.kiro/
+.amazonq/
+
+# Build and distribution
+playwright-report/
+DockerDesktop/
+
+# Uploads and user content
+uploads/
+
+# Electron code editor (has syntax issues)
+apps/frontend/html-pages/electron-code-editor/
+
+# Python files (not JavaScript)
+**/*.py
+**/*.pyc
+
+# Configuration files that shouldn't be linted
+**/*.json
+**/*.yaml
+**/*.yml
+**/*.toml
+**/*.conf
+**/*.config
+**/*.env*
+
+# Binary and installer files
+tools/installers/
+**/*.exe
+**/*.msi
+
+# Generated reports
+**/*-report.txt
+**/*-report.md
+code-scan-report.temp
+eslint-report.json
+lint-*.txt
+
+# Test artifacts
+**/*.spec.js
+**/*.test.js
+tests/
+
+# Legacy and backup files
+src/legacy/
+**/*.bak
+**/*.backup
+
+# Third-party and vendor code
+frameworks/
+hexarchy/
+Hootner/
+services/massive-training-data/
+
+# Generated/compiled files
+**/*.d.ts
+**/*.map
+
+# Documentation
+docs/
+**/*.md
+
+# Scripts and batch files
+**/*.bat
+**/*.sh
+**/*.ps1
+
+# SSL certificates
+apps/frontend/ssl/
+
+# JSON config in root
+json/

@@ -1,37 +1,69 @@
 node_modules/
-.env
-.env.local
-.env.production
+
+# Environment files
+.env*
+!*.env.example
+
+# Credentials & Keys
+*.key
+*.pem
+*.p12
+*.pfx
+*.secret
+*.secrets
+!ssl/example.key
+!ssl/example.pem
+
+# AWS SSO Cache
+.aws/sso/cache/
+
+# Logs
+logs/
 *.log
+
+# Servers
+servers/
+
+# Build outputs
 dist/
 build/
-.DS_Store
-Thumbs.db
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+
+# Cache & temp
+.cache/
+.parcel-cache/
 *.tmp
 *.temp
-.idea/workspace.xml
-coverage/
-.nyc_output/
+.eslintcache
+
+# Runtime
 *.pid
 *.seed
 *.pid.lock
 .npm
-.eslintcache
-.cache/
-.parcel-cache/
-.next/
-out/
-.nuxt/
-.vuepress/dist/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/workspace.xml
+
+# Serverless
 .serverless/
 .fusebox/
 .dynamodb/
 .tern-port
+
+# SSL
 ssl/private/
-*.key
-*.pem
-!ssl/example.key
-!ssl/example.pem
 
 # Keep VS Code settings for Todo Tree configuration
 # .vscode/settings.json

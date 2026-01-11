@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  },
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "globals": {
+    "webBridge": "readonly",
+    "addOutput": "readonly",
+    "platformIntegration": "readonly",
+    "editor": "readonly",
+    "createFile": "readonly",
+    "state": "readonly",
+    "showPanel": "readonly",
+    "commandPalette": "readonly",
+    "UI_CONSTANTS": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-empty": "warn",
+    "no-useless-catch": "warn",
+    "no-useless-escape": "warn"
+  }
+}

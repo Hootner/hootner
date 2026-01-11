@@ -1,0 +1,27 @@
+{
+  "editor.linkedEditing": true,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/logs/**": true,
+    "**/.pm2": true,
+    "**/playwright-report": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/logs/**": true,
+    "**/.pm2": true
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "javascript.preferences.includePackageJsonAutoImports": "on",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "files.associations": {
+    "*.cjs": "javascript",
+    "*.mjs": "javascript"
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  }
+}

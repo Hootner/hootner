@@ -246,7 +246,7 @@ node scripts/db-health-check.js
 ./scripts/multi-region-sync.sh
 
 # Deploy to multiple regions
-kubectl config use-context us-east-1
+kubectl config use-context us-east-2
 kubectl apply -f k8s/
 kubectl config use-context eu-west-1
 kubectl apply -f k8s/

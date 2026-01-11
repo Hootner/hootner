@@ -1,0 +1,29 @@
+name: Commit Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Validate Commit Messages
+        uses: wagoid/commitlint-github-action@v5
+        with:
+          configFile: .commitlintrc.json
+      
+      - name: Check Commit Size
+        run: |
+          git log --oneline -n 10 --pretty=format:"%h %s" | while read line; do
+            if [ ${#line} -gt 72 ]; then
+              echo "❌ Commit message too long: $line"
+              exit 1
+            fi
+          done

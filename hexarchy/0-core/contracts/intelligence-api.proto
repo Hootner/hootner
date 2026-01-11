@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package hexarchy.intelligence;
+
+// Intelligence Domain API Contract
+service IntelligenceService {
+  // Tutoring operations
+  rpc StartTutoringSession(TutoringRequest) returns (TutoringResponse);
+  rpc GetLearningPath(LearningPathRequest) returns (LearningPathResponse);
+  rpc SubmitAssessment(AssessmentSubmission) returns (AssessmentResult);
+  rpc DivideConcept(ConceptDivisionRequest) returns (ConceptDivisionResponse);
+  
+  // Model operations
+  rpc TrainModel(TrainingRequest) returns (TrainingResponse);
+  rpc GetModelPrediction(PredictionRequest) returns (PredictionResponse);
+}
+
+message TutoringRequest {
+  string user_id = 1;
+  string subject = 2;
+  string topic = 3;
+  string difficulty_level = 4;
+}
+
+message TutoringResponse {
+  string session_id = 1;
+  string tutor_agent_id = 2;
+  repeated string suggested_resources = 3;
+  string status = 4;
+}
+
+message LearningPathRequest {
+  string user_id = 1;
+  string goal = 2;
+  string current_level = 3;
+}
+
+message LearningPathResponse {
+  string path_id = 1;
+  repeated LearningStep steps = 2;
+  int32 estimated_duration_hours = 3;
+}
+
+message LearningStep {
+  string step_id = 1;
+  string title = 2;
+  string description = 3;
+  repeated string prerequisites = 4;
+  repeated string resources = 5;
+}
+
+message AssessmentSubmission {
+  string user_id = 1;
+  string assessment_id = 2;
+  map<string, string> answers = 3;
+}
+
+message AssessmentResult {
+  string result_id = 1;
+  float score = 2;
+  map<string, bool> concept_mastery = 3;
+  repeated string recommendations = 4;
+}
+
+message ConceptDivisionRequest {
+  string concept_id = 1;
+  int32 target_complexity = 2;
+  string learning_style = 3;
+}
+
+message ConceptDivisionResponse {
+  repeated SubConcept sub_concepts = 1;
+  string visual_representation = 2;
+}
+
+message SubConcept {
+  string id = 1;
+  string title = 2;
+  string explanation = 3;
+  int32 complexity_level = 4;
+}
+
+message TrainingRequest {
+  string model_id = 1;
+  string dataset_path = 2;
+  map<string, string> hyperparameters = 3;
+}
+
+message TrainingResponse {
+  string job_id = 1;
+  string status = 2;
+  string estimated_completion = 3;
+}
+
+message PredictionRequest {
+  string model_id = 1;
+  bytes input_data = 2;
+}
+
+message PredictionResponse {
+  bytes prediction = 1;
+  float confidence = 2;
+  map<string, float> alternatives = 3;
+}
