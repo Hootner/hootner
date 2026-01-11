@@ -7,11 +7,11 @@ on:
     branches: [main]
   schedule:
     # Run daily maintenance at 2 AM UTC
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
   workflow_dispatch:
     inputs:
       task_type:
-        description: 'Task type to execute'
+        description: "Task type to execute"
         required: true
         type: choice
         options:
@@ -21,7 +21,7 @@ on:
           - maintenance
           - learning
       auto_fix:
-        description: 'Apply automatic fixes (for code-analysis)'
+        description: "Apply automatic fixes (for code-analysis)"
         required: false
         type: boolean
         default: false
@@ -37,8 +37,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
@@ -64,8 +64,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
@@ -98,8 +98,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
@@ -112,8 +112,8 @@ jobs:
       - name: Commit Documentation Updates
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: '📝 Auto-update documentation [skip ci]'
-          file_pattern: 'docs/**'
+          commit_message: "📝 Auto-update documentation [skip ci]"
+          file_pattern: "docs/**"
 
   continuous-learning:
     name: 🧠 Continuous Learning
@@ -125,8 +125,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
@@ -145,7 +145,13 @@ jobs:
   orchestrator-status:
     name: 📊 Orchestrator Status Report
     runs-on: ubuntu-latest
-    needs: [code-analysis, predictive-maintenance, auto-documentation, continuous-learning]
+    needs:
+      [
+        code-analysis,
+        predictive-maintenance,
+        auto-documentation,
+        continuous-learning,
+      ]
     if: always()
     steps:
       - uses: actions/checkout@v4
@@ -153,8 +159,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
@@ -171,16 +177,16 @@ jobs:
           script: |
             const status = `
             ## 🎭 Agent Orchestration Report
-            
+
             ### Workflow Results
             - Code Analysis: ${{ needs.code-analysis.result }}
             - Predictive Maintenance: ${{ needs.predictive-maintenance.result }}
             - Auto Documentation: ${{ needs.auto-documentation.result }}
             - Continuous Learning: ${{ needs.continuous-learning.result }}
-            
+
             All agents executed successfully! ✅
             `;
-            
+
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

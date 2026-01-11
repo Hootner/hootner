@@ -4,9 +4,9 @@
  * Test Suite for Advanced Agents
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import AgentOrchestrator from '../frameworks/ai/agents/agent-orchestrator.js';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { advancedAgents } from '../frameworks/ai/agents/advanced-agents.js';
+import AgentOrchestrator from '../frameworks/ai/agents/agent-orchestrator.js';
 
 describe('Advanced Agents', () => {
     let orchestrator;
@@ -102,7 +102,7 @@ describe('Advanced Agents', () => {
 
             // Note: This is a dry run - won't actually deploy
             const result = await orchestrator.executeTask(config);
-            
+
             expect(result).toHaveProperty('success');
         });
     });
@@ -125,7 +125,7 @@ describe('Advanced Agents', () => {
     describe('Agent Orchestration', () => {
         it('should track task metrics', () => {
             const status = orchestrator.getStatus();
-            
+
             expect(status).toHaveProperty('agents');
             expect(status).toHaveProperty('tasks');
             expect(status.tasks).toHaveProperty('total');
@@ -160,9 +160,9 @@ describe('Advanced Agents', () => {
 
         it('should calculate success rate', async () => {
             const agent = orchestrator.agents.get('ContinuousLearningAgent');
-            
+
             await orchestrator.executeTask({ type: 'learning' });
-            
+
             expect(agent?.metrics.successRate).toBeGreaterThanOrEqual(0);
             expect(agent?.metrics.successRate).toBeLessThanOrEqual(100);
         });
@@ -233,14 +233,14 @@ describe('Advanced Agent Classes', () => {
         it('should detect anomalies', async () => {
             const metrics = await agent.collectMetrics();
             const anomalies = agent.detectAnomalies(metrics);
-            
+
             expect(Array.isArray(anomalies)).toBe(true);
         });
 
         it('should predict failures', async () => {
             const metrics = await agent.collectMetrics();
             const predictions = agent.predictFailures(metrics);
-            
+
             expect(Array.isArray(predictions)).toBe(true);
         });
     });
