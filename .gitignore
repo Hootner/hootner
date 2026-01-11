@@ -10,3 +10,6 @@ package-lock.json
 .aws/
 .pm2/
 logs/
+
+# Prevent workflows from going to remote
+.github/workflows/
