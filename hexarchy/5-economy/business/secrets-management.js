@@ -74,6 +74,11 @@ class SecretsManagement {
   async getSecret({ path, version = null }) {
     console.log(`🔐 Retrieving secret: ${path}`);
     
+    // Validate path to prevent directory traversal
+    if (!path || typeof path !== 'string' || path.includes('..') || path.includes('/') || path.includes('\\')) {
+      throw new Error('Invalid secret path');
+    }
+    
     const secret = this.vault.get(path);
     if (!secret) {
       throw new Error(`Secret not found: ${path}`);
@@ -98,6 +103,15 @@ class SecretsManagement {
 
   async createSecret({ path, value, type = 'generic', ttl = 86400 }) {
     console.log(`🔒 Creating secret: ${path}`);
+    
+    // Validate inputs
+    if (!path || typeof path !== 'string' || path.includes('..') || path.includes('/') || path.includes('\\')) {
+      throw new Error('Invalid secret path');
+    }
+    
+    if (ttl && (typeof ttl !== 'number' || ttl < 0 || ttl > 31536000)) { // Max 1 year
+      throw new Error('Invalid TTL value');
+    }
     
     if (this.vault.has(path)) {
       throw new Error(`Secret already exists: ${path}`);

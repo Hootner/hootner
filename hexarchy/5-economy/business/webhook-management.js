@@ -25,10 +25,20 @@ class WebhookManagement {
     
     console.log(`🔗 Registering webhook: ${url} for events: ${events.join(', ')}`);
     
+    // Validate URL to prevent SSRF
+    if (!url || typeof url !== 'string' || !this.isValidWebhookUrl(url)) {
+      throw new Error('Invalid webhook URL');
+    }
+    
     // Validate events
     const invalidEvents = events.filter(event => !this.eventTypes.includes(event));
     if (invalidEvents.length > 0) {
       throw new Error(`Invalid events: ${invalidEvents.join(', ')}`);
+    }
+    
+    // Validate secret
+    if (secret && (typeof secret !== 'string' || secret.length < 16)) {
+      throw new Error('Webhook secret must be at least 16 characters');
     }
 
     const webhook = {
@@ -36,7 +46,7 @@ class WebhookManagement {
       url,
       events,
       secret,
-      description,
+      description: description.replace(/[<>"'&]/g, ''), // Sanitize description
       active,
       createdAt: new Date().toISOString(),
       lastDelivery: null,
@@ -51,6 +61,26 @@ class WebhookManagement {
     await this.testWebhook(webhookId);
     
     return webhook;
+  }
+
+  isValidWebhookUrl(url) {
+    try {
+      const parsed = new URL(url);
+      // Only allow HTTPS for security
+      if (parsed.protocol !== 'https:') {
+        return false;
+      }
+      // Prevent internal network access
+      const hostname = parsed.hostname;
+      if (hostname === 'localhost' || hostname === '127.0.0.1' || 
+          hostname.startsWith('192.168.') || hostname.startsWith('10.') ||
+          hostname.startsWith('172.')) {
+        return false;
+      }
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async testWebhook(webhookId) {

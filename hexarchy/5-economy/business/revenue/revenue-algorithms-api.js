@@ -6,6 +6,10 @@
 import express from 'express';
 import cors from 'cors';
 import crypto from 'crypto';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import csrf from 'csurf';
+import xss from 'xss';
 import RevenueOptimization from './revenue-optimization.js';
 import PricingAlgorithms from './pricing-algorithms.js';
 import ConversionOptimization from './conversion-optimization.js';
@@ -14,30 +18,80 @@ import RevenueAnalytics from './revenue-analytics.js';
 const app = express();
 const PORT = process.env.REVENUE_API_PORT || 3009;
 
-app.use(cors());
-app.use(express.json());
+// Security middleware
+app.use(helmet());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173'],
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
 
-// Authentication middleware
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP'
+});
+app.use(limiter);
+
+// CSRF protection
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
+
+// Enhanced authentication middleware
 const authenticateRequest = (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({ success: false, error: 'Authentication required' });
   }
+  
+  // Validate token format and prevent injection
+  if (!/^[A-Za-z0-9\-_\.]+$/.test(token)) {
+    return res.status(401).json({ success: false, error: 'Invalid token format' });
+  }
+  
+  // In production, verify JWT token here
   req.sessionId = crypto.randomUUID();
+  req.userId = extractUserIdFromToken(token); // Implement this function
   next();
 };
 
-// Input sanitization middleware
+function extractUserIdFromToken(token) {
+  // Placeholder - implement JWT verification
+  return 'user_' + crypto.randomBytes(8).toString('hex');
+}
+
+// Enhanced input sanitization middleware
 const sanitizeInput = (req, res, next) => {
   if (req.body) {
-    Object.keys(req.body).forEach(key => {
-      if (typeof req.body[key] === 'string') {
-        req.body[key] = req.body[key].replace(/[<>"'&]/g, '');
-      }
-    });
+    req.body = sanitizeObject(req.body);
+  }
+  if (req.query) {
+    req.query = sanitizeObject(req.query);
+  }
+  if (req.params) {
+    req.params = sanitizeObject(req.params);
   }
   next();
 };
+
+function sanitizeObject(obj) {
+  if (typeof obj === 'string') {
+    return xss(obj);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizeObject);
+  }
+  if (obj && typeof obj === 'object') {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(obj)) {
+      const cleanKey = xss(key);
+      sanitized[cleanKey] = sanitizeObject(value);
+    }
+    return sanitized;
+  }
+  return obj;
+}
 
 // Revenue optimization endpoints
 app.post('/api/revenue/optimize-price', authenticateRequest, sanitizeInput, async (req, res) => {

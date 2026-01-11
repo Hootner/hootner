@@ -196,13 +196,42 @@ class RevenueIntegration {
 
   // Helper methods
   trackUserInteraction(userId, interaction) {
+    // Validate and sanitize interaction data
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('Invalid userId');
+    }
+    
+    const sanitizedInteraction = {
+      type: interaction.type?.replace(/[^a-zA-Z0-9_]/g, ''),
+      content: interaction.content ? sanitizeObject(interaction.content) : {},
+      userId: userId.replace(/[^a-zA-Z0-9_-]/g, '')
+    };
+    
     // Integrate with personalization agent
     try {
       const PersonalizationAgent = require('./personalization-agent');
-      PersonalizationAgent.trackInteraction(userId, interaction);
+      PersonalizationAgent.trackInteraction(userId, sanitizedInteraction);
     } catch (error) {
       console.log('Personalization agent not available:', error.message);
     }
+  }
+
+  function sanitizeObject(obj) {
+    if (typeof obj === 'string') {
+      return obj.replace(/[<>"'&]/g, '');
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(sanitizeObject);
+    }
+    if (obj && typeof obj === 'object') {
+      const sanitized = {};
+      for (const [key, value] of Object.entries(obj)) {
+        const cleanKey = key.replace(/[^a-zA-Z0-9_]/g, '');
+        sanitized[cleanKey] = sanitizeObject(value);
+      }
+      return sanitized;
+    }
+    return obj;
   }
 
   optimizeVideoRecommendations(userId, videoId) {

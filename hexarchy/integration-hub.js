@@ -48,15 +48,64 @@ class HexarchyIntegrationHub {
   }
 
   _setupMiddleware() {
-    // CORS for existing HOOTNER frontend
+    // Security headers
     this.app.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', `http://localhost:${config.server.port}`);
+      res.header('X-Content-Type-Options', 'nosniff');
+      res.header('X-Frame-Options', 'DENY');
+      res.header('X-XSS-Protection', '1; mode=block');
+      res.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+      next();
+    });
+    
+    // CORS for existing HOOTNER frontend with strict origin validation
+    this.app.use((req, res, next) => {
+      const allowedOrigins = [
+        `http://localhost:${config.server.port}`,
+        'https://hootner.com',
+        'https://app.hootner.com'
+      ];
+      
+      const origin = req.headers.origin;
+      if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
+      res.header('Access-Control-Allow-Credentials', 'true');
       next();
     });
 
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: '10mb' }));
+    
+    // Input sanitization middleware
+    this.app.use((req, res, next) => {
+      if (req.body) {
+        req.body = this.sanitizeObject(req.body);
+      }
+      if (req.query) {
+        req.query = this.sanitizeObject(req.query);
+      }
+      next();
+    });
+  }
+  
+  sanitizeObject(obj) {
+    if (typeof obj === 'string') {
+      return obj.replace(/[<>"'&]/g, '');
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.sanitizeObject(item));
+    }
+    if (obj && typeof obj === 'object') {
+      const sanitized = {};
+      for (const [key, value] of Object.entries(obj)) {
+        const cleanKey = key.replace(/[^a-zA-Z0-9_]/g, '');
+        sanitized[cleanKey] = this.sanitizeObject(value);
+      }
+      return sanitized;
+    }
+    return obj;
   }
 
   _setupRoutes() {
