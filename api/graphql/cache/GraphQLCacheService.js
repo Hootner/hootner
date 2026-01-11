@@ -164,7 +164,7 @@ class GraphQLCacheService {
       let totalDeleted = 0;
 
       for (const pattern of patterns) {
-        const searchPattern = id ? pattern.replace('*', `${id}*`) : pattern;
+        const searchPattern = id ? pattern.replaceAll('*', `${id}*`) : pattern;
 
         const deleted = await this.delPattern(searchPattern);
         totalDeleted += deleted;
