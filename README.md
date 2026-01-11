@@ -12,16 +12,18 @@ Full-stack video streaming platform with AI generation, real-time collaboration,
 ## 🚀 Quick Start
 
 ```bash
-# One-command setup
-npm install && npm run start:all
-
-# Or step by step
-npm install              # Install dependencies
-npm run dev             # Start React app (port 5173)
-node scripts/start-all-servers.js  # Start all 9 servers
+# Complete setup with infrastructure
+docker-compose up -d          # Start MongoDB + Redis
+npm install                   # Install dependencies
+cd api/graphql && npm install # Install API dependencies
+npm run start:all            # Start frontend + API
 ```
 
-**Ready in 30 seconds** → Open [localhost:5173](http://localhost:5173)
+**Ready in 60 seconds** → 
+- Frontend: [localhost:3000](http://localhost:3000)
+- GraphQL API: [localhost:4000/graphql](http://localhost:4000/graphql)
+- MongoDB: localhost:27017
+- Redis: localhost:6379
 
 ## 📁 Architecture
 
@@ -228,46 +230,45 @@ npm run start:all  # Cross-platform orchestration
 ## 🛠️ Development
 
 ### Prerequisites
-- Node.js 25.2.1, NPM 11.6.2
-- Docker & Kubernetes (optional)
-- Python 3.9+ (AI services)
-- AWS CLI (serverless)
+- Node.js 18+, NPM 9+
+- Docker & Docker Compose
+- Git
 
 ### Environment Setup
 ```bash
 cp .env.example .env
-npm run generate:secrets
-# Configure Firebase - see apps/frontend/FIREBASE_SETUP_STEPS.md
+# Edit .env with your configuration
+docker-compose up -d     # Start infrastructure
+npm install              # Install dependencies
+cd api/graphql && npm install
 ```
 
 ### Development Modes
 ```bash
-# Development
-docker-compose -f docker-compose.dev.yml up
+# Full stack development
+npm run start:all        # Frontend + API
 
-# Production
-docker-compose -f docker-compose.prod.yml up
-
-# With monitoring
-docker-compose -f docker-compose.monitoring.yml up
-
-# Chaos testing
-docker-compose -f docker-compose.chaos.yml up
+# Individual services
+npm start               # Frontend only (port 3000)
+npm run start:api       # GraphQL API only (port 4000)
+docker-compose up       # Infrastructure only
 ```
 
 ## 🧪 Testing & Quality
 
 ```bash
-npm test                    # Full test suite
-npm run test:chaos         # Chaos engineering (8 scenarios)
+npm test                    # Unit tests with Vitest
+npm run test:e2e           # End-to-end tests with Playwright
+npm run test:smoke         # Smoke tests
 npm run security:audit     # Security vulnerability scan
-npm run analyze:duplication # Code quality analysis
+npm run lint               # Code linting
 ```
 
-### Chaos Engineering
-- Chaos Monkey, Load/Spike tests, Recovery scenarios
-- Circuit breaker testing, Service mesh validation
-- Game Day exercises, Dependency failure simulation
+### Load Testing
+```bash
+# Install k6 (https://k6.io/docs/getting-started/installation/)
+k6 run load-test.js        # Performance testing
+```
 
 ## 🚀 Deployment
 
