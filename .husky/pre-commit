@@ -1,1 +1,14 @@
-npm test
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🦉 HOOTNER - Running enhanced code review..."
+
+# Run the enhanced code review agent
+node code-review-agent.js
+
+if [ $? -ne 0 ]; then
+  echo "❌ Code review failed. Commit aborted."
+  exit 1
+fi
+
+echo "✅ Enhanced code review passed!"
