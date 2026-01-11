@@ -1,4 +1,5 @@
 # 🦉 HOOTNER
+>
 > **The Owl Never Sleeps** - Enterprise Video Streaming Platform
 
 [![Node.js](https://img.shields.io/badge/Node.js-25.2.1-green.svg)](https://nodejs.org/)
@@ -19,11 +20,32 @@ cd api/graphql && npm install # Install API dependencies
 npm run start:all            # Start frontend + API
 ```
 
-**Ready in 60 seconds** → 
+**Ready in 60 seconds** →
+
 - Frontend: [localhost:3000](http://localhost:3000)
 - GraphQL API: [localhost:4000/graphql](http://localhost:4000/graphql)
 - MongoDB: localhost:27017
 - Redis: localhost:6379
+
+## 🤖 AI Development Tools
+
+### Copilot Integration
+
+```bash
+# Task delegation
+node copilot-delegate.js delegate "Fix security issues"
+node copilot-guide.js  # View delegation guide
+
+# Commit validation
+node commit-validator.js  # Auto-runs on commits
+```
+
+### VSCode Optimization
+
+- **Network throttling disabled** for maximum performance
+- **Prettier formatting** for JS/TS/React files
+- **Python interpreter** configured for AI services
+- **Docker integration** ready when needed
 
 ## 📁 Architecture
 
@@ -162,18 +184,21 @@ Hootner/
 ## ✨ Core Features
 
 ### 🎬 AI Video Platform
+
 - **Text-to-Video Generation** - 3D U-Net diffusion models, 30s generation time
 - **Jukebox Player** - Vinyl animations, touch navigation, Web Audio effects
 - **PWA Ready** - Offline caching, installable, Service Worker
 - **Real-time Streaming** - WebSocket, live collaboration
 
 ### 🌐 Frontend Stack
+
 - **React 18 + TypeScript + Vite** - Modern development experience
 - **18 HTML Pages** - Landing, Player, Dashboard, Social, Marketplace, Analytics, Editor
 - **Apollo GraphQL** - Real-time subscriptions, Firebase auth, JWT
 - **Tailwind CSS** - Utility-first styling
 
 ### 🤖 AI-Powered Development
+
 - **Cursor-Style Editing** - Chat (Ctrl+K), Write (Ctrl+L), Refactor modes
 - **Zed-Inspired Speed** - <100ms startup, real-time collaboration
 - **Multi-Agent System** - 12+ specialized AI agents
@@ -181,12 +206,14 @@ Hootner/
 - **Sustainability** - Energy tracking, AI ethics audits (2025)
 
 ### 🔐 Security & Compliance
+
 - **Multi-layer Protection** - JWT/Firebase, Helmet.js, rate limiting, CORS
 - **Injection Prevention** - SQL, XSS, NoSQL, LDAP, command injection
 - **Compliance Ready** - GDPR, SOC2, audit logging, 90-day retention
 - **Automated Scanning** - Snyk, CodeQL, dependency audits
 
 ### 🏗️ Enterprise Infrastructure
+
 - **Container Runtime** - Docker Alpine, 512MB-1GB memory, health checks
 - **Node.js 25.2.1** - ES modules, 4GB memory, 30 worker threads, GPU acceleration
 - **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
@@ -194,6 +221,7 @@ Hootner/
 - **Resilience** - Chaos engineering (8 scenarios), PITR backups, multi-region sync
 
 ### 💳 Integrations
+
 - **Payments** - Stripe processing, fraud detection
 - **Database** - MongoDB, Redis, Prisma ORM
 - **Cloud** - AWS S3, Firebase, Socket.io
@@ -201,6 +229,7 @@ Hootner/
 - **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
 
 ### 🤖 AI Agent Hub (75+ Agents)
+
 - **Core AI (12)** - Personalization, ML, NLP, Computer Vision, Speech-to-Text
 - **Business Intelligence (15)** - Revenue optimization, Analytics, Pricing algorithms
 - **Security & Compliance (18)** - Fraud detection, GDPR, Penetration testing, Zero-trust
@@ -210,12 +239,14 @@ Hootner/
 ## 🎮 Usage Examples
 
 ### Video Player
+
 ```bash
 cd apps/frontend/html-pages && node video-player-server.js
 # Open http://localhost:3000/video-player.html
 ```
 
 ### AI Video Generation
+
 ```bash
 cd services/video-generation
 python install.py  # Auto-install ML dependencies
@@ -223,6 +254,7 @@ python api.py      # Start API on port 5003
 ```
 
 ### All Servers (9 services)
+
 ```bash
 npm run start:all  # Cross-platform orchestration
 ```
@@ -230,11 +262,13 @@ npm run start:all  # Cross-platform orchestration
 ## 🛠️ Development
 
 ### Prerequisites
+
 - Node.js 18+, NPM 9+
 - Docker & Docker Compose
 - Git
 
 ### Environment Setup
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
@@ -244,6 +278,7 @@ cd api/graphql && npm install
 ```
 
 ### Development Modes
+
 ```bash
 # Full stack development
 npm run start:all        # Frontend + API
@@ -264,7 +299,19 @@ npm run security:audit     # Security vulnerability scan
 npm run lint               # Code linting
 ```
 
+### 🔍 Code Quality Status
+
+⚠️ **Security Review Required** - Recent deep scan identified multiple security vulnerabilities and code quality issues that need attention. Use the Code Issues Panel in your IDE to review and fix:
+
+- Security vulnerabilities requiring immediate attention
+- Code quality improvements for maintainability
+- Performance optimization opportunities
+- Best practices compliance updates
+
+**Action Required**: Review findings in Code Issues Panel and implement recommended fixes before production deployment.
+
 ### Load Testing
+
 ```bash
 # Install k6 (https://k6.io/docs/getting-started/installation/)
 k6 run load-test.js        # Performance testing
@@ -273,12 +320,14 @@ k6 run load-test.js        # Performance testing
 ## 🚀 Deployment
 
 ### Docker
+
 ```bash
 docker build -t hootner-frontend -f Dockerfile.frontend .
 docker build -t hootner-server -f Dockerfile .
 ```
 
 ### Kubernetes + Istio
+
 ```bash
 kubectl apply -f k8s/
 cd k8s/istio && ./install.sh
@@ -286,11 +335,13 @@ scripts/deployment/blue-green-deploy.sh
 ```
 
 ### CI/CD Pipeline (24 Workflows)
+
 ✅ Testing • 🔒 Security • 📦 Docker • 🚀 Deploy • 📊 Monitoring • 🔄 Rollback
 
 ## 📊 Monitoring & Observability
 
 **Prometheus + Grafana Stack** → [localhost:3001](http://localhost:3001)
+
 - Request rates, latencies, error rates
 - Resource usage (CPU, memory, disk)
 - Business metrics, chaos experiment results
@@ -299,21 +350,25 @@ scripts/deployment/blue-green-deploy.sh
 ## 📚 Documentation Hub
 
 ### 📝 Quick References
+
 - [Architecture](docs/ARCHITECTURE.md) • [API Schema](docs/API_SCHEMA.md) • [Services Guide](docs/SERVICES.md)
 - [Security Checklist](SECURITY_CHECKLIST.md) • [Injection Protection](docs/INJECTION_PROTECTION.md)
 - [JSDoc Reference](JSDOC_QUICK_REFERENCE.md) • [TODO Guidelines](docs/TODO_GUIDELINES.md)
 
-### 🔧 Developer Resources  
+### 🔧 Developer Resources
+
 - [Codebase Fixes Plan](CODEBASE_FIXES_PLAN.md) • [Migration Guide](MIGRATION_GUIDE.md)
 - [Syntax Fixes](docs/SYNTAX_FIXES_SUMMARY.md) • [Code Quality](docs/DEDUPLICATION_GUIDE.md)
 - [Documentation Guide](docs/DOCUMENTATION_GUIDE.md) • [Type Definitions](types/services.d.ts)
 
 ### 🤖 AI & Performance
+
 - [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md) • [Cursor AI Modes](docs/CURSOR_AI_MODES.md)
 - [Zed Optimization](docs/ZED_OPTIMIZATION.md) • [Visual Designer](docs/VISUAL_DESIGNER.md)
 - [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](frameworks/ai/agents/README.md)
 
 ### 🛠️ Operations
+
 - [Deployment Checklist](.github/DEPLOYMENT_CHECKLIST.md) • [Chaos Engineering](docs/CHAOS_ENGINEERING.md)
 - [Backup Strategy](docs/BACKUP_STRATEGY.md) • [Blue-Green Deployment](docs/BLUE_GREEN_DEPLOYMENT.md)
 - [Stripe Integration](docs/STRIPE_INTEGRATION.md) • [Watcher Agent](docs/WATCHER.md)
@@ -321,6 +376,7 @@ scripts/deployment/blue-green-deploy.sh
 ## 📝 Essential Commands
 
 ### Server Management
+
 | Command | Description |
 |---------|-------------|
 | `npm run start:all` | Start all 9 servers (cross-platform) |
@@ -329,20 +385,25 @@ scripts/deployment/blue-green-deploy.sh
 | `npm run package` | Package Electron app |
 
 ### AI & Video Generation
+
 | Command | Description |
 |---------|-------------|
 | `cd services/video-generation && python api.py` | Start AI video API (port 5003) |
 | `node enhanced-agent-hub.js` | Start 75+ AI agents hub |
 
 ### Code Quality & Security
+
 | Command | Description |
 |---------|-------------|
 | `npm run security:audit` | Security vulnerability scan |
 | `npm run analyze:duplication` | Code duplication analysis |
 | `npm run docs:generate` | Generate API documentation |
 | `npm run todos:scan` | Scan codebase for TODOs |
+| `node commit-validator.js` | Validate commits (auto-runs) |
+| `node copilot-delegate.js delegate "task"` | Delegate tasks to copilot |
 
 ### Infrastructure
+
 | Command | Description |
 |---------|-------------|
 | `./scripts/blue-green-deploy.sh` | Zero-downtime deployment |
@@ -351,25 +412,27 @@ scripts/deployment/blue-green-deploy.sh
 
 ## 🌆 Tech Stack
 
-**Frontend** • React 18, TypeScript, Vite, Tailwind CSS  
-**Backend** • Node.js, Express, GraphQL, NestJS  
-**Database** • MongoDB, Redis, Prisma ORM  
-**Infrastructure** • Docker, Kubernetes, Istio  
-**Monitoring** • Prometheus, Grafana  
-**CI/CD** • GitHub Actions (24 workflows)  
-**Cloud** • AWS (S3, Lambda, SQS)  
-**Payments** • Stripe  
+**Frontend** • React 18, TypeScript, Vite, Tailwind CSS
+**Backend** • Node.js, Express, GraphQL, NestJS
+**Database** • MongoDB, Redis, Prisma ORM
+**Infrastructure** • Docker, Kubernetes, Istio
+**Monitoring** • Prometheus, Grafana
+**CI/CD** • GitHub Actions (24 workflows)
+**Cloud** • AWS (S3, Lambda, SQS)
+**Payments** • Stripe
 **Auth** • Firebase, JWT
 
 ## 🏗️ Architecture Highlights
 
 ### Microservices (14+ Core Services)
+
 - **AI Agents** - Security, Compliance, BI, Operations, Payment Fraud
 - **Core Services** - Audit, Backup, Marketplace, Payment, Content Moderation
 - **Video Generation** - PyTorch 2.0+, 3D U-Net, Flask API (port 5003)
 - **AWS Serverless** - SQS+Lambda, DLQ, CloudWatch, IAM
 
 ### Resilience Patterns
+
 - Circuit Breaker, Retry Logic, Bulkhead, Timeout
 - Graceful Shutdown, Rate Limiting
 - Istio Service Mesh - Traffic management, security, observability
@@ -384,6 +447,7 @@ scripts/deployment/blue-green-deploy.sh
 **MIT License** - See [LICENSE](LICENSE)
 
 **Support Channels**
+
 - 📧 [support@hootner.com](mailto:support@hootner.com)
 - 💬 [Discord Community](https://discord.gg/your-invite-link)
 - 🐛 [GitHub Issues](https://github.com/yourusername/hootner/issues)
@@ -393,7 +457,7 @@ scripts/deployment/blue-green-deploy.sh
 
 ## 🦉 Why HOOTNER?
 
-🎯 **Production-Ready** • 🔄 **Zero-Downtime** • 📊 **Scalable** • 🛡️ **Secure**  
+🎯 **Production-Ready** • 🔄 **Zero-Downtime** • 📊 **Scalable** • 🛡️ **Secure**
 🧪 **Tested** • 📊 **Observable** • 🔧 **Resilient** • 🌍 **Multi-Region**
 
 > **"The Owl Never Sleeps"** - 24/7 enterprise video streaming platform

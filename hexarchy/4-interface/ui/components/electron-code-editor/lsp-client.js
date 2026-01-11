@@ -7,11 +7,40 @@ class LSPClient {
     this.connections = new Map();
     this.diagnostics = new Map();
     this.capabilities = {};
+    this.allowedHosts = ["localhost", "127.0.0.1", "lsp.hootner.com"];
+  }
+
+  /**
+   * Validate WebSocket URL to prevent SSRF (CWE-918)
+   */
+  isValidWebSocketUrl(url) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol !== "ws:" && parsed.protocol !== "wss:") {
+        return false;
+      }
+      return this.allowedHosts.includes(parsed.hostname);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Validate payload structure
+   */
+  isValidPayload(payload) {
+    return payload && typeof payload === "object" && !Array.isArray(payload);
   }
 
   connect(language, serverUrl) {
     return new Promise((resolve, reject) => {
       try {
+        // Validate WebSocket URL (CWE-918 fix)
+        if (!this.isValidWebSocketUrl(serverUrl)) {
+          reject(new Error("Invalid or unauthorized WebSocket URL"));
+          return;
+        }
+
         const ws = new WebSocket(serverUrl);
 
         ws.addEventListener("open", () => {
@@ -36,8 +65,14 @@ class LSPClient {
           let payload = null;
           try {
             payload = JSON.parse(event.data);
+            // Validate payload structure (CWE-502 fix)
+            if (!this.isValidPayload(payload)) {
+              console.error("Invalid LSP payload structure");
+              return;
+            }
           } catch (err) {
-            console.error("LSP message JSON parse error:", err);
+            console.error("LSP message JSON parse error:", err.message);
+            return;
           }
           this.handleMessage(language, payload);
         });
@@ -137,6 +172,11 @@ class LSPClient {
       const handler = (event) => {
         try {
           const msg = JSON.parse(event.data);
+          // Validate message structure (CWE-502 fix)
+          if (!this.isValidPayload(msg)) {
+            console.error("Invalid LSP completion message structure");
+            return;
+          }
           if (msg.id === id) {
             clearTimeout(timeout);
             ws.removeEventListener("message", handler);
@@ -145,7 +185,7 @@ class LSPClient {
             return resolve(msg.result || []);
           }
         } catch (err) {
-          console.error("LSP completion handler error:", err);
+          console.error("LSP completion handler error:", err.message);
         }
       };
 
@@ -187,13 +227,18 @@ class LSPClient {
       const handler = (event) => {
         try {
           const msg = JSON.parse(event.data);
+          // Validate message structure (CWE-502 fix)
+          if (!this.isValidPayload(msg)) {
+            console.error("Invalid LSP hover message structure");
+            return;
+          }
           if (msg.id === id) {
             clearTimeout(timeout);
             ws.removeEventListener("message", handler);
             resolve(msg.result || null);
           }
         } catch (err) {
-          console.error("LSP hover handler error:", err);
+          console.error("LSP hover handler error:", err.message);
         }
       };
 

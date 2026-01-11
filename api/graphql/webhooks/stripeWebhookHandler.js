@@ -3,6 +3,14 @@
  * Handles subscription lifecycle events from Stripe
  */
 
+// Validate required environment variables
+if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY environment variable is required');
+}
+if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error('STRIPE_WEBHOOK_SECRET environment variable is required');
+}
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { logger } = require('../utils/logger');
 

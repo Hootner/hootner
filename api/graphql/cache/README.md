@@ -1,44 +1,59 @@
 # GraphQL Redis Caching Layer
 
+> **UPDATED**: Now featuring `UnifiedCacheManager` - consolidating Apollo Server and Express middleware into one API!
+> See [MIGRATION.md](./MIGRATION.md) for migration guide.
+
 Comprehensive caching solution for GraphQL queries with TTL, invalidation strategies, and performance optimization.
+
+## Quick Start (New API)
+
+```javascript
+const { UnifiedCacheManager } = require("./cache");
+
+// Single instance for everything
+const cacheManager = new UnifiedCacheManager({
+  cacheableOperations: ["getUser", "getVideo", "getTrendingVideos"],
+});
+
+// Apollo Server
+const server = new ApolloServer({
+  plugins: [cacheManager.apolloPlugin()],
+});
+
+// Express
+app.use("/graphql", cacheManager.graphqlMiddleware());
+app.use("/graphql", cacheManager.invalidationMiddleware());
+```
 
 ## Features
 
-✅ **Smart Caching**
+✅ **Unified API** - Single class for Apollo + Express
+✅ **Smart Caching** - Automatic query caching
+✅ **Type-based TTL** - Configure per GraphQL type
+✅ **Auto Invalidation** - Mutation-triggered
+✅ **Environment Config** - Dev/prod settings
+✅ **Cache Strategies** - Tag-based, pattern-based
+✅ **Performance** - Batch operations, cache warming
+✅ **Monitoring** - Hit/miss tracking
 
-- Automatic query caching
-- Type-based TTL configuration
-- User-specific cache keys
-- Mutation-triggered invalidation
-
-✅ **Cache Strategies**
-
-- Cache-aside pattern
-- Tag-based invalidation
-- Pattern-based invalidation
-- Batch operations
-
-✅ **Performance**
-
-- Configurable TTL per type
-- Cache warming
-- Batch get/set operations
-- Redis pipeline support
-
-✅ **Monitoring**
-
-- Hit/miss tracking
 - Cache statistics
 - Memory usage monitoring
 - Eviction tracking
 
 ## Architecture
 
-```
+```text
 cache/
-├── GraphQLCacheService.js    # Core caching service
-├── GraphQLCachePlugin.js     # Apollo Server plugin
-├── CacheMiddleware.js         # Express middleware
+├── UnifiedCacheManager.js     # 🆕 Unified API (recommended)
+├── GraphQLCacheService.js     # Core caching service
+├── GraphQLCachePlugin.js      # ⚠️ Legacy Apollo plugin
+├── CacheMiddleware.js         # ⚠️ Legacy Express middleware
+├── index.js                   # Module exports
+├── shared/
+│   ├── config.js              # Environment-aware configuration
+│   ├── utils.js               # Shared utilities
+│   └── constants.js           # Cache constants
+├── MIGRATION.md               # Migration guide
 └── README.md                  # Documentation
 ```
 

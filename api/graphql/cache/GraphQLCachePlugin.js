@@ -104,8 +104,12 @@ class GraphQLCachePlugin {
 
       const { query, variables, operationName } = req.body;
 
-      // Skip if no operation name or is mutation
-      if (!operationName || query.includes("mutation")) {
+      // Skip if no operation name or is mutation with type checking
+      if (
+        !operationName ||
+        typeof query !== "string" ||
+        query.trim().startsWith("mutation")
+      ) {
         return next();
       }
 
