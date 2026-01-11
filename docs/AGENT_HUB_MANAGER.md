@@ -345,13 +345,19 @@ spec:
 ### With Main Orchestration System
 
 ```javascript
-// In index.js (main orchestrator)
-import manager from './agent-hub-manager.js';
+// Example integration with agent-hub-manager.js
+import AgentHubManager from './agent-hub-manager.js';
 
-// Log orchestration events
-orchestrator.on('service:started', (data) => {
-  manager.logEvent('info', `Service started: ${data}`);
-});
+const hubManager = new AgentHubManager();
+await hubManager.initialize();
+
+// Access agent hub functionality
+const status = hubManager.agentHub.getStatus();
+console.log('Agent Hub Status:', status);
+
+// Start specific agents programmatically
+hubManager.startAgent('personalization-agent');
+hubManager.bulkStartAgents('security');
 ```
 
 ### With Monitoring Stack
