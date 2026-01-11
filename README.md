@@ -236,6 +236,28 @@ Hootner/
 - **Infrastructure & Operations (20)** - Auto-scaling, CDN, Database sharding, Multi-cloud
 - **Specialized Services (10)** - Localization, Voice assistants, Blockchain, CRM integration
 
+### 🎭 Advanced Agent Orchestration (NEW!)
+
+**Intelligent Automation** - 5 advanced agents with sophisticated coordination:
+
+- **Intelligent Code Agent** - Auto-analysis, refactoring, security scanning
+- **Continuous Learning Agent** - Pattern recognition, adaptation, feedback loops
+- **Predictive Maintenance Agent** - Anomaly detection, failure prediction, auto-remediation
+- **Autonomous Deployment Agent** - CI/CD orchestration, canary deployments, rollbacks
+- **Intelligent Documentation Agent** - Auto-docs, API discovery, changelog generation
+
+**Quick Start:**
+```bash
+npm run orchestrator:init           # Initialize all agents
+npm run orchestrator:analyze        # Run code analysis
+npm run orchestrator:deploy         # Autonomous deployment
+npm run orchestrator:docs           # Generate documentation
+npm run orchestrator:maintenance    # Predictive maintenance
+npm run orchestrator:status         # Check agent status
+```
+
+See [docs/ADVANCED_AGENTS.md](docs/ADVANCED_AGENTS.md) for complete guide.
+
 ## 🎮 Usage Examples
 
 ### Video Player
