@@ -256,19 +256,7 @@ jobs:
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '⚠️ Dependency Update Failed',
-              body: `## Dependency Update Failure
-              
-              The automated dependency update workflow failed.
-              
-              [View Workflow Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
-              
-              ## Possible Causes
-              - Incompatible dependency versions
-              - Breaking changes in updates
-              - Test failures
-              - Network issues
-              
-              Please review and update manually.`,
+              title: 'Dependency Update Failed',
+              body: 'The automated dependency update workflow failed. Please review and update manually.',
               labels: ['dependencies', 'bug', 'automated']
             });
