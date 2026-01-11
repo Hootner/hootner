@@ -1,132 +1,20 @@
 {
-  "http.proxySupport": "off",
-  "http.systemCertificates": false,
-  "extensions.autoCheckUpdates": false,
-  "extensions.autoUpdate": false,
-  "telemetry.telemetryLevel": "off",
-  "update.mode": "manual",
-  "workbench.settings.enableNaturalLanguageSearch": false,
-  "search.followSymlinks": false,
-  "files.watcherExclude": {
-    "**/node_modules/**": true,
-    "**/.git/**": true,
-    "**/logs/**": true,
-    "**/dist/**": true,
-    "**/build/**": true
+  "workbench.colorCustomizations": {
+    "editor.background": "#0d1117",
+    "editorGroupHeader.tabsBackground": "#161b22",
+    "sideBar.background": "#0d1117",
+    "activityBar.background": "#0d1117",
+    "panel.background": "#0d1117",
+    "terminal.background": "#0d1117",
+    "editorIndentGuide.background": "#00ff00",
+    "editorIndentGuide.activeBackground": "#00ff00",
+    "editorRuler.foreground": "#00ff00",
+    "statusBar.background": "#007acc",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.noFolderBackground": "#007acc",
+    "statusBar.debuggingBackground": "#007acc"
   },
-  "typescript.disableAutomaticTypeAcquisition": true,
-  "npm.fetchOnlinePackageInfo": false,
-  "extensions.ignoreRecommendations": true,
-  "workbench.enableExperiments": false,
-  "workbench.settings.useSplitJSON": true,
-  "git.autofetch": false,
-  "git.fetchOnPull": false,
-  "editor.quickSuggestions": {
-    "other": false,
-    "comments": false,
-    "strings": false
-  },
-  "typescript.preferences.includePackageJsonAutoImports": "off",
-  "typescript.suggest.autoImports": false,
-  "javascript.suggest.autoImports": false,
-  "typescript.updateImportsOnFileMove.enabled": "never",
-  "javascript.updateImportsOnFileMove.enabled": "never",
-  "eslint.enable": true,
-  "eslint.format.enable": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-containers"
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "files.associations": {
-    "*.js": "javascript",
-    "*.mjs": "javascript",
-    "*.cjs": "javascript",
-    "*.ts": "typescript",
-    "*.tsx": "typescriptreact",
-    "*.jsx": "javascriptreact",
-    "*.graphql": "graphql",
-    "*.gql": "graphql",
-    "Dockerfile*": "dockerfile",
-    "*.yml": "yaml",
-    "*.yaml": "yaml"
-  },
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact",
-    "typescript": "typescriptreact"
-  },
-  "files.exclude": {
-    "**/node_modules": true,
-    "**/.git": true,
-    "**/logs": true,
-    "**/dist": true,
-    "**/build": true,
-    "**/.pm2": true,
-    "**/.aws/sso/cache": true,
-    "**/.codegpt/*.sqlite*": true
-  },
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/logs": true,
-    "**/dist": true,
-    "**/build": true,
-    "**/.pm2": true,
-    "**/.aws": true,
-    "**/.codegpt": true
-  },
-  "python.defaultInterpreterPath": "C:\\Python\\python.exe",
-  "python.terminal.activateEnvironment": false,
-  "docker.showStartPage": false,
-  "docker.dockerPath": "",
-  "yaml.schemas": {
-    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
-    "https://json.schemastore.org/docker-compose.json": "docker-compose*.yml"
-  },
-  "json.schemas": [
-    {
-      "fileMatch": [
-        "package.json"
-      ],
-      "url": "https://json.schemastore.org/package.json"
-    },
-    {
-      "fileMatch": [
-        "tsconfig*.json"
-      ],
-      "url": "https://json.schemastore.org/tsconfig.json"
-    }
-  ],
-  "workbench.colorTheme": "Default Dark+",
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "editor.rulers": [
-    80,
-    120
-  ],
-  "editor.wordWrap": "on",
-  "terminal.integrated.defaultProfile.windows": "Command Prompt",
-  "terminal.integrated.profiles.windows": {
-    "Command Prompt": {
-      "path": "cmd.exe",
-      "args": []
-    }
-  }
+  "editor.rulers": [80, 120],
+  "editor.renderIndentGuides": true,
+  "editor.guides.indentation": true
 }

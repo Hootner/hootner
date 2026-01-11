@@ -2,7 +2,7 @@
   "name": "@hootner/enterprise-platform",
   "version": "1.0.0",
   "description": "HOOTNER - Enterprise Video Streaming Platform with AI Integration",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "engines": {
     "node": ">=18.0.0",

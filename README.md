@@ -1,5 +1,5 @@
 # 🦉 HOOTNER
->
+
 > **The Owl Never Sleeps** - Enterprise Video Streaming Platform
 
 [![Node.js](https://img.shields.io/badge/Node.js-25.2.1-green.svg)](https://nodejs.org/)
@@ -377,38 +377,40 @@ scripts/deployment/blue-green-deploy.sh
 
 ### Server Management
 
-| Command | Description |
-|---------|-------------|
+| Command             | Description                          |
+| ------------------- | ------------------------------------ |
 | `npm run start:all` | Start all 9 servers (cross-platform) |
-| `npm run dev` | React development server (port 5173) |
-| `npm run collab` | Real-time collaboration server |
-| `npm run package` | Package Electron app |
+| `npm run dev`       | React development server (port 5173) |
+| `npm run collab`    | Real-time collaboration server       |
+| `npm run package`   | Package Electron app                 |
 
 ### AI & Video Generation
 
-| Command | Description |
-|---------|-------------|
+| Command                                         | Description                    |
+| ----------------------------------------------- | ------------------------------ |
 | `cd services/video-generation && python api.py` | Start AI video API (port 5003) |
-| `node enhanced-agent-hub.js` | Start 75+ AI agents hub |
+| `npm run agent-hub`                             | Start agent manager (port 9001) |
+| `npm run agent-cli list`                        | List all agents (CLI)          |
+| `npm run agent-cli interactive`                 | Interactive agent management   |
 
 ### Code Quality & Security
 
-| Command | Description |
-|---------|-------------|
-| `npm run security:audit` | Security vulnerability scan |
-| `npm run analyze:duplication` | Code duplication analysis |
-| `npm run docs:generate` | Generate API documentation |
-| `npm run todos:scan` | Scan codebase for TODOs |
-| `node commit-validator.js` | Validate commits (auto-runs) |
-| `node copilot-delegate.js delegate "task"` | Delegate tasks to copilot |
+| Command                                    | Description                  |
+| ------------------------------------------ | ---------------------------- |
+| `npm run security:audit`                   | Security vulnerability scan  |
+| `npm run analyze:duplication`              | Code duplication analysis    |
+| `npm run docs:generate`                    | Generate API documentation   |
+| `npm run todos:scan`                       | Scan codebase for TODOs      |
+| `node commit-validator.js`                 | Validate commits (auto-runs) |
+| `node copilot-delegate.js delegate "task"` | Delegate tasks to copilot    |
 
 ### Infrastructure
 
-| Command | Description |
-|---------|-------------|
+| Command                          | Description              |
+| -------------------------------- | ------------------------ |
 | `./scripts/blue-green-deploy.sh` | Zero-downtime deployment |
-| `./scripts/chaos-test.js` | Chaos engineering tests |
-| `sam deploy --guided` | Deploy AWS serverless |
+| `./scripts/chaos-test.js`        | Chaos engineering tests  |
+| `sam deploy --guided`            | Deploy AWS serverless    |
 
 ## 🌆 Tech Stack
 
