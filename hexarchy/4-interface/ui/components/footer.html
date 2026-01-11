@@ -1,0 +1,58 @@
+<footer style="
+  background: linear-gradient(135deg, rgba(10,10,15,0.95), rgba(26,26,46,0.95));
+  border-top: 2px solid rgba(0,255,0,0.3);
+  padding: 40px 20px 20px;
+  margin-top: 60px;
+  backdrop-filter: blur(20px);
+">
+  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
+    <div>
+      <h3 style="color: #00ff00; margin-bottom: 12px; font-size: 16px;">🦉 HOOTNER</h3>
+      <p style="color: #00ffff; font-size: 13px; line-height: 1.6;">Enterprise video streaming platform with AI integration and real-time collaboration.</p>
+    </div>
+    <div>
+      <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Platform</h4>
+      <a href="/dashboard" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Dashboard</a>
+      <a href="/video-player" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Video Player</a>
+      <a href="/marketplace" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Marketplace</a>
+      <a href="/analytics" style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">Analytics</a>
+    </div>
+    <div>
+      <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Resources</h4>
+      <a href="/docs" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Documentation</a>
+      <a href="/api" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">API Reference</a>
+      <a href="/support" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Support</a>
+      <a href="/status" style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">System Status</a>
+    </div>
+    <div>
+      <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Legal</h4>
+      <a href="/privacy" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Privacy Policy</a>
+      <a href="/terms" style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Terms of Service</a>
+      <a href="/security" style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">Security</a>
+    </div>
+  </div>
+  <div style="border-top: 1px solid rgba(0,255,0,0.2); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <p style="color: #00ffff; font-size: 13px;">© 2024 HOOTNER. All rights reserved. | "The Owl Never Sleeps"</p>
+    <div style="display: flex; gap: 16px;">
+      <a href="https://github.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">💻</a>
+      <a href="https://twitter.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">🐦</a>
+      <a href="https://discord.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">💬</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Auto-load footer on all pages
+document.addEventListener('DOMContentLoaded', () => {
+  if (!document.querySelector('footer')) {
+    fetch('/components/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        const footer = document.createElement('div');
+        footer.innerHTML = html;
+        document.body.appendChild(footer.firstElementChild);
+      })
+      .catch(() => console.log('Footer component not loaded'));
+  }
+});
+</script>

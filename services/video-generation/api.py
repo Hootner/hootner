@@ -14,6 +14,7 @@ import uuid
 import time
 from datetime import datetime
 import torch
+import json
 
 from generator import VideoGenerator
 
@@ -26,7 +27,9 @@ CORS(
 
 # Configuration
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "outputs")
+ANALYTICS_DIR = os.path.join(os.path.dirname(__file__), "analytics")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(ANALYTICS_DIR, exist_ok=True)
 
 MAX_PROMPT_LENGTH = 500
 RATE_LIMIT_REQUESTS = 10
@@ -393,18 +396,214 @@ def get_stats():
     )
 
 
+# ============================================================================
+# NEW: Video Player Integration Endpoints
+# ============================================================================
+
+
+@app.route("/api/video/<video_id>", methods=["GET"])
+def get_video_info(video_id):
+    """
+    Get video metadata by ID
+
+    Response:
+    {
+        "id": "video-123",
+        "title": "AI Generated Video",
+        "url": "/api/video/stream/video-123.mp4",
+        "duration": 30.0,
+        "scenes": [...],
+        "thumbnails": [...]
+    }
+    """
+    # Check if video exists
+    video_path = os.path.join(OUTPUT_DIR, f"{video_id}.mp4")
+    gif_path = os.path.join(OUTPUT_DIR, f"{video_id}.gif")
+
+    if os.path.exists(video_path):
+        file_path = video_path
+        file_type = "video/mp4"
+    elif os.path.exists(gif_path):
+        file_path = gif_path
+        file_type = "image/gif"
+    else:
+        return jsonify({"error": "Video not found"}), 404
+
+    # Get file info
+    file_size = os.path.getsize(file_path)
+    created_at = datetime.fromtimestamp(os.path.getctime(file_path))
+
+    # Load metadata if exists
+    metadata_path = os.path.join(OUTPUT_DIR, f"{video_id}.json")
+    metadata = {}
+    if os.path.exists(metadata_path):
+        with open(metadata_path, "r") as f:
+            metadata = json.load(f)
+
+    return jsonify(
+        {
+            "id": video_id,
+            "title": metadata.get("prompt", f"Video {video_id}"),
+            "url": f"/api/video/stream/{os.path.basename(file_path)}",
+            "video_url": f"/api/video/stream/{os.path.basename(file_path)}",
+            "type": file_type,
+            "size_mb": round(file_size / (1024 * 1024), 2),
+            "duration": metadata.get("duration", 30.0),
+            "created_at": created_at.isoformat(),
+            "metadata": metadata,
+        }
+    )
+
+
+@app.route("/api/video/stream/<filename>", methods=["GET"])
+def stream_video(filename):
+    """Stream video file"""
+    file_path = os.path.join(OUTPUT_DIR, secure_filename(filename))
+
+    if not os.path.exists(file_path):
+        return jsonify({"error": "File not found"}), 404
+
+    # Determine MIME type
+    if filename.endswith(".mp4"):
+        mime_type = "video/mp4"
+    elif filename.endswith(".gif"):
+        mime_type = "image/gif"
+    else:
+        mime_type = "application/octet-stream"
+
+    return send_file(file_path, mimetype=mime_type)
+
+
+@app.route("/api/video/sample", methods=["GET"])
+def get_sample_video():
+    """Get a sample video for testing"""
+    # Return first available video or error
+    files = [f for f in os.listdir(OUTPUT_DIR) if f.endswith((".mp4", ".gif"))]
+
+    if files:
+        return send_file(os.path.join(OUTPUT_DIR, files[0]))
+    else:
+        return jsonify({"error": "No videos available"}), 404
+
+
+@app.route("/api/analytics/track", methods=["POST"])
+def track_analytics():
+    """
+    Track video analytics event
+
+    Request:
+    {
+        "session_id": "uuid",
+        "video_id": "video-123",
+        "event_type": "play|pause|seek|complete",
+        "timestamp": 45.2,
+        "data": {...}
+    }
+    """
+    data = request.get_json()
+
+    session_id = data.get("session_id")
+    video_id = data.get("video_id")
+
+    if not session_id or not video_id:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Save analytics event
+    analytics_file = os.path.join(ANALYTICS_DIR, f"{session_id}.jsonl")
+
+    event = {**data, "recorded_at": datetime.utcnow().isoformat()}
+
+    with open(analytics_file, "a") as f:
+        f.write(json.dumps(event) + "\n")
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/analytics/playback", methods=["POST"])
+def track_playback():
+    """
+    Track playback position
+
+    Request:
+    {
+        "session_id": "uuid",
+        "video_id": "video-123",
+        "current_time": 45.2,
+        "playback_rate": 1.0
+    }
+    """
+    data = request.get_json()
+
+    session_id = data.get("session_id")
+    video_id = data.get("video_id")
+
+    if not session_id or not video_id:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Save playback event
+    analytics_file = os.path.join(ANALYTICS_DIR, f"{session_id}.jsonl")
+
+    event = {
+        "event_type": "playback_position",
+        **data,
+        "recorded_at": datetime.utcnow().isoformat(),
+    }
+
+    with open(analytics_file, "a") as f:
+        f.write(json.dumps(event) + "\n")
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/analytics/<video_id>", methods=["GET"])
+def get_video_analytics(video_id):
+    """Get analytics for a specific video"""
+    # Aggregate all sessions for this video
+    analytics_files = os.listdir(ANALYTICS_DIR)
+
+    total_views = 0
+    events = []
+
+    for filename in analytics_files:
+        file_path = os.path.join(ANALYTICS_DIR, filename)
+        with open(file_path, "r") as f:
+            for line in f:
+                event = json.loads(line)
+                if event.get("video_id") == video_id:
+                    events.append(event)
+                    if event.get("event_type") == "session_start":
+                        total_views += 1
+
+    return jsonify(
+        {
+            "video_id": video_id,
+            "total_views": total_views,
+            "total_events": len(events),
+            "events": events[-100:],  # Last 100 events
+        }
+    )
+
+
 if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("🦉 HOOTNER Video Generation API")
     print("=" * 60)
     print("\n📡 Server starting on http://localhost:5003")
     print("\n📚 Endpoints:")
-    print("   GET  /health          - Health check")
-    print("   POST /generate        - Generate single video")
-    print("   POST /batch           - Generate multiple videos")
-    print("   GET  /download/<file> - Download generated video")
-    print("   GET  /models          - List available models")
-    print("   GET  /stats           - Generation statistics")
+    print("   GET  /health                  - Health check")
+    print("   POST /generate                - Generate single video")
+    print("   POST /batch                   - Generate multiple videos")
+    print("   GET  /download/<file>         - Download generated video")
+    print("   GET  /models                  - List available models")
+    print("   GET  /stats                   - Generation statistics")
+    print("\n🎬 Video Player Integration:")
+    print("   GET  /api/video/<id>          - Get video metadata")
+    print("   GET  /api/video/stream/<file> - Stream video file")
+    print("   GET  /api/video/sample         - Get sample video")
+    print("\n📊 Analytics:")
+    print("   POST /api/analytics/track     - Track events")
+    print("   POST /api/analytics/playback  - Track playback")
+    print("   GET  /api/analytics/<id>      - Get video analytics")
     print("\n" + "=" * 60 + "\n")
 
     app.run(host="0.0.0.0", port=5003, debug=False)
