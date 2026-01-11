@@ -1,5 +1,5 @@
 # Enhanced Video Generation Service - Requirements
-# Production-ready dependencies with monitoring and optimization
+# Production-ready with 8K UHD HDR10 and Dolby Atmos support
 
 # Core Deep Learning
 torch>=2.0.0
@@ -14,6 +14,15 @@ pillow>=10.0.0
 imageio>=2.31.0
 imageio-ffmpeg>=0.4.9
 opencv-python>=4.8.0
+
+# Audio Processing & Generation
+soundfile>=0.12.1  # High-quality audio I/O
+scipy>=1.11.0  # Signal processing
+librosa>=0.10.0  # Audio analysis
+
+# Optional: AI Audio Generation
+# audiocraft>=1.0.0  # Meta MusicGen (requires PyTorch 2.0+)
+# audiocraft can be installed with: pip install -U audiocraft
 
 # Flask API & WebSocket
 flask>=2.3.0
@@ -44,3 +53,13 @@ tqdm>=4.65.0
 # Optional: Model Optimization
 # onnx>=1.14.0       # ONNX export
 # onnxruntime>=1.15.0  # ONNX runtime
+
+# Note: FFmpeg is required for HDR10 encoding and Dolby Atmos support
+# Install FFmpeg separately:
+#   Windows: choco install ffmpeg or download from ffmpeg.org
+#   Linux: sudo apt install ffmpeg
+#   macOS: brew install ffmpeg
+#
+# Verify FFmpeg supports required codecs:
+#   ffmpeg -codecs | grep hevc  # For HDR10 (HEVC/H.265)
+#   ffmpeg -codecs | grep eac3  # For Dolby Atmos (Enhanced AC-3)

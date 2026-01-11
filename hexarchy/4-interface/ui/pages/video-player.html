@@ -961,9 +961,7 @@
         "
       >
         <div style="display: flex; align-items: center; gap: 24px">
-          <a
-            href="index.html"
-            class="nav-logo"
+          <a href="/" class="nav-logo"
             style="
               font-weight: bold;
               background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
@@ -1236,34 +1234,43 @@
           </div>
         </div>
         <div class="flex gap-2 items-center">
-          <a href="profile.html" class="text-slate-300 hover:text-white"
+          <a href="/ai-video" class="text-slate-300 hover:text-white"
+            >🎥 AI Video</a
+          >
+          <a href="/live-stream" class="text-slate-300 hover:text-white"
+            >📱 Live</a
+          >
+          <a href="/analytics" class="text-slate-300 hover:text-white"
+            >🧠 Analytics</a
+          >
+          <a href="/profile" class="text-slate-300 hover:text-white"
             >👤 Profile</a
           >
-          <a href="design-showcase.html" class="text-slate-300 hover:text-white"
+          <a href="/design-showcase" class="text-slate-300 hover:text-white"
             >🎨 Design</a
           >
-          <a href="feed.html" class="text-slate-300 hover:text-white"
+          <a href="/feed-react" class="text-slate-300 hover:text-white"
             >📰 Social</a
           >
-          <a href="marketplace.html" class="text-slate-300 hover:text-white"
+          <a href="/marketplace" class="text-slate-300 hover:text-white"
             >🛒 Marketplace</a
           >
-          <a href="dashboard.html" class="text-slate-300 hover:text-white"
+          <a href="/dashboard" class="text-slate-300 hover:text-white"
             >📈 Dashboard</a
           >
-          <a href="video-player.html" class="text-green-400 font-medium"
+          <a href="/video-player" class="text-green-400 font-medium"
             >▶️ Video</a
           >
-          <a href="auto-editor.html" class="text-slate-300 hover:text-white"
+          <a href="/auto-editor" class="text-slate-300 hover:text-white"
             >✂️ Editor</a
           >
-          <a href="code-editor.html" class="text-slate-300 hover:text-white"
+          <a href="/code-editor" class="text-slate-300 hover:text-white"
             >💻 Code</a
           >
-          <a href="settings.html" class="text-slate-300 hover:text-white"
+          <a href="/settings" class="text-slate-300 hover:text-white"
             >⚙️ Settings</a
           >
-          <a href="login.html" class="text-slate-300 hover:text-white"
+          <a href="/login" class="text-slate-300 hover:text-white"
             >🔐 Login</a
           >
         </div>
@@ -3511,9 +3518,9 @@
       }
 
       document.getElementById('marketplaceBtn').onclick = () =>
-        navigateTo('./marketplace.html?from=player');
+        navigateTo('/marketplace?from=player');
       document.getElementById('lobbyBtn').onclick = () =>
-        showModal('Coming Soon', 'Lobby feature coming soon!');
+        navigateTo('/live-stream');
 
       // Offline Video Management
       let offlineVideos =

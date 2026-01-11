@@ -60,6 +60,30 @@ app.get('/design-showcase', (req, res) => {
   res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/design-showcase.html'));
 });
 
+app.get('/ai-video', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/ai-video.html'));
+});
+
+app.get('/live-stream', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/live-stream.html'));
+});
+
+app.get('/analytics', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/analytics.html'));
+});
+
+app.get('/collaboration', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/collaboration.html'));
+});
+
+app.get('/agent-management', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/agent-management.html'));
+});
+
+app.get('/devops-monitoring', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/devops-monitoring.html'));
+});
+
 app.get('/feed-react', (req, res) => {
   res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/feed-react.html'));
 });
@@ -88,6 +112,52 @@ app.get('/api/dashboard/stats', (req, res) => {
     apiCalls: 8200,
     errorRate: 0.3,
     timestamp: new Date().toISOString()
+  });
+});
+
+// API endpoints for agent management
+app.get('/api/agents/status', (req, res) => {
+  res.json({
+    totalAgents: 75,
+    activeAgents: 74,
+    categories: {
+      core: { total: 12, active: 12 },
+      business: { total: 15, active: 15 },
+      security: { total: 18, active: 17 },
+      infrastructure: { total: 20, active: 20 },
+      service: { total: 10, active: 10 }
+    },
+    systemResources: {
+      cpu: Math.floor(Math.random() * 30) + 30,
+      memory: Math.floor(Math.random() * 40) + 40,
+      gpu: Math.floor(Math.random() * 50) + 50
+    }
+  });
+});
+
+// API endpoints for DevOps monitoring
+app.get('/api/devops/metrics', (req, res) => {
+  res.json({
+    uptime: 99.97,
+    responseTime: Math.floor(Math.random() * 50) + 100,
+    throughput: (Math.random() * 2 + 1.5).toFixed(1) + 'K/s',
+    errorRate: (Math.random() * 0.1).toFixed(3),
+    activePods: Math.floor(Math.random() * 10) + 45,
+    containers: [
+      { name: 'hootner-frontend', status: 'running', cpu: 15, memory: 45 },
+      { name: 'hootner-api', status: 'running', cpu: 32, memory: 67 },
+      { name: 'mongodb-primary', status: 'running', cpu: 28, memory: 78 },
+      { name: 'redis-cache', status: 'warning', cpu: 85, memory: 89 }
+    ]
+  });
+});
+
+// API endpoints for collaboration
+app.get('/api/collaboration/rooms', (req, res) => {
+  res.json({
+    activeRooms: Math.floor(Math.random() * 5) + 2,
+    totalParticipants: Math.floor(Math.random() * 20) + 10,
+    onlineUsers: Math.floor(Math.random() * 15) + 5
   });
 });
 
@@ -123,6 +193,29 @@ io.on('connection', (socket) => {
     socket.emit('metrics', metrics);
     socket.emit('traffic', traffic);
     
+    // Advanced analytics data
+    const analytics = {
+      performanceScore: Math.floor(Math.random() * 20) + 80,
+      predictions: {
+        'Traffic Growth': `+${Math.floor(Math.random() * 30)}%`,
+        'Revenue Forecast': `$${(Math.random() * 10 + 10).toFixed(1)}K`,
+        'User Retention': `${(Math.random() * 10 + 85).toFixed(1)}%`
+      }
+    };
+    
+    socket.emit('analytics', analytics);
+    socket.emit('predictions', analytics.predictions);
+    
+    // Live streaming data
+    if (Math.random() > 0.8) {
+      const streamData = {
+        viewers: Math.floor(Math.random() * 200) + 50,
+        bitrate: Math.floor(Math.random() * 2000) + 3000,
+        fps: Math.floor(Math.random() * 10) + 55
+      };
+      socket.emit('streamStats', streamData);
+    }
+    
     // Random security alerts
     if (Math.random() > 0.9) {
       const alerts = [
@@ -133,6 +226,27 @@ io.on('connection', (socket) => {
       const alert = alerts[Math.floor(Math.random() * alerts.length)];
       socket.emit('security', alert);
     }
+    
+    // Agent management data
+    const agentData = {
+      totalAgents: 75,
+      activeAgents: Math.floor(Math.random() * 3) + 72,
+      systemLoad: {
+        cpu: Math.floor(Math.random() * 30) + 30,
+        memory: Math.floor(Math.random() * 40) + 40,
+        gpu: Math.floor(Math.random() * 50) + 50
+      }
+    };
+    socket.emit('agentMetrics', agentData);
+    
+    // DevOps monitoring data
+    const devopsData = {
+      responseTime: Math.floor(Math.random() * 50) + 100,
+      throughput: (Math.random() * 2 + 1.5).toFixed(1),
+      errorRate: (Math.random() * 0.1).toFixed(3),
+      activePods: Math.floor(Math.random() * 10) + 45
+    };
+    socket.emit('devopsMetrics', devopsData);
   }, 5000);
   
   socket.on('disconnect', () => {
@@ -147,6 +261,10 @@ server.listen(PORT, () => {
   console.log(`🎬 Video Player: http://localhost:${PORT}/video-player`);
   console.log(`💻 Code Editor: http://localhost:${PORT}/code-editor`);
   console.log(`🛒 Marketplace: http://localhost:${PORT}/marketplace`);
+  console.log(`🤝 Collaboration: http://localhost:${PORT}/collaboration`);
+  console.log(`🤖 AI Agents: http://localhost:${PORT}/agent-management`);
+  console.log(`⚡ DevOps: http://localhost:${PORT}/devops-monitoring`);
+  console.log(`📈 Analytics: http://localhost:${PORT}/analytics`);
   console.log(`⚙️ Settings: http://localhost:${PORT}/settings`);
   console.log(`👤 Profile: http://localhost:${PORT}/profile`);
   console.log(`🔐 Login: http://localhost:${PORT}/login`);

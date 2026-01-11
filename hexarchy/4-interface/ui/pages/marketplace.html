@@ -86,7 +86,7 @@
       >
         <div style="display: flex; align-items: center; gap: 24px">
           <a
-            href="index.html"
+            href="/"
             style="
               font-size: 14px;
               font-weight: bold;
@@ -362,61 +362,79 @@
         </div>
         <div class="flex gap-2 items-center">
           <a
-            href="profile.html"
+            href="/ai-video"
+            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
+            class="text-slate-300 hover:text-white"
+            >🎥 AI Video</a
+          >
+          <a
+            href="/live-stream"
+            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
+            class="text-slate-300 hover:text-white"
+            >📱 Live</a
+          >
+          <a
+            href="/analytics"
+            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
+            class="text-slate-300 hover:text-white"
+            >🧠 Analytics</a
+          >
+          <a
+            href="/profile"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >👤 Profile</a
           >
           <a
-            href="design-showcase.html"
+            href="/design-showcase"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >🎨 Design</a
           >
           <a
-            href="feed.html"
+            href="/feed-react"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >📰 Social</a
           >
           <a
-            href="marketplace.html"
+            href="/marketplace"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-green-400 font-medium"
             >🛒 Marketplace</a
           >
           <a
-            href="dashboard.html"
+            href="/dashboard"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >📈 Dashboard</a
           >
           <a
-            href="video-player.html"
+            href="/video-player"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >▶️ Video</a
           >
           <a
-            href="auto-editor.html"
+            href="/auto-editor"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >✂️ Editor</a
           >
           <a
-            href="code-editor.html"
+            href="/code-editor"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >💻 Code</a
           >
           <a
-            href="settings.html"
+            href="/settings"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >⚙️ Settings</a
           >
           <a
-            href="login.html"
+            href="/login"
             style="font-size: 10px; text-decoration: none; padding: 4px 8px"
             class="text-slate-300 hover:text-white"
             >🔐 Login</a
@@ -649,9 +667,42 @@
 
       function buyNow(id) {
         const product = products.find(p => p.id === id);
-        alert(
-          `Purchasing: ${product.name} for ${product.price}\n\nStripe checkout would open here.`
-        );
+        
+        // Simulate Stripe checkout integration
+        const checkoutData = {
+          productId: id,
+          productName: product.name,
+          price: product.price,
+          currency: 'USD',
+          successUrl: window.location.origin + '/marketplace?success=true',
+          cancelUrl: window.location.origin + '/marketplace?canceled=true'
+        };
+        
+        // In real implementation, this would redirect to Stripe Checkout
+        if (confirm(`Purchase ${product.name} for $${product.price}?\n\nThis will redirect to Stripe Checkout.`)) {
+          // Simulate successful purchase
+          setTimeout(() => {
+            alert(`✅ Purchase successful!\n\nProduct: ${product.name}\nPrice: $${product.price}\n\nDownload link sent to your email.`);
+            
+            // Add purchase notification
+            const purchaseNotif = {
+              id: Date.now(),
+              type: 'system',
+              user: 'HOOTNER Store',
+              text: `Successfully purchased "${product.name}"`,
+              time: 'Just now',
+              timestamp: Date.now(),
+              unread: true,
+              icon: '🛒',
+              group: 'today'
+            };
+            
+            notifications.unshift(purchaseNotif);
+            updateBadge();
+            
+            if (notifSoundEnabled) playNotificationSound();
+          }, 1500);
+        }
       }
 
       renderProducts();
