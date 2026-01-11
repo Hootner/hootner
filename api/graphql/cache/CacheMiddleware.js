@@ -3,7 +3,7 @@
  * Request-level caching with Redis
  */
 
-const GraphQLCacheService = require("./GraphQLCacheService");
+const GraphQLCacheService = require('./GraphQLCacheService');
 
 class CacheMiddleware {
   constructor(options = {}) {
@@ -18,14 +18,14 @@ class CacheMiddleware {
 
     return async (req, res, next) => {
       // Only cache POST requests
-      if (req.method !== "POST") {
+      if (req.method !== 'POST') {
         return next();
       }
 
       const { query, variables, operationName } = req.body;
 
       // Skip mutations
-      if (!query || query.trim().startsWith("mutation")) {
+      if (!query || query.trim().startsWith('mutation')) {
         return next();
       }
 
@@ -83,7 +83,7 @@ class CacheMiddleware {
   cacheRoute(ttl = 300) {
     return async (req, res, next) => {
       // Only cache GET requests
-      if (req.method !== "GET") {
+      if (req.method !== 'GET') {
         return next();
       }
 
@@ -120,7 +120,7 @@ class CacheMiddleware {
       const { operationName, variables } = req.body;
 
       // Only handle mutations
-      if (!operationName || !req.body.query?.trim().startsWith("mutation")) {
+      if (!operationName || !req.body.query?.trim().startsWith('mutation')) {
         return next();
       }
 

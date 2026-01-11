@@ -36,7 +36,7 @@ class CopilotTaskManager {
     this.saveTasks();
     
     console.log(chalk.green(`✅ Task delegated: ${description}`));
-    console.log(chalk.cyan(`📋 Copilot Instructions:`));
+    console.log(chalk.cyan('📋 Copilot Instructions:'));
     console.log(task.copilotInstructions);
     return task.id;
   }
