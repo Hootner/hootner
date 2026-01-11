@@ -6,8 +6,6 @@
  */
 
 import { EventEmitter } from 'events';
-import axios from 'axios';
-import { MongoClient } from 'mongodb';
 
 class AdvancedAgentBase extends EventEmitter {
     constructor(name, capabilities) {
@@ -37,14 +35,14 @@ class AdvancedAgentBase extends EventEmitter {
     recordMetric(operation, duration, success) {
         this.metrics.operations++;
         this.metrics.lastOperation = Date.now();
-        
+
         // Update success rate
         const successCount = Math.floor(this.metrics.operations * (this.metrics.successRate / 100));
         const newSuccessCount = success ? successCount + 1 : successCount;
         this.metrics.successRate = (newSuccessCount / this.metrics.operations) * 100;
 
         // Update average response time
-        this.metrics.avgResponseTime = 
+        this.metrics.avgResponseTime =
             (this.metrics.avgResponseTime * (this.metrics.operations - 1) + duration) / this.metrics.operations;
     }
 }
@@ -81,7 +79,7 @@ class IntelligentCodeAgent extends AdvancedAgentBase {
 
             this.recordMetric('codebase-analysis', Date.now() - startTime, true);
             this.emit('analysis-complete', analysis);
-            
+
             return analysis;
         } catch (error) {
             this.recordMetric('codebase-analysis', Date.now() - startTime, false);
@@ -124,7 +122,7 @@ class IntelligentCodeAgent extends AdvancedAgentBase {
 
     generateRecommendations(analysis) {
         const recommendations = [];
-        
+
         if (analysis.complexity.averageComplexity > 5) {
             recommendations.push({
                 type: 'refactor',
@@ -149,13 +147,13 @@ class IntelligentCodeAgent extends AdvancedAgentBase {
         try {
             // Analyze file
             const analysis = await this.analyzeFile(filePath);
-            
+
             // Generate refactoring plan
             const plan = this.createRefactoringPlan(analysis, options);
-            
+
             // Apply refactorings
             const result = await this.applyRefactorings(filePath, plan);
-            
+
             this.recordMetric('auto-refactor', Date.now() - startTime, true);
             return result;
         } catch (error) {
@@ -222,7 +220,7 @@ class ContinuousLearningAgent extends AdvancedAgentBase {
             const insights = await this.analyzePatterns();
             const adaptations = this.generateAdaptations(insights);
             await this.applyAdaptations(adaptations);
-            
+
             this.emit('learning-cycle-complete', { insights, adaptations });
         } catch (error) {
             console.error(`[${this.name}] Learning cycle error:`, error.message);
@@ -322,7 +320,7 @@ class PredictiveMaintenanceAgent extends AdvancedAgentBase {
         try {
             const metrics = await this.collectMetrics();
             const anomalies = this.detectAnomalies(metrics);
-            
+
             if (anomalies.length > 0) {
                 await this.handleAnomalies(anomalies);
             }
@@ -369,7 +367,7 @@ class PredictiveMaintenanceAgent extends AdvancedAgentBase {
     async handleAnomalies(anomalies) {
         for (const anomaly of anomalies) {
             console.log(`⚠️  [${this.name}] Anomaly detected: ${anomaly.type} (${anomaly.severity})`);
-            
+
             // Auto-remediate if possible
             await this.remediate(anomaly);
         }
@@ -396,7 +394,7 @@ class PredictiveMaintenanceAgent extends AdvancedAgentBase {
 
     predictFailures(metrics) {
         const predictions = [];
-        
+
         // Trend analysis for failure prediction
         if (metrics.disk > 80) {
             predictions.push({
@@ -414,7 +412,7 @@ class PredictiveMaintenanceAgent extends AdvancedAgentBase {
         for (const prediction of predictions) {
             console.log(`🔮 [${this.name}] Failure predicted: ${prediction.type} in ${prediction.timeToFailure}`);
             console.log(`   Recommendation: ${prediction.recommendation}`);
-            
+
             // Take preventive action
             this.emit('preventive-action', prediction);
         }
@@ -466,10 +464,10 @@ class AutonomousDeploymentAgent extends AdvancedAgentBase {
             if (canaryResult.success) {
                 // Full production deployment
                 await this.fullDeploy(config);
-                
+
                 this.recordMetric('deployment', Date.now() - startTime, true);
                 this.emit('deployment-complete', { deploymentId, success: true });
-                
+
                 return { success: true, deploymentId };
             } else {
                 // Rollback
@@ -511,10 +509,10 @@ class AutonomousDeploymentAgent extends AdvancedAgentBase {
     async canaryDeploy(config) {
         console.log(`   ✓ Starting canary deployment (10% traffic)`);
         // Deploy to 10% of production traffic
-        
+
         // Monitor canary for 5 minutes
         const health = await this.monitorCanary(config);
-        
+
         return { success: health.errorRate < 1 };
     }
 

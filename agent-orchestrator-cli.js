@@ -6,9 +6,9 @@
  */
 
 import chalk from 'chalk';
+import Table from 'cli-table3';
 import { program } from 'commander';
 import ora from 'ora';
-import Table from 'cli-table3';
 import AgentOrchestrator from './frameworks/ai/agents/agent-orchestrator.js';
 
 const orchestrator = new AgentOrchestrator();
@@ -61,7 +61,7 @@ program
     .option('--auto-fix', 'Apply automatic fixes', false)
     .action(async (options) => {
         await orchestrator.initialize();
-        
+
         const spinner = ora('Running code analysis workflow...').start();
         try {
             const result = await orchestrator.executeTask({
@@ -71,7 +71,7 @@ program
             });
 
             spinner.succeed('Code analysis completed');
-            
+
             // Display results
             console.log(chalk.bold('\n📊 Analysis Results:'));
             console.log(`Files Analyzed: ${result.summary.filesAnalyzed}`);
@@ -82,8 +82,8 @@ program
             if (result.recommendations.length > 0) {
                 console.log(chalk.bold('\n💡 Recommendations:'));
                 result.recommendations.forEach((rec, i) => {
-                    const icon = rec.priority === 'critical' ? '🔴' : 
-                                rec.priority === 'high' ? '🟠' : '🟡';
+                    const icon = rec.priority === 'critical' ? '🔴' :
+                        rec.priority === 'high' ? '🟠' : '🟡';
                     console.log(`${icon} ${i + 1}. [${rec.type}] ${rec.message}`);
                 });
             }
@@ -100,7 +100,7 @@ program
     .option('-b, --branch <branch>', 'Git branch to deploy', 'main')
     .action(async (options) => {
         await orchestrator.initialize();
-        
+
         const spinner = ora(`Deploying to ${options.env}...`).start();
         try {
             const result = await orchestrator.executeTask({
@@ -130,7 +130,7 @@ program
     .option('--no-architecture', 'Skip architecture diagrams')
     .action(async (options) => {
         await orchestrator.initialize();
-        
+
         const spinner = ora('Generating documentation...').start();
         try {
             const result = await orchestrator.executeTask({
@@ -140,14 +140,14 @@ program
             });
 
             spinner.succeed('Documentation generated');
-            
+
             console.log(chalk.bold('\n📝 Documentation Generated:'));
-            console.log(`Overview: ✅`);
-            console.log(`API Reference: ✅`);
-            console.log(`Examples: ✅`);
-            console.log(`Changelog: ✅`);
+            console.log('Overview: ✅');
+            console.log('API Reference: ✅');
+            console.log('Examples: ✅');
+            console.log('Changelog: ✅');
             if (result.architecture) {
-                console.log(`Architecture Diagrams: ✅`);
+                console.log('Architecture Diagrams: ✅');
             }
             if (result.codeInsights) {
                 console.log(chalk.bold('\n🔍 Code Insights:'));
@@ -166,7 +166,7 @@ program
     .description('Run predictive maintenance workflow')
     .action(async () => {
         await orchestrator.initialize();
-        
+
         const spinner = ora('Running maintenance workflow...').start();
         try {
             const result = await orchestrator.executeTask({
@@ -174,7 +174,7 @@ program
             });
 
             spinner.succeed('Maintenance workflow completed');
-            
+
             console.log(chalk.bold('\n🔧 Maintenance Report:'));
             console.log(`Immediate Actions: ${result.immediateActions.length}`);
             console.log(`Scheduled Maintenance: ${result.scheduledMaintenance.length}`);
@@ -204,11 +204,11 @@ program
     .option('-f, --feedback <feedback>', 'Provide user feedback (JSON string)')
     .action(async (options) => {
         await orchestrator.initialize();
-        
+
         const spinner = ora('Running learning workflow...').start();
         try {
             const config = { type: 'learning' };
-            
+
             if (options.feedback) {
                 config.feedback = JSON.parse(options.feedback);
             }
@@ -216,7 +216,7 @@ program
             const result = await orchestrator.executeTask(config);
 
             spinner.succeed('Learning workflow completed');
-            
+
             console.log(chalk.bold('\n🧠 Learning Status:'));
             console.log(`Patterns Learned: ${result.patterns}`);
             console.log(`Feedback Processed: ${result.feedbackProcessed}`);
@@ -232,9 +232,9 @@ program
     .description('Show orchestrator and agent status')
     .action(async () => {
         await orchestrator.initialize();
-        
+
         const status = orchestrator.getStatus();
-        
+
         console.log(chalk.bold('\n📊 Agent Orchestrator Status\n'));
 
         // Agent Status Table
@@ -249,8 +249,8 @@ program
                 agent.status === 'active' ? chalk.green('●') : chalk.red('○'),
                 agent.metrics.operations || 0,
                 `${(agent.metrics.successRate || 100).toFixed(1)}%`,
-                agent.metrics.avgResponseTime 
-                    ? `${agent.metrics.avgResponseTime.toFixed(0)}ms` 
+                agent.metrics.avgResponseTime
+                    ? `${agent.metrics.avgResponseTime.toFixed(0)}ms`
                     : 'N/A'
             ]);
         }
@@ -284,7 +284,7 @@ program
     .description('Start interactive mode')
     .action(async () => {
         await orchestrator.initialize();
-        
+
         console.log(chalk.bold('\n🎭 Agent Orchestrator - Interactive Mode\n'));
         console.log('Available commands:');
         console.log('  analyze   - Run code analysis');

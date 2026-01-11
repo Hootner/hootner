@@ -7,7 +7,6 @@
 
 import { EventEmitter } from 'events';
 import { advancedAgents } from './advanced-agents.js';
-import { productionAgents } from './production-agent-implementations.js';
 
 class AgentOrchestrator extends EventEmitter {
     constructor() {
@@ -27,11 +26,11 @@ class AgentOrchestrator extends EventEmitter {
                 const instance = new AgentClass();
                 await instance.start();
                 this.agents.set(name, instance);
-                
+
                 // Listen to agent events
                 instance.on('started', (data) => this.emit('agent-started', data));
                 instance.on('stopped', (data) => this.emit('agent-stopped', data));
-                
+
                 console.log(`   ✅ ${name} ready`);
             } catch (error) {
                 console.error(`   ❌ ${name} failed to initialize: ${error.message}`);
