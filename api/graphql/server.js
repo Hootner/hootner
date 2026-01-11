@@ -5,8 +5,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Validate environment variables at startup
-const { validateEnvironment } = require('./utils/validateEnv');
-const envConfig = validateEnvironment('api');
+const { validateEnvironment } = require("./utils/validateEnv");
+const envConfig = validateEnvironment("api");
 
 // Enhanced GraphQL Schema
 const schema = buildSchema(`
