@@ -1,0 +1,22 @@
+npm warn using --force Recommended protections disabled.
+npm warn audit Updating vitest to 4.0.16, which is a SemVer major change.
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: express-graphql@0.12.0
+npm warn Found: graphql@16.12.0
+npm warn node_modules/graphql
+npm warn   graphql@"^16.8.1" from the root project
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer graphql@"^14.7.0 || ^15.3.0" from express-graphql@0.12.0
+npm warn node_modules/express-graphql
+npm warn   express-graphql@"^0.12.0" from the root project
+npm warn
+npm warn Conflicting peer dependency: graphql@15.10.1
+npm warn node_modules/graphql
+npm warn   peer graphql@"^14.7.0 || ^15.3.0" from express-graphql@0.12.0
+npm warn   node_modules/express-graphql
+npm warn     express-graphql@"^0.12.0" from the root project
+
+added 16 packages, removed 32 packages, changed 12 packages, and audited 649 packages in 5s
+
+found 0 vulnerabilities
