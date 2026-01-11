@@ -6,7 +6,9 @@
   "main": "index.js",
   "runtimeConfig": "./runtimes/node/runtime-config.json",
   "scripts": {
-    "start": "node index.js",
+    "start": "node frontend-server.js",
+    "start:api": "cd api/graphql && npm start",
+    "start:all": "npm run start:api & npm start",
     "dev": "nodemon index.js",
     "hexarchy:validate": "node hexarchy/8-operations/devops/validate-hexagonal.js",
     "hexarchy:layers": "node -e \"console.log('Hexagonal Layers:'); import('fs').then(fs => fs.readdirSync('hexarchy').forEach(l => console.log('  ' + l)))\"",
