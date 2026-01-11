@@ -12,6 +12,7 @@
     "start": "node index.js",
     "start:hootner": "node start-hootner.js",
     "start:enhanced": "node serve-html-enhanced.js",
+    "launch:platform": "node launch-platform.js",
     "start:api": "cd api/graphql && npm start",
     "start:all": "node index.js",
     "dev": "nodemon index.js",

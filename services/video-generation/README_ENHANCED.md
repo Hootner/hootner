@@ -400,7 +400,7 @@ DEVICE=cuda
 from monitoring import logger
 
 # Log with context
-logger.info("Video generation started", 
+logger.info("Video generation started",
             job_id="uuid",
             prompt="A robot dancing",
             num_frames=16)
@@ -495,14 +495,14 @@ trainer = MixedPrecisionTrainer(enabled=True, dtype="float16")
 # Training loop
 for batch in dataloader:
     optimizer.zero_grad()
-    
+
     with trainer.autocast():
         output = model(batch)
         loss = criterion(output, target)
-    
+
     loss_scaled = trainer.scale_loss(loss)
     loss_scaled.backward()
-    
+
     trainer.step(optimizer)
 ```
 
@@ -590,7 +590,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-  
+
   redis:
     image: redis:alpine
     ports:

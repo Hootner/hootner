@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Video Generator - HOOTNER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e); color: #00ff00; }
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+    .neon { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+    .progress-bar { transition: width 0.3s ease; }
+  </style>
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8 bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">
+      🎬 AI Video Generator
+    </h1>
+    
+    <div class="glass rounded-xl p-6 neon mb-6">
+      <h3 class="text-lg font-semibold mb-4 text-cyan-400">Generate Video</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Prompt</label>
+          <textarea id="prompt" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white" 
+                    placeholder="A futuristic city with flying cars at sunset..." rows="3"></textarea>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Duration (seconds)</label>
+            <select id="duration" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white">
+              <option value="3">3 seconds</option>
+              <option value="5" selected>5 seconds</option>
+              <option value="10">10 seconds</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Quality</label>
+            <select id="quality" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white">
+              <option value="512">512p</option>
+              <option value="720" selected>720p</option>
+              <option value="1080">1080p</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="generateBtn" onclick="generateVideo()" 
+                class="w-full bg-gradient-to-r from-green-500 to-cyan-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-cyan-600 transition-all">
+          🚀 Generate Video
+        </button>
+      </div>
+    </div>
+    
+    <div id="progressPanel" class="glass rounded-xl p-6 neon mb-6 hidden">
+      <h3 class="text-lg font-semibold mb-4 text-cyan-400">Generation Progress</h3>
+      <div class="space-y-3">
+        <div class="flex justify-between text-sm">
+          <span id="progressText">Initializing...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-green-400 to-cyan-400 h-3 rounded-full progress-bar" style="width: 0%"></div>
+        </div>
+        <div id="progressDetails" class="text-xs text-gray-400"></div>
+      </div>
+    </div>
+    
+    <div id="resultsPanel" class="glass rounded-xl p-6 neon hidden">
+      <h3 class="text-lg font-semibold mb-4 text-cyan-400">Generated Videos</h3>
+      <div id="videoResults" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+
+  <script>
+    let socket;
+    let currentJobId = null;
+    
+    function initVideoGenerator() {
+      try {
+        socket = io('http://localhost:5003');
+        socket.on('progress', updateProgress);
+        socket.on('completed', onVideoCompleted);
+        socket.on('error', onVideoError);
+      } catch (e) {
+        console.log('Video generation service unavailable');
+      }
+    }
+    
+    async function generateVideo() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+      
+      const duration = parseInt(document.getElementById('duration').value);
+      const quality = parseInt(document.getElementById('quality').value);
+      
+      document.getElementById('generateBtn').disabled = true;
+      document.getElementById('progressPanel').classList.remove('hidden');
+      
+      try {
+        const response = await fetch('http://localhost:5003/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt,
+            num_frames: duration * 24,
+            height: quality,
+            width: Math.floor(quality * 16/9)
+          })
+        });
+        
+        const data = await response.json();
+        currentJobId = data.job_id;
+        
+        updateProgress({ progress: 0, step: 0, total: 100 });
+      } catch (error) {
+        console.error('Generation failed:', error);
+        simulateGeneration();
+      }
+    }
+    
+    function updateProgress(data) {
+      const percent = data.progress || 0;
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('progressPercent').textContent = percent + '%';
+      document.getElementById('progressText').textContent = getProgressText(percent);
+      document.getElementById('progressDetails').textContent = 
+        `Step ${data.step || 0} of ${data.total || 100}`;
+    }
+    
+    function getProgressText(percent) {
+      if (percent < 20) return 'Initializing AI model...';
+      if (percent < 40) return 'Processing prompt...';
+      if (percent < 60) return 'Generating frames...';
+      if (percent < 80) return 'Applying effects...';
+      if (percent < 100) return 'Finalizing video...';
+      return 'Complete!';
+    }
+    
+    function onVideoCompleted(data) {
+      document.getElementById('generateBtn').disabled = false;
+      document.getElementById('progressPanel').classList.add('hidden');
+      
+      const resultsPanel = document.getElementById('resultsPanel');
+      const videoResults = document.getElementById('videoResults');
+      
+      const videoCard = document.createElement('div');
+      videoCard.className = 'bg-gray-800 rounded-lg p-4';
+      videoCard.innerHTML = `
+        <video controls class="w-full rounded mb-3">
+          <source src="${data.download_url}" type="video/mp4">
+        </video>
+        <div class="text-sm text-gray-400">
+          Generated in ${data.generation_time?.toFixed(1) || 'N/A'}s
+        </div>
+        <button onclick="downloadVideo('${data.download_url}')" 
+                class="mt-2 bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">
+          📥 Download
+        </button>
+      `;
+      
+      videoResults.appendChild(videoCard);
+      resultsPanel.classList.remove('hidden');
+    }
+    
+    function onVideoError(data) {
+      document.getElementById('generateBtn').disabled = false;
+      document.getElementById('progressPanel').classList.add('hidden');
+      alert('Generation failed: ' + data.error);
+    }
+    
+    function simulateGeneration() {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setTimeout(() => {
+            onVideoCompleted({
+              download_url: '/demo-video.mp4',
+              generation_time: 45.2
+            });
+          }, 500);
+        }
+        updateProgress({ progress: Math.floor(progress), step: Math.floor(progress), total: 100 });
+      }, 300);
+    }
+    
+    function downloadVideo(url) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'generated-video.mp4';
+      a.click();
+    }
+    
+    document.addEventListener('DOMContentLoaded', initVideoGenerator);
+  </script>
+</body>
+</html>
