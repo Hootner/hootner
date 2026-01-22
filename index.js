@@ -5,6 +5,7 @@
  * The Owl Never Sleeps - 24/7 Video Streaming Platform
  */
 
+import 'dotenv/config';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -50,12 +51,10 @@ class HootnerOrchestrator {
   async healthCheck(url) {
     try {
       const response = await fetch(url, {
-        timeout: 5000,
         signal: AbortSignal.timeout(5000)
       });
       return response.ok;
     } catch (error) {
-      console.warn(`Health check failed for ${url}:`, error.message);
       return false;
     }
   }
@@ -91,9 +90,14 @@ async function startHootner() {
     console.log('   0-core: Domain & business rules ✓');
     
     // 1-foundation: Infrastructure  
+    console.log('   1-foundation: Starting infrastructure...');
     await orchestrator.startLayer('1-foundation', [
-      { name: 'database', command: 'docker-compose', args: ['up', '-d', 'mongodb', 'redis'] }
+      { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
     ]);
+    
+    // Wait for database to be ready
+    console.log('   Waiting for database connection...');
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // 2-intelligence: AI services
     await orchestrator.startLayer('2-intelligence', [

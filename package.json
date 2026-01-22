@@ -9,6 +9,7 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
+    "onboard": "node scripts/onboard-dev.js",
     "start": "node index.js",
     "start:hootner": "node start-hootner.js",
     "start:enhanced": "node serve-html-enhanced.js",
@@ -34,6 +35,11 @@
     "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "py:format": "python -m black .",
+    "py:format:check": "python -m black --check .",
+    "py:lint": "python -m ruff .",
+    "tools:format:all": "npm run format && npm run py:format",
+    "tools:lint:all": "npm run lint && npm run py:lint",
     "security:audit": "npm audit && node security-audit.js",
     "security:fix": "npm audit fix",
     "security:report": "node security-audit.js",
@@ -67,7 +73,16 @@
     "orchestrator:docs": "node agent-orchestrator-cli.js docs",
     "orchestrator:maintenance": "node agent-orchestrator-cli.js maintenance",
     "orchestrator:status": "node agent-orchestrator-cli.js status",
-    "postinstall": "cd api/graphql && npm install"
+    "dual-agent:enable": "node scripts/dual-agent-switcher.js enable",
+    "dual-agent:disable": "node scripts/dual-agent-switcher.js disable",
+    "dual-agent:status": "node scripts/dual-agent-switcher.js status",
+    "aws:validate": "node scripts/aws-config-validator.js",
+    "aws:configure": "aws configure",
+    "aws:identity": "aws sts get-caller-identity",
+    "postinstall": "cd api/graphql && npm install",
+    "py:precommit:install": "python -m pip install --user pre-commit || true && python -m pre_commit install || true",
+    "py:precommit:run": "python -m pre_commit run --all-files || true",
+    "prepare": "husky install"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -105,16 +120,15 @@
     "prettier": "^3.1.0",
     "vitest": "^1.0.4"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test"
-    }
-  },
+  
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "*.py": [
+      "python -m ruff",
+      "python -m black --quiet --fast"
     ]
   },
   "config": {

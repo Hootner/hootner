@@ -1,4 +1,14 @@
 {
+  "editor.fontFamily": "Consolas, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "editor.fontLigatures": false,
+  "editor.fontWeight": "400",
+  "editor.letterSpacing": 0,
+  "editor.lineHeight": 0,
+  "editor.renderWhitespace": "selection",
+  "editor.smoothScrolling": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
   "workbench.colorCustomizations": {
     "editor.background": "#0d1117",
     "editorGroupHeader.tabsBackground": "#161b22",
@@ -14,7 +24,42 @@
     "statusBar.noFolderBackground": "#007acc",
     "statusBar.debuggingBackground": "#007acc"
   },
-  "editor.rulers": [80, 120],
-  "editor.renderIndentGuides": true,
-  "editor.guides.indentation": true
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.guides.indentation": true,
+  // Python Configuration for AI Video Generation Service
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.diagnosticMode": "workspace",
+  "python.languageServer": "Pylance",
+  "python.analysis.extraPaths": [
+    "./services/video-generation"
+  ],
+  "python.autoComplete.extraPaths": [
+    "./services/video-generation"
+  ],
+  "python.defaultInterpreterPath": "python",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.indexing": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": false
+  },
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": false,
+  "python.analysis.ignore": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/outputs",
+    "**/analytics"
+  ],
+  // Suppress Python notifications
+  "python.showStartPage": false,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportMissingModuleSource": "none"
+  }
 }

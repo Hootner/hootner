@@ -10,10 +10,17 @@
 
 Full-stack video streaming platform with AI generation, real-time collaboration, and enterprise DevOps.
 
-## 🚀 Quick Start
+## 🚀 Day 1: One Command Start
 
 ```bash
-# Complete setup with infrastructure
+# Prove the owl flies in 60 seconds
+node scripts/onboard-dev.js
+```
+
+This single script checks prerequisites, starts infrastructure, and launches core services.
+
+**Manual setup:**
+```bash
 docker-compose up -d          # Start MongoDB + Redis
 npm install                   # Install dependencies
 cd api/graphql && npm install # Install API dependencies
@@ -22,7 +29,12 @@ npm run start:all            # Start frontend + API
 
 **Ready in 60 seconds** →
 
-- Frontend: [localhost:3000](http://localhost:3000)
+- **Login Page**: [localhost:3001](http://localhost:3001) - Authentication portal
+- **Dashboard (Landing)**: [localhost:3005](http://localhost:3005) - Central hub after login
+- **Social Feed**: [localhost:3001/feed](http://localhost:3001/feed) - Watch, create, engage
+- **Cinema Player**: [localhost:3001/video-player](http://localhost:3001/video-player) - 8K HDR10 streaming
+- **Marketplace**: [localhost:3001/marketplace](http://localhost:3001/marketplace) - Digital products & NFTs
+- **Code Editor**: [localhost:3001/code-editor](http://localhost:3001/code-editor) - AI-powered development
 - GraphQL API: [localhost:4000/graphql](http://localhost:4000/graphql)
 - MongoDB: localhost:27017
 - Redis: localhost:6379
@@ -373,7 +385,7 @@ scripts/deployment/blue-green-deploy.sh
 
 ### 📝 Quick References
 
-- [Architecture](docs/ARCHITECTURE.md) • [API Schema](docs/API_SCHEMA.md) • [Services Guide](docs/SERVICES.md)
+- **[Day 1 Guide](docs/DAY_ONE.md)** • [Architecture](docs/ARCHITECTURE.md) • [API Schema](docs/API_SCHEMA.md) • [Services Guide](docs/SERVICES.md)
 - [Security Checklist](SECURITY_CHECKLIST.md) • [Injection Protection](docs/INJECTION_PROTECTION.md)
 - [JSDoc Reference](JSDOC_QUICK_REFERENCE.md) • [TODO Guidelines](docs/TODO_GUIDELINES.md)
 
@@ -399,21 +411,22 @@ scripts/deployment/blue-green-deploy.sh
 
 ### Server Management
 
-| Command             | Description                          |
-| ------------------- | ------------------------------------ |
-| `npm run start:all` | Start all 9 servers (cross-platform) |
+| Command                        | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `node scripts/onboard-dev.js`  | Day 1 onboarding (checks + starts)   |
+| `npm run start:all`            | Start all 9 servers (cross-platform) |
 | `npm run dev`       | React development server (port 5173) |
 | `npm run collab`    | Real-time collaboration server       |
 | `npm run package`   | Package Electron app                 |
 
 ### AI & Video Generation
 
-| Command                                         | Description                    |
-| ----------------------------------------------- | ------------------------------ |
-| `cd services/video-generation && python api.py` | Start AI video API (port 5003) |
+| Command                                         | Description                     |
+| ----------------------------------------------- | ------------------------------- |
+| `cd services/video-generation && python api.py` | Start AI video API (port 5003)  |
 | `npm run agent-hub`                             | Start agent manager (port 9001) |
-| `npm run agent-cli list`                        | List all agents (CLI)          |
-| `npm run agent-cli interactive`                 | Interactive agent management   |
+| `npm run agent-cli list`                        | List all agents (CLI)           |
+| `npm run agent-cli interactive`                 | Interactive agent management    |
 
 ### Code Quality & Security
 

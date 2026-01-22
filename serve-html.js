@@ -8,14 +8,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 
 // Serve static files from hexarchy UI pages
 app.use(express.static(path.join(__dirname, 'hexarchy/4-interface/ui')));
 
 // Routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/dashboard.html'));
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/login.html'));
 });
 
 app.get('/dashboard', (req, res) => {
@@ -50,6 +50,14 @@ app.get('/auto-editor', (req, res) => {
   res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/auto-editor.html'));
 });
 
+app.get('/feed', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/feed-react.html'));
+});
+
+app.get('/social', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/feed-react.html'));
+});
+
 app.get('/ultra-editor', (req, res) => {
   res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/ultra-editor.html'));
 });
@@ -58,8 +66,24 @@ app.get('/design-showcase', (req, res) => {
   res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/design-showcase.html'));
 });
 
-app.get('/feed-react', (req, res) => {
-  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/feed-react.html'));
+app.get('/messages', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/messages.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/contact.html'));
+});
+
+app.get('/collaboration', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/collaboration.html'));
+});
+
+app.get('/agent-management', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/agent-management.html'));
+});
+
+app.get('/devops-monitoring', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hexarchy/4-interface/ui/pages/devops-monitoring.html'));
 });
 
 // API endpoints for video player
@@ -101,7 +125,7 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
-  
+
   // Send real-time metrics
   setInterval(() => {
     socket.emit('metrics', {
@@ -111,33 +135,7 @@ io.on('connection', (socket) => {
       revenue: Math.floor(Math.random() * 5000) + 10000
     });
   }, 5000);
-  
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
-  });
-});
 
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
-
-io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
-  
-  // Send real-time metrics
-  setInterval(() => {
-    socket.emit('metrics', {
-      posts: Math.floor(Math.random() * 50) + 100,
-      users: Math.floor(Math.random() * 500) + 1000,
-      engagement: Math.floor(Math.random() * 20) + 80,
-      revenue: Math.floor(Math.random() * 5000) + 10000
-    });
-  }, 5000);
-  
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
@@ -145,11 +143,14 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
   console.log(`🦉 HOOTNER Platform running on http://localhost:${PORT}`);
+  console.log(`🔐 Login: http://localhost:${PORT}/login`);
   console.log(`📊 Dashboard: http://localhost:${PORT}/dashboard`);
+  console.log(`🛒 Marketplace: http://localhost:${PORT}/marketplace`);
+  console.log(`💬 Messages: http://localhost:${PORT}/messages`);
+  console.log(`📧 Contact: http://localhost:${PORT}/contact`);
   console.log(`🎬 Video Player: http://localhost:${PORT}/video-player`);
   console.log(`💻 Code Editor: http://localhost:${PORT}/code-editor`);
-  console.log(`🛒 Marketplace: http://localhost:${PORT}/marketplace`);
-  console.log(`⚙️ Settings: http://localhost:${PORT}/settings`);
-  console.log(`👤 Profile: http://localhost:${PORT}/profile`);
-  console.log(`🔐 Login: http://localhost:${PORT}/login`);
+  console.log(`🤝 Collaboration: http://localhost:${PORT}/collaboration`);
+  console.log(`🤖 AI Agents: http://localhost:${PORT}/agent-management`);
+  console.log(`⚙️ DevOps: http://localhost:${PORT}/devops-monitoring`);
 });

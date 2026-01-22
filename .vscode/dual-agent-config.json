@@ -1,0 +1,31 @@
+{
+  "amazonQ": {
+    "enableAmazonQCodeReferences": true,
+    "enableAmazonQChatPanel": true,
+    "enableAmazonQSecurityScan": true,
+    "autoApplySuggestions": false
+  },
+  "copilot": {
+    "enableAutoComplete": true,
+    "enableCopilotChat": true,
+    "enableInlineCompletions": true
+  },
+  "dualAgent": {
+    "enabled": true,
+    "mode": "cooperative",
+    "primaryAgent": "copilot",
+    "fallbackAgent": "amazonQ",
+    "routingStrategy": "context-aware",
+    "enableFallback": true,
+    "routingRules": {
+      "aws-specific": "amazonQ",
+      "codebase-context": "amazonQ",
+      "inline-code": "copilot",
+      "chat-refactor": "copilot",
+      "security-audit": "amazonQ",
+      "general-coding": "copilot",
+      "documentation": "copilot",
+      "enterprise-compliance": "amazonQ"
+    }
+  }
+}

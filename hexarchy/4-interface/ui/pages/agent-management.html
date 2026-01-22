@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +10,25 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-gray-800 p-4 shadow-lg">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
+    <script src="../components/auth-guard.js"></script>
+    <script src="../components/header-enhanced.js"></script>
+
+    <div style="padding-top: 20px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h1 class="text-2xl font-bold text-cyan-400">🤖 AI Agent Command Center</h1>
-                <div class="flex space-x-2">
-                    <button onclick="window.location.href='/dashboard'" class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700">Dashboard</button>
-                    <button onclick="window.location.href='/collaboration'" class="px-3 py-1 bg-purple-600 rounded hover:bg-purple-700">Collaboration</button>
-                    <button onclick="window.location.href='/analytics'" class="px-3 py-1 bg-green-600 rounded hover:bg-green-700">Analytics</button>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span id="systemStatus" class="text-green-400">System Online</span>
+                    </div>
+                    <span id="agentCount" class="text-cyan-400">🤖 75 Agents</span>
                 </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span id="systemStatus" class="text-green-400">System Online</span>
-                </div>
-                <span id="agentCount" class="text-cyan-400">🤖 75 Agents</span>
             </div>
         </div>
-    </nav>
+    </div>
 
     <div class="flex h-screen">
         <!-- Sidebar -->
@@ -199,10 +198,11 @@
                             <option value="infrastructure">Infrastructure</option>
                             <option value="service">Specialized Services</option>
                         </select>
-                        <input id="searchAgent" type="text" placeholder="Search agents..." class="px-3 py-1 bg-gray-700 rounded">
+                        <input id="searchAgent" type="text" placeholder="Search agents..."
+                            class="px-3 py-1 bg-gray-700 rounded">
                     </div>
                 </div>
-                
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
@@ -244,7 +244,7 @@
     <script>
         // Initialize Socket.IO
         const socket = io();
-        
+
         // Sample agent data
         const agents = [
             { name: 'personalization-agent', category: 'core', status: 'active', cpu: 15, memory: 45, tasks: 127, uptime: '2d 14h' },
@@ -303,14 +303,14 @@
         function populateAgentTable(filteredAgents = agents) {
             const tbody = document.getElementById('agentTableBody');
             tbody.innerHTML = '';
-            
+
             filteredAgents.forEach(agent => {
                 const row = document.createElement('tr');
                 row.className = 'border-b border-gray-700 hover:bg-gray-700';
-                
-                const statusColor = agent.status === 'active' ? 'text-green-400' : 
-                                  agent.status === 'warning' ? 'text-yellow-400' : 'text-red-400';
-                
+
+                const statusColor = agent.status === 'active' ? 'text-green-400' :
+                    agent.status === 'warning' ? 'text-yellow-400' : 'text-red-400';
+
                 row.innerHTML = `
                     <td class="p-3">
                         <div class="flex items-center space-x-2">
@@ -418,14 +418,14 @@
             const cpuUsage = Math.floor(Math.random() * 30) + 30;
             const memoryUsage = Math.floor(Math.random() * 40) + 40;
             const gpuUsage = Math.floor(Math.random() * 50) + 50;
-            
+
             document.getElementById('cpuUsage').textContent = `${cpuUsage}%`;
             document.getElementById('cpuBar').style.width = `${cpuUsage}%`;
             document.getElementById('memoryUsage').textContent = `${memoryUsage}%`;
             document.getElementById('memoryBar').style.width = `${memoryUsage}%`;
             document.getElementById('gpuUsage').textContent = `${gpuUsage}%`;
             document.getElementById('gpuBar').style.width = `${gpuUsage}%`;
-            
+
             // Update counters
             document.getElementById('tasksProcessed').textContent = (12847 + Math.floor(Math.random() * 100)).toLocaleString();
             document.getElementById('successRate').textContent = `${(98 + Math.random() * 2).toFixed(1)}%`;
@@ -445,7 +445,7 @@
                 <div class="text-xs text-gray-400 mt-1">${new Date().toLocaleTimeString()}</div>
             `;
             alertsList.insertBefore(alert, alertsList.firstChild);
-            
+
             // Keep only last 5 alerts
             while (alertsList.children.length > 5) {
                 alertsList.removeChild(alertsList.lastChild);
@@ -454,10 +454,10 @@
 
         // Initialize
         populateAgentTable();
-        
+
         // Start real-time updates
         setInterval(updateMetrics, 3000);
-        
+
         // Add sample alerts
         setTimeout(() => addAlert('Agent auto-scaling triggered', 'info'), 2000);
         setTimeout(() => addAlert('High memory usage detected', 'warning'), 5000);
@@ -465,4 +465,5 @@
     </script>
     <script src="../components/footer-enhanced.js"></script>
 </body>
+
 </html>

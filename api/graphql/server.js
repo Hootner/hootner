@@ -1,17 +1,22 @@
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
+import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
+import connectDB from './db.js';
+import { validateEnvironment } from './utils/validateEnv.js';
+import marketplaceRoutes from './routes/marketplace.js';
+import contactRoutes from './routes/contact.js';
+import messagesRoutes from './routes/messages.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Validate environment variables at startup
-const { validateEnvironment } = require("./utils/validateEnv");
 const envConfig = validateEnvironment("api");
 
 // Enhanced GraphQL Schema
@@ -188,6 +193,7 @@ const root = {
 };
 
 const app = express();
+app.use(express.json());
 
 // Security middleware
 app.use(helmet({
@@ -208,6 +214,9 @@ const graphqlLimiter = rateLimit({
 });
 
 app.use('/graphql', graphqlLimiter);
+app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/messages', messagesRoutes);
 
 // CORS with proper configuration
 app.use((req, res, next) => {
@@ -296,8 +305,18 @@ app.get("/metrics", (req, res) => {
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
-});
+(async () => {
+  try {
+    // Initialize database connection
+    await connectDB();
+    
+    app.listen(PORT, () => {
+      console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
+      console.log(`📊 Health check: http://localhost:${PORT}/health`);
+      console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+})();
