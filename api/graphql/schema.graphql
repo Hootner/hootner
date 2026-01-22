@@ -1,12 +1,53 @@
 type Query {
   health: String
   version: String
+  playlists(userId: ID, limit: Int): [Playlist!]!
+  playlist(id: ID!): Playlist
+  myPlaylists: [Playlist!]!
 }
 
 type Mutation {
   _empty: String
+  createPlaylist(input: PlaylistInput!): Playlist!
+  updatePlaylist(id: ID!, input: PlaylistInput!): Playlist!
+  deletePlaylist(id: ID!): Boolean!
+  addVideoToPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+  removeVideoFromPlaylist(playlistId: ID!, videoId: ID!): Playlist!
 }
 
 type Subscription {
   _empty: String
+}
+
+type Playlist {
+  id: ID!
+  name: String!
+  description: String
+  userId: ID!
+  videos: [Video!]!
+  visibility: PlaylistVisibility!
+  thumbnail: String
+  videoCount: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Video {
+  id: ID!
+  title: String!
+  url: String
+  thumbnailUrl: String
+  duration: Int
+}
+
+input PlaylistInput {
+  name: String!
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+}
+
+enum PlaylistVisibility {
+  PUBLIC
+  PRIVATE
 }

@@ -1,5 +1,6 @@
 const Video = require('../models/Video');
 const User = require('../models/User');
+const Playlist = require('../models/Playlist');
 
 module.exports = {
   health: () => ({
@@ -81,5 +82,19 @@ module.exports = {
   me: async (_, __, { user }) => {
     if (!user) return null;
     return User.findById(user.id);
+  },
+
+  playlists: async (_, { userId, limit = 20 }) => {
+    const query = userId ? { userId } : { visibility: 'PUBLIC' };
+    return Playlist.find(query).limit(limit).populate('userId').populate('videos');
+  },
+
+  playlist: async (_, { id }) => {
+    return Playlist.findById(id).populate('userId').populate('videos');
+  },
+
+  myPlaylists: async (_, __, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    return Playlist.find({ userId: user.id }).populate('videos');
   }
 };

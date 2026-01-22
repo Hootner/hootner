@@ -37,16 +37,44 @@ npm run start:all            # Start frontend + API
 
 ## 🤖 AI Development Tools
 
-### Copilot Integration
+### Enhanced Copilot CLI ⭐ NEW
 
 ```bash
-# Task delegation
-node copilot-delegate.js delegate "Fix security issues"
-node copilot-guide.js  # View delegation guide
+# Task Delegation
+node copilot-delegate.js delegate "Add retry logic" src/api.js
+node copilot-delegate.js monitor
 
-# Commit validation
-node commit-validator.js  # Auto-runs on commits
+# Code Analysis & Security
+node copilot-delegate.js analyze src/auth.js      # Code review
+node copilot-delegate.js security                 # Security audit
+node copilot-delegate.js refactor src/player.js   # Refactoring suggestions
+
+# Optimization & Documentation
+node copilot-delegate.js optimize src/search.js   # Performance tips
+node copilot-delegate.js docs src/service.js      # Generate docs
+node copilot-delegate.js validate                 # Validate commit
 ```
+
+See [COPILOT_CLI_PROMPT.md](COPILOT_CLI_PROMPT.md) for complete guide and integration examples.
+
+### Git Integrity & Health Monitoring ⭐ NEW
+
+```bash
+# Integrity Checks (prevents large files > 10MB)
+npm run git:integrity:report      # Full audit
+npm run git:integrity:check       # Pre-commit check
+
+# Repository Health Monitoring
+npm run git:health:monitor        # Current health snapshot
+npm run git:health:history        # 30-day trend analysis
+```
+
+**Repository Stats:**
+- **Size:** 10 MB (.git cleaned from 703 MB → 8.77 MB | 98.75% reduction)
+- **Health:** 🟢 HEALTHY - Protected against large file commits
+- **LFS:** 10 patterns configured for ML models, videos, executables
+
+See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for details.
 
 ### VSCode Optimization
 
@@ -188,6 +216,7 @@ Hootner/
 - **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
 - **Monitoring Stack** - Prometheus, Grafana, 24 CI/CD workflows
 - **Resilience** - Chaos engineering (8 scenarios), PITR backups, multi-region sync
+- **Git LFS** - Automated tracking for ML models, videos, executables (10+ patterns)
 
 ### 💳 Integrations
 
@@ -414,6 +443,9 @@ scripts/deployment/blue-green-deploy.sh
 - **[Frontend Quick Card](FRONTEND_QUICK_CARD.md)** ⭐ NEW
 - **[Live API Testing Guide](LIVE_API_TESTING_GUIDE.md)** ⭐ NEW
 - **[Project Completion Summary](PROJECT_COMPLETION_SUMMARY.md)** ⭐ NEW
+- **[Copilot CLI Prompt Guide](COPILOT_CLI_PROMPT.md)** ⭐ NEW
+- **[Git Integrity Monitoring](docs/GIT_INTEGRITY_MONITORING.md)** ⭐ NEW
+- **[Repository Cleanup Summary](REPO_CLEANUP_SUMMARY.md)** ⭐ NEW
 
 ### 🔧 Developer Resources
 
@@ -445,6 +477,15 @@ scripts/deployment/blue-green-deploy.sh
 | `npm run collaboration`        | Real-time collaboration server       |
 | `npm run launch:platform`      | Launch platform services             |
 
+### Git & Repository Management
+
+| Command                                    | Description                  |
+| ------------------------------------------ | ---------------------------- |
+| `npm run git:integrity:report`             | Full integrity audit         |
+| `npm run git:integrity:check`              | Pre-commit validation        |
+| `npm run git:health:monitor`               | Repository health snapshot   |
+| `npm run git:health:history`               | 30-day metrics trend         |
+
 ### AI & Video Generation
 
 | Command                                         | Description                     |
@@ -459,10 +500,9 @@ scripts/deployment/blue-green-deploy.sh
 | Command                                    | Description                  |
 | ------------------------------------------ | ---------------------------- |
 | `npm run security:audit`                   | Security vulnerability scan  |
-
-
-
-| `node commit-validator.js`                 | Validate commits (auto-runs) |
+| `node copilot-delegate.js analyze <file>`  | Code analysis & review       |
+| `node copilot-delegate.js security`        | Security audit               |
+| `node copilot-delegate.js validate`        | Validate commits             |
 | `node copilot-delegate.js delegate "task"` | Delegate tasks to copilot    |
 
 ### Infrastructure

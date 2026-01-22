@@ -1,5 +1,6 @@
 const Video = require('../models/Video');
 const User = require('../models/User');
+const Playlist = require('../models/Playlist');
 const jwt = require('jsonwebtoken');
 const { pubsub } = require('./subscriptions');
 
@@ -123,5 +124,45 @@ module.exports = {
     await video.save();
 
     return { success: true, message: 'Comment deleted', video };
+  },
+
+  createPlaylist: async (_, { input }, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    const playlist = new Playlist({ ...input, userId: user.id });
+    return playlist.save();
+  },
+
+  updatePlaylist: async (_, { id, input }, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    const playlist = await Playlist.findOne({ _id: id, userId: user.id });
+    if (!playlist) throw new Error('Playlist not found');
+    Object.assign(playlist, input);
+    return playlist.save();
+  },
+
+  deletePlaylist: async (_, { id }, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    const result = await Playlist.deleteOne({ _id: id, userId: user.id });
+    return result.deletedCount > 0;
+  },
+
+  addVideoToPlaylist: async (_, { playlistId, videoId }, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    const playlist = await Playlist.findOne({ _id: playlistId, userId: user.id });
+    if (!playlist) throw new Error('Playlist not found');
+    if (!playlist.videos.includes(videoId)) {
+      playlist.videos.push(videoId);
+      await playlist.save();
+    }
+    return playlist.populate('videos');
+  },
+
+  removeVideoFromPlaylist: async (_, { playlistId, videoId }, { user }) => {
+    if (!user) throw new Error('Not authenticated');
+    const playlist = await Playlist.findOne({ _id: playlistId, userId: user.id });
+    if (!playlist) throw new Error('Playlist not found');
+    playlist.videos = playlist.videos.filter(v => v.toString() !== videoId);
+    await playlist.save();
+    return playlist.populate('videos');
   }
 };
