@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import chalk from 'chalk';
+import path from 'path';
 
 const TASKS_FILE = 'copilot-tasks.json';
 
@@ -63,7 +64,8 @@ Comment your changes with // COPILOT: [description]`;
     // Check if files have COPILOT comments indicating work
     const hasChanges = task.files.some(file => {
       try {
-        const content = fs.readFileSync(file, 'utf8');
+        const safeFilePath = path.resolve(file);
+        const content = fs.readFileSync(safeFilePath, 'utf8');
         return content.includes('// COPILOT:');
       } catch {
         return false;

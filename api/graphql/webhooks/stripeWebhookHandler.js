@@ -108,7 +108,7 @@ class StripeWebhookHandler {
   /**
    * Handle subscription created event
    */
-  async handleSubscriptionCreated(subscription, event) {
+  async handleSubscriptionCreated(subscription) {
     const { customer, id, status, items, current_period_end, trial_end } =
       subscription;
 
@@ -154,7 +154,7 @@ class StripeWebhookHandler {
   /**
    * Handle subscription updated event
    */
-  async handleSubscriptionUpdated(subscription, event) {
+  async handleSubscriptionUpdated(subscription) {
     const {
       customer,
       id,
@@ -208,7 +208,7 @@ class StripeWebhookHandler {
   /**
    * Handle subscription deleted/canceled event
    */
-  async handleSubscriptionDeleted(subscription, event) {
+  async handleSubscriptionDeleted(subscription) {
     const { customer, id, status } = subscription;
 
     logger.info('Subscription deleted', {
@@ -251,7 +251,7 @@ class StripeWebhookHandler {
   /**
    * Handle trial ending soon
    */
-  async handleTrialWillEnd(subscription, event) {
+  async handleTrialWillEnd(subscription) {
     const { customer, id, trial_end } = subscription;
 
     logger.info('Trial will end', {
@@ -287,7 +287,7 @@ class StripeWebhookHandler {
   /**
    * Handle successful invoice payment
    */
-  async handleInvoicePaid(invoice, event) {
+  async handleInvoicePaid(invoice) {
     const { customer, subscription, id, amount_paid, billing_reason } = invoice;
 
     logger.info('Invoice paid', {
@@ -342,7 +342,7 @@ class StripeWebhookHandler {
   /**
    * Handle failed invoice payment
    */
-  async handleInvoicePaymentFailed(invoice, event) {
+  async handleInvoicePaymentFailed(invoice) {
     const { customer, subscription, id, attempt_count, next_payment_attempt } =
       invoice;
 
@@ -400,7 +400,7 @@ class StripeWebhookHandler {
   /**
    * Handle successful payment
    */
-  async handlePaymentSucceeded(paymentIntent, event) {
+  async handlePaymentSucceeded(paymentIntent) {
     const { id, customer, amount, currency } = paymentIntent;
 
     logger.info('Payment succeeded', {
@@ -429,7 +429,7 @@ class StripeWebhookHandler {
   /**
    * Handle failed payment
    */
-  async handlePaymentFailed(paymentIntent, event) {
+  async handlePaymentFailed(paymentIntent) {
     const { id, customer, amount, last_payment_error } = paymentIntent;
 
     logger.error('Payment failed', {
@@ -459,7 +459,7 @@ class StripeWebhookHandler {
   /**
    * Handle customer created
    */
-  async handleCustomerCreated(customer, event) {
+  async handleCustomerCreated(customer) {
     const { id, email, name } = customer;
 
     logger.info('Customer created', {
@@ -492,7 +492,7 @@ class StripeWebhookHandler {
   /**
    * Handle customer updated
    */
-  async handleCustomerUpdated(customer, event) {
+  async handleCustomerUpdated(customer) {
     const { id, email, name } = customer;
 
     logger.info('Customer updated', {
@@ -519,7 +519,7 @@ class StripeWebhookHandler {
   /**
    * Handle customer deleted
    */
-  async handleCustomerDeleted(customer, event) {
+  async handleCustomerDeleted(customer) {
     const { id } = customer;
 
     logger.info('Customer deleted', {

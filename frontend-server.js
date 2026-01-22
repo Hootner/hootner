@@ -52,13 +52,18 @@ const validateInput = (req, res, next) => {
   
   // Sanitize input to prevent XSS
   if (body && typeof body === 'object') {
+    const sanitizedBody = {};
     for (const key in body) {
       if (typeof body[key] === 'string') {
-        body[key] = body[key].replace(/<script[^>]*>.*?<\/script>/gi, '');
-        body[key] = body[key].replace(/javascript:/gi, '');
-        body[key] = body[key].replace(/on\w+=/gi, '');
+        let sanitizedValue = body[key].replace(/<script[^>]*>.*?<\/script>/gi, '');
+        sanitizedValue = sanitizedValue.replace(/javascript:/gi, '');
+        sanitizedValue = sanitizedValue.replace(/on\w+=/gi, '');
+        sanitizedBody[key] = sanitizedValue;
+      } else {
+        sanitizedBody[key] = body[key];
       }
     }
+    req.body = sanitizedBody;
   }
   next();
 };
@@ -139,7 +144,7 @@ app.get('/api/health', (req, res) => {
 // User management
 app.post('/api/users', async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name } = req.body;
     
     // Business logic: Create user
     const user = {
@@ -223,7 +228,7 @@ app.get('/video-player', (req, res) => {
 });
 
 // Error handling middleware
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   console.error('Server error:', error);
   res.status(500).json({ 
     success: false, 

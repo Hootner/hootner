@@ -7,11 +7,7 @@
 
 import 'dotenv/config';
 import { spawn } from 'child_process';
-import path from 'path';
 import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 class HootnerOrchestrator {
   constructor() {
@@ -20,7 +16,7 @@ class HootnerOrchestrator {
   }
 
   async startService(name, command, args = [], options = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const service = spawn(command, args, {
         stdio: 'pipe',
         cwd: options.cwd || process.cwd(),

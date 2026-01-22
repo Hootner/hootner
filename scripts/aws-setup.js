@@ -108,7 +108,7 @@ function createDynamoDBTable() {
 }
 
 // Create Lambda function for video processing
-function createLambdaFunction(s3Bucket) {
+function createLambdaFunction() {
   const functionName = `${PROJECT_NAME}-video-processor`;
   
   try {
@@ -169,7 +169,7 @@ async function main() {
   // Create resources
   config.s3Bucket = createS3Bucket();
   config.dynamoDBTable = createDynamoDBTable();
-  config.lambdaFunction = createLambdaFunction(config.s3Bucket);
+  config.lambdaFunction = createLambdaFunction();
   
   // Save configuration
   saveConfig(config);

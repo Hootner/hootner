@@ -180,7 +180,8 @@ Promise.all(checks).then((results) => {
   }
 
   // Update cache on success
-  cache[fileHash] = { timestamp: Date.now(), files: changedFiles };
+  const cacheEntry = { timestamp: Date.now(), files: changedFiles };
+  cache[fileHash] = cacheEntry;
   saveCache(cache);
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);

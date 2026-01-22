@@ -11,34 +11,6 @@ const path = require('path');
 const services = [];
 let shuttingDown = false;
 
-// Service configurations
-const SERVICE_CONFIGS = [
-  {
-    name: 'MongoDB',
-    check: () => checkPort(27017),
-    start: null, // Managed by docker-compose
-    color: '\x1b[32m', // Green
-  },
-  {
-    name: 'Redis',
-    check: () => checkPort(6379),
-    start: null, // Managed by docker-compose
-    color: '\x1b[31m', // Red
-  },
-  {
-    name: 'GraphQL API',
-    check: () => checkPort(4000),
-    start: () => startService('GraphQL API', 'node', ['server-enhanced.js'], path.join(__dirname, '..', 'api', 'graphql')),
-    color: '\x1b[35m', // Magenta
-  },
-  {
-    name: 'Video Generation API',
-    check: () => checkPort(5003),
-    start: () => startService('Video Generation', 'python', ['api.py'], path.join(__dirname, '..', 'services', 'video-generation')),
-    color: '\x1b[36m', // Cyan
-  },
-];
-
 // Check if port is in use
 function checkPort(port) {
   return new Promise((resolve) => {

@@ -57,13 +57,15 @@ class SecurityAuditor {
     const envFile = path.join(__dirname, '.env');
     
     // Check if .env exists in production
-    if (fs.existsSync(envFile)) {
+    const safeEnvFile = path.resolve(envFile);
+    if (fs.existsSync(safeEnvFile)) {
       this.log('warn', '.env file exists - ensure it\'s not committed to version control');
     }
     
     // Check .env.example for weak defaults
-    if (fs.existsSync(envExample)) {
-      const envContent = fs.readFileSync(envExample, 'utf8');
+    const safeEnvExample = path.resolve(envExample);
+    if (fs.existsSync(safeEnvExample)) {
+      const envContent = fs.readFileSync(safeEnvExample, 'utf8');
       
       const weakPatterns = [
         { pattern: /JWT_SECRET=.*test.*|JWT_SECRET=.*dev.*|JWT_SECRET=.*123.*/i, message: 'Weak JWT secret detected' },
@@ -91,9 +93,10 @@ class SecurityAuditor {
     
     sensitiveFiles.forEach(file => {
       const filePath = path.join(__dirname, file);
-      if (fs.existsSync(filePath)) {
+      const safeFilePath = path.resolve(filePath);
+      if (fs.existsSync(safeFilePath)) {
         try {
-          const stats = fs.statSync(filePath);
+          const stats = fs.statSync(safeFilePath);
           const mode = (stats.mode & parseInt('777', 8)).toString(8);
           
           if (mode === '777' || mode === '666') {
@@ -115,8 +118,9 @@ class SecurityAuditor {
     
     dockerFiles.forEach(file => {
       const filePath = path.join(__dirname, file);
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf8');
+      const safeFilePath = path.resolve(filePath);
+      if (fs.existsSync(safeFilePath)) {
+        const content = fs.readFileSync(safeFilePath, 'utf8');
         
         // Check for security best practices
         const securityChecks = [
@@ -146,8 +150,9 @@ class SecurityAuditor {
     
     jsFiles.forEach(file => {
       const filePath = path.join(__dirname, file);
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf8');
+      const safeFilePath = path.resolve(filePath);
+      if (fs.existsSync(safeFilePath)) {
+        const content = fs.readFileSync(safeFilePath, 'utf8');
         
         const securityPatterns = [
           { pattern: /eval\s*\(/i, message: `${file}: eval() usage detected`, level: 'error' },

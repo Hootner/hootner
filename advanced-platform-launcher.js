@@ -5,7 +5,7 @@
  * Orchestrates all services with health monitoring, auto-recovery, and load balancing
  */
 
-import { spawn, exec } from 'child_process';
+import { spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import fs from 'fs/promises';
 import path from 'path';
@@ -380,7 +380,7 @@ class ServiceOrchestrator extends EventEmitter {
   async logToFile(serviceName, type, message) {
     const logFile = path.join(__dirname, 'logs', 'services', `${serviceName}-${type}.log`);
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}\\n`;
+    const logEntry = `[${timestamp}] ${message}\n`;
     
     try {
       await fs.appendFile(logFile, logEntry);
@@ -397,13 +397,14 @@ class ServiceOrchestrator extends EventEmitter {
     };
 
     for (const [serviceName, service] of this.services) {
-      metrics.services[serviceName] = {
+      const serviceMetrics = {
         status: service.status,
         uptime: service.startTime ? Date.now() - service.startTime : 0,
         restartCount: service.restartCount,
         pid: service.pid,
         port: service.config.port
       };
+      metrics.services[serviceName] = serviceMetrics;
     }
 
     return metrics;

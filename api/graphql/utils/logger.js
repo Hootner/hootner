@@ -13,8 +13,9 @@ class Logger {
     }
 
     ensureLogDirectory() {
-        if (!fs.existsSync(this.logsDir)) {
-            fs.mkdirSync(this.logsDir, { recursive: true });
+        const safeLogsDir = path.resolve(this.logsDir);
+        if (!fs.existsSync(safeLogsDir)) {
+            fs.mkdirSync(safeLogsDir, { recursive: true });
         }
     }
 
@@ -31,8 +32,9 @@ class Logger {
         const formattedMessage = this.formatMessage(level, message, metadata);
         console.log(formattedMessage);
 
-        // Write to file
-        const logFile = path.join(this.logsDir, `${level}.log`);
+        // Write to file with safe path
+        const safeLevel = level.replace(/[^a-zA-Z0-9_-]/g, '_');
+        const logFile = path.join(this.logsDir, `${safeLevel}.log`);
         fs.appendFileSync(logFile, formattedMessage + '\n');
     }
 

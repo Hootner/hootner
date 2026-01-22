@@ -82,7 +82,7 @@ router.get('/orders/:userId', async (req, res) => {
 
 router.post('/contact-seller', async (req, res) => {
   try {
-    const { productId, email, message } = req.body;
+    const { productId, email } = req.body;
     const product = await Product.findById(productId);
     
     // TODO: Send email to seller

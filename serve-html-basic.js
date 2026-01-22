@@ -65,16 +65,17 @@ function safeResolve(root, requestPath) {
 }
 
 function serveFile(filePath, res) {
-  fs.stat(filePath, (err, stats) => {
+  const safeFilePath = path.resolve(filePath);
+  fs.stat(safeFilePath, (err, stats) => {
     if (err || !stats.isFile()) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Not found');
       return;
     }
-    const ext = path.extname(filePath).toLowerCase();
+    const ext = path.extname(safeFilePath).toLowerCase();
     const contentType = mimeTypes[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': contentType });
-    const stream = fs.createReadStream(filePath);
+    const stream = fs.createReadStream(safeFilePath);
     stream.pipe(res);
   });
 }
@@ -84,8 +85,9 @@ const server = http.createServer((req, res) => {
   const pathname = parsed.pathname || '/';
 
   // Route mapped pages
-  if (routes[pathname]) {
-    const pagePath = safeResolve(PAGES_ROOT, routes[pathname]);
+  const routeFile = routes[pathname];
+  if (routeFile) {
+    const pagePath = safeResolve(PAGES_ROOT, routeFile);
     if (pagePath) {
       return serveFile(pagePath, res);
     }

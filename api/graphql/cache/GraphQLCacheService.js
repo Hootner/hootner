@@ -7,7 +7,6 @@ const Redis = require('ioredis');
 const config = require('./shared/config');
 const {
   generateCacheKey,
-  parseInfo,
   calculateHitRate,
   extractKeyCount,
 } = require('./shared/utils');
@@ -81,7 +80,7 @@ class GraphQLCacheService {
           // Safe JSON parsing with validation
           const parsed = JSON.parse(cached);
           // Validate parsed data is not malicious
-          if (parsed && typeof parsed === 'object') {
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
             console.log(`Cache HIT: ${key}`);
             return parsed;
           }
@@ -212,8 +211,10 @@ class GraphQLCacheService {
       createVideo: () => this.invalidate('Video'),
       updateVideo: () => this.invalidate('Video', args.id),
       deleteVideo: () => this.invalidate('Video', args.id),
-      createComment: () =>
-        this.invalidate('Comment') && this.invalidate('Video', args.videoId),
+      createComment: () => {
+        this.invalidate('Comment');
+        this.invalidate('Video', args.videoId);
+      },
       updateComment: () => this.invalidate('Comment', args.id),
       deleteComment: () => this.invalidate('Comment', args.id),
       updateUser: () => this.invalidateUser(args.id),
@@ -238,8 +239,8 @@ class GraphQLCacheService {
       const cached = await this.get(key);
 
       if (!cached) {
-        const result = await execute();
-        await this.set(key, result);
+        const queryResult = await execute();
+        await this.set(key, queryResult);
       }
     }
 
@@ -256,27 +257,28 @@ class GraphQLCacheService {
       const memory = await this.redis.info('memory');
 
       // Parse info strings
-      const parseInfo = (str) => {
+      const parseInfoLocal = (str) => {
         const lines = str.split('\r\n');
         const stats = {};
         lines.forEach((line) => {
           const [key, value] = line.split(':');
           if (key && value) {
-            stats[key] = value;
+            const sanitizedKey = key.replace(/[^a-zA-Z0-9_]/g, '_');
+            stats[sanitizedKey] = value;
           }
         });
         return stats;
       };
 
-      const statsInfo = parseInfo(info);
-      const keyspaceInfo = parseInfo(keyspace);
-      const memoryInfo = parseInfo(memory);
+      const statsInfo = parseInfoLocal(info);
+      const keyspaceInfo = parseInfoLocal(keyspace);
+      const memoryInfo = parseInfoLocal(memory);
 
       return {
         hits: parseInt(statsInfo.keyspace_hits) || 0,
         misses: parseInt(statsInfo.keyspace_misses) || 0,
         hitRate: this.calculateHitRate(statsInfo),
-        keys: this.extractKeyCount(keyspaceInfo),
+        keys: await this.extractKeyCount(keyspaceInfo),
         memory: memoryInfo.used_memory_human,
         evictions: parseInt(statsInfo.evicted_keys) || 0,
       };
@@ -354,7 +356,7 @@ class GraphQLCacheService {
         try {
           const parsed = JSON.parse(v);
           // Validate parsed data
-          if (parsed && typeof parsed === 'object') {
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
             return { key: keys[i], value: parsed };
           }
           return { key: keys[i], value: null };

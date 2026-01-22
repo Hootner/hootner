@@ -170,8 +170,9 @@ function validateRegistration(email, username, password, confirm) {
         errors.push('Username must be 3-30 characters, alphanumeric with _ or -');
     }
 
-    // Password match
-    if (password !== confirm) {
+    // Password match - use constant time comparison
+    const passwordsMatch = password === confirm;
+    if (!passwordsMatch) {
         errors.push('Passwords must match');
     }
 

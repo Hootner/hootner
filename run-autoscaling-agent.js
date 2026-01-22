@@ -166,15 +166,17 @@ class AutoScalingAgent {
 
         try {
             switch (decision.action) {
-                case 'scale_up':
+                case 'scale_up': {
                     console.log(`📈 Scaling UP from ${decision.currentInstances} to ${replicas} instances`);
                     await this.performScaling(scalingMode, replicas);
                     break;
+                }
 
-                case 'scale_down':
+                case 'scale_down': {
                     console.log(`📉 Scaling DOWN from ${decision.currentInstances} to ${replicas} instances`);
                     await this.performScaling(scalingMode, replicas);
                     break;
+                }
             }
 
             console.log('✅ Scaling operation completed successfully');
@@ -192,7 +194,7 @@ class AutoScalingAgent {
         const execAsync = promisify(exec);
 
         switch (mode) {
-            case 'kubernetes':
+            case 'kubernetes': {
                 console.log('🔄 Executing Kubernetes scaling...');
                 const k8sCommand = `kubectl scale deployment hootner --replicas=${replicas}`;
                 console.log(`   Command: ${k8sCommand}`);
@@ -210,8 +212,9 @@ class AutoScalingAgent {
                     console.log('   🔍 DRY RUN - Command not executed');
                 }
                 break;
+            }
 
-            case 'docker':
+            case 'docker': {
                 console.log('🔄 Executing Docker Compose scaling...');
                 const dockerCommand = `docker-compose up -d --scale app=${replicas}`;
                 console.log(`   Command: ${dockerCommand}`);
@@ -232,15 +235,16 @@ class AutoScalingAgent {
                     console.log('   🔍 DRY RUN - Command not executed');
                 }
                 break;
+            }
 
-            case 'aws':
+            case 'aws': {
                 console.log('🔄 Executing AWS ECS/EKS scaling...');
                 const awsCommand = `aws ecs update-service --cluster hootner-cluster --service hootner-service --desired-count ${replicas}`;
                 console.log(`   Command: ${awsCommand}`);
 
                 if (process.env.DRY_RUN !== 'true') {
                     try {
-                        const { stdout } = await execAsync(awsCommand);
+                        await execAsync(awsCommand);
                         console.log('   ✅ Service scaled successfully');
                     } catch (error) {
                         console.log('   ⚠️  AWS CLI not available or not configured');
@@ -250,12 +254,14 @@ class AutoScalingAgent {
                     console.log('   🔍 DRY RUN - Command not executed');
                 }
                 break;
+            }
 
-            default:
+            default: {
                 console.log('🔍 SIMULATION MODE (no actual scaling)');
                 console.log(`   Would execute: kubectl scale deployment hootner --replicas=${replicas}`);
                 console.log(`   Would execute: docker-compose up -d --scale app=${replicas}`);
                 console.log('   💡 Set SCALING_MODE=kubernetes or docker to enable real scaling');
+            }
         }
     }
 

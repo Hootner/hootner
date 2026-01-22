@@ -2,22 +2,16 @@ import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 import 'dotenv/config';
-import fs from 'fs';
-import path from 'path';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import { fileURLToPath } from 'url';
 import connectDB from './db.js';
 import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
 import messagesRoutes from './routes/messages.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Validate environment variables at startup
-const envConfig = validateEnvironment('api');
+validateEnvironment('api');
 
 // Enhanced GraphQL Schema
 const schema = buildSchema(`

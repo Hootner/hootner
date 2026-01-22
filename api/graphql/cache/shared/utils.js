@@ -10,13 +10,14 @@ const crypto = require('crypto');
  */
 function generateCacheKey(query, variables = {}, context = {}) {
   const userId = context.user?.id || 'anonymous';
+  const sanitizedUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const queryHash = crypto
     .createHash('sha256')
     .update(JSON.stringify({ query, variables }))
     .digest('hex')
     .substring(0, 16);
 
-  return `query:${userId}:${queryHash}`;
+  return `query:${sanitizedUserId}:${queryHash}`;
 }
 
 /**
@@ -69,10 +70,10 @@ function calculateHitRate(hits, misses) {
  * Extract key count from Redis keyspace info
  */
 function extractKeyCount(keyspaceInfo) {
-  const db0 = keyspaceInfo.db0;
-  if (!db0) return 0;
+  const db0Info = keyspaceInfo.db0;
+  if (!db0Info) return 0;
 
-  const match = db0.match(/keys=(\d+)/);
+  const match = db0Info.match(/keys=(\d+)/);
   return match ? parseInt(match[1]) : 0;
 }
 
@@ -112,7 +113,9 @@ function createPipeline(redis, operations) {
   const pipeline = redis.pipeline();
 
   operations.forEach(({ command, args }) => {
-    pipeline[command](...args);
+    if (typeof pipeline[command] === 'function') {
+      pipeline[command](...args);
+    }
   });
 
   return pipeline;
