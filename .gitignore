@@ -9,3 +9,8 @@ coverage/
 .aws/
 .pm2/
 logs/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
