@@ -2,12 +2,10 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const TASKS_FILE = 'copilot-tasks.json';
+const MAX_FILES_TO_SCAN = 20;
+const MAGIC_NUMBERS = [100, 200, 300, 400, 500, 1000, 3600, 86400];
 
 class CopilotTaskManager {
   constructor() {
@@ -277,7 +275,8 @@ Comment your changes with // COPILOT: [description]`;
     }
 
     // Magic numbers
-    const magicNumbers = content.match(/\b(100|200|300|400|500|1000|3600|86400)\b/g);
+    const magicNumberPattern = new RegExp(`\\b(${MAGIC_NUMBERS.join('|')})\\b`, 'g');
+    const magicNumbers = content.match(magicNumberPattern);
     if (magicNumbers && magicNumbers.length > 3) {
       suggestions.push('Extract magic numbers into named constants');
     }
@@ -420,12 +419,19 @@ Comment your changes with // COPILOT: [description]`;
     
     try {
       // Import and run the commit validator
-      import('./commit-validator.js').then(() => {
-        console.log(chalk.green('Commit validation completed'));
-      }).catch(error => {
-        console.log(chalk.red('❌ Validation failed:'), error.message);
-        process.exit(1);
-      });
+      import('./commit-validator.js')
+        .then(() => {
+          console.log(chalk.green('Commit validation completed'));
+        })
+        .catch(error => {
+          if (error.code === 'ERR_MODULE_NOT_FOUND') {
+            console.log(chalk.yellow('⚠️  Commit validator not available'));
+            console.log(chalk.gray('Install: npm install --save-dev @commitlint/cli'));
+          } else {
+            console.log(chalk.red('❌ Validation failed:'), error.message);
+            process.exit(1);
+          }
+        });
     } catch (error) {
       console.log(chalk.yellow('⚠️  Commit validator not available'));
       console.log(chalk.gray('Install: npm install --save-dev @commitlint/cli'));
@@ -447,7 +453,7 @@ Comment your changes with // COPILOT: [description]`;
       }
     });
     
-    return fileList.slice(0, 20); // Limit to first 20 files for performance
+    return fileList.slice(0, MAX_FILES_TO_SCAN);
   }
 
   // Show help

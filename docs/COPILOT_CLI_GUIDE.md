@@ -338,6 +338,6 @@ Run: node copilot-delegate.js delegate "Optimize search algorithm" src/search.js
 ## 📞 Support
 
 For issues or feature requests:
-- Check [AI_AGENT_ORCHESTRATION.md](ai/AI_AGENT_ORCHESTRATION.md)
+- Check [AI_AGENT_ORCHESTRATION.md](../docs/ai/AI_AGENT_ORCHESTRATION.md)
 - Review [commit-validator.js](../commit-validator.js) for validation rules
 - Run `node copilot-delegate.js` (no args) for quick help
