@@ -50,15 +50,15 @@ const graphqlLimiter = createRateLimiter(
 const securityHeaders = helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      imgSrc: ["'self'", 'data:', 'https:'],
-      connectSrc: ["'self'", 'ws:', 'wss:'],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'", 'https:'],
-      frameSrc: ["'none'"],
+      defaultSrc: ['\'self\''],
+      scriptSrc: ['\'self\'', '\'unsafe-inline\'', 'https://cdn.jsdelivr.net'],
+      styleSrc: ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
+      imgSrc: ['\'self\'', 'data:', 'https:'],
+      connectSrc: ['\'self\'', 'ws:', 'wss:'],
+      fontSrc: ['\'self\'', 'https://fonts.gstatic.com'],
+      objectSrc: ['\'none\''],
+      mediaSrc: ['\'self\'', 'https:'],
+      frameSrc: ['\'none\''],
     },
   },
   hsts: {

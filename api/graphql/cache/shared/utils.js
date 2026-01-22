@@ -3,17 +3,17 @@
  * Common functions used across cache implementations
  */
 
-const crypto = require("crypto");
+const crypto = require('crypto');
 
 /**
  * Generate cache key from GraphQL query and variables
  */
 function generateCacheKey(query, variables = {}, context = {}) {
-  const userId = context.user?.id || "anonymous";
+  const userId = context.user?.id || 'anonymous';
   const queryHash = crypto
-    .createHash("sha256")
+    .createHash('sha256')
     .update(JSON.stringify({ query, variables }))
-    .digest("hex")
+    .digest('hex')
     .substring(0, 16);
 
   return `query:${userId}:${queryHash}`;
@@ -23,11 +23,11 @@ function generateCacheKey(query, variables = {}, context = {}) {
  * Parse Redis INFO command output
  */
 function parseInfo(infoString) {
-  const lines = infoString.split("\r\n");
+  const lines = infoString.split('\r\n');
   const stats = {};
 
   lines.forEach((line) => {
-    const [key, value] = line.split(":");
+    const [key, value] = line.split(':');
     if (key && value) {
       stats[key] = value;
     }
@@ -41,19 +41,19 @@ function parseInfo(infoString) {
  */
 function extractTypeName(operationName) {
   const typeMap = {
-    getUser: "User",
-    getUserProfile: "User",
-    getUserVideos: "Video",
-    getVideo: "Video",
-    getVideos: "Video",
-    getTrendingVideos: "Video",
-    searchVideos: "Video",
-    getComments: "Comment",
-    getVideoComments: "Comment",
-    getVideoStats: "VideoStats",
+    getUser: 'User',
+    getUserProfile: 'User',
+    getUserVideos: 'Video',
+    getVideo: 'Video',
+    getVideos: 'Video',
+    getTrendingVideos: 'Video',
+    searchVideos: 'Video',
+    getComments: 'Comment',
+    getVideoComments: 'Comment',
+    getVideoStats: 'VideoStats',
   };
 
-  return typeMap[operationName] || "Query";
+  return typeMap[operationName] || 'Query';
 }
 
 /**
@@ -81,7 +81,7 @@ function extractKeyCount(keyspaceInfo) {
  */
 function isMutation(query) {
   if (!query) return false;
-  return query.trim().startsWith("mutation");
+  return query.trim().startsWith('mutation');
 }
 
 /**
@@ -102,7 +102,7 @@ function generateTaggedKeys(tags) {
  * Sanitize cache key to prevent injection
  */
 function sanitizeCacheKey(key) {
-  return key.replace(/[^a-zA-Z0-9:_-]/g, "_");
+  return key.replace(/[^a-zA-Z0-9:_-]/g, '_');
 }
 
 /**

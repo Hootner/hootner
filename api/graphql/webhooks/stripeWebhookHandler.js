@@ -5,34 +5,34 @@
 
 // Validate required environment variables
 if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY environment variable is required");
+  throw new Error('STRIPE_SECRET_KEY environment variable is required');
 }
 if (!process.env.STRIPE_WEBHOOK_SECRET) {
-  throw new Error("STRIPE_WEBHOOK_SECRET environment variable is required");
+  throw new Error('STRIPE_WEBHOOK_SECRET environment variable is required');
 }
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const { logger } = require("../utils/logger");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { logger } = require('../utils/logger');
 
 class StripeWebhookHandler {
   constructor() {
     this.webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     this.eventHandlers = {
-      "customer.subscription.created":
+      'customer.subscription.created':
         this.handleSubscriptionCreated.bind(this),
-      "customer.subscription.updated":
+      'customer.subscription.updated':
         this.handleSubscriptionUpdated.bind(this),
-      "customer.subscription.deleted":
+      'customer.subscription.deleted':
         this.handleSubscriptionDeleted.bind(this),
-      "customer.subscription.trial_will_end":
+      'customer.subscription.trial_will_end':
         this.handleTrialWillEnd.bind(this),
-      "invoice.paid": this.handleInvoicePaid.bind(this),
-      "invoice.payment_failed": this.handleInvoicePaymentFailed.bind(this),
-      "payment_intent.succeeded": this.handlePaymentSucceeded.bind(this),
-      "payment_intent.payment_failed": this.handlePaymentFailed.bind(this),
-      "customer.created": this.handleCustomerCreated.bind(this),
-      "customer.updated": this.handleCustomerUpdated.bind(this),
-      "customer.deleted": this.handleCustomerDeleted.bind(this),
+      'invoice.paid': this.handleInvoicePaid.bind(this),
+      'invoice.payment_failed': this.handleInvoicePaymentFailed.bind(this),
+      'payment_intent.succeeded': this.handlePaymentSucceeded.bind(this),
+      'payment_intent.payment_failed': this.handlePaymentFailed.bind(this),
+      'customer.created': this.handleCustomerCreated.bind(this),
+      'customer.updated': this.handleCustomerUpdated.bind(this),
+      'customer.deleted': this.handleCustomerDeleted.bind(this),
     };
   }
 
@@ -40,11 +40,11 @@ class StripeWebhookHandler {
    * Verify and process webhook event
    */
   async handleWebhook(req, res) {
-    const signature = req.headers["stripe-signature"];
+    const signature = req.headers['stripe-signature'];
 
     if (!signature) {
-      logger.error("Missing Stripe signature header");
-      return res.status(400).json({ error: "Missing signature" });
+      logger.error('Missing Stripe signature header');
+      return res.status(400).json({ error: 'Missing signature' });
     }
 
     let event;
@@ -57,17 +57,17 @@ class StripeWebhookHandler {
         this.webhookSecret
       );
 
-      logger.info("Webhook verified", {
+      logger.info('Webhook verified', {
         eventId: event.id,
         eventType: event.type,
         timestamp: new Date(event.created * 1000).toISOString(),
       });
     } catch (err) {
-      logger.error("Webhook signature verification failed", {
+      logger.error('Webhook signature verification failed', {
         error: err.message,
-        signature: signature.substring(0, 20) + "...",
+        signature: signature.substring(0, 20) + '...',
       });
-      return res.status(400).json({ error: "Invalid signature" });
+      return res.status(400).json({ error: 'Invalid signature' });
     }
 
     try {
@@ -76,12 +76,12 @@ class StripeWebhookHandler {
 
       if (handler) {
         await handler(event.data.object, event);
-        logger.info("Webhook processed successfully", {
+        logger.info('Webhook processed successfully', {
           eventId: event.id,
           eventType: event.type,
         });
       } else {
-        logger.warn("Unhandled webhook event type", {
+        logger.warn('Unhandled webhook event type', {
           eventId: event.id,
           eventType: event.type,
         });
@@ -90,7 +90,7 @@ class StripeWebhookHandler {
       // Always return 200 to acknowledge receipt
       return res.status(200).json({ received: true, eventId: event.id });
     } catch (error) {
-      logger.error("Webhook processing error", {
+      logger.error('Webhook processing error', {
         eventId: event.id,
         eventType: event.type,
         error: error.message,
@@ -99,7 +99,7 @@ class StripeWebhookHandler {
 
       // Return 500 so Stripe retries the webhook
       return res.status(500).json({
-        error: "Webhook processing failed",
+        error: 'Webhook processing failed',
         eventId: event.id,
       });
     }
@@ -112,7 +112,7 @@ class StripeWebhookHandler {
     const { customer, id, status, items, current_period_end, trial_end } =
       subscription;
 
-    logger.info("Subscription created", {
+    logger.info('Subscription created', {
       subscriptionId: id,
       customerId: customer,
       status,
@@ -131,19 +131,19 @@ class StripeWebhookHandler {
       });
 
       // Send welcome email
-      await this.sendSubscriptionEmail(customer, "welcome", {
+      await this.sendSubscriptionEmail(customer, 'welcome', {
         subscriptionId: id,
-        planName: items.data[0]?.price.nickname || "Premium Plan",
+        planName: items.data[0]?.price.nickname || 'Premium Plan',
       });
 
       // Track analytics
-      await this.trackEvent("subscription_created", {
+      await this.trackEvent('subscription_created', {
         subscriptionId: id,
         customerId: customer,
         planId: items.data[0]?.price.id,
       });
     } catch (error) {
-      logger.error("Error processing subscription created", {
+      logger.error('Error processing subscription created', {
         subscriptionId: id,
         error: error.message,
       });
@@ -164,7 +164,7 @@ class StripeWebhookHandler {
       current_period_end,
     } = subscription;
 
-    logger.info("Subscription updated", {
+    logger.info('Subscription updated', {
       subscriptionId: id,
       customerId: customer,
       status,
@@ -184,20 +184,20 @@ class StripeWebhookHandler {
 
       // Notify user if subscription is set to cancel
       if (cancel_at_period_end) {
-        await this.sendSubscriptionEmail(customer, "cancellation_scheduled", {
+        await this.sendSubscriptionEmail(customer, 'cancellation_scheduled', {
           subscriptionId: id,
           endDate: new Date(current_period_end * 1000).toLocaleDateString(),
         });
       }
 
       // Track analytics
-      await this.trackEvent("subscription_updated", {
+      await this.trackEvent('subscription_updated', {
         subscriptionId: id,
         customerId: customer,
         status,
       });
     } catch (error) {
-      logger.error("Error processing subscription updated", {
+      logger.error('Error processing subscription updated', {
         subscriptionId: id,
         error: error.message,
       });
@@ -211,7 +211,7 @@ class StripeWebhookHandler {
   async handleSubscriptionDeleted(subscription, event) {
     const { customer, id, status } = subscription;
 
-    logger.info("Subscription deleted", {
+    logger.info('Subscription deleted', {
       subscriptionId: id,
       customerId: customer,
       status,
@@ -222,7 +222,7 @@ class StripeWebhookHandler {
       await this.updateUserSubscription({
         customerId: customer,
         subscriptionId: id,
-        status: "canceled",
+        status: 'canceled',
         canceledAt: new Date(),
       });
 
@@ -230,17 +230,17 @@ class StripeWebhookHandler {
       await this.revokePremiumAccess(customer);
 
       // Send cancellation confirmation
-      await this.sendSubscriptionEmail(customer, "canceled", {
+      await this.sendSubscriptionEmail(customer, 'canceled', {
         subscriptionId: id,
       });
 
       // Track analytics
-      await this.trackEvent("subscription_deleted", {
+      await this.trackEvent('subscription_deleted', {
         subscriptionId: id,
         customerId: customer,
       });
     } catch (error) {
-      logger.error("Error processing subscription deleted", {
+      logger.error('Error processing subscription deleted', {
         subscriptionId: id,
         error: error.message,
       });
@@ -254,7 +254,7 @@ class StripeWebhookHandler {
   async handleTrialWillEnd(subscription, event) {
     const { customer, id, trial_end } = subscription;
 
-    logger.info("Trial will end", {
+    logger.info('Trial will end', {
       subscriptionId: id,
       customerId: customer,
       trialEnd: new Date(trial_end * 1000).toISOString(),
@@ -262,7 +262,7 @@ class StripeWebhookHandler {
 
     try {
       // Send reminder email
-      await this.sendSubscriptionEmail(customer, "trial_ending", {
+      await this.sendSubscriptionEmail(customer, 'trial_ending', {
         subscriptionId: id,
         trialEndDate: new Date(trial_end * 1000).toLocaleDateString(),
         daysRemaining: Math.ceil(
@@ -271,12 +271,12 @@ class StripeWebhookHandler {
       });
 
       // Track analytics
-      await this.trackEvent("trial_ending", {
+      await this.trackEvent('trial_ending', {
         subscriptionId: id,
         customerId: customer,
       });
     } catch (error) {
-      logger.error("Error processing trial ending", {
+      logger.error('Error processing trial ending', {
         subscriptionId: id,
         error: error.message,
       });
@@ -290,7 +290,7 @@ class StripeWebhookHandler {
   async handleInvoicePaid(invoice, event) {
     const { customer, subscription, id, amount_paid, billing_reason } = invoice;
 
-    logger.info("Invoice paid", {
+    logger.info('Invoice paid', {
       invoiceId: id,
       customerId: customer,
       subscriptionId: subscription,
@@ -316,8 +316,8 @@ class StripeWebhookHandler {
       }
 
       // Send receipt email (only for subscription renewals, not initial)
-      if (billing_reason === "subscription_cycle") {
-        await this.sendSubscriptionEmail(customer, "payment_received", {
+      if (billing_reason === 'subscription_cycle') {
+        await this.sendSubscriptionEmail(customer, 'payment_received', {
           invoiceId: id,
           amount: amount_paid / 100,
           receiptUrl: invoice.hosted_invoice_url,
@@ -325,13 +325,13 @@ class StripeWebhookHandler {
       }
 
       // Track analytics
-      await this.trackEvent("invoice_paid", {
+      await this.trackEvent('invoice_paid', {
         invoiceId: id,
         customerId: customer,
         amount: amount_paid / 100,
       });
     } catch (error) {
-      logger.error("Error processing invoice paid", {
+      logger.error('Error processing invoice paid', {
         invoiceId: id,
         error: error.message,
       });
@@ -346,7 +346,7 @@ class StripeWebhookHandler {
     const { customer, subscription, id, attempt_count, next_payment_attempt } =
       invoice;
 
-    logger.error("Invoice payment failed", {
+    logger.error('Invoice payment failed', {
       invoiceId: id,
       customerId: customer,
       subscriptionId: subscription,
@@ -367,7 +367,7 @@ class StripeWebhookHandler {
       });
 
       // Send payment failure notification
-      await this.sendSubscriptionEmail(customer, "payment_failed", {
+      await this.sendSubscriptionEmail(customer, 'payment_failed', {
         invoiceId: id,
         attemptCount: attempt_count,
         updatePaymentUrl: `${process.env.FRONTEND_URL}/account/billing`,
@@ -377,19 +377,19 @@ class StripeWebhookHandler {
       if (!next_payment_attempt) {
         await this.suspendSubscriptionAccess(customer, subscription);
 
-        await this.sendSubscriptionEmail(customer, "subscription_suspended", {
+        await this.sendSubscriptionEmail(customer, 'subscription_suspended', {
           subscriptionId: subscription,
         });
       }
 
       // Track analytics
-      await this.trackEvent("invoice_payment_failed", {
+      await this.trackEvent('invoice_payment_failed', {
         invoiceId: id,
         customerId: customer,
         attemptCount: attempt_count,
       });
     } catch (error) {
-      logger.error("Error processing payment failure", {
+      logger.error('Error processing payment failure', {
         invoiceId: id,
         error: error.message,
       });
@@ -403,7 +403,7 @@ class StripeWebhookHandler {
   async handlePaymentSucceeded(paymentIntent, event) {
     const { id, customer, amount, currency } = paymentIntent;
 
-    logger.info("Payment succeeded", {
+    logger.info('Payment succeeded', {
       paymentIntentId: id,
       customerId: customer,
       amount: amount / 100,
@@ -412,13 +412,13 @@ class StripeWebhookHandler {
 
     try {
       // Track successful payment
-      await this.trackEvent("payment_succeeded", {
+      await this.trackEvent('payment_succeeded', {
         paymentIntentId: id,
         customerId: customer,
         amount: amount / 100,
       });
     } catch (error) {
-      logger.error("Error processing payment succeeded", {
+      logger.error('Error processing payment succeeded', {
         paymentIntentId: id,
         error: error.message,
       });
@@ -432,7 +432,7 @@ class StripeWebhookHandler {
   async handlePaymentFailed(paymentIntent, event) {
     const { id, customer, amount, last_payment_error } = paymentIntent;
 
-    logger.error("Payment failed", {
+    logger.error('Payment failed', {
       paymentIntentId: id,
       customerId: customer,
       amount: amount / 100,
@@ -441,14 +441,14 @@ class StripeWebhookHandler {
 
     try {
       // Track failed payment
-      await this.trackEvent("payment_failed", {
+      await this.trackEvent('payment_failed', {
         paymentIntentId: id,
         customerId: customer,
         amount: amount / 100,
         errorMessage: last_payment_error?.message,
       });
     } catch (error) {
-      logger.error("Error processing payment failed", {
+      logger.error('Error processing payment failed', {
         paymentIntentId: id,
         error: error.message,
       });
@@ -462,7 +462,7 @@ class StripeWebhookHandler {
   async handleCustomerCreated(customer, event) {
     const { id, email, name } = customer;
 
-    logger.info("Customer created", {
+    logger.info('Customer created', {
       customerId: id,
       email,
       name,
@@ -477,11 +477,11 @@ class StripeWebhookHandler {
       });
 
       // Track analytics
-      await this.trackEvent("customer_created", {
+      await this.trackEvent('customer_created', {
         customerId: id,
       });
     } catch (error) {
-      logger.error("Error processing customer created", {
+      logger.error('Error processing customer created', {
         customerId: id,
         error: error.message,
       });
@@ -495,7 +495,7 @@ class StripeWebhookHandler {
   async handleCustomerUpdated(customer, event) {
     const { id, email, name } = customer;
 
-    logger.info("Customer updated", {
+    logger.info('Customer updated', {
       customerId: id,
       email,
     });
@@ -508,7 +508,7 @@ class StripeWebhookHandler {
         name,
       });
     } catch (error) {
-      logger.error("Error processing customer updated", {
+      logger.error('Error processing customer updated', {
         customerId: id,
         error: error.message,
       });
@@ -522,7 +522,7 @@ class StripeWebhookHandler {
   async handleCustomerDeleted(customer, event) {
     const { id } = customer;
 
-    logger.info("Customer deleted", {
+    logger.info('Customer deleted', {
       customerId: id,
     });
 
@@ -531,11 +531,11 @@ class StripeWebhookHandler {
       await this.unlinkStripeCustomer(id);
 
       // Track analytics
-      await this.trackEvent("customer_deleted", {
+      await this.trackEvent('customer_deleted', {
         customerId: id,
       });
     } catch (error) {
-      logger.error("Error processing customer deleted", {
+      logger.error('Error processing customer deleted', {
         customerId: id,
         error: error.message,
       });
@@ -546,57 +546,57 @@ class StripeWebhookHandler {
   // Database helper methods (implement with your ORM/database)
   async updateUserSubscription(data) {
     // TODO: Implement database update
-    logger.debug("Update user subscription", data);
+    logger.debug('Update user subscription', data);
   }
 
   async recordPayment(data) {
     // TODO: Implement payment recording
-    logger.debug("Record payment", data);
+    logger.debug('Record payment', data);
   }
 
   async recordPaymentFailure(data) {
     // TODO: Implement payment failure recording
-    logger.debug("Record payment failure", data);
+    logger.debug('Record payment failure', data);
   }
 
   async linkStripeCustomer(data) {
     // TODO: Implement customer linking
-    logger.debug("Link Stripe customer", data);
+    logger.debug('Link Stripe customer', data);
   }
 
   async updateStripeCustomer(data) {
     // TODO: Implement customer update
-    logger.debug("Update Stripe customer", data);
+    logger.debug('Update Stripe customer', data);
   }
 
   async unlinkStripeCustomer(customerId) {
     // TODO: Implement customer unlinking
-    logger.debug("Unlink Stripe customer", { customerId });
+    logger.debug('Unlink Stripe customer', { customerId });
   }
 
   async revokePremiumAccess(customerId) {
     // TODO: Implement access revocation
-    logger.debug("Revoke premium access", { customerId });
+    logger.debug('Revoke premium access', { customerId });
   }
 
   async extendSubscriptionAccess(customerId, subscriptionId) {
     // TODO: Implement access extension
-    logger.debug("Extend subscription access", { customerId, subscriptionId });
+    logger.debug('Extend subscription access', { customerId, subscriptionId });
   }
 
   async suspendSubscriptionAccess(customerId, subscriptionId) {
     // TODO: Implement access suspension
-    logger.debug("Suspend subscription access", { customerId, subscriptionId });
+    logger.debug('Suspend subscription access', { customerId, subscriptionId });
   }
 
   async sendSubscriptionEmail(customerId, type, data) {
     // TODO: Implement email sending
-    logger.debug("Send subscription email", { customerId, type, data });
+    logger.debug('Send subscription email', { customerId, type, data });
   }
 
   async trackEvent(eventName, data) {
     // TODO: Implement analytics tracking
-    logger.debug("Track event", { eventName, data });
+    logger.debug('Track event', { eventName, data });
   }
 }
 

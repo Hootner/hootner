@@ -8,25 +8,25 @@ let DOMPurify = null;
 let isBrowser = false;
 
 // Detect environment
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   // Browser environment
   isBrowser = true;
   try {
-    DOMPurify = require("dompurify");
+    DOMPurify = require('dompurify');
   } catch (e) {
     console.warn(
-      "DOMPurify not available in browser, falling back to escaping"
+      'DOMPurify not available in browser, falling back to escaping'
     );
   }
 } else {
   // Node.js environment
   try {
-    const createDOMPurify = require("dompurify");
-    const { JSDOM } = require("jsdom");
-    const window = new JSDOM("").window;
+    const createDOMPurify = require('dompurify');
+    const { JSDOM } = require('jsdom');
+    const window = new JSDOM('').window;
     DOMPurify = createDOMPurify(window);
   } catch (e) {
-    console.warn("DOMPurify/JSDOM not available, falling back to escaping");
+    console.warn('DOMPurify/JSDOM not available, falling back to escaping');
   }
 }
 
@@ -37,14 +37,14 @@ if (typeof window !== "undefined") {
  * @returns {string} - Escaped string
  */
 function escapeHtml(unsafe) {
-  if (typeof unsafe !== "string") return "";
+  if (typeof unsafe !== 'string') return '';
   return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;")
-    .replace(/\//g, "&#x2F;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/\//g, '&#x2F;');
 }
 
 /**
@@ -54,26 +54,26 @@ function escapeHtml(unsafe) {
  * @returns {string} - Sanitized HTML
  */
 function sanitizeHtml(dirty, config = {}) {
-  if (typeof dirty !== "string") return "";
+  if (typeof dirty !== 'string') return '';
 
   // Use DOMPurify if available
   if (DOMPurify) {
     const defaultConfig = {
       ALLOWED_TAGS: [
-        "b",
-        "i",
-        "em",
-        "strong",
-        "a",
-        "p",
-        "br",
-        "ul",
-        "ol",
-        "li",
-        "span",
-        "div",
+        'b',
+        'i',
+        'em',
+        'strong',
+        'a',
+        'p',
+        'br',
+        'ul',
+        'ol',
+        'li',
+        'span',
+        'div',
       ],
-      ALLOWED_ATTR: ["href", "title", "class", "id", "style"],
+      ALLOWED_ATTR: ['href', 'title', 'class', 'id', 'style'],
       ALLOW_DATA_ATTR: false,
       SAFE_FOR_TEMPLATES: true,
     };
@@ -91,7 +91,7 @@ function sanitizeHtml(dirty, config = {}) {
  * @returns {string} - Plain text
  */
 function sanitizeText(dirty) {
-  if (typeof dirty !== "string") return "";
+  if (typeof dirty !== 'string') return '';
 
   if (DOMPurify) {
     return DOMPurify.sanitize(dirty, { ALLOWED_TAGS: [] });
@@ -106,18 +106,18 @@ function sanitizeText(dirty) {
  * @returns {string} - Safe URL or empty string
  */
 function sanitizeUrl(url) {
-  if (typeof url !== "string") return "";
+  if (typeof url !== 'string') return '';
 
   const trimmed = url.trim().toLowerCase();
 
   // Block dangerous protocols
   if (
-    trimmed.startsWith("javascript:") ||
-    trimmed.startsWith("data:") ||
-    trimmed.startsWith("vbscript:") ||
-    trimmed.startsWith("file:")
+    trimmed.startsWith('javascript:') ||
+    trimmed.startsWith('data:') ||
+    trimmed.startsWith('vbscript:') ||
+    trimmed.startsWith('file:')
   ) {
-    return "";
+    return '';
   }
 
   return url;
@@ -130,44 +130,44 @@ function sanitizeUrl(url) {
  * @param {string} content - Element content
  * @returns {string} - Safe HTML string
  */
-function createSafeElement(tagName, attributes = {}, content = "") {
+function createSafeElement(tagName, attributes = {}, content = '') {
   const allowedTags = [
-    "div",
-    "span",
-    "p",
-    "a",
-    "button",
-    "strong",
-    "em",
-    "i",
-    "b",
-    "ul",
-    "ol",
-    "li",
+    'div',
+    'span',
+    'p',
+    'a',
+    'button',
+    'strong',
+    'em',
+    'i',
+    'b',
+    'ul',
+    'ol',
+    'li',
   ];
 
   if (!allowedTags.includes(tagName)) {
-    tagName = "div";
+    tagName = 'div';
   }
 
   // Sanitize attributes
   const safeAttrs = Object.entries(attributes)
     .filter(([key]) =>
-      ["class", "id", "href", "title", "aria-label", "role"].includes(key)
+      ['class', 'id', 'href', 'title', 'aria-label', 'role'].includes(key)
     )
     .map(([key, value]) => {
-      if (key === "href") {
+      if (key === 'href') {
         value = sanitizeUrl(value);
       } else {
         value = escapeHtml(String(value));
       }
       return `${key}="${value}"`;
     })
-    .join(" ");
+    .join(' ');
 
   const safeContent = sanitizeHtml(content);
 
-  return `<${tagName}${safeAttrs ? " " + safeAttrs : ""}>${safeContent}</${tagName}>`;
+  return `<${tagName}${safeAttrs ? ' ' + safeAttrs : ''}>${safeContent}</${tagName}>`;
 }
 
 /**
@@ -177,12 +177,12 @@ function createSafeElement(tagName, attributes = {}, content = "") {
  * @returns {Object} - Sanitized object
  */
 function sanitizeObject(obj, fields = []) {
-  if (!obj || typeof obj !== "object") return obj;
+  if (!obj || typeof obj !== 'object') return obj;
 
   const sanitized = { ...obj };
 
   fields.forEach((field) => {
-    if (field in sanitized && typeof sanitized[field] === "string") {
+    if (field in sanitized && typeof sanitized[field] === 'string') {
       sanitized[field] = sanitizeText(sanitized[field]);
     }
   });
@@ -204,8 +204,8 @@ function validateInput(input, options = {}) {
     allowHtml = false,
   } = options;
 
-  if (typeof input !== "string") {
-    throw new Error("Input must be a string");
+  if (typeof input !== 'string') {
+    throw new Error('Input must be a string');
   }
 
   if (input.length > maxLength) {
@@ -217,7 +217,7 @@ function validateInput(input, options = {}) {
   }
 
   if (pattern && !pattern.test(input)) {
-    throw new Error("Input does not match required pattern");
+    throw new Error('Input does not match required pattern');
   }
 
   return allowHtml ? sanitizeHtml(input) : sanitizeText(input);

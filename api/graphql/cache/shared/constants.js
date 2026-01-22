@@ -6,28 +6,28 @@
 module.exports = {
   // Cache key prefixes
   PREFIXES: {
-    QUERY: "query:",
-    USER: "User:",
-    VIDEO: "Video:",
-    COMMENT: "Comment:",
-    TAG: "tag:",
-    ROUTE: "route:",
+    QUERY: 'query:',
+    USER: 'User:',
+    VIDEO: 'Video:',
+    COMMENT: 'Comment:',
+    TAG: 'tag:',
+    ROUTE: 'route:',
   },
 
   // Cache events
   EVENTS: {
-    CONNECTED: "connect",
-    ERROR: "error",
-    READY: "ready",
-    RECONNECTING: "reconnecting",
+    CONNECTED: 'connect',
+    ERROR: 'error',
+    READY: 'ready',
+    RECONNECTING: 'reconnecting',
   },
 
   // Redis connection states
   CONNECTION_STATES: {
-    CONNECTING: "connecting",
-    CONNECTED: "connected",
-    READY: "ready",
-    DISCONNECTED: "disconnected",
+    CONNECTING: 'connecting',
+    CONNECTED: 'connected',
+    READY: 'ready',
+    DISCONNECTED: 'disconnected',
   },
 
   // Default limits
@@ -47,16 +47,16 @@ module.exports = {
 
   // Cache response headers
   HEADERS: {
-    CACHE_STATUS: "X-Cache-Status",
-    CACHE_KEY: "X-Cache-Key",
-    CACHE_TTL: "X-Cache-TTL",
+    CACHE_STATUS: 'X-Cache-Status',
+    CACHE_KEY: 'X-Cache-Key',
+    CACHE_TTL: 'X-Cache-TTL',
   },
 
   // Cache status values
   STATUS: {
-    HIT: "HIT",
-    MISS: "MISS",
-    BYPASS: "BYPASS",
-    ERROR: "ERROR",
+    HIT: 'HIT',
+    MISS: 'MISS',
+    BYPASS: 'BYPASS',
+    ERROR: 'ERROR',
   },
 };

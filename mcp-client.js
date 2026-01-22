@@ -99,12 +99,13 @@ async function main() {
         
         try {
           switch (cmd) {
-            case 'status':
+            case 'status': {
               const result = await client.getHexarchyStatus();
               console.log(result[0].text);
               break;
+            }
               
-            case 'start':
+            case 'start': {
               if (args[0]) {
                 const result = await client.startLayer(args[0]);
                 console.log(result[0].text);
@@ -112,13 +113,16 @@ async function main() {
                 console.log('Usage: start <layer>');
               }
               break;
+            }
               
-            case 'exit':
+            case 'exit': {
               rl.close();
               return;
+            }
               
-            default:
+            default: {
               console.log('Unknown command');
+            }
           }
         } catch (error) {
           console.error('Error:', error.message);
