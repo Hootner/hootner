@@ -2,6 +2,7 @@ name: Copilot Pro Code Review
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_dispatch:
 
 jobs:
   copilot-review:
