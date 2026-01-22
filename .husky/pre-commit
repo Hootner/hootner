@@ -1,6 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+npx lint-staged
 echo "🦉 HOOTNER - Running enhanced code review..."
 
 # Run the enhanced code review agent

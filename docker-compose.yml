@@ -51,9 +51,9 @@ services:
       - "4000:4000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:hootner123@postgres:5432/hootner
+      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your-jwt-secret-key
+      - JWT_SECRET=${JWT_SECRET}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
     volumes:
       - ./logs:/app/logs
@@ -80,7 +80,7 @@ services:
       - "5001:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:hootner123@postgres:5432/hootner
+      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./logs:/app/logs
@@ -111,7 +111,7 @@ services:
       - "5002:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:hootner123@postgres:5432/hootner
+      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
       - REDIS_URL=redis://redis:6379
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
     volumes:
@@ -134,7 +134,7 @@ services:
       - "5004:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:hootner123@postgres:5432/hootner
+      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./logs:/app/logs

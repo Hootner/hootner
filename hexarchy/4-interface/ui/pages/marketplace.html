@@ -1,1042 +1,400 @@
 ﻿<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🛒 Marketplace - Hootner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      .notif-item {
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .notif-item:hover {
-        background: rgba(0, 255, 255, 0.05);
-      }
-      .notif-item.unread {
-        background: rgba(0, 255, 255, 0.08);
-      }
-      .notif-filter {
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
-        border: 1px solid rgba(0, 255, 0, 0.2);
-      }
-      .notif-filter:hover {
-        background: rgba(0, 255, 255, 0.1);
-      }
-    </style>
 
-    <style>
-      /* Content size fixes */
-      body {
-        padding-top: 80px !important;
-        min-height: calc(100vh - 80px) !important;
-      }
-      nav {
-        height: 70px !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        z-index: 1000 !important;
-      }
-      .main-content {
-        margin-top: 0 !important;
-        padding: 20px !important;
-      }
-    </style>
-
-    <style>
-      html {
-        font-size: 12px !important;
-      }
-      body {
-        zoom: 0.75 !important;
-        transform: scale(0.75) !important;
-        transform-origin: 0 0 !important;
-        width: 133% !important;
-      }
-    </style>
-  </head>
-  <body
-    class="min-h-screen"
-    style="
-      background: linear-gradient(
-        135deg,
-        #0a0a0f 0%,
-        #1a1a2e 50%,
-        #0a0a0f 100%
-      );
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🛒 Marketplace - HOOTNER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #0a0a0f);
       color: #00ff00;
-    "
-  >
-    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
-      <div
-        style="
-          padding: 12px 20px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        "
-      >
-        <div style="display: flex; align-items: center; gap: 24px">
-          <a
-            href="/"
-            style="
-              font-size: 14px;
-              font-weight: bold;
-              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              text-decoration: none;
-              margin-left: 0;
-            "
-            >🦉 HOOTNER</a
-          >
-          <div style="position: relative">
-            <button
-              onclick="toggleNotifications()"
-              style="
-                background: none;
-                border: none;
-                color: #00ffff;
-                cursor: pointer;
-                font-size: 12px;
-                padding: 4px 8px;
-                position: relative;
-              "
-              title="Notifications"
-            >
-              🔔
-              <span
-                id="notif-badge"
-                style="
-                  position: absolute;
-                  top: 2px;
-                  right: 2px;
-                  background: #ef4444;
-                  color: white;
-                  border-radius: 50%;
-                  width: 14px;
-                  height: 14px;
-                  font-size: 9px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-weight: bold;
-                "
-                >3</span
-              >
-            </button>
-            <div
-              id="notif-dropdown"
-              style="
-                display: none;
-                position: fixed;
-                top: 60px;
-                right: 20px;
-                width: 400px;
-                max-width: calc(100vw - 40px);
-                max-height: calc(100vh - 80px);
-                background: rgba(10, 10, 15, 0.98);
-                border: 2px solid rgba(0, 255, 0, 0.3);
-                border-radius: 8px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-                z-index: 9999;
-                flex-direction: column;
-                overflow: hidden;
-              "
-            >
-              <div
-                style="
-                  padding: 12px 16px;
-                  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-                  flex-shrink: 0;
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 12px;
-                  "
-                >
-                  <h3
-                    style="
-                      color: #00ff00;
-                      font-size: 16px;
-                      font-weight: bold;
-                      margin: 0;
-                    "
-                  >
-                    Notifications
-                  </h3>
-                  <div style="display: flex; gap: 8px; align-items: center">
-                    <button
-                      onclick="toggleNotifSound()"
-                      id="sound-btn"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 16px;
-                      "
-                      title="Toggle sound"
-                    >
-                      🔔
-                    </button>
-                    <button
-                      onclick="clearAllNotifications()"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #ef4444;
-                        cursor: pointer;
-                        font-size: 16px;
-                      "
-                      title="Clear all"
-                    >
-                      🗑️
-                    </button>
-                    <button
-                      onclick="markAllRead()"
-                      style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 12px;
-                      "
-                    >
-                      Mark all read
-                    </button>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  id="notif-search"
-                  oninput="filterNotifications()"
-                  placeholder="🔍 Search notifications..."
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 1px solid rgba(0, 255, 0, 0.3);
-                    border-radius: 4px;
-                    color: #00ff00;
-                    font-size: 13px;
-                    margin-bottom: 8px;
-                  "
-                />
-                <div style="display: flex; gap: 4px; flex-wrap: wrap">
-                  <button
-                    class="notif-filter active"
-                    data-filter="all"
-                    onclick="setNotifFilter('all')"
-                    style="
-                      padding: 4px 12px;
-                      background: rgba(0, 255, 255, 0.2);
-                      border: 1px solid rgba(0, 255, 255, 0.3);
-                      border-radius: 12px;
-                      color: #00ffff;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    All
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="like"
-                    onclick="setNotifFilter('like')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    ❤️ Likes
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="comment"
-                    onclick="setNotifFilter('comment')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    💬 Comments
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="follow"
-                    onclick="setNotifFilter('follow')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    👤 Follows
-                  </button>
-                  <button
-                    class="notif-filter"
-                    data-filter="system"
-                    onclick="setNotifFilter('system')"
-                    style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    "
-                  >
-                    ⚠️ System
-                  </button>
-                </div>
-              </div>
-              <div
-                id="notif-list"
-                style="
-                  flex: 1;
-                  overflow-y: auto;
-                  min-height: 200px;
-                  max-height: calc(100vh - 280px);
-                "
-              ></div>
-              <div
-                style="
-                  padding: 12px;
-                  text-align: center;
-                  border-top: 1px solid rgba(0, 255, 0, 0.2);
-                  display: flex;
-                  gap: 8px;
-                  justify-content: center;
-                "
-              >
-                <button
-                  onclick="loadMoreNotifications()"
-                  style="
-                    background: none;
-                    border: none;
-                    color: #00ffff;
-                    font-size: 13px;
-                    cursor: pointer;
-                    text-decoration: underline;
-                  "
-                >
-                  Load more
-                </button>
-                <span style="color: #6b7280">•</span>
-                <a
-                  href="#"
-                  style="color: #00ffff; font-size: 13px; text-decoration: none"
-                  >View all</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex gap-2 items-center">
-          <a
-            href="/ai-video"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >🎥 AI Video</a
-          >
-          <a
-            href="/live-stream"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >📱 Live</a
-          >
-          <a
-            href="/analytics"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >🧠 Analytics</a
-          >
-          <a
-            href="/profile"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >👤 Profile</a
-          >
-          <a
-            href="/design-showcase"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >🎨 Design</a
-          >
-          <a
-            href="/feed-react"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >📰 Social</a
-          >
-          <a
-            href="/marketplace"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-green-400 font-medium"
-            >🛒 Marketplace</a
-          >
-          <a
-            href="/dashboard"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >📈 Dashboard</a
-          >
-          <a
-            href="/video-player"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >▶️ Video</a
-          >
-          <a
-            href="/auto-editor"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >✂️ Editor</a
-          >
-          <a
-            href="/code-editor"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >💻 Code</a
-          >
-          <a
-            href="/settings"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >⚙️ Settings</a
-          >
-          <a
-            href="/login"
-            style="font-size: 10px; text-decoration: none; padding: 4px 8px"
-            class="text-slate-300 hover:text-white"
-            >🔐 Login</a
-          >
-        </div>
-      </div>
-    </nav>
+    }
 
-    <div style="padding: 20px">
-      <div
-        style="
-          background: rgba(10, 10, 15, 0.8);
-          border-radius: 8px;
-          padding: 1.5rem;
-          margin-bottom: 1.5rem;
-          border: 2px solid transparent;
-          background-image:
-            linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-            linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-          background-origin: border-box;
-          background-clip: padding-box, border-box;
-          box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-        "
-      >
-        <h1
-          style="
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: #00ff00;
-          "
-        >
-          🛒 Marketplace
-        </h1>
-        <p style="color: #00ffff; margin: 0">
-          Secure digital storefront powered by Stripe
-        </p>
-      </div>
+    .product-card {
+      transition: all 0.3s;
+      cursor: pointer;
+    }
 
-      <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
-        <button
-          onclick="setCategory('all')"
-          class="category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition"
-          style="
-            background: linear-gradient(135deg, #00ffff, #ff00ff);
-            color: white;
-            border: none;
-            cursor: pointer;
-          "
-        >
-          All
-        </button>
-        <button
-          onclick="setCategory('code')"
-          class="category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition"
-          style="
-            background: rgba(0, 255, 255, 0.2);
-            color: #00ffff;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            cursor: pointer;
-          "
-        >
-          Code
-        </button>
-        <button
-          onclick="setCategory('design')"
-          class="category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition"
-          style="
-            background: rgba(0, 255, 255, 0.2);
-            color: #00ffff;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            cursor: pointer;
-          "
-        >
-          Design
-        </button>
-        <button
-          onclick="setCategory('templates')"
-          class="category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition"
-          style="
-            background: rgba(0, 255, 255, 0.2);
-            color: #00ffff;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            cursor: pointer;
-          "
-        >
-          Templates
-        </button>
-        <button
-          onclick="setCategory('plugins')"
-          class="category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition"
-          style="
-            background: rgba(0, 255, 255, 0.2);
-            color: #00ffff;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            cursor: pointer;
-          "
-        >
-          Plugins
-        </button>
-      </div>
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    }
 
-      <div id="products" class="grid md:grid-cols-3 gap-6"></div>
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <script src="../components/auth-guard.js"></script>
+  <script src="../components/header-enhanced.js"></script>
+
+  <div style="padding: 20px; max-width: 1400px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: bold; color: #00ff00; margin-bottom: 8px;">🛒 Marketplace</h1>
+        <p style="color: #00ffff; margin: 0;">Secure digital storefront powered by Stripe</p>
+      </div>
+      <button onclick="toggleCart()"
+        style="position: relative; padding: 12px 24px; background: linear-gradient(135deg, #00ffff, #ff00ff); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s;"
+        onmouseover="this.style.background='linear-gradient(135deg, #ff00ff, #ffff00)'"
+        onmouseout="this.style.background='linear-gradient(135deg, #00ffff, #ff00ff)'">
+        🛒 Cart
+        <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+      </button>
     </div>
 
-    <script>
-      const products = [
-        {
-          id: 1,
-          name: 'React Component Pack',
-          price: 29,
-          category: 'code',
-          verified: true,
-          color: 'from-blue-400 to-blue-600',
-        },
-        {
-          id: 2,
-          name: 'UI Design System',
-          price: 49,
-          category: 'design',
-          verified: true,
-          color: 'from-purple-400 to-purple-600',
-        },
-        {
-          id: 3,
-          name: 'API Integration Kit',
-          price: 39,
-          category: 'code',
-          verified: false,
-          color: 'from-green-400 to-green-600',
-        },
-        {
-          id: 4,
-          name: 'Landing Page Template',
-          price: 19,
-          category: 'templates',
-          verified: true,
-          color: 'from-pink-400 to-pink-600',
-        },
-        {
-          id: 5,
-          name: 'Analytics Dashboard',
-          price: 59,
-          category: 'code',
-          verified: true,
-          color: 'from-indigo-400 to-indigo-600',
-        },
-        {
-          id: 6,
-          name: 'Icon Pack Pro',
-          price: 15,
-          category: 'design',
-          verified: true,
-          color: 'from-yellow-400 to-orange-600',
-        },
-        {
-          id: 7,
-          name: 'Auth Plugin',
-          price: 25,
-          category: 'plugins',
-          verified: false,
-          color: 'from-red-400 to-red-600',
-        },
-        {
-          id: 8,
-          name: 'E-commerce Template',
-          price: 79,
-          category: 'templates',
-          verified: true,
-          color: 'from-teal-400 to-teal-600',
-        },
-        {
-          id: 9,
-          name: 'Payment Gateway Plugin',
-          price: 45,
-          category: 'plugins',
-          verified: true,
-          color: 'from-cyan-400 to-cyan-600',
-        },
-      ];
+    <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+      <input type="text" id="search-input" placeholder="🔍 Search products..." oninput="filterProducts()"
+        style="flex: 1; padding: 12px 16px; background: rgba(10, 10, 15, 0.8); border: 2px solid rgba(0, 255, 0, 0.3); border-radius: 8px; color: #00ff00; font-size: 14px;">
+      <select id="sort-select" onchange="filterProducts()"
+        style="padding: 12px 16px; background: rgba(10, 10, 15, 0.8); border: 2px solid rgba(0, 255, 0, 0.3); border-radius: 8px; color: #00ff00; font-size: 14px; cursor: pointer;">
+        <option value="default">Sort by</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="name">Name A-Z</option>
+      </select>
+    </div>
 
-      let currentCategory = 'all';
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px;">
+      <button onclick="setCategory('all')" class="category-btn" data-category="all"
+        style="padding: 10px 20px; background: linear-gradient(135deg, #00ffff, #ff00ff); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;">All</button>
+      <button onclick="setCategory('code')" class="category-btn" data-category="code"
+        style="padding: 10px 20px; background: rgba(0, 255, 255, 0.2); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;">💻
+        Code</button>
+      <button onclick="setCategory('design')" class="category-btn" data-category="design"
+        style="padding: 10px 20px; background: rgba(0, 255, 255, 0.2); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;">🎨
+        Design</button>
+      <button onclick="setCategory('templates')" class="category-btn" data-category="templates"
+        style="padding: 10px 20px; background: rgba(0, 255, 255, 0.2); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;">📄
+        Templates</button>
+      <button onclick="setCategory('plugins')" class="category-btn" data-category="plugins"
+        style="padding: 10px 20px; background: rgba(0, 255, 255, 0.2); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;">🔌
+        Plugins</button>
+    </div>
 
-      function renderProducts() {
-        const filtered =
-          currentCategory === 'all'
-            ? products
-            : products.filter(p => p.category === currentCategory);
-        document.getElementById('products').innerHTML = filtered
-          .map(
-            p => `
-        <div style="background: rgba(10, 10, 15, 0.8); border-radius: 12px; overflow: hidden; transition: all 0.3s; border: 2px solid transparent; background-image: linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)), linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00); background-origin: border-box; background-clip: padding-box, border-box; box-shadow: 0 0 20px rgba(0,255,0,0.3);" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 0 30px rgba(0,255,0,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 20px rgba(0,255,0,0.3)'">
-          <div style="height: 12rem; background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,255,255,0.2)); display: flex; align-items: center; justify-content: center; font-size: 4rem;">
-            ${p.category === 'code' ? '💻' : p.category === 'design' ? '🎨' : p.category === 'templates' ? '📄' : '🔌'}
-          </div>
-          <div style="padding: 1.5rem;">
-            <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 0.5rem;">
-              <h3 style="font-weight: bold; font-size: 1.125rem; color: #00ff00;">${p.name}</h3>
-              ${p.verified ? '<span style="color: #10b981; font-size: 1.25rem;">✓</span>' : ''}
-            </div>
-            <p style="color: #00ffff; font-size: 0.875rem; margin-bottom: 1rem;">High-quality digital product</p>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 1.5rem; font-weight: bold; color: #00ff00;">${p.price}</span>
-              <button onclick="buyNow(${p.id})" style="padding: 0.5rem 1.5rem; background: linear-gradient(135deg, #00ffff, #ff00ff); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ff00ff, #ffff00)'" onmouseout="this.style.background='linear-gradient(135deg, #00ffff, #ff00ff)'">Buy Now</button>
-            </div>
-          </div>
+    <div id="products" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
+    </div>
+  </div>
+
+  <div id="cart-modal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+    <div
+      style="background: linear-gradient(135deg, #0a0a0f, #1a1a2e); border: 3px solid; border-image: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff) 1; border-radius: 24px; padding: 32px; min-width: 500px; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-size: 1.5rem; font-weight: bold; color: #00ff00;">🛒 Shopping Cart</h2>
+        <button onclick="toggleCart()"
+          style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 24px;">✕</button>
+      </div>
+      <div id="cart-items" style="margin-bottom: 24px;"></div>
+      <div style="border-top: 2px solid rgba(0, 255, 0, 0.3); padding-top: 16px; margin-top: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-size: 1.25rem; font-weight: bold; color: #00ffff;">Total:</span>
+          <span id="cart-total" style="font-size: 1.5rem; font-weight: bold; color: #00ff00;">$0</span>
         </div>
-      `
-          )
-          .join('');
-      }
+        <button onclick="checkout()"
+          style="width: 100%; padding: 16px; background: linear-gradient(135deg, #00ff00, #00ffff); color: #000; border: none; border-radius: 12px; cursor: pointer; font-size: 1.125rem; font-weight: bold; transition: all 0.3s;"
+          onmouseover="this.style.background='linear-gradient(135deg, #00ffff, #ff00ff)'"
+          onmouseout="this.style.background='linear-gradient(135deg, #00ff00, #00ffff)'">Checkout with Stripe</button>
+      </div>
+    </div>
+  </div>
 
-      function setCategory(cat) {
-        currentCategory = cat;
-        document.querySelectorAll('.category-btn').forEach(btn => {
-          btn.className =
-            'category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition';
-          btn.style.background = 'rgba(0,255,255,0.2)';
-          btn.style.color = '#00ffff';
-          btn.style.border = '1px solid rgba(0,255,255,0.3)';
-        });
-        event.target.className =
-          'category-btn px-6 py-2 rounded-lg font-medium whitespace-nowrap transition';
-        event.target.style.background =
-          'linear-gradient(135deg, #00ffff, #ff00ff)';
-        event.target.style.color = 'white';
-        event.target.style.border = 'none';
-        renderProducts();
-      }
+  <script src="../components/footer-enhanced.js"></script>
 
-      function buyNow(id) {
-        const product = products.find(p => p.id === id);
-        
-        // Simulate Stripe checkout integration
-        const checkoutData = {
-          productId: id,
-          productName: product.name,
-          price: product.price,
-          currency: 'USD',
-          successUrl: window.location.origin + '/marketplace?success=true',
-          cancelUrl: window.location.origin + '/marketplace?canceled=true'
-        };
-        
-        // In real implementation, this would redirect to Stripe Checkout
-        if (confirm(`Purchase ${product.name} for $${product.price}?\n\nThis will redirect to Stripe Checkout.`)) {
-          // Simulate successful purchase
-          setTimeout(() => {
-            alert(`✅ Purchase successful!\n\nProduct: ${product.name}\nPrice: $${product.price}\n\nDownload link sent to your email.`);
-            
-            // Add purchase notification
-            const purchaseNotif = {
-              id: Date.now(),
-              type: 'system',
-              user: 'HOOTNER Store',
-              text: `Successfully purchased "${product.name}"`,
-              time: 'Just now',
-              timestamp: Date.now(),
-              unread: true,
-              icon: '🛒',
-              group: 'today'
-            };
-            
-            notifications.unshift(purchaseNotif);
-            updateBadge();
-            
-            if (notifSoundEnabled) playNotificationSound();
-          }, 1500);
-        }
-      }
+  <script>
+    const API_URL = 'http://localhost:4000/api/marketplace';
+    let products = [];
+    let currentCategory = 'all';
+    let currentPage = 1;
+    let hasMore = true;
+    let loading = false;
+    let cart = JSON.parse(localStorage.getItem('hootner_cart') || '[]');
+    const stripe = Stripe('pk_test_51234567890');
 
-      renderProducts();
+    async function loadProducts(reset = false) {
+      if (loading || (!hasMore && !reset)) return;
+      loading = true;
+      document.getElementById('loading').style.display = 'block';
 
-      let notifications = [
-        {
-          id: 1,
-          type: 'like',
-          user: 'john_dev',
-          text: 'liked your product "React Component Pack"',
-          time: '5m ago',
-          timestamp: Date.now() - 300000,
-          unread: true,
-          icon: '❤️',
-          group: 'today',
-        },
-        {
-          id: 2,
-          type: 'comment',
-          user: 'sarah_designer',
-          text: 'commented on "UI Design System"',
-          time: '1h ago',
-          timestamp: Date.now() - 3600000,
-          unread: true,
-          icon: '💬',
-          group: 'today',
-        },
-        {
-          id: 3,
-          type: 'follow',
-          user: 'mike_coder',
-          text: 'started following you',
-          time: '2h ago',
-          timestamp: Date.now() - 7200000,
-          unread: true,
-          icon: '👤',
-          group: 'today',
-        },
-        {
-          id: 4,
-          type: 'mention',
-          user: 'react_master',
-          text: 'mentioned you in a post',
-          time: '3h ago',
-          timestamp: Date.now() - 10800000,
-          unread: false,
-          icon: '@',
-          group: 'today',
-        },
-        {
-          id: 5,
-          type: 'system',
-          user: 'HOOTNER',
-          text: 'Your product "API Integration Kit" has a new review',
-          time: '5h ago',
-          timestamp: Date.now() - 18000000,
-          unread: false,
-          icon: '⚠️',
-          group: 'today',
-        },
-        {
-          id: 6,
-          type: 'like',
-          user: 'dev_master',
-          text: 'and 5 others liked your product',
-          time: '1d ago',
-          timestamp: Date.now() - 86400000,
-          unread: false,
-          icon: '❤️',
-          group: 'yesterday',
-        },
-        {
-          id: 7,
-          type: 'follow',
-          user: 'code_ninja',
-          text: 'started following you',
-          time: '1d ago',
-          timestamp: Date.now() - 90000000,
-          unread: false,
-          icon: '👤',
-          group: 'yesterday',
-        },
-        {
-          id: 8,
-          type: 'system',
-          user: 'HOOTNER',
-          text: 'New feature: Bulk discounts now available!',
-          time: '2d ago',
-          timestamp: Date.now() - 172800000,
-          unread: false,
-          icon: '🎉',
-          group: 'older',
-        },
-      ];
-      let notifFilter = 'all';
-      let notifSoundEnabled = true;
-
-      function toggleNotifications() {
-        const dropdown = document.getElementById('notif-dropdown');
-        const isVisible = dropdown.style.display === 'flex';
-        if (isVisible) {
-          dropdown.style.display = 'none';
-        } else {
-          dropdown.style.display = 'flex';
-          renderNotifications();
-        }
-      }
-
-      function renderNotifications() {
-        const container = document.getElementById('notif-list');
-        if (!container) return;
-        const searchInput = document.getElementById('notif-search');
-        const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
-
-        let filtered = notifications.filter(n => {
-          if (notifFilter !== 'all' && n.type !== notifFilter) return false;
-          if (
-            searchQuery &&
-            !n.text.toLowerCase().includes(searchQuery) &&
-            !n.user.toLowerCase().includes(searchQuery)
-          )
-            return false;
-          return true;
-        });
-
-        if (filtered.length === 0) {
-          container.innerHTML =
-            '<div style="padding:40px 20px;text-align:center;color:#6b7280;font-size:13px;">No notifications found</div>';
-          return;
+      try {
+        if (reset) {
+          currentPage = 1;
+          products = [];
         }
 
-        const grouped = { today: [], yesterday: [], older: [] };
-        filtered.forEach(n => grouped[n.group].push(n));
+        const params = new URLSearchParams();
+        if (currentCategory !== 'all') params.append('category', currentCategory);
+        const search = document.getElementById('search-input').value;
+        if (search) params.append('search', search);
+        const sort = document.getElementById('sort-select').value;
+        if (sort !== 'default') params.append('sort', sort);
+        params.append('page', currentPage);
+        params.append('limit', 9);
 
-        let html = '';
-        ['today', 'yesterday', 'older'].forEach(group => {
-          if (grouped[group].length > 0) {
-            html += `<div style="padding:8px 16px;background:rgba(0,255,0,0.05);border-bottom:1px solid rgba(0,255,0,0.1);font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;">${group}</div>`;
-            html += grouped[group]
-              .map(
-                n => `
-            <div class="notif-item ${n.unread ? 'unread' : ''}">
-              <div style="display:flex;gap:12px;align-items:start;">
-                <div style="font-size:24px;flex-shrink:0;">${n.icon}</div>
-                <div style="flex:1;min-width:0;" onclick="markRead(${n.id})">
-                  <div style="color:#00ff00;font-weight:bold;font-size:13px;margin-bottom:4px;">@${n.user}</div>
-                  <div style="color:#00ffff;font-size:13px;margin-bottom:4px;">${n.text}</div>
-                  <div style="color:#6b7280;font-size:11px;">${n.time}</div>
-                </div>
-                <div style="display:flex;gap:4px;flex-shrink:0;">
-                  ${n.unread ? '<div style="width:8px;height:8px;background:#00ffff;border-radius:50%;margin-top:6px;"></div>' : ''}
-                  <button onclick="deleteNotification(${n.id});event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;opacity:0.5;" title="Delete">✕</button>
-                </div>
+        const res = await fetch(`${API_URL}/products?${params}`);
+        const data = await res.json();
+
+        products = reset ? data.products : [...products, ...data.products];
+        hasMore = data.hasMore;
+        currentPage++;
+
+        renderProducts(reset);
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        showNotification('❌ Failed to load products');
+      } finally {
+        loading = false;
+        document.getElementById('loading').style.display = 'none';
+      }
+    }
+
+    function renderProducts(reset = false) {
+      const container = document.getElementById('products');
+      const html = products.map(p => `
+          <div class="product-card" style="background: rgba(10, 10, 15, 0.8); border-radius: 12px; overflow: hidden; border: 2px solid rgba(0, 255, 0, 0.3); box-shadow: 0 0 20px rgba(0,255,0,0.3); display: flex; gap: 24px; padding: 24px;">
+            <div style="width: 200px; height: 200px; flex-shrink: 0; background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,255,255,0.2)); display: flex; align-items: center; justify-content: center; font-size: 4rem; border-radius: 8px;">${p.icon}</div>
+            <div style="flex: 1; display: flex; flex-direction: column;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                <h3 style="font-weight: bold; font-size: 1.5rem; color: #00ff00;">${p.name}</h3>
+                ${p.verified ? '<span style="color: #10b981; font-size: 1.5rem;" title="Verified seller">✓</span>' : ''}
+              </div>
+              <p style="color: #00ffff; font-size: 1rem; margin-bottom: 16px; flex: 1;">${p.description}</p>
+              <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.875rem; color: #6b7280;">
+                <span>⭐ ${p.rating}</span>
+                <span>•</span>
+                <span>🛒 ${p.sales} sales</span>
+              </div>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <button onclick="contactSeller('${p._id}')" style="padding: 10px 20px; background: rgba(0, 255, 255, 0.2); border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px; color: #00ffff; cursor: pointer; font-size: 1rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(0, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(0, 255, 255, 0.2)'">💬 Contact Seller</button>
+                <span style="font-size: 2rem; font-weight: bold; color: #00ff00; margin-left: auto; margin-right: 16px;">$${p.price}</span>
+                <button onclick="addToCart('${p._id}')" style="padding: 12px 32px; background: linear-gradient(135deg, #00ffff, #ff00ff); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(135deg, #ff00ff, #ffff00)'" onmouseout="this.style.background='linear-gradient(135deg, #00ffff, #ff00ff)'">Add to Cart</button>
               </div>
             </div>
-          `
-              )
-              .join('');
-          }
-        });
+          </div>
+        `).join('');
 
-        container.innerHTML = html;
-      }
+      if (reset) container.innerHTML = html;
+      else container.innerHTML += html;
+    }
 
-      function markRead(id) {
-        event.stopPropagation();
-        const notif = notifications.find(n => n.id === id);
-        if (notif) notif.unread = false;
-        updateBadge();
-        renderNotifications();
-      }
-
-      function markAllRead() {
-        event.stopPropagation();
-        notifications.forEach(n => (n.unread = false));
-        updateBadge();
-        renderNotifications();
-        alert('All notifications marked as read');
-      }
-
-      function deleteNotification(id) {
-        event.stopPropagation();
-        notifications = notifications.filter(n => n.id !== id);
-        updateBadge();
-        renderNotifications();
-      }
-
-      function clearAllNotifications() {
-        event.stopPropagation();
-        if (confirm('Clear all notifications? This cannot be undone.')) {
-          notifications = [];
-          updateBadge();
-          renderNotifications();
-          alert('All notifications cleared');
-        }
-      }
-
-      function setNotifFilter(filter) {
-        event.stopPropagation();
-        notifFilter = filter;
-        document.querySelectorAll('.notif-filter').forEach(btn => {
-          btn.classList.remove('active');
-          btn.style.background = 'transparent';
-        });
-        const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
-        if (activeBtn) {
-          activeBtn.classList.add('active');
-          activeBtn.style.background = 'rgba(0,255,255,0.2)';
-        }
-        renderNotifications();
-      }
-
-      function filterNotifications() {
-        renderNotifications();
-      }
-
-      function toggleNotifSound() {
-        event.stopPropagation();
-        notifSoundEnabled = !notifSoundEnabled;
-        const btn = document.getElementById('sound-btn');
-        btn.textContent = notifSoundEnabled ? '🔔' : '🔕';
-        btn.style.opacity = notifSoundEnabled ? '1' : '0.5';
-        alert(
-          notifSoundEnabled
-            ? 'Notification sound enabled'
-            : 'Notification sound disabled'
-        );
-      }
-
-      function loadMoreNotifications() {
-        event.stopPropagation();
-        const newNotifs = [
-          {
-            id: Date.now(),
-            type: 'like',
-            user: 'user_' + Math.floor(Math.random() * 1000),
-            text: 'liked your product',
-            time: 'Just now',
-            timestamp: Date.now(),
-            unread: true,
-            icon: '❤️',
-            group: 'today',
-          },
-          {
-            id: Date.now() + 1,
-            type: 'comment',
-            user: 'dev_' + Math.floor(Math.random() * 1000),
-            text: 'commented on your listing',
-            time: 'Just now',
-            timestamp: Date.now(),
-            unread: true,
-            icon: '💬',
-            group: 'today',
-          },
-        ];
-        notifications = [...newNotifs, ...notifications];
-        updateBadge();
-        renderNotifications();
-        if (notifSoundEnabled) playNotificationSound();
-        alert('Loaded 2 new notifications');
-      }
-
-      function playNotificationSound() {
-        const audio = new Audio(
-          'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUBELTKXh8bllHAU2jdXvzn0pBSh+zPDajzsKElyx6OyrWBUIQ5zd8sFuJAUuhM/z24k2CBhku+zooVARC0yl4fG5ZRwFNo3V7859KQUofsz'
-        );
-        audio.volume = 0.3;
-        audio.play().catch(() => {});
-      }
-
-      function updateBadge() {
-        const unreadCount = notifications.filter(n => n.unread).length;
-        const badge = document.getElementById('notif-badge');
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount;
-          badge.style.display = 'flex';
+    function setCategory(cat) {
+      currentCategory = cat;
+      hasMore = true;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        if (btn.dataset.category === cat) {
+          btn.style.background = 'linear-gradient(135deg, #00ffff, #ff00ff)';
+          btn.style.color = 'white';
+          btn.style.border = 'none';
         } else {
-          badge.style.display = 'none';
-        }
-      }
-
-      function simulateRealTimeNotifications() {
-        setInterval(() => {
-          if (Math.random() > 0.7) {
-            const types = ['like', 'comment', 'follow', 'mention'];
-            const icons = ['❤️', '💬', '👤', '@'];
-            const texts = [
-              'liked your product',
-              'commented on your listing',
-              'started following you',
-              'mentioned you',
-            ];
-            const idx = Math.floor(Math.random() * types.length);
-
-            const newNotif = {
-              id: Date.now(),
-              type: types[idx],
-              user: 'user_' + Math.floor(Math.random() * 1000),
-              text: texts[idx],
-              time: 'Just now',
-              timestamp: Date.now(),
-              unread: true,
-              icon: icons[idx],
-              group: 'today',
-            };
-
-            notifications.unshift(newNotif);
-            updateBadge();
-            const dropdown = document.getElementById('notif-dropdown');
-            if (dropdown && dropdown.style.display === 'flex') {
-              renderNotifications();
-            }
-            if (notifSoundEnabled) playNotificationSound();
-          }
-        }, 30000);
-      }
-
-      document.addEventListener('click', e => {
-        const dropdown = document.getElementById('notif-dropdown');
-        const notifBtn = e.target.closest(
-          'button[onclick="toggleNotifications()"]'
-        );
-        const insideDropdown = e.target.closest('#notif-dropdown');
-
-        if (dropdown && !insideDropdown && !notifBtn) {
-          dropdown.style.display = 'none';
+          btn.style.background = 'rgba(0, 255, 255, 0.2)';
+          btn.style.color = '#00ffff';
+          btn.style.border = '1px solid rgba(0, 255, 255, 0.3)';
         }
       });
+      loadProducts(true);
+    }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        updateBadge();
-        simulateRealTimeNotifications();
-      });
-    </script>
-    <div class="main-content"></div>
-  </body>
+    function filterProducts() {
+      hasMore = true;
+      loadProducts(true);
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p._id === id);
+      const existing = cart.find(item => item._id === id);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ _id: product._id, name: product.name, price: product.price, icon: product.icon, quantity: 1 });
+      }
+      localStorage.setItem('hootner_cart', JSON.stringify(cart));
+      updateCartBadge();
+      showNotification(`✅ ${product.name} added to cart!`);
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item._id !== id);
+      localStorage.setItem('hootner_cart', JSON.stringify(cart));
+      updateCartBadge();
+      renderCart();
+    }
+
+    function updateQuantity(id, delta) {
+      const item = cart.find(i => i._id === id);
+      if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) removeFromCart(id);
+        else {
+          localStorage.setItem('hootner_cart', JSON.stringify(cart));
+          renderCart();
+        }
+      }
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+      if (modal.style.display === 'flex') renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items');
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">Your cart is empty</p>';
+      } else {
+        container.innerHTML = cart.map(item => `
+            <div style="display: flex; gap: 16px; padding: 16px; background: rgba(0, 255, 0, 0.05); border-radius: 8px; margin-bottom: 12px;">
+              <div style="font-size: 3rem;">${item.icon}</div>
+              <div style="flex: 1;">
+                <h4 style="color: #00ff00; font-weight: bold; margin-bottom: 4px;">${item.name}</h4>
+                <p style="color: #00ffff; font-size: 0.875rem;">$${item.price} each</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button onclick="updateQuantity('${item._id}', -1)" style="width: 28px; height: 28px; background: rgba(0, 255, 0, 0.2); border: 1px solid rgba(0, 255, 0, 0.3); border-radius: 4px; color: #00ff00; cursor: pointer; font-weight: bold;">-</button>
+                <span style="color: #00ff00; font-weight: bold; min-width: 24px; text-align: center;">${item.quantity}</span>
+                <button onclick="updateQuantity('${item._id}', 1)" style="width: 28px; height: 28px; background: rgba(0, 255, 0, 0.2); border: 1px solid rgba(0, 255, 0, 0.3); border-radius: 4px; color: #00ff00; cursor: pointer; font-weight: bold;">+</button>
+                <button onclick="removeFromCart('${item._id}')" style="width: 28px; height: 28px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; color: #ef4444; cursor: pointer; font-weight: bold; margin-left: 8px;">×</button>
+              </div>
+              <div style="color: #00ff00; font-weight: bold; font-size: 1.125rem;">$${item.price * item.quantity}</div>
+            </div>
+          `).join('');
+      }
+
+      document.getElementById('cart-total').textContent = '$' + total;
+    }
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cart-badge');
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    async function checkout() {
+      if (cart.length === 0) return;
+
+      try {
+        const userId = localStorage.getItem('hootner_user_id') || 'guest';
+        const res = await fetch(`${API_URL}/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart, userId })
+        });
+
+        const { url } = await res.json();
+        window.location.href = url;
+      } catch (error) {
+        console.error('Checkout failed:', error);
+        showNotification('❌ Checkout failed. Please try again.');
+      }
+    }
+
+    function showNotification(text) {
+      const notif = document.createElement('div');
+      notif.textContent = text;
+      notif.style.cssText = 'position: fixed; top: 100px; right: 20px; background: #00ff00; color: #000; padding: 16px 24px; border-radius: 8px; font-weight: bold; z-index: 10001; box-shadow: 0 4px 12px rgba(0, 255, 0, 0.5);';
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }
+
+    loadProducts();
+    updateCartBadge();
+
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadProducts();
+      }
+    });
+
+
+    function contactSeller(productId) {
+      const product = products.find(p => p._id === productId);
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center;';
+      modal.innerHTML = `
+          <div style="background: linear-gradient(135deg, #0a0a0f, #1a1a2e); border: 3px solid; border-image: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff) 1; border-radius: 24px; padding: 32px; min-width: 500px; max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 style="font-size: 1.5rem; font-weight: bold; color: #00ff00;">💬 Contact Seller</h2>
+              <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 24px;">✕</button>
+            </div>
+            <div style="margin-bottom: 16px; padding: 16px; background: rgba(0, 255, 0, 0.05); border-radius: 8px;">
+              <div style="color: #00ffff; font-size: 0.875rem; margin-bottom: 4px;">Product:</div>
+              <div style="color: #00ff00; font-weight: bold;">${product.name}</div>
+            </div>
+            <form onsubmit="sendMessage(event, '${productId}')">
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; color: #00ffff; margin-bottom: 8px; font-weight: 600;">Your Email *</label>
+                <input type="email" name="email" required style="width: 100%; padding: 12px; background: rgba(10, 10, 15, 0.8); border: 2px solid rgba(0, 255, 0, 0.3); border-radius: 8px; color: #00ff00;">
+              </div>
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; color: #00ffff; margin-bottom: 8px; font-weight: 600;">Message *</label>
+                <textarea name="message" required rows="4" style="width: 100%; padding: 12px; background: rgba(10, 10, 15, 0.8); border: 2px solid rgba(0, 255, 0, 0.3); border-radius: 8px; color: #00ff00;"></textarea>
+              </div>
+              <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #00ff00, #00ffff); color: #000; border: none; border-radius: 12px; cursor: pointer; font-size: 1.125rem; font-weight: bold;">Send Message</button>
+            </form>
+          </div>
+        `;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    }
+
+    async function sendMessage(e, productId) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {
+        productId,
+        email: formData.get('email'),
+        message: formData.get('message')
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/contact-seller`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          showNotification('✅ Message sent to seller!');
+          form.closest('div').parentElement.remove();
+        } else {
+          throw new Error('Failed');
+        }
+      } catch (error) {
+        showNotification('❌ Failed to send message');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('cart-modal');
+      if (e.target === modal) toggleCart();
+    });
+
+  </script>
+</body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,26 +10,24 @@
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-gray-800 p-4 shadow-lg">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
+    <script src="../components/auth-guard.js"></script>
+    <script src="../components/header-enhanced.js"></script>
+
+    <div style="padding-top: 20px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h1 class="text-2xl font-bold text-blue-400">🦉 HOOTNER Collaboration</h1>
-                <div class="flex space-x-2">
-                    <button onclick="window.location.href='/dashboard'" class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700">Dashboard</button>
-                    <button onclick="window.location.href='/video-player'" class="px-3 py-1 bg-purple-600 rounded hover:bg-purple-700">Video Player</button>
-                    <button onclick="window.location.href='/code-editor'" class="px-3 py-1 bg-green-600 rounded hover:bg-green-700">Code Editor</button>
+                <div class="flex items-center space-x-4">
+                    <span id="onlineUsers" class="text-green-400">👥 0 online</span>
+                    <button id="shareScreen" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700">
+                        <i class="fas fa-desktop mr-2"></i>Share Screen
+                    </button>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <span id="onlineUsers" class="text-green-400">👥 0 online</span>
-                <button id="shareScreen" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700">
-                    <i class="fas fa-desktop mr-2"></i>Share Screen
-                </button>
-            </div>
         </div>
-    </nav>
+    </div>
 
     <div class="flex h-screen">
         <!-- Sidebar -->
@@ -43,9 +42,10 @@
                     <button id="joinCall" class="w-full px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">
                         <i class="fas fa-phone mr-2"></i>Join Call
                     </button>
-                    <input id="roomId" type="text" placeholder="Room ID" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600">
+                    <input id="roomId" type="text" placeholder="Room ID"
+                        class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600">
                 </div>
-                
+
                 <!-- Local Video -->
                 <div class="mt-4">
                     <video id="localVideo" class="w-full rounded bg-black" muted autoplay></video>
@@ -75,7 +75,8 @@
                     <!-- Chat messages will appear here -->
                 </div>
                 <div class="flex">
-                    <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 px-3 py-2 bg-gray-700 rounded-l border border-gray-600">
+                    <input id="chatInput" type="text" placeholder="Type a message..."
+                        class="flex-1 px-3 py-2 bg-gray-700 rounded-l border border-gray-600">
                     <button id="sendChat" class="px-4 py-2 bg-blue-600 rounded-r hover:bg-blue-700">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -87,7 +88,8 @@
                 <h3 class="text-lg font-semibold mb-3 text-yellow-400">File Sharing</h3>
                 <div class="space-y-2">
                     <input id="fileInput" type="file" class="hidden" multiple>
-                    <button onclick="document.getElementById('fileInput').click()" class="w-full px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700">
+                    <button onclick="document.getElementById('fileInput').click()"
+                        class="w-full px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700">
                         <i class="fas fa-upload mr-2"></i>Upload Files
                     </button>
                     <div id="sharedFiles" class="space-y-1">
@@ -104,7 +106,7 @@
                 <div id="remoteVideos" class="grid grid-cols-2 gap-4 h-full">
                     <!-- Remote video streams will appear here -->
                 </div>
-                
+
                 <!-- Screen Share Display -->
                 <div id="screenShareContainer" class="hidden">
                     <video id="screenShareVideo" class="w-full h-full rounded bg-black"></video>
@@ -144,7 +146,7 @@
 
         // Initialize PeerJS
         peer = new Peer();
-        
+
         peer.on('open', (id) => {
             console.log('Peer ID:', id);
         });
@@ -152,9 +154,9 @@
         // Get user media
         async function initializeMedia() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: true, 
-                    audio: true 
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
                 });
                 document.getElementById('localVideo').srcObject = localStream;
             } catch (error) {
@@ -165,11 +167,11 @@
         // Start video call
         document.getElementById('startCall').addEventListener('click', async () => {
             if (!localStream) await initializeMedia();
-            
+
             const roomId = Math.random().toString(36).substring(7);
             document.getElementById('roomId').value = roomId;
             currentRoom = roomId;
-            
+
             socket.emit('join-room', roomId);
             addChatMessage('System', `Room created: ${roomId}`);
         });
@@ -178,9 +180,9 @@
         document.getElementById('joinCall').addEventListener('click', async () => {
             const roomId = document.getElementById('roomId').value;
             if (!roomId) return;
-            
+
             if (!localStream) await initializeMedia();
-            
+
             currentRoom = roomId;
             socket.emit('join-room', roomId);
             addChatMessage('System', `Joined room: ${roomId}`);
@@ -189,7 +191,7 @@
         // Handle incoming calls
         peer.on('call', (call) => {
             call.answer(localStream);
-            
+
             call.on('stream', (remoteStream) => {
                 addRemoteVideo(call.peer, remoteStream);
             });
@@ -199,7 +201,7 @@
         socket.on('user-connected', (userId) => {
             if (localStream) {
                 const call = peer.call(userId, localStream);
-                
+
                 call.on('stream', (remoteStream) => {
                     addRemoteVideo(userId, remoteStream);
                 });
@@ -217,19 +219,19 @@
             videoElement.autoplay = true;
             videoElement.className = 'w-full h-full rounded bg-black';
             videoElement.id = `video-${userId}`;
-            
+
             const container = document.createElement('div');
             container.className = 'relative';
             container.appendChild(videoElement);
-            
+
             const label = document.createElement('div');
             label.className = 'absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded text-sm';
             label.textContent = `User ${userId.substring(0, 8)}`;
             container.appendChild(label);
-            
+
             document.getElementById('remoteVideos').appendChild(container);
             remoteStreams.set(userId, stream);
-            
+
             updateParticipantsList();
         }
 
@@ -247,7 +249,7 @@
         function updateParticipantsList() {
             const list = document.getElementById('participantsList');
             list.innerHTML = '';
-            
+
             // Add self
             const selfItem = document.createElement('div');
             selfItem.className = 'flex items-center space-x-2 p-2 bg-gray-700 rounded';
@@ -257,7 +259,7 @@
                 <span class="text-xs text-gray-400">(Host)</span>
             `;
             list.appendChild(selfItem);
-            
+
             // Add remote participants
             remoteStreams.forEach((stream, userId) => {
                 const item = document.createElement('div');
@@ -268,7 +270,7 @@
                 `;
                 list.appendChild(item);
             });
-            
+
             document.getElementById('onlineUsers').textContent = `👥 ${remoteStreams.size + 1} online`;
         }
 
@@ -279,7 +281,7 @@
                 if (videoTrack) {
                     videoTrack.enabled = !videoTrack.enabled;
                     isVideoEnabled = videoTrack.enabled;
-                    document.getElementById('toggleVideo').innerHTML = 
+                    document.getElementById('toggleVideo').innerHTML =
                         isVideoEnabled ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash"></i>';
                 }
             }
@@ -292,7 +294,7 @@
                 if (audioTrack) {
                     audioTrack.enabled = !audioTrack.enabled;
                     isAudioEnabled = audioTrack.enabled;
-                    document.getElementById('toggleAudio').innerHTML = 
+                    document.getElementById('toggleAudio').innerHTML =
                         isAudioEnabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash"></i>';
                 }
             }
@@ -304,10 +306,10 @@
                 const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
                 document.getElementById('screenShareVideo').srcObject = screenStream;
                 document.getElementById('screenShareContainer').classList.remove('hidden');
-                
+
                 // Notify others about screen share
                 socket.emit('screen-share-start', currentRoom);
-                
+
                 screenStream.getVideoTracks()[0].onended = () => {
                     document.getElementById('screenShareContainer').classList.add('hidden');
                     socket.emit('screen-share-end', currentRoom);
@@ -363,7 +365,7 @@
             canvas.width = rect.width;
             canvas.height = rect.height;
         }
-        
+
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -374,19 +376,19 @@
 
         canvas.addEventListener('mousemove', (e) => {
             if (!isDrawing) return;
-            
+
             const brushColor = document.getElementById('brushColor').value;
             const brushSize = document.getElementById('brushSize').value;
-            
+
             ctx.strokeStyle = brushColor;
             ctx.lineWidth = brushSize;
             ctx.lineCap = 'round';
-            
+
             ctx.beginPath();
             ctx.moveTo(lastX, lastY);
             ctx.lineTo(e.offsetX, e.offsetY);
             ctx.stroke();
-            
+
             // Emit drawing data
             socket.emit('whiteboard-draw', {
                 room: currentRoom,
@@ -397,7 +399,7 @@
                 color: brushColor,
                 size: brushSize
             });
-            
+
             [lastX, lastY] = [e.offsetX, e.offsetY];
         });
 
@@ -408,7 +410,7 @@
             ctx.strokeStyle = data.color;
             ctx.lineWidth = data.size;
             ctx.lineCap = 'round';
-            
+
             ctx.beginPath();
             ctx.moveTo(data.x1, data.y1);
             ctx.lineTo(data.x2, data.y2);
@@ -438,12 +440,12 @@
                     </button>
                 `;
                 document.getElementById('sharedFiles').appendChild(fileItem);
-                
+
                 // Notify others about file share
-                socket.emit('file-shared', { 
-                    room: currentRoom, 
-                    fileName: file.name, 
-                    fileSize: file.size 
+                socket.emit('file-shared', {
+                    room: currentRoom,
+                    fileName: file.name,
+                    fileSize: file.size
                 });
             });
         });
@@ -455,7 +457,7 @@
         // Initialize
         initializeMedia();
         updateParticipantsList();
-        
+
         // Add welcome message
         setTimeout(() => {
             addChatMessage('System', 'Welcome to HOOTNER Collaboration Hub! 🦉');
@@ -463,4 +465,5 @@
     </script>
     <script src="../components/footer-enhanced.js"></script>
 </body>
+
 </html>

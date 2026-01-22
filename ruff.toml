@@ -1,0 +1,5 @@
+# Optional: duplicate of pyproject ruff settings for tools that read ruff.toml
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "C", "B", "T", "D"]
+extend-ignore = ["E501"]
