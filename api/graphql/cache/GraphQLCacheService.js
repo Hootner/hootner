@@ -3,14 +3,14 @@
  * Caching layer with TTL and invalidation strategies
  */
 
-const Redis = require("ioredis");
-const config = require("./shared/config");
+const Redis = require('ioredis');
+const config = require('./shared/config');
 const {
   generateCacheKey,
   parseInfo,
   calculateHitRate,
   extractKeyCount,
-} = require("./shared/utils");
+} = require('./shared/utils');
 
 class GraphQLCacheService {
   constructor(options = {}) {
@@ -39,27 +39,27 @@ class GraphQLCacheService {
    * Setup Redis event listeners
    */
   setupEventListeners() {
-    this.redis.on("connect", () => {
-      console.log("✓ Redis connected");
+    this.redis.on('connect', () => {
+      console.log('✓ Redis connected');
     });
 
-    this.redis.on("error", (err) => {
+    this.redis.on('error', (err) => {
       // Log error with context but don't expose sensitive info
       const errorInfo = {
-        message: err.message || "Unknown Redis error",
+        message: err.message || 'Unknown Redis error',
         code: err.code,
         syscall: err.syscall,
         timestamp: new Date().toISOString(),
       };
-      console.error("Redis error:", errorInfo);
+      console.error('Redis error:', errorInfo);
     });
 
-    this.redis.on("ready", () => {
-      console.log("✓ Redis ready");
+    this.redis.on('ready', () => {
+      console.log('✓ Redis ready');
     });
 
-    this.redis.on("reconnecting", () => {
-      console.log("Redis reconnecting...");
+    this.redis.on('reconnecting', () => {
+      console.log('Redis reconnecting...');
     });
   }
 
@@ -81,7 +81,7 @@ class GraphQLCacheService {
           // Safe JSON parsing with validation
           const parsed = JSON.parse(cached);
           // Validate parsed data is not malicious
-          if (parsed && typeof parsed === "object") {
+          if (parsed && typeof parsed === 'object') {
             console.log(`Cache HIT: ${key}`);
             return parsed;
           }
@@ -97,7 +97,7 @@ class GraphQLCacheService {
       console.log(`Cache MISS: ${key}`);
       return null;
     } catch (error) {
-      console.error("Cache get error:", error);
+      console.error('Cache get error:', error);
       return null;
     }
   }
@@ -115,7 +115,7 @@ class GraphQLCacheService {
 
       return true;
     } catch (error) {
-      console.error("Cache set error:", error);
+      console.error('Cache set error:', error);
       return false;
     }
   }
@@ -137,7 +137,7 @@ class GraphQLCacheService {
       console.log(`Cache DEL: ${key}`);
       return true;
     } catch (error) {
-      console.error("Cache delete error:", error);
+      console.error('Cache delete error:', error);
       return false;
     }
   }
@@ -154,7 +154,7 @@ class GraphQLCacheService {
       }
       return keys.length;
     } catch (error) {
-      console.error("Cache delete pattern error:", error);
+      console.error('Cache delete pattern error:', error);
       return 0;
     }
   }
@@ -168,18 +168,18 @@ class GraphQLCacheService {
       let totalDeleted = 0;
 
       for (const pattern of patterns) {
-        const searchPattern = id ? pattern.replace("*", `${id}*`) : pattern;
+        const searchPattern = id ? pattern.replace('*', `${id}*`) : pattern;
 
         const deleted = await this.delPattern(searchPattern);
         totalDeleted += deleted;
       }
 
       console.log(
-        `Invalidated ${totalDeleted} cache entries for ${typeName}${id ? `:${id}` : ""}`
+        `Invalidated ${totalDeleted} cache entries for ${typeName}${id ? `:${id}` : ''}`
       );
       return totalDeleted;
     } catch (error) {
-      console.error("Cache invalidation error:", error);
+      console.error('Cache invalidation error:', error);
       return 0;
     }
   }
@@ -209,13 +209,13 @@ class GraphQLCacheService {
    */
   async invalidateOnMutation(mutationName, args, result) {
     const invalidationMap = {
-      createVideo: () => this.invalidate("Video"),
-      updateVideo: () => this.invalidate("Video", args.id),
-      deleteVideo: () => this.invalidate("Video", args.id),
+      createVideo: () => this.invalidate('Video'),
+      updateVideo: () => this.invalidate('Video', args.id),
+      deleteVideo: () => this.invalidate('Video', args.id),
       createComment: () =>
-        this.invalidate("Comment") && this.invalidate("Video", args.videoId),
-      updateComment: () => this.invalidate("Comment", args.id),
-      deleteComment: () => this.invalidate("Comment", args.id),
+        this.invalidate('Comment') && this.invalidate('Video', args.videoId),
+      updateComment: () => this.invalidate('Comment', args.id),
+      deleteComment: () => this.invalidate('Comment', args.id),
       updateUser: () => this.invalidateUser(args.id),
       subscribe: () => this.invalidateUser(args.userId),
       unsubscribe: () => this.invalidateUser(args.userId),
@@ -243,7 +243,7 @@ class GraphQLCacheService {
       }
     }
 
-    console.log("Cache warming complete");
+    console.log('Cache warming complete');
   }
 
   /**
@@ -251,16 +251,16 @@ class GraphQLCacheService {
    */
   async getStats() {
     try {
-      const info = await this.redis.info("stats");
-      const keyspace = await this.redis.info("keyspace");
-      const memory = await this.redis.info("memory");
+      const info = await this.redis.info('stats');
+      const keyspace = await this.redis.info('keyspace');
+      const memory = await this.redis.info('memory');
 
       // Parse info strings
       const parseInfo = (str) => {
-        const lines = str.split("\r\n");
+        const lines = str.split('\r\n');
         const stats = {};
         lines.forEach((line) => {
-          const [key, value] = line.split(":");
+          const [key, value] = line.split(':');
           if (key && value) {
             stats[key] = value;
           }
@@ -281,7 +281,7 @@ class GraphQLCacheService {
         evictions: parseInt(statsInfo.evicted_keys) || 0,
       };
     } catch (error) {
-      console.error("Failed to get cache stats:", error);
+      console.error('Failed to get cache stats:', error);
       return null;
     }
   }
@@ -317,7 +317,7 @@ class GraphQLCacheService {
 
       return true;
     } catch (error) {
-      console.error("Cache set with tags error:", error);
+      console.error('Cache set with tags error:', error);
       return false;
     }
   }
@@ -337,7 +337,7 @@ class GraphQLCacheService {
 
       return keys.length;
     } catch (error) {
-      console.error("Cache invalidate by tag error:", error);
+      console.error('Cache invalidate by tag error:', error);
       return 0;
     }
   }
@@ -354,7 +354,7 @@ class GraphQLCacheService {
         try {
           const parsed = JSON.parse(v);
           // Validate parsed data
-          if (parsed && typeof parsed === "object") {
+          if (parsed && typeof parsed === 'object') {
             return { key: keys[i], value: parsed };
           }
           return { key: keys[i], value: null };
@@ -367,7 +367,7 @@ class GraphQLCacheService {
         }
       });
     } catch (error) {
-      console.error("Cache mget error:", error);
+      console.error('Cache mget error:', error);
       return keys.map((key) => ({ key, value: null }));
     }
   }
@@ -389,7 +389,7 @@ class GraphQLCacheService {
       console.log(`Cache MSET: ${entries.length} keys`);
       return true;
     } catch (error) {
-      console.error("Cache mset error:", error);
+      console.error('Cache mset error:', error);
       return false;
     }
   }
@@ -399,7 +399,7 @@ class GraphQLCacheService {
    */
   async close() {
     await this.redis.quit();
-    console.log("Redis connection closed");
+    console.log('Redis connection closed');
   }
 }
 

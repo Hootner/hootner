@@ -178,7 +178,7 @@ class SecurityAuditor {
     const reportPath = path.join(__dirname, 'security-audit-report.json');
     fs.writeFileSync(reportPath, JSON.stringify(this.results, null, 2));
     
-    console.log(`\n📋 Security Audit Summary:`);
+    console.log('\n📋 Security Audit Summary:');
     console.log(`   🔴 Vulnerabilities: ${this.results.summary.vulnerabilities}`);
     console.log(`   🟡 Warnings: ${this.results.summary.warnings}`);
     console.log(`   🟢 Passed: ${this.results.summary.passed}`);

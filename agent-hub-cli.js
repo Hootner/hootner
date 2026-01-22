@@ -204,7 +204,7 @@ class AgentHubCLI {
         const spinner = ora(`Starting all ${type} agents`).start();
 
         let count = 0;
-        this.agentHub.agents.forEach((agent, name) => {
+        this.agentHub.agents.forEach((agent) => {
             if (agent.type === type && agent.status !== 'active') {
                 agent.status = 'active';
                 agent.startTime = Date.now();
@@ -222,7 +222,7 @@ class AgentHubCLI {
         const spinner = ora(`Stopping all ${type} agents`).start();
 
         let count = 0;
-        this.agentHub.agents.forEach((agent, name) => {
+        this.agentHub.agents.forEach((agent) => {
             if (agent.type === type && agent.status === 'active') {
                 agent.status = 'stopped';
                 agent.stopTime = Date.now();
@@ -329,13 +329,15 @@ class AgentHubCLI {
             ]);
 
             switch (action) {
-                case 'list':
+                case 'list': {
                     this.listAgents({});
                     break;
-                case 'status':
+                }
+                case 'status': {
                     this.showStatus();
                     break;
-                case 'start':
+                }
+                case 'start': {
                     const { startAgent } = await inquirer.prompt([
                         {
                             type: 'input',
@@ -345,7 +347,8 @@ class AgentHubCLI {
                     ]);
                     this.startAgent(startAgent);
                     break;
-                case 'stop':
+                }
+                case 'stop': {
                     const { stopAgent } = await inquirer.prompt([
                         {
                             type: 'input',
@@ -355,7 +358,8 @@ class AgentHubCLI {
                     ]);
                     this.stopAgent(stopAgent);
                     break;
-                case 'restart':
+                }
+                case 'restart': {
                     const { restartAgent } = await inquirer.prompt([
                         {
                             type: 'input',
@@ -365,7 +369,8 @@ class AgentHubCLI {
                     ]);
                     this.restartAgent(restartAgent);
                     break;
-                case 'bulk-start':
+                }
+                case 'bulk-start': {
                     const { bulkStartType } = await inquirer.prompt([
                         {
                             type: 'list',
@@ -376,7 +381,8 @@ class AgentHubCLI {
                     ]);
                     this.bulkStartAgents(bulkStartType);
                     break;
-                case 'bulk-stop':
+                }
+                case 'bulk-stop': {
                     const { bulkStopType } = await inquirer.prompt([
                         {
                             type: 'list',
@@ -387,12 +393,15 @@ class AgentHubCLI {
                     ]);
                     this.bulkStopAgents(bulkStopType);
                     break;
-                case 'health':
+                }
+                case 'health': {
                     this.healthCheck();
                     break;
-                case 'exit':
+                }
+                case 'exit': {
                     console.log(chalk.green('\n✅ Goodbye!\n'));
                     process.exit(0);
+                }
             }
 
             if (action !== 'exit') {
@@ -406,4 +415,4 @@ class AgentHubCLI {
 }
 
 // Run CLI
-const cli = new AgentHubCLI();
+new AgentHubCLI();

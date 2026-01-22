@@ -5,11 +5,11 @@
 
 const baseConfig = {
   redis: {
-    host: process.env.REDIS_HOST || "localhost",
+    host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT) || 6379,
     password: process.env.REDIS_PASSWORD,
     db: 0,
-    keyPrefix: "graphql:",
+    keyPrefix: 'graphql:',
     retryStrategy: (times) => Math.min(times * 50, 2000),
     maxRetriesPerRequest: 3,
   },
@@ -28,37 +28,37 @@ const baseConfig = {
 
   invalidation: {
     patterns: {
-      User: ["User:*", "UserProfile:*", "UserVideos:*"],
-      Video: ["Video:*", "VideoList:*", "TrendingVideos:*", "SearchResults:*"],
-      Comment: ["Comment:*", "VideoComments:*"],
-      Subscription: ["User:*:subscription", "SubscriptionStats:*"],
+      User: ['User:*', 'UserProfile:*', 'UserVideos:*'],
+      Video: ['Video:*', 'VideoList:*', 'TrendingVideos:*', 'SearchResults:*'],
+      Comment: ['Comment:*', 'VideoComments:*'],
+      Subscription: ['User:*:subscription', 'SubscriptionStats:*'],
     },
 
     mutationMap: {
-      createVideo: "Video",
-      updateVideo: "Video",
-      deleteVideo: "Video",
-      createComment: "Comment",
-      updateComment: "Comment",
-      deleteComment: "Comment",
-      updateUser: "User",
-      subscribe: "User",
-      unsubscribe: "User",
+      createVideo: 'Video',
+      updateVideo: 'Video',
+      deleteVideo: 'Video',
+      createComment: 'Comment',
+      updateComment: 'Comment',
+      deleteComment: 'Comment',
+      updateUser: 'User',
+      subscribe: 'User',
+      unsubscribe: 'User',
     },
   },
 
   operations: {
     cacheable: [
-      "getUser",
-      "getVideo",
-      "getVideos",
-      "getComments",
-      "getTrendingVideos",
-      "searchVideos",
-      "getUserProfile",
-      "getVideoStats",
+      'getUser',
+      'getVideo',
+      'getVideos',
+      'getComments',
+      'getTrendingVideos',
+      'searchVideos',
+      'getUserProfile',
+      'getVideoStats',
     ],
-    excludeFields: ["currentUser"],
+    excludeFields: ['currentUser'],
   },
 };
 
@@ -105,6 +105,6 @@ const configs = {
   test: testConfig,
 };
 
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || 'development';
 
 module.exports = configs[env] || developmentConfig;

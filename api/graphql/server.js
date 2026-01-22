@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Validate environment variables at startup
-const envConfig = validateEnvironment("api");
+const envConfig = validateEnvironment('api');
 
 // Enhanced GraphQL Schema
 const schema = buildSchema(`
@@ -99,17 +99,17 @@ const schema = buildSchema(`
 // Business Logic Resolvers
 const root = {
   // Queries
-  health: () => "OK",
-  version: () => "1.0.0",
+  health: () => 'OK',
+  version: () => '1.0.0',
 
   users: async () => {
     // Mock data - integrate with database
     return [
       {
-        id: "1",
-        email: "user@hootner.com",
-        name: "Demo User",
-        subscription: "premium",
+        id: '1',
+        email: 'user@hootner.com',
+        name: 'Demo User',
+        subscription: 'premium',
         createdAt: new Date().toISOString(),
       },
     ];
@@ -119,11 +119,11 @@ const root = {
     // Mock data - integrate with video service
     return [
       {
-        id: "1",
-        title: "Demo Video",
-        url: "/videos/demo.mp4",
-        status: "ready",
-        userId: "1",
+        id: '1',
+        title: 'Demo Video',
+        url: '/videos/demo.mp4',
+        status: 'ready',
+        userId: '1',
         createdAt: new Date().toISOString(),
       },
     ];
@@ -146,12 +146,12 @@ const root = {
       id: Date.now().toString(),
       email: input.email,
       name: input.name,
-      subscription: "free",
+      subscription: 'free',
       createdAt: new Date().toISOString(),
     };
 
     // TODO: Hash password, save to database
-    console.log("Creating user:", user.email);
+    console.log('Creating user:', user.email);
     return user;
   },
 
@@ -161,13 +161,13 @@ const root = {
       id: Date.now().toString(),
       title: input.title,
       url: null, // Will be set after processing
-      status: "processing",
+      status: 'processing',
       userId: input.userId,
       createdAt: new Date().toISOString(),
     };
 
     // TODO: Process video file, generate thumbnails
-    console.log("Processing video:", video.title);
+    console.log('Processing video:', video.title);
     return video;
   },
 
@@ -180,7 +180,7 @@ const root = {
       return {
         success: true,
         transactionId: `txn_${Date.now()}`,
-        message: "Payment processed successfully",
+        message: 'Payment processed successfully',
       };
     } catch (error) {
       return {
@@ -199,9 +199,9 @@ app.use(express.json());
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      defaultSrc: ['\'self\''],
+      scriptSrc: ['\'self\''],
+      styleSrc: ['\'self\'', '\'unsafe-inline\''],
     },
   },
 }));
@@ -243,13 +243,13 @@ app.use((req, res, next) => {
 
 // GraphQL endpoint with enhanced features
 app.use(
-  "/graphql",
+  '/graphql',
   graphqlHTTP({
     schema: schema,
     rootValue: root,
     // Disable GraphiQL in production (CWE-200 fix)
     graphiql:
-      process.env.NODE_ENV !== "production"
+      process.env.NODE_ENV !== 'production'
         ? {
             headerEditorEnabled: true,
             shouldPersistHeaders: false, // Don't persist sensitive headers
@@ -282,20 +282,20 @@ app.use(
 );
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get('/health', (req, res) => {
   res.json({
-    status: "OK",
+    status: 'OK',
     timestamp: new Date().toISOString(),
     services: {
-      graphql: "running",
-      database: "connected",
-      redis: "connected",
+      graphql: 'running',
+      database: 'connected',
+      redis: 'connected',
     },
   });
 });
 
 // Metrics endpoint
-app.get("/metrics", (req, res) => {
+app.get('/metrics', (req, res) => {
   res.json({
     uptime: process.uptime(),
     memory: process.memoryUsage(),

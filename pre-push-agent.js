@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const { execSync } = require("child_process");
-const chalk = require("chalk");
-const fs = require("fs");
+const { execSync } = require('child_process');
+const chalk = require('chalk');
+const fs = require('fs');
 
 const startTime = Date.now();
 
@@ -11,27 +11,27 @@ const startTime = Date.now();
  */
 function runSilent(cmd) {
   try {
-    return execSync(cmd, { stdio: "pipe", encoding: "utf8" }).trim();
+    return execSync(cmd, { stdio: 'pipe', encoding: 'utf8' }).trim();
   } catch (error) {
     return null;
   }
 }
 
-console.log(chalk.blue("🚀 Pre-push validation..."));
+console.log(chalk.blue('🚀 Pre-push validation...'));
 
 const checks = [];
 
 // Check 1: Tests
-if (fs.existsSync("package.json")) {
-  const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+if (fs.existsSync('package.json')) {
+  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   if (pkg.scripts && pkg.scripts.test) {
     checks.push(
       new Promise((resolve) => {
-        const result = runSilent("npm test");
+        const result = runSilent('npm test');
         resolve({
-          name: "Tests",
+          name: 'Tests',
           passed: result !== null,
-          icon: "🧪",
+          icon: '🧪',
         });
       })
     );
@@ -39,16 +39,16 @@ if (fs.existsSync("package.json")) {
 }
 
 // Check 2: Build (if script exists)
-if (fs.existsSync("package.json")) {
-  const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+if (fs.existsSync('package.json')) {
+  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   if (pkg.scripts && pkg.scripts.build) {
     checks.push(
       new Promise((resolve) => {
-        const result = runSilent("npm run build");
+        const result = runSilent('npm run build');
         resolve({
-          name: "Build",
+          name: 'Build',
           passed: result !== null,
-          icon: "🔨",
+          icon: '🔨',
         });
       })
     );
@@ -58,11 +58,11 @@ if (fs.existsSync("package.json")) {
 // Check 3: Uncommitted changes
 checks.push(
   new Promise((resolve) => {
-    const status = runSilent("git status --porcelain");
+    const status = runSilent('git status --porcelain');
     resolve({
-      name: "Uncommitted changes",
+      name: 'Uncommitted changes',
       passed: !status || status.length === 0,
-      icon: "📝",
+      icon: '📝',
     });
   })
 );
@@ -70,28 +70,28 @@ checks.push(
 // Check 4: Branch protection
 checks.push(
   new Promise((resolve) => {
-    const branch = runSilent("git rev-parse --abbrev-ref HEAD");
-    const protectedBranches = ["main", "master", "production"];
+    const branch = runSilent('git rev-parse --abbrev-ref HEAD');
+    const protectedBranches = ['main', 'master', 'production'];
     if (protectedBranches.includes(branch)) {
       console.log(chalk.yellow(`⚠️ Pushing to protected branch: ${branch}`));
     }
-    resolve({ name: "Branch check", passed: true, icon: "🌿" });
+    resolve({ name: 'Branch check', passed: true, icon: '🌿' });
   })
 );
 
 Promise.all(checks).then((results) => {
-  console.log(chalk.yellow("\n📊 Validation Results:"));
+  console.log(chalk.yellow('\n📊 Validation Results:'));
 
   results.forEach((result) => {
-    const status = result.passed ? chalk.green("✅") : chalk.red("❌");
+    const status = result.passed ? chalk.green('✅') : chalk.red('❌');
     console.log(`${status} ${result.icon} ${result.name}`);
   });
 
   const failed = results.filter((r) => !r.passed);
 
   if (failed.length > 0) {
-    console.error(chalk.red("\n❌ PUSH BLOCKED - Validation failed"));
-    console.error(chalk.yellow("Fix the issues above before pushing\n"));
+    console.error(chalk.red('\n❌ PUSH BLOCKED - Validation failed'));
+    console.error(chalk.yellow('Fix the issues above before pushing\n'));
     process.exit(1);
   }
 

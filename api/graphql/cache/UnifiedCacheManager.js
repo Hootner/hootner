@@ -3,9 +3,9 @@
  * Consolidates Apollo Server plugin and Express middleware functionality
  */
 
-const GraphQLCacheService = require("./GraphQLCacheService");
-const config = require("./shared/config");
-const { extractTypeName, isMutation, isCacheable } = require("./shared/utils");
+const GraphQLCacheService = require('./GraphQLCacheService');
+const config = require('./shared/config');
+const { extractTypeName, isMutation, isCacheable } = require('./shared/utils');
 
 class UnifiedCacheManager {
   constructor(options = {}) {
@@ -40,12 +40,12 @@ class UnifiedCacheManager {
         // Skip caching for mutations
         if (
           !operationName ||
-          requestContext.operation?.operation === "mutation"
+          requestContext.operation?.operation === 'mutation'
         ) {
           return {
             async willSendResponse(responseContext) {
               // Invalidate cache on mutation
-              if (responseContext.operation?.operation === "mutation") {
+              if (responseContext.operation?.operation === 'mutation') {
                 await cache.invalidateOnMutation(
                   operationName,
                   request.variables,
@@ -118,7 +118,7 @@ class UnifiedCacheManager {
 
     return async (req, res, next) => {
       // Only cache POST requests
-      if (req.method !== "POST") {
+      if (req.method !== 'POST') {
         return next();
       }
 
@@ -194,7 +194,7 @@ class UnifiedCacheManager {
 
     return async (req, res, next) => {
       // Only cache GET requests
-      if (req.method !== "GET") {
+      if (req.method !== 'GET') {
         return next();
       }
 
@@ -204,7 +204,7 @@ class UnifiedCacheManager {
       const cached = await cache.get(cacheKey);
 
       if (cached) {
-        res.set("X-Cache-Status", "HIT");
+        res.set('X-Cache-Status', 'HIT');
         return res.json(cached);
       }
 
@@ -217,7 +217,7 @@ class UnifiedCacheManager {
           await cache.set(cacheKey, body, ttl);
         });
 
-        res.set("X-Cache-Status", "MISS");
+        res.set('X-Cache-Status', 'MISS');
         return originalJson(body);
       }.bind(this);
 

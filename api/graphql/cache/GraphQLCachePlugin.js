@@ -3,22 +3,22 @@
  * Apollo Server plugin for caching GraphQL queries
  */
 
-const GraphQLCacheService = require("./GraphQLCacheService");
+const GraphQLCacheService = require('./GraphQLCacheService');
 
 class GraphQLCachePlugin {
   constructor(options = {}) {
     this.cache = new GraphQLCacheService(options);
     this.cacheableOperations = options.cacheableOperations || [
-      "getUser",
-      "getVideo",
-      "getVideos",
-      "getComments",
-      "getTrendingVideos",
-      "searchVideos",
-      "getUserProfile",
-      "getVideoStats",
+      'getUser',
+      'getVideo',
+      'getVideos',
+      'getComments',
+      'getTrendingVideos',
+      'searchVideos',
+      'getUserProfile',
+      'getVideoStats',
     ];
-    this.excludeFields = options.excludeFields || ["currentUser"];
+    this.excludeFields = options.excludeFields || ['currentUser'];
   }
 
   /**
@@ -32,7 +32,7 @@ class GraphQLCachePlugin {
    * Check if operation is a mutation
    */
   isMutation(operation) {
-    return operation.operation === "mutation";
+    return operation.operation === 'mutation';
   }
 
   /**
@@ -49,7 +49,7 @@ class GraphQLCachePlugin {
           return {
             async willSendResponse(responseContext) {
               // Invalidate cache on mutation
-              if (responseContext.operation.operation === "mutation") {
+              if (responseContext.operation.operation === 'mutation') {
                 await this.cache.invalidateOnMutation(
                   operationName,
                   request.variables,
@@ -98,7 +98,7 @@ class GraphQLCachePlugin {
   middleware() {
     return async (req, res, next) => {
       // Only handle POST requests (GraphQL queries)
-      if (req.method !== "POST") {
+      if (req.method !== 'POST') {
         return next();
       }
 
@@ -107,8 +107,8 @@ class GraphQLCachePlugin {
       // Skip if no operation name or is mutation with type checking
       if (
         !operationName ||
-        typeof query !== "string" ||
-        query.trim().startsWith("mutation")
+        typeof query !== 'string' ||
+        query.trim().startsWith('mutation')
       ) {
         return next();
       }
@@ -159,19 +159,19 @@ class GraphQLCachePlugin {
   extractTypeName(operationName) {
     // Convert getUser -> User, getTrendingVideos -> Video, etc.
     const typeMap = {
-      getUser: "User",
-      getUserProfile: "User",
-      getUserVideos: "Video",
-      getVideo: "Video",
-      getVideos: "Video",
-      getTrendingVideos: "Video",
-      searchVideos: "Video",
-      getComments: "Comment",
-      getVideoComments: "Comment",
-      getVideoStats: "VideoStats",
+      getUser: 'User',
+      getUserProfile: 'User',
+      getUserVideos: 'Video',
+      getVideo: 'Video',
+      getVideos: 'Video',
+      getTrendingVideos: 'Video',
+      searchVideos: 'Video',
+      getComments: 'Comment',
+      getVideoComments: 'Comment',
+      getVideoStats: 'VideoStats',
     };
 
-    return typeMap[operationName] || "Query";
+    return typeMap[operationName] || 'Query';
   }
 
   /**

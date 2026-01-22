@@ -4,19 +4,19 @@
  * Example: Using UnifiedCacheManager
  */
 
-const { UnifiedCacheManager } = require("./index");
-const express = require("express");
+const { UnifiedCacheManager } = require('./index');
+const express = require('express');
 
 // Initialize unified cache manager
 const cacheManager = new UnifiedCacheManager({
   cacheableOperations: [
-    "getUser",
-    "getVideo",
-    "getTrendingVideos",
-    "searchVideos",
+    'getUser',
+    'getVideo',
+    'getTrendingVideos',
+    'searchVideos',
   ],
   redis: {
-    host: process.env.REDIS_HOST || "localhost",
+    host: process.env.REDIS_HOST || 'localhost',
     port: process.env.REDIS_PORT || 6379,
   },
 });
@@ -27,34 +27,34 @@ app.use(express.json());
 
 // GraphQL caching middleware
 app.use(
-  "/graphql",
+  '/graphql',
   cacheManager.graphqlMiddleware({
-    excludeQueries: ["currentUser"],
+    excludeQueries: ['currentUser'],
   })
 );
 
 // Invalidation middleware
-app.use("/graphql", cacheManager.invalidationMiddleware());
+app.use('/graphql', cacheManager.invalidationMiddleware());
 
 // Route caching
-app.get("/api/trending", cacheManager.routeMiddleware(120), (req, res) => {
+app.get('/api/trending', cacheManager.routeMiddleware(120), (req, res) => {
   res.json({
     videos: [
-      { id: 1, title: "Video 1", views: 1000 },
-      { id: 2, title: "Video 2", views: 2000 },
+      { id: 1, title: 'Video 1', views: 1000 },
+      { id: 2, title: 'Video 2', views: 2000 },
     ],
   });
 });
 
 // Cache statistics endpoint
-app.get("/api/cache/stats", async (req, res) => {
+app.get('/api/cache/stats', async (req, res) => {
   const stats = await cacheManager.getStats();
   res.json(stats);
 });
 
 // Clear cache endpoint (admin only)
 app.post(
-  "/api/cache/clear",
+  '/api/cache/clear',
   // TODO: Add authentication middleware here
   // Example: authenticateAdmin,
   async (req, res) => {
@@ -62,12 +62,12 @@ app.post(
     if (!req.user || !req.user.isAdmin) {
       return res
         .status(403)
-        .json({ error: "Forbidden: Admin access required" });
+        .json({ error: 'Forbidden: Admin access required' });
     }
 
     await cacheManager.clearAll();
     res.json({
-      message: "Cache cleared",
+      message: 'Cache cleared',
       timestamp: new Date().toISOString(),
       clearedBy: req.user.id,
     });
@@ -82,8 +82,8 @@ app.listen(PORT, () => {
 });
 
 // Graceful shutdown
-process.on("SIGTERM", async () => {
-  console.log("Shutting down...");
+process.on('SIGTERM', async () => {
+  console.log('Shutting down...');
   await cacheManager.close();
   process.exit(0);
 });

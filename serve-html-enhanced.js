@@ -165,8 +165,8 @@ app.get('/api/collaboration/rooms', (req, res) => {
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: '*',
+    methods: ['GET', 'POST']
   }
 });
 
