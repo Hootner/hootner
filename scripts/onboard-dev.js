@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const { execSync } = require('child_process');
-const { existsSync } = require('fs');
+import { execSync } from 'child_process';
+import { existsSync } from 'fs';
 
 const exec = (cmd) => execSync(cmd, { stdio: 'inherit', shell: true });
 const check = (cmd) => {

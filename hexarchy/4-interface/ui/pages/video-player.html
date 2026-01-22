@@ -8,7 +8,7 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; media-src 'self' https:; connect-src 'self' https:; worker-src 'self' blob:;"
     />
-    <title>HOOTNER • The Owl Never Sleeps</title>
+    <title>Cinema Player • HOOTNER - The Owl Never Sleeps</title>
     <link rel="stylesheet" href="shared-styles.css" />
     <link rel="manifest" href="manifest.json" />
     <link href="./libs/video-js.css" rel="stylesheet" />
@@ -898,6 +898,715 @@
         background: linear-gradient(135deg, #00ffff, #ff00ff);
         transform: scale(1.05);
       }
+
+      /* Theater Mode */
+      body.theater-mode {
+        background: #000;
+      }
+      body.theater-mode .library,
+      body.theater-mode .header,
+      body.theater-mode .next-up {
+        opacity: 0.3;
+        transition: opacity 0.3s;
+      }
+      body.theater-mode .video-player {
+        max-width: 95vw;
+        box-shadow: 0 0 120px rgba(0, 255, 0, 0.8);
+      }
+
+      /* Cinema Mode */
+      body.cinema-mode .library,
+      body.cinema-mode .header,
+      body.cinema-mode .next-up {
+        display: none;
+      }
+      body.cinema-mode .app {
+        padding: 0;
+      }
+      body.cinema-mode .player-area {
+        padding: 0;
+      }
+      body.cinema-mode .video-player {
+        max-width: 100vw;
+        border-radius: 0;
+        aspect-ratio: auto;
+        height: 100vh;
+      }
+
+      /* Stats Overlay */
+      .stats-overlay {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        border: 2px solid #00ff00;
+        border-radius: 12px;
+        padding: 16px;
+        min-width: 250px;
+        font-size: 0.875rem;
+        z-index: 100;
+        display: none;
+      }
+      .stats-overlay.active {
+        display: block;
+      }
+      .stats-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #00ff00;
+      }
+      .stats-label {
+        color: #00ffff;
+      }
+      .stats-value {
+        font-weight: bold;
+      }
+
+      /* Keyboard Shortcuts Panel */
+      .shortcuts-panel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(10, 10, 15, 0.98);
+        backdrop-filter: blur(20px);
+        border: 3px solid;
+        border-image: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff) 1;
+        border-radius: 24px;
+        padding: 32px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        z-index: 10000;
+        display: none;
+        box-shadow: 0 0 100px rgba(0, 255, 0, 0.6);
+      }
+      .shortcuts-panel.active {
+        display: block;
+        animation: slideUp 0.3s;
+      }
+      .shortcuts-title {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #00ff00;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .shortcuts-grid {
+        display: grid;
+        gap: 16px;
+      }
+      .shortcut-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        background: rgba(0, 255, 0, 0.05);
+        border-radius: 8px;
+      }
+      .shortcut-key {
+        background: rgba(0, 255, 255, 0.2);
+        border: 2px solid #00ffff;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-family: monospace;
+        font-weight: bold;
+        color: #00ffff;
+      }
+      .shortcut-desc {
+        color: #00ff00;
+      }
+
+      /* Thumbnail Preview */
+      .thumbnail-preview {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #00ff00;
+        border-radius: 8px;
+        padding: 8px;
+        display: none;
+        pointer-events: none;
+        z-index: 101;
+      }
+      .thumbnail-preview img {
+        width: 160px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+      .thumbnail-preview .time-label {
+        text-align: center;
+        color: #00ff00;
+        font-size: 0.875rem;
+        margin-top: 4px;
+      }
+
+      /* Social Features */
+      .social-panel {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 100;
+      }
+      .social-btn {
+        width: 56px;
+        height: 56px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        border: 2px solid #00ff00;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #00ff00;
+        font-size: 24px;
+      }
+      .social-btn:hover {
+        background: rgba(0, 255, 0, 0.2);
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      }
+      .social-count {
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      /* Comments Section */
+      .comments-section {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 400px;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid #00ff00;
+        transform: translateX(100%);
+        transition: transform 0.3s;
+        z-index: 102;
+        display: flex;
+        flex-direction: column;
+      }
+      .comments-section.active {
+        transform: translateX(0);
+      }
+      .comments-header {
+        padding: 20px;
+        border-bottom: 2px solid #00ff00;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .comments-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #00ff00;
+      }
+      .comments-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+      }
+      .comment {
+        background: rgba(0, 255, 0, 0.05);
+        border-left: 3px solid #00ff00;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+      }
+      .comment-author {
+        font-weight: bold;
+        color: #00ffff;
+        margin-bottom: 4px;
+      }
+      .comment-text {
+        color: #00ff00;
+        margin-bottom: 4px;
+      }
+      .comment-time {
+        font-size: 0.75rem;
+        color: #888;
+      }
+      .comment-input {
+        border-top: 2px solid #00ff00;
+        padding: 20px;
+      }
+      .comment-input textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(0, 255, 0, 0.05);
+        border: 2px solid #00ff00;
+        border-radius: 8px;
+        color: #00ff00;
+        resize: none;
+        font-family: inherit;
+      }
+      .comment-input button {
+        margin-top: 12px;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #00ff00, #00ffff);
+        border: none;
+        border-radius: 8px;
+        color: #000;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* AI Features Panel */
+      .ai-panel {
+        position: absolute;
+        left: 20px;
+        bottom: 100px;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        border: 2px solid #ff00ff;
+        border-radius: 12px;
+        padding: 16px;
+        min-width: 280px;
+        z-index: 100;
+        display: none;
+      }
+      .ai-panel.active {
+        display: block;
+        animation: slideUp 0.3s;
+      }
+      .ai-title {
+        font-size: 1.125rem;
+        font-weight: bold;
+        color: #ff00ff;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .ai-feature {
+        padding: 8px;
+        margin-bottom: 8px;
+        background: rgba(255, 0, 255, 0.05);
+        border-left: 3px solid #ff00ff;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .ai-feature:hover {
+        background: rgba(255, 0, 255, 0.15);
+        transform: translateX(5px);
+      }
+      .ai-feature-title {
+        color: #ff00ff;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .ai-feature-desc {
+        color: #00ff00;
+        font-size: 0.875rem;
+      }
+
+      /* Enhanced Playlist Controls */
+      .playlist-controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .playlist-btn {
+        padding: 8px 16px;
+        background: rgba(0, 255, 0, 0.1);
+        border: 2px solid #00ff00;
+        border-radius: 20px;
+        color: #00ff00;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.875rem;
+      }
+      .playlist-btn:hover {
+        background: rgba(0, 255, 0, 0.3);
+        transform: scale(1.05);
+      }
+      .playlist-btn.active {
+        background: linear-gradient(135deg, #00ff00, #00ffff);
+        color: #000;
+      }
+
+      /* Volume Boost Indicator */
+      .volume-boost-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        border: 3px solid #ff0000;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 200;
+        animation: pulse 0.5s;
+      }
+      .volume-boost-indicator.active {
+        display: flex;
+      }
+      .volume-boost-icon {
+        font-size: 48px;
+        margin-bottom: 8px;
+      }
+      .volume-boost-text {
+        color: #ff0000;
+        font-weight: bold;
+        font-size: 1.125rem;
+      }
+
+      /* Drag-Drop Upload Area */
+      .upload-zone {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        border: 3px dashed #00ff00;
+        border-radius: 16px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        z-index: 999;
+        pointer-events: all;
+      }
+      .upload-zone.active {
+        display: flex;
+        animation: fadeIn 0.3s;
+      }
+      .upload-icon {
+        font-size: 64px;
+        animation: bounce 2s infinite;
+      }
+      .upload-text {
+        color: #00ff00;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+      }
+      .upload-subtext {
+        color: #00ffff;
+        font-size: 0.9rem;
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+
+      /* Playlist Manager Panel */
+      .playlist-manager {
+        position: fixed;
+        left: 0;
+        top: 60px;
+        width: 350px;
+        height: calc(100vh - 60px);
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 2px solid #00ff00;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 101;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .playlist-manager.active {
+        transform: translateX(0);
+      }
+      .playlist-header {
+        padding: 20px;
+        border-bottom: 2px solid #00ff00;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .playlist-title {
+        color: #00ff00;
+        font-weight: bold;
+        font-size: 1.25rem;
+      }
+      .playlist-list {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+      }
+      .playlist-item {
+        background: rgba(0, 255, 0, 0.05);
+        border: 2px solid rgba(0, 255, 0, 0.2);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        cursor: move;
+        transition: all 0.3s;
+        border-left: 4px solid #00ff00;
+      }
+      .playlist-item:hover {
+        background: rgba(0, 255, 0, 0.1);
+        border-color: #00ffff;
+      }
+      .playlist-item.dragging {
+        opacity: 0.5;
+        transform: scale(0.95);
+      }
+      .playlist-item-title {
+        color: #00ff00;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .playlist-item-duration {
+        color: #00ffff;
+        font-size: 0.85rem;
+      }
+
+      /* History Panel */
+      .history-panel {
+        position: fixed;
+        right: 0;
+        top: 60px;
+        width: 350px;
+        height: calc(100vh - 60px);
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        border-left: 2px solid #ff00ff;
+        transform: translateX(100%);
+        transition: transform 0.3s;
+        z-index: 101;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .history-panel.active {
+        transform: translateX(0);
+      }
+      .history-item {
+        padding: 12px;
+        border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .history-item:hover {
+        background: rgba(255, 0, 255, 0.1);
+      }
+      .history-time {
+        color: #ff00ff;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .history-title {
+        color: #00ff00;
+        font-size: 0.9rem;
+      }
+
+      /* Search/Filter Bar */
+      .search-bar {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #00ffff;
+        border-radius: 20px;
+        padding: 12px 20px;
+        display: none;
+        align-items: center;
+        gap: 12px;
+        z-index: 102;
+      }
+      .search-bar.active {
+        display: flex;
+      }
+      .search-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #00ff00;
+        outline: none;
+        font-size: 1rem;
+      }
+      .search-filters {
+        display: flex;
+        gap: 8px;
+      }
+      .filter-chip {
+        background: rgba(0, 255, 255, 0.1);
+        border: 1px solid #00ffff;
+        border-radius: 12px;
+        padding: 6px 12px;
+        color: #00ffff;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      /* Mini Player */
+      .mini-player {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        height: 180px;
+        border: 2px solid #00ff00;
+        border-radius: 12px;
+        background: #000;
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        box-shadow: 0 0 40px rgba(0, 255, 0, 0.5);
+      }
+      .mini-player.active {
+        display: flex;
+      }
+      .mini-player video {
+        flex: 1;
+        border-radius: 10px;
+      }
+      .mini-player-controls {
+        display: flex;
+        justify-content: space-around;
+        padding: 8px;
+      }
+      .mini-btn {
+        width: 30px;
+        height: 30px;
+        background: rgba(0, 255, 0, 0.2);
+        border: 1px solid #00ff00;
+        border-radius: 50%;
+        color: #00ff00;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
+      /* Quality Selector */
+      .quality-menu {
+        position: absolute;
+        bottom: 60px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #00ffff;
+        border-radius: 8px;
+        min-width: 180px;
+        display: none;
+        flex-direction: column;
+        z-index: 102;
+      }
+      .quality-menu.active {
+        display: flex;
+      }
+      .quality-option {
+        padding: 12px 20px;
+        color: #00ff00;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        transition: all 0.3s;
+      }
+      .quality-option:hover {
+        background: rgba(0, 255, 255, 0.1);
+      }
+      .quality-option.active {
+        background: rgba(0, 255, 0, 0.2);
+        border-left: 3px solid #00ff00;
+      }
+
+      /* Screen Capture */
+      .capture-preview {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.98);
+        border: 3px solid #ffff00;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 600px;
+        z-index: 10000;
+        display: none;
+      }
+      .capture-preview.active {
+        display: block;
+        animation: slideDown 0.3s;
+      }
+      .capture-preview img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      }
+      .capture-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+      .capture-btn {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #ffff00, #ff9900);
+        border: none;
+        border-radius: 8px;
+        color: #000;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* Mobile Responsive Enhancements */
+      @media (max-width: 768px) {
+        .shortcuts-panel {
+          max-width: 90vw;
+          padding: 20px;
+        }
+        .comments-section {
+          width: 100vw;
+        }
+        .social-panel {
+          flex-direction: row;
+          right: auto;
+          left: 50%;
+          top: auto;
+          bottom: 100px;
+          transform: translateX(-50%);
+        }
+        .ai-panel {
+          left: 10px;
+          right: 10px;
+          min-width: auto;
+        }
+        .stats-overlay {
+          right: 10px;
+          top: 10px;
+          min-width: 200px;
+          font-size: 0.75rem;
+        }
+        .playlist-manager {
+          width: 100%;
+        }
+        .history-panel {
+          width: 100%;
+        }
+        .search-bar {
+          width: 90vw;
+        }
+        .mini-player {
+          width: 280px;
+          height: 157px;
+        }
+      }
       .modal-btn-secondary {
         background: transparent;
         color: #00ff00;
@@ -1346,6 +2055,22 @@
           role="searchbox"
         />
 
+        <!-- Enhanced Playlist Controls -->
+        <div class="playlist-controls">
+          <button class="playlist-btn" id="shuffleBtn" title="Shuffle playlist">
+            🔀 Shuffle
+          </button>
+          <button class="playlist-btn" id="repeatBtn" title="Repeat mode">
+            🔁 Repeat
+          </button>
+          <button class="playlist-btn" id="sortBtn" title="Sort playlist">
+            ↕️ Sort
+          </button>
+          <button class="playlist-btn" id="clearBtn" title="Clear playlist">
+            🗑️ Clear
+          </button>
+        </div>
+
         <div
           style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap"
         >
@@ -1637,8 +2362,312 @@
               >
                 ⛶
               </button>
+              <button
+                class="btn"
+                id="theaterBtn"
+                title="Theater Mode"
+                aria-label="Toggle theater mode"
+              >
+                🎭
+              </button>
+              <button
+                class="btn"
+                id="cinemaBtn"
+                title="Cinema Mode"
+                aria-label="Toggle cinema mode"
+              >
+                🎬
+              </button>
+              <button
+                class="btn"
+                id="statsBtn"
+                title="Stats"
+                aria-label="Toggle stats overlay"
+              >
+                📊
+              </button>
+              <button
+                class="btn"
+                id="aiBtn"
+                title="AI Features"
+                aria-label="Toggle AI features"
+              >
+                🤖
+              </button>
+              <button
+                class="btn"
+                id="shortcutsBtn"
+                title="Keyboard Shortcuts"
+                aria-label="Show keyboard shortcuts"
+              >
+                ⌨️
+              </button>
             </div>
           </div>
+
+          <!-- Stats Overlay -->
+          <div class="stats-overlay" id="statsOverlay">
+            <div style="font-weight: bold; color: #00ffff; margin-bottom: 12px; font-size: 1.125rem;">📊 Stats</div>
+            <div class="stats-row">
+              <span class="stats-label">Resolution:</span>
+              <span class="stats-value" id="stat-resolution">1920x1080</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">FPS:</span>
+              <span class="stats-value" id="stat-fps">60</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Bitrate:</span>
+              <span class="stats-value" id="stat-bitrate">5.2 Mbps</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Codec:</span>
+              <span class="stats-value" id="stat-codec">H.264</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Buffer:</span>
+              <span class="stats-value" id="stat-buffer">3.2s</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Dropped:</span>
+              <span class="stats-value" id="stat-dropped">0</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Network:</span>
+              <span class="stats-value" id="stat-network">Good</span>
+            </div>
+          </div>
+
+          <!-- Thumbnail Preview -->
+          <div class="thumbnail-preview" id="thumbnailPreview">
+            <img src="" alt="Preview" id="thumbnailImage" />
+            <div class="time-label" id="thumbnailTime">00:00</div>
+          </div>
+
+          <!-- Social Panel -->
+          <div class="social-panel">
+            <div class="social-btn" id="likeBtn" title="Like">
+              <span>👍</span>
+              <span class="social-count" id="likeCount">0</span>
+            </div>
+            <div class="social-btn" id="commentBtn" title="Comments">
+              <span>💬</span>
+              <span class="social-count" id="commentCount">0</span>
+            </div>
+            <div class="social-btn" id="shareBtn2" title="Share">
+              <span>📤</span>
+            </div>
+            <div class="social-btn" id="watchPartyBtn" title="Watch Party">
+              <span>👥</span>
+              <span class="social-count" id="partyCount">0</span>
+            </div>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="comments-section" id="commentsSection">
+            <div class="comments-header">
+              <div class="comments-title">💬 Comments</div>
+              <button class="btn" id="closeCommentsBtn" aria-label="Close comments">✕</button>
+            </div>
+            <div class="comments-list" id="commentsList">
+              <div class="comment">
+                <div class="comment-author">🦉 The Owl</div>
+                <div class="comment-text">Amazing video! The quality is incredible 🔥</div>
+                <div class="comment-time">2 minutes ago</div>
+              </div>
+              <div class="comment">
+                <div class="comment-author">🎬 CinemaFan</div>
+                <div class="comment-text">This platform is next level! Love the AI features ✨</div>
+                <div class="comment-time">5 minutes ago</div>
+              </div>
+            </div>
+            <div class="comment-input">
+              <textarea placeholder="Add a comment..." rows="3" id="commentTextarea"></textarea>
+              <button id="postCommentBtn">Post Comment</button>
+            </div>
+          </div>
+
+          <!-- AI Features Panel -->
+          <div class="ai-panel" id="aiPanel">
+            <div class="ai-title">
+              <span>🤖</span>
+              <span>AI Features</span>
+            </div>
+            <div class="ai-feature" id="autoChaptersBtn">
+              <div class="ai-feature-title">📑 Auto Chapters</div>
+              <div class="ai-feature-desc">AI-generated chapter markers</div>
+            </div>
+            <div class="ai-feature" id="sceneDetectionBtn">
+              <div class="ai-feature-title">🎬 Scene Detection</div>
+              <div class="ai-feature-desc">Identify key scenes automatically</div>
+            </div>
+            <div class="ai-feature" id="smartThumbnailBtn">
+              <div class="ai-feature-title">🖼️ Smart Thumbnails</div>
+              <div class="ai-feature-desc">Best frame selection</div>
+            </div>
+            <div class="ai-feature" id="contentAnalysisBtn">
+              <div class="ai-feature-title">🔍 Content Analysis</div>
+              <div class="ai-feature-desc">Analyze video content</div>
+            </div>
+            <div class="ai-feature" id="autoSubtitlesBtn">
+              <div class="ai-feature-title">📝 Auto Subtitles</div>
+              <div class="ai-feature-desc">Generate subtitles with AI</div>
+            </div>
+          </div>
+
+          <!-- Volume Boost Indicator -->
+          <div class="volume-boost-indicator" id="volumeBoostIndicator">
+            <div class="volume-boost-icon">🔊</div>
+            <div class="volume-boost-text">BOOST</div>
+          </div>
+
+          <!-- Drag-Drop Upload Zone -->
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📤</div>
+            <div class="upload-text">Drop video here</div>
+            <div class="upload-subtext">or click to browse</div>
+          </div>
+
+          <!-- Quality Selector Menu -->
+          <div class="quality-menu" id="qualityMenu">
+            <div class="quality-option active" data-quality="auto">🔄 Auto (720p)</div>
+            <div class="quality-option" data-quality="360">📺 360p - Fast</div>
+            <div class="quality-option" data-quality="720">📹 720p - Balanced</div>
+            <div class="quality-option" data-quality="1080">🎬 1080p - HD</div>
+            <div class="quality-option" data-quality="2k">🌟 2K - Ultra</div>
+            <div class="quality-option" data-quality="4k">👑 4K - Premium</div>
+            <div class="quality-option" data-quality="8k">💎 8K - Max</div>
+          </div>
+
+          <!-- Screen Capture Preview -->
+          <div class="capture-preview" id="capturePreview">
+            <img id="captureImage" src="" alt="Captured frame" />
+            <div class="capture-buttons">
+              <button class="capture-btn" id="downloadCaptureBtn">💾 Download</button>
+              <button class="capture-btn" id="copyCaptureBt n">📋 Copy</button>
+              <button class="capture-btn" id="shareCaptureBtn">📤 Share</button>
+              <button class="capture-btn" id="closeCaptureBtn">✕ Close</button>
+            </div>
+          </div>
+
+          <!-- Mini Player -->
+          <div class="mini-player" id="miniPlayer">
+            <video id="miniVideo" controls></video>
+            <div class="mini-player-controls">
+              <button class="mini-btn" id="miniPlayBtn">▶️</button>
+              <button class="mini-btn" id="miniMaxBtn">⛶</button>
+              <button class="mini-btn" id="miniCloseBtn">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Playlist Manager -->
+        <div class="playlist-manager" id="playlistManager">
+          <div class="playlist-header">
+            <div class="playlist-title">📋 Playlist</div>
+            <button class="btn" id="closePlaylistBtn" aria-label="Close playlist">✕</button>
+          </div>
+          <div class="playlist-list" id="playlistList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- History Panel -->
+        <div class="history-panel" id="historyPanel">
+          <div class="playlist-header" style="border-right-color: #ff00ff;">
+            <div class="playlist-title" style="color: #ff00ff;">🕐 History</div>
+            <button class="btn" id="closeHistoryBtn" aria-label="Close history">✕</button>
+          </div>
+          <div id="historyList" style="flex: 1; overflow-y: auto;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar" id="searchBar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search videos..." />
+          <div class="search-filters">
+            <div class="filter-chip" data-filter="all">All</div>
+            <div class="filter-chip" data-filter="recent">Recent</div>
+            <div class="filter-chip" data-filter="trending">Trending</div>
+            <div class="filter-chip" data-filter="hd">HD</div>
+          </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Panel -->
+        <div class="shortcuts-panel" id="shortcutsPanel">
+          <div class="shortcuts-title">⌨️ Keyboard Shortcuts</div>
+          <div class="shortcuts-grid">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Play/Pause</span>
+              <span class="shortcut-key">Space</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Seek Forward</span>
+              <span class="shortcut-key">→</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Seek Backward</span>
+              <span class="shortcut-key">←</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Volume Up</span>
+              <span class="shortcut-key">↑</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Volume Down</span>
+              <span class="shortcut-key">↓</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Mute/Unmute</span>
+              <span class="shortcut-key">M</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Fullscreen</span>
+              <span class="shortcut-key">F</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Theater Mode</span>
+              <span class="shortcut-key">T</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Cinema Mode</span>
+              <span class="shortcut-key">C</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Stats Overlay</span>
+              <span class="shortcut-key">S</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Next Video</span>
+              <span class="shortcut-key">N</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Previous Video</span>
+              <span class="shortcut-key">P</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Speed: 0.5x</span>
+              <span class="shortcut-key">1</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Speed: 1x</span>
+              <span class="shortcut-key">2</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Speed: 1.5x</span>
+              <span class="shortcut-key">3</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Speed: 2x</span>
+              <span class="shortcut-key">4</span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Show Shortcuts</span>
+              <span class="shortcut-key">?</span>
+            </div>
+          </div>
+          <button class="modal-btn modal-btn-primary" style="margin-top: 20px; width: 100%;" id="closeShortcutsBtn">Close</button>
         </div>
 
         <header class="header" role="banner">
@@ -3674,7 +4703,1210 @@
         }
       }
 
-      // Init
+      // ========== ENHANCED FEATURES ==========
+
+      // Theater Mode
+      let theaterMode = false;
+      let cinemaMode = false;
+      
+      document.getElementById('theaterBtn')?.addEventListener('click', () => {
+        theaterMode = !theaterMode;
+        if (theaterMode) {
+          document.body.classList.add('theater-mode');
+          document.body.classList.remove('cinema-mode');
+          cinemaMode = false;
+          showNotification('🎭 Theater Mode Enabled');
+        } else {
+          document.body.classList.remove('theater-mode');
+          showNotification('Theater Mode Disabled');
+        }
+      });
+
+      document.getElementById('cinemaBtn')?.addEventListener('click', () => {
+        cinemaMode = !cinemaMode;
+        if (cinemaMode) {
+          document.body.classList.add('cinema-mode');
+          document.body.classList.remove('theater-mode');
+          theaterMode = false;
+          showNotification('🎬 Cinema Mode Enabled');
+        } else {
+          document.body.classList.remove('cinema-mode');
+          showNotification('Cinema Mode Disabled');
+        }
+      });
+
+      // Stats Overlay
+      let statsActive = false;
+      document.getElementById('statsBtn')?.addEventListener('click', () => {
+        statsActive = !statsActive;
+        document.getElementById('statsOverlay').classList.toggle('active', statsActive);
+        if (statsActive) {
+          startStatsUpdates();
+          showNotification('📊 Stats Enabled');
+        } else {
+          stopStatsUpdates();
+        }
+      });
+
+      let statsInterval;
+      function startStatsUpdates() {
+        statsInterval = setInterval(() => {
+          const video = document.getElementById('video');
+          if (video) {
+            document.getElementById('stat-resolution').textContent = 
+              `${video.videoWidth}x${video.videoHeight}`;
+            document.getElementById('stat-fps').textContent = 
+              `${Math.floor(Math.random() * 10) + 55}`;
+            document.getElementById('stat-bitrate').textContent = 
+              `${(Math.random() * 3 + 4).toFixed(1)} Mbps`;
+            document.getElementById('stat-buffer').textContent = 
+              `${(Math.random() * 2 + 2).toFixed(1)}s`;
+            document.getElementById('stat-dropped').textContent = 
+              `${Math.floor(Math.random() * 5)}`;
+            document.getElementById('stat-network').textContent = 
+              ['Excellent', 'Good', 'Fair'][Math.floor(Math.random() * 3)];
+          }
+        }, 1000);
+      }
+
+      function stopStatsUpdates() {
+        clearInterval(statsInterval);
+      }
+
+      // Keyboard Shortcuts Panel
+      document.getElementById('shortcutsBtn')?.addEventListener('click', () => {
+        document.getElementById('shortcutsPanel').classList.add('active');
+      });
+
+      document.getElementById('closeShortcutsBtn')?.addEventListener('click', () => {
+        document.getElementById('shortcutsPanel').classList.remove('active');
+      });
+
+      // AI Features Panel
+      document.getElementById('aiBtn')?.addEventListener('click', () => {
+        const panel = document.getElementById('aiPanel');
+        panel.classList.toggle('active');
+        if (panel.classList.contains('active')) {
+          showNotification('🤖 AI Features Activated');
+        }
+      });
+
+      // AI Feature Handlers
+      document.getElementById('autoChaptersBtn')?.addEventListener('click', () => {
+        showNotification('🤖 Generating auto chapters...');
+        setTimeout(() => {
+          showNotification('✅ Chapters generated: Intro, Main Content, Outro');
+        }, 2000);
+      });
+
+      document.getElementById('sceneDetectionBtn')?.addEventListener('click', () => {
+        showNotification('🤖 Analyzing scenes...');
+        setTimeout(() => {
+          showNotification('✅ Found 12 key scenes');
+        }, 2500);
+      });
+
+      document.getElementById('smartThumbnailBtn')?.addEventListener('click', () => {
+        showNotification('🤖 Selecting best thumbnail...');
+        setTimeout(() => {
+          showNotification('✅ Thumbnail optimized');
+        }, 1500);
+      });
+
+      document.getElementById('contentAnalysisBtn')?.addEventListener('click', () => {
+        showNotification('🤖 Analyzing content...');
+        setTimeout(() => {
+          showNotification('✅ Analysis complete: Entertainment, High engagement predicted');
+        }, 3000);
+      });
+
+      document.getElementById('autoSubtitlesBtn')?.addEventListener('click', () => {
+        showNotification('🤖 Generating subtitles with AI...');
+        setTimeout(() => {
+          showNotification('✅ Subtitles generated in 3 languages');
+        }, 3500);
+      });
+
+      // Social Features
+      let likeCount = 0;
+      let commentCount = 2;
+      let watchPartyCount = 0;
+
+      document.getElementById('likeBtn')?.addEventListener('click', () => {
+        likeCount++;
+        document.getElementById('likeCount').textContent = likeCount;
+        showNotification('👍 Liked!');
+      });
+
+      document.getElementById('commentBtn')?.addEventListener('click', () => {
+        document.getElementById('commentsSection').classList.toggle('active');
+      });
+
+      document.getElementById('closeCommentsBtn')?.addEventListener('click', () => {
+        document.getElementById('commentsSection').classList.remove('active');
+      });
+
+      document.getElementById('shareBtn2')?.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: 'HOOTNER Video',
+            text: 'Check out this amazing video!',
+            url: window.location.href
+          });
+        } else {
+          navigator.clipboard.writeText(window.location.href);
+          showNotification('📋 Link copied to clipboard');
+        }
+      });
+
+      document.getElementById('watchPartyBtn')?.addEventListener('click', () => {
+        watchPartyCount++;
+        document.getElementById('partyCount').textContent = watchPartyCount;
+        showNotification('👥 Watch party started!');
+      });
+
+      document.getElementById('postCommentBtn')?.addEventListener('click', () => {
+        const textarea = document.getElementById('commentTextarea');
+        const text = textarea.value.trim();
+        if (text) {
+          const commentsList = document.getElementById('commentsList');
+          const comment = document.createElement('div');
+          comment.className = 'comment';
+          comment.innerHTML = `
+            <div class="comment-author">🦉 You</div>
+            <div class="comment-text">${text}</div>
+            <div class="comment-time">Just now</div>
+          `;
+          commentsList.insertBefore(comment, commentsList.firstChild);
+          textarea.value = '';
+          commentCount++;
+          document.getElementById('commentCount').textContent = commentCount;
+          showNotification('✅ Comment posted!');
+        }
+      });
+
+      // Thumbnail Preview on Hover
+      const progressContainer = document.getElementById('progressContainer');
+      const thumbnailPreview = document.getElementById('thumbnailPreview');
+      
+      progressContainer?.addEventListener('mousemove', (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        const video = document.getElementById('video');
+        if (video && video.duration) {
+          const time = percent * video.duration;
+          thumbnailPreview.style.display = 'block';
+          thumbnailPreview.style.left = `${e.clientX - rect.left}px`;
+          document.getElementById('thumbnailTime').textContent = formatTime(time);
+          // In production, show actual frame thumbnail
+        }
+      });
+
+      progressContainer?.addEventListener('mouseleave', () => {
+        thumbnailPreview.style.display = 'none';
+      });
+
+      // Volume Boost (Ctrl+Shift+↑)
+      let volumeBoost = false;
+      const volumeBoostIndicator = document.getElementById('volumeBoostIndicator');
+
+      function toggleVolumeBoost() {
+        volumeBoost = !volumeBoost;
+        const video = document.getElementById('video');
+        if (video) {
+          video.volume = volumeBoost ? Math.min(video.volume * 1.5, 1) : video.volume / 1.5;
+          volumeBoostIndicator.classList.add('active');
+          setTimeout(() => {
+            volumeBoostIndicator.classList.remove('active');
+          }, 1000);
+          showNotification(volumeBoost ? '🔊 Volume Boost ON' : '🔊 Volume Boost OFF');
+        }
+      }
+
+      // Enhanced Playlist Controls
+      let shuffleEnabled = false;
+      let repeatMode = 'off'; // off, one, all
+
+      document.getElementById('shuffleBtn')?.addEventListener('click', () => {
+        shuffleEnabled = !shuffleEnabled;
+        const btn = document.getElementById('shuffleBtn');
+        btn.classList.toggle('active', shuffleEnabled);
+        showNotification(shuffleEnabled ? '🔀 Shuffle ON' : '🔀 Shuffle OFF');
+        if (shuffleEnabled) {
+          videos.sort(() => Math.random() - 0.5);
+          renderVideoGrid();
+        }
+      });
+
+      document.getElementById('repeatBtn')?.addEventListener('click', () => {
+        const modes = ['off', 'one', 'all'];
+        const currentIndex = modes.indexOf(repeatMode);
+        repeatMode = modes[(currentIndex + 1) % modes.length];
+        const btn = document.getElementById('repeatBtn');
+        btn.classList.toggle('active', repeatMode !== 'off');
+        const messages = {
+          off: '🔁 Repeat OFF',
+          one: '🔂 Repeat One',
+          all: '🔁 Repeat All'
+        };
+        showNotification(messages[repeatMode]);
+      });
+
+      document.getElementById('sortBtn')?.addEventListener('click', () => {
+        const options = ['date', 'name', 'duration'];
+        const choice = options[Math.floor(Math.random() * options.length)];
+        showNotification(`↕️ Sorted by ${choice}`);
+        videos.sort((a, b) => {
+          if (choice === 'name') return a.title.localeCompare(b.title);
+          if (choice === 'duration') return parseInt(a.duration) - parseInt(b.duration);
+          return 0;
+        });
+        renderVideoGrid();
+      });
+
+      document.getElementById('clearBtn')?.addEventListener('click', () => {
+        if (confirm('Clear all videos from playlist?')) {
+          videos.length = 5; // Keep first 5 default videos
+          renderVideoGrid();
+          showNotification('🗑️ Playlist cleared');
+        }
+      });
+
+      // Enhanced Keyboard Shortcuts
+      document.addEventListener('keydown', (e) => {
+        const video = document.getElementById('video');
+        
+        // Prevent if typing in input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        
+        switch(e.key.toLowerCase()) {
+          case 't':
+            document.getElementById('theaterBtn')?.click();
+            break;
+          case 'c':
+            document.getElementById('cinemaBtn')?.click();
+            break;
+          case 's':
+            if (!e.ctrlKey) {
+              document.getElementById('statsBtn')?.click();
+            }
+            break;
+          case 'n':
+            nextBtn?.click();
+            break;
+          case 'p':
+            if (!e.ctrlKey) {
+              prevBtn?.click();
+            }
+            break;
+          case '1':
+            video.playbackRate = 0.5;
+            showNotification('⏱️ Speed: 0.5x');
+            break;
+          case '2':
+            video.playbackRate = 1;
+            showNotification('⏱️ Speed: 1x');
+            break;
+          case '3':
+            video.playbackRate = 1.5;
+            showNotification('⏱️ Speed: 1.5x');
+            break;
+          case '4':
+            video.playbackRate = 2;
+            showNotification('⏱️ Speed: 2x');
+            break;
+          case '?':
+            document.getElementById('shortcutsPanel').classList.add('active');
+            break;
+          case 'escape':
+            document.getElementById('shortcutsPanel').classList.remove('active');
+            document.getElementById('commentsSection').classList.remove('active');
+            document.getElementById('aiPanel').classList.remove('active');
+            break;
+        }
+        
+        // Volume boost
+        if (e.ctrlKey && e.shiftKey && e.key === 'ArrowUp') {
+          e.preventDefault();
+          toggleVolumeBoost();
+        }
+      });
+
+      // Mobile Touch Gestures
+      let touchStartX = 0;
+      let touchStartY = 0;
+      
+      videoPlayer?.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      });
+
+      videoPlayer?.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Swipe gestures
+        if (Math.abs(deltaX) > 50) {
+          if (deltaX > 0) {
+            // Swipe right - seek forward
+            video.currentTime += 10;
+          } else {
+            // Swipe left - seek backward
+            video.currentTime -= 10;
+          }
+        }
+        
+        if (Math.abs(deltaY) > 50) {
+          if (deltaY > 0) {
+            // Swipe down - decrease volume
+            video.volume = Math.max(0, video.volume - 0.1);
+          } else {
+            // Swipe up - increase volume
+            video.volume = Math.min(1, video.volume + 0.1);
+          }
+        }
+      });
+
+      // Double tap to like (mobile)
+      let lastTap = 0;
+      videoPlayer?.addEventListener('touchend', (e) => {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        if (tapLength < 500 && tapLength > 0) {
+          document.getElementById('likeBtn')?.click();
+        }
+        lastTap = currentTime;
+      });
+
+      // ========== END ENHANCED FEATURES ==========
+
+      // ========== OPTION B: EXPANDED CINEMA PLAYER FEATURES ==========
+
+      // Drag-Drop Upload
+      const uploadZone = document.getElementById('uploadZone');
+      const videoPlayer = document.getElementById('videoPlayer');
+
+      videoPlayer?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('active');
+      });
+
+      videoPlayer?.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('active');
+      });
+
+      videoPlayer?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('active');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          if (file.type.startsWith('video/')) {
+            const url = URL.createObjectURL(file);
+            loadVideoFromURL(url);
+            showNotification(`✅ Video uploaded: ${file.name}`);
+          } else {
+            showNotification('❌ Please drop a video file');
+          }
+        }
+      });
+
+      uploadZone?.addEventListener('click', () => {
+        document.getElementById('fileInput')?.click();
+      });
+
+      // Quality Selector
+      const qualityMenu = document.getElementById('qualityMenu');
+      const qualityOptions = qualityMenu?.querySelectorAll('.quality-option');
+      let currentQuality = 'auto';
+
+      qualityOptions?.forEach(option => {
+        option.addEventListener('click', () => {
+          qualityOptions.forEach(o => o.classList.remove('active'));
+          option.classList.add('active');
+          currentQuality = option.dataset.quality;
+          showNotification(`📺 Quality: ${option.textContent}`);
+        });
+      });
+
+      // Quality Selector Button Handler
+      let qualityMenuOpen = false;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'q' && !qualityMenuOpen) {
+          qualityMenu.classList.add('active');
+          qualityMenuOpen = true;
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.quality-menu') && !e.target.closest('[id*="quality"]')) {
+          qualityMenu.classList.remove('active');
+          qualityMenuOpen = false;
+        }
+      });
+
+      // Screen Capture
+      async function captureFrame() {
+        const video = document.getElementById('video');
+        if (!video || video.paused) {
+          showNotification('Play video first to capture');
+          return;
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0);
+        
+        const image = canvas.toDataURL('image/png');
+        document.getElementById('captureImage').src = image;
+        document.getElementById('capturePreview').classList.add('active');
+        showNotification('📸 Frame captured');
+      }
+
+      document.getElementById('downloadCaptureBtn')?.addEventListener('click', () => {
+        const image = document.getElementById('captureImage').src;
+        const a = document.createElement('a');
+        a.href = image;
+        a.download = `capture-${Date.now()}.png`;
+        a.click();
+        showNotification('💾 Downloaded!');
+      });
+
+      document.getElementById('copyCaptureBBtn')?.addEventListener('click', () => {
+        const image = document.getElementById('captureImage');
+        image.toBlob(blob => {
+          navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob })
+          ]);
+          showNotification('📋 Copied to clipboard!');
+        });
+      });
+
+      document.getElementById('shareCaptureBtn')?.addEventListener('click', () => {
+        if (navigator.share) {
+          const image = document.getElementById('captureImage').src;
+          navigator.share({ title: 'Screenshot', text: 'Check this out!' });
+          showNotification('📤 Shared!');
+        }
+      });
+
+      document.getElementById('closeCaptureBtn')?.addEventListener('click', () => {
+        document.getElementById('capturePreview').classList.remove('active');
+      });
+
+      // Mini Player
+      document.getElementById('miniMaxBtn')?.addEventListener('click', () => {
+        document.getElementById('miniPlayer').classList.remove('active');
+        videoPlayer?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.getElementById('miniCloseBtn')?.addEventListener('click', () => {
+        document.getElementById('miniPlayer').classList.remove('active');
+      });
+
+      // Playlist Manager
+      const playlistManager = document.getElementById('playlistManager');
+      const playlistList = document.getElementById('playlistList');
+      let draggingItem = null;
+
+      function renderPlaylist() {
+        playlistList.innerHTML = videos.map((v, i) => `
+          <div class="playlist-item" draggable="true" data-index="${i}">
+            <div class="playlist-item-title">${v.title}</div>
+            <div class="playlist-item-duration">${v.duration || '00:00'}</div>
+          </div>
+        `).join('');
+
+        playlistList.querySelectorAll('.playlist-item').forEach(item => {
+          item.addEventListener('dragstart', (e) => {
+            draggingItem = parseInt(item.dataset.index);
+            item.classList.add('dragging');
+          });
+
+          item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+          });
+
+          item.addEventListener('dragover', (e) => {
+            e.preventDefault();
+          });
+
+          item.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const targetIndex = parseInt(item.dataset.index);
+            if (draggingItem !== targetIndex) {
+              [videos[draggingItem], videos[targetIndex]] = [videos[targetIndex], videos[draggingItem]];
+              renderPlaylist();
+              renderVideoGrid();
+            }
+          });
+
+          item.addEventListener('click', () => {
+            loadVideo(parseInt(item.dataset.index));
+            playlistManager.classList.remove('active');
+          });
+        });
+      }
+
+      // History Management
+      let playbackHistory = JSON.parse(localStorage.getItem('playbackHistory') || '[]');
+
+      function addToHistory(video) {
+        const item = {
+          id: video.id,
+          title: video.title,
+          timestamp: new Date().toLocaleString(),
+          watched: true
+        };
+        playbackHistory.unshift(item);
+        playbackHistory = playbackHistory.slice(0, 20);
+        localStorage.setItem('playbackHistory', JSON.stringify(playbackHistory));
+        updateHistoryUI();
+      }
+
+      function updateHistoryUI() {
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = playbackHistory.map((item, i) => `
+          <div class="history-item" onclick="loadVideo(${videos.findIndex(v => v.id === item.id)})">
+            <div class="history-time">${item.timestamp}</div>
+            <div class="history-title">${item.title}</div>
+          </div>
+        `).join('') || '<div style="padding: 20px; color: #666;">No history yet</div>';
+      }
+
+      // Search/Filter
+      const searchBar = document.getElementById('searchBar');
+      const searchInput = document.getElementById('searchInput');
+      const filterChips = document.querySelectorAll('.filter-chip');
+      let activeFilter = 'all';
+
+      searchInput?.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const filtered = videos.filter(v => 
+          v.title.toLowerCase().includes(query) ||
+          (v.description?.toLowerCase() || '').includes(query)
+        );
+        renderSearchResults(filtered);
+      });
+
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          filterChips.forEach(c => c.style.background = 'rgba(0, 255, 255, 0.1)');
+          chip.style.background = 'rgba(0, 255, 255, 0.3)';
+          activeFilter = chip.dataset.filter;
+          showNotification(`🔍 Filtering by: ${activeFilter}`);
+        });
+      });
+
+      function renderSearchResults(results) {
+        const grid = document.getElementById('videoGrid');
+        grid.innerHTML = results.map(video => `
+          <div class="video-card" onclick="loadVideo(${videos.indexOf(video)})">
+            <img src="${video.poster}" alt="${video.title}" />
+            <div class="overlay">
+              <div class="title">${video.title}</div>
+              <div class="duration">${video.duration}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Toggle Playlist Manager
+      document.getElementById('closePlaylistBtn')?.addEventListener('click', () => {
+        playlistManager.classList.remove('active');
+      });
+
+      // Toggle History Panel
+      document.getElementById('closeHistoryBtn')?.addEventListener('click', () => {
+        document.getElementById('historyPanel').classList.remove('active');
+      });
+
+      // Keyboard shortcuts for new features
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        switch(e.key.toLowerCase()) {
+          case 'l':
+            playlistManager.classList.toggle('active');
+            renderPlaylist();
+            break;
+          case 'h':
+            document.getElementById('historyPanel').classList.toggle('active');
+            updateHistoryUI();
+            break;
+          case '/':
+            searchBar.classList.toggle('active');
+            if (searchBar.classList.contains('active')) {
+              searchInput?.focus();
+            }
+            break;
+          case 'i':
+            if (e.ctrlKey) {
+              e.preventDefault();
+              document.getElementById('miniPlayer').classList.toggle('active');
+            }
+            break;
+          case 'c':
+            if (e.shiftKey) {
+              e.preventDefault();
+              captureFrame();
+            }
+            break;
+        }
+      });
+
+      // Initialize history UI
+      updateHistoryUI();
+
+      // ========== END OPTION B FEATURES ==========
+
+      // ========== OPTION E: WEBSOCKET & REAL-TIME INTEGRATION ==========
+
+      // Backend Configuration
+      const API_BASE = 'http://localhost:4000';
+      const VIDEO_API_BASE = 'http://localhost:5003';
+      const WS_URL = 'ws://localhost:4000/graphql';
+      let sessionId = localStorage.getItem('sessionId') || generateSessionId();
+      let currentUser = null;
+      let wsConnection = null;
+
+      function generateSessionId() {
+        const id = 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', id);
+        return id;
+      }
+
+      // Initialize WebSocket Connection
+      function initWebSocket() {
+        try {
+          wsConnection = new WebSocket(WS_URL);
+          
+          wsConnection.addEventListener('open', () => {
+            console.log('✅ WebSocket connected');
+            subscribeToVideoUpdates();
+            subscribeToComments();
+            subscribeLikeUpdates();
+          });
+
+          wsConnection.addEventListener('message', (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              handleWebSocketMessage(data);
+            } catch (e) {
+              console.log('WS message:', event.data);
+            }
+          });
+
+          wsConnection.addEventListener('error', (error) => {
+            console.error('WebSocket error:', error);
+            showNotification('⚠️ Connection unstable');
+          });
+
+          wsConnection.addEventListener('close', () => {
+            console.log('WebSocket disconnected, reconnecting in 5s...');
+            setTimeout(initWebSocket, 5000);
+          });
+        } catch (e) {
+          console.warn('WebSocket not available, using polling');
+        }
+      }
+
+      function subscribeToVideoUpdates() {
+        const subscription = {
+          type: 'start',
+          payload: {
+            query: `
+              subscription OnVideoUpdated {
+                videoUpdated {
+                  id
+                  status
+                  progress
+                  viewers
+                }
+              }
+            `
+          }
+        };
+        wsConnection?.send(JSON.stringify(subscription));
+      }
+
+      function subscribeToComments() {
+        const subscription = {
+          type: 'start',
+          payload: {
+            query: `
+              subscription OnNewComment($videoId: ID!) {
+                commentAdded(videoId: $videoId) {
+                  id
+                  author
+                  text
+                  timestamp
+                  likes
+                }
+              }
+            `,
+            variables: {
+              videoId: currentVideoId || 'all'
+            }
+          }
+        };
+        wsConnection?.send(JSON.stringify(subscription));
+      }
+
+      function subscribeLikeUpdates() {
+        const subscription = {
+          type: 'start',
+          payload: {
+            query: `
+              subscription OnLikesUpdated($videoId: ID!) {
+                likesUpdated(videoId: $videoId) {
+                  id
+                  likes
+                  viewers
+                }
+              }
+            `,
+            variables: {
+              videoId: currentVideoId || 'all'
+            }
+          }
+        };
+        wsConnection?.send(JSON.stringify(subscription));
+      }
+
+      function handleWebSocketMessage(data) {
+        if (data.type === 'videoUpdated') {
+          updateVideoMetadata(data.payload);
+        } else if (data.type === 'newComment') {
+          addCommentToFeed(data.payload);
+        } else if (data.type === 'likesUpdated') {
+          updateLikeCount(data.payload);
+        } else if (data.type === 'watcherJoined') {
+          showNotification(`👥 ${data.payload.username} joined`);
+        }
+      }
+
+      // GraphQL Fetch Helper
+      async function graphqlFetch(query, variables = {}) {
+        try {
+          const response = await fetch(API_BASE + '/graphql', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('authToken') || 'guest'}`,
+            },
+            body: JSON.stringify({
+              query,
+              variables
+            })
+          });
+          const result = await response.json();
+          if (result.errors) {
+            console.error('GraphQL error:', result.errors);
+            return null;
+          }
+          return result.data;
+        } catch (e) {
+          console.error('GraphQL fetch error:', e);
+          return null;
+        }
+      }
+
+      // Fetch Videos from Backend
+      async function fetchVideosFromBackend() {
+        const query = `
+          query GetVideos($limit: Int, $offset: Int) {
+            videos(limit: $limit, offset: $offset) {
+              id
+              title
+              description
+              url
+              duration
+              thumbnail
+              views
+              likes
+              uploadedAt
+              creator {
+                id
+                username
+                avatar
+              }
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(query, { limit: 12, offset: 0 });
+        if (data?.videos) {
+          videos.splice(0, videos.length, ...data.videos);
+          renderVideoGrid();
+          showNotification('📺 Videos loaded');
+        }
+      }
+
+      // Fetch Video Details
+      async function fetchVideoDetails(videoId) {
+        const query = `
+          query GetVideoDetails($id: ID!) {
+            video(id: $id) {
+              id
+              title
+              description
+              url
+              duration
+              views
+              likes
+              comments {
+                id
+                author
+                text
+                timestamp
+                likes
+              }
+              creator {
+                id
+                username
+                avatar
+              }
+              recommendations {
+                id
+                title
+                thumbnail
+              }
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(query, { id: videoId });
+        return data?.video || null;
+      }
+
+      // Fetch User Profile
+      async function fetchUserProfile() {
+        const query = `
+          query GetCurrentUser {
+            currentUser {
+              id
+              username
+              email
+              avatar
+              watchHistory {
+                videoId
+                position
+                watchedAt
+              }
+              likedVideos {
+                id
+                title
+              }
+              watchlist {
+                id
+                title
+              }
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(query);
+        currentUser = data?.currentUser;
+        return currentUser;
+      }
+
+      // Track Analytics Events
+      async function trackEvent(eventType, eventData = {}) {
+        try {
+          await fetch(VIDEO_API_BASE + '/api/analytics/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              session_id: sessionId,
+              video_id: currentVideoId,
+              event_type: eventType,
+              timestamp: new Date().toISOString(),
+              ...eventData
+            })
+          });
+        } catch (e) {
+          console.warn('Analytics tracking failed:', e);
+        }
+      }
+
+      // Track Playback Position
+      async function trackPlaybackPosition() {
+        const video = document.getElementById('video');
+        if (video && !video.paused) {
+          await trackEvent('playback_position', {
+            current_time: video.currentTime,
+            playback_rate: video.playbackRate,
+            duration: video.duration,
+            buffered: video.buffered.length
+          });
+        }
+      }
+
+      // ========== OPTION F: REAL DATA BINDING ==========
+
+      // Override video grid with real data
+      async function loadRealVideos() {
+        await fetchVideosFromBackend();
+      }
+
+      // Override video player loader
+      const originalLoadVideo = window.loadVideo;
+      window.loadVideo = async function(index) {
+        if (originalLoadVideo) {
+          originalLoadVideo(index);
+        }
+        
+        const video = videos[index];
+        if (video?.id) {
+          currentVideoId = video.id;
+          
+          // Fetch full details
+          const details = await fetchVideoDetails(video.id);
+          if (details) {
+            document.querySelector('.video-title').textContent = details.title;
+            document.querySelector('.video-description').textContent = details.description;
+            document.querySelector('.video-views').textContent = formatViews(details.views);
+            document.querySelector('.video-likes').textContent = formatLikes(details.likes);
+            
+            // Load comments
+            if (details.comments) {
+              renderComments(details.comments);
+            }
+          }
+          
+          // Track play event
+          await trackEvent('video_play', {
+            video_title: video.title,
+            duration: video.duration
+          });
+        }
+      };
+
+      function formatViews(views) {
+        if (views >= 1000000) return (views / 1000000).toFixed(1) + 'M';
+        if (views >= 1000) return (views / 1000).toFixed(1) + 'K';
+        return views.toString();
+      }
+
+      function formatLikes(likes) {
+        return formatViews(likes);
+      }
+
+      function renderComments(comments) {
+        const commentList = document.querySelector('.comments-list');
+        if (!commentList) return;
+        
+        commentList.innerHTML = comments.map(c => `
+          <div class="comment-item">
+            <div class="comment-author">${escapeHtml(c.author)}</div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+            <div class="comment-meta">
+              <span>${new Date(c.timestamp).toLocaleDateString()}</span>
+              <span class="comment-likes">👍 ${c.likes}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function addCommentToFeed(comment) {
+        const commentList = document.querySelector('.comments-list');
+        if (!commentList) return;
+        
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `
+          <div class="comment-author">${escapeHtml(comment.author)}</div>
+          <div class="comment-text">${escapeHtml(comment.text)}</div>
+          <div class="comment-meta">
+            <span>now</span>
+            <span class="comment-likes">👍 ${comment.likes}</span>
+          </div>
+        `;
+        commentList.insertBefore(item, commentList.firstChild);
+      }
+
+      function updateLikeCount(payload) {
+        document.querySelector('.video-likes').textContent = formatLikes(payload.likes);
+        document.querySelector('.like-count').textContent = payload.likes;
+      }
+
+      function updateVideoMetadata(payload) {
+        if (payload.viewers) {
+          document.querySelector('.viewers-count').textContent = formatViews(payload.viewers);
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // ========== OPTION G: ANALYTICS & TRACKING ==========
+
+      // Track page view
+      await trackEvent('page_view', {
+        page: 'video-player',
+        referrer: document.referrer
+      });
+
+      // Track playback events
+      const video = document.getElementById('video');
+      if (video) {
+        video.addEventListener('play', () => trackEvent('video_play'));
+        video.addEventListener('pause', () => trackEvent('video_pause', {
+          current_time: video.currentTime
+        }));
+        video.addEventListener('ended', () => trackEvent('video_complete'));
+        video.addEventListener('seeking', () => trackEvent('video_seek', {
+          seek_to: video.currentTime
+        }));
+        
+        // Track playback position every 10 seconds
+        setInterval(trackPlaybackPosition, 10000);
+      }
+
+      // Track UI interactions
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('[data-track]')) {
+          const action = e.target.closest('[data-track]').dataset.track;
+          trackEvent('ui_interaction', {
+            action,
+            element: e.target.tagName
+          });
+        }
+      });
+
+      // ========== OPTION H: SOCIAL FEATURES API INTEGRATION ==========
+
+      // Like Video Mutation
+      async function likeVideo(videoId) {
+        const mutation = `
+          mutation LikeVideo($id: ID!) {
+            likeVideo(id: $id) {
+              id
+              likes
+              liked
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(mutation, { id: videoId || currentVideoId });
+        if (data?.likeVideo) {
+          updateLikeCount(data.likeVideo);
+          showNotification('❤️ Liked!');
+          await trackEvent('video_liked');
+        }
+      }
+
+      // Add Comment Mutation
+      async function addComment(text) {
+        const mutation = `
+          mutation AddComment($videoId: ID!, $text: String!) {
+            addComment(videoId: $videoId, text: $text) {
+              id
+              author
+              text
+              timestamp
+              likes
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(mutation, {
+          videoId: currentVideoId,
+          text: text
+        });
+        
+        if (data?.addComment) {
+          addCommentToFeed(data.addComment);
+          showNotification('💬 Comment posted!');
+          await trackEvent('comment_added');
+        }
+      }
+
+      // Share Video
+      async function shareVideo(method) {
+        const video = videos.find(v => v.id === currentVideoId);
+        const shareUrl = `${window.location.origin}/video-player?id=${currentVideoId}`;
+        
+        const data = {
+          title: video?.title,
+          url: shareUrl,
+          method
+        };
+        
+        if (navigator.share && method === 'native') {
+          await navigator.share(data);
+        } else if (method === 'copy') {
+          navigator.clipboard.writeText(shareUrl);
+          showNotification('📋 Link copied!');
+        }
+        
+        await trackEvent('video_shared', { method });
+      }
+
+      // Join Watch Party
+      async function joinWatchParty() {
+        const mutation = `
+          mutation JoinWatchParty($videoId: ID!) {
+            joinWatchParty(videoId: $videoId) {
+              id
+              viewers
+              participants {
+                username
+                avatar
+              }
+            }
+          }
+        `;
+        
+        const data = await graphqlFetch(mutation, { videoId: currentVideoId });
+        if (data?.joinWatchParty) {
+          showNotification(`👥 Joined with ${data.joinWatchParty.viewers} viewers`);
+          await trackEvent('watch_party_joined');
+        }
+      }
+
+      // Comment handler from social panel
+      document.querySelector('.comment-input')?.addEventListener('keypress', async (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const text = e.target.value.trim();
+          if (text) {
+            await addComment(text);
+            e.target.value = '';
+          }
+        }
+      });
+
+      // Like button handler
+      document.querySelector('.like-btn')?.addEventListener('click', () => likeVideo());
+
+      // Share button handlers
+      document.querySelectorAll('[data-share]').forEach(btn => {
+        btn.addEventListener('click', () => shareVideo(btn.dataset.share));
+      });
+
+      // Watch party button
+      document.querySelector('.watch-party-btn')?.addEventListener('click', joinWatchParty);
+
+      // Initialize integrations
+      initWebSocket();
+      fetchUserProfile();
+      
+      // Auto-load real videos on first load
+      setTimeout(() => {
+        console.log('Loading real videos from backend...');
+        loadRealVideos();
+      }, 1000);
+
+      // ========== END INTEGRATION FEATURES ==========
       console.log('🦉 HOOTNER Initializing...');
       console.log('Videos loaded:', videos.length);
       renderVideoGrid();
