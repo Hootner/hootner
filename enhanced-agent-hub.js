@@ -52,15 +52,15 @@ class EnhancedAgentHub {
 
     for (const [agentName, AgentClass] of Object.entries(productionAgents)) {
       try {
-        const instance = new AgentClass();
-        await instance.start();
-        this.agentInstances.set(agentName, instance);
+        const agentInstance = new AgentClass();
+        await agentInstance.start();
+        this.agentInstances.set(agentName, agentInstance);
 
         // Update agent metadata
         const agent = this.agents.get(agentName);
         if (agent) {
           agent.status = 'active';
-          agent.instance = instance;
+          agent.instance = agentInstance;
           agent.startTime = Date.now();
         }
 
@@ -237,9 +237,9 @@ class EnhancedAgentHub {
 
   async shutdown() {
     console.log('🛑 Shutting down all agents...');
-    for (const [name, instance] of this.agentInstances) {
+    for (const [name, agentInstance] of this.agentInstances) {
       try {
-        await instance.stop();
+        await agentInstance.stop();
         console.log(`   ✅ ${name} stopped`);
       } catch (error) {
         console.error(`   ❌ ${name} failed to stop: ${error.message}`);

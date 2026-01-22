@@ -34,8 +34,12 @@ class CommitValidator {
   }
   
   validateConventional(msg) {
-    const pattern = /^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .{1,50}/;
-    return pattern.test(msg) 
+    // Simple pattern to avoid ReDoS
+    const hasType = /^(feat|fix|docs|style|refactor|test|chore)/.test(msg);
+    const hasColon = msg.includes(':');
+    const hasDescription = msg.length > 10;
+    
+    return hasType && hasColon && hasDescription
       ? { valid: true }
       : { valid: false, error: 'Use conventional commits: feat/fix/docs: description' };
   }

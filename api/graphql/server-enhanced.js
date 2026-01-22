@@ -80,7 +80,7 @@ const wsServer = new WebSocketServer({
 const serverCleanup = useServer(
     {
         schema,
-        context: async (ctx, msg, args) => {
+        context: async (ctx) => {
             // Get user from connection params (for subscriptions)
             const token = ctx.connectionParams?.authorization?.replace('Bearer ', '');
 
@@ -103,10 +103,10 @@ const serverCleanup = useServer(
 
             return {};
         },
-        onConnect: async (ctx) => {
+        onConnect: async () => {
             console.log('🔌 Client connected to WebSocket');
         },
-        onDisconnect: async (ctx) => {
+        onDisconnect: async () => {
             console.log('🔌 Client disconnected from WebSocket');
         },
     },
@@ -143,17 +143,17 @@ const apolloServer = new ApolloServer({
 
         // Custom logging plugin
         {
-            async requestDidStart(requestContext) {
+            async requestDidStart() {
                 const start = Date.now();
 
                 return {
-                    async willSendResponse(requestContext) {
+                    async willSendResponse(responseContext) {
                         const duration = Date.now() - start;
-                        console.log(`⚡ ${requestContext.operationName || 'Anonymous'} completed in ${duration}ms`);
+                        console.log(`⚡ ${responseContext.operationName || 'Anonymous'} completed in ${duration}ms`);
                     },
 
-                    async didEncounterErrors(requestContext) {
-                        console.error('GraphQL Errors:', requestContext.errors);
+                    async didEncounterErrors(errorContext) {
+                        console.error('GraphQL Errors:', errorContext.errors);
                     },
                 };
             },

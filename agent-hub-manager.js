@@ -361,13 +361,14 @@ class AgentHubManager {
 
         Object.keys(agentsByType).forEach(type => {
             const agents = agentsByType[type];
-            typeStats[type] = {
+            const typeStats = {
                 total: agents.length,
                 active: agents.filter(name => {
                     const agent = this.agentHub.agents.get(name);
                     return agent && agent.status === 'active';
                 }).length
             };
+            typeStats[type] = typeStats;
         });
 
         return {

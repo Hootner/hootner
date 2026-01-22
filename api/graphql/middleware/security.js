@@ -74,11 +74,15 @@ const securityHeaders = helmet({
 // XSS sanitization middleware
 const sanitizeInput = (req, res, next) => {
   if (req.body) {
+    const sanitizedBody = {};
     Object.keys(req.body).forEach(key => {
       if (typeof req.body[key] === 'string') {
-        req.body[key] = xss(req.body[key]);
+        sanitizedBody[key] = xss(req.body[key]);
+      } else {
+        sanitizedBody[key] = req.body[key];
       }
     });
+    req.body = sanitizedBody;
   }
   next();
 };
@@ -101,7 +105,8 @@ const preventInjection = (req, res, next) => {
     return false;
   };
 
-  if (checkValue(req.body) || checkValue(req.query) || checkValue(req.params)) {
+  const hasInjection = checkValue(req.body) || checkValue(req.query) || checkValue(req.params);
+  if (hasInjection) {
     console.warn(`Injection attempt detected: ${req.ip} - ${req.path}`);
     return res.status(400).json({ error: 'Invalid input detected' });
   }

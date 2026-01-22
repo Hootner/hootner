@@ -106,5 +106,6 @@ const configs = {
 };
 
 const env = process.env.NODE_ENV || 'development';
+const selectedConfig = configs[env] || developmentConfig;
 
-module.exports = configs[env] || developmentConfig;
+module.exports = selectedConfig;

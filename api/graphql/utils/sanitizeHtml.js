@@ -5,12 +5,10 @@
 
 // Server-side DOMPurify (using jsdom)
 let DOMPurify = null;
-let isBrowser = false;
 
 // Detect environment
 if (typeof window !== 'undefined') {
   // Browser environment
-  isBrowser = true;
   try {
     DOMPurify = require('dompurify');
   } catch (e) {
@@ -156,12 +154,13 @@ function createSafeElement(tagName, attributes = {}, content = '') {
       ['class', 'id', 'href', 'title', 'aria-label', 'role'].includes(key)
     )
     .map(([key, value]) => {
+      let sanitizedValue = value;
       if (key === 'href') {
-        value = sanitizeUrl(value);
+        sanitizedValue = sanitizeUrl(value);
       } else {
-        value = escapeHtml(String(value));
+        sanitizedValue = escapeHtml(String(value));
       }
-      return `${key}="${value}"`;
+      return `${key}="${sanitizedValue}"`;
     })
     .join(' ');
 
@@ -183,7 +182,8 @@ function sanitizeObject(obj, fields = []) {
 
   fields.forEach((field) => {
     if (field in sanitized && typeof sanitized[field] === 'string') {
-      sanitized[field] = sanitizeText(sanitized[field]);
+      const sanitizedValue = sanitizeText(sanitized[field]);
+      sanitized[field] = sanitizedValue;
     }
   });
 

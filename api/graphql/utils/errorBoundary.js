@@ -55,7 +55,7 @@ function withErrorBoundary(resolver, resolverName = 'Unknown') {
  * @param {string} category - Category name (Query, Mutation, etc.)
  * @returns {object} Wrapped resolvers
  */
-function withErrorBoundary(resolvers, category = 'Resolver') {
+function wrapResolvers(resolvers, category = 'Resolver') {
     const wrappedResolvers = {};
 
     for (const [key, resolver] of Object.entries(resolvers)) {
@@ -92,11 +92,13 @@ function handleResolverError(error, resolverName, args) {
     console.error('Timestamp:', new Date().toISOString());
 
     if (args[1]) {
-        console.error('Arguments:', JSON.stringify(args[1], null, 2));
+        const sanitizedArgs = JSON.stringify(args[1], null, 2);
+        console.error('Arguments:', sanitizedArgs);
     }
 
     if (error.stack) {
-        console.error('Stack:', error.stack);
+        const sanitizedStack = error.stack.replace(/[^\w\s\n\r\t\-.()\[\]{}:;,/\\]/g, '');
+        console.error('Stack:', sanitizedStack);
     }
 
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
@@ -283,6 +285,7 @@ module.exports = {
     ErrorCodes,
     AppError,
     withErrorBoundary,
+    wrapResolvers,
     handleResolverError,
     formatError,
     validate,

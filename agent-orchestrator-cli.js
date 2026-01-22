@@ -18,7 +18,7 @@ orchestrator.on('task-started', ({ taskId, config }) => {
     console.log(chalk.blue(`\n▶️  Task ${taskId} started: ${config.type}`));
 });
 
-orchestrator.on('task-completed', ({ taskId, result }) => {
+orchestrator.on('task-completed', ({ taskId }) => {
     console.log(chalk.green(`✅ Task ${taskId} completed successfully`));
 });
 
@@ -79,7 +79,7 @@ program
             console.log(`Security Score: ${result.summary.securityScore}`);
             console.log(`Auto-fix Applied: ${result.summary.autoFixApplied ? 'Yes' : 'No'}`);
 
-            if (result.recommendations.length > 0) {
+            if (result.recommendations && result.recommendations.length > 0) {
                 console.log(chalk.bold('\n💡 Recommendations:'));
                 result.recommendations.forEach((rec, i) => {
                     const icon = rec.priority === 'critical' ? '🔴' :

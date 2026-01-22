@@ -6,10 +6,8 @@
 
 const { execSync } = require('child_process');
 const fs = require('fs');
-const path = require('path');
 const http = require('http');
 
-const checks = [];
 let passed = 0;
 let failed = 0;
 
@@ -24,12 +22,13 @@ function log(message, color = RESET) {
 }
 
 function checkFile(filePath, description) {
-  const exists = fs.existsSync(filePath);
+  const safeFilePath = filePath.replace(/[^\w\s\-.()\[\]{}:;/\\]/g, '');
+  const exists = fs.existsSync(safeFilePath);
   if (exists) {
     log(`✅ ${description}`, GREEN);
     passed++;
   } else {
-    log(`❌ ${description} - File not found: ${filePath}`, RED);
+    log(`❌ ${description} - File not found: ${safeFilePath}`, RED);
     failed++;
   }
   return exists;
