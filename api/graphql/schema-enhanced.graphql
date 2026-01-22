@@ -53,6 +53,9 @@ type Mutation {
   uploadVideo(input: UploadVideoInput!): VideoPayload!
   updateVideo(id: ID!, input: UpdateVideoInput!): VideoPayload!
   deleteVideo(id: ID!): DeletePayload!
+  likeVideo(videoId: ID!): VideoPayload!
+  addComment(videoId: ID!, text: String!): VideoPayload!
+  deleteComment(videoId: ID!, commentId: ID!): VideoPayload!
 
   # Video Generation (AI)
   generateVideo(input: GenerateVideoInput!): GenerationJobPayload!
@@ -72,9 +75,11 @@ type Mutation {
 # ==================== SUBSCRIPTIONS ====================
 
 type Subscription {
-  # Video Processing
-  videoProcessed(userId: ID): VideoProcessedEvent!
-  videoProgress(videoId: ID!): VideoProgressEvent!
+  # Video likes
+  videoLiked(videoId: ID): VideoLikedEvent!
+
+  # Comments
+  commentAdded(videoId: ID): CommentAddedEvent!
 
   # Video Generation (AI)
   generationProgress(jobId: ID!): GenerationProgressEvent!
@@ -122,6 +127,7 @@ type Video {
   visibility: VideoVisibility!
   views: Int!
   likes: Int!
+  comments: [Comment!]!
   userId: ID!
   user: User!
   createdAt: DateTime!
@@ -135,6 +141,14 @@ type Video {
 
   # Analytics
   analytics: VideoAnalytics
+}
+
+type Comment {
+  id: ID!
+  userId: ID!
+  user: User!
+  text: String!
+  createdAt: DateTime!
 }
 
 type GenerationJob {
@@ -447,6 +461,17 @@ type SystemAlertEvent {
   severity: AlertSeverity!
   message: String!
   service: String
+  timestamp: DateTime!
+}
+
+type VideoLikedEvent {
+  video: Video!
+  timestamp: DateTime!
+}
+
+type CommentAddedEvent {
+  video: Video!
+  comment: Comment!
   timestamp: DateTime!
 }
 

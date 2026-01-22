@@ -3,17 +3,286 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Video Generator - HOOTNER</title>
+  <title>🎬 AI Video Generator - HOOTNER</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <style>
-    body { background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e); color: #00ff00; }
-    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-    .neon { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0a0a0f);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: #00ff00;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .glass { 
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .glass-light {
+      background: rgba(10, 10, 15, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 0, 0.1);
+    }
+    
+    .neon { 
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3),
+                  0 0 40px rgba(0, 255, 0, 0.2);
+    }
+    
+    .neon-hover:hover {
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5),
+                  0 0 60px rgba(0, 255, 0, 0.3);
+      transform: translateY(-2px);
+    }
+    
     .progress-bar { transition: width 0.3s ease; }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    }
+    
+    .btn-secondary {
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      color: #00ff00;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(0, 255, 0, 0.2);
+      border-color: rgba(0, 255, 255, 0.5);
+      color: #00ffff;
+    }
+    
+    .preset-card {
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.05), rgba(0, 255, 255, 0.05));
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .preset-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+    
+    .preset-card:hover::before {
+      left: 100%;
+    }
+    
+    .preset-card:hover {
+      border-color: rgba(0, 255, 255, 0.6);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+    }
+    
+    .preset-card.active {
+      border-color: #00ffff;
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.15), rgba(0, 255, 255, 0.15));
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    }
+    
+    .video-card {
+      background: rgba(10, 10, 15, 0.9);
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .video-card:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      transform: scale(1.02);
+      box-shadow: 0 8px 32px rgba(0, 255, 255, 0.3);
+    }
+    
+    .video-card video {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #000;
+    }
+    
+    .input-field {
+      background: rgba(10, 10, 15, 0.8);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      border-radius: 8px;
+      color: #00ff00;
+      padding: 12px 16px;
+      width: 100%;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #00ffff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+    
+    .tab-button {
+      background: rgba(0, 255, 0, 0.05);
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+      padding: 12px 24px;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    
+    .tab-button:hover {
+      background: rgba(0, 255, 0, 0.1);
+    }
+    
+    .tab-button.active {
+      background: rgba(0, 255, 255, 0.2);
+      border-color: #00ffff;
+      color: #00ffff;
+      box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.3);
+    }
+    
+    .badge {
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      color: #000;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    
+    .badge-pro {
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+    }
+    
+    .queue-item {
+      background: rgba(10, 10, 15, 0.7);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s;
+    }
+    
+    .queue-item:hover {
+      border-color: rgba(0, 255, 255, 0.4);
+      background: rgba(10, 10, 15, 0.9);
+    }
+    
+    .loader {
+      border: 3px solid rgba(0, 255, 0, 0.2);
+      border-top: 3px solid #00ffff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+    ::-webkit-scrollbar-thumb { 
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover { 
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr !important; }
+      .text-4xl { font-size: 2rem !important; }
+      .glass { padding: 16px !important; }
+    }
   </style>
 </head>
-<body class="min-h-screen p-6">
+<body class="min-h-screen">
   <div class="max-w-4xl mx-auto">
     <h1 class="text-4xl font-bold mb-8 bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">
       🎬 AI Video Generator

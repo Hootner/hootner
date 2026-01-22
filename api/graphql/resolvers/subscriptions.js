@@ -1,180 +1,126 @@
-/**
- * Subscription Resolvers - Real-time Event Streaming
- * Handles WebSocket-based subscriptions for real-time updates
- *
- * Author: HOOTNER Code Guardian
- */
+const { PubSub, withFilter } = require('graphql-subscriptions');
+const { RedisPubSub } = require('graphql-redis-subscriptions');
+const Redis = require('ioredis');
 
-const { withFilter } = require('graphql-subscriptions');
-const { pubsub, EVENTS } = require('../utils/pubsub');
-const { validateAuth } = require('../utils/auth');
+// Use Redis for production, in-memory for development
+const pubsub = process.env.REDIS_URL 
+  ? new RedisPubSub({
+      publisher: new Redis(process.env.REDIS_URL),
+      subscriber: new Redis(process.env.REDIS_URL)
+    })
+  : new PubSub();
 
-const subscriptionResolvers = {
-    // ==================== VIDEO PROCESSING ====================
+module.exports = {
+  // Video events
+  videoProcessed: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['VIDEO_PROCESSED']),
+      (payload, variables) => {
+        return !variables.userId || payload.videoProcessed.userId === variables.userId;
+      }
+    )
+  },
 
-    videoProcessed: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.VIDEO_PROCESSED]),
-            (payload, variables, context) => {
-                // Filter by userId if specified
-                if (variables.userId) {
-                    return payload.videoProcessed.userId === variables.userId;
-                }
-                return true;
-            }
-        ),
-        resolve: (payload) => payload.videoProcessed,
-    },
+  videoProgress: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['VIDEO_PROGRESS']),
+      (payload, variables) => {
+        return payload.videoProgress.videoId === variables.videoId;
+      }
+    )
+  },
 
-    videoProgress: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.VIDEO_PROGRESS]),
-            (payload, variables) => {
-                // Only send updates for the specific video
-                return payload.videoProgress.videoId === variables.videoId;
-            }
-        ),
-        resolve: (payload) => payload.videoProgress,
-    },
+  // Video likes
+  videoLiked: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['VIDEO_LIKED']),
+      (payload, variables) => {
+        return !variables.videoId || payload.videoLiked.id === variables.videoId;
+      }
+    )
+  },
 
-    // ==================== VIDEO GENERATION (AI) ====================
+  // Comments
+  commentAdded: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['COMMENT_ADDED']),
+      (payload, variables) => {
+        return !variables.videoId || payload.commentAdded.video.id === variables.videoId;
+      }
+    )
+  },
 
-    generationProgress: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.GENERATION_PROGRESS]),
-            (payload, variables, context) => {
-                // Validate authentication
-                try {
-                    validateAuth(context);
-                } catch (error) {
-                    return false;
-                }
+  // Generation events
+  generationProgress: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['GENERATION_PROGRESS']),
+      (payload, variables) => {
+        return payload.generationProgress.jobId === variables.jobId;
+      }
+    )
+  },
 
-                // Only send updates for the specific job
-                return payload.generationProgress.jobId === variables.jobId;
-            }
-        ),
-        resolve: (payload) => {
-            return {
-                jobId: payload.generationProgress.jobId,
-                progress: payload.generationProgress.progress,
-                status: payload.generationProgress.status,
-                message: payload.generationProgress.message,
-                estimatedTimeRemaining: payload.generationProgress.estimatedTimeRemaining,
-                timestamp: new Date(),
-            };
-        },
-    },
+  generationCompleted: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['GENERATION_COMPLETED']),
+      (payload, variables) => {
+        return !variables.userId || payload.generationCompleted.userId === variables.userId;
+      }
+    )
+  },
 
-    generationCompleted: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.GENERATION_COMPLETED]),
-            (payload, variables, context) => {
-                // Validate authentication
-                try {
-                    validateAuth(context);
-                } catch (error) {
-                    return false;
-                }
+  // Stream events
+  streamStarted: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['STREAM_STARTED']),
+      (payload, variables) => {
+        return !variables.userId || payload.streamStarted.userId === variables.userId;
+      }
+    )
+  },
 
-                // Filter by userId if specified
-                if (variables.userId) {
-                    return payload.generationCompleted.userId === variables.userId;
-                }
+  streamEnded: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['STREAM_ENDED']),
+      (payload, variables) => {
+        return payload.streamEnded.streamId === variables.streamId;
+      }
+    )
+  },
 
-                // Otherwise, only send to the owner
-                return payload.generationCompleted.userId === context.user.id;
-            }
-        ),
-        resolve: (payload) => payload.generationCompleted,
-    },
+  streamViewers: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['STREAM_VIEWERS']),
+      (payload, variables) => {
+        return payload.streamViewers.streamId === variables.streamId;
+      }
+    )
+  },
 
-    // ==================== REAL-TIME STREAMING ====================
+  streamQuality: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['STREAM_QUALITY']),
+      (payload, variables) => {
+        return payload.streamQuality.streamId === variables.streamId;
+      }
+    )
+  },
 
-    streamStarted: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.STREAM_STARTED]),
-            (payload, variables, context) => {
-                // Filter by userId if specified
-                if (variables.userId) {
-                    return payload.streamStarted.userId === variables.userId;
-                }
-                return true;
-            }
-        ),
-        resolve: (payload) => payload.streamStarted,
-    },
+  // User activity
+  userActivity: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['USER_ACTIVITY']),
+      (payload, variables) => {
+        return payload.userActivity.userId === variables.userId;
+      }
+    )
+  },
 
-    streamEnded: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.STREAM_ENDED]),
-            (payload, variables) => {
-                // Only send updates for the specific stream
-                return payload.streamEnded.streamId === variables.streamId;
-            }
-        ),
-        resolve: (payload) => payload.streamEnded,
-    },
-
-    streamViewers: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.STREAM_VIEWERS]),
-            (payload, variables) => {
-                // Only send updates for the specific stream
-                return payload.streamViewers.streamId === variables.streamId;
-            }
-        ),
-        resolve: (payload) => payload.streamViewers,
-    },
-
-    streamQuality: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.STREAM_QUALITY]),
-            (payload, variables) => {
-                // Only send updates for the specific stream
-                return payload.streamQuality.streamId === variables.streamId;
-            }
-        ),
-        resolve: (payload) => payload.streamQuality,
-    },
-
-    // ==================== USER ACTIVITY ====================
-
-    userActivity: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.USER_ACTIVITY]),
-            (payload, variables, context) => {
-                // Validate authentication
-                try {
-                    validateAuth(context);
-                } catch (error) {
-                    return false;
-                }
-
-                // Only send updates for the specific user
-                return payload.userActivity.userId === variables.userId;
-            }
-        ),
-        resolve: (payload) => payload.userActivity,
-    },
-
-    // ==================== SYSTEM EVENTS ====================
-
-    systemAlert: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator([EVENTS.SYSTEM_ALERT]),
-            (payload, variables, context) => {
-                // Only admins can subscribe to system alerts
-                try {
-                    validateAuth(context);
-                    return context.user.role === 'ADMIN';
-                } catch (error) {
-                    return false;
-                }
-            }
-        ),
-        resolve: (payload) => payload.systemAlert,
-    },
+  // System alerts
+  systemAlert: {
+    subscribe: () => pubsub.asyncIterator(['SYSTEM_ALERT'])
+  }
 };
 
-module.exports = subscriptionResolvers;
+// Export pubsub for use in other resolvers
+module.exports.pubsub = pubsub;

@@ -1,0 +1,51 @@
+# HOOTNER Development Environment
+# MongoDB + Redis for local development
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7-jammy
+    container_name: hootner-mongodb-dev
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: dev_password_change_in_prod
+      MONGO_INITDB_DATABASE: hootner
+    volumes:
+      - mongodb_dev_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - hootner-dev
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hootner-redis-dev
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass dev_redis_password
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - hootner-dev
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "dev_redis_password", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  hootner-dev:
+    driver: bridge
+
+volumes:
+  mongodb_dev_data:
+  redis_dev_data:
