@@ -19,6 +19,17 @@
       "status": "pending",
       "created": "2026-01-22T19:56:07.433Z",
       "copilotInstructions": "@workspace Add retry logic to API calls\nFiles to focus on: src/api.js\nUse /fix for code issues\nUse Ctrl+I for inline suggestions\nComment your changes with // COPILOT: [description]"
+    },
+    {
+      "id": 1769111834051,
+      "description": "Improve error handling",
+      "files": [
+        "index.js"
+      ],
+      "priority": "medium",
+      "status": "pending",
+      "created": "2026-01-22T19:57:14.051Z",
+      "copilotInstructions": "@workspace Improve error handling\nFiles to focus on: index.js\nUse /fix for code issues\nUse Ctrl+I for inline suggestions\nComment your changes with // COPILOT: [description]"
     }
   ],
   "completed": []

@@ -37,16 +37,26 @@ npm run start:all            # Start frontend + API
 
 ## 🤖 AI Development Tools
 
-### Copilot Integration
+### Enhanced Copilot CLI
+
+**Comprehensive code quality, security, and automation tools** - [Full Guide](docs/COPILOT_CLI_GUIDE.md)
 
 ```bash
 # Task delegation
-node copilot-delegate.js delegate "Fix security issues"
-node copilot-guide.js  # View delegation guide
+node copilot-delegate.js delegate "Add retry logic" src/api.js
+node copilot-delegate.js monitor      # Monitor tasks
+node copilot-delegate.js complete ID  # Mark complete
 
-# Commit validation
-node commit-validator.js  # Auto-runs on commits
+# Code analysis & security
+node copilot-delegate.js analyze src/handlers/auth.js  # Full code analysis
+node copilot-delegate.js security                      # Security audit
+node copilot-delegate.js refactor src/components/Player.js  # Refactoring suggestions
+node copilot-delegate.js optimize src/algorithms/search.js  # Performance tips
+node copilot-delegate.js docs src/services/VideoPlayer.js   # Documentation generation
+node copilot-delegate.js validate                           # Commit validation
 ```
+
+**Quick Start:** Run `node copilot-delegate.js` for help or see [Copilot CLI Guide](docs/COPILOT_CLI_GUIDE.md)
 
 ### VSCode Optimization
 

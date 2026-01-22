@@ -61,6 +61,12 @@
 | [README.md](README.md) | Main project overview | Everyone |
 | [docs/API.md](docs/API.md) | API reference | Developers |
 
+### 🤖 AI Development Tools
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [docs/COPILOT_CLI_GUIDE.md](docs/COPILOT_CLI_GUIDE.md) | Enhanced Copilot CLI for code quality, security, and automation | Developers |
+| [docs/ai/AI_AGENT_ORCHESTRATION.md](docs/ai/AI_AGENT_ORCHESTRATION.md) | Multi-agent orchestration architecture | Developers/Architects |
+
 ---
 
 ## 🎯 Start Here Based on Your Role
