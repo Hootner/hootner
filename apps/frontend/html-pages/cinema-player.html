@@ -226,14 +226,28 @@
         .controls-row {
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .controls-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .controls-section.right {
+            margin-left: auto;
+            justify-content: flex-end;
         }
 
         .control-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
@@ -369,6 +383,32 @@
             padding: 2px 6px;
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 900px) {
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls-section {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .controls-section.right {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+
+            .time-display {
+                order: 3;
+                width: 100%;
+            }
+
+            .volume-slider {
+                width: 140px;
+            }
         }
 
         /* Fullscreen */
@@ -798,92 +838,94 @@
 
             <!-- Control buttons -->
             <div class="controls-row">
-                <!-- Play/Pause -->
-                <button class="control-btn" id="playPauseBtn" onclick="togglePlayPause()">
-                    <span id="playPauseIcon">▶️</span>
-                    <span id="playPauseText">Play</span>
-                </button>
-
-                <!-- Skip back/forward -->
-                <button class="control-btn" onclick="skipTime(-10)">
-                    <span>⏪</span>
-                    <span>-10s</span>
-                </button>
-                <button class="control-btn" onclick="skipTime(10)">
-                    <span>⏩</span>
-                    <span>+10s</span>
-                </button>
-
-                <!-- Time display -->
-                <div class="time-display" id="timeDisplay">
-                    00:00:00 / 00:00:00
-                </div>
-
-                <div class="spacer"></div>
-
-                <!-- Volume -->
-                <div class="volume-control">
-                    <button class="control-btn" id="muteBtn" onclick="toggleMute()">
-                        <span id="volumeIcon">🔊</span>
+                <div class="controls-section left">
+                    <!-- Play/Pause -->
+                    <button class="control-btn" id="playPauseBtn" onclick="togglePlayPause()">
+                        <span id="playPauseIcon">▶️</span>
+                        <span id="playPauseText">Play</span>
                     </button>
-                    <div class="volume-slider" id="volumeSlider" onclick="setVolume(event)">
-                        <div class="volume-level" id="volumeLevel"></div>
+
+                    <!-- Skip back/forward -->
+                    <button class="control-btn" onclick="skipTime(-10)">
+                        <span>⏪</span>
+                        <span>-10s</span>
+                    </button>
+                    <button class="control-btn" onclick="skipTime(10)">
+                        <span>⏩</span>
+                        <span>+10s</span>
+                    </button>
+
+                    <!-- Time display -->
+                    <div class="time-display" id="timeDisplay">
+                        00:00:00 / 00:00:00
                     </div>
                 </div>
 
-                <!-- Speed control -->
-                <div class="speed-menu" id="speedMenu">
-                    <button class="control-btn" onclick="toggleSpeedMenu()">
-                        <span>⚡</span>
-                        <span id="speedText">1x</span>
-                    </button>
-                    <div class="speed-options">
-                        <div class="speed-option" onclick="setSpeed(0.25)">0.25x</div>
-                        <div class="speed-option" onclick="setSpeed(0.5)">0.5x</div>
-                        <div class="speed-option" onclick="setSpeed(0.75)">0.75x</div>
-                        <div class="speed-option active" onclick="setSpeed(1)">1x</div>
-                        <div class="speed-option" onclick="setSpeed(1.25)">1.25x</div>
-                        <div class="speed-option" onclick="setSpeed(1.5)">1.5x</div>
-                        <div class="speed-option" onclick="setSpeed(2)">2x</div>
-                    </div>
-                </div>
-
-                <!-- Quality selector -->
-                <div class="quality-menu" id="qualityMenu">
-                    <button class="control-btn" onclick="toggleQualityMenu()">
-                        <span>🎬</span>
-                        <span id="qualityText">8K</span>
-                    </button>
-                    <div class="quality-options">
-                        <div class="quality-option" onclick="setQuality('8k')">
-                            <span>8K UHD</span>
-                            <span class="quality-badge">7680×4320</span>
-                        </div>
-                        <div class="quality-option active" onclick="setQuality('4k')">
-                            <span>4K UHD</span>
-                            <span class="quality-badge">3840×2160</span>
-                        </div>
-                        <div class="quality-option" onclick="setQuality('hd')">
-                            <span>Full HD</span>
-                            <span class="quality-badge">1920×1080</span>
-                        </div>
-                        <div class="quality-option" onclick="setQuality('sd')">
-                            <span>HD</span>
-                            <span class="quality-badge">1280×720</span>
+                <div class="controls-section right">
+                    <!-- Volume -->
+                    <div class="volume-control">
+                        <button class="control-btn" id="muteBtn" onclick="toggleMute()">
+                            <span id="volumeIcon">🔊</span>
+                        </button>
+                        <div class="volume-slider" id="volumeSlider" onclick="setVolume(event)">
+                            <div class="volume-level" id="volumeLevel"></div>
                         </div>
                     </div>
+
+                    <!-- Speed control -->
+                    <div class="speed-menu" id="speedMenu">
+                        <button class="control-btn" onclick="toggleSpeedMenu()">
+                            <span>⚡</span>
+                            <span id="speedText">1x</span>
+                        </button>
+                        <div class="speed-options">
+                            <div class="speed-option" onclick="setSpeed(0.25)">0.25x</div>
+                            <div class="speed-option" onclick="setSpeed(0.5)">0.5x</div>
+                            <div class="speed-option" onclick="setSpeed(0.75)">0.75x</div>
+                            <div class="speed-option active" onclick="setSpeed(1)">1x</div>
+                            <div class="speed-option" onclick="setSpeed(1.25)">1.25x</div>
+                            <div class="speed-option" onclick="setSpeed(1.5)">1.5x</div>
+                            <div class="speed-option" onclick="setSpeed(2)">2x</div>
+                        </div>
+                    </div>
+
+                    <!-- Quality selector -->
+                    <div class="quality-menu" id="qualityMenu">
+                        <button class="control-btn" onclick="toggleQualityMenu()">
+                            <span>🎬</span>
+                            <span id="qualityText">8K</span>
+                        </button>
+                        <div class="quality-options">
+                            <div class="quality-option" onclick="setQuality('8k')">
+                                <span>8K UHD</span>
+                                <span class="quality-badge">7680×4320</span>
+                            </div>
+                            <div class="quality-option active" onclick="setQuality('4k')">
+                                <span>4K UHD</span>
+                                <span class="quality-badge">3840×2160</span>
+                            </div>
+                            <div class="quality-option" onclick="setQuality('hd')">
+                                <span>Full HD</span>
+                                <span class="quality-badge">1920×1080</span>
+                            </div>
+                            <div class="quality-option" onclick="setQuality('sd')">
+                                <span>HD</span>
+                                <span class="quality-badge">1280×720</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fullscreen -->
+                    <button class="control-btn" onclick="toggleFullscreen()">
+                        <span id="fullscreenIcon">⛶</span>
+                        <span>Fullscreen</span>
+                    </button>
+
+                    <!-- Keyboard shortcuts -->
+                    <button class="control-btn" onclick="toggleShortcuts()">
+                        <span>⌨️</span>
+                    </button>
                 </div>
-
-                <!-- Fullscreen -->
-                <button class="control-btn" onclick="toggleFullscreen()">
-                    <span id="fullscreenIcon">⛶</span>
-                    <span>Fullscreen</span>
-                </button>
-
-                <!-- Keyboard shortcuts -->
-                <button class="control-btn" onclick="toggleShortcuts()">
-                    <span>⌨️</span>
-                </button>
             </div>
         </div>
 
