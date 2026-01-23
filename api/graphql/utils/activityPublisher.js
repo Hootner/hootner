@@ -148,7 +148,7 @@ export class ActivityPublisher {
     await this.publishActivity({
       type: status === 'healthy' ? 'SYSTEM_HEALTHY' : 'ALERT_CRITICAL',
       message: message || `System status: ${status}`,
-      description: `Health check completed`,
+      description: 'Health check completed',
       category: 'system',
       service: 'monitoring'
     });

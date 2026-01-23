@@ -14,6 +14,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { DynamoDBClient, CreateTableCommand, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 
+// ENV CONFIG
+// Required for AWS-hosted DynamoDB: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+// Optional: DYNAMO_TABLE (defaults to HootnerActivities)
+// Optional: DYNAMO_ENDPOINT for local dev (e.g., http://localhost:8000)
 const REGION = process.env.AWS_REGION || 'us-east-1';
 const TABLE_NAME = process.env.DYNAMO_TABLE || 'HootnerActivities';
 const DYNAMO_ENDPOINT = process.env.DYNAMO_ENDPOINT; // Optional: http://localhost:8000 for DynamoDB Local

@@ -109,7 +109,7 @@ export class ActivityStreamGenerator {
       {
         type: 'PAYMENT_PROCESSED',
         message: () => `Payment processed: $${this.random(10, 999)}.99`,
-        description: () => `Subscription renewal | Status: completed`,
+        description: () => 'Subscription renewal | Status: completed',
         category: 'payment',
         service: 'payment-service'
       },
@@ -136,14 +136,14 @@ export class ActivityStreamGenerator {
       },
       {
         type: 'ANALYTICS_REPORT',
-        message: () => `Analytics report generated`,
+        message: () => 'Analytics report generated',
         description: () => `Viewers: ${this.random(1000, 50000)} | Watch time: ${this.random(100, 10000)}h`,
         category: 'analytics',
         service: 'analytics-service'
       },
       {
         type: 'COLLABORATION_SESSION',
-        message: () => `Collaboration session started`,
+        message: () => 'Collaboration session started',
         description: () => `Participants: ${this.random(2, 20)} | Duration: ${this.random(5, 120)}m`,
         category: 'collaboration',
         service: 'collab-service'

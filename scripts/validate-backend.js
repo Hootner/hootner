@@ -22,7 +22,7 @@ function log(message, color = RESET) {
 }
 
 function checkFile(filePath, description) {
-  const safeFilePath = filePath.replace(/[^\w\s\-.()\[\]{}:;/\\]/g, '');
+  const safeFilePath = filePath.replace(/[^\w\s\-.(){}:;/\\]/g, '');
   const exists = fs.existsSync(safeFilePath);
   if (exists) {
     log(`✅ ${description}`, GREEN);

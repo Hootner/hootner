@@ -7,6 +7,7 @@
  */
 
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 const require = createRequire(import.meta.url);
 
 const express = require('express');
@@ -20,6 +21,10 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
+
+// ESM-friendly __dirname replacement
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Import resolvers and utilities
 const resolvers = require('./resolvers').default;

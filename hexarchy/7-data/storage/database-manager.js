@@ -1,10 +1,11 @@
 /**
  * HOOTNER Database Manager - Production Database Operations
- * Supports PostgreSQL, MongoDB, Redis with connection pooling and health monitoring
+ * Supports PostgreSQL, MongoDB, Redis, DynamoDB with connection pooling and health monitoring
  */
-
 const EventEmitter = require('events');
 const { performance } = require('perf_hooks');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 
 class DatabaseManager extends EventEmitter {
   constructor() {
@@ -53,9 +54,34 @@ class DatabaseManager extends EventEmitter {
         return this.createMongoConnection(config);
       case 'redis':
         return this.createRedisConnection(config);
+      case 'dynamodb':
+        return this.createDynamoConnection(config);
       default:
         throw new Error(`Unsupported database type: ${config.type}`);
     }
+  }
+
+  createDynamoConnection(config) {
+    const client = new DynamoDBClient({
+      region: config.region || 'us-east-1',
+      endpoint: config.endpoint || undefined
+    });
+    const docClient = DynamoDBDocumentClient.from(client, {
+      marshallOptions: { removeUndefinedValues: true }
+    });
+
+    return {
+      type: 'dynamodb',
+      table: config.table || 'HootnerActivities',
+      client: docClient,
+      async healthCheck() {
+        await docClient.send(new ScanCommand({ TableName: config.table || 'HootnerActivities', Limit: 1 }));
+        return true;
+      },
+      async close() {
+        // No-op for SDK v3 clients
+      }
+    };
   }
 
   createPostgresConnection(config) {
@@ -243,6 +269,11 @@ class DatabaseManager extends EventEmitter {
           break;
         case 'redis':
           await connection.get('health_check');
+          break;
+        case 'dynamodb':
+          if (connection.healthCheck) {
+            await connection.healthCheck();
+          }
           break;
       }
       
