@@ -16,7 +16,10 @@ services:
     environment:
       - NODE_ENV=production
       - API_URL=http://api:4000
-      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME:-hootner-prod}
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
       - JWT_SECRET=${JWT_SECRET}
     volumes:
@@ -24,7 +27,6 @@ services:
     networks:
       - hootner-network
     depends_on:
-      - postgres
       - redis
       - api
     restart: unless-stopped
@@ -51,7 +53,10 @@ services:
       - "4000:4000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME:-hootner-prod}
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
@@ -60,7 +65,6 @@ services:
     networks:
       - hootner-network
     depends_on:
-      - postgres
       - redis
     restart: unless-stopped
     healthcheck:
@@ -80,7 +84,10 @@ services:
       - "5001:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME:-hootner-prod}
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./logs:/app/logs
@@ -88,7 +95,6 @@ services:
     networks:
       - hootner-network
     depends_on:
-      - postgres
       - redis
     restart: unless-stopped
     deploy:
@@ -111,7 +117,10 @@ services:
       - "5002:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME:-hootner-prod}
       - REDIS_URL=redis://redis:6379
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
     volumes:
@@ -119,7 +128,6 @@ services:
     networks:
       - hootner-network
     depends_on:
-      - postgres
       - redis
     restart: unless-stopped
 
@@ -134,46 +142,18 @@ services:
       - "5004:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://hootner:${POSTGRES_PASSWORD}@postgres:5432/hootner
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME:-hootner-prod}
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./logs:/app/logs
     networks:
       - hootner-network
     depends_on:
-      - postgres
       - redis
     restart: unless-stopped
-
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: hootner-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=hootner
-      - POSTGRES_USER=hootner
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
-    networks:
-      - hootner-network
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hootner -d hootner"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
 
   # Redis Cache
   redis:
@@ -267,8 +247,6 @@ networks:
         - subnet: 172.20.0.0/16
 
 volumes:
-  postgres_data:
-    driver: local
   redis_data:
     driver: local
   ai-models:
