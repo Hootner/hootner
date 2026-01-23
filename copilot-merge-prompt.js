@@ -20,7 +20,17 @@ class MergePromptGenerator {
    */
   getRecentCommits(branch = 'HEAD', count = 10) {
     try {
-      const output = execSync(`git log ${branch} --oneline -${count}`, { 
+      // Validate branch name to prevent command injection
+      const safeBranch = branch.replace(/[^a-zA-Z0-9_\-./]/g, '');
+      if (safeBranch !== branch) {
+        console.error(chalk.yellow('Warning: Invalid branch name characters detected'));
+        return [];
+      }
+      
+      // Validate count is a positive integer
+      const safeCount = Math.max(1, Math.min(parseInt(count, 10) || 10, 100));
+      
+      const output = execSync(`git log ${safeBranch} --oneline -${safeCount}`, { 
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'pipe']
       }).trim();
@@ -364,22 +374,57 @@ function main() {
     switch (arg) {
       case '--branch':
       case '-b':
-        options.branch = args[++i];
+        if (i + 1 < args.length) {
+          options.branch = args[++i];
+        } else {
+          console.error(chalk.red('Error: --branch requires a value'));
+          process.exit(1);
+        }
         break;
       case '--base':
-        options.baseBranch = args[++i];
+        if (i + 1 < args.length) {
+          options.baseBranch = args[++i];
+        } else {
+          console.error(chalk.red('Error: --base requires a value'));
+          process.exit(1);
+        }
         break;
       case '--count':
       case '-n':
-        options.commitCount = parseInt(args[++i], 10);
+        if (i + 1 < args.length) {
+          const count = parseInt(args[++i], 10);
+          if (isNaN(count) || count < 1) {
+            console.error(chalk.red('Error: --count must be a positive integer'));
+            process.exit(1);
+          }
+          options.commitCount = count;
+        } else {
+          console.error(chalk.red('Error: --count requires a numeric value'));
+          process.exit(1);
+        }
         break;
       case '--type':
       case '-t':
-        options.customType = args[++i];
+        if (i + 1 < args.length) {
+          const type = args[++i];
+          if (!['feat', 'fix', 'refactor', 'chore', 'docs'].includes(type)) {
+            console.error(chalk.red('Error: --type must be one of: feat, fix, refactor, chore, docs'));
+            process.exit(1);
+          }
+          options.customType = type;
+        } else {
+          console.error(chalk.red('Error: --type requires a value'));
+          process.exit(1);
+        }
         break;
       case '--summary':
       case '-s':
-        options.customSummary = args[++i];
+        if (i + 1 < args.length) {
+          options.customSummary = args[++i];
+        } else {
+          console.error(chalk.red('Error: --summary requires a value'));
+          process.exit(1);
+        }
         break;
       case '--save':
         options.save = true;
