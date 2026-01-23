@@ -35,6 +35,12 @@ class MergePromptGenerator {
         stdio: ['pipe', 'pipe', 'pipe']
       }).trim();
       
+      // Handle empty output
+      if (!output) {
+        this.commits = [];
+        return this.commits;
+      }
+      
       this.commits = output.split('\n').map(line => {
         const match = line.match(/^([a-f0-9]+)\s+(.+)$/);
         if (match) {
@@ -192,7 +198,7 @@ class MergePromptGenerator {
     }
 
     // If we don't have enough points, extract from commits
-    if (points.length < 3) {
+    if (points.length < 3 && commits.length > 0) {
       commits.slice(0, 5).forEach(commit => {
         const msg = commit.message.replace(/^(feat|fix|docs|style|refactor|test|chore)(\([^)]+\))?:\s*/i, '');
         if (!points.some(p => p.toLowerCase().includes(msg.toLowerCase().substring(0, 20)))) {
