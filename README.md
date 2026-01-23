@@ -272,7 +272,7 @@ Hootner/
 - Frontend: HTML5, CSS3 (glassmorphism), vanilla JS, Video.js
 - Backend: GraphQL API (port 4000), Video Gen (port 5003)
 - Database: DynamoDB (videos, users, comments), Redis (caching)
-- Infrastructure: Docker, AWS S3/CloudFront
+- Infrastructure: AWS S3/CloudFront
 
 ### 🎭 Advanced Agent Orchestration (NEW!)
 
@@ -334,8 +334,6 @@ npm run start:all  # Cross-platform orchestration
 
 **Quick Start Backend:**
 ```bash
-# Start infrastructure
-docker compose -f docker-compose.dev.yml up -d
 
 # Setup DynamoDB table
 npm run db:setup
@@ -362,7 +360,6 @@ npm run backend:validate
 ### Prerequisites
 
 - Node.js 18+, NPM 9+
-- Docker & Docker Compose
 - Git
 
 ### Environment Setup
@@ -370,7 +367,6 @@ npm run backend:validate
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
-docker compose -f docker-compose.dev.yml up -d  # Start infrastructure
 npm install              # Install dependencies
 cd api/graphql && npm install
 npm run db:setup        # Create DynamoDB table
@@ -414,23 +410,6 @@ npm run lint               # Code linting
 ```bash
 # Install k6 (https://k6.io/docs/getting-started/installation/)
 k6 run load-test.js        # Performance testing
-```
-
-## 🚀 Deployment
-
-### Docker
-
-```bash
-docker build -t hootner-frontend -f Dockerfile.frontend .
-docker build -t hootner-server -f Dockerfile .
-```
-
-### Kubernetes + Istio
-
-```bash
-kubectl apply -f k8s/
-cd k8s/istio && ./install.sh
-scripts/deployment/blue-green-deploy.sh
 ```
 
 ### CI/CD Pipeline (10 Active Workflows)
@@ -536,7 +515,6 @@ scripts/deployment/blue-green-deploy.sh
 **Frontend** • React 18, TypeScript, Vite, Tailwind CSS
 **Backend** • Node.js, Express, GraphQL, NestJS
 **Database** • DynamoDB, Redis
-**Infrastructure** • Docker, Kubernetes, Istio
 **Monitoring** • Prometheus, Grafana
 **CI/CD** • GitHub Actions (24 workflows)
 **Cloud** • AWS (S3, Lambda, SQS)
