@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { useQuery, useMutation, gql } from '@apollo/client'
 
 const GET_PLAYLISTS = gql`
   query GetMyPlaylists {
@@ -13,7 +13,7 @@ const GET_PLAYLISTS = gql`
       createdAt
     }
   }
-`;
+`
 
 const CREATE_PLAYLIST = gql`
   mutation CreatePlaylist($input: PlaylistInput!) {
@@ -23,53 +23,55 @@ const CREATE_PLAYLIST = gql`
       description
     }
   }
-`;
+`
 
 const DELETE_PLAYLIST = gql`
   mutation DeletePlaylist($id: ID!) {
     deletePlaylist(id: $id)
   }
-`;
+`
 
 interface Playlist {
-  id: string;
-  name: string;
-  description?: string;
-  videoCount: number;
-  thumbnail?: string;
-  createdAt: string;
+  id: string
+  name: string
+  description?: string
+  videoCount: number
+  thumbnail?: string
+  createdAt: string
 }
 
 export const PlaylistManager = () => {
-  const [showCreate, setShowCreate] = useState(false);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [showCreate, setShowCreate] = useState(false)
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
 
-  const { data, loading, refetch } = useQuery<{ myPlaylists: Playlist[] }>(GET_PLAYLISTS);
+  const { data, loading, refetch } = useQuery<{ myPlaylists: Playlist[] }>(
+    GET_PLAYLISTS
+  )
   const [createPlaylist] = useMutation(CREATE_PLAYLIST, {
     onCompleted: () => {
-      setShowCreate(false);
-      setName('');
-      setDescription('');
-      refetch();
-    }
-  });
+      setShowCreate(false)
+      setName('')
+      setDescription('')
+      refetch()
+    },
+  })
   const [deletePlaylist] = useMutation(DELETE_PLAYLIST, {
-    onCompleted: () => refetch()
-  });
+    onCompleted: () => refetch(),
+  })
 
   const handleCreate = async (e: FormEvent) => {
-    e.preventDefault();
-    await createPlaylist({ variables: { input: { name, description } } });
-  };
+    e.preventDefault()
+    await createPlaylist({ variables: { input: { name, description } } })
+  }
 
   const handleDelete = async (id: string) => {
     if (confirm('Delete this playlist?')) {
-      await deletePlaylist({ variables: { id } });
+      await deletePlaylist({ variables: { id } })
     }
-  };
+  }
 
-  if (loading) return <div className="text-center p-8">Loading...</div>;
+  if (loading) return <div className="text-center p-8">Loading...</div>
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -110,7 +112,11 @@ export const PlaylistManager = () => {
         {data?.myPlaylists.map((playlist) => (
           <div key={playlist.id} className="bg-white rounded-lg shadow p-4">
             {playlist.thumbnail && (
-              <img src={playlist.thumbnail} alt={playlist.name} className="w-full h-40 object-cover rounded mb-3" />
+              <img
+                src={playlist.thumbnail}
+                alt={playlist.name}
+                className="w-full h-40 object-cover rounded mb-3"
+              />
             )}
             <h3 className="text-xl font-semibold mb-2">{playlist.name}</h3>
             {playlist.description && (
@@ -127,5 +133,5 @@ export const PlaylistManager = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

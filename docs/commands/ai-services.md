@@ -285,7 +285,7 @@ export GPU_MEMORY_LIMIT="8GB"
 export BATCH_SIZE="4"
 
 # Configure AI services
-export AI_API_KEY="your-api-key"
+export AI_API_KEY="YOUR_API_KEY_HERE"
 export AI_MODEL_VERSION="v2.1"
 export AI_TIMEOUT="30s"
 

@@ -131,6 +131,7 @@ act -s AWS_ACCESS_KEY_ID=<your-key> -s AWS_SECRET_ACCESS_KEY=<your-secret>
 ## Amazon Q Integration
 
 Amazon Q uses AWS credentials to:
+
 - Search your codebase
 - Provide AWS API recommendations
 - Run security scans

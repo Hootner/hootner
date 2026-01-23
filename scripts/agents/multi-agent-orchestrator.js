@@ -76,7 +76,7 @@ class MultiAgentOrchestrator {
     console.log(chalk.blue(`  Lines: ${lines}, Functions: ${functions}`));
     
     if (lines > 300) {
-      console.log(chalk.yellow(`  ⚠️  High complexity - delegating to fixer`));
+      console.log(chalk.yellow('  ⚠️  High complexity - delegating to fixer'));
       this.delegate('fixer', 'refactor', { file, lines });
     }
     
@@ -96,7 +96,7 @@ class MultiAgentOrchestrator {
 
   refactorCode(data) {
     console.log(chalk.green(`  Refactoring ${data.file}...`));
-    console.log(`    ✓ Split into smaller functions`);
+    console.log('    ✓ Split into smaller functions');
     
     this.delegate('reviewer', 'approve', data);
     return { refactored: true };
@@ -104,7 +104,7 @@ class MultiAgentOrchestrator {
 
   reviewChanges(data) {
     console.log(chalk.blue(`  Reviewing ${data.fixed} fixes...`));
-    console.log(`    ✓ All fixes approved`);
+    console.log('    ✓ All fixes approved');
     return { approved: true };
   }
 
@@ -164,7 +164,7 @@ class MultiAgentOrchestrator {
   async run(agentName, action, data) {
     console.log(chalk.blue(`\n🚀 Starting: ${agentName}.${action}\n`));
     await this.delegate(agentName, action, data);
-    console.log(chalk.green(`\n✅ Workflow complete\n`));
+    console.log(chalk.green('\n✅ Workflow complete\n'));
   }
 
   status() {

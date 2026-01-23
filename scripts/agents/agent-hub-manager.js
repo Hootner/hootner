@@ -361,14 +361,13 @@ class AgentHubManager {
 
         Object.keys(agentsByType).forEach(type => {
             const agents = agentsByType[type];
-            const typeStats = {
+            typeStats[type] = {
                 total: agents.length,
                 active: agents.filter(name => {
                     const agent = this.agentHub.agents.get(name);
                     return agent && agent.status === 'active';
                 }).length
             };
-            typeStats[type] = typeStats;
         });
 
         return {
@@ -754,7 +753,7 @@ class AgentHubManager {
         categoryStats.innerHTML += \`
           <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 5px;">
             <strong style="text-transform: capitalize;">\${type}</strong>:
-            \${stats.active}/\` + stats.total + ` active
+            \${stats.active}/\${stats.total} active
           </div>
         \`;
       });

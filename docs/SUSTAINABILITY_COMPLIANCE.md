@@ -45,10 +45,10 @@ Sustainability: Energy Report
 
 ```javascript
 // Get energy report
-const report = sustainabilityMonitor.getReport();
+const report = sustainabilityMonitor.getReport()
 
 // Manual tracking
-await sustainabilityMonitor.trackEnergy();
+await sustainabilityMonitor.trackEnergy()
 ```
 
 ## Enhanced Compliance Dashboard
@@ -101,13 +101,13 @@ Compliance: Export Report
 
 ```javascript
 // Generate AI ethics report
-const report = complianceDashboard.generateReport('AI_ETHICS');
+const report = complianceDashboard.generateReport('AI_ETHICS')
 
 // Export as JSON
-const json = complianceDashboard.exportReport('json');
+const json = complianceDashboard.exportReport('json')
 
 // Export as CSV
-const csv = complianceDashboard.exportReport('csv');
+const csv = complianceDashboard.exportReport('csv')
 ```
 
 ## Integration Points

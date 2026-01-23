@@ -32,6 +32,7 @@ If Python API isn't available, the system automatically falls back to canvas-bas
 ## 🎨 How It Works
 
 ### **With Python API (REAL AI):**
+
 1. Frontend sends prompt to `http://localhost:5003/generate`
 2. Python diffusion model generates video frames
 3. Saves as MP4/GIF with real AI effects
@@ -39,6 +40,7 @@ If Python API isn't available, the system automatically falls back to canvas-bas
 5. Video appears in "My Videos"
 
 ### **With Canvas Fallback:**
+
 1. Creates animated canvas frames
 2. Theme-based colors (ocean, sunset, neon, etc.)
 3. Particle effects & waves
@@ -50,9 +52,11 @@ If Python API isn't available, the system automatically falls back to canvas-bas
 ## 📡 API Endpoints
 
 ### `POST /generate`
+
 Generate video from text prompt
 
 **Request:**
+
 ```json
 {
   "prompt": "A robot dancing",
@@ -68,6 +72,7 @@ Generate video from text prompt
 ```
 
 **Response:**
+
 ```json
 {
   "job_id": "abc-123",
@@ -83,9 +88,11 @@ Generate video from text prompt
 ```
 
 ### `GET /status/{job_id}`
+
 Check generation progress
 
 **Response:**
+
 ```json
 {
   "status": "processing",
@@ -96,9 +103,11 @@ Check generation progress
 ```
 
 ### `GET /download/{filename}`
+
 Download generated video
 
 ### `GET /health`
+
 API health check
 
 ---
@@ -106,6 +115,7 @@ API health check
 ## 🔧 Configuration
 
 ### **Environment Variables:**
+
 ```bash
 # Optional: Override API URL
 export AI_VIDEO_API_BASE=http://localhost:5003
@@ -115,9 +125,10 @@ export CUDA_VISIBLE_DEVICES=0
 ```
 
 ### **In Browser:**
+
 ```javascript
 // Set custom API endpoint
-localStorage.setItem('hootner_video_api_base', 'http://your-server:5003');
+localStorage.setItem('hootner_video_api_base', 'http://your-server:5003')
 ```
 
 ---
@@ -125,6 +136,7 @@ localStorage.setItem('hootner_video_api_base', 'http://your-server:5003');
 ## 📊 Features
 
 ### **Diffusion Model Features:**
+
 - ✅ DDPM (Denoising Diffusion Probabilistic Models)
 - ✅ DDIM fast sampling
 - ✅ Cosine noise schedule
@@ -134,6 +146,7 @@ localStorage.setItem('hootner_video_api_base', 'http://your-server:5003');
 - ✅ Temporal attention layers
 
 ### **Video Features:**
+
 - ✅ Up to 4K resolution (3840x2160)
 - ✅ 24/30/60 FPS support
 - ✅ 3-30 second duration
@@ -147,6 +160,7 @@ localStorage.setItem('hootner_video_api_base', 'http://your-server:5003');
 ## 🎯 Usage Examples
 
 ### **1. Generate a Video:**
+
 ```bash
 curl -X POST http://localhost:5003/generate \
   -H "Content-Type: application/json" \
@@ -160,11 +174,13 @@ curl -X POST http://localhost:5003/generate \
 ```
 
 ### **2. Check Status:**
+
 ```bash
 curl http://localhost:5003/status/abc-123
 ```
 
 ### **3. Download Video:**
+
 ```bash
 curl http://localhost:5003/download/abc-123.mp4 -o video.mp4
 ```
@@ -174,6 +190,7 @@ curl http://localhost:5003/download/abc-123.mp4 -o video.mp4
 ## 🔍 Troubleshooting
 
 ### **Python API not starting:**
+
 ```bash
 # Check Python version (requires 3.8+)
 python --version
@@ -186,11 +203,13 @@ pip install flask flask-cors pillow numpy tqdm
 ```
 
 ### **CUDA out of memory:**
+
 - Reduce `num_frames` (try 60 instead of 120)
 - Reduce `height` and `width` (try 512 instead of 720)
 - Reduce `num_inference_steps` (try 25 instead of 50)
 
 ### **Generation too slow:**
+
 - Use DDIM sampler (faster than DDPM)
 - Reduce inference steps to 25-30
 - Enable mixed precision (FP16)
@@ -200,6 +219,7 @@ pip install flask flask-cors pillow numpy tqdm
 ## 📱 Frontend Integration
 
 The frontend automatically:
+
 1. **Tries Python API first** at `localhost:5003`
 2. **Falls back to canvas** if API unavailable
 3. **Shows warning** when using fallback

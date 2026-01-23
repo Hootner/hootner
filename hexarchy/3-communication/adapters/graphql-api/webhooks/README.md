@@ -5,18 +5,21 @@ Comprehensive Stripe webhook handler for subscription management with proper err
 ## Features
 
 ✅ **Subscription Events**
+
 - `customer.subscription.created` - New subscription created
 - `customer.subscription.updated` - Subscription modified
 - `customer.subscription.deleted` - Subscription canceled
 - `customer.subscription.trial_will_end` - Trial ending soon
 
 ✅ **Payment Events**
+
 - `invoice.paid` - Successful payment
 - `invoice.payment_failed` - Payment failure
 - `payment_intent.succeeded` - One-time payment success
 - `payment_intent.payment_failed` - Payment failure
 
 ✅ **Customer Events**
+
 - `customer.created` - New customer
 - `customer.updated` - Customer info changed
 - `customer.deleted` - Customer removed
@@ -34,16 +37,16 @@ FRONTEND_URL=https://hootner.com
 ### Express Integration
 
 ```javascript
-const express = require('express');
-const webhookRoutes = require('./api/graphql/webhooks/routes');
+const express = require('express')
+const webhookRoutes = require('./api/graphql/webhooks/routes')
 
-const app = express();
+const app = express()
 
 // IMPORTANT: Stripe webhooks need raw body
-app.use('/webhooks', webhookRoutes);
+app.use('/webhooks', webhookRoutes)
 
 // Other middleware (JSON parser) comes after webhook routes
-app.use(express.json());
+app.use(express.json())
 ```
 
 ### Stripe Dashboard Configuration
@@ -59,17 +62,19 @@ app.use(express.json());
 ### Subscription Created
 
 Triggered when a customer subscribes:
+
 - Updates database with subscription info
 - Sends welcome email
 - Tracks analytics event
 
 ```javascript
-await handleSubscriptionCreated(subscription, event);
+await handleSubscriptionCreated(subscription, event)
 ```
 
 ### Subscription Updated
 
 Handles subscription changes:
+
 - Plan upgrades/downgrades
 - Cancellation scheduling
 - Status changes (active, paused, etc.)
@@ -77,6 +82,7 @@ Handles subscription changes:
 ### Subscription Deleted
 
 Revokes access when subscription ends:
+
 - Updates user status
 - Revokes premium features
 - Sends cancellation confirmation
@@ -84,6 +90,7 @@ Revokes access when subscription ends:
 ### Invoice Paid
 
 Successful payment processing:
+
 - Records payment in database
 - Extends subscription access
 - Sends receipt email (for renewals)
@@ -91,6 +98,7 @@ Successful payment processing:
 ### Invoice Payment Failed
 
 Handles failed payments:
+
 - Notifies customer
 - Tracks retry attempts
 - Suspends access after final failure
@@ -102,11 +110,7 @@ Handles failed payments:
 All webhooks are verified using Stripe's signature:
 
 ```javascript
-event = stripe.webhooks.constructEvent(
-  req.body,
-  signature,
-  webhookSecret
-);
+event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret)
 ```
 
 ### Error Handling
@@ -125,13 +129,13 @@ logger.info('Subscription created', {
   customerId: customer,
   status,
   trialEnd: trial_end,
-});
+})
 
 logger.error('Payment failed', {
   invoiceId: id,
   attemptCount: attempt_count,
   error: last_payment_error?.message,
-});
+})
 ```
 
 ## Testing
@@ -198,6 +202,7 @@ async revokePremiumAccess(customerId) {
 ## Email Notifications
 
 Email types sent:
+
 - **welcome** - New subscription
 - **cancellation_scheduled** - Scheduled cancellation
 - **canceled** - Subscription ended
@@ -209,6 +214,7 @@ Email types sent:
 ## Analytics Tracking
 
 Events tracked:
+
 - `subscription_created`
 - `subscription_updated`
 - `subscription_deleted`
@@ -229,6 +235,7 @@ curl http://localhost:4000/webhooks/stripe/health
 ```
 
 Response:
+
 ```json
 {
   "status": "ok",
@@ -240,6 +247,7 @@ Response:
 ### Logs
 
 Check logs in:
+
 - `logs/info.log` - All webhook events
 - `logs/error.log` - Errors and failures
 - `logs/debug.log` - Detailed debugging (dev only)
@@ -260,16 +268,18 @@ Check logs in:
 ## Webhook Retry Logic
 
 Stripe automatically retries failed webhooks:
+
 - Attempts over 3 days
 - Exponential backoff
 - Up to 72 hours of retries
 
 Return `500` to trigger retry:
+
 ```javascript
 return res.status(500).json({
   error: 'Webhook processing failed',
   eventId: event.id,
-});
+})
 ```
 
 ## Best Practices

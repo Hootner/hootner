@@ -3,10 +3,10 @@ import { RedisPubSub } from 'graphql-redis-subscriptions';
 import Redis from 'ioredis';
 
 // Use Redis for production, in-memory for development
-const pubsub = process.env.REDIS_URL 
+const pubsub = process.env.REDIS_URL
   ? new RedisPubSub({
       publisher: new Redis(process.env.REDIS_URL),
-      subscriber: new Redis(process.env.REDIS_URL)
+      subscriber: new Redis(process.env.REDIS_URL),
     })
   : new PubSub();
 
@@ -18,7 +18,7 @@ const resolvers = {
       (payload, variables) => {
         return !variables.userId || payload.videoProcessed.userId === variables.userId;
       }
-    )
+    ),
   },
 
   videoProgress: {
@@ -27,7 +27,7 @@ const resolvers = {
       (payload, variables) => {
         return payload.videoProgress.videoId === variables.videoId;
       }
-    )
+    ),
   },
 
   // Video likes
@@ -37,7 +37,7 @@ const resolvers = {
       (payload, variables) => {
         return !variables.videoId || payload.videoLiked.id === variables.videoId;
       }
-    )
+    ),
   },
 
   // Comments
@@ -47,7 +47,7 @@ const resolvers = {
       (payload, variables) => {
         return !variables.videoId || payload.commentAdded.video.id === variables.videoId;
       }
-    )
+    ),
   },
 
   // Generation events
@@ -57,16 +57,18 @@ const resolvers = {
       (payload, variables) => {
         return payload.generationProgress.jobId === variables.jobId;
       }
-    )
+    ),
   },
 
   generationCompleted: {
     subscribe: withFilter(
       () => pubsub.asyncIterator(['GENERATION_COMPLETED']),
       (payload, variables) => {
-        return !variables.userId || payload.generationCompleted.userId === variables.userId;
+        return (
+          !variables.userId || payload.generationCompleted.userId === variables.userId
+        );
       }
-    )
+    ),
   },
 
   // Stream events
@@ -76,7 +78,7 @@ const resolvers = {
       (payload, variables) => {
         return !variables.userId || payload.streamStarted.userId === variables.userId;
       }
-    )
+    ),
   },
 
   streamEnded: {
@@ -85,7 +87,7 @@ const resolvers = {
       (payload, variables) => {
         return payload.streamEnded.streamId === variables.streamId;
       }
-    )
+    ),
   },
 
   streamViewers: {
@@ -94,7 +96,7 @@ const resolvers = {
       (payload, variables) => {
         return payload.streamViewers.streamId === variables.streamId;
       }
-    )
+    ),
   },
 
   streamQuality: {
@@ -103,7 +105,7 @@ const resolvers = {
       (payload, variables) => {
         return payload.streamQuality.streamId === variables.streamId;
       }
-    )
+    ),
   },
 
   // User activity
@@ -113,19 +115,19 @@ const resolvers = {
       (payload, variables) => {
         return payload.userActivity.userId === variables.userId;
       }
-    )
+    ),
   },
 
   // System alerts
   systemAlert: {
-    subscribe: () => pubsub.asyncIterator(['SYSTEM_ALERT'])
+    subscribe: () => pubsub.asyncIterator(['SYSTEM_ALERT']),
   },
 
   // Real-time activity stream for dashboard/monitoring
   activityStream: {
     subscribe: () => pubsub.asyncIterator(['ACTIVITY_STREAM']),
-    resolve: (payload) => payload.activityStream
-  }
+    resolve: (payload) => payload.activityStream,
+  },
 };
 
 // Export pubsub for use in other resolvers

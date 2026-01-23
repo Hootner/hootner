@@ -27,7 +27,7 @@ function run(cmd, silent = false) {
       encoding: 'utf8',
     }).trim();
   } catch (error) {
-    if (!silent) console.error(chalk.red(`Command failed: ` + cmd + ``));
+    if (!silent) console.error(chalk.red('Command failed: ' + cmd + ''));
     throw error;
   }
 }
@@ -102,13 +102,13 @@ if (cache[fileHash] && cache[fileHash].timestamp > Date.now() - 300000) {
 }
 
 // Auto-fix with ESLint (only changed files)
-console.log(chalk.yellow(`🔧 Auto-fixing ` + changedFiles.length + ` files...`));
+console.log(chalk.yellow('🔧 Auto-fixing ' + changedFiles.length + ' files...'));
 try {
   const eslintFiles = changedFiles
     .filter((f) => /\.(js|ts|jsx|tsx)$/.test(f))
     .join(' ');
   if (eslintFiles) {
-    runSilent(`npx eslint ` + eslintFiles + ` --fix --quiet`);
+    runSilent('npx eslint ' + eslintFiles + ' --fix --quiet');
     run('git add .', true);
     console.log(chalk.green('✅ Files processed'));
   }
@@ -156,7 +156,7 @@ checks.push(
       resolve({
         type: 'security',
         passed: critical === 0,
-        message: `` + critical + ` high-risk issues`,
+        message: '' + critical + ' high-risk issues',
       });
     } catch {
       resolve({ type: 'security', passed: true, message: '' });
@@ -170,7 +170,7 @@ Promise.all(checks).then((results) => {
   if (failed.length > 0) {
     console.error(chalk.red('\n❌ COMMIT BLOCKED - Issues found:'));
     failed.forEach((f) => {
-      console.error(chalk.yellow(`[${f.type}] ` + f.message + ``));
+      console.error(chalk.yellow(`[${f.type}] ` + f.message + ''));
     });
     console.error(chalk.cyan('\n💡 AI Fix Options:'));
     console.error('• Amazon Q: Use /review in Q chat');
@@ -186,5 +186,5 @@ Promise.all(checks).then((results) => {
   saveCache(cache);
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-  console.log(chalk.green(`✅ Dual AI workflow complete (` + elapsed + `s)`));
+  console.log(chalk.green('✅ Dual AI workflow complete (' + elapsed + 's)'));
 });

@@ -337,32 +337,32 @@ POST /api/v1/audit/cleanup?days=90
 
 ```typescript
 // In your service
-import { Injectable } from "@nestjs/common";
-import { HttpService } from "@nestjs/axios";
+import { Injectable } from '@nestjs/common'
+import { HttpService } from '@nestjs/axios'
 
 @Injectable()
 export class VideoService {
   async updateVideo(id: string, data: any, userId: string) {
-    const oldVideo = await this.getVideo(id);
-    const newVideo = await this.update(id, data);
+    const oldVideo = await this.getVideo(id)
+    const newVideo = await this.update(id, data)
 
     // Log audit event
     await this.http
-      .post("http://audit-service:3001/api/v1/audit", {
+      .post('http://audit-service:3001/api/v1/audit', {
         userId,
         username: oldVideo.owner,
-        action: "UPDATE",
-        resource: "VIDEO",
+        action: 'UPDATE',
+        resource: 'VIDEO',
         resourceId: id,
         ipAddress: req.ip,
-        userAgent: req.headers["user-agent"],
-        severity: "MEDIUM",
+        userAgent: req.headers['user-agent'],
+        severity: 'MEDIUM',
         oldValue: { title: oldVideo.title },
         newValue: { title: newVideo.title },
       })
-      .toPromise();
+      .toPromise()
 
-    return newVideo;
+    return newVideo
   }
 }
 ```

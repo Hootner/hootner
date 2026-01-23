@@ -17,20 +17,24 @@ async function createContact({ name, email, subject, message }) {
     message,
     status: 'new',
     createdAt: now,
-    updatedAt: now
+    updatedAt: now,
   };
   await docClient.send(new PutCommand({ TableName: TABLE_NAME, Item: item }));
   return item;
 }
 
 async function listContacts(limit = 50) {
-  const res = await docClient.send(new ScanCommand({
-    TableName: TABLE_NAME,
-    FilterExpression: '#type = :type',
-    ExpressionAttributeNames: { '#type': 'entityType' },
-    ExpressionAttributeValues: { ':type': 'CONTACT' }
-  }));
-  return (res.Items || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, limit);
+  const res = await docClient.send(
+    new ScanCommand({
+      TableName: TABLE_NAME,
+      FilterExpression: '#type = :type',
+      ExpressionAttributeNames: { '#type': 'entityType' },
+      ExpressionAttributeValues: { ':type': 'CONTACT' },
+    })
+  );
+  return (res.Items || [])
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, limit);
 }
 
 export { createContact, listContacts };

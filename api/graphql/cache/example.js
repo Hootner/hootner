@@ -9,12 +9,7 @@ const express = require('express');
 
 // Initialize unified cache manager
 const cacheManager = new UnifiedCacheManager({
-  cacheableOperations: [
-    'getUser',
-    'getVideo',
-    'getTrendingVideos',
-    'searchVideos',
-  ],
+  cacheableOperations: ['getUser', 'getVideo', 'getTrendingVideos', 'searchVideos'],
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
     port: process.env.REDIS_PORT || 6379,
@@ -60,9 +55,7 @@ app.post(
   async (req, res) => {
     // Verify admin authorization
     if (!req.user || !req.user.isAdmin) {
-      return res
-        .status(403)
-        .json({ error: 'Forbidden: Admin access required' });
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
     await cacheManager.clearAll();

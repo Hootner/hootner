@@ -3,8 +3,8 @@
  * Data transfer object for querying audit logs
  */
 
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { ApiPropertyOptional } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 import {
   IsDateString,
   IsEnum,
@@ -13,69 +13,65 @@ import {
   IsString,
   Max,
   Min,
-} from "class-validator";
-import {
-  AuditAction,
-  AuditResource,
-  AuditSeverity,
-} from "../schemas/audit-log.schema";
+} from 'class-validator'
+import { AuditAction, AuditResource, AuditSeverity } from '../schemas/audit-log.schema'
 
 export class QueryAuditLogsDto {
-  @ApiPropertyOptional({ description: "Filter by user ID" })
+  @ApiPropertyOptional({ description: 'Filter by user ID' })
   @IsOptional()
   @IsString()
-  userId?: string;
+  userId?: string
 
-  @ApiPropertyOptional({ enum: AuditAction, description: "Filter by action" })
+  @ApiPropertyOptional({ enum: AuditAction, description: 'Filter by action' })
   @IsOptional()
   @IsEnum(AuditAction)
-  action?: AuditAction;
+  action?: AuditAction
 
   @ApiPropertyOptional({
     enum: AuditResource,
-    description: "Filter by resource",
+    description: 'Filter by resource',
   })
   @IsOptional()
   @IsEnum(AuditResource)
-  resource?: AuditResource;
+  resource?: AuditResource
 
-  @ApiPropertyOptional({ description: "Filter by resource ID" })
+  @ApiPropertyOptional({ description: 'Filter by resource ID' })
   @IsOptional()
   @IsString()
-  resourceId?: string;
+  resourceId?: string
 
   @ApiPropertyOptional({
     enum: AuditSeverity,
-    description: "Filter by severity",
+    description: 'Filter by severity',
   })
   @IsOptional()
   @IsEnum(AuditSeverity)
-  severity?: AuditSeverity;
+  severity?: AuditSeverity
 
-  @ApiPropertyOptional({ description: "Filter by IP address" })
+  @ApiPropertyOptional({ description: 'Filter by IP address' })
   @IsOptional()
   @IsString()
-  ipAddress?: string;
+  ipAddress?: string
 
-  @ApiPropertyOptional({ description: "Filter logs from this date" })
+  @ApiPropertyOptional({ description: 'Filter logs from this date' })
   @IsOptional()
   @IsDateString()
-  startDate?: string;
+  startDate?: string
 
-  @ApiPropertyOptional({ description: "Filter logs until this date" })
+  @ApiPropertyOptional({ description: 'Filter logs until this date' })
   @IsOptional()
   @IsDateString()
-  endDate?: string;
+  endDate?: string
 
-  @ApiPropertyOptional({ description: "Page number", default: 1, minimum: 1 })
+  @ApiPropertyOptional({ description: 'Page number', default: 1, minimum: 1 })
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  page?: number = 1;
+  page?: number = 1
 
   @ApiPropertyOptional({
-    description: "Items per page",
+    description: 'Items per page',
     default: 50,
     minimum: 1,
     maximum: 100,
@@ -85,18 +81,18 @@ export class QueryAuditLogsDto {
   @IsNumber()
   @Min(1)
   @Max(100)
-  limit?: number = 50;
+  limit?: number = 50
 
-  @ApiPropertyOptional({ description: "Sort field", default: "timestamp" })
+  @ApiPropertyOptional({ description: 'Sort field', default: 'timestamp' })
   @IsOptional()
   @IsString()
-  sortBy?: string = "timestamp";
+  sortBy?: string = 'timestamp'
 
   @ApiPropertyOptional({
-    description: "Sort order (asc/desc)",
-    default: "desc",
+    description: 'Sort order (asc/desc)',
+    default: 'desc',
   })
   @IsOptional()
   @IsString()
-  sortOrder?: "asc" | "desc" = "desc";
+  sortOrder?: 'asc' | 'desc' = 'desc'
 }

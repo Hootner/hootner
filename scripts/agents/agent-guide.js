@@ -44,8 +44,8 @@ const agents = [
 ];
 
 agents.forEach((agent, i) => {
-    console.log(`   ${i + 1}. ` + chalk.cyan(agent.name) + ``);
-    console.log(`      ` + chalk.dim(agent.desc) + ``);
+    console.log(`   ${i + 1}. ` + chalk.cyan(agent.name) + '');
+    console.log('      ' + chalk.dim(agent.desc) + '');
 });
 
 console.log(chalk.bold('\n📊 Workflow Examples:\n'));
@@ -66,7 +66,7 @@ console.log('   • Auto-Documentation on Push');
 console.log('   • Continuous Learning');
 
 console.log(chalk.bold('\n📚 Documentation:\n'));
-console.log(`   See ` + chalk.cyan('docs/ADVANCED_AGENTS.md') + ` for full guide\n`);
+console.log('   See ' + chalk.cyan('docs/ADVANCED_AGENTS.md') + ' for full guide\n');
 
 console.log(chalk.bold('💡 Tips:\n'));
 console.log('   • Use --auto-fix carefully - test on branches first');

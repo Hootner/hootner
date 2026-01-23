@@ -47,14 +47,14 @@ curl -X POST http://localhost:5003/generate \
 
 ```javascript
 // In your React component
-const generateVideo = async prompt => {
+const generateVideo = async (prompt) => {
   const response = await fetch('/api/video-generation/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt }),
-  });
-  return response.json();
-};
+  })
+  return response.json()
+}
 ```
 
 ## 🏗️ Architecture
@@ -93,10 +93,10 @@ Default settings (modify in generator.py):
 
 ```javascript
 // Add to video-player.html
-const aiGenerate = async prompt => {
-  const video = await generateVideo(prompt);
-  addToCarousel(video.download_url);
-};
+const aiGenerate = async (prompt) => {
+  const video = await generateVideo(prompt)
+  addToCarousel(video.download_url)
+}
 ```
 
 ### Marketplace
@@ -104,9 +104,9 @@ const aiGenerate = async prompt => {
 ```javascript
 // Premium AI video generation feature
 const premiumGenerate = async (prompt, userId) => {
-  if (!hasPremium(userId)) throw new Error('Premium required');
-  return generateVideo(prompt);
-};
+  if (!hasPremium(userId)) throw new Error('Premium required')
+  return generateVideo(prompt)
+}
 ```
 
 ### Social Feed
@@ -114,9 +114,9 @@ const premiumGenerate = async (prompt, userId) => {
 ```javascript
 // Generate videos for posts
 const createAIPost = async (prompt, userId) => {
-  const video = await generateVideo(prompt);
-  return createPost({ userId, videoUrl: video.download_url });
-};
+  const video = await generateVideo(prompt)
+  return createPost({ userId, videoUrl: video.download_url })
+}
 ```
 
 ## 🚀 Production Deployment

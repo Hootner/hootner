@@ -10,7 +10,7 @@ This guide sets up Amazon Q Developer with Model Context Protocol (MCP) to boost
 # 1. Run setup script
 setup-mcp.bat
 
-# 2. Install dependencies  
+# 2. Install dependencies
 npm install
 
 # 3. Start Amazon Q CLI
@@ -28,15 +28,17 @@ q
 ### 🚢 Deployment Tools
 
 **deploy_service** - Deploy HOOTNER services
+
 ```
 "Deploy HOOTNER in production environment"
-"Deploy frontend service in dev environment"  
+"Deploy frontend service in dev environment"
 "Deploy all services using blue-green strategy"
 ```
 
 ### 🧪 Chaos Engineering
 
 **run_chaos_test** - Execute chaos tests
+
 ```
 "Run chaos monkey test for 10 minutes"
 "Execute load test on the system"
@@ -46,6 +48,7 @@ q
 ### 🏥 Health Monitoring
 
 **check_system_health** - Monitor system status
+
 ```
 "Check overall system health"
 "Check frontend service health"
@@ -55,6 +58,7 @@ q
 ### 💾 Backup Management
 
 **backup_system** - Trigger backups
+
 ```
 "Create full system backup"
 "Run incremental backup with 30 day retention"
@@ -64,6 +68,7 @@ q
 ### 🔒 Security Auditing
 
 **security_audit** - Run security scans
+
 ```
 "Run comprehensive security audit"
 "Scan for dependency vulnerabilities"
@@ -74,6 +79,7 @@ q
 ## Example Workflows
 
 ### Deployment Workflow
+
 ```
 Q: "Deploy HOOTNER in staging environment and run health checks"
 
@@ -84,6 +90,7 @@ Amazon Q will:
 ```
 
 ### Chaos Testing Workflow
+
 ```
 Q: "Run chaos monkey test for 5 minutes then check system recovery"
 
@@ -94,6 +101,7 @@ Amazon Q will:
 ```
 
 ### Security Audit Workflow
+
 ```
 Q: "Perform full security audit and backup the system"
 
@@ -106,6 +114,7 @@ Amazon Q will:
 ## Configuration
 
 ### MCP Server Config (`~/.aws/amazonq/mcp.json`)
+
 ```json
 {
   "mcpServers": {
@@ -123,6 +132,7 @@ Amazon Q will:
 ```
 
 ### Environment Variables
+
 - `HOOTNER_ENV`: Deployment environment (development/staging/production)
 - `FASTMCP_LOG_LEVEL`: MCP logging level (ERROR/INFO/DEBUG)
 - `AWS_PROFILE`: AWS profile for CDK operations
@@ -132,6 +142,7 @@ Amazon Q will:
 ### Common Issues
 
 **MCP Server Not Loading**
+
 ```bash
 # Check syntax
 node -c mcp-server.js
@@ -145,6 +156,7 @@ q
 ```
 
 **Tool Execution Fails**
+
 ```bash
 # Verify dependencies
 npm install
@@ -157,6 +169,7 @@ ls -la scripts/
 ```
 
 **Timeout Issues**
+
 ```bash
 # Increase timeout
 q settings mcp.initTimeout 30000
@@ -181,16 +194,19 @@ cat $TMPDIR/qlog
 ## Integration with HOOTNER Architecture
 
 ### Microservices Integration
+
 - Connects to all 10+ HOOTNER microservices
 - Monitors service mesh (Istio) health
 - Manages blue-green deployments
 
-### DevOps Pipeline Integration  
+### DevOps Pipeline Integration
+
 - Triggers CI/CD workflows
 - Executes chaos engineering tests
 - Manages backup strategies
 
 ### Security Integration
+
 - Runs comprehensive security audits
 - Scans for injection vulnerabilities
 - Validates compliance requirements
@@ -198,6 +214,7 @@ cat $TMPDIR/qlog
 ## Advanced Usage
 
 ### Custom Tool Development
+
 ```javascript
 // Add new tool to mcp-server.js
 {
@@ -213,6 +230,7 @@ cat $TMPDIR/qlog
 ```
 
 ### Multi-Environment Support
+
 ```json
 {
   "mcpServers": {
@@ -233,7 +251,7 @@ cat $TMPDIR/qlog
 ## Next Steps
 
 1. Explore AWS CDK MCP server for infrastructure management
-2. Create custom tools for your specific workflows  
+2. Create custom tools for your specific workflows
 3. Integrate with external APIs (Jira, Slack, etc.)
 4. Set up automated MCP server deployment
 5. Configure monitoring and alerting for MCP operations

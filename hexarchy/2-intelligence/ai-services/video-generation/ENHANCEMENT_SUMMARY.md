@@ -72,7 +72,7 @@ The Python-based AI video generation service has been significantly enhanced wit
    - Lower rate limits
    - Verbose logging
 
-2. **`config/production.yaml`**
+8. **`config/production.yaml`**
    - Production environment settings
    - Optimizations enabled
    - API key authentication
@@ -158,13 +158,13 @@ The Python-based AI video generation service has been significantly enhanced wit
 
 ## 📊 Performance Improvements
 
-| Feature | Original | Enhanced | Improvement |
-|---------|----------|----------|-------------|
-| Sampling Speed | 50 steps DDPM | 20 steps DPM | **5-10x faster** |
-| Memory Usage | Full FP32 | Mixed FP16 | **50% reduction** |
-| Inference Speed | Standard | Compiled | **30-50% faster** |
-| API Throughput | Sync only | Async queue | **10x concurrent** |
-| Cache Hit Rate | None | Redis cache | **70-80% hits** |
+| Feature         | Original      | Enhanced     | Improvement        |
+| --------------- | ------------- | ------------ | ------------------ |
+| Sampling Speed  | 50 steps DDPM | 20 steps DPM | **5-10x faster**   |
+| Memory Usage    | Full FP32     | Mixed FP16   | **50% reduction**  |
+| Inference Speed | Standard      | Compiled     | **30-50% faster**  |
+| API Throughput  | Sync only     | Async queue  | **10x concurrent** |
+| Cache Hit Rate  | None          | Redis cache  | **70-80% hits**    |
 
 ---
 

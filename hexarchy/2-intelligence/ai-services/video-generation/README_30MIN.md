@@ -38,6 +38,7 @@ The API will start on **http://localhost:5004**
 Generate a new 30-minute AI video.
 
 **Request Body:**
+
 ```json
 {
   "prompt": "A cinematic journey through space with nebulas, stars, and galaxies",
@@ -55,20 +56,21 @@ Generate a new 30-minute AI video.
 
 **Parameters:**
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `prompt` | string | **required** | Text description of the video (max 2000 chars) |
-| `duration_minutes` | float | 30 | Video duration (1-30 minutes) |
-| `resolution` | string | "4k" | Resolution: hd, 2k, 4k, 8k |
-| `fps` | int | 24 | Frames per second (8-60) |
-| `quality` | string | "high" | Quality: draft, medium, high, cinema |
-| `hdr_enabled` | bool | true | Enable HDR10 output |
-| `guidance_scale` | float | 7.5 | Guidance scale (1.0-15.0) |
-| `seed` | int | null | Random seed for reproducibility |
-| `enable_checkpoints` | bool | true | Enable checkpoint recovery |
-| `email_notification` | string | null | Email for completion notification |
+| Parameter            | Type   | Default      | Description                                    |
+| -------------------- | ------ | ------------ | ---------------------------------------------- |
+| `prompt`             | string | **required** | Text description of the video (max 2000 chars) |
+| `duration_minutes`   | float  | 30           | Video duration (1-30 minutes)                  |
+| `resolution`         | string | "4k"         | Resolution: hd, 2k, 4k, 8k                     |
+| `fps`                | int    | 24           | Frames per second (8-60)                       |
+| `quality`            | string | "high"       | Quality: draft, medium, high, cinema           |
+| `hdr_enabled`        | bool   | true         | Enable HDR10 output                            |
+| `guidance_scale`     | float  | 7.5          | Guidance scale (1.0-15.0)                      |
+| `seed`               | int    | null         | Random seed for reproducibility                |
+| `enable_checkpoints` | bool   | true         | Enable checkpoint recovery                     |
+| `email_notification` | string | null         | Email for completion notification              |
 
 **Response (202 Accepted):**
+
 ```json
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -94,6 +96,7 @@ Generate a new 30-minute AI video.
 Get real-time progress of video generation.
 
 **Response:**
+
 ```json
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -113,6 +116,7 @@ Get real-time progress of video generation.
 ```
 
 **Status Values:**
+
 - `queued`: Waiting to start
 - `processing`: Currently generating
 - `completed`: Ready for download
@@ -134,6 +138,7 @@ Download the completed video file.
 Cancel an active video generation job.
 
 **Response:**
+
 ```json
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -149,10 +154,12 @@ Cancel an active video generation job.
 List all video generation jobs.
 
 **Query Parameters:**
+
 - `status` (optional): Filter by status
 - `limit` (optional): Max results (default: 50)
 
 **Response:**
+
 ```json
 {
   "total": 3,
@@ -172,21 +179,21 @@ List all video generation jobs.
 
 ## 🎨 Resolution Presets
 
-| Preset | Resolution | Aspect Ratio | Use Case |
-|--------|------------|--------------|----------|
-| HD | 1920x1080 | 16:9 | Fast preview, web streaming |
-| 2K | 2560x1440 | 16:9 | High-quality web, social media |
-| 4K | 3840x2160 | 16:9 | Professional production |
-| 8K | 7680x4320 | 16:9 | Cinema, large displays |
+| Preset | Resolution | Aspect Ratio | Use Case                       |
+| ------ | ---------- | ------------ | ------------------------------ |
+| HD     | 1920x1080  | 16:9         | Fast preview, web streaming    |
+| 2K     | 2560x1440  | 16:9         | High-quality web, social media |
+| 4K     | 3840x2160  | 16:9         | Professional production        |
+| 8K     | 7680x4320  | 16:9         | Cinema, large displays         |
 
 ## 🎭 Quality Presets
 
-| Quality | Inference Steps | Processing Time | Use Case |
-|---------|----------------|-----------------|----------|
-| Draft | 20 | Fast (3x speed) | Quick previews |
-| Medium | 30 | Moderate (2x speed) | Standard quality |
-| High | 50 | Normal | Production ready |
-| Cinema | 100 | Slow (0.5x speed) | Maximum quality |
+| Quality | Inference Steps | Processing Time     | Use Case         |
+| ------- | --------------- | ------------------- | ---------------- |
+| Draft   | 20              | Fast (3x speed)     | Quick previews   |
+| Medium  | 30              | Moderate (2x speed) | Standard quality |
+| High    | 50              | Normal              | Production ready |
+| Cinema  | 100             | Slow (0.5x speed)   | Maximum quality  |
 
 ## 📊 Technical Specifications
 
@@ -289,14 +296,14 @@ FLASK_ENV=production
 
 ```yaml
 generation:
-  max_num_frames: 43200       # 30 minutes at 24fps
-  max_duration_seconds: 1800  # 30 minutes
-  
+  max_num_frames: 43200 # 30 minutes at 24fps
+  max_duration_seconds: 1800 # 30 minutes
+
   long_form:
     enabled: true
-    chunk_size: 1200          # 50 seconds
-    overlap_frames: 24        # 1 second
-    checkpoint_interval: 7200  # 5 minutes
+    chunk_size: 1200 # 50 seconds
+    overlap_frames: 24 # 1 second
+    checkpoint_interval: 7200 # 5 minutes
 ```
 
 ## 🐛 Troubleshooting
@@ -306,6 +313,7 @@ generation:
 **Problem**: GPU runs out of memory during generation
 
 **Solutions**:
+
 1. Reduce resolution (use HD instead of 4K)
 2. Reduce quality (use medium instead of high)
 3. Reduce chunk size in config
@@ -316,6 +324,7 @@ generation:
 **Problem**: Video generation takes too long
 
 **Solutions**:
+
 1. Use draft quality for previews
 2. Reduce resolution
 3. Reduce inference steps
@@ -327,6 +336,7 @@ generation:
 **Problem**: Visible transitions between chunks
 
 **Solutions**:
+
 1. Increase overlap frames (default: 24)
 2. Enable temporal smoothing
 3. Use higher quality settings
@@ -336,16 +346,19 @@ generation:
 ### Hardware Requirements
 
 **Minimum (HD, Medium Quality)**:
+
 - GPU: 8GB VRAM
 - RAM: 16GB
 - Storage: 50GB free space
 
 **Recommended (4K, High Quality)**:
+
 - GPU: 24GB VRAM (RTX 3090, A6000)
 - RAM: 64GB
 - Storage: 500GB NVMe SSD
 
 **Optimal (8K, Cinema Quality)**:
+
 - GPU: 40GB+ VRAM (A100, H100)
 - RAM: 128GB
 - Storage: 2TB NVMe SSD
@@ -417,13 +430,13 @@ spec:
         app: long-video-api
     spec:
       containers:
-      - name: api
-        image: hootner/long-video-api:latest
-        ports:
-        - containerPort: 5004
-        resources:
-          limits:
-            nvidia.com/gpu: 1
+        - name: api
+          image: hootner/long-video-api:latest
+          ports:
+            - containerPort: 5004
+          resources:
+            limits:
+              nvidia.com/gpu: 1
 ```
 
 ## 🎯 Roadmap

@@ -5,32 +5,37 @@
  * Author: HOOTNER Code Guardian
  */
 
-const { ApolloError, UserInputError, AuthenticationError, ForbiddenError } = require('apollo-server-express');
+const {
+  ApolloError,
+  UserInputError,
+  AuthenticationError,
+  ForbiddenError,
+} = require('apollo-server-express');
 
 /**
  * Error codes for different error types
  */
 const ErrorCodes = {
-    INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
-    BAD_USER_INPUT: 'BAD_USER_INPUT',
-    UNAUTHENTICATED: 'UNAUTHENTICATED',
-    FORBIDDEN: 'FORBIDDEN',
-    NOT_FOUND: 'NOT_FOUND',
-    VALIDATION_ERROR: 'VALIDATION_ERROR',
-    DATABASE_ERROR: 'DATABASE_ERROR',
-    EXTERNAL_SERVICE_ERROR: 'EXTERNAL_SERVICE_ERROR',
-    RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
-    TIMEOUT: 'TIMEOUT',
+  INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+  BAD_USER_INPUT: 'BAD_USER_INPUT',
+  UNAUTHENTICATED: 'UNAUTHENTICATED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  DATABASE_ERROR: 'DATABASE_ERROR',
+  EXTERNAL_SERVICE_ERROR: 'EXTERNAL_SERVICE_ERROR',
+  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+  TIMEOUT: 'TIMEOUT',
 };
 
 /**
  * Custom error class for application errors
  */
 class AppError extends ApolloError {
-    constructor(message, code, extensions = {}) {
-        super(message, code, extensions);
-        this.name = 'AppError';
-    }
+  constructor(message, code, extensions = {}) {
+    super(message, code, extensions);
+    this.name = 'AppError';
+  }
 }
 
 /**
@@ -40,13 +45,13 @@ class AppError extends ApolloError {
  * @returns {function} Wrapped resolver
  */
 function withErrorBoundary(resolver, resolverName = 'Unknown') {
-    return async (...args) => {
-        try {
-            return await resolver(...args);
-        } catch (error) {
-            return handleResolverError(error, resolverName, args);
-        }
-    };
+  return async (...args) => {
+    try {
+      return await resolver(...args);
+    } catch (error) {
+      return handleResolverError(error, resolverName, args);
+    }
+  };
 }
 
 /**
@@ -56,23 +61,23 @@ function withErrorBoundary(resolver, resolverName = 'Unknown') {
  * @returns {object} Wrapped resolvers
  */
 function wrapResolvers(resolvers, category = 'Resolver') {
-    const wrappedResolvers = {};
+  const wrappedResolvers = {};
 
-    for (const [key, resolver] of Object.entries(resolvers)) {
-        if (typeof resolver === 'function') {
-            wrappedResolvers[key] = async (...args) => {
-                try {
-                    return await resolver(...args);
-                } catch (error) {
-                    return handleResolverError(error, `${category}.${key}`, args);
-                }
-            };
-        } else {
-            wrappedResolvers[key] = resolver;
+  for (const [key, resolver] of Object.entries(resolvers)) {
+    if (typeof resolver === 'function') {
+      wrappedResolvers[key] = async (...args) => {
+        try {
+          return await resolver(...args);
+        } catch (error) {
+          return handleResolverError(error, `${category}.${key}`, args);
         }
+      };
+    } else {
+      wrappedResolvers[key] = resolver;
     }
+  }
 
-    return wrappedResolvers;
+  return wrappedResolvers;
 }
 
 /**
@@ -83,92 +88,80 @@ function wrapResolvers(resolvers, category = 'Resolver') {
  * @throws {ApolloError} Formatted error
  */
 function handleResolverError(error, resolverName, args) {
-    // Log error details
-    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.error(`❌ Error in resolver: ${resolverName}`);
-    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.error('Error:', error.message);
-    console.error('Type:', error.constructor.name);
-    console.error('Timestamp:', new Date().toISOString());
+  // Log error details
+  console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.error(`❌ Error in resolver: ${resolverName}`);
+  console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.error('Error:', error.message);
+  console.error('Type:', error.constructor.name);
+  console.error('Timestamp:', new Date().toISOString());
 
-    if (args[1]) {
-        const sanitizedArgs = JSON.stringify(args[1], null, 2);
-        console.error('Arguments:', sanitizedArgs);
-    }
+  if (args[1]) {
+    const sanitizedArgs = JSON.stringify(args[1], null, 2);
+    console.error('Arguments:', sanitizedArgs);
+  }
 
-    if (error.stack) {
-        const sanitizedStack = error.stack.split('\n').slice(0, 10).join('\n');
-        console.error('Stack:', sanitizedStack);
-    }
+  if (error.stack) {
+    const sanitizedStack = error.stack.split('\n').slice(0, 10).join('\n');
+    console.error('Stack:', sanitizedStack);
+  }
 
-    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+  console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-    // Re-throw known Apollo errors
-    if (error instanceof AuthenticationError) {
-        throw error;
-    }
+  // Re-throw known Apollo errors
+  if (error instanceof AuthenticationError) {
+    throw error;
+  }
 
-    if (error instanceof ForbiddenError) {
-        throw error;
-    }
+  if (error instanceof ForbiddenError) {
+    throw error;
+  }
 
-    if (error instanceof UserInputError) {
-        throw error;
-    }
+  if (error instanceof UserInputError) {
+    throw error;
+  }
 
-    if (error instanceof ApolloError) {
-        throw error;
-    }
+  if (error instanceof ApolloError) {
+    throw error;
+  }
 
-    // Handle specific error types
-    if (error.code === 'ECONNREFUSED') {
-        throw new AppError(
-            'External service unavailable',
-            ErrorCodes.EXTERNAL_SERVICE_ERROR,
-            {
-                service: error.address,
-                resolver: resolverName,
-            }
-        );
-    }
-
-    if (error.code === 'ETIMEDOUT') {
-        throw new AppError(
-            'Operation timed out',
-            ErrorCodes.TIMEOUT,
-            {
-                resolver: resolverName,
-            }
-        );
-    }
-
-    if (error.name === 'ValidationError') {
-        throw new UserInputError('Validation failed', {
-            validationErrors: error.errors,
-            resolver: resolverName,
-        });
-    }
-
-    if (error.name === 'MongoError' || error.name === 'MongooseError') {
-        throw new AppError(
-            'Database operation failed',
-            ErrorCodes.DATABASE_ERROR,
-            {
-                resolver: resolverName,
-                originalError: error.message,
-            }
-        );
-    }
-
-    // Default: Internal server error
+  // Handle specific error types
+  if (error.code === 'ECONNREFUSED') {
     throw new AppError(
-        'An unexpected error occurred',
-        ErrorCodes.INTERNAL_SERVER_ERROR,
-        {
-            resolver: resolverName,
-            originalError: process.env.NODE_ENV === 'development' ? error.message : undefined,
-        }
+      'External service unavailable',
+      ErrorCodes.EXTERNAL_SERVICE_ERROR,
+      {
+        service: error.address,
+        resolver: resolverName,
+      }
     );
+  }
+
+  if (error.code === 'ETIMEDOUT') {
+    throw new AppError('Operation timed out', ErrorCodes.TIMEOUT, {
+      resolver: resolverName,
+    });
+  }
+
+  if (error.name === 'ValidationError') {
+    throw new UserInputError('Validation failed', {
+      validationErrors: error.errors,
+      resolver: resolverName,
+    });
+  }
+
+  if (error.name === 'MongoError' || error.name === 'MongooseError') {
+    throw new AppError('Database operation failed', ErrorCodes.DATABASE_ERROR, {
+      resolver: resolverName,
+      originalError: error.message,
+    });
+  }
+
+  // Default: Internal server error
+  throw new AppError('An unexpected error occurred', ErrorCodes.INTERNAL_SERVER_ERROR, {
+    resolver: resolverName,
+    originalError: process.env.NODE_ENV === 'development' ? error.message : undefined,
+  });
 }
 
 /**
@@ -177,27 +170,27 @@ function handleResolverError(error, resolverName, args) {
  * @returns {object} Formatted error
  */
 function formatError(error) {
-    // Don't expose internal errors in production
-    if (process.env.NODE_ENV === 'production') {
-        if (error.extensions?.code === ErrorCodes.INTERNAL_SERVER_ERROR) {
-            return {
-                message: 'An unexpected error occurred',
-                extensions: {
-                    code: ErrorCodes.INTERNAL_SERVER_ERROR,
-                },
-            };
-        }
-    }
-
-    return {
-        message: error.message,
+  // Don't expose internal errors in production
+  if (process.env.NODE_ENV === 'production') {
+    if (error.extensions?.code === ErrorCodes.INTERNAL_SERVER_ERROR) {
+      return {
+        message: 'An unexpected error occurred',
         extensions: {
-            code: error.extensions?.code || 'UNKNOWN_ERROR',
-            ...error.extensions,
+          code: ErrorCodes.INTERNAL_SERVER_ERROR,
         },
-        locations: error.locations,
-        path: error.path,
-    };
+      };
+    }
+  }
+
+  return {
+    message: error.message,
+    extensions: {
+      code: error.extensions?.code || 'UNKNOWN_ERROR',
+      ...error.extensions,
+    },
+    locations: error.locations,
+    path: error.path,
+  };
 }
 
 /**
@@ -207,11 +200,11 @@ function formatError(error) {
  * @param {string} field - Field name
  */
 function validate(condition, message, field = null) {
-    if (!condition) {
-        throw new UserInputError(message, {
-            validationErrors: field ? [{ field, message }] : [],
-        });
-    }
+  if (!condition) {
+    throw new UserInputError(message, {
+      validationErrors: field ? [{ field, message }] : [],
+    });
+  }
 }
 
 /**
@@ -220,12 +213,12 @@ function validate(condition, message, field = null) {
  * @returns {Promise<[Error|null, any]>} [error, result] tuple
  */
 async function asyncTryCatch(fn) {
-    try {
-        const result = await fn();
-        return [null, result];
-    } catch (error) {
-        return [error, null];
-    }
+  try {
+    const result = await fn();
+    return [null, result];
+  } catch (error) {
+    return [error, null];
+  }
 }
 
 /**
@@ -237,58 +230,58 @@ async function asyncTryCatch(fn) {
 const rateLimitCache = new Map();
 
 function checkRateLimit(key, limit = 100, window = 60) {
-    const now = Date.now();
-    const windowMs = window * 1000;
+  const now = Date.now();
+  const windowMs = window * 1000;
 
-    if (!rateLimitCache.has(key)) {
-        rateLimitCache.set(key, [now]);
-        return true;
-    }
-
-    const requests = rateLimitCache.get(key).filter(time => now - time < windowMs);
-
-    if (requests.length >= limit) {
-        throw new AppError(
-            `Rate limit exceeded. Maximum ${limit} requests per ${window} seconds`,
-            ErrorCodes.RATE_LIMIT_EXCEEDED,
-            {
-                limit,
-                window,
-                retryAfter: Math.ceil((requests[0] + windowMs - now) / 1000),
-            }
-        );
-    }
-
-    requests.push(now);
-    rateLimitCache.set(key, requests);
-
+  if (!rateLimitCache.has(key)) {
+    rateLimitCache.set(key, [now]);
     return true;
+  }
+
+  const requests = rateLimitCache.get(key).filter((time) => now - time < windowMs);
+
+  if (requests.length >= limit) {
+    throw new AppError(
+      `Rate limit exceeded. Maximum ${limit} requests per ${window} seconds`,
+      ErrorCodes.RATE_LIMIT_EXCEEDED,
+      {
+        limit,
+        window,
+        retryAfter: Math.ceil((requests[0] + windowMs - now) / 1000),
+      }
+    );
+  }
+
+  requests.push(now);
+  rateLimitCache.set(key, requests);
+
+  return true;
 }
 
 // Cleanup rate limit cache every minute
 setInterval(() => {
-    const now = Date.now();
-    const maxAge = 60 * 1000;
+  const now = Date.now();
+  const maxAge = 60 * 1000;
 
-    for (const [key, requests] of rateLimitCache.entries()) {
-        const validRequests = requests.filter(time => now - time < maxAge);
+  for (const [key, requests] of rateLimitCache.entries()) {
+    const validRequests = requests.filter((time) => now - time < maxAge);
 
-        if (validRequests.length === 0) {
-            rateLimitCache.delete(key);
-        } else {
-            rateLimitCache.set(key, validRequests);
-        }
+    if (validRequests.length === 0) {
+      rateLimitCache.delete(key);
+    } else {
+      rateLimitCache.set(key, validRequests);
     }
+  }
 }, 60000);
 
 module.exports = {
-    ErrorCodes,
-    AppError,
-    withErrorBoundary,
-    wrapResolvers,
-    handleResolverError,
-    formatError,
-    validate,
-    asyncTryCatch,
-    checkRateLimit,
+  ErrorCodes,
+  AppError,
+  withErrorBoundary,
+  wrapResolvers,
+  handleResolverError,
+  formatError,
+  validate,
+  asyncTryCatch,
+  checkRateLimit,
 };

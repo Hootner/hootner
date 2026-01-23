@@ -361,10 +361,7 @@ class GraphQLCacheService {
           }
           return { key: keys[i], value: null };
         } catch (parseError) {
-          console.error(
-            `JSON parse error for key ${keys[i]}:`,
-            parseError.message
-          );
+          console.error(`JSON parse error for key ${keys[i]}:`, parseError.message);
           return { key: keys[i], value: null };
         }
       });

@@ -107,11 +107,7 @@
     "result": 107.28,
     "params": {
       "price": 100,
-      "competitors": [
-        95,
-        105,
-        98
-      ],
+      "competitors": [95, 105, 98],
       "demand": 0.7
     },
     "timestamp": 1768072175230,

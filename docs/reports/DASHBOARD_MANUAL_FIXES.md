@@ -3,6 +3,7 @@
 ## 🔴 CRITICAL FIXES REQUIRED
 
 ### Fix 1: Line 2918 - Incomplete CSS Property
+
 **Location:** Style section, `.actions` class  
 **Issue:** CSS property incomplete, breaks layout
 
@@ -10,7 +11,7 @@
 /* FIND (Line ~2918): */
 .actions {
   display: flex;
-  flex-direction: 
+  flex-direction:
 
 /* REPLACE WITH: */
 .actions {
@@ -23,6 +24,7 @@
 ---
 
 ### Fix 2: Line 2972 - Malformed JavaScript String
+
 **Location:** `updateMetrics()` function  
 **Issue:** HTML tags inside JavaScript string
 
@@ -37,6 +39,7 @@ if (data.revenue) document.getElementById('stat-revenue').textContent = '$' + (d
 ---
 
 ### Fix 3: Add Sanitization Helper
+
 **Location:** After first `<script>` tag in main script section  
 **Issue:** Missing sanitization function
 
@@ -47,126 +50,149 @@ const sanitize = (html) => {
   if (typeof DOMPurify !== 'undefined') {
     return DOMPurify.sanitize(html, {
       ALLOWED_TAGS: ['strong', 'p', 'span', 'div', 'h3', 'button'],
-      ALLOWED_ATTR: ['class', 'style', 'onclick']
-    });
+      ALLOWED_ATTR: ['class', 'style', 'onclick'],
+    })
   }
   // Fallback: escape HTML
-  const div = document.createElement('div');
-  div.textContent = html;
-  return div.innerHTML;
-};
+  const div = document.createElement('div')
+  div.textContent = html
+  return div.innerHTML
+}
 ```
 
 ---
 
 ### Fix 4: Line 3005 - XSS in addActivity()
+
 **Location:** `addActivity()` function  
 **Issue:** Unescaped user input in innerHTML
 
 ```javascript
 /* FIND (Line ~3005): */
-item.innerHTML = `<p><strong>${activity.text}</strong></p><p class="time">Just now</p>`;
+item.innerHTML = `<p><strong>${activity.text}</strong></p><p class="time">Just now</p>`
 
 /* REPLACE WITH: */
-const safeText = sanitize(activity.text);
-item.innerHTML = `<p><strong>${safeText}</strong></p><p class="time">Just now</p>`;
+const safeText = sanitize(activity.text)
+item.innerHTML = `<p><strong>${safeText}</strong></p><p class="time">Just now</p>`
 ```
 
 ---
 
 ### Fix 5: Line 3033 - eval() Security Risk
+
 **Location:** `runCode()` function  
 **Issue:** Arbitrary code execution vulnerability
 
 ```javascript
 /* FIND (Line ~3033): */
-const result = eval(code);
+const result = eval(code)
 
 /* REPLACE WITH: */
 // Security: Use Function constructor instead of eval
 const result = (() => {
   try {
-    return new Function('return ' + code)();
+    return new Function('return ' + code)()
   } catch (e) {
-    throw new Error('Code execution failed: ' + e.message);
+    throw new Error('Code execution failed: ' + e.message)
   }
-})();
+})()
 ```
 
 ---
 
 ### Fix 6: Line 3070 - ReDoS Regex
+
 **Location:** `saveProfile()` function  
 **Issue:** Regex vulnerable to ReDoS attacks
 
 ```javascript
 /* FIND (Line ~3070): */
 if (username && !/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-  alert('Invalid username format');
-  return;
+  alert('Invalid username format')
+  return
 }
 
 /* REPLACE WITH: */
 // Security: Check length first to prevent ReDoS
-if (username && (username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_]+$/.test(username))) {
-  alert('Invalid username format');
-  return;
+if (
+  username &&
+  (username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_]+$/.test(username))
+) {
+  alert('Invalid username format')
+  return
 }
 ```
 
 ---
 
 ### Fix 7: Line 3398 - XSS in showSuggestions()
+
 **Location:** `showSuggestions()` function  
 **Issue:** Unescaped suggestions in HTML
 
 ```javascript
 /* FIND (Line ~3398): */
-container.innerHTML = suggestions.map(s =>
-  `<div onclick="applySuggestion('${s}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${s}</div>`
-).join('');
+container.innerHTML = suggestions
+  .map(
+    (s) =>
+      `<div onclick="applySuggestion('${s}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${s}</div>`
+  )
+  .join('')
 
 /* REPLACE WITH: */
-container.innerHTML = suggestions.map(s => {
-  const safeSuggestion = sanitize(s);
-  return `<div onclick="applySuggestion('${safeSuggestion}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${safeSuggestion}</div>`;
-}).join('');
+container.innerHTML = suggestions
+  .map((s) => {
+    const safeSuggestion = sanitize(s)
+    return `<div onclick="applySuggestion('${safeSuggestion}')" style="padding:8px 12px;cursor:pointer;border-radius:4px;color:#00ffff;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">🔍 ${safeSuggestion}</div>`
+  })
+  .join('')
 ```
 
 ---
 
 ### Fix 8: Line 3410 - XSS in showRecentSearches()
+
 **Location:** `showRecentSearches()` function  
 **Issue:** Unescaped search queries in HTML
 
 ```javascript
 /* FIND (Line ~3410): */
-searchData.recentSearches.slice(0, 5).map(s =>
-  `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
+searchData.recentSearches
+  .slice(0, 5)
+  .map(
+    (s) =>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
     <span onclick="applySuggestion('${s}')" style="flex:1;color:#00ffff;">🕐 ${s}</span>
     <button onclick="removeRecentSearch('${s}');event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">✕</button>
   </div>`
-).join('')
+  )
+  .join('')
 
 /* REPLACE WITH: */
-searchData.recentSearches.slice(0, 5).map(s => {
-  const safeSearch = sanitize(s);
-  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
+searchData.recentSearches
+  .slice(0, 5)
+  .map((s) => {
+    const safeSearch = sanitize(s)
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;cursor:pointer;border-radius:4px;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">
     <span onclick="applySuggestion('${safeSearch}')" style="flex:1;color:#00ffff;">🕐 ${safeSearch}</span>
     <button onclick="removeRecentSearch('${safeSearch}');event.stopPropagation()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">✕</button>
-  </div>`;
-}).join('')
+  </div>`
+  })
+  .join('')
 ```
 
 ---
 
 ### Fix 9: Line 3638 - XSS in renderNotifications()
+
 **Location:** `renderNotifications()` function  
 **Issue:** Unescaped notification text and user
 
 ```javascript
 /* FIND (Line ~3638): */
-html += grouped[group].map(n => `
+html += grouped[group]
+  .map(
+    (n) => `
   <div class="notif-item ${n.unread ? 'unread' : ''}">
     <div style="display:flex;gap:12px;align-items:start;">
       <div style="font-size:24px;flex-shrink:0;">${n.icon}</div>
@@ -181,13 +207,16 @@ html += grouped[group].map(n => `
       </div>
     </div>
   </div>
-`).join('');
+`
+  )
+  .join('')
 
 /* REPLACE WITH: */
-html += grouped[group].map(n => {
-  const safeUser = sanitize(n.user);
-  const safeText = sanitize(n.text);
-  return `
+html += grouped[group]
+  .map((n) => {
+    const safeUser = sanitize(n.user)
+    const safeText = sanitize(n.text)
+    return `
   <div class="notif-item ${n.unread ? 'unread' : ''}">
     <div style="display:flex;gap:12px;align-items:start;">
       <div style="font-size:24px;flex-shrink:0;">${n.icon}</div>
@@ -202,30 +231,32 @@ html += grouped[group].map(n => {
       </div>
     </div>
   </div>
-`;
-}).join('');
+`
+  })
+  .join('')
 ```
 
 ---
 
 ### Fix 10: Line 3838 - Second eval() in Monaco Editor
+
 **Location:** Monaco editor integration, `window.runCode` function  
 **Issue:** Another eval() usage
 
 ```javascript
 /* FIND (Line ~3838): */
-const result = eval(code);
+const result = eval(code)
 
 /* REPLACE WITH: */
 // Security: Use Function constructor instead of eval
 const result = (() => {
   try {
-    const fn = new Function(code);
-    return fn();
+    const fn = new Function(code)
+    return fn()
   } catch (e) {
-    throw new Error('Execution error: ' + e.message);
+    throw new Error('Execution error: ' + e.message)
   }
-})();
+})()
 ```
 
 ---
@@ -251,6 +282,7 @@ After applying all fixes:
    - Test profile validation
 
 4. **Run Security Scan:**
+
    ```bash
    npm audit
    ```
@@ -283,6 +315,7 @@ After applying all fixes:
 ## 🔄 Rollback
 
 If issues occur:
+
 ```bash
 # Restore backup
 cp apps/frontend/html-pages/dashboard.html.backup apps/frontend/html-pages/dashboard.html

@@ -43,18 +43,19 @@ npm run start:frontend
 ### 3. Test Integration
 
 **Open browser console** and run:
+
 ```javascript
 // Test WebSocket connection
-console.log('Session ID:', sessionId);
+console.log('Session ID:', sessionId)
 
 // Fetch videos
-fetchVideosFromBackend();
+fetchVideosFromBackend()
 
 // Track an event
-trackEvent('test_event', { message: 'Integration working!' });
+trackEvent('test_event', { message: 'Integration working!' })
 
 // Test like
-likeVideo();
+likeVideo()
 ```
 
 ---
@@ -66,6 +67,7 @@ likeVideo();
 **File:** `hexarchy/4-interface/ui/pages/video-player.html` (Lines 5365+)
 
 **Features:**
+
 - ✅ WebSocket connection initialization
 - ✅ GraphQL subscriptions for video updates
 - ✅ Real-time comments stream
@@ -73,25 +75,27 @@ likeVideo();
 - ✅ Automatic reconnection (5s timeout)
 
 **Configuration:**
+
 ```javascript
-const API_BASE = 'http://localhost:4000';
-const VIDEO_API_BASE = 'http://localhost:5003';
-const WS_URL = 'ws://localhost:4000/graphql';
+const API_BASE = 'http://localhost:4000'
+const VIDEO_API_BASE = 'http://localhost:5003'
+const WS_URL = 'ws://localhost:4000/graphql'
 ```
 
 **Usage:**
+
 ```javascript
 // Automatically initializes on page load
-initWebSocket();
+initWebSocket()
 
 // Subscribe to specific video updates
-subscribeToVideoUpdates();
+subscribeToVideoUpdates()
 
 // Subscribe to comments
-subscribeToComments();
+subscribeToComments()
 
 // Subscribe to likes
-subscribeLikeUpdates();
+subscribeLikeUpdates()
 ```
 
 ---
@@ -99,6 +103,7 @@ subscribeLikeUpdates();
 ### Option F: Real Data Binding
 
 **Features:**
+
 - ✅ Fetch videos from GraphQL API
 - ✅ Load video details on play
 - ✅ User profile loading
@@ -109,22 +114,23 @@ subscribeLikeUpdates();
 
 ```javascript
 // Fetch all videos
-await fetchVideosFromBackend();
+await fetchVideosFromBackend()
 
 // Load video details
-const details = await fetchVideoDetails(videoId);
+const details = await fetchVideoDetails(videoId)
 
 // Get user profile
-const user = await fetchUserProfile();
+const user = await fetchUserProfile()
 
 // GraphQL fetch helper
-const data = await graphqlFetch(query, variables);
+const data = await graphqlFetch(query, variables)
 ```
 
 **Example - Play Video with Real Data:**
+
 ```javascript
 // Click video in grid
-loadVideo(0);
+loadVideo(0)
 // → Fetches details from GraphQL
 // → Renders comments
 // → Tracks analytics
@@ -136,6 +142,7 @@ loadVideo(0);
 ### Option G: Analytics & Tracking
 
 **Features:**
+
 - ✅ Page view tracking
 - ✅ Playback events (play, pause, seek, complete)
 - ✅ Playback position tracking (every 10 seconds)
@@ -145,14 +152,15 @@ loadVideo(0);
 **API Endpoint:** `POST http://localhost:5003/api/analytics/track`
 
 **Usage:**
+
 ```javascript
 // Track custom event
 await trackEvent('video_like', {
-  video_title: 'My Video'
-});
+  video_title: 'My Video',
+})
 
 // Track playback position
-await trackPlaybackPosition();
+await trackPlaybackPosition()
 
 // Events are auto-tracked:
 // - page_view
@@ -162,6 +170,7 @@ await trackPlaybackPosition();
 ```
 
 **Analytics Payload:**
+
 ```json
 {
   "session_id": "session-1234567890-abc123",
@@ -179,6 +188,7 @@ await trackPlaybackPosition();
 ### Option H: Social Features API Integration
 
 **Features:**
+
 - ✅ Like video mutation
 - ✅ Add comment mutation
 - ✅ Share video (native + copy link)
@@ -189,16 +199,16 @@ await trackPlaybackPosition();
 
 ```javascript
 // Like video
-await likeVideo(videoId);
+await likeVideo(videoId)
 
 // Add comment
-await addComment('Great video!');
+await addComment('Great video!')
 
 // Share video
-await shareVideo('native'); // or 'copy'
+await shareVideo('native') // or 'copy'
 
 // Join watch party
-await joinWatchParty();
+await joinWatchParty()
 ```
 
 **GraphQL Mutations:**
@@ -244,6 +254,7 @@ mutation JoinWatchParty($videoId: ID!) {
 ### GraphQL Queries
 
 **Get Videos:**
+
 ```graphql
 query GetVideos($limit: Int, $offset: Int) {
   videos(limit: $limit, offset: $offset) {
@@ -266,6 +277,7 @@ query GetVideos($limit: Int, $offset: Int) {
 ```
 
 **Get Video Details:**
+
 ```graphql
 query GetVideoDetails($id: ID!) {
   video(id: $id) {
@@ -298,6 +310,7 @@ query GetVideoDetails($id: ID!) {
 ```
 
 **Get Current User:**
+
 ```graphql
 query GetCurrentUser {
   currentUser {
@@ -325,6 +338,7 @@ query GetCurrentUser {
 ### WebSocket Subscriptions
 
 **Video Updates:**
+
 ```graphql
 subscription OnVideoUpdated {
   videoUpdated {
@@ -337,6 +351,7 @@ subscription OnVideoUpdated {
 ```
 
 **New Comments:**
+
 ```graphql
 subscription OnNewComment($videoId: ID!) {
   commentAdded(videoId: $videoId) {
@@ -350,6 +365,7 @@ subscription OnNewComment($videoId: ID!) {
 ```
 
 **Likes Updates:**
+
 ```graphql
 subscription OnLikesUpdated($videoId: ID!) {
   likesUpdated(videoId: $videoId) {
@@ -363,6 +379,7 @@ subscription OnLikesUpdated($videoId: ID!) {
 ### Analytics API
 
 **Track Event:**
+
 ```
 POST http://localhost:5003/api/analytics/track
 Content-Type: application/json
@@ -379,6 +396,7 @@ Content-Type: application/json
 ```
 
 **Playback Position:**
+
 ```
 POST http://localhost:5003/api/analytics/playback
 Content-Type: application/json
@@ -397,11 +415,13 @@ Content-Type: application/json
 ## Security Features
 
 ### Rate Limiting
+
 - **API:** 100 requests / 15 minutes
 - **Auth:** 5 requests / 15 minutes
 - **GraphQL:** 60 requests / minute
 
 ### Protection
+
 - ✅ XSS sanitization
 - ✅ SQL/NoSQL injection prevention
 - ✅ Security headers (Helmet.js)
@@ -409,15 +429,16 @@ Content-Type: application/json
 - ✅ Request size limiting (10MB max)
 
 ### Authentication
+
 ```javascript
 // Token stored in localStorage
-const token = localStorage.getItem('authToken');
+const token = localStorage.getItem('authToken')
 
 // Sent with each GraphQL request
 const headers = {
-  'Authorization': `Bearer ${token}`,
-  'Content-Type': 'application/json'
-};
+  Authorization: `Bearer ${token}`,
+  'Content-Type': 'application/json',
+}
 ```
 
 ---
@@ -426,21 +447,21 @@ const headers = {
 
 **Expanded Cinema Player:**
 
-| Key | Action |
-|-----|--------|
-| **T** | Toggle Theater Mode |
-| **C** | Toggle Cinema Mode |
-| **S** | Toggle Stats Overlay |
-| **?** | Show Shortcuts |
-| **L** | Toggle Playlist Manager |
-| **H** | Toggle Watch History |
-| **/** | Toggle Search Bar |
-| **Ctrl+I** | Toggle Mini-Player |
-| **Shift+C** | Capture Screenshot |
-| **Q** | Quality Selector |
-| **P** | Toggle Pause/Play |
-| **Arrow Keys** | Seek ±10s |
-| **1-4** | Playback Speed |
+| Key            | Action                  |
+| -------------- | ----------------------- |
+| **T**          | Toggle Theater Mode     |
+| **C**          | Toggle Cinema Mode      |
+| **S**          | Toggle Stats Overlay    |
+| **?**          | Show Shortcuts          |
+| **L**          | Toggle Playlist Manager |
+| **H**          | Toggle Watch History    |
+| **/**          | Toggle Search Bar       |
+| **Ctrl+I**     | Toggle Mini-Player      |
+| **Shift+C**    | Capture Screenshot      |
+| **Q**          | Quality Selector        |
+| **P**          | Toggle Pause/Play       |
+| **Arrow Keys** | Seek ±10s               |
+| **1-4**        | Playback Speed          |
 
 ---
 
@@ -453,6 +474,7 @@ const headers = {
 ```
 
 **Solution:**
+
 1. Verify backend is running: `npm run start:backend`
 2. Check GraphQL API: `http://localhost:4000/health`
 3. Check firewall/security settings
@@ -464,6 +486,7 @@ Check browser console for GraphQL errors
 ```
 
 **Solution:**
+
 1. Verify GraphQL running on port 4000
 2. Check database: `mongosh mongodb://localhost:27017/hootner`
 3. Verify MongoDB running: `docker ps`
@@ -475,6 +498,7 @@ Checking Video API at http://localhost:5003
 ```
 
 **Solution:**
+
 1. Verify Video API running: `http://localhost:5003/health`
 2. Check session ID: `console.log(sessionId)`
 3. Check network tab for POST errors
@@ -486,6 +510,7 @@ WebSocket subscriptions not working
 ```
 
 **Solution:**
+
 1. Check WebSocket connection: `console.log(wsConnection.readyState)`
 2. Verify `subscribeToComments()` called
 3. Check backend logs
@@ -495,16 +520,19 @@ WebSocket subscriptions not working
 ## Performance Optimization
 
 ### Caching Strategy
+
 - **Redis:** 24-hour video metadata cache
 - **LocalStorage:** User preferences, session ID, auth token
 - **Browser Cache:** Static assets, thumbnails
 
 ### Lazy Loading
+
 - Videos loaded on demand (Grid displays 12)
 - Comments pagination (10 per load)
 - Recommendations load after video finish
 
 ### Network Optimization
+
 - **Compression:** gzip for all responses
 - **CDN:** CloudFront for video streaming
 - **Playback Position:** Tracked every 10s (not every frame)
@@ -564,11 +592,13 @@ WebSocket subscriptions not working
 ## Support
 
 **Documentation:**
+
 - [Backend Quick Ref](BACKEND_QUICK_REF.md)
 - [Backend Status](BACKEND_STATUS.md)
 - [Architecture Diagram](ARCHITECTURE_DIAGRAM.md)
 
 **Testing:**
+
 ```bash
 npm test                    # Unit tests
 npm run test:e2e           # End-to-end tests
@@ -576,6 +606,7 @@ npm run security:audit     # Security scan
 ```
 
 **Commands:**
+
 ```bash
 npm run start:all          # All services
 npm run start:backend      # Backend only
@@ -588,7 +619,7 @@ npm run lint -- --fix      # Code quality
 ## 🦉 The Owl Never Sleeps
 
 > **HOOTNER** - Enterprise Video Platform
-> 
+>
 > ✅ Backend: Production-ready (Amazon Q)
 > ✅ Frontend: Fully integrated (GitHub Copilot)
 > ✅ Real-time: WebSocket + GraphQL

@@ -3,19 +3,19 @@
  * Modern video player with custom controls, TypeScript, and Tailwind CSS
  */
 
-import { useEffect } from "react";
-import { useVideoPlayer } from "../hooks/useVideoPlayer";
-import type { VideoPlayerProps } from "../types/videoPlayer";
-import { VideoControls } from "./VideoControls";
-import { VideoProgressBar } from "./VideoProgressBar";
+import { useEffect } from 'react'
+import { useVideoPlayer } from '../hooks/useVideoPlayer'
+import type { VideoPlayerProps } from '../types/videoPlayer'
+import { VideoControls } from './VideoControls'
+import { VideoProgressBar } from './VideoProgressBar'
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   video,
   autoPlay = false,
   loop = false,
   muted = false,
-  preload = "metadata",
-  className = "",
+  preload = 'metadata',
+  className = '',
   onPlay,
   onPause,
   onEnded,
@@ -34,34 +34,34 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     toggleMute,
     toggleFullscreen,
     setPlaybackRate,
-  } = useVideoPlayer(video, autoPlay);
+  } = useVideoPlayer(video, autoPlay)
 
   // Callbacks
   useEffect(() => {
     if (state.isPlaying) {
-      onPlay?.();
+      onPlay?.()
     } else {
-      onPause?.();
+      onPause?.()
     }
-  }, [state.isPlaying, onPlay, onPause]);
+  }, [state.isPlaying, onPlay, onPause])
 
   useEffect(() => {
-    onTimeUpdate?.(state.currentTime);
-  }, [state.currentTime, onTimeUpdate]);
+    onTimeUpdate?.(state.currentTime)
+  }, [state.currentTime, onTimeUpdate])
 
   useEffect(() => {
-    onVolumeChange?.(state.volume);
-  }, [state.volume, onVolumeChange]);
+    onVolumeChange?.(state.volume)
+  }, [state.volume, onVolumeChange])
 
   useEffect(() => {
-    onFullscreenChange?.(state.isFullscreen);
-  }, [state.isFullscreen, onFullscreenChange]);
+    onFullscreenChange?.(state.isFullscreen)
+  }, [state.isFullscreen, onFullscreenChange])
 
   useEffect(() => {
     if (state.error) {
-      onError?.(state.error);
+      onError?.(state.error)
     }
-  }, [state.error, onError]);
+  }, [state.error, onError])
 
   return (
     <div
@@ -116,7 +116,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         {!state.isPlaying && !state.loading && !state.error && (
           <button
             onClick={togglePlay}
-            aria-label={state.isPlaying ? "Pause video" : "Play video"}
+            aria-label={state.isPlaying ? 'Pause video' : 'Play video'}
             className="pointer-events-auto w-20 h-20 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform"
           >
             <svg
@@ -133,13 +133,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Video Info Overlay */}
       <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <h3 className="text-white text-lg font-semibold truncate">
-          {video.title}
-        </h3>
+        <h3 className="text-white text-lg font-semibold truncate">{video.title}</h3>
         {video.description && (
-          <p className="text-gray-300 text-sm mt-1 truncate">
-            {video.description}
-          </p>
+          <p className="text-gray-300 text-sm mt-1 truncate">{video.description}</p>
         )}
       </div>
 
@@ -174,5 +170,5 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}

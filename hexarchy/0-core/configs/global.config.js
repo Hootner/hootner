@@ -9,7 +9,7 @@ export const globalConfig = {
     name: 'Hexarchy Educational Platform',
     version: '1.0.0',
     environment: process.env.NODE_ENV || 'development',
-    deploymentId: process.env.DEPLOYMENT_ID || 'local'
+    deploymentId: process.env.DEPLOYMENT_ID || 'local',
   },
 
   // Domain registry
@@ -21,7 +21,7 @@ export const globalConfig = {
     economy: { id: 5, port: 5005, health: '/health' },
     governance: { id: 6, port: 5006, health: '/health' },
     data: { id: 7, port: 5007, health: '/health' },
-    operations: { id: 8, port: 5008, health: '/health' }
+    operations: { id: 8, port: 5008, health: '/health' },
   },
 
   // Observability
@@ -29,25 +29,25 @@ export const globalConfig = {
     tracing: {
       enabled: true,
       serviceName: 'hexarchy',
-      endpoint: process.env.JAEGER_ENDPOINT || 'http://localhost:14268/api/traces'
+      endpoint: process.env.JAEGER_ENDPOINT || 'http://localhost:14268/api/traces',
     },
     metrics: {
       enabled: true,
       port: 9090,
-      interval: 15000
+      interval: 15000,
     },
     logging: {
       level: process.env.LOG_LEVEL || 'info',
       format: 'json',
-      outputs: ['console', 'file']
-    }
+      outputs: ['console', 'file'],
+    },
   },
 
   // Circuit breaker defaults
   circuitBreaker: {
     threshold: 5,
     timeout: 60000,
-    resetTimeout: 30000
+    resetTimeout: 30000,
   },
 
   // Retry policies
@@ -55,13 +55,13 @@ export const globalConfig = {
     maxAttempts: 3,
     backoff: 'exponential',
     initialDelay: 1000,
-    maxDelay: 10000
+    maxDelay: 10000,
   },
 
   // Rate limiting
   rateLimit: {
     windowMs: 60000,
-    maxRequests: 100
+    maxRequests: 100,
   },
 
   // Feature flags
@@ -69,8 +69,8 @@ export const globalConfig = {
     aiTutoring: true,
     blockchain: true,
     advancedAnalytics: true,
-    collaborativeWhiteboard: false
-  }
-};
+    collaborativeWhiteboard: false,
+  },
+}
 
-export default globalConfig;
+export default globalConfig

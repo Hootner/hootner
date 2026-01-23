@@ -47,16 +47,16 @@ region = us-east-1
 
 When you make a request (via chat or commands), the system routes to the appropriate agent:
 
-| Request Type | Primary Agent | Use Case |
-|---|---|---|
-| AWS-specific | Amazon Q | S3, Lambda, ECS, etc. |
-| Codebase context | Amazon Q | Search files, understand structure |
-| Inline code | Copilot | Auto-complete, in-editor suggestions |
-| Chat refactor | Copilot | Multi-line refactoring, chat |
-| Security audit | Amazon Q | Vulnerability scanning |
-| General coding | Copilot | Standard code generation |
-| Documentation | Copilot | Comments, docstrings |
-| Compliance | Amazon Q | Enterprise policies |
+| Request Type     | Primary Agent | Use Case                             |
+| ---------------- | ------------- | ------------------------------------ |
+| AWS-specific     | Amazon Q      | S3, Lambda, ECS, etc.                |
+| Codebase context | Amazon Q      | Search files, understand structure   |
+| Inline code      | Copilot       | Auto-complete, in-editor suggestions |
+| Chat refactor    | Copilot       | Multi-line refactoring, chat         |
+| Security audit   | Amazon Q      | Vulnerability scanning               |
+| General coding   | Copilot       | Standard code generation             |
+| Documentation    | Copilot       | Comments, docstrings                 |
+| Compliance       | Amazon Q      | Enterprise policies                  |
 
 If the primary agent fails or isn't available, the system falls back to the other agent.
 

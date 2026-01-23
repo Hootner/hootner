@@ -3,6 +3,7 @@
 ## 🚀 Server Architecture
 
 ### Port Allocation
+
 ```
 Port 3000  → HTML Pages Server (serve-html.js)
 Port 3005  → React Dashboard (Vite dev server)
@@ -14,16 +15,19 @@ Port 6379  → Redis Cache
 ## 📍 Service Endpoints
 
 ### 🔐 Authentication & Entry Points
+
 - **Login/Register**: `http://localhost:3000/` (Root entry point)
 - **React Dashboard**: `http://localhost:3005/` (Post-login landing)
 
 ### 🛒 E-commerce & Marketplace
+
 - **Marketplace Feed**: `http://localhost:3000/marketplace`
 - **Product API**: `http://localhost:4000/api/marketplace/products`
 - **Checkout API**: `http://localhost:4000/api/marketplace/checkout`
 - **Contact Seller**: `http://localhost:4000/api/marketplace/contact-seller`
 
 ### 💬 Messaging & Communication
+
 - **Messages App**: `http://localhost:3000/messages`
 - **Conversations API**: `http://localhost:4000/api/messages/conversations`
 - **Send Message API**: `http://localhost:4000/api/messages/send`
@@ -31,16 +35,19 @@ Port 6379  → Redis Cache
 - **Contact API**: `http://localhost:4000/api/contact`
 
 ### 🤝 Collaboration & Management
+
 - **Real-time Collaboration**: `http://localhost:3000/collaboration`
 - **AI Agent Management**: `http://localhost:3000/agent-management`
 - **DevOps Monitoring**: `http://localhost:3000/devops-monitoring`
 
 ### 🎬 Media & Content
+
 - **Video Player**: `http://localhost:3000/video-player`
 - **Code Editor**: `http://localhost:3000/code-editor`
 - **Social Feed**: `http://localhost:3000/feed`
 
 ### 📊 Analytics & Data
+
 - **GraphQL Playground**: `http://localhost:4000/graphql`
 - **Health Check**: `http://localhost:4000/health`
 - **Metrics**: `http://localhost:4000/metrics`
@@ -48,6 +55,7 @@ Port 6379  → Redis Cache
 ## 🔄 Data Flow Architecture
 
 ### Authentication Flow
+
 ```
 1. User → localhost:3000/ (Login)
 2. Auth Success → localStorage tokens
@@ -56,6 +64,7 @@ Port 6379  → Redis Cache
 ```
 
 ### Marketplace Flow
+
 ```
 1. Browse → localhost:3000/marketplace
 2. Products → API: localhost:4000/api/marketplace/products
@@ -64,6 +73,7 @@ Port 6379  → Redis Cache
 ```
 
 ### Messaging Flow
+
 ```
 1. Messages → localhost:3000/messages
 2. Conversations → API: localhost:4000/api/messages/conversations
@@ -74,6 +84,7 @@ Port 6379  → Redis Cache
 ## 🗄️ Database Schema
 
 ### MongoDB Collections
+
 ```
 - products (marketplace items)
 - orders (purchase transactions)
@@ -84,6 +95,7 @@ Port 6379  → Redis Cache
 ```
 
 ### Key Models
+
 - **Product**: name, price, category, thumbnail, preview, verified
 - **Order**: userId, items[], total, status, stripeSessionId
 - **Message**: conversationId, senderId, text, type, readBy[]
@@ -92,6 +104,7 @@ Port 6379  → Redis Cache
 ## 🛠️ Development Commands
 
 ### Start All Services
+
 ```bash
 # Terminal 1: MongoDB + Redis
 docker-compose up -d
@@ -110,6 +123,7 @@ cd api/graphql && node seed.js
 ```
 
 ### Individual Services
+
 ```bash
 # HTML Server only
 node serve-html.js
@@ -127,6 +141,7 @@ cd api/graphql && node seed.js
 ## 📁 File Structure Map
 
 ### Frontend Pages
+
 ```
 hexarchy/4-interface/ui/pages/
 ├── login.html           → Root entry point
@@ -142,6 +157,7 @@ hexarchy/4-interface/ui/pages/
 ```
 
 ### Backend API
+
 ```
 api/graphql/
 ├── server.js           → Main API server
@@ -160,6 +176,7 @@ api/graphql/
 ```
 
 ### Shared Components
+
 ```
 hexarchy/4-interface/ui/components/
 ├── header-enhanced.js   → Navigation header
@@ -170,12 +187,14 @@ hexarchy/4-interface/ui/components/
 ## 🔐 Security Implementation
 
 ### Authentication System
+
 - **Entry Point**: `localhost:3000/` (login page)
 - **Token Storage**: localStorage + sessionStorage
 - **Protected Routes**: All pages except login
 - **Redirect Flow**: auth-guard.js → sessionStorage → login → back
 
 ### API Security
+
 - **CORS**: Configured for localhost origins
 - **Rate Limiting**: 100 requests per 15 minutes
 - **Helmet.js**: Security headers
@@ -184,6 +203,7 @@ hexarchy/4-interface/ui/components/
 ## 🚀 Deployment Readiness
 
 ### Environment Variables
+
 ```bash
 # API Server
 PORT=4000
@@ -197,6 +217,7 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ```
 
 ### Production Considerations
+
 - [ ] JWT token implementation
 - [ ] Token expiration (24h TTL)
 - [ ] Password hashing (bcrypt)
@@ -211,6 +232,7 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ## 📊 Feature Status
 
 ### ✅ Implemented
+
 - Authentication system with route protection
 - Marketplace with infinite scroll feed
 - Product thumbnails and preview modals
@@ -222,12 +244,14 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 - Stripe checkout simulation
 
 ### 🚧 In Progress
+
 - Socket.IO real-time messaging
 - User registration backend
 - Order processing workflow
 - Email notifications
 
 ### 📋 Planned
+
 - JWT token validation
 - User profile management
 - Admin dashboard
@@ -238,12 +262,14 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ## 🔗 Integration Points
 
 ### External Services
+
 - **Stripe**: Payment processing (test mode)
 - **Socket.IO**: Real-time messaging (ready)
 - **MongoDB**: Primary database
 - **Redis**: Caching and sessions
 
 ### Internal APIs
+
 - **GraphQL**: `localhost:4000/graphql`
 - **REST Marketplace**: `localhost:4000/api/marketplace/*`
 - **REST Messages**: `localhost:4000/api/messages/*`
@@ -252,6 +278,7 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ## 📝 Development Notes
 
 ### Current Limitations
+
 - No user registration backend (frontend only)
 - Mock Stripe integration (no real payments)
 - No email sending (console logs only)
@@ -259,6 +286,7 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 - No real-time Socket.IO connection
 
 ### Next Steps for Production
+
 1. Implement JWT authentication with backend
 2. Add user registration API
 3. Connect real Stripe webhooks
@@ -277,9 +305,10 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ## 🧭 Header Navigation Mapping
 
 ### Current Header Links (header-enhanced.js)
+
 ```
 🤝 Collaborate    → /collaboration     → localhost:3000/collaboration
-🤖 AI Agents      → /agent-management  → localhost:3000/agent-management  
+🤖 AI Agents      → /agent-management  → localhost:3000/agent-management
 ⚙️ DevOps         → /devops-monitoring → localhost:3000/devops-monitoring
 📊 Analytics      → /analytics         → NOT IMPLEMENTED
 🛒 Marketplace    → /marketplace       → localhost:3000/marketplace
@@ -289,15 +318,17 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ```
 
 ### Missing Pages That Need Creation
+
 - **Analytics Page**: `/analytics` → Should show charts, metrics, user data
 - **Profile Page**: User menu links to profile (not in main nav)
 - **Settings Page**: User menu links to settings (not in main nav)
 
 ### Recommended Header Link Updates
+
 ```javascript
 // Current header links should be:
 { text: '🤝 Collaborate', href: '/collaboration' },      // ✅ EXISTS
-{ text: '🤖 AI Agents', href: '/agent-management' },     // ✅ EXISTS  
+{ text: '🤖 AI Agents', href: '/agent-management' },     // ✅ EXISTS
 { text: '⚙️ DevOps', href: '/devops-monitoring' },       // ✅ EXISTS
 { text: '📊 Analytics', href: '/analytics' },            // ❌ NEEDS CREATION
 { text: '🛒 Marketplace', href: '/marketplace' },        // ✅ EXISTS
@@ -308,9 +339,10 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ```
 
 ### User Menu Links (Dropdown)
+
 ```javascript
 // User menu should include:
 { text: '👤 Profile', href: '/profile' },               // ❌ NEEDS CREATION
-{ text: '⚙️ Settings', href: '/settings' },             // ❌ NEEDS CREATION  
+{ text: '⚙️ Settings', href: '/settings' },             // ❌ NEEDS CREATION
 { text: '🚪 Logout', action: 'logout' }                 // ✅ EXISTS
 ```

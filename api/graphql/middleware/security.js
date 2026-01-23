@@ -75,7 +75,7 @@ const securityHeaders = helmet({
 const sanitizeInput = (req, res, next) => {
   if (req.body) {
     const sanitizedBody = {};
-    Object.keys(req.body).forEach(key => {
+    Object.keys(req.body).forEach((key) => {
       if (typeof req.body[key] === 'string') {
         sanitizedBody[key] = xss(req.body[key]);
       } else {
@@ -97,7 +97,7 @@ const preventInjection = (req, res, next) => {
 
   const checkValue = (value) => {
     if (typeof value === 'string') {
-      return dangerousPatterns.some(pattern => pattern.test(value));
+      return dangerousPatterns.some((pattern) => pattern.test(value));
     }
     if (typeof value === 'object' && value !== null) {
       return Object.values(value).some(checkValue);
@@ -105,7 +105,8 @@ const preventInjection = (req, res, next) => {
     return false;
   };
 
-  const hasInjection = checkValue(req.body) || checkValue(req.query) || checkValue(req.params);
+  const hasInjection =
+    checkValue(req.body) || checkValue(req.query) || checkValue(req.params);
   if (hasInjection) {
     console.warn(`Injection attempt detected: ${req.ip} - ${req.path}`);
     return res.status(400).json({ error: 'Invalid input detected' });
@@ -117,7 +118,10 @@ const preventInjection = (req, res, next) => {
 // Request size limiter
 const requestSizeLimiter = (req, res, next) => {
   const maxSize = 10 * 1024 * 1024; // 10MB
-  if (req.headers['content-length'] && parseInt(req.headers['content-length']) > maxSize) {
+  if (
+    req.headers['content-length'] &&
+    parseInt(req.headers['content-length']) > maxSize
+  ) {
     return res.status(413).json({ error: 'Request entity too large' });
   }
   next();

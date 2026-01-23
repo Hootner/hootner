@@ -16,7 +16,7 @@ class CommitValidator {
     for (const check of checks) {
       const result = check();
       if (!result.valid) {
-        console.log(chalk.red(`❌ ` + result.error + ``));
+        console.log(chalk.red('❌ ' + result.error + ''));
         process.exit(1);
       }
     }
@@ -52,9 +52,9 @@ class CommitValidator {
         continue;
       }
       try {
-        const content = execSync(`git show :` + file + ``, { encoding: 'utf8' });
+        const content = execSync('git show :' + file + '', { encoding: 'utf8' });
         if (secrets.test(content)) {
-          return { valid: false, error: `Potential secret in ` + file + `` };
+          return { valid: false, error: 'Potential secret in ' + file + '' };
         }
       } catch (error) {
         // Ignore file read errors
@@ -67,9 +67,9 @@ class CommitValidator {
     const jsFiles = files.filter(f => f.endsWith('.js') || f.endsWith('.ts'));
     for (const file of jsFiles) {
       try {
-        execSync(`npx eslint ` + file + ``, { stdio: 'pipe' });
+        execSync('npx eslint ' + file + '', { stdio: 'pipe' });
       } catch {
-        return { valid: false, error: `Syntax errors in ` + file + `` };
+        return { valid: false, error: 'Syntax errors in ' + file + '' };
       }
     }
     return { valid: true };

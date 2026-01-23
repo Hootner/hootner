@@ -43,7 +43,7 @@
     │  ✅ Screenshot Capture            ✅ Mini-Player (PiP)         │
     │                                                                   │
     └─────────────────────────────────────────────────────────────────┘
-    
+
                         17 Expansion Features + 25 Enhanced Features
                                 = 42 Total UI Features
 

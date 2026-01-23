@@ -25,7 +25,7 @@ try {
   if (hasDocs) suggestion += 'docs: ';
   
   if (suggestion) {
-    console.log(`🤖 Suggested commit prefix: ` + suggestion + ``);
+    console.log('🤖 Suggested commit prefix: ' + suggestion + '');
   }
 
   console.log('✅ Commit message enhancement complete');

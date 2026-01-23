@@ -26,17 +26,20 @@ npm run start:backend
 ## 📋 Full Startup Sequence
 
 ### Step 1: Start Infrastructure (MongoDB + Redis)
+
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
 **Expected Output:**
+
 ```
 hootner-mongodb-dev is up to date
 hootner-redis-dev is up to date
 ```
 
 **Verify:**
+
 ```bash
 docker ps
 # Should show:
@@ -47,11 +50,13 @@ docker ps
 ---
 
 ### Step 2: Start Backend Services
+
 ```bash
 npm run start:backend
 ```
 
 **Services Starting:**
+
 - ✅ GraphQL API Server (:4000)
 - ✅ Real-time Subscriptions (WebSocket)
 - ✅ Video Generation Service (:5003)
@@ -59,6 +64,7 @@ npm run start:backend
 - ✅ Agent Hub
 
 **Expected Logs:**
+
 ```
 🦉 HOOTNER Backend Services Orchestrator
 📊 Checking infrastructure services...
@@ -73,6 +79,7 @@ npm run start:backend
 ---
 
 ### Step 3: Frontend Already Running
+
 ```
 Video Player: http://localhost:3005/video-player
 Dashboard:    http://localhost:3005/dashboard
@@ -84,6 +91,7 @@ Live Activity: http://localhost:3005/live-activity
 ## 🔌 Connection Points
 
 ### Live Activity Page ↔ Backend
+
 Once backend is running, **live-activity.html** will:
 
 1. Detect GraphQL API at `http://localhost:4000/graphql`
@@ -92,6 +100,7 @@ Once backend is running, **live-activity.html** will:
 4. Show: deployments, security scans, AI agent actions, user activity
 
 ### What You'll See
+
 - 🎥 Real video uploads from users
 - 🚀 Actual deployment events
 - 🤖 AI Agent "SecurityBot" running
@@ -103,19 +112,20 @@ Once backend is running, **live-activity.html** will:
 
 ## 🛠️ Available Commands
 
-| Command | Purpose |
-|---------|---------|
-| `npm run start:backend` | Start all backend services |
-| `docker-compose -f docker-compose.dev.yml up` | Start MongoDB + Redis |
-| `npm run backend:validate` | Verify all services healthy |
-| `npm run db:optimize` | Optimize databases |
-| `npm run security:audit` | Run security checks |
+| Command                                       | Purpose                     |
+| --------------------------------------------- | --------------------------- |
+| `npm run start:backend`                       | Start all backend services  |
+| `docker-compose -f docker-compose.dev.yml up` | Start MongoDB + Redis       |
+| `npm run backend:validate`                    | Verify all services healthy |
+| `npm run db:optimize`                         | Optimize databases          |
+| `npm run security:audit`                      | Run security checks         |
 
 ---
 
 ## ✨ What This Accomplishes
 
 ### Before (Current State)
+
 ```
 Frontend ✅ → Demo Data (simulated)
 Dashboard ✅ → Mock stats
@@ -123,6 +133,7 @@ Live Activity ✅ → Fake events
 ```
 
 ### After (Once Backend Running)
+
 ```
 Frontend ✅ → Video Library with REAL videos
 Dashboard ✅ → REAL analytics from database
@@ -150,6 +161,7 @@ After running startup commands, verify:
 ## 🚨 Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 # Kill process on port 4000
 lsof -i :4000 | grep LISTEN | awk '{print $2}' | xargs kill -9
@@ -159,11 +171,13 @@ lsof -i :6379 | grep LISTEN | awk '{print $2}' | xargs kill -9
 ```
 
 ### Docker Not Running
+
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
 ### Services Won't Start
+
 ```bash
 # Check npm dependencies
 npm install
@@ -181,22 +195,23 @@ npm run start:backend
 
 Once everything is running, you'll have:
 
-| Component | Status | Location |
-|-----------|--------|----------|
-| Video Player | ✅ Live | :3005/video-player |
-| Dashboard | ✅ Live | :3005/dashboard |
+| Component     | Status          | Location            |
+| ------------- | --------------- | ------------------- |
+| Video Player  | ✅ Live         | :3005/video-player  |
+| Dashboard     | ✅ Live         | :3005/dashboard     |
 | Live Activity | ✅ **Now REAL** | :3005/live-activity |
-| GraphQL API | ✅ Live | :4000/graphql |
-| Subscriptions | ✅ Live | ws://localhost:4000 |
-| Video Gen API | ✅ Live | :5003 |
-| MongoDB | ✅ Live | :27017 |
-| Redis | ✅ Live | :6379 |
+| GraphQL API   | ✅ Live         | :4000/graphql       |
+| Subscriptions | ✅ Live         | ws://localhost:4000 |
+| Video Gen API | ✅ Live         | :5003               |
+| MongoDB       | ✅ Live         | :27017              |
+| Redis         | ✅ Live         | :6379               |
 
 ---
 
 ## 🎯 Final Result
 
 **A complete enterprise video streaming platform with:**
+
 - ✅ Real-time video player with AI features
 - ✅ Live activity monitoring dashboard
 - ✅ Real-time event streaming
@@ -207,4 +222,3 @@ Once everything is running, you'll have:
 - ✅ Production-ready architecture
 
 **All running on your local machine! 🚀**
-

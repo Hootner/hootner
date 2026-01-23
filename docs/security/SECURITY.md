@@ -4,9 +4,9 @@
 
 We release patches for security vulnerabilities in the following versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x     | ✅ Active support  |
+| Version | Supported              |
+| ------- | ---------------------- |
+| 1.x     | ✅ Active support      |
 | < 1.0   | ❌ No longer supported |
 
 ## 🔒 Reporting a Vulnerability
@@ -18,6 +18,7 @@ We release patches for security vulnerabilities in the following versions:
 Email security reports to: **security@hootner.com**
 
 Include the following information:
+
 - Type of vulnerability
 - Full paths of source file(s) related to the vulnerability
 - Location of the affected source code (tag/branch/commit or direct URL)
@@ -89,6 +90,7 @@ Before submitting a PR, ensure:
 Never commit `.env` files. Use `.env.example` as a template.
 
 Required secrets:
+
 - `JWT_SECRET` - Minimum 32 characters
 - `MONGODB_URI` - Connection string with authentication
 - `REDIS_URL` - Secure Redis connection
@@ -97,6 +99,7 @@ Required secrets:
 ### Rate Limiting
 
 Default limits:
+
 - API: 100 requests/15 minutes per IP
 - Authentication: 5 attempts/15 minutes per IP
 - File uploads: 10 MB max size

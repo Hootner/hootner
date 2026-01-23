@@ -55,7 +55,7 @@ export class ActivityStreamGenerator {
         message: 'System online and healthy',
         description: 'All services operational',
         category: 'system',
-        service: 'monitoring'
+        service: 'monitoring',
       },
       {
         type: 'VIDEO_UPLOADED',
@@ -63,15 +63,15 @@ export class ActivityStreamGenerator {
         description: 'File: "Summer_Vacation.mp4" (2.4 GB)',
         category: 'content',
         service: 'video-service',
-        userId: 'user_123'
+        userId: 'user_123',
       },
       {
         type: 'DEPLOYMENT_SUCCESS',
         message: 'Deployment successful: v2.1.4',
         description: 'Frontend + Backend deployed to production',
         category: 'deployment',
-        service: 'deployment-pipeline'
-      }
+        service: 'deployment-pipeline',
+      },
     ];
 
     for (const event of events) {
@@ -88,77 +88,89 @@ export class ActivityStreamGenerator {
       {
         type: 'VIDEO_UPLOADED',
         message: () => `User uploaded video: "${this.randomVideoTitle()}"`,
-        description: () => `Size: ${this.randomSize()} | Duration: ${this.randomDuration()}m`,
+        description: () =>
+          `Size: ${this.randomSize()} | Duration: ${this.randomDuration()}m`,
         category: 'content',
-        service: 'video-service'
+        service: 'video-service',
       },
       {
         type: 'DEPLOYMENT_SUCCESS',
         message: () => `Deployment successful: v${this.randomVersion()}`,
-        description: () => `Services: API, Frontend, Workers | Duration: ${this.random(2, 10)}s`,
+        description: () =>
+          `Services: API, Frontend, Workers | Duration: ${this.random(2, 10)}s`,
         category: 'deployment',
-        service: 'deployment-pipeline'
+        service: 'deployment-pipeline',
       },
       {
         type: 'AI_AGENT_ACTIVATED',
         message: () => `AI Agent "${this.randomAgent()}" activated`,
         description: () => `Processing: ${this.randomTask()}`,
         category: 'ai',
-        service: 'agent-hub'
+        service: 'agent-hub',
       },
       {
         type: 'PAYMENT_PROCESSED',
         message: () => `Payment processed: $${this.random(10, 999)}.99`,
         description: () => 'Subscription renewal | Status: completed',
         category: 'payment',
-        service: 'payment-service'
+        service: 'payment-service',
       },
       {
         type: 'SECURITY_SCAN',
         message: () => `Security scan completed: ${this.random(0, 5)} issues found`,
-        description: () => `Scan Type: ${this.randomScanType()} | Severity: ${this.randomSeverity()}`,
+        description: () =>
+          `Scan Type: ${this.randomScanType()} | Severity: ${this.randomSeverity()}`,
         category: 'security',
-        service: 'security-service'
+        service: 'security-service',
       },
       {
         type: 'AUTO_SCALING',
         message: () => `Auto-scaling triggered: ${this.randomScalingService()}`,
-        description: () => `Action: scale ${this.randomDirection()} | Reason: ${this.randomReason()}`,
+        description: () =>
+          `Action: scale ${this.randomDirection()} | Reason: ${this.randomReason()}`,
         category: 'infrastructure',
-        service: 'auto-scaler'
+        service: 'auto-scaler',
       },
       {
         type: 'NEW_USER',
         message: () => `New user registered: ${this.randomUserName()}`,
         description: () => `Email: ${this.randomEmail()} | Plan: ${this.randomPlan()}`,
         category: 'user',
-        service: 'user-service'
+        service: 'user-service',
       },
       {
         type: 'ANALYTICS_REPORT',
         message: () => 'Analytics report generated',
-        description: () => `Viewers: ${this.random(1000, 50000)} | Watch time: ${this.random(100, 10000)}h`,
+        description: () =>
+          `Viewers: ${this.random(1000, 50000)} | Watch time: ${this.random(100, 10000)}h`,
         category: 'analytics',
-        service: 'analytics-service'
+        service: 'analytics-service',
       },
       {
         type: 'COLLABORATION_SESSION',
         message: () => 'Collaboration session started',
-        description: () => `Participants: ${this.random(2, 20)} | Duration: ${this.random(5, 120)}m`,
+        description: () =>
+          `Participants: ${this.random(2, 20)} | Duration: ${this.random(5, 120)}m`,
         category: 'collaboration',
-        service: 'collab-service'
-      }
+        service: 'collab-service',
+      },
     ];
 
     const eventTemplate = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-    
+
     await ActivityPublisher.publishActivity({
       type: eventTemplate.type,
-      message: typeof eventTemplate.message === 'function' ? eventTemplate.message() : eventTemplate.message,
-      description: typeof eventTemplate.description === 'function' ? eventTemplate.description() : eventTemplate.description,
+      message:
+        typeof eventTemplate.message === 'function'
+          ? eventTemplate.message()
+          : eventTemplate.message,
+      description:
+        typeof eventTemplate.description === 'function'
+          ? eventTemplate.description()
+          : eventTemplate.description,
       category: eventTemplate.category,
       service: eventTemplate.service,
-      userId: Math.random() > 0.7 ? `user_${this.random(1, 1000)}` : null
+      userId: Math.random() > 0.7 ? `user_${this.random(1, 1000)}` : null,
     });
   }
 
@@ -170,7 +182,7 @@ export class ActivityStreamGenerator {
   }
 
   static delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   static randomVideoTitle() {
@@ -182,7 +194,7 @@ export class ActivityStreamGenerator {
       'Live Concert',
       'Conference Talk',
       'Gaming Highlights',
-      'Nature Documentary'
+      'Nature Documentary',
     ];
     return titles[Math.floor(Math.random() * titles.length)];
   }
@@ -206,7 +218,7 @@ export class ActivityStreamGenerator {
       'PerformanceOptimizer',
       'ContentModerator',
       'AnalyticsEngine',
-      'RecommendationEngine'
+      'RecommendationEngine',
     ];
     return agents[Math.floor(Math.random() * agents.length)];
   }
@@ -218,7 +230,7 @@ export class ActivityStreamGenerator {
       'optimizing performance',
       'generating recommendations',
       'moderating content',
-      'processing analytics'
+      'processing analytics',
     ];
     return tasks[Math.floor(Math.random() * tasks.length)];
   }
@@ -275,7 +287,7 @@ export class ActivityStreamGenerator {
   static getStatus() {
     return {
       isRunning,
-      interval: generatorInterval ? 'active' : 'inactive'
+      interval: generatorInterval ? 'active' : 'inactive',
     };
   }
 }

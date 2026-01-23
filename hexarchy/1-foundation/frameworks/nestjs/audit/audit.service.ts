@@ -3,20 +3,16 @@
  * Business logic for audit logging
  */
 
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { CreateAuditLogDto } from "./dto/create-audit-log.dto";
-import { QueryAuditLogsDto } from "./dto/query-audit-logs.dto";
-import {
-  AuditLog,
-  AuditLogDocument,
-  AuditResource,
-} from "./schemas/audit-log.schema";
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { CreateAuditLogDto } from './dto/create-audit-log.dto'
+import { QueryAuditLogsDto } from './dto/query-audit-logs.dto'
+import { AuditLog, AuditLogDocument, AuditResource } from './schemas/audit-log.schema'
 
 @Injectable()
 export class AuditService {
-  private readonly logger = new Logger(AuditService.name);
+  private readonly logger = new Logger(AuditService.name)
 
   constructor(
     @InjectModel(AuditLog.name)
@@ -31,21 +27,18 @@ export class AuditService {
       const auditLog = new this.auditLogModel({
         ...createAuditLogDto,
         timestamp: new Date(),
-      });
+      })
 
-      const savedLog = await auditLog.save();
+      const savedLog = await auditLog.save()
 
       this.logger.log(
         `Audit log created: ${savedLog.action} on ${savedLog.resource} by ${savedLog.username}`
-      );
+      )
 
-      return savedLog;
+      return savedLog
     } catch (error) {
-      this.logger.error(
-        `Failed to create audit log: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to create audit log: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -57,19 +50,19 @@ export class AuditService {
       const auditLogs = logs.map((log) => ({
         ...log,
         timestamp: new Date(),
-      }));
+      }))
 
-      const savedLogs = await this.auditLogModel.insertMany(auditLogs);
+      const savedLogs = await this.auditLogModel.insertMany(auditLogs)
 
-      this.logger.log(`Created ${savedLogs.length} audit logs in bulk`);
+      this.logger.log(`Created ${savedLogs.length} audit logs in bulk`)
 
-      return savedLogs;
+      return savedLogs
     } catch (error) {
       this.logger.error(
         `Failed to create bulk audit logs: ${error.message}`,
         error.stack
-      );
-      throw error;
+      )
+      throw error
     }
   }
 
@@ -81,62 +74,56 @@ export class AuditService {
       const {
         page = 1,
         limit = 50,
-        sortBy = "timestamp",
-        sortOrder = "desc",
+        sortBy = 'timestamp',
+        sortOrder = 'desc',
         ...filters
-      } = queryDto;
+      } = queryDto
 
       // Build query filters
-      const query: any = {};
+      const query: any = {}
 
       if (filters.userId) {
-        query.userId = filters.userId;
+        query.userId = filters.userId
       }
 
       if (filters.action) {
-        query.action = filters.action;
+        query.action = filters.action
       }
 
       if (filters.resource) {
-        query.resource = filters.resource;
+        query.resource = filters.resource
       }
 
       if (filters.resourceId) {
-        query.resourceId = filters.resourceId;
+        query.resourceId = filters.resourceId
       }
 
       if (filters.severity) {
-        query.severity = filters.severity;
+        query.severity = filters.severity
       }
 
       if (filters.ipAddress) {
-        query.ipAddress = filters.ipAddress;
+        query.ipAddress = filters.ipAddress
       }
 
       if (filters.startDate || filters.endDate) {
-        query.timestamp = {};
+        query.timestamp = {}
         if (filters.startDate) {
-          query.timestamp.$gte = new Date(filters.startDate);
+          query.timestamp.$gte = new Date(filters.startDate)
         }
         if (filters.endDate) {
-          query.timestamp.$lte = new Date(filters.endDate);
+          query.timestamp.$lte = new Date(filters.endDate)
         }
       }
 
       // Execute query with pagination
-      const skip = (page - 1) * limit;
-      const sort = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
+      const skip = (page - 1) * limit
+      const sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
 
       const [logs, total] = await Promise.all([
-        this.auditLogModel
-          .find(query)
-          .sort(sort)
-          .skip(skip)
-          .limit(limit)
-          .lean()
-          .exec(),
+        this.auditLogModel.find(query).sort(sort).skip(skip).limit(limit).lean().exec(),
         this.auditLogModel.countDocuments(query).exec(),
-      ]);
+      ])
 
       return {
         data: logs,
@@ -146,13 +133,10 @@ export class AuditService {
           total,
           totalPages: Math.ceil(total / limit),
         },
-      };
+      }
     } catch (error) {
-      this.logger.error(
-        `Failed to query audit logs: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to query audit logs: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -161,19 +145,16 @@ export class AuditService {
    */
   async findOne(id: string): Promise<AuditLog> {
     try {
-      const log = await this.auditLogModel.findById(id).exec();
+      const log = await this.auditLogModel.findById(id).exec()
 
       if (!log) {
-        throw new NotFoundException(`Audit log with ID ${id} not found`);
+        throw new NotFoundException(`Audit log with ID ${id} not found`)
       }
 
-      return log;
+      return log
     } catch (error) {
-      this.logger.error(
-        `Failed to find audit log: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to find audit log: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -181,7 +162,7 @@ export class AuditService {
    * Get audit logs for a specific user
    */
   async findByUser(userId: string, queryDto: QueryAuditLogsDto) {
-    return this.findAll({ ...queryDto, userId });
+    return this.findAll({ ...queryDto, userId })
   }
 
   /**
@@ -192,7 +173,7 @@ export class AuditService {
     resourceId: string,
     queryDto: QueryAuditLogsDto
   ) {
-    return this.findAll({ ...queryDto, resource, resourceId });
+    return this.findAll({ ...queryDto, resource, resourceId })
   }
 
   /**
@@ -200,37 +181,38 @@ export class AuditService {
    */
   async getStatistics(startDate?: Date, endDate?: Date) {
     try {
-      const matchStage: any = {};
+      const matchStage: any = {}
 
       if (startDate || endDate) {
-        matchStage.timestamp = {};
-        if (startDate) matchStage.timestamp.$gte = startDate;
-        if (endDate) matchStage.timestamp.$lte = endDate;
+        matchStage.timestamp = {}
+        if (startDate) matchStage.timestamp.$gte = startDate
+        if (endDate) matchStage.timestamp.$lte = endDate
       }
 
-      const [actionStats, resourceStats, severityStats, totalCount] =
-        await Promise.all([
+      const [actionStats, resourceStats, severityStats, totalCount] = await Promise.all(
+        [
           // Actions breakdown
           this.auditLogModel.aggregate([
             ...(Object.keys(matchStage).length ? [{ $match: matchStage }] : []),
-            { $group: { _id: "$action", count: { $sum: 1 } } },
+            { $group: { _id: '$action', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
           ]),
           // Resources breakdown
           this.auditLogModel.aggregate([
             ...(Object.keys(matchStage).length ? [{ $match: matchStage }] : []),
-            { $group: { _id: "$resource", count: { $sum: 1 } } },
+            { $group: { _id: '$resource', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
           ]),
           // Severity breakdown
           this.auditLogModel.aggregate([
             ...(Object.keys(matchStage).length ? [{ $match: matchStage }] : []),
-            { $group: { _id: "$severity", count: { $sum: 1 } } },
+            { $group: { _id: '$severity', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
           ]),
           // Total count
           this.auditLogModel.countDocuments(matchStage).exec(),
-        ]);
+        ]
+      )
 
       return {
         total: totalCount,
@@ -246,13 +228,10 @@ export class AuditService {
           (acc, { _id, count }) => ({ ...acc, [_id]: count }),
           {}
         ),
-      };
+      }
     } catch (error) {
-      this.logger.error(
-        `Failed to get statistics: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to get statistics: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -265,15 +244,12 @@ export class AuditService {
         .find({ userId })
         .sort({ timestamp: -1 })
         .limit(limit)
-        .select("action resource resourceId timestamp")
+        .select('action resource resourceId timestamp')
         .lean()
-        .exec();
+        .exec()
     } catch (error) {
-      this.logger.error(
-        `Failed to get user timeline: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to get user timeline: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -282,26 +258,23 @@ export class AuditService {
    */
   async cleanup(daysToKeep = 90): Promise<number> {
     try {
-      const cutoffDate = new Date();
-      cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+      const cutoffDate = new Date()
+      cutoffDate.setDate(cutoffDate.getDate() - daysToKeep)
 
       const result = await this.auditLogModel
         .deleteMany({
           timestamp: { $lt: cutoffDate },
         })
-        .exec();
+        .exec()
 
       this.logger.log(
         `Deleted ${result.deletedCount} audit logs older than ${daysToKeep} days`
-      );
+      )
 
-      return result.deletedCount;
+      return result.deletedCount
     } catch (error) {
-      this.logger.error(
-        `Failed to cleanup audit logs: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to cleanup audit logs: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -310,14 +283,11 @@ export class AuditService {
    */
   async export(queryDto: QueryAuditLogsDto): Promise<AuditLog[]> {
     try {
-      const result = await this.findAll({ ...queryDto, limit: 10000 });
-      return result.data;
+      const result = await this.findAll({ ...queryDto, limit: 10000 })
+      return result.data
     } catch (error) {
-      this.logger.error(
-        `Failed to export audit logs: ${error.message}`,
-        error.stack
-      );
-      throw error;
+      this.logger.error(`Failed to export audit logs: ${error.message}`, error.stack)
+      throw error
     }
   }
 
@@ -326,26 +296,21 @@ export class AuditService {
    */
   async getHealth() {
     try {
-      const db = this.auditLogModel.db;
-      const state = db.readyState;
-      const stateMap = [
-        "disconnected",
-        "connected",
-        "connecting",
-        "disconnecting",
-      ];
+      const db = this.auditLogModel.db
+      const state = db.readyState
+      const stateMap = ['disconnected', 'connected', 'connecting', 'disconnecting']
 
       return {
-        status: state === 1 ? "up" : "down",
+        status: state === 1 ? 'up' : 'down',
         state: stateMap[state],
         name: db.name,
         host: db.host,
-      };
+      }
     } catch (error) {
       return {
-        status: "down",
+        status: 'down',
         error: error.message,
-      };
+      }
     }
   }
 }

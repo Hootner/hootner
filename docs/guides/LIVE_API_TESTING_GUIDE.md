@@ -27,11 +27,13 @@ node serve-html-basic.js
 ## 1️⃣ Health Checks
 
 ### GraphQL API Health
+
 ```bash
 curl http://localhost:4000/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "ok",
@@ -41,11 +43,13 @@ curl http://localhost:4000/health
 ```
 
 ### Video API Health
+
 ```bash
 curl http://localhost:5003/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "ok",
@@ -55,6 +59,7 @@ curl http://localhost:5003/health
 ```
 
 ### MongoDB Connection
+
 ```bash
 mongosh mongodb://admin:dev_password_change_in_prod@localhost:27017/hootner?authSource=admin
 # Inside mongosh:
@@ -63,6 +68,7 @@ mongosh mongodb://admin:dev_password_change_in_prod@localhost:27017/hootner?auth
 ```
 
 ### Redis Connection
+
 ```bash
 redis-cli -h localhost -p 6379 -a dev_redis_password
 # Inside redis-cli:
@@ -75,6 +81,7 @@ redis-cli -h localhost -p 6379 -a dev_redis_password
 ## 2️⃣ GraphQL API Tests
 
 ### Get Videos
+
 ```bash
 curl -X POST http://localhost:4000/graphql \
   -H "Content-Type: application/json" \
@@ -84,6 +91,7 @@ curl -X POST http://localhost:4000/graphql \
 ```
 
 ### Get Single Video
+
 ```bash
 curl -X POST http://localhost:4000/graphql \
   -H "Content-Type: application/json" \
@@ -93,6 +101,7 @@ curl -X POST http://localhost:4000/graphql \
 ```
 
 ### Like Video
+
 ```bash
 curl -X POST http://localhost:4000/graphql \
   -H "Content-Type: application/json" \
@@ -102,6 +111,7 @@ curl -X POST http://localhost:4000/graphql \
 ```
 
 ### Add Comment
+
 ```bash
 curl -X POST http://localhost:4000/graphql \
   -H "Content-Type: application/json" \
@@ -111,6 +121,7 @@ curl -X POST http://localhost:4000/graphql \
 ```
 
 ### Get Comments
+
 ```bash
 curl -X POST http://localhost:4000/graphql \
   -H "Content-Type: application/json" \
@@ -124,6 +135,7 @@ curl -X POST http://localhost:4000/graphql \
 ## 3️⃣ REST API Tests
 
 ### Track Event
+
 ```bash
 curl -X POST http://localhost:5003/api/analytics/track \
   -H "Content-Type: application/json" \
@@ -138,6 +150,7 @@ curl -X POST http://localhost:5003/api/analytics/track \
 ```
 
 ### Track Playback Position
+
 ```bash
 curl -X POST http://localhost:5003/api/analytics/playback \
   -H "Content-Type: application/json" \
@@ -151,6 +164,7 @@ curl -X POST http://localhost:5003/api/analytics/playback \
 ```
 
 ### Get Video Metadata
+
 ```bash
 curl http://localhost:5003/api/video/video-1
 ```
@@ -163,27 +177,29 @@ curl http://localhost:5003/api/video/video-1
 
 ```javascript
 // Test WebSocket connection
-const ws = new WebSocket('ws://localhost:4000/graphql');
+const ws = new WebSocket('ws://localhost:4000/graphql')
 
 ws.addEventListener('open', () => {
-  console.log('✅ WebSocket connected');
-  
+  console.log('✅ WebSocket connected')
+
   // Subscribe to video updates
-  ws.send(JSON.stringify({
-    type: 'start',
-    payload: {
-      query: 'subscription { videoUpdated { id status progress } }'
-    }
-  }));
-});
+  ws.send(
+    JSON.stringify({
+      type: 'start',
+      payload: {
+        query: 'subscription { videoUpdated { id status progress } }',
+      },
+    })
+  )
+})
 
 ws.addEventListener('message', (event) => {
-  console.log('📨 Message:', event.data);
-});
+  console.log('📨 Message:', event.data)
+})
 
 ws.addEventListener('error', (error) => {
-  console.error('❌ Error:', error);
-});
+  console.error('❌ Error:', error)
+})
 ```
 
 ---
@@ -194,36 +210,36 @@ ws.addEventListener('error', (error) => {
 
 ```javascript
 // 1. Check WebSocket
-console.log('WS Status:', wsConnection?.readyState);
+console.log('WS Status:', wsConnection?.readyState)
 // 0 = CONNECTING, 1 = OPEN, 2 = CLOSING, 3 = CLOSED
 
 // 2. Check Session
-console.log('Session ID:', sessionId);
+console.log('Session ID:', sessionId)
 
 // 3. Check User
-console.log('Current User:', currentUser);
+console.log('Current User:', currentUser)
 
 // 4. Fetch Videos
-await fetchVideosFromBackend();
+await fetchVideosFromBackend()
 
 // 5. Fetch Video Details
-const details = await fetchVideoDetails('video-1');
-console.log('Video Details:', details);
+const details = await fetchVideoDetails('video-1')
+console.log('Video Details:', details)
 
 // 6. Track Event
-await trackEvent('test_event', { message: 'Testing' });
+await trackEvent('test_event', { message: 'Testing' })
 
 // 7. Like Video
-await likeVideo('video-1');
+await likeVideo('video-1')
 
 // 8. Add Comment
-await addComment('This is a test comment');
+await addComment('This is a test comment')
 
 // 9. Join Watch Party
-await joinWatchParty();
+await joinWatchParty()
 
 // 10. Share Video
-await shareVideo('copy');
+await shareVideo('copy')
 ```
 
 ---
@@ -322,11 +338,11 @@ export default function() {
   const query = JSON.stringify({
     query: '{ videos(limit: 10) { id title } }',
   });
-  
+
   const res = http.post('http://localhost:4000/graphql', query, {
     headers: { 'Content-Type': 'application/json' },
   });
-  
+
   check(res, {
     'status is 200': (r) => r.status === 200,
     'has data': (r) => r.body.includes('data'),
@@ -357,13 +373,13 @@ done
 
 ```javascript
 // Browser console
-const ws = new WebSocket('ws://localhost:4000/graphql');
-const start = Date.now();
+const ws = new WebSocket('ws://localhost:4000/graphql')
+const start = Date.now()
 
 ws.addEventListener('open', () => {
-  const latency = Date.now() - start;
-  console.log('Connection latency:', latency + 'ms');
-});
+  const latency = Date.now() - start
+  console.log('Connection latency:', latency + 'ms')
+})
 ```
 
 ---
@@ -429,15 +445,17 @@ curl -X POST http://localhost:4000/graphql \
 ### Enable Verbose Logging
 
 **Backend:**
+
 ```javascript
 // In api/graphql/index.js
-process.env.DEBUG = 'hootner:*';
+process.env.DEBUG = 'hootner:*'
 ```
 
 **Frontend:**
+
 ```javascript
 // Browser console
-localStorage.setItem('debug', 'hootner:*');
+localStorage.setItem('debug', 'hootner:*')
 // Reload page
 ```
 
@@ -535,31 +553,36 @@ db.users.insertOne({
 You'll know everything is working when:
 
 ✅ **Health Checks**
+
 ```bash
 curl http://localhost:4000/health   # ✅ 200 OK
 curl http://localhost:5003/health   # ✅ 200 OK
 ```
 
 ✅ **GraphQL**
+
 ```bash
 curl ... -d '{"query": "{ videos { id } }"}' # ✅ Returns data
 ```
 
 ✅ **Analytics**
+
 ```bash
 curl -X POST .../analytics/track ... # ✅ 200 OK
 ```
 
 ✅ **WebSocket**
+
 ```javascript
 wsConnection.readyState === 1 // ✅ OPEN
 ```
 
 ✅ **Frontend**
+
 ```javascript
-fetchVideosFromBackend()  // ✅ Populates grid
-likeVideo()               // ✅ Updates count
-addComment()              // ✅ Shows instantly
+fetchVideosFromBackend() // ✅ Populates grid
+likeVideo() // ✅ Updates count
+addComment() // ✅ Shows instantly
 ```
 
 ---

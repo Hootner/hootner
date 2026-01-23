@@ -3,6 +3,7 @@
 ## ✅ Implemented Features
 
 ### 1. GraphQL Resolvers ✅
+
 - Video queries with filtering and pagination
 - User authentication (login, JWT)
 - Comments persistence
@@ -10,6 +11,7 @@
 - Real-time subscriptions
 
 ### 2. WebSocket Events ✅
+
 - Video likes (real-time)
 - Comments (real-time)
 - Video processing updates
@@ -17,6 +19,7 @@
 - User activity tracking
 
 ### 3. Database Schemas ✅
+
 - User model with bcrypt password hashing
 - Video model with embedded comments and likes
 - MongoDB indexes for performance
@@ -46,11 +49,9 @@ mutation {
 
 # Create User
 mutation {
-  createUser(input: {
-    email: "newuser@example.com"
-    name: "New User"
-    password: "securepass123"
-  }) {
+  createUser(
+    input: { email: "newuser@example.com", name: "New User", password: "securepass123" }
+  ) {
     success
     message
     user {
@@ -230,14 +231,14 @@ subscription {
 ### Client Setup
 
 ```javascript
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { split, HttpLink } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { split, HttpLink } from '@apollo/client'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 // HTTP connection
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql'
-});
+  uri: 'http://localhost:4000/graphql',
+})
 
 // WebSocket connection
 const wsLink = new WebSocketLink({
@@ -245,61 +246,67 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: {
-      authorization: `Bearer ${token}`
-    }
-  }
-});
+      authorization: `Bearer ${token}`,
+    },
+  },
+})
 
 // Split based on operation type
 const splitLink = split(
   ({ query }) => {
-    const definition = getMainDefinition(query);
+    const definition = getMainDefinition(query)
     return (
       definition.kind === 'OperationDefinition' &&
       definition.operation === 'subscription'
-    );
+    )
   },
   wsLink,
   httpLink
-);
+)
 ```
 
 ### Subscribe to Events
 
 ```javascript
 // Subscribe to likes
-const { data } = useSubscription(gql`
-  subscription OnVideoLiked($videoId: ID!) {
-    videoLiked(videoId: $videoId) {
-      video {
-        id
-        likes
+const { data } = useSubscription(
+  gql`
+    subscription OnVideoLiked($videoId: ID!) {
+      videoLiked(videoId: $videoId) {
+        video {
+          id
+          likes
+        }
+        timestamp
       }
-      timestamp
     }
+  `,
+  {
+    variables: { videoId: 'video-123' },
   }
-`, {
-  variables: { videoId: 'video-123' }
-});
+)
 
 // Subscribe to comments
-const { data } = useSubscription(gql`
-  subscription OnCommentAdded($videoId: ID!) {
-    commentAdded(videoId: $videoId) {
-      comment {
-        id
-        text
-        user {
-          name
-          avatar
+const { data } = useSubscription(
+  gql`
+    subscription OnCommentAdded($videoId: ID!) {
+      commentAdded(videoId: $videoId) {
+        comment {
+          id
+          text
+          user {
+            name
+            avatar
+          }
+          createdAt
         }
-        createdAt
       }
     }
+  `,
+  {
+    variables: { videoId: 'video-123' },
   }
-`, {
-  variables: { videoId: 'video-123' }
-});
+)
 ```
 
 ---
@@ -307,6 +314,7 @@ const { data } = useSubscription(gql`
 ## 💾 Database Schemas
 
 ### User Schema
+
 ```javascript
 {
   email: String (unique, required),
@@ -321,6 +329,7 @@ const { data } = useSubscription(gql`
 ```
 
 ### Video Schema
+
 ```javascript
 {
   title: String (required),
@@ -348,6 +357,7 @@ const { data } = useSubscription(gql`
 ```
 
 ### Indexes
+
 ```javascript
 // User indexes
 { email: 1 } (unique)
@@ -367,40 +377,40 @@ const { data } = useSubscription(gql`
 // 1. Login
 const { data } = await client.mutate({
   mutation: LOGIN_MUTATION,
-  variables: { email, password }
-});
+  variables: { email, password },
+})
 
 // 2. Store token
-localStorage.setItem('token', data.login.token);
+localStorage.setItem('token', data.login.token)
 
 // 3. Add to requests
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ''
-    }
-  };
-});
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  }
+})
 
 // 4. Use in client
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
-});
+  cache: new InMemoryCache(),
+})
 ```
 
 ---
 
 ## 📡 API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/graphql` | POST | GraphQL queries and mutations |
-| `/graphql` | WS | GraphQL subscriptions |
-| `/health` | GET | Health check |
-| `/metrics` | GET | Performance metrics |
+| Endpoint   | Method | Description                   |
+| ---------- | ------ | ----------------------------- |
+| `/graphql` | POST   | GraphQL queries and mutations |
+| `/graphql` | WS     | GraphQL subscriptions         |
+| `/health`  | GET    | Health check                  |
+| `/metrics` | GET    | Performance metrics           |
 
 ---
 
@@ -428,22 +438,22 @@ curl -X POST http://localhost:4000/graphql \
 ```javascript
 // Fetch video data
 const { data, loading } = useQuery(GET_VIDEO, {
-  variables: { id: videoId }
-});
+  variables: { id: videoId },
+})
 
 // Like video
-const [likeVideo] = useMutation(LIKE_VIDEO);
+const [likeVideo] = useMutation(LIKE_VIDEO)
 
 // Add comment
-const [addComment] = useMutation(ADD_COMMENT);
+const [addComment] = useMutation(ADD_COMMENT)
 
 // Subscribe to real-time updates
 useSubscription(VIDEO_LIKED_SUBSCRIPTION, {
   variables: { videoId },
   onSubscriptionData: ({ subscriptionData }) => {
     // Update UI with new like count
-  }
-});
+  },
+})
 ```
 
 ---

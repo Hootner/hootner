@@ -15,10 +15,10 @@ class DualAgentOrchestrator {
         'chat-mode',
         'refactoring',
         'test-generation',
-        'documentation'
+        'documentation',
       ],
       model: 'Claude-based',
-      mode: 'active'
+      mode: 'active',
     }
 
     this.amazonQ = {
@@ -29,10 +29,10 @@ class DualAgentOrchestrator {
         'enterprise-policies',
         'security-scanning',
         'compliance-checks',
-        'custom-context'
+        'custom-context',
       ],
       model: 'Anthropic Claude',
-      mode: 'active'
+      mode: 'active',
     }
 
     this.routingRules = {
@@ -42,15 +42,15 @@ class DualAgentOrchestrator {
       'chat-refactor': 'copilot',
       'security-audit': 'amazonQ',
       'general-coding': 'copilot',
-      'documentation': 'copilot',
-      'enterprise-compliance': 'amazonQ'
+      documentation: 'copilot',
+      'enterprise-compliance': 'amazonQ',
     }
 
     this.stats = {
       copilotRequests: 0,
       amazonQRequests: 0,
       fallbacks: 0,
-      avgResponseTime: 0
+      avgResponseTime: 0,
     }
   }
 
@@ -101,7 +101,7 @@ class DualAgentOrchestrator {
       agent: 'GitHub Copilot',
       response: `[Copilot] Processing: ${query}`,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
   }
 
@@ -113,7 +113,7 @@ class DualAgentOrchestrator {
       agent: 'Amazon Q',
       response: `[Q] Processing: ${query}`,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
   }
 
@@ -125,8 +125,8 @@ class DualAgentOrchestrator {
       ...this.stats,
       agents: {
         copilot: this.copilot,
-        amazonQ: this.amazonQ
-      }
+        amazonQ: this.amazonQ,
+      },
     }
   }
 

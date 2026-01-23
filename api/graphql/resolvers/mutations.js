@@ -1,8 +1,28 @@
 import jwt from 'jsonwebtoken';
 import { pubsub } from './subscriptions.js';
-import { findUserByEmail, createUser, comparePassword, getUserById } from '../models/User.js';
-import { createVideo, getVideoById, updateVideo as updateVideoRecord, deleteVideo as deleteVideoRecord, toggleLike, addComment, deleteComment } from '../models/Video.js';
-import { createPlaylist, updatePlaylist, deletePlaylist, addVideoToPlaylist, removeVideoFromPlaylist, getPlaylistById } from '../models/Playlist.js';
+import {
+  findUserByEmail,
+  createUser,
+  comparePassword,
+  getUserById,
+} from '../models/User.js';
+import {
+  createVideo,
+  getVideoById,
+  updateVideo as updateVideoRecord,
+  deleteVideo as deleteVideoRecord,
+  toggleLike,
+  addComment,
+  deleteComment,
+} from '../models/Video.js';
+import {
+  createPlaylist,
+  updatePlaylist,
+  deletePlaylist,
+  addVideoToPlaylist,
+  removeVideoFromPlaylist,
+  getPlaylistById,
+} from '../models/Playlist.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_min_32_chars_change_prod';
 
@@ -10,15 +30,27 @@ const resolvers = {
   login: async (_, { email, password }) => {
     const user = await findUserByEmail(email);
     if (!user) {
-      return { success: false, message: 'Invalid credentials', errors: [{ field: 'email', message: 'User not found' }] };
+      return {
+        success: false,
+        message: 'Invalid credentials',
+        errors: [{ field: 'email', message: 'User not found' }],
+      };
     }
 
     const valid = await comparePassword(user, password);
     if (!valid) {
-      return { success: false, message: 'Invalid credentials', errors: [{ field: 'password', message: 'Incorrect password' }] };
+      return {
+        success: false,
+        message: 'Invalid credentials',
+        errors: [{ field: 'password', message: 'Incorrect password' }],
+      };
     }
 
-    const token = jwt.sign({ id: user.userId, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(
+      { id: user.userId, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
     const refreshToken = jwt.sign({ id: user.userId }, JWT_SECRET, { expiresIn: '30d' });
 
     return {
@@ -27,7 +59,7 @@ const resolvers = {
       token,
       refreshToken,
       user,
-      expiresIn: 604800
+      expiresIn: 604800,
     };
   },
 
@@ -35,13 +67,21 @@ const resolvers = {
     try {
       const existing = await findUserByEmail(input.email);
       if (existing) {
-        return { success: false, message: 'Email already exists', errors: [{ field: 'email', message: 'Email already in use' }] };
+        return {
+          success: false,
+          message: 'Email already exists',
+          errors: [{ field: 'email', message: 'Email already in use' }],
+        };
       }
 
       const user = await createUser(input);
       return { success: true, message: 'User created', user };
     } catch (error) {
-      return { success: false, message: error.message, errors: [{ field: 'general', message: error.message }] };
+      return {
+        success: false,
+        message: error.message,
+        errors: [{ field: 'general', message: error.message }],
+      };
     }
   },
 
@@ -59,7 +99,8 @@ const resolvers = {
     if (!user) throw new Error('Not authenticated');
     const existing = await getVideoById(id);
     if (!existing) return { success: false, message: 'Video not found' };
-    if (existing.userId !== user.id && user.role !== 'ADMIN') throw new Error('Not authorized');
+    if (existing.userId !== user.id && user.role !== 'ADMIN')
+      throw new Error('Not authorized');
 
     await deleteVideoRecord(id);
     return { success: true, message: 'Video deleted', deletedId: id };
@@ -84,8 +125,14 @@ const resolvers = {
 
   deleteComment: async (_, { videoId, commentId }, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    const updated = await deleteComment(videoId, commentId, user.id, user.role === 'ADMIN');
-    if (!updated) return { success: false, message: 'Comment not found or not authorized' };
+    const updated = await deleteComment(
+      videoId,
+      commentId,
+      user.id,
+      user.role === 'ADMIN'
+    );
+    if (!updated)
+      return { success: false, message: 'Comment not found or not authorized' };
     return { success: true, message: 'Comment deleted', video: updated };
   },
 
@@ -118,7 +165,7 @@ const resolvers = {
     const playlist = await removeVideoFromPlaylist(playlistId, videoId, user.id);
     if (!playlist) throw new Error('Playlist not found');
     return playlist;
-  }
+  },
 };
 
 export default resolvers;

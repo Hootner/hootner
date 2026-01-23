@@ -1,4 +1,9 @@
-import { listVideos, getVideoById, incrementViews, trendingVideos as listTrendingVideos } from '../models/Video.js';
+import {
+  listVideos,
+  getVideoById,
+  incrementViews,
+  trendingVideos as listTrendingVideos,
+} from '../models/Video.js';
 import { listUsers, getUserById } from '../models/User.js';
 import { listPlaylists, getPlaylistById } from '../models/Playlist.js';
 
@@ -11,9 +16,9 @@ const resolvers = {
       database: 'connected',
       redis: 'connected',
       videoGeneration: 'available',
-      streaming: 'ready'
+      streaming: 'ready',
     },
-    uptime: Math.floor(process.uptime())
+    uptime: Math.floor(process.uptime()),
   }),
 
   version: () => '2.0.0',
@@ -21,14 +26,14 @@ const resolvers = {
   videos: async (_, { filter, limit = 20, offset = 0 }) => {
     const { items, totalCount } = await listVideos(filter || {}, limit, offset);
     return {
-      edges: items.map(v => ({ node: v, cursor: v.videoId })),
+      edges: items.map((v) => ({ node: v, cursor: v.videoId })),
       pageInfo: {
         hasNextPage: offset + limit < totalCount,
         hasPreviousPage: offset > 0,
         startCursor: items[0]?.videoId,
-        endCursor: items[items.length - 1]?.videoId
+        endCursor: items[items.length - 1]?.videoId,
       },
-      totalCount
+      totalCount,
     };
   },
 
@@ -75,7 +80,7 @@ const resolvers = {
   myPlaylists: async (_, __, { user }) => {
     if (!user) throw new Error('Not authenticated');
     return listPlaylists({ userId: user.id, limit: 50 });
-  }
+  },
 };
 
 export default resolvers;

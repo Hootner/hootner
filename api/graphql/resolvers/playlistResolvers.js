@@ -14,7 +14,7 @@ module.exports = {
     myPlaylists: async (_, __, { user }) => {
       if (!user) throw new Error('Not authenticated');
       return Playlist.find({ userId: user.id }).populate('videos');
-    }
+    },
   },
 
   Mutation: {
@@ -53,9 +53,9 @@ module.exports = {
       if (!user) throw new Error('Not authenticated');
       const playlist = await Playlist.findOne({ _id: playlistId, userId: user.id });
       if (!playlist) throw new Error('Playlist not found');
-      playlist.videos = playlist.videos.filter(v => v.toString() !== videoId);
+      playlist.videos = playlist.videos.filter((v) => v.toString() !== videoId);
       await playlist.save();
       return playlist.populate('videos');
-    }
-  }
+    },
+  },
 };

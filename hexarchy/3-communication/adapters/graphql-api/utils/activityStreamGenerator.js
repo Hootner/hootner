@@ -3,10 +3,10 @@
  * Publishes realistic events to WebSocket subscribers
  */
 
-import ActivityPublisher from '../utils/activityPublisher.js';
+import ActivityPublisher from '../utils/activityPublisher.js'
 
-let generatorInterval = null;
-let isRunning = false;
+let generatorInterval = null
+let isRunning = false
 
 export class ActivityStreamGenerator {
   /**
@@ -15,22 +15,22 @@ export class ActivityStreamGenerator {
    */
   static startGenerator(intervalMs = 3000) {
     if (isRunning) {
-      console.log('⚠️ Activity generator already running');
-      return;
+      console.log('⚠️ Activity generator already running')
+      return
     }
 
-    isRunning = true;
-    console.log('🚀 Starting Activity Stream Generator...');
+    isRunning = true
+    console.log('🚀 Starting Activity Stream Generator...')
 
     // Initial burst of events
-    this.generateBurstEvents();
+    this.generateBurstEvents()
 
     // Generate ongoing events
     generatorInterval = setInterval(() => {
-      this.generateRandomEvent();
-    }, intervalMs);
+      this.generateRandomEvent()
+    }, intervalMs)
 
-    console.log(`✅ Activity generator running (event every ${intervalMs}ms)`);
+    console.log(`✅ Activity generator running (event every ${intervalMs}ms)`)
   }
 
   /**
@@ -38,10 +38,10 @@ export class ActivityStreamGenerator {
    */
   static stopGenerator() {
     if (generatorInterval) {
-      clearInterval(generatorInterval);
-      generatorInterval = null;
-      isRunning = false;
-      console.log('🛑 Activity generator stopped');
+      clearInterval(generatorInterval)
+      generatorInterval = null
+      isRunning = false
+      console.log('🛑 Activity generator stopped')
     }
   }
 
@@ -55,7 +55,7 @@ export class ActivityStreamGenerator {
         message: 'System online and healthy',
         description: 'All services operational',
         category: 'system',
-        service: 'monitoring'
+        service: 'monitoring',
       },
       {
         type: 'VIDEO_UPLOADED',
@@ -63,20 +63,20 @@ export class ActivityStreamGenerator {
         description: 'File: "Summer_Vacation.mp4" (2.4 GB)',
         category: 'content',
         service: 'video-service',
-        userId: 'user_123'
+        userId: 'user_123',
       },
       {
         type: 'DEPLOYMENT_SUCCESS',
         message: 'Deployment successful: v2.1.4',
         description: 'Frontend + Backend deployed to production',
         category: 'deployment',
-        service: 'deployment-pipeline'
-      }
-    ];
+        service: 'deployment-pipeline',
+      },
+    ]
 
     for (const event of events) {
-      await ActivityPublisher.publishActivity(event);
-      await this.delay(500);
+      await ActivityPublisher.publishActivity(event)
+      await this.delay(500)
     }
   }
 
@@ -88,89 +88,101 @@ export class ActivityStreamGenerator {
       {
         type: 'VIDEO_UPLOADED',
         message: () => `User uploaded video: "${this.randomVideoTitle()}"`,
-        description: () => `Size: ${this.randomSize()} | Duration: ${this.randomDuration()}m`,
+        description: () =>
+          `Size: ${this.randomSize()} | Duration: ${this.randomDuration()}m`,
         category: 'content',
-        service: 'video-service'
+        service: 'video-service',
       },
       {
         type: 'DEPLOYMENT_SUCCESS',
         message: () => `Deployment successful: v${this.randomVersion()}`,
-        description: () => `Services: API, Frontend, Workers | Duration: ${this.random(2, 10)}s`,
+        description: () =>
+          `Services: API, Frontend, Workers | Duration: ${this.random(2, 10)}s`,
         category: 'deployment',
-        service: 'deployment-pipeline'
+        service: 'deployment-pipeline',
       },
       {
         type: 'AI_AGENT_ACTIVATED',
         message: () => `AI Agent "${this.randomAgent()}" activated`,
         description: () => `Processing: ${this.randomTask()}`,
         category: 'ai',
-        service: 'agent-hub'
+        service: 'agent-hub',
       },
       {
         type: 'PAYMENT_PROCESSED',
         message: () => `Payment processed: $${this.random(10, 999)}.99`,
         description: () => 'Subscription renewal | Status: completed',
         category: 'payment',
-        service: 'payment-service'
+        service: 'payment-service',
       },
       {
         type: 'SECURITY_SCAN',
         message: () => `Security scan completed: ${this.random(0, 5)} issues found`,
-        description: () => `Scan Type: ${this.randomScanType()} | Severity: ${this.randomSeverity()}`,
+        description: () =>
+          `Scan Type: ${this.randomScanType()} | Severity: ${this.randomSeverity()}`,
         category: 'security',
-        service: 'security-service'
+        service: 'security-service',
       },
       {
         type: 'AUTO_SCALING',
         message: () => `Auto-scaling triggered: ${this.randomScalingService()}`,
-        description: () => `Action: scale ${this.randomDirection()} | Reason: ${this.randomReason()}`,
+        description: () =>
+          `Action: scale ${this.randomDirection()} | Reason: ${this.randomReason()}`,
         category: 'infrastructure',
-        service: 'auto-scaler'
+        service: 'auto-scaler',
       },
       {
         type: 'NEW_USER',
         message: () => `New user registered: ${this.randomUserName()}`,
         description: () => `Email: ${this.randomEmail()} | Plan: ${this.randomPlan()}`,
         category: 'user',
-        service: 'user-service'
+        service: 'user-service',
       },
       {
         type: 'ANALYTICS_REPORT',
         message: () => 'Analytics report generated',
-        description: () => `Viewers: ${this.random(1000, 50000)} | Watch time: ${this.random(100, 10000)}h`,
+        description: () =>
+          `Viewers: ${this.random(1000, 50000)} | Watch time: ${this.random(100, 10000)}h`,
         category: 'analytics',
-        service: 'analytics-service'
+        service: 'analytics-service',
       },
       {
         type: 'COLLABORATION_SESSION',
         message: () => 'Collaboration session started',
-        description: () => `Participants: ${this.random(2, 20)} | Duration: ${this.random(5, 120)}m`,
+        description: () =>
+          `Participants: ${this.random(2, 20)} | Duration: ${this.random(5, 120)}m`,
         category: 'collaboration',
-        service: 'collab-service'
-      }
-    ];
+        service: 'collab-service',
+      },
+    ]
 
-    const eventTemplate = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-    
+    const eventTemplate = eventTypes[Math.floor(Math.random() * eventTypes.length)]
+
     await ActivityPublisher.publishActivity({
       type: eventTemplate.type,
-      message: typeof eventTemplate.message === 'function' ? eventTemplate.message() : eventTemplate.message,
-      description: typeof eventTemplate.description === 'function' ? eventTemplate.description() : eventTemplate.description,
+      message:
+        typeof eventTemplate.message === 'function'
+          ? eventTemplate.message()
+          : eventTemplate.message,
+      description:
+        typeof eventTemplate.description === 'function'
+          ? eventTemplate.description()
+          : eventTemplate.description,
       category: eventTemplate.category,
       service: eventTemplate.service,
-      userId: Math.random() > 0.7 ? `user_${this.random(1, 1000)}` : null
-    });
+      userId: Math.random() > 0.7 ? `user_${this.random(1, 1000)}` : null,
+    })
   }
 
   /**
    * Utility methods for generating random data
    */
   static random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   static delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   static randomVideoTitle() {
@@ -182,21 +194,21 @@ export class ActivityStreamGenerator {
       'Live Concert',
       'Conference Talk',
       'Gaming Highlights',
-      'Nature Documentary'
-    ];
-    return titles[Math.floor(Math.random() * titles.length)];
+      'Nature Documentary',
+    ]
+    return titles[Math.floor(Math.random() * titles.length)]
   }
 
   static randomSize() {
-    return `${this.random(100, 2400)}MB`;
+    return `${this.random(100, 2400)}MB`
   }
 
   static randomDuration() {
-    return this.random(5, 120);
+    return this.random(5, 120)
   }
 
   static randomVersion() {
-    return `${this.random(1, 5)}.${this.random(0, 9)}.${this.random(0, 9)}`;
+    return `${this.random(1, 5)}.${this.random(0, 9)}.${this.random(0, 9)}`
   }
 
   static randomAgent() {
@@ -206,9 +218,9 @@ export class ActivityStreamGenerator {
       'PerformanceOptimizer',
       'ContentModerator',
       'AnalyticsEngine',
-      'RecommendationEngine'
-    ];
-    return agents[Math.floor(Math.random() * agents.length)];
+      'RecommendationEngine',
+    ]
+    return agents[Math.floor(Math.random() * agents.length)]
   }
 
   static randomTask() {
@@ -218,55 +230,55 @@ export class ActivityStreamGenerator {
       'optimizing performance',
       'generating recommendations',
       'moderating content',
-      'processing analytics'
-    ];
-    return tasks[Math.floor(Math.random() * tasks.length)];
+      'processing analytics',
+    ]
+    return tasks[Math.floor(Math.random() * tasks.length)]
   }
 
   static randomScanType() {
-    const types = ['DAST', 'SAST', 'Dependency', 'Infrastructure', 'Container'];
-    return types[Math.floor(Math.random() * types.length)];
+    const types = ['DAST', 'SAST', 'Dependency', 'Infrastructure', 'Container']
+    return types[Math.floor(Math.random() * types.length)]
   }
 
   static randomSeverity() {
-    const severities = ['critical', 'high', 'medium', 'low'];
-    return severities[Math.floor(Math.random() * severities.length)];
+    const severities = ['critical', 'high', 'medium', 'low']
+    return severities[Math.floor(Math.random() * severities.length)]
   }
 
   static randomScalingService() {
-    const services = ['API Cluster', 'Worker Pool', 'Cache Layer', 'Database Replicas'];
-    return services[Math.floor(Math.random() * services.length)];
+    const services = ['API Cluster', 'Worker Pool', 'Cache Layer', 'Database Replicas']
+    return services[Math.floor(Math.random() * services.length)]
   }
 
   static randomDirection() {
-    return Math.random() > 0.5 ? 'up' : 'down';
+    return Math.random() > 0.5 ? 'up' : 'down'
   }
 
   static randomReason() {
-    const reasons = ['high CPU', 'high memory', 'high traffic', 'low traffic'];
-    return reasons[Math.floor(Math.random() * reasons.length)];
+    const reasons = ['high CPU', 'high memory', 'high traffic', 'low traffic']
+    return reasons[Math.floor(Math.random() * reasons.length)]
   }
 
   static randomUserName() {
-    const names = ['Alex', 'Jordan', 'Casey', 'Morgan', 'Taylor', 'Riley'];
-    const domains = ['creator', 'user', 'dev', 'pro'];
-    return `${names[Math.floor(Math.random() * names.length)]}_${domains[Math.floor(Math.random() * domains.length)]}`;
+    const names = ['Alex', 'Jordan', 'Casey', 'Morgan', 'Taylor', 'Riley']
+    const domains = ['creator', 'user', 'dev', 'pro']
+    return `${names[Math.floor(Math.random() * names.length)]}_${domains[Math.floor(Math.random() * domains.length)]}`
   }
 
   static randomEmail() {
-    return `${this.randomUserName()}@example.com`;
+    return `${this.randomUserName()}@example.com`
   }
 
   static randomPlan() {
-    const plans = ['Free', 'Pro', 'Enterprise', 'Premium'];
-    return plans[Math.floor(Math.random() * plans.length)];
+    const plans = ['Free', 'Pro', 'Enterprise', 'Premium']
+    return plans[Math.floor(Math.random() * plans.length)]
   }
 
   /**
    * Check if generator is running
    */
   static isRunning() {
-    return isRunning;
+    return isRunning
   }
 
   /**
@@ -275,9 +287,9 @@ export class ActivityStreamGenerator {
   static getStatus() {
     return {
       isRunning,
-      interval: generatorInterval ? 'active' : 'inactive'
-    };
+      interval: generatorInterval ? 'active' : 'inactive',
+    }
   }
 }
 
-export default ActivityStreamGenerator;
+export default ActivityStreamGenerator

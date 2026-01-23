@@ -173,15 +173,17 @@ export const app = express();
 app.use(express.json());
 
 // Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ['\'self\''],
-      scriptSrc: ['\'self\''],
-      styleSrc: ['\'self\'', '\'unsafe-inline\''],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ['\'self\''],
+        scriptSrc: ['\'self\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\''],
+      },
     },
-  },
-}));
+  })
+);
 
 // Rate limiting for GraphQL
 const graphqlLimiter = rateLimit({
@@ -200,7 +202,7 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:3000',
     'https://hootner.com',
-    process.env.FRONTEND_URL
+    process.env.FRONTEND_URL,
   ].filter(Boolean);
 
   const origin = req.headers.origin;
@@ -224,7 +226,7 @@ app.all(
   createHandler({
     schema,
     rootValue: root,
-    graphiql: process.env.NODE_ENV !== 'production'
+    graphiql: process.env.NODE_ENV !== 'production',
   })
 );
 

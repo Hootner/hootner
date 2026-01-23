@@ -3,6 +3,7 @@
 ## Quick Deployment Options
 
 ### Local Development
+
 ```bash
 # Start local MCP server
 npm run mcp:start
@@ -12,6 +13,7 @@ npm run mcp:http
 ```
 
 ### Docker Deployment
+
 ```bash
 # Build and run locally
 npm run docker:build
@@ -22,6 +24,7 @@ docker-compose -f docker-compose.mcp.yml up -d
 ```
 
 ### AWS Production Deployment
+
 ```bash
 # Deploy to AWS ECS
 npm run deploy:aws
@@ -30,11 +33,13 @@ npm run deploy:aws
 ## Architecture
 
 ### Local (stdio transport)
+
 ```
 Amazon Q ←→ MCP Server (stdio) ←→ HOOTNER Services
 ```
 
 ### Remote (HTTP transport)
+
 ```
 Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER Services
 ```
@@ -42,6 +47,7 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
 ## Configuration
 
 ### Local Configuration
+
 ```json
 {
   "mcpServers": {
@@ -55,6 +61,7 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
 ```
 
 ### Remote Configuration
+
 ```json
 {
   "mcpServers": {
@@ -72,12 +79,15 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
 ## AWS ECS Deployment
 
 ### Prerequisites
+
 - AWS CLI configured
 - Docker installed
 - ECR repository access
 
 ### Deployment Steps
+
 1. **Build & Push Image**
+
    ```bash
    docker build -f Dockerfile.mcp -t hootner-mcp .
    docker tag hootner-mcp:latest 123456789.dkr.ecr.us-east-2.amazonaws.com/hootner-mcp:latest
@@ -85,6 +95,7 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
    ```
 
 2. **Create ECS Resources**
+
    ```bash
    # Create cluster
    aws ecs create-cluster --cluster-name hootner-cluster
@@ -104,17 +115,14 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
 ## Security Configuration
 
 ### IAM Roles
+
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "ecs:*",
-        "ecr:*",
-        "logs:*"
-      ],
+      "Action": ["ecs:*", "ecr:*", "logs:*"],
       "Resource": "*"
     }
   ]
@@ -122,6 +130,7 @@ Amazon Q ←→ HTTPS/SSE ←→ Load Balancer ←→ MCP Server ←→ HOOTNER 
 ```
 
 ### Environment Variables
+
 ```bash
 # Production
 HOOTNER_ENV=production
@@ -136,11 +145,13 @@ NODE_ENV=development
 ## Testing Deployment
 
 ### Health Check
+
 ```bash
 curl https://your-mcp.hootner.com/health
 ```
 
 ### Tool Testing
+
 ```bash
 # List tools
 curl -X POST https://your-mcp.hootner.com/v1/tools/list
@@ -152,6 +163,7 @@ curl -X POST https://your-mcp.hootner.com/v1/tools/call \
 ```
 
 ### Amazon Q Integration
+
 ```
 "Deploy frontend to production using remote MCP"
 "Check system health via remote server"
@@ -160,15 +172,18 @@ curl -X POST https://your-mcp.hootner.com/v1/tools/call \
 ## Monitoring & Logging
 
 ### CloudWatch Logs
+
 - Log group: `/ecs/hootner-mcp`
 - Stream prefix: `ecs`
 
 ### Metrics
+
 - Container CPU/Memory usage
 - Request count and latency
 - Tool execution success/failure rates
 
 ### Alerts
+
 ```bash
 # High error rate
 aws cloudwatch put-metric-alarm \
@@ -181,6 +196,7 @@ aws cloudwatch put-metric-alarm \
 ## Scaling Configuration
 
 ### Auto Scaling
+
 ```json
 {
   "serviceName": "hootner-mcp-service",
@@ -193,6 +209,7 @@ aws cloudwatch put-metric-alarm \
 ```
 
 ### Load Balancer Settings
+
 - Health check: `/health`
 - Timeout: 30 seconds
 - Interval: 30 seconds
@@ -203,6 +220,7 @@ aws cloudwatch put-metric-alarm \
 ### Common Issues
 
 **Container Won't Start**
+
 ```bash
 # Check logs
 aws logs get-log-events --log-group-name /ecs/hootner-mcp
@@ -212,6 +230,7 @@ aws ecs describe-task-definition --task-definition hootner-mcp-task
 ```
 
 **SSL/TLS Issues**
+
 ```bash
 # Verify certificate
 openssl s_client -connect your-mcp.hootner.com:443
@@ -221,6 +240,7 @@ docker exec nginx nginx -t
 ```
 
 **Tool Execution Failures**
+
 ```bash
 # Check MCP server logs
 docker logs hootner-mcp

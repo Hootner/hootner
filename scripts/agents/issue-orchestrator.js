@@ -67,7 +67,7 @@ class IssueBasedOrchestrator {
   run() {
     console.log(chalk.yellow('🎯 Issue-Based Agent Orchestrator'));
     console.log(chalk.gray('Addressing past issues:'));
-    this.pastIssues.forEach(issue => console.log(chalk.gray(`  - ` + issue + ``)));
+    this.pastIssues.forEach(issue => console.log(chalk.gray('  - ' + issue + '')));
     console.log('');
     
     this.fixEslintRegex();

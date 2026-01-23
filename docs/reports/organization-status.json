@@ -13,14 +13,7 @@
       "src",
       "utils"
     ],
-    "apps/backend/": [
-      "config",
-      "middleware",
-      "servers",
-      "services",
-      "src",
-      "utils"
-    ],
+    "apps/backend/": ["config", "middleware", "servers", "services", "src", "utils"],
     "services/": [
       "ai",
       "analytics",
@@ -65,11 +58,6 @@
       "utilities",
       "validation"
     ],
-    "tools/": [
-      "analysis",
-      "deployment",
-      "health",
-      "installers"
-    ]
+    "tools/": ["analysis", "deployment", "health", "installers"]
   }
 }

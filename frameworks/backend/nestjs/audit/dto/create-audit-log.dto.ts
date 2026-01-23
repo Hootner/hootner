@@ -3,7 +3,7 @@
  * Data transfer object for creating audit logs
  */
 
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import {
   IsDateString,
   IsEnum,
@@ -11,92 +11,88 @@ import {
   IsObject,
   IsOptional,
   IsString,
-} from "class-validator";
-import {
-  AuditAction,
-  AuditResource,
-  AuditSeverity,
-} from "../schemas/audit-log.schema";
+} from 'class-validator'
+import { AuditAction, AuditResource, AuditSeverity } from '../schemas/audit-log.schema'
 
 export class CreateAuditLogDto {
-  @ApiProperty({ description: "User ID performing the action" })
+  @ApiProperty({ description: 'User ID performing the action' })
   @IsString()
-  userId: string;
+  userId: string
 
-  @ApiProperty({ description: "Username performing the action" })
+  @ApiProperty({ description: 'Username performing the action' })
   @IsString()
-  username: string;
+  username: string
 
-  @ApiProperty({ enum: AuditAction, description: "Action performed" })
+  @ApiProperty({ enum: AuditAction, description: 'Action performed' })
   @IsEnum(AuditAction)
-  action: AuditAction;
+  action: AuditAction
 
-  @ApiProperty({ enum: AuditResource, description: "Resource affected" })
+  @ApiProperty({ enum: AuditResource, description: 'Resource affected' })
   @IsEnum(AuditResource)
-  resource: AuditResource;
+  resource: AuditResource
 
-  @ApiPropertyOptional({ description: "ID of the affected resource" })
+  @ApiPropertyOptional({ description: 'ID of the affected resource' })
   @IsOptional()
   @IsString()
-  resourceId?: string;
+  resourceId?: string
 
-  @ApiPropertyOptional({ description: "Additional metadata" })
+  @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsOptional()
   @IsObject()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, any>
 
-  @ApiProperty({ description: "IP address of the request" })
+  @ApiProperty({ description: 'IP address of the request' })
   @IsString()
-  ipAddress: string;
+  ipAddress: string
 
-  @ApiProperty({ description: "User agent of the request" })
+  @ApiProperty({ description: 'User agent of the request' })
   @IsString()
-  userAgent: string;
+  userAgent: string
 
-  @ApiPropertyOptional({ description: "Request tracking ID" })
+  @ApiPropertyOptional({ description: 'Request tracking ID' })
   @IsOptional()
   @IsString()
-  requestId?: string;
+  requestId?: string
 
-  @ApiPropertyOptional({ description: "Session ID" })
+  @ApiPropertyOptional({ description: 'Session ID' })
   @IsOptional()
   @IsString()
-  sessionId?: string;
+  sessionId?: string
 
   @ApiProperty({ enum: AuditSeverity, default: AuditSeverity.LOW })
   @IsEnum(AuditSeverity)
   @IsOptional()
-  severity?: AuditSeverity;
+  severity?: AuditSeverity
 
-  @ApiPropertyOptional({ description: "Status of the action" })
+  @ApiPropertyOptional({ description: 'Status of the action' })
   @IsOptional()
   @IsString()
-  status?: string;
+  status?: string
 
-  @ApiPropertyOptional({ description: "Previous value before change" })
+  @ApiPropertyOptional({ description: 'Previous value before change' })
   @IsOptional()
   @IsObject()
-  oldValue?: Record<string, any>;
+  oldValue?: Record<string, any>
 
-  @ApiPropertyOptional({ description: "New value after change" })
+  @ApiPropertyOptional({ description: 'New value after change' })
   @IsOptional()
   @IsObject()
-  newValue?: Record<string, any>;
+  newValue?: Record<string, any>
 
-  @ApiPropertyOptional({ description: "Error message if action failed" })
+  @ApiPropertyOptional({ description: 'Error message if action failed' })
   @IsOptional()
   @IsString()
-  errorMessage?: string;
+  errorMessage?: string
 
   @ApiPropertyOptional({
-    description: "Duration of the action in milliseconds",
+    description: 'Duration of the action in milliseconds',
   })
   @IsOptional()
   @IsNumber()
-  duration?: number;
+  duration?: number
 
-  @ApiPropertyOptional({ description: "Expiration date for the log" })
+  @ApiPropertyOptional({ description: 'Expiration date for the log' })
   @IsOptional()
   @IsDateString()
-  expiresAt?: Date;
+  expiresAt?: Date
 }

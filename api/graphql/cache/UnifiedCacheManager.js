@@ -17,8 +17,7 @@ class UnifiedCacheManager {
 
     // Merge operation configuration
     this.config = {
-      cacheableOperations:
-        options.cacheableOperations || config.operations.cacheable,
+      cacheableOperations: options.cacheableOperations || config.operations.cacheable,
       excludeFields: options.excludeFields || config.operations.excludeFields,
       excludeQueries: options.excludeQueries || [],
       includeQueries: options.includeQueries || [],
@@ -38,10 +37,7 @@ class UnifiedCacheManager {
         const operationName = request.operationName;
 
         // Skip caching for mutations
-        if (
-          !operationName ||
-          requestContext.operation?.operation === 'mutation'
-        ) {
+        if (!operationName || requestContext.operation?.operation === 'mutation') {
           return {
             async willSendResponse(responseContext) {
               // Invalidate cache on mutation

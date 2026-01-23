@@ -9,41 +9,41 @@ The cache module has been consolidated to reduce duplication and improve maintai
 ### Before (Old API)
 
 ```javascript
-const GraphQLCachePlugin = require("./cache/GraphQLCachePlugin");
-const CacheMiddleware = require("./cache/CacheMiddleware");
+const GraphQLCachePlugin = require('./cache/GraphQLCachePlugin')
+const CacheMiddleware = require('./cache/CacheMiddleware')
 
 // Apollo Server
 const cachePlugin = new GraphQLCachePlugin({
-  cacheableOperations: ["getUser", "getVideo"],
-});
+  cacheableOperations: ['getUser', 'getVideo'],
+})
 const server = new ApolloServer({
   plugins: [cachePlugin.plugin()],
-});
+})
 
 // Express
-const cacheMiddleware = new CacheMiddleware();
-app.use("/graphql", cacheMiddleware.cacheGraphQL());
-app.use("/graphql", cacheMiddleware.invalidateOnMutation());
+const cacheMiddleware = new CacheMiddleware()
+app.use('/graphql', cacheMiddleware.cacheGraphQL())
+app.use('/graphql', cacheMiddleware.invalidateOnMutation())
 ```
 
 ### After (New API)
 
 ```javascript
-const { UnifiedCacheManager } = require("./cache");
+const { UnifiedCacheManager } = require('./cache')
 
 // Single instance for both Apollo and Express
 const cacheManager = new UnifiedCacheManager({
-  cacheableOperations: ["getUser", "getVideo"],
-});
+  cacheableOperations: ['getUser', 'getVideo'],
+})
 
 // Apollo Server
 const server = new ApolloServer({
   plugins: [cacheManager.apolloPlugin()],
-});
+})
 
 // Express
-app.use("/graphql", cacheManager.graphqlMiddleware());
-app.use("/graphql", cacheManager.invalidationMiddleware());
+app.use('/graphql', cacheManager.graphqlMiddleware())
+app.use('/graphql', cacheManager.invalidationMiddleware())
 ```
 
 ## Benefits
@@ -60,35 +60,35 @@ app.use("/graphql", cacheManager.invalidationMiddleware());
 
 ```javascript
 // Automatically uses correct config based on NODE_ENV
-const cacheManager = new UnifiedCacheManager();
+const cacheManager = new UnifiedCacheManager()
 
 // Or override per environment
 const devCache = new UnifiedCacheManager({
   ttl: { default: 60 },
-});
+})
 ```
 
 ### 2. Route Caching Middleware
 
 ```javascript
 // Cache any Express route
-app.get("/api/trending", cacheManager.routeMiddleware(120), (req, res) => {
-  res.json({ trending: getTrendingVideos() });
-});
+app.get('/api/trending', cacheManager.routeMiddleware(120), (req, res) => {
+  res.json({ trending: getTrendingVideos() })
+})
 ```
 
 ### 3. Direct Cache Access
 
 ```javascript
-const cache = cacheManager.getCacheService();
+const cache = cacheManager.getCacheService()
 
 // Manual caching
-await cache.set("custom:key", data, 300);
-const cached = await cache.get("custom:key");
+await cache.set('custom:key', data, 300)
+const cached = await cache.get('custom:key')
 
 // Statistics
-const stats = await cacheManager.getStats();
-console.log(`Hit rate: ${stats.hitRate}%`);
+const stats = await cacheManager.getStats()
+console.log(`Hit rate: ${stats.hitRate}%`)
 ```
 
 ## Configuration Changes
@@ -98,15 +98,15 @@ console.log(`Hit rate: ${stats.hitRate}%`);
 ```javascript
 // GraphQLCachePlugin
 new GraphQLCachePlugin({
-  cacheableOperations: ["getUser"],
+  cacheableOperations: ['getUser'],
   ttlByType: { User: 600 },
-});
+})
 
 // CacheMiddleware
 new CacheMiddleware({
-  excludeQueries: ["currentUser"],
+  excludeQueries: ['currentUser'],
   ttlByType: { User: 600 }, // Duplicate!
-});
+})
 ```
 
 ### New Configuration (Single Source)
@@ -114,10 +114,10 @@ new CacheMiddleware({
 ```javascript
 // All configuration in one place
 new UnifiedCacheManager({
-  cacheableOperations: ["getUser"],
-  excludeQueries: ["currentUser"],
+  cacheableOperations: ['getUser'],
+  excludeQueries: ['currentUser'],
   // TTL automatically loaded from shared/config.js
-});
+})
 ```
 
 ## Backwards Compatibility
@@ -126,11 +126,11 @@ The old APIs are still available but deprecated:
 
 ```javascript
 // ⚠️ Still works but deprecated
-const GraphQLCachePlugin = require("./cache/GraphQLCachePlugin");
-const CacheMiddleware = require("./cache/CacheMiddleware");
+const GraphQLCachePlugin = require('./cache/GraphQLCachePlugin')
+const CacheMiddleware = require('./cache/CacheMiddleware')
 
 // ✅ Use this instead
-const { UnifiedCacheManager } = require("./cache");
+const { UnifiedCacheManager } = require('./cache')
 ```
 
 ## Migration Steps
@@ -148,15 +148,15 @@ const { UnifiedCacheManager } = require("./cache");
 ```javascript
 // Merge all cache config into one
 const cacheConfig = {
-  cacheableOperations: ["getUser", "getVideo", "getTrendingVideos"],
-  excludeQueries: ["currentUser"],
+  cacheableOperations: ['getUser', 'getVideo', 'getTrendingVideos'],
+  excludeQueries: ['currentUser'],
   redis: {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
   },
-};
+}
 
-const cacheManager = new UnifiedCacheManager(cacheConfig);
+const cacheManager = new UnifiedCacheManager(cacheConfig)
 ```
 
 ### Step 3: Update Apollo Server
@@ -191,19 +191,19 @@ npm test -- api/graphql/cache
 
 ```javascript
 // cache/instance.js
-const { UnifiedCacheManager } = require("./");
+const { UnifiedCacheManager } = require('./')
 
 const cacheManager = new UnifiedCacheManager({
   redis: {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
   },
-});
+})
 
-module.exports = cacheManager;
+module.exports = cacheManager
 
 // Use everywhere
-const cacheManager = require("./cache/instance");
+const cacheManager = require('./cache/instance')
 ```
 
 ### Pattern 2: Multiple Cache Instances
@@ -211,40 +211,40 @@ const cacheManager = require("./cache/instance");
 ```javascript
 // Different cache for different purposes
 const userCache = new UnifiedCacheManager({
-  cacheableOperations: ["getUser", "getUserProfile"],
+  cacheableOperations: ['getUser', 'getUserProfile'],
   redis: { db: 1 },
-});
+})
 
 const videoCache = new UnifiedCacheManager({
-  cacheableOperations: ["getVideo", "getTrendingVideos"],
+  cacheableOperations: ['getVideo', 'getTrendingVideos'],
   redis: { db: 2 },
-});
+})
 ```
 
 ### Pattern 3: Testing with Mock Cache
 
 ```javascript
 // test/cache.test.js
-const { UnifiedCacheManager } = require("../api/graphql/cache");
+const { UnifiedCacheManager } = require('../api/graphql/cache')
 
-describe("Cache", () => {
-  let cache;
+describe('Cache', () => {
+  let cache
 
   beforeEach(() => {
     cache = new UnifiedCacheManager({
       redis: { db: 15 }, // Test database
-    });
-  });
+    })
+  })
 
   afterEach(async () => {
-    await cache.clearAll();
-    await cache.close();
-  });
+    await cache.clearAll()
+    await cache.close()
+  })
 
-  it("should cache queries", async () => {
+  it('should cache queries', async () => {
     // Test caching
-  });
-});
+  })
+})
 ```
 
 ## Troubleshooting
@@ -255,10 +255,10 @@ describe("Cache", () => {
 
 ```javascript
 // ❌ Wrong
-app.use("/graphql", cacheManager.graphqlMiddleware);
+app.use('/graphql', cacheManager.graphqlMiddleware)
 
 // ✅ Correct
-app.use("/graphql", cacheManager.graphqlMiddleware());
+app.use('/graphql', cacheManager.graphqlMiddleware())
 ```
 
 ### Issue: Different behavior between environments
@@ -274,7 +274,7 @@ NODE_ENV=production npm start
 **Solution**: Clear Redis after migration:
 
 ```javascript
-await cacheManager.clearAll();
+await cacheManager.clearAll()
 ```
 
 ## Performance Impact
@@ -289,12 +289,12 @@ If issues arise, rollback is simple:
 
 ```javascript
 // Temporarily revert to old API
-const GraphQLCachePlugin = require("./cache/GraphQLCachePlugin");
-const CacheMiddleware = require("./cache/CacheMiddleware");
+const GraphQLCachePlugin = require('./cache/GraphQLCachePlugin')
+const CacheMiddleware = require('./cache/CacheMiddleware')
 
 // Old code still works
-const plugin = new GraphQLCachePlugin();
-const middleware = new CacheMiddleware();
+const plugin = new GraphQLCachePlugin()
+const middleware = new CacheMiddleware()
 ```
 
 ## Support

@@ -97,36 +97,36 @@ result = generate_cinema_video(
 
 ### HDR10 Features
 
-| Feature | Specification |
-|---------|---------------|
-| **Bit Depth** | 10-bit (1024 levels per channel) |
-| **Color Space** | Rec.2020 (wide color gamut) |
-| **Transfer Function** | PQ (SMPTE ST 2084) |
-| **Peak Brightness** | 1000-4000 nits |
-| **Color Primaries** | Red (0.708, 0.292), Green (0.170, 0.797), Blue (0.131, 0.046) |
-| **Tone Mapping** | Reinhard, Hable, ACES |
+| Feature               | Specification                                                 |
+| --------------------- | ------------------------------------------------------------- |
+| **Bit Depth**         | 10-bit (1024 levels per channel)                              |
+| **Color Space**       | Rec.2020 (wide color gamut)                                   |
+| **Transfer Function** | PQ (SMPTE ST 2084)                                            |
+| **Peak Brightness**   | 1000-4000 nits                                                |
+| **Color Primaries**   | Red (0.708, 0.292), Green (0.170, 0.797), Blue (0.131, 0.046) |
+| **Tone Mapping**      | Reinhard, Hable, ACES                                         |
 
 ### Dolby Atmos Features
 
-| Feature | Specification |
-|---------|---------------|
-| **Channels** | 7.1.4 (12 channels total) |
-| **Audio Objects** | Up to 118 simultaneous |
-| **Codec** | EAC3 (Enhanced AC-3) |
-| **Bitrate** | 768-1536 kbps |
-| **Sample Rate** | 48 kHz |
-| **Bit Depth** | 24-bit |
+| Feature           | Specification               |
+| ----------------- | --------------------------- |
+| **Channels**      | 7.1.4 (12 channels total)   |
+| **Audio Objects** | Up to 118 simultaneous      |
+| **Codec**         | EAC3 (Enhanced AC-3)        |
+| **Bitrate**       | 768-1536 kbps               |
+| **Sample Rate**   | 48 kHz                      |
+| **Bit Depth**     | 24-bit                      |
 | **Spatial Audio** | 3D object-based positioning |
-| **Binaural** | Headphone 3D rendering |
+| **Binaural**      | Headphone 3D rendering      |
 
 ### Resolution Profiles
 
-| Profile | Resolution | Aspect Ratio |
-|---------|-----------|--------------|
-| Preview | 256×256 | 1:1 |
-| HD | 1920×1080 | 16:9 |
-| 4K | 3840×2160 | 16:9 |
-| **8K** | **7680×4320** | **16:9** |
+| Profile | Resolution    | Aspect Ratio |
+| ------- | ------------- | ------------ |
+| Preview | 256×256       | 1:1          |
+| HD      | 1920×1080     | 16:9         |
+| 4K      | 3840×2160     | 16:9         |
+| **8K**  | **7680×4320** | **16:9**     |
 
 ---
 
@@ -134,12 +134,12 @@ result = generate_cinema_video(
 
 ### Generation Times (NVIDIA RTX 4090, 24GB VRAM)
 
-| Resolution | Frames | Processing | Total Time |
-|------------|--------|------------|------------|
-| Preview | 48 (2s) | HDR+Audio | ~3 seconds |
-| HD | 240 (10s) | HDR+Audio | ~15 seconds |
-| 4K | 240 (10s) | HDR+Audio | ~45 seconds |
-| **8K** | **240 (10s)** | **HDR+Audio** | **~180 seconds** |
+| Resolution | Frames        | Processing    | Total Time       |
+| ---------- | ------------- | ------------- | ---------------- |
+| Preview    | 48 (2s)       | HDR+Audio     | ~3 seconds       |
+| HD         | 240 (10s)     | HDR+Audio     | ~15 seconds      |
+| 4K         | 240 (10s)     | HDR+Audio     | ~45 seconds      |
+| **8K**     | **240 (10s)** | **HDR+Audio** | **~180 seconds** |
 
 ### File Sizes (10 seconds @ 24fps)
 
@@ -153,18 +153,21 @@ result = generate_cinema_video(
 ## 🔧 System Requirements
 
 ### Minimum (4K HDR)
+
 - **GPU**: NVIDIA RTX 3090 (24GB VRAM)
 - **RAM**: 64GB
 - **Storage**: 500GB SSD
 - **CPU**: 16+ cores
 
 ### Recommended (8K HDR + Atmos)
+
 - **GPU**: NVIDIA RTX 4090 (24GB) or A100 (80GB)
 - **RAM**: 128GB+
 - **Storage**: 1TB+ NVMe SSD
 - **CPU**: 32+ cores (Threadripper/Xeon)
 
 ### Software
+
 - **Python**: 3.10+
 - **CUDA**: 11.8+
 - **FFmpeg**: with libx265 (HEVC) and eac3 codecs
@@ -174,6 +177,7 @@ result = generate_cinema_video(
 ## 🎯 Key Features
 
 ### Video Processing
+
 ✅ 8K upscaling (Lanczos or ESRGAN)
 ✅ HDR10 color grading (sRGB → Rec.2020 → PQ)
 ✅ 10-bit encoding (1024 levels per channel)
@@ -182,6 +186,7 @@ result = generate_cinema_video(
 ✅ Multiple resolution profiles
 
 ### Audio Processing
+
 ✅ AI music generation (MusicGen)
 ✅ 7.1.4 channel spatial audio
 ✅ Object-based audio positioning (up to 118 objects)
@@ -191,6 +196,7 @@ result = generate_cinema_video(
 ✅ Audio-video synchronization
 
 ### Integration
+
 ✅ High-level API (`generate_cinema_video()`)
 ✅ Batch processing support
 ✅ Configuration management (YAML)
@@ -218,6 +224,7 @@ generate_cinema_video(
 ### Classes
 
 **HDR10Processor**
+
 - `linear_to_pq()` - Apply PQ transfer function
 - `srgb_to_rec2020()` - Color space conversion
 - `apply_hdr10_grading()` - HDR color grading
@@ -225,11 +232,13 @@ generate_cinema_video(
 - `generate_hdr10_metadata()` - Generate HDR metadata
 
 **DolbyAtmosProcessor**
+
 - `generate_spatial_audio()` - Create 7.1.4 spatial audio
 - `binaural_render()` - Render to headphone stereo
 - `encode_eac3()` - Encode Dolby Atmos
 
 **CinemaGradeVideoGenerator**
+
 - `generate()` - Complete pipeline execution
 
 ---
@@ -237,6 +246,7 @@ generate_cinema_video(
 ## 📖 Documentation
 
 Full documentation available in:
+
 - **README_8K_HDR_ATMOS.md** - Complete implementation guide
 - **config/development.yaml** - Development configuration
 - **config/production.yaml** - Production configuration
@@ -295,21 +305,22 @@ results = batch_generate_cinema_videos(
 
 ## ✅ Implementation Status
 
-| Component | Status | File |
-|-----------|--------|------|
-| HDR10 Processing | ✅ Complete | hdr_processing.py |
-| 8K Upscaling | ✅ Complete | hdr_processing.py |
-| Dolby Atmos | ✅ Complete | dolby_atmos.py |
-| Audio Generation | ✅ Complete | dolby_atmos.py |
-| Integration | ✅ Complete | cinema_integration.py |
-| Configuration | ✅ Complete | config/*.yaml |
-| Documentation | ✅ Complete | README_8K_HDR_ATMOS.md |
+| Component        | Status      | File                   |
+| ---------------- | ----------- | ---------------------- |
+| HDR10 Processing | ✅ Complete | hdr_processing.py      |
+| 8K Upscaling     | ✅ Complete | hdr_processing.py      |
+| Dolby Atmos      | ✅ Complete | dolby_atmos.py         |
+| Audio Generation | ✅ Complete | dolby_atmos.py         |
+| Integration      | ✅ Complete | cinema_integration.py  |
+| Configuration    | ✅ Complete | config/\*.yaml         |
+| Documentation    | ✅ Complete | README_8K_HDR_ATMOS.md |
 
 ---
 
 ## 🔮 Future Enhancements
 
 Potential improvements:
+
 - ESRGAN model integration for higher-quality upscaling
 - Real-time HDR preview
 - Hardware-accelerated encoding (NVENC)
@@ -322,6 +333,7 @@ Potential improvements:
 ## 📝 Notes
 
 ### FFmpeg Requirement
+
 FFmpeg is **required** for HDR10 encoding and Dolby Atmos support. Install with:
 
 ```bash
@@ -336,13 +348,16 @@ brew install ffmpeg
 ```
 
 Verify codecs:
+
 ```bash
 ffmpeg -codecs | grep hevc  # HDR10 (HEVC/H.265)
 ffmpeg -codecs | grep eac3  # Dolby Atmos (Enhanced AC-3)
 ```
 
 ### MusicGen (Optional)
+
 For AI music generation, install audiocraft:
+
 ```bash
 pip install -U audiocraft
 ```
@@ -354,6 +369,7 @@ Without MusicGen, the system generates placeholder audio tones.
 ## 🎉 Summary
 
 The video generation service now supports **professional cinema-grade output** with:
+
 - **8K UHD** resolution (7680×4320)
 - **HDR10** 10-bit color with Rec.2020 and PQ
 - **Dolby Atmos** 7.1.4 spatial audio

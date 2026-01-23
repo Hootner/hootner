@@ -9,10 +9,10 @@ const ISSUES_FILE = join(__dirname, 'issues.json');
 class FixerAgent {
   async fix() {
     const issues = await this.loadIssues();
-    const pending = issues.filter(i => i.status === 'pending');
-    
+    const pending = issues.filter((i) => i.status === 'pending');
+
     console.log(`[Fixer] Processing ${pending.length} issues`);
-    
+
     for (const issue of pending) {
       try {
         await this.fixIssue(issue);
@@ -25,10 +25,10 @@ class FixerAgent {
         console.error(`[Fixer] Failed: ${issue.type} - ${e.message}`);
       }
     }
-    
+
     await this.saveIssues(issues);
   }
-  
+
   async fixIssue(issue) {
     switch (issue.type) {
       case 'api':
@@ -44,19 +44,19 @@ class FixerAgent {
         throw new Error('Unknown issue type');
     }
   }
-  
+
   async fixAPI(issue) {
     console.log('[Fixer] Attempting API recovery...');
   }
-  
+
   async fixVideo(issue) {
     console.log('[Fixer] Fixing video issue...');
   }
-  
+
   async fixDatabase(issue) {
     console.log('[Fixer] Repairing database...');
   }
-  
+
   async loadIssues() {
     try {
       const data = await fs.readFile(ISSUES_FILE, 'utf8');
@@ -65,7 +65,7 @@ class FixerAgent {
       return [];
     }
   }
-  
+
   async saveIssues(issues) {
     await fs.writeFile(ISSUES_FILE, JSON.stringify(issues, null, 2));
   }

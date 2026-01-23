@@ -8,21 +8,21 @@ Comprehensive caching solution for GraphQL queries with TTL, invalidation strate
 ## Quick Start (New API)
 
 ```javascript
-const { UnifiedCacheManager } = require("./cache");
+const { UnifiedCacheManager } = require('./cache')
 
 // Single instance for everything
 const cacheManager = new UnifiedCacheManager({
-  cacheableOperations: ["getUser", "getVideo", "getTrendingVideos"],
-});
+  cacheableOperations: ['getUser', 'getVideo', 'getTrendingVideos'],
+})
 
 // Apollo Server
 const server = new ApolloServer({
   plugins: [cacheManager.apolloPlugin()],
-});
+})
 
 // Express
-app.use("/graphql", cacheManager.graphqlMiddleware());
-app.use("/graphql", cacheManager.invalidationMiddleware());
+app.use('/graphql', cacheManager.graphqlMiddleware())
+app.use('/graphql', cacheManager.invalidationMiddleware())
 ```
 
 ## Features
@@ -76,10 +76,10 @@ REDIS_PASSWORD=
 ### Initialize Cache Service
 
 ```javascript
-const GraphQLCacheService = require("./cache/GraphQLCacheService");
+const GraphQLCacheService = require('./cache/GraphQLCacheService')
 
 const cache = new GraphQLCacheService({
-  host: "localhost",
+  host: 'localhost',
   port: 6379,
   defaultTTL: 300, // 5 minutes
   ttlByType: {
@@ -89,7 +89,7 @@ const cache = new GraphQLCacheService({
     VideoStats: 60, // 1 minute
     TrendingVideos: 120, // 2 minutes
   },
-});
+})
 ```
 
 ## Usage
@@ -97,17 +97,12 @@ const cache = new GraphQLCacheService({
 ### Apollo Server Integration
 
 ```javascript
-const { ApolloServer } = require("apollo-server-express");
-const GraphQLCachePlugin = require("./cache/GraphQLCachePlugin");
+const { ApolloServer } = require('apollo-server-express')
+const GraphQLCachePlugin = require('./cache/GraphQLCachePlugin')
 
 const cachePlugin = new GraphQLCachePlugin({
-  cacheableOperations: [
-    "getUser",
-    "getVideo",
-    "getTrendingVideos",
-    "searchVideos",
-  ],
-});
+  cacheableOperations: ['getUser', 'getVideo', 'getTrendingVideos', 'searchVideos'],
+})
 
 const server = new ApolloServer({
   typeDefs,
@@ -116,57 +111,57 @@ const server = new ApolloServer({
   context: ({ req }) => ({
     user: req.user,
   }),
-});
+})
 ```
 
 ### Express Middleware
 
 ```javascript
-const express = require("express");
-const CacheMiddleware = require("./cache/CacheMiddleware");
+const express = require('express')
+const CacheMiddleware = require('./cache/CacheMiddleware')
 
-const app = express();
-const cacheMiddleware = new CacheMiddleware();
+const app = express()
+const cacheMiddleware = new CacheMiddleware()
 
 // Cache GraphQL queries
 app.use(
-  "/graphql",
+  '/graphql',
   cacheMiddleware.cacheGraphQL({
-    excludeQueries: ["getCurrentUser"],
+    excludeQueries: ['getCurrentUser'],
   })
-);
+)
 
 // Invalidate on mutations
-app.use("/graphql", cacheMiddleware.invalidateOnMutation());
+app.use('/graphql', cacheMiddleware.invalidateOnMutation())
 
 // Cache REST routes
-app.get("/api/trending", cacheMiddleware.cacheRoute(120), (req, res) => {
+app.get('/api/trending', cacheMiddleware.cacheRoute(120), (req, res) => {
   // Handler
-});
+})
 ```
 
 ### Manual Caching
 
 ```javascript
-const cache = require("./cache/GraphQLCacheService");
+const cache = require('./cache/GraphQLCacheService')
 
 // Cache a query result
-await cache.set("video:123", videoData, 300);
+await cache.set('video:123', videoData, 300)
 
 // Get cached result
-const cached = await cache.get("video:123");
+const cached = await cache.get('video:123')
 
 // Set with type-based TTL
-await cache.setByType("video:123", videoData, "Video");
+await cache.setByType('video:123', videoData, 'Video')
 
 // Delete cache
-await cache.del("video:123");
+await cache.del('video:123')
 
 // Invalidate by pattern
-await cache.delPattern("video:*");
+await cache.delPattern('video:*')
 
 // Invalidate by type
-await cache.invalidate("Video", "123");
+await cache.invalidate('Video', '123')
 ```
 
 ## TTL Configuration
@@ -186,10 +181,10 @@ await cache.invalidate("Video", "123");
 
 ```javascript
 // Set with custom TTL
-await cache.set("key", value, 600); // 10 minutes
+await cache.set('key', value, 600) // 10 minutes
 
 // Set without TTL (persist)
-await cache.redis.set("key", JSON.stringify(value));
+await cache.redis.set('key', JSON.stringify(value))
 ```
 
 ## Invalidation Strategies
@@ -198,51 +193,47 @@ await cache.redis.set("key", JSON.stringify(value));
 
 ```javascript
 // Invalidate all Video caches
-await cache.invalidate("Video");
+await cache.invalidate('Video')
 
 // Invalidate specific video
-await cache.invalidate("Video", "123");
+await cache.invalidate('Video', '123')
 ```
 
 ### 2. Pattern-Based Invalidation
 
 ```javascript
 // Invalidate all user-related caches
-await cache.delPattern("User:*");
+await cache.delPattern('User:*')
 
 // Invalidate specific user queries
-await cache.delPattern("query:user123:*");
+await cache.delPattern('query:user123:*')
 ```
 
 ### 3. Mutation-Triggered Invalidation
 
 ```javascript
 // Automatically invalidates related caches
-await cache.invalidateOnMutation("updateVideo", {
-  id: "123",
-  title: "New Title",
-});
+await cache.invalidateOnMutation('updateVideo', {
+  id: '123',
+  title: 'New Title',
+})
 ```
 
 ### 4. User-Specific Invalidation
 
 ```javascript
 // Invalidate all caches for a user
-await cache.invalidateUser("user123");
+await cache.invalidateUser('user123')
 ```
 
 ### 5. Tag-Based Invalidation
 
 ```javascript
 // Set with tags
-await cache.setWithTags("video:123", videoData, [
-  "video",
-  "trending",
-  "featured",
-]);
+await cache.setWithTags('video:123', videoData, ['video', 'trending', 'featured'])
 
 // Invalidate by tag
-await cache.invalidateByTag("trending");
+await cache.invalidateByTag('trending')
 ```
 
 ## Cache Warming
@@ -260,7 +251,7 @@ await cache.warmCache([
     variables: {},
     execute: () => getPopularUsers(),
   },
-]);
+])
 ```
 
 ## Batch Operations
@@ -268,8 +259,8 @@ await cache.warmCache([
 ### Batch Get
 
 ```javascript
-const keys = ["video:1", "video:2", "video:3"];
-const results = await cache.mget(keys);
+const keys = ['video:1', 'video:2', 'video:3']
+const results = await cache.mget(keys)
 
 // Results: [{ key: 'video:1', value: {...} }, ...]
 ```
@@ -278,20 +269,20 @@ const results = await cache.mget(keys);
 
 ```javascript
 const entries = [
-  { key: "video:1", value: videoData1 },
-  { key: "video:2", value: videoData2 },
-  { key: "video:3", value: videoData3 },
-];
+  { key: 'video:1', value: videoData1 },
+  { key: 'video:2', value: videoData2 },
+  { key: 'video:3', value: videoData3 },
+]
 
-await cache.mset(entries, 300);
+await cache.mset(entries, 300)
 ```
 
 ## Cache Statistics
 
 ```javascript
-const stats = await cache.getStats();
+const stats = await cache.getStats()
 
-console.log(stats);
+console.log(stats)
 // {
 //   hits: 1250,
 //   misses: 350,
@@ -308,57 +299,57 @@ console.log(stats);
 const resolvers = {
   Query: {
     getVideo: async (parent, { id }, context) => {
-      const cacheKey = `video:${id}`;
+      const cacheKey = `video:${id}`
 
       // Try cache first
-      const cached = await cache.get(cacheKey);
-      if (cached) return cached;
+      const cached = await cache.get(cacheKey)
+      if (cached) return cached
 
       // Fetch from database
-      const video = await Video.findById(id);
+      const video = await Video.findById(id)
 
       // Cache result
-      await cache.setByType(cacheKey, video, "Video");
+      await cache.setByType(cacheKey, video, 'Video')
 
-      return video;
+      return video
     },
 
     getTrendingVideos: async (parent, args, context) => {
-      const cacheKey = "trending:videos";
+      const cacheKey = 'trending:videos'
 
-      const cached = await cache.get(cacheKey);
-      if (cached) return cached;
+      const cached = await cache.get(cacheKey)
+      if (cached) return cached
 
-      const videos = await Video.find().sort({ views: -1 }).limit(10);
+      const videos = await Video.find().sort({ views: -1 }).limit(10)
 
-      await cache.setByType(cacheKey, videos, "TrendingVideos");
+      await cache.setByType(cacheKey, videos, 'TrendingVideos')
 
-      return videos;
+      return videos
     },
   },
 
   Mutation: {
     updateVideo: async (parent, { id, input }, context) => {
-      const video = await Video.findByIdAndUpdate(id, input, { new: true });
+      const video = await Video.findByIdAndUpdate(id, input, { new: true })
 
       // Invalidate related caches
-      await cache.invalidate("Video", id);
+      await cache.invalidate('Video', id)
 
-      return video;
+      return video
     },
   },
-};
+}
 ```
 
 ## Invalidation Patterns
 
 ```javascript
 const invalidationPatterns = {
-  User: ["User:*", "UserProfile:*", "UserVideos:*"],
-  Video: ["Video:*", "VideoList:*", "TrendingVideos:*", "SearchResults:*"],
-  Comment: ["Comment:*", "VideoComments:*"],
-  Subscription: ["User:*:subscription", "SubscriptionStats:*"],
-};
+  User: ['User:*', 'UserProfile:*', 'UserVideos:*'],
+  Video: ['Video:*', 'VideoList:*', 'TrendingVideos:*', 'SearchResults:*'],
+  Comment: ['Comment:*', 'VideoComments:*'],
+  Subscription: ['User:*:subscription', 'SubscriptionStats:*'],
+}
 ```
 
 ## Best Practices
@@ -367,45 +358,45 @@ const invalidationPatterns = {
 
 ```javascript
 // ✅ Good - Cache query
-const videos = await cache.getOrSet("videos:all", () => Video.find());
+const videos = await cache.getOrSet('videos:all', () => Video.find())
 
 // ❌ Bad - Don't cache mutations
-const video = await Video.create(data); // Never cache this
+const video = await Video.create(data) // Never cache this
 ```
 
 ### 2. Use Type-Based TTLs
 
 ```javascript
 // ✅ Good - Different TTLs for different types
-await cache.setByType("user:123", user, "User"); // 10 min
-await cache.setByType("stats:123", stats, "VideoStats"); // 1 min
+await cache.setByType('user:123', user, 'User') // 10 min
+await cache.setByType('stats:123', stats, 'VideoStats') // 1 min
 ```
 
 ### 3. Invalidate on Mutations
 
 ```javascript
 // ✅ Good - Invalidate after mutation
-await Video.update(id, data);
-await cache.invalidate("Video", id);
+await Video.update(id, data)
+await cache.invalidate('Video', id)
 ```
 
 ### 4. Use Patterns for Related Data
 
 ```javascript
 // ✅ Good - Invalidate all related caches
-await cache.delPattern(`video:${videoId}:*`);
+await cache.delPattern(`video:${videoId}:*`)
 ```
 
 ### 5. Handle Cache Failures Gracefully
 
 ```javascript
 // ✅ Good - Fallback on cache failure
-const cached = await cache.get(key).catch(() => null);
-if (cached) return cached;
+const cached = await cache.get(key).catch(() => null)
+if (cached) return cached
 
-const data = await fetchFromDB();
-await cache.set(key, data).catch(console.error);
-return data;
+const data = await fetchFromDB()
+await cache.set(key, data).catch(console.error)
+return data
 ```
 
 ## Monitoring
@@ -435,16 +426,16 @@ TTL graphql:video:123
 
 ```javascript
 // Track cache hit rate
-app.get("/api/cache/stats", async (req, res) => {
-  const stats = await cache.getStats();
-  res.json(stats);
-});
+app.get('/api/cache/stats', async (req, res) => {
+  const stats = await cache.getStats()
+  res.json(stats)
+})
 
 // Clear cache (admin only)
-app.post("/api/cache/clear", async (req, res) => {
-  await cache.clearAll();
-  res.json({ message: "Cache cleared" });
-});
+app.post('/api/cache/clear', async (req, res) => {
+  await cache.clearAll()
+  res.json({ message: 'Cache cleared' })
+})
 ```
 
 ## Performance Tips

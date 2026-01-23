@@ -13,7 +13,7 @@ module.exports = {
     if (filter?.search) {
       query.$or = [
         { title: { $regex: filter.search, $options: 'i' } },
-        { description: { $regex: filter.search, $options: 'i' } }
+        { description: { $regex: filter.search, $options: 'i' } },
       ];
     }
 
@@ -26,14 +26,14 @@ module.exports = {
     const totalCount = await Video.countDocuments(query);
 
     return {
-      edges: videos.map(v => ({ node: v, cursor: v._id.toString() })),
+      edges: videos.map((v) => ({ node: v, cursor: v._id.toString() })),
       pageInfo: {
         hasNextPage: offset + limit < totalCount,
         hasPreviousPage: offset > 0,
         startCursor: videos[0]?._id.toString(),
-        endCursor: videos[videos.length - 1]?._id.toString()
+        endCursor: videos[videos.length - 1]?._id.toString(),
       },
-      totalCount
+      totalCount,
     };
   },
 
@@ -56,7 +56,7 @@ module.exports = {
   // Add like
   likeVideo: async (_, { videoId }, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    
+
     const video = await Video.findById(videoId);
     if (!video) throw new Error('Video not found');
 
@@ -73,37 +73,39 @@ module.exports = {
     return {
       success: true,
       message: likeIndex > -1 ? 'Like removed' : 'Video liked',
-      video
+      video,
     };
   },
 
   // Add comment
   addComment: async (_, { videoId, text }, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    
+
     const video = await Video.findById(videoId);
     if (!video) throw new Error('Video not found');
 
     video.comments.push({
       userId: user.id,
       text,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     await video.save();
-    pubsub.publish('COMMENT_ADDED', { commentAdded: { video, comment: video.comments[video.comments.length - 1] } });
+    pubsub.publish('COMMENT_ADDED', {
+      commentAdded: { video, comment: video.comments[video.comments.length - 1] },
+    });
 
     return {
       success: true,
       message: 'Comment added',
-      video
+      video,
     };
   },
 
   // Delete comment
   deleteComment: async (_, { videoId, commentId }, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    
+
     const video = await Video.findById(videoId);
     if (!video) throw new Error('Video not found');
 
@@ -117,7 +119,7 @@ module.exports = {
     return {
       success: true,
       message: 'Comment deleted',
-      video
+      video,
     };
-  }
+  },
 };

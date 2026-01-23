@@ -3,18 +3,21 @@
 ## ✅ What Was Just Implemented
 
 ### 1. **WebSocket Connection** (live-activity.html)
+
 ```javascript
 // Connects to GraphQL WebSocket at ws://localhost:4000/graphql
 connectToBackend() → Opens WebSocket connection
 ```
 
 **Features:**
+
 - ✅ Real-time event streaming
 - ✅ Auto-reconnection (up to 5 attempts)
 - ✅ Graceful fallback to demo mode if backend unavailable
 - ✅ Error handling and connection monitoring
 
 ### 2. **Event Mapping** (Backend → Frontend)
+
 ```javascript
 mapBackendEventToDisplay(event) → Converts backend format to display format
 
@@ -24,6 +27,7 @@ Display:  { emoji: '🎥', text: 'User uploaded 4K video', type: 'video_uploaded
 ```
 
 **Supported Event Types:**
+
 - 🎥 `VIDEO_UPLOADED` - User video uploads
 - 🚀 `DEPLOYMENT_SUCCESS` - Successful code deployments
 - 🔐 `SECURITY_SCAN` - Security audit completions
@@ -38,6 +42,7 @@ Display:  { emoji: '🎥', text: 'User uploaded 4K video', type: 'video_uploaded
 - ❌ `DEPLOYMENT_FAILED` - Failed deployments
 
 ### 3. **Real-Time Display**
+
 ```javascript
 addRealActivity(activity) → Displays real events in feed
 - Shows actual data from backend
@@ -47,11 +52,13 @@ addRealActivity(activity) → Displays real events in feed
 ```
 
 ### 4. **Startup Script** (start-platform-complete.js)
+
 ```bash
 npm run start:platform
 ```
 
 **Does:**
+
 1. Starts Docker (MongoDB + Redis)
 2. Waits 5 seconds for initialization
 3. Starts Backend Services (GraphQL API + Video Gen)
@@ -62,6 +69,7 @@ npm run start:platform
 ## 🚀 **How to Run It**
 
 ### **Option 1: One Command (Easiest)**
+
 ```bash
 npm run start:platform
 ```
@@ -69,16 +77,19 @@ npm run start:platform
 ### **Option 2: Manual Setup (More Control)**
 
 **Terminal 1 - Infrastructure:**
+
 ```bash
 docker-compose -f docker-compose.dev.yml up
 ```
 
 **Terminal 2 - Backend:**
+
 ```bash
 npm run start:backend
 ```
 
 **Terminal 3 - Frontend (Already Running):**
+
 ```
 http://localhost:3005/live-activity
 ```
@@ -90,23 +101,28 @@ http://localhost:3005/live-activity
 ### **Live Activity Page Behavior:**
 
 **1. Attempts Real Backend Connection (0-5 seconds)**
+
 ```
 🔌 Attempting WebSocket connection to ws://localhost:4000/graphql
 ✅ WebSocket connected to backend
 ```
 
 **2. If Backend Available:**
+
 ```
 📨 New real event: { emoji: '🎥', text: 'User uploaded video' }
 📨 New real event: { emoji: '🚀', text: 'Deployment v2.1.4' }
 ```
+
 **Shows LIVE badge**, displays actual system events
 
 **3. If Backend Unavailable (5+ seconds timeout):**
+
 ```
 ⏱️ No backend response, falling back to demo mode
 📊 Running in DEMO mode - using simulated data
 ```
+
 **Shows DEMO events** temporarily until backend comes online
 
 ---
@@ -209,18 +225,21 @@ Once backend is running, you have:
 ## 🔧 **Troubleshooting**
 
 ### **Live Activity shows demo data instead of real?**
+
 ```
 ⚠️ Backend not running or WebSocket unavailable
 Fix: npm run start:backend
 ```
 
 ### **WebSocket connection timeout?**
+
 ```
 Check if GraphQL API started: http://localhost:4000/graphql
 Should see: "This is the homepage of apollo server"
 ```
 
 ### **No events showing up?**
+
 ```
 Backend may not be generating events yet
 Wait 30-60 seconds for services to fully initialize
@@ -246,4 +265,3 @@ Once everything is working:
 **After:** ✅ Real backend events streamed to frontend
 
 **What it means:** Your monitoring dashboard now shows actual, live system activity!
-

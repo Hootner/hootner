@@ -21,6 +21,7 @@ npm run start:backend
 ```
 
 **Services will be available at:**
+
 - GraphQL API: http://localhost:4000/graphql
 - Video Generation: http://localhost:5003/health
 - MongoDB: mongodb://localhost:27017/hootner
@@ -69,6 +70,7 @@ npm run db:optimize
 ```
 
 **What it does:**
+
 - Creates MongoDB collections (users, videos, sessions, analytics)
 - Creates performance indexes
 - Configures Redis LRU eviction policy
@@ -83,6 +85,7 @@ npm run db:optimize
 Location: `api/graphql/middleware/security.js`
 
 **Features:**
+
 - Rate limiting (API, Auth, GraphQL)
 - XSS sanitization
 - SQL/NoSQL injection prevention
@@ -99,13 +102,13 @@ const {
   securityHeaders,
   sanitizeInput,
   preventInjection,
-} = require('./middleware/security');
+} = require('./middleware/security')
 
-app.use(securityHeaders);
-app.use(sanitizeInput);
-app.use(preventInjection);
-app.use('/api', apiLimiter);
-app.use('/auth', authLimiter);
+app.use(securityHeaders)
+app.use(sanitizeInput)
+app.use(preventInjection)
+app.use('/api', apiLimiter)
+app.use('/auth', authLimiter)
 ```
 
 ---
@@ -133,6 +136,7 @@ curl http://localhost:4000/health
 Open: http://localhost:4000/graphql
 
 **Example Query:**
+
 ```graphql
 query {
   videos {
@@ -161,6 +165,7 @@ python api.py
 ```
 
 **Endpoints:**
+
 - `POST /generate` - Generate video from text
 - `GET /health` - Health check
 - `GET /api/video/<id>` - Get video metadata
@@ -194,6 +199,7 @@ npm run aws:setup
 ```
 
 **Creates:**
+
 - S3 bucket for video storage
 - DynamoDB table for metadata
 - Lambda function for processing
@@ -212,6 +218,7 @@ npm run start:backend
 ```
 
 **What it does:**
+
 1. Checks MongoDB and Redis are running
 2. Optimizes database configurations
 3. Starts GraphQL API (port 4000)
@@ -312,20 +319,24 @@ redis-cli -a dev_redis_password info memory
 Once backend services are running, GitHub Copilot can integrate:
 
 **GraphQL Endpoints:**
+
 - `http://localhost:4000/graphql` - Main GraphQL endpoint
 - WebSocket subscriptions for real-time features
 
 **Video APIs:**
+
 - `http://localhost:5003/api/video/<id>` - Video metadata
 - `http://localhost:5003/api/video/stream/<file>` - Video streaming
 
 **Analytics:**
+
 - `POST http://localhost:5003/api/analytics/track` - Track events
 - `POST http://localhost:5003/api/analytics/playback` - Track playback
 
 ### WebSocket Support
 
 GraphQL API includes WebSocket support for real-time features:
+
 - `ws://localhost:4000/graphql` - Subscriptions endpoint
 
 ---

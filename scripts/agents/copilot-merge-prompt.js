@@ -23,10 +23,10 @@ class MergeCommitGenerator {
       const prompt = `Generate a merge commit message for merging ${branch} into main.
 
 Summary of changes:
-` + commitLines.slice(0, 10).map(c => `- ${c + ``).join('\n')}
+${commitLines.slice(0, 10).map(c => `- ${c}`).join('\n')}
 
 Files modified (${fileList.length} total):
-${fileList.slice(0, 15).map(f => `- ` + f + ``).join('\n')}${fileList.length > 15 ? '\n- ... and more' : ''}
+${fileList.slice(0, 15).map(f => `- ${f}`).join('\n')}${fileList.length > 15 ? '\n- ... and more' : ''}
 
 Format:
 Merge: [Brief summary of feature/fix]
@@ -47,7 +47,7 @@ Testing: [What was tested]`;
       console.log('4. Use: git commit -m "generated message"\n');
       
     } catch (err) {
-      console.error(chalk.red(`Error: ` + err.message + ``));
+      console.error(chalk.red('Error: ' + err.message + ''));
       process.exit(1);
     }
   }

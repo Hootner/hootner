@@ -75,23 +75,23 @@ Files are automatically detected by extension:
 
 ```javascript
 // Automatic validation
-createFile('test.js', 'console.log("hello")');
+createFile('test.js', 'console.log("hello")')
 
 // Retry with backoff
 await errorHandler.withRetry(() => saveToServer(), {
   maxRetries: 3,
   delay: 1000,
-});
+})
 
 // Timeout protection
-await errorHandler.withTimeout(() => longRunningTask(), 5000, 'Task name');
+await errorHandler.withTimeout(() => longRunningTask(), 5000, 'Task name')
 
 // Manual error reporting
 errorHandler.handleError({
   type: 'custom',
   message: 'Something went wrong',
   timestamp: Date.now(),
-});
+})
 ```
 
 ## 🎯 Features
@@ -135,15 +135,15 @@ const servers = {
   javascript: 'ws://localhost:3001/lsp/javascript',
   typescript: 'ws://localhost:3001/lsp/typescript',
   python: 'ws://localhost:3001/lsp/python',
-};
+}
 ```
 
 ### Error Handler Options
 
 ```javascript
-errorHandler.maxErrors = 100; // Max errors to track
-errorHandler.validateFile(filename); // Validate filename
-errorHandler.validateCode(code, language); // Validate code
+errorHandler.maxErrors = 100 // Max errors to track
+errorHandler.validateFile(filename) // Validate filename
+errorHandler.validateCode(code, language) // Validate code
 ```
 
 ### Monaco Extensions
@@ -153,11 +153,11 @@ errorHandler.validateCode(code, language); // Validate code
 monacoExtensions.registerCustomLanguage('mylang', {
   keywords: ['if', 'else', 'for'],
   operators: ['+', '-', '*', '/'],
-});
+})
 
 // Setup providers
-monacoExtensions.setupCompletionProvider('mylang', provider);
-monacoExtensions.setupHoverProvider('mylang', provider);
+monacoExtensions.setupCompletionProvider('mylang', provider)
+monacoExtensions.setupHoverProvider('mylang', provider)
 ```
 
 ## 📊 Error Types
@@ -207,23 +207,23 @@ monacoExtensions.setupHoverProvider('mylang', provider);
 ### View Error Stats
 
 ```javascript
-const stats = errorHandler.getErrorStats();
-console.log(stats);
+const stats = errorHandler.getErrorStats()
+console.log(stats)
 // { total: 5, byType: { runtime: 3, validation: 2 }, recent: [...] }
 ```
 
 ### Clear Errors
 
 ```javascript
-errorHandler.clearErrors();
+errorHandler.clearErrors()
 ```
 
 ### Listen to Errors
 
 ```javascript
-const unsubscribe = errorHandler.addListener(error => {
-  console.log('New error:', error);
-});
+const unsubscribe = errorHandler.addListener((error) => {
+  console.log('New error:', error)
+})
 ```
 
 ## 📝 Notes

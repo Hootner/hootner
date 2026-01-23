@@ -108,7 +108,7 @@ npm run format:check
 
 # Specific linting
 npm run lint:js         # JavaScript only
-npm run lint:html       # HTML only  
+npm run lint:html       # HTML only
 npm run lint:css        # CSS only
 ```
 
@@ -128,7 +128,7 @@ npm run test:smoke
 # Frontend testing
 cd apps/frontend && npm test
 
-# Server testing  
+# Server testing
 cd apps/server && npm test
 ```
 
@@ -267,17 +267,20 @@ docker-compose -f docker-compose.dev.yml up
 ## 📝 Development Notes
 
 ### Prerequisites
+
 - Node.js 18+
 - npm 9+
 - Docker & Docker Compose (optional)
 
 ### Port Usage
+
 - 3000: Frontend dev server
 - 5000: Main application
 - 8080: Documentation server
 - Various: Microservices (3001-3015)
 
 ### Environment Files
+
 - `.env` - Main environment variables
 - `apps/frontend/.env` - Frontend specific
 - `.env.example` - Template file

@@ -18,10 +18,11 @@ Modern, feature-rich video player built with React, TypeScript, and Tailwind CSS
 ## Components
 
 ### VideoPlayer.tsx
+
 Main container component that orchestrates all video player functionality.
 
 ```tsx
-import { VideoPlayer } from './components/VideoPlayer';
+import { VideoPlayer } from './components/VideoPlayer'
 
 const video = {
   id: 'video-1',
@@ -29,9 +30,9 @@ const video = {
   url: 'https://example.com/video.mp4',
   thumbnailUrl: 'https://example.com/thumb.jpg',
   duration: 120,
-};
+}
 
-<VideoPlayer
+;<VideoPlayer
   video={video}
   autoPlay={false}
   onPlay={() => console.log('Playing')}
@@ -40,19 +41,24 @@ const video = {
 ```
 
 ### VideoControls.tsx
+
 Control bar with play/pause, skip, volume, settings, and fullscreen buttons.
 
 ### VideoProgressBar.tsx
+
 Interactive progress bar with:
+
 - Current progress indicator
 - Buffered content preview
 - Hover time preview
 - Click/drag to seek
 
 ### VideoVolumeControl.tsx
+
 Volume slider with mute toggle and icon states.
 
 ### VideoSettings.tsx
+
 Settings panel for playback speed and quality selection.
 
 ## Hook: useVideoPlayer
@@ -72,7 +78,7 @@ const {
   toggleMute,
   toggleFullscreen,
   setPlaybackRate,
-} = useVideoPlayer(video, autoPlay);
+} = useVideoPlayer(video, autoPlay)
 ```
 
 ## Types
@@ -88,19 +94,20 @@ TypeScript interfaces in `types/videoPlayer.ts`:
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `Space` or `K` | Play/Pause |
-| `←` | Seek backward 5s |
-| `→` | Seek forward 5s |
-| `↑` | Volume up |
-| `↓` | Volume down |
-| `M` | Mute/Unmute |
-| `F` | Fullscreen |
+| Key            | Action           |
+| -------------- | ---------------- |
+| `Space` or `K` | Play/Pause       |
+| `←`            | Seek backward 5s |
+| `→`            | Seek forward 5s  |
+| `↑`            | Volume up        |
+| `↓`            | Volume down      |
+| `M`            | Mute/Unmute      |
+| `F`            | Fullscreen       |
 
 ## Usage Example
 
 See [App.tsx](./App.tsx) for a complete working example with:
+
 - Video player implementation
 - Event handlers
 - Features documentation
@@ -109,6 +116,7 @@ See [App.tsx](./App.tsx) for a complete working example with:
 ## Styling
 
 Built with Tailwind CSS utilities:
+
 - Dark theme (bg-black, bg-gray-800)
 - Smooth transitions
 - Hover effects
@@ -125,7 +133,7 @@ type VideoPlayerAction =
   | { type: 'PAUSE' }
   | { type: 'SEEK'; payload: number }
   | { type: 'SET_VOLUME'; payload: number }
-  // ... more actions
+// ... more actions
 ```
 
 ## Browser Support
@@ -146,22 +154,23 @@ npm install -D tailwindcss postcss autoprefixer
 ## Integration with GraphQL API
 
 The video player integrates with the GraphQL API for:
+
 - Video metadata fetching
 - Progress tracking
 - Analytics events
 - User preferences
 
 ```tsx
-import { useQuery } from '@apollo/client';
-import { GET_VIDEO } from './graphql/queries';
+import { useQuery } from '@apollo/client'
+import { GET_VIDEO } from './graphql/queries'
 
-const { data } = useQuery(GET_VIDEO, { variables: { id: videoId } });
+const { data } = useQuery(GET_VIDEO, { variables: { id: videoId } })
 
-<VideoPlayer
+;<VideoPlayer
   video={data.video}
   onTimeUpdate={(time) => {
     // Track progress
-    updateVideoProgress({ videoId, currentTime: time });
+    updateVideoProgress({ videoId, currentTime: time })
   }}
 />
 ```

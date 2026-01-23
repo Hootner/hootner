@@ -35,13 +35,13 @@ Designer: Open Visual Designer
 
 ```javascript
 // Open designer
-window.visualDesigner.open();
+window.visualDesigner.open()
 
 // Add element
-window.visualDesigner.addElement('div');
+window.visualDesigner.addElement('div')
 
 // Export code
-window.visualDesigner.exportCode();
+window.visualDesigner.exportCode()
 ```
 
 ## Debug Enhancements
@@ -76,13 +76,13 @@ Debug: Export Sessions
 
 ```javascript
 // Add breakpoint
-debugEnhancer.addBreakpoint('file.js', 42);
+debugEnhancer.addBreakpoint('file.js', 42)
 
 // Snooze suggestion
-debugEnhancer.snoozeSuggestion('Use const instead of let', 3600000);
+debugEnhancer.snoozeSuggestion('Use const instead of let', 3600000)
 
 // Export debug sessions
-const sessions = debugEnhancer.exportSessions();
+const sessions = debugEnhancer.exportSessions()
 ```
 
 ### Compliance Integration

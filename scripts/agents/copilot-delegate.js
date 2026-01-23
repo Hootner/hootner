@@ -151,7 +151,7 @@ Comment your changes with // COPILOT: [description]`;
       }
 
       // Suggest arrow functions for single-line functions
-      const singleLineFunctions = content.match(/function\s+\w+\s*\([^)]*\)\s*\{\s*return\s+[^}]+;\s*\}/g) || [];
+      const singleLineFunctions = content.match(/function\s+\w+\s*\([^)]*\)\s*\{\s*return\s+[^}]+;?\s*\}/g) || [];
       if (singleLineFunctions.length > 0) {
         suggestions.push(`Convert ${singleLineFunctions.length} single-line function(s) to arrow functions`);
       }

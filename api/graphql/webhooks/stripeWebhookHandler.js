@@ -18,14 +18,10 @@ class StripeWebhookHandler {
   constructor() {
     this.webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     this.eventHandlers = {
-      'customer.subscription.created':
-        this.handleSubscriptionCreated.bind(this),
-      'customer.subscription.updated':
-        this.handleSubscriptionUpdated.bind(this),
-      'customer.subscription.deleted':
-        this.handleSubscriptionDeleted.bind(this),
-      'customer.subscription.trial_will_end':
-        this.handleTrialWillEnd.bind(this),
+      'customer.subscription.created': this.handleSubscriptionCreated.bind(this),
+      'customer.subscription.updated': this.handleSubscriptionUpdated.bind(this),
+      'customer.subscription.deleted': this.handleSubscriptionDeleted.bind(this),
+      'customer.subscription.trial_will_end': this.handleTrialWillEnd.bind(this),
       'invoice.paid': this.handleInvoicePaid.bind(this),
       'invoice.payment_failed': this.handleInvoicePaymentFailed.bind(this),
       'payment_intent.succeeded': this.handlePaymentSucceeded.bind(this),
@@ -51,11 +47,7 @@ class StripeWebhookHandler {
 
     try {
       // Verify webhook signature
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        signature,
-        this.webhookSecret
-      );
+      event = stripe.webhooks.constructEvent(req.body, signature, this.webhookSecret);
 
       logger.info('Webhook verified', {
         eventId: event.id,
@@ -109,8 +101,7 @@ class StripeWebhookHandler {
    * Handle subscription created event
    */
   async handleSubscriptionCreated(subscription) {
-    const { customer, id, status, items, current_period_end, trial_end } =
-      subscription;
+    const { customer, id, status, items, current_period_end, trial_end } = subscription;
 
     logger.info('Subscription created', {
       subscriptionId: id,
@@ -155,14 +146,8 @@ class StripeWebhookHandler {
    * Handle subscription updated event
    */
   async handleSubscriptionUpdated(subscription) {
-    const {
-      customer,
-      id,
-      status,
-      cancel_at_period_end,
-      items,
-      current_period_end,
-    } = subscription;
+    const { customer, id, status, cancel_at_period_end, items, current_period_end } =
+      subscription;
 
     logger.info('Subscription updated', {
       subscriptionId: id,
@@ -343,8 +328,7 @@ class StripeWebhookHandler {
    * Handle failed invoice payment
    */
   async handleInvoicePaymentFailed(invoice) {
-    const { customer, subscription, id, attempt_count, next_payment_attempt } =
-      invoice;
+    const { customer, subscription, id, attempt_count, next_payment_attempt } = invoice;
 
     logger.error('Invoice payment failed', {
       invoiceId: id,

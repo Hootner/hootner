@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
-import crypto from 'crypto';
+} from '@modelcontextprotocol/sdk/types.js'
+import crypto from 'crypto'
 
 const server = new Server(
   {
@@ -18,7 +18,7 @@ const server = new Server(
       tools: {},
     },
   }
-);
+)
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -47,12 +47,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
     ],
-  };
-});
+  }
+})
 
 // Handle tool calls
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
+  const { name, arguments: args } = request.params
 
   switch (name) {
     case 'hexarchy_status':
@@ -60,31 +60,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              status: 'active',
-              sessionId: crypto.randomUUID(),
-              layers: {
-                '0-core': 'Domain logic & business rules',
-                '1-foundation': 'Infrastructure & services',
-                '2-intelligence': 'AI & analytics',
-                '3-communication': 'APIs & integrations',
-                '4-interface': 'UI & frontend',
-                '5-economy': 'Business & commerce',
-                '6-governance': 'Security & compliance',
-                '7-data': 'Data & repositories',
-                '8-operations': 'DevOps & monitoring'
-              }
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                status: 'active',
+                sessionId: crypto.randomUUID(),
+                layers: {
+                  '0-core': 'Domain logic & business rules',
+                  '1-foundation': 'Infrastructure & services',
+                  '2-intelligence': 'AI & analytics',
+                  '3-communication': 'APIs & integrations',
+                  '4-interface': 'UI & frontend',
+                  '5-economy': 'Business & commerce',
+                  '6-governance': 'Security & compliance',
+                  '7-data': 'Data & repositories',
+                  '8-operations': 'DevOps & monitoring',
+                },
+              },
+              null,
+              2
+            ),
           },
         ],
-      };
+      }
 
     case 'start_layer':
-      const layer = args?.layer;
+      const layer = args?.layer
       if (!layer) {
-        throw new Error('Layer parameter is required');
+        throw new Error('Layer parameter is required')
       }
-      
+
       return {
         content: [
           {
@@ -92,17 +96,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             text: `Starting hexagonal layer: ${layer}`,
           },
         ],
-      };
+      }
 
     default:
-      throw new Error(`Unknown tool: ${name}`);
+      throw new Error(`Unknown tool: ${name}`)
   }
-});
+})
 
 async function runServer() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error('🦉 HOOTNER MCP Server running');
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
+  console.error('🦉 HOOTNER MCP Server running')
 }
 
-runServer().catch(console.error);
+runServer().catch(console.error)

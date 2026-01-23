@@ -57,13 +57,13 @@ const result = condition1
     ? value2
     : condition3
       ? value3
-      : defaultValue;
+      : defaultValue
 
 // Generic variable names
 function process(a, b, c) {
-  const temp = a + b;
-  const result = temp * c;
-  return result;
+  const temp = a + b
+  const result = temp * c
+  return result
 }
 
 // Long function (50+ lines)

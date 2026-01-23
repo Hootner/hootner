@@ -3,21 +3,21 @@
  * Cross-domain orchestration example: Intelligence → Communication → Economy → Interface
  */
 
-import { eventBus } from '../orchestration/event-bus.js';
-import { DomainEvent, EventTypes } from '../contracts/domain-events.js';
-import { createLogger } from '../utils/logger.js';
+import { eventBus } from '../orchestration/event-bus.js'
+import { DomainEvent, EventTypes } from '../contracts/domain-events.js'
+import { createLogger } from '../utils/logger.js'
 
-const logger = createLogger('core', 'tutoring-workflow');
+const logger = createLogger('core', 'tutoring-workflow')
 
 export class TutoringSessionWorkflow {
   constructor(correlationId) {
-    this.correlationId = correlationId || crypto.randomUUID();
+    this.correlationId = correlationId || crypto.randomUUID()
     this.state = {
       sessionId: null,
       userId: null,
       status: 'pending',
-      steps: []
-    };
+      steps: [],
+    }
   }
 
   /**
@@ -28,43 +28,43 @@ export class TutoringSessionWorkflow {
       correlationId: this.correlationId,
       userId,
       subject,
-      topic
-    });
+      topic,
+    })
 
-    this.state.userId = userId;
+    this.state.userId = userId
 
     try {
       // Step 1: Intelligence - Start tutoring session
-      const sessionId = await this._startTutoringSession(userId, subject, topic);
-      this.state.sessionId = sessionId;
-      this.state.steps.push({ step: 'session_started', timestamp: Date.now() });
+      const sessionId = await this._startTutoringSession(userId, subject, topic)
+      this.state.sessionId = sessionId
+      this.state.steps.push({ step: 'session_started', timestamp: Date.now() })
 
       // Step 2: Communication - Notify user
-      await this._notifyUser(userId, sessionId);
-      this.state.steps.push({ step: 'user_notified', timestamp: Date.now() });
+      await this._notifyUser(userId, sessionId)
+      this.state.steps.push({ step: 'user_notified', timestamp: Date.now() })
 
       // Step 3: Interface - Update UI
-      await this._updateInterface(userId, sessionId);
-      this.state.steps.push({ step: 'interface_updated', timestamp: Date.now() });
+      await this._updateInterface(userId, sessionId)
+      this.state.steps.push({ step: 'interface_updated', timestamp: Date.now() })
 
       // Step 4: Governance - Log session
-      await this._logSession(userId, sessionId);
-      this.state.steps.push({ step: 'session_logged', timestamp: Date.now() });
+      await this._logSession(userId, sessionId)
+      this.state.steps.push({ step: 'session_logged', timestamp: Date.now() })
 
-      this.state.status = 'completed';
+      this.state.status = 'completed'
       logger.info('Tutoring session workflow completed', {
         correlationId: this.correlationId,
-        sessionId
-      });
+        sessionId,
+      })
 
-      return { sessionId, status: 'success' };
+      return { sessionId, status: 'success' }
     } catch (error) {
-      this.state.status = 'failed';
+      this.state.status = 'failed'
       logger.error('Tutoring session workflow failed', {
         correlationId: this.correlationId,
-        error: error.message
-      });
-      throw error;
+        error: error.message,
+      })
+      throw error
     }
   }
 
@@ -73,12 +73,12 @@ export class TutoringSessionWorkflow {
       EventTypes.TUTORING_SESSION_STARTED,
       { userId, subject, topic },
       { correlationId: this.correlationId, source: 'workflow' }
-    );
+    )
 
-    await eventBus.publish(event);
+    await eventBus.publish(event)
 
     // Simulate async response (in real system, wait for Intelligence domain response)
-    return `session_${Date.now()}`;
+    return `session_${Date.now()}`
   }
 
   async _notifyUser(userId, sessionId) {
@@ -88,12 +88,12 @@ export class TutoringSessionWorkflow {
         userId,
         type: 'tutoring_session_started',
         message: `Your tutoring session ${sessionId} has started`,
-        sessionId
+        sessionId,
       },
       { correlationId: this.correlationId, source: 'workflow' }
-    );
+    )
 
-    await eventBus.publish(event);
+    await eventBus.publish(event)
   }
 
   async _updateInterface(userId, sessionId) {
@@ -102,12 +102,12 @@ export class TutoringSessionWorkflow {
       {
         userId,
         action: 'show_tutoring_interface',
-        sessionId
+        sessionId,
       },
       { correlationId: this.correlationId, source: 'workflow' }
-    );
+    )
 
-    await eventBus.publish(event);
+    await eventBus.publish(event)
   }
 
   async _logSession(userId, sessionId) {
@@ -117,12 +117,12 @@ export class TutoringSessionWorkflow {
         userId,
         action: 'tutoring_session_started',
         sessionId,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       },
       { correlationId: this.correlationId, source: 'workflow' }
-    );
+    )
 
-    await eventBus.publish(event);
+    await eventBus.publish(event)
   }
 
   /**
@@ -131,8 +131,8 @@ export class TutoringSessionWorkflow {
   async complete(score, conceptsMastered) {
     logger.info('Completing tutoring session', {
       correlationId: this.correlationId,
-      sessionId: this.state.sessionId
-    });
+      sessionId: this.state.sessionId,
+    })
 
     // Economy - Award rewards
     const event = new DomainEvent(
@@ -142,21 +142,21 @@ export class TutoringSessionWorkflow {
         sessionId: this.state.sessionId,
         rewardType: 'session_completion',
         amount: this._calculateReward(score, conceptsMastered),
-        metadata: { score, conceptsMastered }
+        metadata: { score, conceptsMastered },
       },
       { correlationId: this.correlationId, source: 'workflow' }
-    );
+    )
 
-    await eventBus.publish(event);
+    await eventBus.publish(event)
   }
 
   _calculateReward(score, conceptsMastered) {
-    return Math.floor(score * 10) + (conceptsMastered.length * 5);
+    return Math.floor(score * 10) + conceptsMastered.length * 5
   }
 
   getState() {
-    return { ...this.state };
+    return { ...this.state }
   }
 }
 
-export default TutoringSessionWorkflow;
+export default TutoringSessionWorkflow

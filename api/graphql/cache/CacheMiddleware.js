@@ -34,10 +34,7 @@ class CacheMiddleware {
         return next();
       }
 
-      if (
-        includeQueries.length > 0 &&
-        !includeQueries.includes(operationName)
-      ) {
+      if (includeQueries.length > 0 && !includeQueries.includes(operationName)) {
         return next();
       }
 
@@ -130,11 +127,7 @@ class CacheMiddleware {
       res.json = function (body) {
         // Invalidate cache after mutation
         setImmediate(async () => {
-          await this.cache.invalidateOnMutation(
-            operationName,
-            variables,
-            body.data
-          );
+          await this.cache.invalidateOnMutation(operationName, variables, body.data);
         });
 
         return originalJson(body);

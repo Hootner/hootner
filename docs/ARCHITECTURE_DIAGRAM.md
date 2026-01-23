@@ -428,4 +428,3 @@ Publish Event        │           │          │           │
 ---
 
 This architecture enables real-time, zero-latency event streaming from backend to frontend UI. ✨
-

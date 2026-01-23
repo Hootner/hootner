@@ -127,17 +127,17 @@ Generate single video from text prompt.
 
 **Parameters:**
 
-| Parameter | Type | Default | Range | Description |
-|-----------|------|---------|-------|-------------|
-| `prompt` | string | required | 1-500 chars | Text description |
-| `num_frames` | int | 16 | 4-64 | Video length |
-| `height` | int | 64 | 32-512 | Frame height |
-| `width` | int | 64 | 32-512 | Frame width |
-| `fps` | int | 8 | 1-60 | Frames per second |
-| `num_inference_steps` | int | 50 | 1-1000 | Sampling steps |
-| `guidance_scale` | float | 7.5 | 1.0-20.0 | Quality control |
-| `seed` | int | null | any | Reproducibility |
-| `format` | string | "gif" | gif/mp4 | Output format |
+| Parameter             | Type   | Default  | Range       | Description       |
+| --------------------- | ------ | -------- | ----------- | ----------------- |
+| `prompt`              | string | required | 1-500 chars | Text description  |
+| `num_frames`          | int    | 16       | 4-64        | Video length      |
+| `height`              | int    | 64       | 32-512      | Frame height      |
+| `width`               | int    | 64       | 32-512      | Frame width       |
+| `fps`                 | int    | 8        | 1-60        | Frames per second |
+| `num_inference_steps` | int    | 50       | 1-1000      | Sampling steps    |
+| `guidance_scale`      | float  | 7.5      | 1.0-20.0    | Quality control   |
+| `seed`                | int    | null     | any         | Reproducibility   |
+| `format`              | string | "gif"    | gif/mp4     | Output format     |
 
 ---
 
@@ -149,11 +149,7 @@ Generate multiple videos from multiple prompts.
 
 ```json
 {
-  "prompts": [
-    "A robot dancing",
-    "A cat sleeping",
-    "Mountains at sunset"
-  ],
+  "prompts": ["A robot dancing", "A cat sleeping", "Mountains at sunset"],
   "num_frames": 16,
   "height": 64,
   "width": 64
@@ -311,11 +307,11 @@ generator.train_step(
 
 ### Model Sizes
 
-| Size | Parameters | Memory | Speed | Quality |
-|------|-----------|--------|-------|---------|
-| **small** | ~15M | 2GB | Fast | Good |
-| **base** | ~50M | 4GB | Medium | Better |
-| **large** | ~200M | 8GB | Slow | Best |
+| Size      | Parameters | Memory | Speed  | Quality |
+| --------- | ---------- | ------ | ------ | ------- |
+| **small** | ~15M       | 2GB    | Fast   | Good    |
+| **base**  | ~50M       | 4GB    | Medium | Better  |
+| **large** | ~200M      | 8GB    | Slow   | Best    |
 
 ### Performance Tuning
 
@@ -408,18 +404,18 @@ EOF
 ### Generation Times (Base Model)
 
 | Resolution | Frames | Steps | GPU (RTX 3090) | CPU (32 cores) |
-|-----------|--------|-------|----------------|----------------|
-| 64x64 | 16 | 50 | ~8s | ~120s |
-| 128x128 | 16 | 50 | ~30s | ~450s |
-| 256x256 | 16 | 50 | ~120s | ~1800s |
+| ---------- | ------ | ----- | -------------- | -------------- |
+| 64x64      | 16     | 50    | ~8s            | ~120s          |
+| 128x128    | 16     | 50    | ~30s           | ~450s          |
+| 256x256    | 16     | 50    | ~120s          | ~1800s         |
 
 ### Memory Usage
 
-| Model Size | Training | Inference | Min GPU |
-|-----------|----------|-----------|---------|
-| Small | 4GB | 2GB | GTX 1060 (6GB) |
-| Base | 8GB | 4GB | RTX 2060 (8GB) |
-| Large | 16GB | 8GB | RTX 3090 (24GB) |
+| Model Size | Training | Inference | Min GPU         |
+| ---------- | -------- | --------- | --------------- |
+| Small      | 4GB      | 2GB       | GTX 1060 (6GB)  |
+| Base       | 8GB      | 4GB       | RTX 2060 (8GB)  |
+| Large      | 16GB     | 8GB       | RTX 3090 (24GB) |
 
 ---
 
@@ -458,7 +454,7 @@ RATE_LIMIT_REQUESTS = 20  # Instead of 10
 
 ## 🚀 Production Deployment
 
-### 
+###
 
 ```
 FROM python:3.10-slim
@@ -495,19 +491,19 @@ spec:
   template:
     spec:
       containers:
-      - name: api
-        image: hootner/video-generation:latest
-        ports:
-        - containerPort: 5003
-        resources:
-          requests:
-            memory: "4Gi"
-            cpu: "2"
-            nvidia.com/gpu: 1
-          limits:
-            memory: "8Gi"
-            cpu: "4"
-            nvidia.com/gpu: 1
+        - name: api
+          image: hootner/video-generation:latest
+          ports:
+            - containerPort: 5003
+          resources:
+            requests:
+              memory: '4Gi'
+              cpu: '2'
+              nvidia.com/gpu: 1
+            limits:
+              memory: '8Gi'
+              cpu: '4'
+              nvidia.com/gpu: 1
 ```
 
 ---

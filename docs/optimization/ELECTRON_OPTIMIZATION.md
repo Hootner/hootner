@@ -44,10 +44,10 @@ Exposed via `window.electronAPI`:
 
 ```javascript
 // Get memory report
-const report = window.memoryProfiler.getReport();
+const report = window.memoryProfiler.getReport()
 
 // Manual cache clear
-await window.memoryProfiler.clearCache();
+await window.memoryProfiler.clearCache()
 ```
 
 ### Command Palette
@@ -163,31 +163,31 @@ forge.config.js             # Build configuration
 
 ```javascript
 // Memory usage
-const usage = await window.electronAPI.getMemoryUsage();
+const usage = await window.electronAPI.getMemoryUsage()
 // Returns: { heapUsed, heapTotal, external, rss }
 
 // Clear cache
-await window.electronAPI.clearCache();
+await window.electronAPI.clearCache()
 
 // File operations
-const content = await window.electronAPI.readFile('/path/to/file');
-await window.electronAPI.writeFile('/path/to/file', 'content');
+const content = await window.electronAPI.readFile('/path/to/file')
+await window.electronAPI.writeFile('/path/to/file', 'content')
 ```
 
 ### MemoryProfiler
 
 ```javascript
 // Start monitoring
-memoryProfiler.start();
+memoryProfiler.start()
 
 // Get report
-const report = memoryProfiler.getReport();
+const report = memoryProfiler.getReport()
 
 // Manual clear
-await memoryProfiler.clearCache();
+await memoryProfiler.clearCache()
 
 // Stop monitoring
-memoryProfiler.stop();
+memoryProfiler.stop()
 ```
 
 ## Webpack Configuration
@@ -229,20 +229,20 @@ out/
 ### Startup Time
 
 ```javascript
-console.log(`⚡ Startup: ${lazyLoader.getStartupTime()}ms`);
+console.log(`⚡ Startup: ${lazyLoader.getStartupTime()}ms`)
 ```
 
 ### Page Load
 
 ```javascript
-console.log(`📊 Page load: ${performance.now()}ms`);
+console.log(`📊 Page load: ${performance.now()}ms`)
 ```
 
 ### Memory Usage
 
 ```javascript
-const report = memoryProfiler.getReport();
-console.log(report.current.heapUsed);
+const report = memoryProfiler.getReport()
+console.log(report.current.heapUsed)
 ```
 
 ## Best Practices Implemented

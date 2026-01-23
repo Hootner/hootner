@@ -3,11 +3,11 @@
  * Apollo Server plugin for caching GraphQL queries
  */
 
-const GraphQLCacheService = require('./GraphQLCacheService');
+const GraphQLCacheService = require('./GraphQLCacheService')
 
 class GraphQLCachePlugin {
   constructor(options = {}) {
-    this.cache = new GraphQLCacheService(options);
+    this.cache = new GraphQLCacheService(options)
     this.cacheableOperations = options.cacheableOperations || [
       'getUser',
       'getVideo',
@@ -17,22 +17,22 @@ class GraphQLCachePlugin {
       'searchVideos',
       'getUserProfile',
       'getVideoStats',
-    ];
-    this.excludeFields = options.excludeFields || ['currentUser'];
+    ]
+    this.excludeFields = options.excludeFields || ['currentUser']
   }
 
   /**
    * Check if operation should be cached
    */
   shouldCacheOperation(operationName) {
-    return this.cacheableOperations.includes(operationName);
+    return this.cacheableOperations.includes(operationName)
   }
 
   /**
    * Check if operation is a mutation
    */
   isMutation(operation) {
-    return operation.operation === 'mutation';
+    return operation.operation === 'mutation'
   }
 
   /**
@@ -41,8 +41,8 @@ class GraphQLCachePlugin {
   plugin() {
     return {
       async requestDidStart(requestContext) {
-        const { request, context } = requestContext;
-        const operationName = request.operationName;
+        const { request, context } = requestContext
+        const operationName = request.operationName
 
         // Skip caching for mutations
         if (!operationName || this.isMutation(requestContext.operation)) {
@@ -54,15 +54,15 @@ class GraphQLCachePlugin {
                   operationName,
                   request.variables,
                   responseContext.response.data
-                );
+                )
               }
             },
-          };
+          }
         }
 
         // Check if operation should be cached
         if (!this.shouldCacheOperation(operationName)) {
-          return;
+          return
         }
 
         // Generate cache key
@@ -70,26 +70,26 @@ class GraphQLCachePlugin {
           request.query,
           request.variables,
           context
-        );
+        )
 
         return {
           async willSendResponse(responseContext) {
-            const { response } = responseContext;
+            const { response } = responseContext
 
             // Don't cache errors
             if (response.errors) {
-              return;
+              return
             }
 
             // Get type name from operation
-            const typeName = this.extractTypeName(operationName);
+            const typeName = this.extractTypeName(operationName)
 
             // Cache the response
-            await this.cache.setByType(cacheKey, response.data, typeName);
+            await this.cache.setByType(cacheKey, response.data, typeName)
           },
-        };
+        }
       },
-    };
+    }
   }
 
   /**
@@ -99,10 +99,10 @@ class GraphQLCachePlugin {
     return async (req, res, next) => {
       // Only handle POST requests (GraphQL queries)
       if (req.method !== 'POST') {
-        return next();
+        return next()
       }
 
-      const { query, variables, operationName } = req.body;
+      const { query, variables, operationName } = req.body
 
       // Skip if no operation name or is mutation with type checking
       if (
@@ -110,19 +110,19 @@ class GraphQLCachePlugin {
         typeof query !== 'string' ||
         query.trim().startsWith('mutation')
       ) {
-        return next();
+        return next()
       }
 
       // Check if operation should be cached
       if (!this.shouldCacheOperation(operationName)) {
-        return next();
+        return next()
       }
 
       // Generate cache key
-      const cacheKey = this.cache.generateCacheKey(query, variables, req);
+      const cacheKey = this.cache.generateCacheKey(query, variables, req)
 
       // Try to get from cache
-      const cached = await this.cache.get(cacheKey);
+      const cached = await this.cache.get(cacheKey)
 
       if (cached) {
         // Return cached response
@@ -132,25 +132,25 @@ class GraphQLCachePlugin {
             cached: true,
             cacheKey,
           },
-        });
+        })
       }
 
       // Store original send function
-      const originalSend = res.json.bind(res);
+      const originalSend = res.json.bind(res)
 
       // Override send to cache response
       res.json = async function (body) {
         // Only cache successful responses
         if (body.data && !body.errors) {
-          const typeName = this.extractTypeName(operationName);
-          await this.cache.setByType(cacheKey, body.data, typeName);
+          const typeName = this.extractTypeName(operationName)
+          await this.cache.setByType(cacheKey, body.data, typeName)
         }
 
-        return originalSend(body);
-      }.bind(this);
+        return originalSend(body)
+      }.bind(this)
 
-      next();
-    };
+      next()
+    }
   }
 
   /**
@@ -169,17 +169,17 @@ class GraphQLCachePlugin {
       getComments: 'Comment',
       getVideoComments: 'Comment',
       getVideoStats: 'VideoStats',
-    };
+    }
 
-    return typeMap[operationName] || 'Query';
+    return typeMap[operationName] || 'Query'
   }
 
   /**
    * Get cache service instance
    */
   getCacheService() {
-    return this.cache;
+    return this.cache
   }
 }
 
-module.exports = GraphQLCachePlugin;
+module.exports = GraphQLCachePlugin

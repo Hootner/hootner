@@ -3,27 +3,27 @@
  * Bootstrap NestJS application
  */
 
-import { ValidationPipe } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as compression from "compression";
-import * as helmet from "helmet";
-import { AuditModule } from "./audit.module";
+import { ValidationPipe } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import * as compression from 'compression'
+import * as helmet from 'helmet'
+import { AuditModule } from './audit.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AuditModule, {
-    logger: ["error", "warn", "log", "debug", "verbose"],
-  });
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+  })
 
   // Security
-  app.use(helmet());
+  app.use(helmet())
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || "*",
+    origin: process.env.CORS_ORIGIN || '*',
     credentials: true,
-  });
+  })
 
   // Compression
-  app.use(compression());
+  app.use(compression())
 
   // Global pipes
   app.useGlobalPipes(
@@ -35,32 +35,32 @@ async function bootstrap() {
         enableImplicitConversion: true,
       },
     })
-  );
+  )
 
   // Swagger documentation
   const config = new DocumentBuilder()
-    .setTitle("Audit Service API")
+    .setTitle('Audit Service API')
     .setDescription(
-      "HOOTNER Audit Service for tracking user activities and system events"
+      'HOOTNER Audit Service for tracking user activities and system events'
     )
-    .setVersion("1.0")
+    .setVersion('1.0')
     .addBearerAuth()
-    .addTag("audit", "Audit log operations")
-    .addTag("health", "Health check endpoints")
-    .build();
+    .addTag('audit', 'Audit log operations')
+    .addTag('health', 'Health check endpoints')
+    .build()
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api/docs", app, document);
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api/docs', app, document)
 
   // Global prefix
-  app.setGlobalPrefix("api/v1");
+  app.setGlobalPrefix('api/v1')
 
-  const port = process.env.PORT || 3001;
-  await app.listen(port);
+  const port = process.env.PORT || 3001
+  await app.listen(port)
 
-  console.log(`🚀 Audit Service running on: http://localhost:${port}`);
-  console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
-  console.log(`❤️  Health Check: http://localhost:${port}/api/v1/health`);
+  console.log(`🚀 Audit Service running on: http://localhost:${port}`)
+  console.log(`📚 API Documentation: http://localhost:${port}/api/docs`)
+  console.log(`❤️  Health Check: http://localhost:${port}/api/v1/health`)
 }
 
-bootstrap();
+bootstrap()

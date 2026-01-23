@@ -1,17 +1,17 @@
-import express from 'express';
-import { createHandler } from 'graphql-http/lib/use/express';
-import { buildSchema } from 'graphql';
-import 'dotenv/config';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import { validateEnvironment } from './utils/validateEnv.js';
-import marketplaceRoutes from './routes/marketplace.js';
-import contactRoutes from './routes/contact.js';
-import messagesRoutes from './routes/messages.js';
-import ActivityStreamGenerator from './utils/activityStreamGenerator.js';
+import express from 'express'
+import { createHandler } from 'graphql-http/lib/use/express'
+import { buildSchema } from 'graphql'
+import 'dotenv/config'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import { validateEnvironment } from './utils/validateEnv.js'
+import marketplaceRoutes from './routes/marketplace.js'
+import contactRoutes from './routes/contact.js'
+import messagesRoutes from './routes/messages.js'
+import ActivityStreamGenerator from './utils/activityStreamGenerator.js'
 
 // Validate environment variables at startup
-validateEnvironment('api');
+validateEnvironment('api')
 
 // Enhanced GraphQL Schema
 const schema = buildSchema(`
@@ -88,7 +88,7 @@ const schema = buildSchema(`
     currency: String!
     paymentMethod: String!
   }
-`);
+`)
 
 // Business Logic Resolvers
 const root = {
@@ -98,12 +98,12 @@ const root = {
 
   users: async () => {
     // Demo data - No real users yet
-    return [];
+    return []
   },
 
   videos: async () => {
     // Demo data - No real videos yet
-    return [];
+    return []
   },
 
   analytics: async () => {
@@ -113,7 +113,7 @@ const root = {
       totalVideos: 0,
       revenue: 0,
       activeStreams: 0,
-    };
+    }
   },
 
   // Mutations
@@ -125,11 +125,11 @@ const root = {
       name: input.name,
       subscription: 'free',
       createdAt: new Date().toISOString(),
-    };
+    }
 
     // TODO: Hash password, save to database
-    console.log('Creating user:', user.email);
-    return user;
+    console.log('Creating user:', user.email)
+    return user
   },
 
   uploadVideo: async ({ input }) => {
@@ -141,82 +141,84 @@ const root = {
       status: 'processing',
       userId: input.userId,
       createdAt: new Date().toISOString(),
-    };
+    }
 
     // TODO: Process video file, generate thumbnails
-    console.log('Processing video:', video.title);
-    return video;
+    console.log('Processing video:', video.title)
+    return video
   },
 
   processPayment: async ({ input }) => {
     // Business logic for payment processing
     try {
       // TODO: Integrate with Stripe
-      console.log(`Processing payment: $${input.amount} ${input.currency}`);
+      console.log(`Processing payment: $${input.amount} ${input.currency}`)
 
       return {
         success: true,
         transactionId: `txn_${Date.now()}`,
         message: 'Payment processed successfully',
-      };
+      }
     } catch (error) {
       return {
         success: false,
         transactionId: null,
         message: error.message,
-      };
+      }
     }
   },
-};
+}
 
-export const app = express();
-app.use(express.json());
+export const app = express()
+app.use(express.json())
 
 // Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ['\'self\''],
-      scriptSrc: ['\'self\''],
-      styleSrc: ['\'self\'', '\'unsafe-inline\''],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+      },
     },
-  },
-}));
+  })
+)
 
 // Rate limiting for GraphQL
 const graphqlLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many GraphQL requests from this IP',
-});
+})
 
-app.use('/graphql', graphqlLimiter);
-app.use('/api/marketplace', marketplaceRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/messages', messagesRoutes);
+app.use('/graphql', graphqlLimiter)
+app.use('/api/marketplace', marketplaceRoutes)
+app.use('/api/contact', contactRoutes)
+app.use('/api/messages', messagesRoutes)
 
 // CORS with proper configuration
 app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:3000',
     'https://hootner.com',
-    process.env.FRONTEND_URL
-  ].filter(Boolean);
+    process.env.FRONTEND_URL,
+  ].filter(Boolean)
 
-  const origin = req.headers.origin;
+  const origin = req.headers.origin
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', origin)
   }
 
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
 
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
+    res.sendStatus(200)
   } else {
-    next();
+    next()
   }
-});
+})
 
 // GraphQL endpoint with enhanced features
 app.all(
@@ -224,9 +226,9 @@ app.all(
   createHandler({
     schema,
     rootValue: root,
-    graphiql: process.env.NODE_ENV !== 'production'
+    graphiql: process.env.NODE_ENV !== 'production',
   })
-);
+)
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -238,8 +240,8 @@ app.get('/health', (req, res) => {
       database: 'connected',
       redis: 'connected',
     },
-  });
-});
+  })
+})
 
 // Metrics endpoint
 app.get('/metrics', (req, res) => {
@@ -247,38 +249,38 @@ app.get('/metrics', (req, res) => {
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     cpu: process.cpuUsage(),
-  });
-});
+  })
+})
 
-const PORT = process.env.PORT || 4000;
-let isInitialized = false;
+const PORT = process.env.PORT || 4000
+let isInitialized = false
 
 export const initializeApp = async () => {
-  if (isInitialized) return;
-  console.log('✅ Using DynamoDB (MongoDB not configured)');
-  isInitialized = true;
-};
+  if (isInitialized) return
+  console.log('✅ Using DynamoDB (MongoDB not configured)')
+  isInitialized = true
+}
 
 export const startServer = async () => {
   try {
-    await initializeApp();
+    await initializeApp()
 
     app.listen(PORT, () => {
-      console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
-      console.log(`📊 Health check: http://localhost:${PORT}/health`);
-      console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
+      console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`)
+      console.log(`📊 Health check: http://localhost:${PORT}/health`)
+      console.log(`📈 Metrics: http://localhost:${PORT}/metrics`)
 
       // Start activity stream generator for real-time events
-      console.log('\n🎬 Initializing real-time activity stream...');
-      ActivityStreamGenerator.startGenerator(3000); // Emit events every 3 seconds
-      console.log('✅ Activity stream generator ready!\n');
-    });
+      console.log('\n🎬 Initializing real-time activity stream...')
+      ActivityStreamGenerator.startGenerator(3000) // Emit events every 3 seconds
+      console.log('✅ Activity stream generator ready!\n')
+    })
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    console.error('❌ Failed to start server:', error)
+    process.exit(1)
   }
-};
+}
 
 if (!process.env.AWS_LAMBDA_FUNCTION_NAME && process.env.NODE_ENV !== 'test') {
-  startServer();
+  startServer()
 }

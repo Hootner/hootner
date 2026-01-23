@@ -3,8 +3,8 @@
  * Interactive progress bar with seek, buffering, and hover preview
  */
 
-import React, { useRef, useState } from 'react';
-import type { VideoProgressBarProps } from '../types/videoPlayer';
+import React, { useRef, useState } from 'react'
+import type { VideoProgressBarProps } from '../types/videoPlayer'
 
 export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
   currentTime,
@@ -13,65 +13,66 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
   onSeek,
   className = '',
 }) => {
-  const progressRef = useRef<HTMLDivElement>(null);
-  const [isSeeking, setIsSeeking] = useState(false);
-  const [hoverTime, setHoverTime] = useState<number | null>(null);
+  const progressRef = useRef<HTMLDivElement>(null)
+  const [isSeeking, setIsSeeking] = useState(false)
+  const [hoverTime, setHoverTime] = useState<number | null>(null)
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-  const bufferedProgress = duration > 0 ? (buffered / duration) * 100 : 0;
-  const hoverProgress = hoverTime !== null && duration > 0 ? (hoverTime / duration) * 100 : 0;
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0
+  const bufferedProgress = duration > 0 ? (buffered / duration) * 100 : 0
+  const hoverProgress =
+    hoverTime !== null && duration > 0 ? (hoverTime / duration) * 100 : 0
 
   const handleSeek = (clientX: number) => {
-    if (!progressRef.current) return;
+    if (!progressRef.current) return
 
-    const rect = progressRef.current.getBoundingClientRect();
-    const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const time = percent * duration;
-    onSeek(time);
-  };
+    const rect = progressRef.current.getBoundingClientRect()
+    const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+    const time = percent * duration
+    onSeek(time)
+  }
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsSeeking(true);
-    handleSeek(e.clientX);
-  };
+    setIsSeeking(true)
+    handleSeek(e.clientX)
+  }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!progressRef.current) return;
+    if (!progressRef.current) return
 
-    const rect = progressRef.current.getBoundingClientRect();
-    const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const time = percent * duration;
-    setHoverTime(time);
+    const rect = progressRef.current.getBoundingClientRect()
+    const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+    const time = percent * duration
+    setHoverTime(time)
 
     if (isSeeking) {
-      handleSeek(e.clientX);
+      handleSeek(e.clientX)
     }
-  };
+  }
 
   const handleMouseUp = (e: React.MouseEvent) => {
     if (isSeeking) {
-      setIsSeeking(false);
-      handleSeek(e.clientX);
+      setIsSeeking(false)
+      handleSeek(e.clientX)
     }
-  };
+  }
 
   const handleMouseLeave = () => {
-    setHoverTime(null);
-    setIsSeeking(false);
-  };
+    setHoverTime(null)
+    setIsSeeking(false)
+  }
 
   const formatTime = (seconds: number): string => {
-    if (!isFinite(seconds)) return '0:00';
+    if (!isFinite(seconds)) return '0:00'
 
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.floor(seconds % 60);
+    const h = Math.floor(seconds / 3600)
+    const m = Math.floor((seconds % 3600) / 60)
+    const s = Math.floor(seconds % 60)
 
     if (h > 0) {
-      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
     }
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  };
+    return `${m}:${s.toString().padStart(2, '0')}`
+  }
 
   return (
     <div className={`relative ${className}`}>
@@ -125,5 +126,5 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}

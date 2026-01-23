@@ -7,7 +7,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 console.log('🦉 Starting Dual Agent System...\n');
 
-const scanner = spawn('node', [join(__dirname, 'scanner-agent.js')], { stdio: 'inherit' });
+const scanner = spawn('node', [join(__dirname, 'scanner-agent.js')], {
+  stdio: 'inherit',
+});
 const fixer = spawn('node', [join(__dirname, 'fixer-agent.js')], { stdio: 'inherit' });
 
 process.on('SIGINT', () => {

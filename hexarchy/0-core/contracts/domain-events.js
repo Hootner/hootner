@@ -41,22 +41,22 @@ export const EventTypes = {
 
   // Foundation Domain Events
   SERVICE_STARTED: 'foundation.service.started',
-  RESOURCE_THRESHOLD_EXCEEDED: 'foundation.resource.threshold'
-};
+  RESOURCE_THRESHOLD_EXCEEDED: 'foundation.resource.threshold',
+}
 
 /**
  * Base event structure
  */
 export class DomainEvent {
   constructor(type, payload, metadata = {}) {
-    this.id = crypto.randomUUID();
-    this.type = type;
-    this.timestamp = new Date().toISOString();
-    this.correlationId = metadata.correlationId || crypto.randomUUID();
-    this.causationId = metadata.causationId || null;
-    this.source = metadata.source || 'unknown';
-    this.version = metadata.version || '1.0';
-    this.payload = payload;
+    this.id = crypto.randomUUID()
+    this.type = type
+    this.timestamp = new Date().toISOString()
+    this.correlationId = metadata.correlationId || crypto.randomUUID()
+    this.causationId = metadata.causationId || null
+    this.source = metadata.source || 'unknown'
+    this.version = metadata.version || '1.0'
+    this.payload = payload
   }
 
   toJSON() {
@@ -68,9 +68,9 @@ export class DomainEvent {
       causationId: this.causationId,
       source: this.source,
       version: this.version,
-      payload: this.payload
-    };
+      payload: this.payload,
+    }
   }
 }
 
-export default { EventTypes, DomainEvent };
+export default { EventTypes, DomainEvent }

@@ -33,7 +33,7 @@ for (const test of tests) {
   }
 }
 
-console.log(`\n📊 Test Results:`);
+console.log('\n📊 Test Results:');
 console.log(`   ✅ Passed: ${passed}`);
 console.log(`   ❌ Failed: ${failed}`);
 console.log(`   📦 Total: ${tests.length}`);

@@ -60,13 +60,10 @@ To change which schema is loaded, edit `server-enhanced.js`:
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'schema-enhanced.graphql'),
   'utf8'
-);
+)
 
 // To use basic schema (not recommended)
-const typeDefs = fs.readFileSync(
-  path.join(__dirname, 'schema.graphql'),
-  'utf8'
-);
+const typeDefs = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8')
 ```
 
 ---

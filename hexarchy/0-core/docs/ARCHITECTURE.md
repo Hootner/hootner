@@ -15,27 +15,28 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 
 \`\`\`
 ┌─────────────────────────────────────────────────────────────┐
-│                        0-CORE                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   Configs    │  │  Contracts   │  │     Utils    │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │Orchestration │  │  Workflows   │  │Observability │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
+│ 0-CORE │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
+│ │ Configs │ │ Contracts │ │ Utils │ │
+│ └──────────────┘ └──────────────┘ └──────────────┘ │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
+│ │Orchestration │ │ Workflows │ │Observability │ │
+│ └──────────────┘ └──────────────┘ └──────────────┘ │
 └─────────────────────────────────────────────────────────────┘
-           │                    │                    │
-    ┌──────┴──────┬─────────────┴─────────┬─────────┴──────┐
-    │             │                       │                 │
-┌───▼───┐  ┌─────▼─────┐  ┌──────▼──────┐  ┌────▼────┐  ┌─▼─┐
-│  1    │  │     2     │  │      3      │  │    4    │  │ 5 │  6   │ 7-8│
-│Found- │  │Intelli-   │  │  Communi-   │  │Interface│  │Econ│Gov  │Data│
-│ation  │  │gence      │  │  cation     │  │         │  │omy │ern  │Ops │
-└───────┘  └───────────┘  └─────────────┘  └─────────┘  └────┘─────┘────┘
+│ │ │
+┌──────┴──────┬─────────────┴─────────┬─────────┴──────┐
+│ │ │ │
+┌───▼───┐ ┌─────▼─────┐ ┌──────▼──────┐ ┌────▼────┐ ┌─▼─┐
+│ 1 │ │ 2 │ │ 3 │ │ 4 │ │ 5 │ 6 │ 7-8│
+│Found- │ │Intelli- │ │ Communi- │ │Interface│ │Econ│Gov │Data│
+│ation │ │gence │ │ cation │ │ │ │omy │ern │Ops │
+└───────┘ └───────────┘ └─────────────┘ └─────────┘ └────┘─────┘────┘
 \`\`\`
 
 ## Domain Responsibilities
 
 ### 1. Foundation (Infrastructure)
+
 - **Purpose**: Core infrastructure, OS-level operations, resource management
 - **Key Components**:
   - Kernel operations
@@ -45,6 +46,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: None (foundation for all)
 
 ### 2. Intelligence (AI/ML)
+
 - **Purpose**: AI-powered tutoring, personalization, learning path generation
 - **Key Components**:
   - AI models (tutor agents, dividers)
@@ -54,6 +56,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: Communication (for agent coordination), Data (for model training)
 
 ### 3. Communication (Networking)
+
 - **Purpose**: All forms of data exchange, notifications, real-time collaboration
 - **Key Components**:
   - APIs (REST/GraphQL/gRPC)
@@ -64,6 +67,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: Foundation (networking stack)
 
 ### 4. Interface (UI/UX)
+
 - **Purpose**: All user-facing interactions
 - **Key Components**:
   - Web/Desktop/Mobile apps
@@ -72,6 +76,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: Communication (for API calls), Intelligence (for AI features)
 
 ### 5. Economy (Value Exchange)
+
 - **Purpose**: Financial transactions, crypto rewards, marketplace
 - **Key Components**:
   - Blockchain integration
@@ -82,6 +87,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: Governance (for compliance), Communication (for transactions)
 
 ### 6. Governance (Security & Compliance)
+
 - **Purpose**: Authentication, authorization, security, compliance
 - **Key Components**:
   - Authentication/Authorization
@@ -92,6 +98,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: All domains (wraps security around everything)
 
 ### 7. Data (New Addition)
+
 - **Purpose**: Data persistence, caching, analytics
 - **Key Components**:
   - Database management
@@ -102,6 +109,7 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 - **Dependencies**: Foundation (for storage)
 
 ### 8. Operations (New Addition)
+
 - **Purpose**: DevOps, CI/CD, monitoring, incident management
 - **Key Components**:
   - CI/CD pipelines
@@ -113,49 +121,53 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 ## Data Flow Example: Tutoring Session
 
 \`\`\`
+
 1. User clicks "Start Session" (Interface)
    │
    ├─> API call to Communication
-       │
-       ├─> Event published to Event Bus
-           │
-           ├─> Intelligence receives event
-           │   ├─> Creates tutoring session
-           │   ├─> Loads user profile (Data)
-           │   └─> Publishes SESSION_STARTED event
-           │
-           ├─> Communication receives event
-           │   └─> Sends notification to user
-           │
-           ├─> Governance receives event
-           │   └─> Logs audit entry
-           │
-           └─> Interface receives event
-               └─> Updates UI
+   │
+   ├─> Event published to Event Bus
+   │
+   ├─> Intelligence receives event
+   │ ├─> Creates tutoring session
+   │ ├─> Loads user profile (Data)
+   │ └─> Publishes SESSION_STARTED event
+   │
+   ├─> Communication receives event
+   │ └─> Sends notification to user
+   │
+   ├─> Governance receives event
+   │ └─> Logs audit entry
+   │
+   └─> Interface receives event
+   └─> Updates UI
 2. Session completes
    │
    ├─> Intelligence publishes SESSION_COMPLETED event
-       │
-       ├─> Economy receives event
-       │   └─> Awards rewards (if fraud check passes)
-       │
-       └─> Intelligence (Feedback Loop)
-           └─> Adjusts difficulty for next session
-\`\`\`
+   │
+   ├─> Economy receives event
+   │ └─> Awards rewards (if fraud check passes)
+   │
+   └─> Intelligence (Feedback Loop)
+   └─> Adjusts difficulty for next session
+   \`\`\`
 
 ## Communication Patterns
 
 ### 1. Synchronous (Request/Response)
+
 - Used for: Time-sensitive operations
 - Protocol: REST/GraphQL via Communication domain
 - Example: User login (Interface → Governance)
 
 ### 2. Asynchronous (Event-Driven)
+
 - Used for: Non-blocking operations, cross-domain workflows
 - Protocol: Event Bus (pub/sub)
 - Example: Reward earning (Intelligence → Economy)
 
 ### 3. Streaming (Real-time)
+
 - Used for: Live data, collaboration
 - Protocol: WebSockets
 - Example: Collaborative whiteboard
@@ -163,39 +175,45 @@ Hexarchy is a six-domain educational platform architecture designed for modulari
 ## Resilience Patterns
 
 ### Circuit Breaker
+
 \`\`\`javascript
 // Automatically implemented in 0-core/utils/circuit-breaker.js
 const breaker = new CircuitBreaker('intelligence-api', {
-  threshold: 5,      // Open after 5 failures
-  timeout: 60000,    // 60s operation timeout
-  resetTimeout: 30000 // Try again after 30s
+threshold: 5, // Open after 5 failures
+timeout: 60000, // 60s operation timeout
+resetTimeout: 30000 // Try again after 30s
 });
 
 await breaker.execute(() => intelligenceAPI.startSession());
 \`\`\`
 
 ### Retry Logic
+
 - Exponential backoff
 - Max 3 retries by default
 - Configurable per-domain
 
 ### Graceful Degradation
+
 - If Intelligence is down, Interface shows cached learning paths
 - If Economy is down, rewards queued for later processing
 
 ## Observability
 
 ### Tracing
+
 - Every inter-domain call has a `correlationId`
 - Full request traces across all domains
 - Visualize in Jaeger
 
 ### Metrics
+
 - Per-domain health metrics
 - API latency tracking
 - Event processing rates
 
 ### Logging
+
 - Structured JSON logs
 - Centralized via 0-core/utils/logger.js
 - Correlation IDs for request tracing
@@ -203,27 +221,32 @@ await breaker.execute(() => intelligenceAPI.startSession());
 ## Deployment Strategy
 
 ### Development
+
 - All domains run locally
 - Ports: 5001-5008
 - Single database instance
 
 ### Production
+
 - Each domain = Kubernetes service
 - Auto-scaling based on load
 - Multi-region deployment
 
 ### Blue-Green Deployment
+
 \`\`\`
+
 1. Deploy "green" version alongside "blue"
 2. Run health checks on green
 3. Gradually route traffic to green
 4. Keep blue running for rollback
 5. Decommission blue after 24h
-\`\`\`
+   \`\`\`
 
 ## Security Architecture
 
 ### Defense in Depth
+
 1. **Perimeter**: Rate limiting, DDoS protection (Communication)
 2. **Authentication**: JWT, OAuth (Governance)
 3. **Authorization**: RBAC per domain (Governance)
@@ -231,6 +254,7 @@ await breaker.execute(() => intelligenceAPI.startSession());
 5. **Monitoring**: Intrusion detection (Operations)
 
 ### Incident Response
+
 - Auto-detection via Governance domain
 - Severity-based response (see [incident-response/incident-system.js](../6-governance/incident-response/incident-system.js))
 - Automated containment for critical incidents
@@ -252,15 +276,18 @@ await breaker.execute(() => intelligenceAPI.startSession());
 ## Scalability
 
 ### Horizontal Scaling
+
 - All domains are stateless (state in Data domain)
 - Can add instances as needed
 - Load balanced by Kubernetes
 
 ### Vertical Scaling
+
 - Intelligence domain (GPU for AI)
 - Data domain (storage)
 
 ### Caching Strategy
+
 - Memory → Redis → Database (3-tier)
 - Cache invalidation via events
 - See [7-data/caching/cache-layer.js](../7-data/caching/cache-layer.js)

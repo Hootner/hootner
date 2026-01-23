@@ -17,6 +17,7 @@ npm run test:smoke
 ## 🎯 Test Categories
 
 ### Frontend Tests
+
 ```bash
 # Navigate to frontend
 cd apps/frontend
@@ -33,6 +34,7 @@ npm test -- components/
 ```
 
 ### API Tests
+
 ```bash
 # Navigate to API
 cd api/graphql
@@ -48,6 +50,7 @@ npm run test:unit
 ```
 
 ### Server Tests
+
 ```bash
 # Navigate to server
 cd apps/server
@@ -189,6 +192,7 @@ open coverage/lcov-report/index.html
 ## 🔧 Test Configuration
 
 ### Jest Configuration
+
 ```bash
 # Run with specific config
 npm test -- --config jest.config.js
@@ -201,6 +205,7 @@ npm test -- --onlyChanged
 ```
 
 ### Playwright Configuration
+
 ```bash
 # Run with specific browser
 npx playwright test --project=chromium
@@ -256,7 +261,7 @@ curl http://localhost:3000/health
 # Database connectivity
 node tests/db-connection-test.js
 
-# Redis connectivity  
+# Redis connectivity
 node tests/redis-connection-test.js
 ```
 
@@ -292,24 +297,28 @@ npm run test:reset
 ## 🎯 Specific Test Commands
 
 ### Video Player Tests
+
 ```bash
 cd apps/frontend/html-pages
 node test-video-player.js
 ```
 
 ### Authentication Tests
+
 ```bash
 node tests/auth/jwt-test.js
 node tests/auth/firebase-test.js
 ```
 
 ### Database Tests
+
 ```bash
 node tests/db/mongodb-test.js
 node tests/db/redis-test.js
 ```
 
 ### API Tests
+
 ```bash
 node tests/api/graphql-test.js
 node tests/api/rest-test.js

@@ -6,7 +6,7 @@
 # Server Configuration
 # ============================================================================
 server:
-  host: "0.0.0.0"
+  host: '0.0.0.0'
   port: 5003
   debug: false
   workers: 4
@@ -15,17 +15,17 @@ server:
 # Model Configuration
 # ============================================================================
 model:
-  size: "base"
-  device: "cuda"
+  size: 'base'
+  device: 'cuda'
   timesteps: 1000
   guidance_scale: 7.5
 
-  checkpoint_dir: "/var/lib/video-generation/checkpoints"
-  weights_path: "/var/lib/video-generation/weights/model_v1.0.0.pt"
+  checkpoint_dir: '/var/lib/video-generation/checkpoints'
+  weights_path: '/var/lib/video-generation/weights/model_v1.0.0.pt'
 
   # Optimization (enabled in production)
   mixed_precision: true
-  precision_dtype: "float16"
+  precision_dtype: 'float16'
   compile_model: true
   gradient_checkpointing: true
 
@@ -33,12 +33,12 @@ model:
 # Sampler Configuration
 # ============================================================================
 sampler:
-  type: "dpm"
+  type: 'dpm'
   num_steps: 50
 
   dpm:
     solver_order: 2
-    algorithm_type: "dpmsolver++"
+    algorithm_type: 'dpmsolver++'
 
 # ============================================================================
 # Generation Defaults
@@ -48,7 +48,7 @@ generation:
   default_height: 512 # Production: HD-ready default
   default_width: 512
   default_fps: 24 # Professional frame rate
-  default_format: "mp4"
+  default_format: 'mp4'
 
   # Maximum limits (4-hour support at 24fps = 345,600 frames)
   max_num_frames: 345600 # 4 hours at 24fps
@@ -89,8 +89,8 @@ generation:
   hdr:
     enabled: true
     bit_depth: 10 # 10-bit color
-    color_space: "rec2020" # Wide color gamut
-    transfer_function: "pq" # Perceptual Quantizer (SMPTE ST 2084)
+    color_space: 'rec2020' # Wide color gamut
+    transfer_function: 'pq' # Perceptual Quantizer (SMPTE ST 2084)
     max_nits: 4000 # Production: Higher peak brightness
     min_nits: 0.005
     max_cll: 4000 # Maximum Content Light Level
@@ -124,10 +124,10 @@ api:
 # ============================================================================
 redis:
   enabled: false
-  host: "redis.production.local"
+  host: 'redis.production.local'
   port: 6379
   db: 0
-  password: "${REDIS_PASSWORD}"
+  password: '${REDIS_PASSWORD}'
   socket_timeout: 10
 
 # ============================================================================
@@ -135,9 +135,9 @@ redis:
 # ============================================================================
 monitoring:
   logging:
-    level: "WARNING"
-    format: "json"
-    log_dir: "/var/log/video-generation"
+    level: 'WARNING'
+    format: 'json'
+    log_dir: '/var/log/video-generation'
 
   prometheus:
     enabled: true
@@ -154,11 +154,11 @@ effects:
   enabled: true
 
   presets:
-    - "cinematic"
-    - "vintage"
-    - "dramatic"
-    - "dreamy"
-    - "vivid"
+    - 'cinematic'
+    - 'vintage'
+    - 'dramatic'
+    - 'dreamy'
+    - 'vivid'
 
   post_processing:
     temporal_smoothing: true
@@ -175,18 +175,18 @@ audio:
   # Dolby Atmos configuration
   dolby_atmos:
     enabled: true
-    channels: "7.1.4" # 7 bed channels + 1 LFE + 4 height channels
-    codec: "eac3" # Enhanced AC-3 for Atmos
+    channels: '7.1.4' # 7 bed channels + 1 LFE + 4 height channels
+    codec: 'eac3' # Enhanced AC-3 for Atmos
     bitrate: 1536 # Production: Higher bitrate (kbps)
     sample_rate: 48000 # 48 kHz
     bit_depth: 24 # 24-bit audio
 
   # Audio generation
   generation:
-    model: "musicgen-large" # Facebook/Meta MusicGen
+    model: 'musicgen-large' # Facebook/Meta MusicGen
     duration_match: true # Match video duration
     sync_to_video: true # Synchronize audio to video timing
-    style_prompt: "" # Optional music style prompt
+    style_prompt: '' # Optional music style prompt
 
   # Spatial audio configuration
   spatial:
@@ -202,20 +202,20 @@ security:
   cors:
     enabled: true
     origins:
-      - "https://hootner.com"
-      - "https://app.hootner.com"
+      - 'https://hootner.com'
+      - 'https://app.hootner.com'
 
   api_key:
     enabled: true
-    header_name: "X-API-Key"
-    key: "${VIDEO_GEN_API_KEY}"
+    header_name: 'X-API-Key'
+    key: '${VIDEO_GEN_API_KEY}'
 
 # ============================================================================
 # Storage
 # ============================================================================
 storage:
-  output_dir: "/var/lib/video-generation/outputs"
-  cache_dir: "/var/lib/video-generation/cache"
+  output_dir: '/var/lib/video-generation/outputs'
+  cache_dir: '/var/lib/video-generation/cache'
   max_output_size_mb: 200
   cleanup_old_files: true
   cleanup_age_days: 3

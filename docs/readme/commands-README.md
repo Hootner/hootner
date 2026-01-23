@@ -39,6 +39,7 @@ npm run docker:up
 ## 📖 Usage
 
 Each file contains:
+
 - ✅ **Command** - The actual command to run
 - 📝 **Description** - What the command does
 - 📍 **Location** - Where to run it from

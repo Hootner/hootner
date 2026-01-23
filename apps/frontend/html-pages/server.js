@@ -11,16 +11,16 @@ app.use(express.static(__dirname));
 
 // Cinema Player
 app.get('/cinema-player', (req, res) => {
-    res.sendFile(path.join(__dirname, 'cinema-player.html'));
+  res.sendFile(path.join(__dirname, 'cinema-player.html'));
 });
 
 // Landing page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
-    console.log(`✅ HTML Pages Server running!`);
-    console.log(`   🎬 Cinema Player: http://localhost:${PORT}/cinema-player.html`);
-    console.log(`   🏠 Landing Page:  http://localhost:${PORT}/`);
+  console.log('✅ HTML Pages Server running!');
+  console.log(`   🎬 Cinema Player: http://localhost:${PORT}/cinema-player.html`);
+  console.log(`   🏠 Landing Page:  http://localhost:${PORT}/`);
 });

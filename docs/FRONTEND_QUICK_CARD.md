@@ -20,63 +20,67 @@ http://localhost:3005/video-player
 
 ## Available Services
 
-| Service | URL | Status |
-|---------|-----|--------|
-| **Cinema Player** | http://localhost:3005/video-player | 🎬 |
-| **GraphQL API** | http://localhost:4000/graphql | 🚀 |
-| **Video API** | http://localhost:5003/health | 📹 |
-| **MongoDB** | mongodb://localhost:27017/hootner | 🗄️ |
-| **Redis** | redis://localhost:6379 | ⚡ |
+| Service           | URL                                | Status |
+| ----------------- | ---------------------------------- | ------ |
+| **Cinema Player** | http://localhost:3005/video-player | 🎬     |
+| **GraphQL API**   | http://localhost:4000/graphql      | 🚀     |
+| **Video API**     | http://localhost:5003/health       | 📹     |
+| **MongoDB**       | mongodb://localhost:27017/hootner  | 🗄️     |
+| **Redis**         | redis://localhost:6379             | ⚡     |
 
 ---
 
 ## Frontend Integration Points
 
 ### 🔌 WebSocket Real-Time
+
 ```javascript
 // Auto-connects on page load
-initWebSocket();
+initWebSocket()
 
 // Subscribe to events
-subscribeToVideoUpdates();
-subscribeToComments();
-subscribeLikeUpdates();
+subscribeToVideoUpdates()
+subscribeToComments()
+subscribeLikeUpdates()
 ```
 
 ### 📊 Real Data Binding
+
 ```javascript
 // Load videos
-await fetchVideosFromBackend();
+await fetchVideosFromBackend()
 
 // Get video details
-const details = await fetchVideoDetails(videoId);
+const details = await fetchVideoDetails(videoId)
 
 // Get user profile
-const user = await fetchUserProfile();
+const user = await fetchUserProfile()
 ```
 
 ### 📈 Analytics Tracking
+
 ```javascript
 // Track events (auto: play, pause, seek, complete)
-await trackEvent('custom_event', { data: value });
+await trackEvent('custom_event', { data: value })
 
 // Track position (auto: every 10s)
-await trackPlaybackPosition();
+await trackPlaybackPosition()
 ```
 
 ### 💬 Social Features
+
 ```javascript
 // Like
-await likeVideo(videoId);
+await likeVideo(videoId)
 
 // Comment
-await addComment('Great video!');
+await addComment('Great video!')
 
 // Share
-await shareVideo('copy');
+await shareVideo('copy')
 
 // Watch Party
-await joinWatchParty();
+await joinWatchParty()
 ```
 
 ---
@@ -84,18 +88,21 @@ await joinWatchParty();
 ## API Endpoints
 
 ### GraphQL
+
 ```javascript
 // POST http://localhost:4000/graphql
-const response = await graphqlFetch(query, variables);
+const response = await graphqlFetch(query, variables)
 ```
 
 ### REST Analytics
+
 ```
 POST http://localhost:5003/api/analytics/track
 POST http://localhost:5003/api/analytics/playback
 ```
 
 ### Video Streaming
+
 ```
 GET http://localhost:5003/api/video/stream/<file>
 GET http://localhost:5003/api/video/<id>
@@ -105,52 +112,57 @@ GET http://localhost:5003/api/video/<id>
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| **T** | Theater Mode |
-| **C** | Cinema Mode |
-| **S** | Stats |
-| **L** | Playlist |
-| **H** | History |
-| **/** | Search |
-| **Ctrl+I** | Mini-Player |
-| **Shift+C** | Screenshot |
-| **?** | Help |
+| Key         | Action       |
+| ----------- | ------------ |
+| **T**       | Theater Mode |
+| **C**       | Cinema Mode  |
+| **S**       | Stats        |
+| **L**       | Playlist     |
+| **H**       | History      |
+| **/**       | Search       |
+| **Ctrl+I**  | Mini-Player  |
+| **Shift+C** | Screenshot   |
+| **?**       | Help         |
 
 ---
 
 ## Common Tasks
 
 ### Add Real Videos
+
 ```javascript
-fetchVideosFromBackend();
+fetchVideosFromBackend()
 ```
 
 ### Track User Action
+
 ```javascript
-await trackEvent('user_action', { 
+await trackEvent('user_action', {
   action: 'video_like',
-  video_id: videoId 
-});
+  video_id: videoId,
+})
 ```
 
 ### Handle Comments Real-Time
+
 ```javascript
 // Auto-handled by WebSocket subscription
 // Comments appear instantly with:
-subscribeToComments();
+subscribeToComments()
 ```
 
 ### Update Like Count
+
 ```javascript
 // Auto-updated by subscription
 // See: handleWebSocketMessage()
 ```
 
 ### Share Video
+
 ```javascript
-await shareVideo('copy');
-showNotification('📋 Link copied!');
+await shareVideo('copy')
+showNotification('📋 Link copied!')
 ```
 
 ---
@@ -159,19 +171,19 @@ showNotification('📋 Link copied!');
 
 ```javascript
 // Check connection
-console.log('WS Ready:', wsConnection.readyState === 1);
+console.log('WS Ready:', wsConnection.readyState === 1)
 
 // Check session
-console.log('Session:', sessionId);
+console.log('Session:', sessionId)
 
 // Check user
-console.log('User:', currentUser);
+console.log('User:', currentUser)
 
 // Manual refresh
-fetchVideosFromBackend();
+fetchVideosFromBackend()
 
 // Manual track
-trackEvent('test', { message: 'Hello' });
+trackEvent('test', { message: 'Hello' })
 ```
 
 ---
@@ -179,6 +191,7 @@ trackEvent('test', { message: 'Hello' });
 ## Troubleshooting
 
 ### ❌ No Videos Loading
+
 ```javascript
 // Check GraphQL
 curl http://localhost:4000/health
@@ -191,6 +204,7 @@ fetchVideosFromBackend();
 ```
 
 ### ❌ Comments Not Real-Time
+
 ```javascript
 // Verify subscription
 subscribeToComments();
@@ -203,6 +217,7 @@ curl ws://localhost:4000/graphql
 ```
 
 ### ❌ Analytics Not Tracking
+
 ```javascript
 // Check Video API
 curl http://localhost:5003/health

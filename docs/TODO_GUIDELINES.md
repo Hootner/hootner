@@ -9,11 +9,13 @@ This document defines the TODO comment standards for the HOOTNER project.
 ### Critical Priority
 
 - **SECURITY** - Security vulnerabilities or concerns
+
   ```javascript
   // SECURITY: Validate user input to prevent XSS
   ```
 
 - **BUG** - Confirmed bugs that need fixing
+
   ```javascript
   // BUG: Memory leak in video player cleanup
   ```
@@ -26,11 +28,13 @@ This document defines the TODO comment standards for the HOOTNER project.
 ### High Priority
 
 - **PERFORMANCE** - Performance optimization needed
+
   ```javascript
   // PERFORMANCE: Cache database queries
   ```
 
 - **REFACTOR** - Code needs restructuring
+
   ```javascript
   // REFACTOR: Extract duplicate logic to shared utility
   ```
@@ -43,11 +47,13 @@ This document defines the TODO comment standards for the HOOTNER project.
 ### Medium Priority
 
 - **TODO** - General tasks to complete
+
   ```javascript
   // TODO: Add error handling for edge cases
   ```
 
 - **OPTIMIZE** - Code works but can be improved
+
   ```javascript
   // OPTIMIZE: Reduce bundle size by lazy loading
   ```
@@ -60,21 +66,25 @@ This document defines the TODO comment standards for the HOOTNER project.
 ### Low Priority
 
 - **HACK** - Temporary workaround
+
   ```javascript
   // HACK: Temporary fix until library is updated
   ```
 
 - **CLEANUP** - Code cleanup needed
+
   ```javascript
   // CLEANUP: Remove unused imports
   ```
 
 - **NOTE** - Important information
+
   ```javascript
   // NOTE: This function is called by external service
   ```
 
 - **DOCS** - Documentation needed
+
   ```javascript
   // DOCS: Add JSDoc comments
   ```
@@ -167,7 +177,7 @@ Add to GitHub Actions workflow:
 ```yaml
 - name: Scan TODOs
   run: node scripts/scan-todos.js
-  
+
 - name: Upload Report
   uses: actions/upload-artifact@v3
   with:

@@ -5,22 +5,15 @@ Centralized constants to eliminate magic numbers across the codebase.
 ## Usage
 
 ```javascript
-const {
-  HTTP_STATUS,
-  TIMEOUTS,
-  LIMITS,
-  ANIMATION,
-  CACHE,
-  MISC,
-} = require('./constants');
+const { HTTP_STATUS, TIMEOUTS, LIMITS, ANIMATION, CACHE, MISC } = require('./constants')
 
 // HTTP Status Codes
-res.status(HTTP_STATUS.OK).json({ data });
-res.status(HTTP_STATUS.NOT_FOUND).json({ error });
+res.status(HTTP_STATUS.OK).json({ data })
+res.status(HTTP_STATUS.NOT_FOUND).json({ error })
 
 // Timeouts
-setTimeout(callback, TIMEOUTS.FIVE_SECONDS);
-cache.set(key, value, TIMEOUTS.ONE_HOUR);
+setTimeout(callback, TIMEOUTS.FIVE_SECONDS)
+cache.set(key, value, TIMEOUTS.ONE_HOUR)
 
 // Limits
 if (input.length > LIMITS.MAX_STRING_LENGTH) {
@@ -29,13 +22,13 @@ if (port > LIMITS.MAX_PORT) {
 }
 
 // Animation
-element.style.transition = `opacity ${ANIMATION.FADE_DURATION}ms`;
+element.style.transition = `opacity ${ANIMATION.FADE_DURATION}ms`
 
 // Cache
-res.setHeader('Cache-Control', `max-age=${CACHE.ONE_DAY}`);
+res.setHeader('Cache-Control', `max-age=${CACHE.ONE_DAY}`)
 
 // Miscellaneous
-const year = MISC.YEAR_2021;
+const year = MISC.YEAR_2021
 ```
 
 ## Files

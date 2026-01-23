@@ -48,9 +48,7 @@ function validateEnvVar(name, options = {}) {
 
   // Validate pattern
   if (pattern && !pattern.test(value)) {
-    throw new Error(
-      `Environment variable ${name} does not match required pattern`
-    );
+    throw new Error(`Environment variable ${name} does not match required pattern`);
   }
 
   // Validate allowed values
@@ -156,13 +154,10 @@ function validateEnvironment(context = 'default') {
         }
 
         try {
-          config.STRIPE_WEBHOOK_SECRET = validateEnvVar(
-            'STRIPE_WEBHOOK_SECRET',
-            {
-              required: true,
-              pattern: /^whsec_/,
-            }
-          );
+          config.STRIPE_WEBHOOK_SECRET = validateEnvVar('STRIPE_WEBHOOK_SECRET', {
+            required: true,
+            pattern: /^whsec_/,
+          });
         } catch (err) {
           errors.push(err.message);
         }
@@ -190,9 +185,7 @@ function validateEnvironment(context = 'default') {
       errors.forEach((error) => console.error(`  - ${error}`));
 
       if (config.NODE_ENV === 'production') {
-        throw new Error(
-          `Environment validation failed with ${errors.length} error(s)`
-        );
+        throw new Error(`Environment validation failed with ${errors.length} error(s)`);
       } else {
         console.warn(
           '\n⚠️  Using default values for development. Set proper values in .env for production.\n'
@@ -218,9 +211,7 @@ function checkRequiredEnvVars(...requiredVars) {
   const missing = requiredVars.filter((name) => !process.env[name]);
 
   if (missing.length > 0) {
-    console.error(
-      `Missing required environment variables: ${missing.join(', ')}`
-    );
+    console.error(`Missing required environment variables: ${missing.join(', ')}`);
     return false;
   }
 
@@ -237,9 +228,4 @@ function getEnv(name, fallback = '') {
   return process.env[name] || fallback;
 }
 
-export {
-  validateEnvVar,
-  validateEnvironment,
-  checkRequiredEnvVars,
-  getEnv,
-};
+export { validateEnvVar, validateEnvironment, checkRequiredEnvVars, getEnv };

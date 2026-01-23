@@ -3,9 +3,9 @@
  * Playback speed and quality settings
  */
 
-import React from 'react';
-import type { VideoSettingsProps } from '../types/videoPlayer';
-import { PLAYBACK_RATES } from '../types/videoPlayer';
+import React from 'react'
+import type { VideoSettingsProps } from '../types/videoPlayer'
+import { PLAYBACK_RATES } from '../types/videoPlayer'
 
 export const VideoSettings: React.FC<VideoSettingsProps> = ({
   playbackRate,
@@ -16,7 +16,9 @@ export const VideoSettings: React.FC<VideoSettingsProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`bg-black bg-opacity-95 rounded-lg shadow-2xl p-4 min-w-[200px] ${className}`}>
+    <div
+      className={`bg-black bg-opacity-95 rounded-lg shadow-2xl p-4 min-w-[200px] ${className}`}
+    >
       {/* Playback Speed */}
       <div className="mb-4">
         <h4 className="text-white text-sm font-semibold mb-2">Playback Speed</h4>
@@ -57,5 +59,5 @@ export const VideoSettings: React.FC<VideoSettingsProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -17,12 +17,12 @@ docker-compose -f docker-compose.dev.yml down
 
 ## Service URLs
 
-| Service | URL | Health Check |
-|---------|-----|--------------|
-| GraphQL API | http://localhost:4000/graphql | http://localhost:4000/health |
-| Video Generation | http://localhost:5003 | http://localhost:5003/health |
-| MongoDB | mongodb://localhost:27017 | `mongosh` connection |
-| Redis | redis://localhost:6379 | `redis-cli ping` |
+| Service          | URL                           | Health Check                 |
+| ---------------- | ----------------------------- | ---------------------------- |
+| GraphQL API      | http://localhost:4000/graphql | http://localhost:4000/health |
+| Video Generation | http://localhost:5003         | http://localhost:5003/health |
+| MongoDB          | mongodb://localhost:27017     | `mongosh` connection         |
+| Redis            | redis://localhost:6379        | `redis-cli ping`             |
 
 ---
 
@@ -108,24 +108,28 @@ API_PORT=4000
 ## Integration Examples
 
 ### GraphQL Query
+
 ```javascript
 fetch('http://localhost:4000/graphql', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    query: '{ videos { id title url } }'
-  })
-});
+    query: '{ videos { id title url } }',
+  }),
+})
 ```
 
 ### Video Streaming
+
 ```javascript
-const video = await fetch('http://localhost:5003/api/video/video-123')
-  .then(res => res.json());
+const video = await fetch('http://localhost:5003/api/video/video-123').then((res) =>
+  res.json()
+)
 // Use video.url in player
 ```
 
 ### Analytics
+
 ```javascript
 await fetch('http://localhost:5003/api/analytics/track', {
   method: 'POST',
@@ -134,9 +138,9 @@ await fetch('http://localhost:5003/api/analytics/track', {
     session_id: sessionId,
     video_id: videoId,
     event_type: 'play',
-    timestamp: currentTime
-  })
-});
+    timestamp: currentTime,
+  }),
+})
 ```
 
 ---

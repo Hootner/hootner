@@ -90,18 +90,18 @@
     ],
 
     toggle() {
-      this.visible = !this.visible;
-      const palette = document.getElementById('commandPalette');
-      palette.style.display = this.visible ? 'block' : 'none';
+      this.visible = !this.visible
+      const palette = document.getElementById('commandPalette')
+      palette.style.display = this.visible ? 'block' : 'none'
 
       if (this.visible) {
-        document.getElementById('commandInput').focus();
-        this.render(this.commands);
+        document.getElementById('commandInput').focus()
+        this.render(this.commands)
       }
     },
 
     render(commands) {
-      const results = document.getElementById('commandResults');
+      const results = document.getElementById('commandResults')
       results.innerHTML = commands
         .map(
           (cmd, i) => `
@@ -112,67 +112,70 @@
         </div>
       `
         )
-        .join('');
+        .join('')
     },
 
     search(query) {
       if (!query) {
-        this.render(this.commands);
-        return;
+        this.render(this.commands)
+        return
       }
 
       const filtered = featureExpansions
         .fuzzySearch(
           query,
-          this.commands.map(c => c.name)
+          this.commands.map((c) => c.name)
         )
-        .map(name => this.commands.find(c => c.name === name))
-        .filter(Boolean);
+        .map((name) => this.commands.find((c) => c.name === name))
+        .filter(Boolean)
 
-      this.selectedIndex = 0;
-      this.render(filtered.length > 0 ? filtered : this.commands);
+      this.selectedIndex = 0
+      this.render(filtered.length > 0 ? filtered : this.commands)
     },
 
     execute(cmd) {
-      featureExpansions.executeCommand(cmd);
-      this.toggle();
+      featureExpansions.executeCommand(cmd)
+      this.toggle()
     },
 
     handleKey(e) {
-      if (!this.visible) return;
+      if (!this.visible) return
 
       switch (e.key) {
         case 'ArrowDown':
-          e.preventDefault();
-          this.selectedIndex = Math.min(this.selectedIndex + 1, this.commands.length - 1);
-          this.render(this.commands);
-          break;
+          e.preventDefault()
+          this.selectedIndex = Math.min(
+            this.selectedIndex + 1,
+            this.commands.length - 1
+          )
+          this.render(this.commands)
+          break
         case 'ArrowUp':
-          e.preventDefault();
-          this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
-          this.render(this.commands);
-          break;
+          e.preventDefault()
+          this.selectedIndex = Math.max(this.selectedIndex - 1, 0)
+          this.render(this.commands)
+          break
         case 'Enter':
-          e.preventDefault();
-          const selected = document.querySelector('.command-item.selected');
-          if (selected) selected.click();
-          break;
+          e.preventDefault()
+          const selected = document.querySelector('.command-item.selected')
+          if (selected) selected.click()
+          break
         case 'Escape':
-          this.toggle();
-          break;
+          this.toggle()
+          break
       }
     },
-  };
+  }
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') {
-      e.preventDefault();
-      commandPalette.toggle();
+      e.preventDefault()
+      commandPalette.toggle()
     }
-    commandPalette.handleKey(e);
-  });
+    commandPalette.handleKey(e)
+  })
 
-  document.getElementById('commandInput')?.addEventListener('input', e => {
-    commandPalette.search(e.target.value);
-  });
+  document.getElementById('commandInput')?.addEventListener('input', (e) => {
+    commandPalette.search(e.target.value)
+  })
 </script>

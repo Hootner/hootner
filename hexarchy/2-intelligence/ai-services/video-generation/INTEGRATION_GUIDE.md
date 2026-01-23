@@ -57,24 +57,26 @@ This document shows how the **5 new modules** integrate seamlessly with the exis
 ### 1. **Frontend Integration**
 
 #### Cinema Player → Video API
+
 ```javascript
 // apps/frontend/html-pages/cinema-player.html
 // Already integrated - loads videos from video generation API
 
-const video = document.getElementById('cinema-video');
-video.src = 'http://localhost:5003/api/video/generated/video-id-123';
+const video = document.getElementById('cinema-video')
+video.src = 'http://localhost:5003/api/video/generated/video-id-123'
 
 // Quality switching connects to adaptive streaming
 function setQuality(quality) {
-  const manifestUrl = `http://localhost:5003/api/streaming/${videoId}/${quality}/master.m3u8`;
+  const manifestUrl = `http://localhost:5003/api/streaming/${videoId}/${quality}/master.m3u8`
   // Load HLS stream
 }
 ```
 
 #### React Components → GraphQL API
+
 ```javascript
 // apps/frontend/src/components/VideoPlayer.jsx
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client'
 
 // Query video metadata including analytics
 const GET_VIDEO = gql`
@@ -90,7 +92,7 @@ const GET_VIDEO = gql`
       }
     }
   }
-`;
+`
 
 // Subscribe to watch party events
 const WATCH_PARTY_UPDATES = gql`
@@ -101,12 +103,13 @@ const WATCH_PARTY_UPDATES = gql`
       messages
     }
   }
-`;
+`
 ```
 
 ### 2. **Backend Service Integration**
 
 #### Video Generation API → New Modules
+
 ```python
 # services/video-generation/api.py
 
@@ -156,30 +159,31 @@ def generate_video():
 ```
 
 #### GraphQL API → Video Services
+
 ```javascript
 // api/graphql/server.js
 
-import axios from 'axios';
+import axios from 'axios'
 
 const resolvers = {
   Query: {
     video: async (parent, { id }) => {
       // Fetch from video generation API
-      const response = await axios.get(`http://localhost:5003/api/video/${id}`);
-      return response.data;
+      const response = await axios.get(`http://localhost:5003/api/video/${id}`)
+      return response.data
     },
 
     videoAnalytics: async (parent, { videoId }) => {
       // NEW: Fetch analytics data
-      const response = await axios.get(`http://localhost:5003/api/analytics/${videoId}`);
-      return response.data;
+      const response = await axios.get(`http://localhost:5003/api/analytics/${videoId}`)
+      return response.data
     },
 
     videoScenes: async (parent, { videoId }) => {
       // NEW: Get AI-detected scenes
-      const response = await axios.get(`http://localhost:5003/api/scenes/${videoId}`);
-      return response.data;
-    }
+      const response = await axios.get(`http://localhost:5003/api/scenes/${videoId}`)
+      return response.data
+    },
   },
 
   Mutation: {
@@ -187,53 +191,56 @@ const resolvers = {
       // NEW: Create watch party via REST API
       const response = await axios.post('http://localhost:5003/api/watch-party', {
         video_id: videoId,
-        settings
-      });
-      return response.data;
-    }
+        settings,
+      })
+      return response.data
+    },
   },
 
   Subscription: {
     watchPartyUpdated: {
       // NEW: Real-time watch party updates via WebSocket
       subscribe: (parent, { partyId }) => {
-        return pubsub.asyncIterator(`WATCH_PARTY_${partyId}`);
-      }
-    }
-  }
-};
+        return pubsub.asyncIterator(`WATCH_PARTY_${partyId}`)
+      },
+    },
+  },
+}
 ```
 
 ### 3. **Agent Hub Integration**
 
 #### Enhanced Agent Hub → New Services
+
 ```javascript
 // enhanced-agent-hub.js
 
 class EnhancedAgentHub {
   async initialize() {
     // Existing agents
-    this.initializeCoreAgents();
+    this.initializeCoreAgents()
 
     // NEW: Video intelligence agents
     this.agents.set('video-scene-detection', {
       status: 'active',
       type: 'video-intelligence',
       execute: async (videoPath) => {
-        const { analyze_video_content } = await import('./services/video-generation/ai_video_intelligence.py');
-        return await analyze_video_content(videoPath);
-      }
-    });
+        const { analyze_video_content } =
+          await import('./services/video-generation/ai_video_intelligence.py')
+        return await analyze_video_content(videoPath)
+      },
+    })
 
     this.agents.set('video-analytics', {
       status: 'active',
       type: 'analytics',
       execute: async (videoId) => {
-        const { VideoAnalytics } = await import('./services/video-generation/analytics_engine.py');
-        const analytics = new VideoAnalytics(videoId);
-        return analytics.export_report();
-      }
-    });
+        const { VideoAnalytics } =
+          await import('./services/video-generation/analytics_engine.py')
+        const analytics = new VideoAnalytics(videoId)
+        return analytics.export_report()
+      },
+    })
   }
 }
 ```
@@ -241,6 +248,7 @@ class EnhancedAgentHub {
 ### 4. **Database Integration**
 
 #### MongoDB Collections
+
 ```javascript
 // Video metadata with new analytics fields
 const videoSchema = {
@@ -250,31 +258,37 @@ const videoSchema = {
   duration: Number,
 
   // NEW: AI analysis results
-  scenes: [{
-    start_time: Number,
-    end_time: Number,
-    keyframe_url: String
-  }],
-  highlights: [{
-    start_time: Number,
-    duration: Number,
-    score: Number
-  }],
+  scenes: [
+    {
+      start_time: Number,
+      end_time: Number,
+      keyframe_url: String,
+    },
+  ],
+  highlights: [
+    {
+      start_time: Number,
+      duration: Number,
+      score: Number,
+    },
+  ],
   thumbnails: [String],
 
   // NEW: Streaming manifests
   streaming: {
     hls_manifest: String,
     dash_manifest: String,
-    qualities: [String]
+    qualities: [String],
   },
 
   // NEW: Subtitles
-  subtitles: [{
-    language: String,
-    url: String,
-    format: String
-  }],
+  subtitles: [
+    {
+      language: String,
+      url: String,
+      format: String,
+    },
+  ],
 
   // NEW: Analytics
   analytics: {
@@ -282,12 +296,13 @@ const videoSchema = {
     unique_viewers: Number,
     avg_watch_time: Number,
     completion_rate: Number,
-    heatmap_data: Mixed
-  }
-};
+    heatmap_data: Mixed,
+  },
+}
 ```
 
 #### Redis Integration
+
 ```javascript
 // Watch party sessions
 redis.hset(`watch-party:${partyId}`, {
@@ -326,29 +341,29 @@ docker-compose up -d                # MongoDB + Redis
 
 ```javascript
 // apps/frontend/src/components/CinemaPlayer.jsx
-import React, { useEffect, useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useEffect, useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client'
 
 const CinemaPlayer = ({ videoId }) => {
-  const [watchPartyId, setWatchPartyId] = useState(null);
+  const [watchPartyId, setWatchPartyId] = useState(null)
 
   // Fetch video with analytics
   const { data, loading } = useQuery(GET_VIDEO_WITH_ANALYTICS, {
-    variables: { id: videoId }
-  });
+    variables: { id: videoId },
+  })
 
   // Create watch party
-  const [createParty] = useMutation(CREATE_WATCH_PARTY);
+  const [createParty] = useMutation(CREATE_WATCH_PARTY)
 
   const handleCreateWatchParty = async () => {
     const result = await createParty({
       variables: {
         videoId,
-        settings: { maxParticipants: 25 }
-      }
-    });
-    setWatchPartyId(result.data.createWatchParty.partyId);
-  };
+        settings: { maxParticipants: 25 },
+      },
+    })
+    setWatchPartyId(result.data.createWatchParty.partyId)
+  }
 
   return (
     <div>
@@ -369,12 +384,10 @@ const CinemaPlayer = ({ videoId }) => {
       </div>
 
       {/* Watch party controls */}
-      <button onClick={handleCreateWatchParty}>
-        Create Watch Party
-      </button>
+      <button onClick={handleCreateWatchParty}>Create Watch Party</button>
     </div>
-  );
-};
+  )
+}
 ```
 
 ### Example 3: Backend Pipeline Integration
@@ -473,18 +486,18 @@ if __name__ == '__main__':
 
 ### Video Generation Service (Port 5003)
 
-| Endpoint | Method | Description | New/Existing |
-|----------|--------|-------------|--------------|
-| `/api/generate` | POST | Generate AI video | Existing |
-| `/api/video/<id>` | GET | Get video info | Existing |
-| `/api/scenes/<id>` | GET | Get detected scenes | **NEW** |
-| `/api/highlights/<id>` | GET | Get video highlights | **NEW** |
-| `/api/streaming/<id>/<quality>` | GET | Get streaming manifest | **NEW** |
-| `/api/subtitles/<id>/<lang>` | GET | Get subtitle file | **NEW** |
-| `/api/analytics/<id>` | GET | Get video analytics | **NEW** |
-| `/api/watch-party` | POST | Create watch party | **NEW** |
-| `/api/watch-party/<id>` | GET | Get party info | **NEW** |
-| `/ws/watch-party/<id>` | WS | Watch party WebSocket | **NEW** |
+| Endpoint                        | Method | Description            | New/Existing |
+| ------------------------------- | ------ | ---------------------- | ------------ |
+| `/api/generate`                 | POST   | Generate AI video      | Existing     |
+| `/api/video/<id>`               | GET    | Get video info         | Existing     |
+| `/api/scenes/<id>`              | GET    | Get detected scenes    | **NEW**      |
+| `/api/highlights/<id>`          | GET    | Get video highlights   | **NEW**      |
+| `/api/streaming/<id>/<quality>` | GET    | Get streaming manifest | **NEW**      |
+| `/api/subtitles/<id>/<lang>`    | GET    | Get subtitle file      | **NEW**      |
+| `/api/analytics/<id>`           | GET    | Get video analytics    | **NEW**      |
+| `/api/watch-party`              | POST   | Create watch party     | **NEW**      |
+| `/api/watch-party/<id>`         | GET    | Get party info         | **NEW**      |
+| `/ws/watch-party/<id>`          | WS     | Watch party WebSocket  | **NEW**      |
 
 ### GraphQL API (Port 4000)
 
@@ -613,6 +626,7 @@ extend type Subscription {
 ## ✅ Integration Checklist
 
 ### Backend Services
+
 - [x] Flask API (port 5003) runs video generation service
 - [x] GraphQL API (port 4000) provides unified API layer
 - [x] MongoDB stores video metadata and analytics
@@ -620,6 +634,7 @@ extend type Subscription {
 - [x] Agent Hub coordinates 75+ AI agents
 
 ### New Modules
+
 - [x] `ai_video_intelligence.py` - Integrated via Flask endpoints
 - [x] `adaptive_streaming.py` - Generates HLS/DASH manifests
 - [x] `watch_party.py` - WebSocket server for real-time sync
@@ -627,12 +642,14 @@ extend type Subscription {
 - [x] `subtitle_generator.py` - Auto-generates multi-lang subs
 
 ### Frontend Components
+
 - [x] `cinema-player.html` - Standalone HTML5 player
 - [x] React components can embed cinema player
 - [x] Apollo Client connects to GraphQL API
 - [x] WebSocket client for watch parties
 
 ### Data Persistence
+
 - [x] MongoDB schemas updated with new fields
 - [x] Redis keys defined for caching
 - [x] File storage for video outputs
@@ -652,7 +669,7 @@ services:
   video-generation:
     build: ./services/video-generation
     ports:
-      - "5003:5003"
+      - '5003:5003'
     environment:
       - MONGODB_URI=mongodb://mongo:27017/hootner
       - REDIS_URL=redis://redis:6379
@@ -669,7 +686,7 @@ services:
     build: ./services/video-generation
     command: python watch_party_server.py
     ports:
-      - "5004:5004"
+      - '5004:5004'
     environment:
       - REDIS_URL=redis://redis:6379
     depends_on:
@@ -729,6 +746,7 @@ All 5 new modules are designed to work seamlessly with your existing HOOTNER pla
 ---
 
 **Ready to deploy? Run:**
+
 ```bash
 npm run start:all
 cd services/video-generation && python api.py

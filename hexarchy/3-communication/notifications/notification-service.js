@@ -3,11 +3,11 @@
  * Multi-channel notification delivery
  */
 
-import { createLogger } from '../../0-core/utils/logger.js';
-import { eventBus } from '../../0-core/orchestration/event-bus.js';
-import { EventTypes } from '../../0-core/contracts/domain-events.js';
+import { createLogger } from '../../0-core/utils/logger.js'
+import { eventBus } from '../../0-core/orchestration/event-bus.js'
+import { EventTypes } from '../../0-core/contracts/domain-events.js'
 
-const logger = createLogger('communication', 'notifications');
+const logger = createLogger('communication', 'notifications')
 
 class NotificationService {
   constructor() {
@@ -15,17 +15,17 @@ class NotificationService {
       email: { enabled: true, handler: this._sendEmail.bind(this) },
       push: { enabled: true, handler: this._sendPush.bind(this) },
       inApp: { enabled: true, handler: this._sendInApp.bind(this) },
-      sms: { enabled: false, handler: this._sendSMS.bind(this) }
-    };
-    this.userPreferences = new Map();
-    this.notificationQueue = [];
-    this._setupEventListeners();
+      sms: { enabled: false, handler: this._sendSMS.bind(this) },
+    }
+    this.userPreferences = new Map()
+    this.notificationQueue = []
+    this._setupEventListeners()
   }
 
   _setupEventListeners() {
     eventBus.subscribe(EventTypes.NOTIFICATION_TRIGGERED, async (event) => {
-      await this.send(event.payload);
-    });
+      await this.send(event.payload)
+    })
   }
 
   /**
@@ -34,16 +34,23 @@ class NotificationService {
   async send(notification) {
     // Input validation
     if (!notification || typeof notification !== 'object') {
-      throw new Error('Invalid notification data');
+      throw new Error('Invalid notification data')
     }
-    
-    const { userId, type, title, message, priority = 'normal', channels = ['inApp'] } = notification;
-    
+
+    const {
+      userId,
+      type,
+      title,
+      message,
+      priority = 'normal',
+      channels = ['inApp'],
+    } = notification
+
     // Validate required fields
     if (!userId || !type || !title || !message) {
-      throw new Error('Missing required notification fields');
+      throw new Error('Missing required notification fields')
     }
-    
+
     // Sanitize inputs
     const sanitizedNotification = {
       userId: String(userId).replace(/[^a-zA-Z0-9_-]/g, ''),
@@ -51,72 +58,72 @@ class NotificationService {
       title: String(title).substring(0, 100),
       message: String(message).substring(0, 500),
       priority,
-      channels: Array.isArray(channels) ? channels : ['inApp']
-    };
+      channels: Array.isArray(channels) ? channels : ['inApp'],
+    }
 
-    logger.info('Sending notification', { 
-      userId: sanitizedNotification.userId, 
-      type: sanitizedNotification.type, 
-      priority 
-    });
+    logger.info('Sending notification', {
+      userId: sanitizedNotification.userId,
+      type: sanitizedNotification.type,
+      priority,
+    })
 
-    const userPrefs = this._getUserPreferences(sanitizedNotification.userId);
-    const enabledChannels = sanitizedNotification.channels.filter(ch => 
-      this.channels[ch]?.enabled && userPrefs.channels.includes(ch)
-    );
+    const userPrefs = this._getUserPreferences(sanitizedNotification.userId)
+    const enabledChannels = sanitizedNotification.channels.filter(
+      (ch) => this.channels[ch]?.enabled && userPrefs.channels.includes(ch)
+    )
 
     const results = await Promise.allSettled(
-      enabledChannels.map(channel => 
+      enabledChannels.map((channel) =>
         this.channels[channel].handler({
           userId: sanitizedNotification.userId,
           type: sanitizedNotification.type,
           title: sanitizedNotification.title,
           message: sanitizedNotification.message,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
       )
-    );
+    )
 
-    const sent = results.filter(r => r.status === 'fulfilled').length;
-    const failed = results.filter(r => r.status === 'rejected').length;
+    const sent = results.filter((r) => r.status === 'fulfilled').length
+    const failed = results.filter((r) => r.status === 'rejected').length
 
     logger.info('Notification sent', {
       userId: sanitizedNotification.userId,
       sent,
       failed,
-      channels: enabledChannels
-    });
+      channels: enabledChannels,
+    })
 
-    return { sent, failed, channels: enabledChannels };
+    return { sent, failed, channels: enabledChannels }
   }
 
   async _sendEmail(notification) {
-    logger.debug('Sending email notification', { userId: notification.userId });
+    logger.debug('Sending email notification', { userId: notification.userId })
     // Would integrate with email service (SendGrid, etc.)
-    return { channel: 'email', status: 'sent' };
+    return { channel: 'email', status: 'sent' }
   }
 
   async _sendPush(notification) {
-    logger.debug('Sending push notification', { userId: notification.userId });
+    logger.debug('Sending push notification', { userId: notification.userId })
     // Would integrate with push service (FCM, etc.)
-    return { channel: 'push', status: 'sent' };
+    return { channel: 'push', status: 'sent' }
   }
 
   async _sendInApp(notification) {
-    logger.debug('Sending in-app notification', { userId: notification.userId });
+    logger.debug('Sending in-app notification', { userId: notification.userId })
     // Would store in database and emit event to UI
     this.notificationQueue.push({
       ...notification,
       id: crypto.randomUUID(),
-      read: false
-    });
-    return { channel: 'inApp', status: 'sent' };
+      read: false,
+    })
+    return { channel: 'inApp', status: 'sent' }
   }
 
   async _sendSMS(notification) {
-    logger.debug('Sending SMS notification', { userId: notification.userId });
+    logger.debug('Sending SMS notification', { userId: notification.userId })
     // Would integrate with SMS service (Twilio, etc.)
-    return { channel: 'sms', status: 'sent' };
+    return { channel: 'sms', status: 'sent' }
   }
 
   _getUserPreferences(userId) {
@@ -125,18 +132,18 @@ class NotificationService {
       return {
         channels: ['inApp'],
         quietHours: { enabled: false },
-        frequency: 'all'
-      };
+        frequency: 'all',
+      }
     }
-    
+
     if (!this.userPreferences.has(userId)) {
       return {
         channels: ['inApp', 'push'],
         quietHours: { enabled: false },
-        frequency: 'all'
-      };
+        frequency: 'all',
+      }
     }
-    return this.userPreferences.get(userId);
+    return this.userPreferences.get(userId)
   }
 
   /**
@@ -145,27 +152,27 @@ class NotificationService {
   getUnread(userId) {
     // Input validation
     if (!userId || typeof userId !== 'string') {
-      return [];
+      return []
     }
-    
-    const sanitizedUserId = userId.replace(/[^a-zA-Z0-9_-]/g, '');
-    
+
+    const sanitizedUserId = userId.replace(/[^a-zA-Z0-9_-]/g, '')
+
     return this.notificationQueue
-      .filter(n => n.userId === sanitizedUserId && !n.read)
-      .sort((a, b) => b.timestamp - a.timestamp);
+      .filter((n) => n.userId === sanitizedUserId && !n.read)
+      .sort((a, b) => b.timestamp - a.timestamp)
   }
 
   /**
    * Mark notification as read
    */
   markRead(notificationId) {
-    const notification = this.notificationQueue.find(n => n.id === notificationId);
+    const notification = this.notificationQueue.find((n) => n.id === notificationId)
     if (notification) {
-      notification.read = true;
-      logger.debug('Marked notification as read', { notificationId });
+      notification.read = true
+      logger.debug('Marked notification as read', { notificationId })
     }
   }
 }
 
-export const notificationService = new NotificationService();
-export default notificationService;
+export const notificationService = new NotificationService()
+export default notificationService

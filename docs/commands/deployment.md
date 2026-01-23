@@ -97,18 +97,21 @@ docker-compose -f docker-compose.prod.yml up -d --force-recreate
 ## 🌐 Environment-Specific Deployments
 
 ### Staging
+
 ```bash
 docker-compose -f docker-compose.staging.yml up -d
 kubectl apply -f k8s/staging/
 ```
 
 ### Production
+
 ```bash
 docker-compose -f docker-compose.prod.yml up -d
 kubectl apply -f k8s/production/
 ```
 
 ### Development
+
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 kubectl apply -f k8s/development/
@@ -333,6 +336,7 @@ kubectl get svc
 ## 📋 Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] Run security audit
 - [ ] Execute all tests
 - [ ] Backup databases
@@ -340,12 +344,14 @@ kubectl get svc
 - [ ] Verify environment variables
 
 ### During Deployment
+
 - [ ] Monitor deployment progress
 - [ ] Check service health
 - [ ] Verify database connections
 - [ ] Test critical paths
 
 ### Post-Deployment
+
 - [ ] Run smoke tests
 - [ ] Monitor error rates
 - [ ] Check performance metrics

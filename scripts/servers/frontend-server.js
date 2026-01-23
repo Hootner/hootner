@@ -190,7 +190,7 @@ app.post('/api/payments', async (req, res) => {
     
     // Business logic: Process payment
     const payment = {
-      id: `pay_` + Date.now() + ``,
+      id: 'pay_' + Date.now() + '',
       userId,
       amount,
       currency,
@@ -198,7 +198,7 @@ app.post('/api/payments', async (req, res) => {
       createdAt: new Date().toISOString()
     };
     
-    console.log(`Payment processed: $${amount} ` + currency + ``);
+    console.log(`Payment processed: $${amount} ` + currency + '');
     res.json({ success: true, payment });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -247,7 +247,7 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Frontend server running on http://localhost:` + PORT + ``);
-  console.log(`📊 Health check: http://localhost:` + PORT + `/api/health`);
-  console.log(`📈 Analytics: http://localhost:` + PORT + `/api/analytics`);
+  console.log('🚀 Frontend server running on http://localhost:' + PORT + '');
+  console.log('📊 Health check: http://localhost:' + PORT + '/api/health');
+  console.log('📈 Analytics: http://localhost:' + PORT + '/api/analytics');
 });

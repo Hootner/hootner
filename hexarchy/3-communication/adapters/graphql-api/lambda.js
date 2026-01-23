@@ -1,14 +1,14 @@
 // Lambda handler for GraphQL API (ESM)
-import serverless from 'serverless-http';
-import { app, initializeApp } from './server.js';
+import serverless from 'serverless-http'
+import { app, initializeApp } from './server.js'
 
-let cachedHandler;
+let cachedHandler
 
 export const handler = async (event, context) => {
   if (!cachedHandler) {
-    await initializeApp();
-    cachedHandler = serverless(app);
+    await initializeApp()
+    cachedHandler = serverless(app)
   }
 
-  return cachedHandler(event, context);
-};
+  return cachedHandler(event, context)
+}

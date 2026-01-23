@@ -1,6 +1,11 @@
-import { listVideos, getVideoById, incrementViews, trendingVideos as listTrendingVideos } from '../models/Video.js';
-import { listUsers, getUserById } from '../models/User.js';
-import { listPlaylists, getPlaylistById } from '../models/Playlist.js';
+import {
+  listVideos,
+  getVideoById,
+  incrementViews,
+  trendingVideos as listTrendingVideos,
+} from '../models/Video.js'
+import { listUsers, getUserById } from '../models/User.js'
+import { listPlaylists, getPlaylistById } from '../models/Playlist.js'
 
 const resolvers = {
   health: () => ({
@@ -11,71 +16,71 @@ const resolvers = {
       database: 'connected',
       redis: 'connected',
       videoGeneration: 'available',
-      streaming: 'ready'
+      streaming: 'ready',
     },
-    uptime: Math.floor(process.uptime())
+    uptime: Math.floor(process.uptime()),
   }),
 
   version: () => '2.0.0',
 
   videos: async (_, { filter, limit = 20, offset = 0 }) => {
-    const { items, totalCount } = await listVideos(filter || {}, limit, offset);
+    const { items, totalCount } = await listVideos(filter || {}, limit, offset)
     return {
-      edges: items.map(v => ({ node: v, cursor: v.videoId })),
+      edges: items.map((v) => ({ node: v, cursor: v.videoId })),
       pageInfo: {
         hasNextPage: offset + limit < totalCount,
         hasPreviousPage: offset > 0,
         startCursor: items[0]?.videoId,
-        endCursor: items[items.length - 1]?.videoId
+        endCursor: items[items.length - 1]?.videoId,
       },
-      totalCount
-    };
+      totalCount,
+    }
   },
 
   video: async (_, { id }) => {
-    const video = await getVideoById(id);
+    const video = await getVideoById(id)
     if (video) {
-      await incrementViews(id);
-      video.views = (video.views || 0) + 1;
+      await incrementViews(id)
+      video.views = (video.views || 0) + 1
     }
-    return video;
+    return video
   },
 
   myVideos: async (_, __, { user }) => {
-    if (!user) throw new Error('Not authenticated');
-    const { items } = await listVideos({ userId: user.id }, 100, 0);
-    return items;
+    if (!user) throw new Error('Not authenticated')
+    const { items } = await listVideos({ userId: user.id }, 100, 0)
+    return items
   },
 
   trendingVideos: async (_, { limit = 10 }) => {
-    return listTrendingVideos(limit);
+    return listTrendingVideos(limit)
   },
 
   users: async (_, { limit = 20, offset = 0 }) => {
-    return listUsers(limit, offset);
+    return listUsers(limit, offset)
   },
 
   user: async (_, { id }) => {
-    return getUserById(id);
+    return getUserById(id)
   },
 
   me: async (_, __, { user }) => {
-    if (!user) return null;
-    return getUserById(user.id);
+    if (!user) return null
+    return getUserById(user.id)
   },
 
   playlists: async (_, { userId, limit = 20 }) => {
-    return listPlaylists({ userId, limit });
+    return listPlaylists({ userId, limit })
   },
 
   playlist: async (_, { id }) => {
-    return getPlaylistById(id);
+    return getPlaylistById(id)
   },
 
   myPlaylists: async (_, __, { user }) => {
-    if (!user) throw new Error('Not authenticated');
-    return listPlaylists({ userId: user.id, limit: 50 });
-  }
-};
+    if (!user) throw new Error('Not authenticated')
+    return listPlaylists({ userId: user.id, limit: 50 })
+  },
+}
 
-export default resolvers;
+export default resolvers

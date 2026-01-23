@@ -5,20 +5,24 @@ This checklist covers settings that must be configured in the GitHub web interfa
 ## 🔐 Security & Analysis
 
 ### Dependency Graph
+
 - [ ] **Enable dependency graph** (Settings → Security → Code security and analysis)
 
 ### Dependabot
+
 - [x] **Dependabot alerts**: Enabled (via dependabot.yml)
 - [x] **Dependabot security updates**: Enabled (via dependabot.yml)
 - [ ] **Grouped security updates**: Enable for easier management
 
 ### Code Scanning
+
 - [ ] **CodeQL analysis**: Enable default setup
   - Languages: JavaScript, TypeScript, Python, Go
   - Schedule: On push to main/develop
 - [ ] **Third-party scanning**: Consider Snyk or SonarCloud integration
 
 ### Secret Scanning
+
 - [ ] **Secret scanning**: Enable
 - [ ] **Push protection**: Enable (prevents committing secrets)
 - [ ] **Validity checks**: Enable (verifies if secrets are active)
@@ -26,11 +30,13 @@ This checklist covers settings that must be configured in the GitHub web interfa
 ## 🌿 Branch Protection Rules
 
 ### Main Branch (`main`)
+
 Navigate to: Settings → Branches → Add branch protection rule
 
 **Branch name pattern**: `main`
 
 #### Protect matching branches
+
 - [ ] **Require a pull request before merging**
   - [ ] Require approvals: **2**
   - [ ] Dismiss stale pull request approvals when new commits are pushed
@@ -57,17 +63,21 @@ Navigate to: Settings → Branches → Add branch protection rule
   - Environments: `staging`
 
 #### Rules applied to everyone including administrators
+
 - [ ] **Include administrators**
 
 #### Restrict who can push to matching branches
+
 - [ ] **Restrict pushes that create matching branches**
   - Allowed actors: `@hootner-team/maintainers`
 
 #### Additional settings
+
 - [ ] **Allow force pushes**: **NO**
 - [ ] **Allow deletions**: **NO**
 
 ### Develop Branch (`develop`)
+
 **Branch name pattern**: `develop`
 
 - [ ] **Require a pull request before merging**
@@ -83,33 +93,40 @@ Navigate to: Settings → Secrets and variables → Actions
 ### Repository Secrets (Required)
 
 #### AWS Credentials
+
 - [ ] `AWS_ACCESS_KEY_ID` - AWS access key for deployments
 - [ ] `AWS_SECRET_ACCESS_KEY` - AWS secret key
 - [ ] `AWS_REGION` - Default: `us-east-2`
 
 #### Database
+
 - [ ] `MONGODB_URI` - Production MongoDB connection string
 - [ ] `MONGODB_URI_TEST` - Test database connection string
 - [ ] `REDIS_URL` - Redis connection string
 
 #### Authentication
+
 - [ ] `JWT_SECRET` - Minimum 32 characters, cryptographically random
 - [ ] `JWT_REFRESH_SECRET` - Separate secret for refresh tokens
 
 #### Container Registry
+
 - [ ] `GHCR_TOKEN` - GitHub Container Registry token (or use `GITHUB_TOKEN`)
 - [ ] `DOCKER_USERNAME` - Docker Hub username (if using)
 - [ ] `DOCKER_PASSWORD` - Docker Hub password (if using)
 
 #### Security
+
 - [ ] `COSIGN_PASSWORD` - For container image signing
 - [ ] `SNYK_TOKEN` - Snyk API token for security scanning
 
 #### Notifications (Optional)
+
 - [ ] `SLACK_WEBHOOK` - Slack webhook for notifications
 - [ ] `DISCORD_WEBHOOK` - Discord webhook for notifications
 
 #### Stripe (if using payments)
+
 - [ ] `STRIPE_SECRET_KEY` - Stripe secret key
 - [ ] `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
 
@@ -122,6 +139,7 @@ Navigate to: Settings → Secrets and variables → Actions
 ## ⚙️ General Settings
 
 ### General
+
 - [ ] **Repository name**: `hootner` or `my-local-repo`
 - [ ] **Description**: "Enterprise-grade video streaming platform with PWA capabilities"
 - [ ] **Website**: https://hootner.com
@@ -133,6 +151,7 @@ Navigate to: Settings → Secrets and variables → Actions
 - [ ] **Environments**: Yes
 
 ### Features
+
 - [ ] **Wikis**: Optional
 - [ ] **Issues**: Yes
 - [ ] **Sponsorships**: Optional
@@ -140,6 +159,7 @@ Navigate to: Settings → Secrets and variables → Actions
 - [ ] **Discussions**: Optional (recommended for community)
 
 ### Pull Requests
+
 - [ ] **Allow merge commits**: Yes
 - [ ] **Allow squash merging**: Yes (recommended)
 - [ ] **Allow rebase merging**: Yes
@@ -148,6 +168,7 @@ Navigate to: Settings → Secrets and variables → Actions
 - [ ] **Automatically delete head branches**: Yes
 
 ### Archives
+
 - [ ] **Include Git LFS objects in archives**: If using LFS
 
 ## 🚀 Actions Settings
@@ -155,6 +176,7 @@ Navigate to: Settings → Secrets and variables → Actions
 Navigate to: Settings → Actions → General
 
 ### Actions permissions
+
 - [ ] **Allow all actions and reusable workflows**: OR
 - [x] **Allow select actions and reusable workflows** (recommended)
   - [ ] Allow actions created by GitHub
@@ -169,10 +191,12 @@ Navigate to: Settings → Actions → General
     ```
 
 ### Workflow permissions
+
 - [x] **Read repository contents and packages permissions** (default)
 - [ ] **Read and write permissions** (if needed for auto-commits)
 
 ### Fork pull request workflows
+
 - [ ] **Require approval for first-time contributors**
 - [ ] **Require approval for all outside collaborators**
 
@@ -181,6 +205,7 @@ Navigate to: Settings → Actions → General
 Navigate to: Settings → Environments
 
 ### Production Environment
+
 - [ ] **Name**: `production`
 - [ ] **Required reviewers**: `@hootner-team/maintainers` (2 required)
 - [ ] **Wait timer**: 0 minutes
@@ -188,6 +213,7 @@ Navigate to: Settings → Environments
 - [ ] **Environment secrets**: Production-specific secrets
 
 ### Staging Environment
+
 - [ ] **Name**: `staging`
 - [ ] **Required reviewers**: `@hootner-team/developers` (1 required)
 - [ ] **Wait timer**: 0 minutes
@@ -195,6 +221,7 @@ Navigate to: Settings → Environments
 - [ ] **Environment secrets**: Staging-specific secrets
 
 ### Preview Environment
+
 - [ ] **Name**: `preview`
 - [ ] **Required reviewers**: None
 - [ ] **Deployment branches**: All branches
@@ -203,24 +230,30 @@ Navigate to: Settings → Environments
 ## 📊 Insights & Analytics
 
 ### Pulse
+
 - [ ] Review weekly activity
 
 ### Contributors
+
 - [ ] Verify contributor graph
 
 ### Traffic
+
 - [ ] Monitor views and clones
 
 ### Dependency graph
+
 - [ ] Review dependencies
 - [ ] Check for vulnerabilities
 
 ## 🔔 Notifications
 
 ### Watching
+
 - [ ] Set repository watch preferences for team members
 
 ### Email notifications
+
 - [ ] Configure email preferences for:
   - [ ] Security alerts
   - [ ] Dependabot alerts
@@ -232,11 +265,13 @@ Navigate to: Settings → Environments
 Navigate to: Settings → Webhooks
 
 ### Slack Integration
+
 - [ ] **Payload URL**: Your Slack webhook URL
 - [ ] **Content type**: application/json
 - [ ] **Events**: Push, Pull request, Issues, Deployment
 
 ### Discord Integration
+
 - [ ] **Payload URL**: Your Discord webhook URL
 - [ ] **Content type**: application/json
 - [ ] **Events**: Push, Pull request, Issues
@@ -246,6 +281,7 @@ Navigate to: Settings → Webhooks
 After configuration:
 
 1. **Test branch protection**:
+
    ```bash
    git checkout main
    git commit --allow-empty -m "test: branch protection"

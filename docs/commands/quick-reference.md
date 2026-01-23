@@ -285,14 +285,14 @@ open http://localhost:3000/video-player.html
 
 ## 🔗 Useful URLs (Development)
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Frontend | http://localhost:3000 | Main frontend |
-| API | http://localhost:5000 | Main API |
-| Video Player | http://localhost:3000/video-player.html | Video player |
-| Grafana | http://localhost:3013 | Monitoring |
-| Prometheus | http://localhost:9090 | Metrics |
-| Documentation | http://localhost:8080 | Generated docs |
+| Service       | URL                                     | Description    |
+| ------------- | --------------------------------------- | -------------- |
+| Frontend      | http://localhost:3000                   | Main frontend  |
+| API           | http://localhost:5000                   | Main API       |
+| Video Player  | http://localhost:3000/video-player.html | Video player   |
+| Grafana       | http://localhost:3013                   | Monitoring     |
+| Prometheus    | http://localhost:9090                   | Metrics        |
+| Documentation | http://localhost:8080                   | Generated docs |
 
 ## 🆘 Emergency Commands
 

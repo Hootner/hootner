@@ -3,6 +3,7 @@
 ## 🎯 Quick Validation
 
 Run this command to check everything:
+
 ```bash
 npm run backend:validate
 ```

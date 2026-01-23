@@ -84,6 +84,7 @@ python api_enhanced.py
 ```
 
 **Default URLs:**
+
 - API: http://localhost:5003
 - Health check: http://localhost:5003/health
 - Metrics: http://localhost:5003/metrics
@@ -116,6 +117,7 @@ curl -X POST http://localhost:5003/generate \
 ```
 
 **Response:**
+
 ```json
 {
   "job_id": "uuid",
@@ -147,6 +149,7 @@ curl -X POST http://localhost:5003/generate \
 ```
 
 **Response:**
+
 ```json
 {
   "job_id": "uuid",
@@ -209,6 +212,7 @@ curl http://localhost:5003/health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -242,26 +246,26 @@ Connect to `ws://localhost:5003/generation` for real-time updates.
 ### Client Example
 
 ```javascript
-const socket = io('http://localhost:5003/generation');
+const socket = io('http://localhost:5003/generation')
 
 // Subscribe to job updates
-socket.emit('subscribe', { job_id: 'uuid' });
+socket.emit('subscribe', { job_id: 'uuid' })
 
 // Listen for progress
 socket.on('progress', (data) => {
-  console.log(`Progress: ${data.progress}% (${data.step}/${data.total})`);
-});
+  console.log(`Progress: ${data.progress}% (${data.step}/${data.total})`)
+})
 
 // Listen for completion
 socket.on('completed', (data) => {
-  console.log('Job completed!', data);
-  console.log('Download URL:', data.download_url);
-});
+  console.log('Job completed!', data)
+  console.log('Download URL:', data.download_url)
+})
 
 // Listen for errors
 socket.on('error', (data) => {
-  console.error('Error:', data.error);
-});
+  console.error('Error:', data.error)
+})
 ```
 
 ### Python Client Example
@@ -340,6 +344,7 @@ video = effects.apply_preset(video, preset="cinematic")
 ### Environment-Specific Configs
 
 Configurations are stored in YAML files:
+
 - `config/development.yaml` - Development settings
 - `config/production.yaml` - Production settings
 
@@ -531,7 +536,7 @@ video = sampler.sample(
 
 ---
 
-## 🐳 
+## 🐳
 
 ### Build Image
 
@@ -565,7 +570,7 @@ video = sampler.sample(
   hootner/video-generation:latest
 ```
 
-### 
+###
 
 ```yaml
 version: '3.8'
@@ -574,7 +579,7 @@ services:
   video-generation:
     image: hootner/video-generation:latest
     ports:
-      - "5003:5003"
+      - '5003:5003'
     environment:
       - ENVIRONMENT=production
       - REDIS_HOST=redis
@@ -594,7 +599,7 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis-data:/data
 
@@ -609,12 +614,14 @@ volumes:
 ### Recommended Settings
 
 **Development:**
+
 - Model size: `small` or `base`
 - Steps: 20-50
 - Mixed precision: Enabled
 - Compile model: Disabled
 
 **Production:**
+
 - Model size: `base` or `large`
 - Steps: 50
 - Mixed precision: Enabled
@@ -623,12 +630,12 @@ volumes:
 
 ### Benchmarks
 
-| Configuration | GPU | Resolution | Frames | Steps | Time |
-|--------------|-----|-----------|--------|-------|------|
-| Small + DPM | RTX 3090 | 64x64 | 16 | 20 | ~15s |
-| Base + DPM | RTX 3090 | 64x64 | 16 | 50 | ~30s |
-| Base + Euler | RTX 3090 | 128x128 | 16 | 50 | ~45s |
-| Large + DPM | A100 | 256x256 | 32 | 50 | ~120s |
+| Configuration | GPU      | Resolution | Frames | Steps | Time  |
+| ------------- | -------- | ---------- | ------ | ----- | ----- |
+| Small + DPM   | RTX 3090 | 64x64      | 16     | 20    | ~15s  |
+| Base + DPM    | RTX 3090 | 64x64      | 16     | 50    | ~30s  |
+| Base + Euler  | RTX 3090 | 128x128    | 16     | 50    | ~45s  |
+| Large + DPM   | A100     | 256x256    | 32     | 50    | ~120s |
 
 ---
 
@@ -643,16 +650,18 @@ Enable API key authentication in production:
 security:
   api_key:
     enabled: true
-    header_name: "X-API-Key"
-    key: "${VIDEO_GEN_API_KEY}"
+    header_name: 'X-API-Key'
+    key: '${VIDEO_GEN_API_KEY}'
 ```
 
 Set the API key:
+
 ```bash
 export VIDEO_GEN_API_KEY="<your_secret_key>"
 ```
 
 Use in requests:
+
 ```bash
 curl -X POST http://localhost:5003/generate \
   -H "X-API-Key: <your_api_key>" \
@@ -663,19 +672,21 @@ curl -X POST http://localhost:5003/generate \
 ### Rate Limiting
 
 Configured per environment:
+
 - Development: 20 requests / 60 seconds
 - Production: 100 requests / 60 seconds
 
 ### CORS
 
 Configure allowed origins in config file:
+
 ```yaml
 security:
   cors:
     enabled: true
     origins:
-      - "https://hootner.com"
-      - "https://app.hootner.com"
+      - 'https://hootner.com'
+      - 'https://app.hootner.com'
 ```
 
 ---
@@ -711,22 +722,26 @@ k6 run load_test.js
 ### Common Issues
 
 **"CUDA out of memory"**
+
 - Reduce batch size
 - Enable gradient checkpointing
 - Use smaller model
 - Reduce resolution/frames
 
 **"Redis connection failed"**
+
 - Check Redis is running: `redis-cli ping`
 - Verify Redis host/port in config
 - Service will fall back to in-memory queue
 
 **"Model loading failed"**
+
 - Check checkpoint path exists
 - Verify model weights compatibility
 - Ensure sufficient disk space
 
 **"Slow generation"**
+
 - Enable mixed precision training
 - Use DPM-Solver++ with fewer steps
 - Enable model compilation (PyTorch 2.0+)
@@ -735,6 +750,7 @@ k6 run load_test.js
 ### Debug Mode
 
 Enable debug logging:
+
 ```bash
 # In config
 monitoring:

@@ -4,27 +4,25 @@
  */
 
 // Server-side DOMPurify (using jsdom)
-let DOMPurify = null;
+let DOMPurify = null
 
 // Detect environment
 if (typeof window !== 'undefined') {
   // Browser environment
   try {
-    DOMPurify = require('dompurify');
+    DOMPurify = require('dompurify')
   } catch (e) {
-    console.warn(
-      'DOMPurify not available in browser, falling back to escaping'
-    );
+    console.warn('DOMPurify not available in browser, falling back to escaping')
   }
 } else {
   // Node.js environment
   try {
-    const createDOMPurify = require('dompurify');
-    const { JSDOM } = require('jsdom');
-    const window = new JSDOM('').window;
-    DOMPurify = createDOMPurify(window);
+    const createDOMPurify = require('dompurify')
+    const { JSDOM } = require('jsdom')
+    const window = new JSDOM('').window
+    DOMPurify = createDOMPurify(window)
   } catch (e) {
-    console.warn('DOMPurify/JSDOM not available, falling back to escaping');
+    console.warn('DOMPurify/JSDOM not available, falling back to escaping')
   }
 }
 
@@ -35,14 +33,14 @@ if (typeof window !== 'undefined') {
  * @returns {string} - Escaped string
  */
 function escapeHtml(unsafe) {
-  if (typeof unsafe !== 'string') return '';
+  if (typeof unsafe !== 'string') return ''
   return unsafe
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;')
-    .replace(/\//g, '&#x2F;');
+    .replace(/\//g, '&#x2F;')
 }
 
 /**
@@ -52,7 +50,7 @@ function escapeHtml(unsafe) {
  * @returns {string} - Sanitized HTML
  */
 function sanitizeHtml(dirty, config = {}) {
-  if (typeof dirty !== 'string') return '';
+  if (typeof dirty !== 'string') return ''
 
   // Use DOMPurify if available
   if (DOMPurify) {
@@ -74,13 +72,13 @@ function sanitizeHtml(dirty, config = {}) {
       ALLOWED_ATTR: ['href', 'title', 'class', 'id', 'style'],
       ALLOW_DATA_ATTR: false,
       SAFE_FOR_TEMPLATES: true,
-    };
+    }
 
-    return DOMPurify.sanitize(dirty, { ...defaultConfig, ...config });
+    return DOMPurify.sanitize(dirty, { ...defaultConfig, ...config })
   }
 
   // Fallback to escaping
-  return escapeHtml(dirty);
+  return escapeHtml(dirty)
 }
 
 /**
@@ -89,13 +87,13 @@ function sanitizeHtml(dirty, config = {}) {
  * @returns {string} - Plain text
  */
 function sanitizeText(dirty) {
-  if (typeof dirty !== 'string') return '';
+  if (typeof dirty !== 'string') return ''
 
   if (DOMPurify) {
-    return DOMPurify.sanitize(dirty, { ALLOWED_TAGS: [] });
+    return DOMPurify.sanitize(dirty, { ALLOWED_TAGS: [] })
   }
 
-  return escapeHtml(dirty);
+  return escapeHtml(dirty)
 }
 
 /**
@@ -104,9 +102,9 @@ function sanitizeText(dirty) {
  * @returns {string} - Safe URL or empty string
  */
 function sanitizeUrl(url) {
-  if (typeof url !== 'string') return '';
+  if (typeof url !== 'string') return ''
 
-  const trimmed = url.trim().toLowerCase();
+  const trimmed = url.trim().toLowerCase()
 
   // Block dangerous protocols
   if (
@@ -115,10 +113,10 @@ function sanitizeUrl(url) {
     trimmed.startsWith('vbscript:') ||
     trimmed.startsWith('file:')
   ) {
-    return '';
+    return ''
   }
 
-  return url;
+  return url
 }
 
 /**
@@ -142,10 +140,10 @@ function createSafeElement(tagName, attributes = {}, content = '') {
     'ul',
     'ol',
     'li',
-  ];
+  ]
 
   if (!allowedTags.includes(tagName)) {
-    tagName = 'div';
+    tagName = 'div'
   }
 
   // Sanitize attributes
@@ -154,19 +152,19 @@ function createSafeElement(tagName, attributes = {}, content = '') {
       ['class', 'id', 'href', 'title', 'aria-label', 'role'].includes(key)
     )
     .map(([key, value]) => {
-      let sanitizedValue = value;
+      let sanitizedValue = value
       if (key === 'href') {
-        sanitizedValue = sanitizeUrl(value);
+        sanitizedValue = sanitizeUrl(value)
       } else {
-        sanitizedValue = escapeHtml(String(value));
+        sanitizedValue = escapeHtml(String(value))
       }
-      return `${key}="${sanitizedValue}"`;
+      return `${key}="${sanitizedValue}"`
     })
-    .join(' ');
+    .join(' ')
 
-  const safeContent = sanitizeHtml(content);
+  const safeContent = sanitizeHtml(content)
 
-  return `<${tagName}${safeAttrs ? ' ' + safeAttrs : ''}>${safeContent}</${tagName}>`;
+  return `<${tagName}${safeAttrs ? ' ' + safeAttrs : ''}>${safeContent}</${tagName}>`
 }
 
 /**
@@ -176,18 +174,18 @@ function createSafeElement(tagName, attributes = {}, content = '') {
  * @returns {Object} - Sanitized object
  */
 function sanitizeObject(obj, fields = []) {
-  if (!obj || typeof obj !== 'object') return obj;
+  if (!obj || typeof obj !== 'object') return obj
 
-  const sanitized = { ...obj };
+  const sanitized = { ...obj }
 
   fields.forEach((field) => {
     if (field in sanitized && typeof sanitized[field] === 'string') {
-      const sanitizedValue = sanitizeText(sanitized[field]);
-      sanitized[field] = sanitizedValue;
+      const sanitizedValue = sanitizeText(sanitized[field])
+      sanitized[field] = sanitizedValue
     }
-  });
+  })
 
-  return sanitized;
+  return sanitized
 }
 
 /**
@@ -202,25 +200,25 @@ function validateInput(input, options = {}) {
     minLength = 0,
     pattern = null,
     allowHtml = false,
-  } = options;
+  } = options
 
   if (typeof input !== 'string') {
-    throw new Error('Input must be a string');
+    throw new Error('Input must be a string')
   }
 
   if (input.length > maxLength) {
-    throw new Error(`Input exceeds maximum length of ${maxLength}`);
+    throw new Error(`Input exceeds maximum length of ${maxLength}`)
   }
 
   if (input.length < minLength) {
-    throw new Error(`Input must be at least ${minLength} characters`);
+    throw new Error(`Input must be at least ${minLength} characters`)
   }
 
   if (pattern && !pattern.test(input)) {
-    throw new Error('Input does not match required pattern');
+    throw new Error('Input does not match required pattern')
   }
 
-  return allowHtml ? sanitizeHtml(input) : sanitizeText(input);
+  return allowHtml ? sanitizeHtml(input) : sanitizeText(input)
 }
 
 module.exports = {
@@ -231,4 +229,4 @@ module.exports = {
   createSafeElement,
   sanitizeObject,
   validateInput,
-};
+}

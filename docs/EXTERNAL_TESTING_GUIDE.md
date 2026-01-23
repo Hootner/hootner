@@ -12,11 +12,13 @@
 Anyone can test the API endpoints directly using the production URL:
 
 #### **Production API Endpoint:**
+
 ```
 https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/
 ```
 
 #### **Test with cURL:**
+
 ```bash
 # Health Check
 curl https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/health
@@ -28,7 +30,9 @@ curl -X POST https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/graphql
 ```
 
 #### **Test with Browser:**
+
 Simply open in any browser:
+
 - GraphQL Playground: `https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/graphql`
 
 ---
@@ -36,14 +40,16 @@ Simply open in any browser:
 ### **Option 2: Frontend Web Application**
 
 #### **S3 Static Website:**
+
 The frontend is deployed to S3. To access:
 
 1. **Enable S3 Website Hosting** (one-time setup by admin):
+
    ```bash
    aws s3 website s3://hootner-frontend-504165876439/ \
      --index-document index.html \
      --error-document index.html
-   
+
    aws s3api put-bucket-policy --bucket hootner-frontend-504165876439 \
      --policy '{
        "Version": "2012-10-17",
@@ -69,18 +75,22 @@ The frontend is deployed to S3. To access:
 Testers can run the frontend locally but connect to the production backend.
 
 #### **Step 1: Clone Repository**
+
 ```bash
 git clone https://github.com/Hootner/hootner.git
 cd hootner
 ```
 
 #### **Step 2: Install Dependencies**
+
 ```bash
 npm install
 ```
 
 #### **Step 3: Configure Environment**
+
 Create `.env.test` file:
+
 ```env
 # Point to Production API
 VITE_API_URL=https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod
@@ -94,6 +104,7 @@ VITE_ENV=production-test
 ```
 
 #### **Step 4: Start Local Frontend**
+
 ```bash
 npm run dev
 ```
@@ -160,6 +171,7 @@ Install Thunder Client extension and add:
 **Base URL:** `https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod`
 
 **Example Requests:**
+
 ```
 GET /health
 POST /graphql
@@ -189,6 +201,7 @@ POST /api/upload
 ## 🧪 Test Scenarios
 
 ### **Basic Connectivity Test**
+
 ```bash
 # Test 1: API Gateway is responding
 curl -i https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/
@@ -204,12 +217,13 @@ curl -X POST https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/graphql
 ```
 
 ### **Frontend Integration Test**
+
 ```javascript
 // Test in browser console
 fetch('https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/health')
-  .then(r => r.json())
+  .then((r) => r.json())
   .then(console.log)
-  .catch(console.error);
+  .catch(console.error)
 ```
 
 ---
@@ -219,17 +233,20 @@ fetch('https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/health')
 If authentication is required:
 
 ### **Test Account Credentials**
+
 ```
 Email: tester@hootner.com
 Password: Test123!@#
 ```
 
 ### **API Key (if applicable)**
+
 ```
 X-API-Key: test_key_provided_by_admin
 ```
 
 ### **Get Test Token**
+
 ```bash
 curl -X POST https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/auth/login \
   -H "Content-Type: application/json" \
@@ -244,11 +261,14 @@ curl -X POST https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/auth/lo
 ## 📊 Monitoring & Logs
 
 ### **For Testers:**
+
 - Report issues via GitHub Issues: `https://github.com/Hootner/hootner/issues`
 - Include request/response details and timestamps
 
 ### **For Admins:**
+
 View CloudWatch logs:
+
 ```bash
 # API Gateway logs
 aws logs tail /aws/apigateway/hootner-platform --follow
@@ -262,10 +282,12 @@ aws logs tail /aws/lambda/hootner-platform-GraphQLFunction-KeWZcE3z6asL --follow
 ## 🌐 Network Requirements
 
 ### **Firewall Rules:**
+
 - Allow outbound HTTPS (port 443)
 - No special inbound rules needed for API testing
 
 ### **DNS:**
+
 - Ensure `*.amazonaws.com` is not blocked
 - No DNS configuration needed
 
@@ -280,6 +302,7 @@ aws logs tail /aws/lambda/hootner-platform-GraphQLFunction-KeWZcE3z6asL --follow
    - Ensure route is configured in API Gateway
 
 2. **CORS Errors:**
+
    ```javascript
    // Frontend config (admin fix)
    Access-Control-Allow-Origin: *
@@ -300,6 +323,7 @@ aws logs tail /aws/lambda/hootner-platform-GraphQLFunction-KeWZcE3z6asL --follow
 ## 📞 Support
 
 **Questions?** Contact:
+
 - GitHub Issues: https://github.com/Hootner/hootner/issues
 - Email: support@hootner.com
 - Slack: #hootner-testing

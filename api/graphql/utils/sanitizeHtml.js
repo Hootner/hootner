@@ -12,9 +12,7 @@ if (typeof window !== 'undefined') {
   try {
     DOMPurify = require('dompurify');
   } catch (e) {
-    console.warn(
-      'DOMPurify not available in browser, falling back to escaping'
-    );
+    console.warn('DOMPurify not available in browser, falling back to escaping');
   }
 } else {
   // Node.js environment

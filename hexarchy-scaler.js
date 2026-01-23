@@ -14,7 +14,7 @@ class HexarchyScaler {
       { id: 5, name: 'Economy', path: 'hexarchy/5-economy', replicas: 5 },
       { id: 6, name: 'Governance', path: 'hexarchy/6-governance', replicas: 3 },
       { id: 7, name: 'Data', path: 'hexarchy/7-data', replicas: 6 },
-      { id: 8, name: 'Operations', path: 'hexarchy/8-operations', replicas: 4 }
+      { id: 8, name: 'Operations', path: 'hexarchy/8-operations', replicas: 4 },
     ];
   }
 
@@ -25,12 +25,12 @@ class HexarchyScaler {
       console.log(`📦 Layer ${layer.id}: ${layer.name}`);
       console.log(`   Path: ${layer.path}`);
       console.log(`   Scaling to ${layer.replicas} replicas...`);
-      
+
       const services = this.getServices(layer.path);
       console.log(`   Services: ${services.length} active`);
-      
+
       this.scaleLayer(layer, services);
-      console.log(`   ✅ Scaled\n`);
+      console.log('   ✅ Scaled\n');
     }
 
     this.generateMetrics();
@@ -38,11 +38,9 @@ class HexarchyScaler {
 
   getServices(path) {
     if (!fs.existsSync(path)) return [];
-    
+
     const files = fs.readdirSync(path, { recursive: true, withFileTypes: true });
-    return files
-      .filter(f => f.isFile() && f.name.endsWith('.js'))
-      .map(f => f.name);
+    return files.filter((f) => f.isFile() && f.name.endsWith('.js')).map((f) => f.name);
   }
 
   scaleLayer(layer, services) {
@@ -52,13 +50,13 @@ class HexarchyScaler {
       services: services.length,
       resources: {
         cpu: `${layer.replicas * 0.5}`,
-        memory: `${layer.replicas * 512}Mi`
+        memory: `${layer.replicas * 512}Mi`,
       },
       autoscaling: {
         min: layer.replicas,
         max: layer.replicas * 3,
-        targetCPU: 70
-      }
+        targetCPU: 70,
+      },
     };
 
     const configPath = `${layer.path}/scale-config.json`;
@@ -67,8 +65,10 @@ class HexarchyScaler {
 
   generateMetrics() {
     const totalReplicas = this.layers.reduce((sum, l) => sum + l.replicas, 0);
-    const totalServices = this.layers.reduce((sum, l) => 
-      sum + this.getServices(l.path).length, 0);
+    const totalServices = this.layers.reduce(
+      (sum, l) => sum + this.getServices(l.path).length,
+      0
+    );
 
     console.log('📊 HEXARCHY SCALE METRICS\n');
     console.log(`   Total Layers: ${this.layers.length}`);

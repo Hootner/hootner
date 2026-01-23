@@ -5,11 +5,11 @@
  * Author: HOOTNER Code Guardian
  */
 
-const jwt = require('jsonwebtoken');
-const { AuthenticationError, ForbiddenError } = require('apollo-server-express');
+const jwt = require('jsonwebtoken')
+const { AuthenticationError, ForbiddenError } = require('apollo-server-express')
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRATION = '24h';
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+const JWT_EXPIRATION = '24h'
 
 /**
  * Generate JWT token for user
@@ -17,15 +17,15 @@ const JWT_EXPIRATION = '24h';
  * @returns {string} JWT token
  */
 function generateToken(user) {
-    return jwt.sign(
-        {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-        },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRATION }
-    );
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRATION }
+  )
 }
 
 /**
@@ -34,14 +34,14 @@ function generateToken(user) {
  * @returns {string} Refresh token
  */
 function generateRefreshToken(user) {
-    return jwt.sign(
-        {
-            id: user.id,
-            type: 'refresh',
-        },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-    );
+  return jwt.sign(
+    {
+      id: user.id,
+      type: 'refresh',
+    },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  )
 }
 
 /**
@@ -51,11 +51,11 @@ function generateRefreshToken(user) {
  * @throws {AuthenticationError} If token is invalid
  */
 function verifyToken(token) {
-    try {
-        return jwt.verify(token, JWT_SECRET);
-    } catch (error) {
-        throw new AuthenticationError('Invalid or expired token');
-    }
+  try {
+    return jwt.verify(token, JWT_SECRET)
+  } catch (error) {
+    throw new AuthenticationError('Invalid or expired token')
+  }
 }
 
 /**
@@ -64,13 +64,13 @@ function verifyToken(token) {
  * @returns {string|null} JWT token or null
  */
 function extractToken(req) {
-    const authHeader = req.headers.authorization || '';
+  const authHeader = req.headers.authorization || ''
 
-    if (authHeader.startsWith('Bearer ')) {
-        return authHeader.substring(7);
-    }
+  if (authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7)
+  }
 
-    return null;
+  return null
 }
 
 /**
@@ -79,26 +79,26 @@ function extractToken(req) {
  * @returns {object|null} User object or null
  */
 async function getUserFromRequest(req) {
-    try {
-        const token = extractToken(req);
+  try {
+    const token = extractToken(req)
 
-        if (!token) {
-            return null;
-        }
-
-        const decoded = verifyToken(token);
-
-        // TODO: Fetch full user from database
-        // For now, return decoded token data
-        return {
-            id: decoded.id,
-            email: decoded.email,
-            role: decoded.role || 'USER',
-        };
-    } catch (error) {
-        console.error('Error getting user from request:', error);
-        return null;
+    if (!token) {
+      return null
     }
+
+    const decoded = verifyToken(token)
+
+    // TODO: Fetch full user from database
+    // For now, return decoded token data
+    return {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role || 'USER',
+    }
+  } catch (error) {
+    console.error('Error getting user from request:', error)
+    return null
+  }
 }
 
 /**
@@ -107,9 +107,9 @@ async function getUserFromRequest(req) {
  * @throws {AuthenticationError} If user is not authenticated
  */
 function validateAuth(context) {
-    if (!context.user) {
-        throw new AuthenticationError('Authentication required');
-    }
+  if (!context.user) {
+    throw new AuthenticationError('Authentication required')
+  }
 }
 
 /**
@@ -119,11 +119,11 @@ function validateAuth(context) {
  * @throws {ForbiddenError} If user doesn't have required role
  */
 function validateRole(context, allowedRoles) {
-    validateAuth(context);
+  validateAuth(context)
 
-    if (!allowedRoles.includes(context.user.role)) {
-        throw new ForbiddenError('Insufficient permissions');
-    }
+  if (!allowedRoles.includes(context.user.role)) {
+    throw new ForbiddenError('Insufficient permissions')
+  }
 }
 
 /**
@@ -133,22 +133,22 @@ function validateRole(context, allowedRoles) {
  * @throws {ForbiddenError} If user doesn't own the resource
  */
 function validateOwnership(context, resourceUserId) {
-    validateAuth(context);
+  validateAuth(context)
 
-    if (context.user.id !== resourceUserId && context.user.role !== 'ADMIN') {
-        throw new ForbiddenError('You do not have permission to access this resource');
-    }
+  if (context.user.id !== resourceUserId && context.user.role !== 'ADMIN') {
+    throw new ForbiddenError('You do not have permission to access this resource')
+  }
 }
 
 module.exports = {
-    generateToken,
-    generateRefreshToken,
-    verifyToken,
-    extractToken,
-    getUserFromRequest,
-    validateAuth,
-    validateRole,
-    validateOwnership,
-    JWT_SECRET,
-    JWT_EXPIRATION,
-};
+  generateToken,
+  generateRefreshToken,
+  verifyToken,
+  extractToken,
+  getUserFromRequest,
+  validateAuth,
+  validateRole,
+  validateOwnership,
+  JWT_SECRET,
+  JWT_EXPIRATION,
+}

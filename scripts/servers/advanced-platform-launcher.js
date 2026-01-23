@@ -136,7 +136,7 @@ class ServiceOrchestrator extends EventEmitter {
   }
 
   async startService(config) {
-    console.log(`🔄 Starting ` + config.name + `...`);
+    console.log('🔄 Starting ' + config.name + '...');
     
     try {
       const service = {
@@ -180,7 +180,7 @@ class ServiceOrchestrator extends EventEmitter {
 
       service.process.on('close', (code) => {
         service.status = code === 0 ? 'stopped' : 'crashed';
-        console.log(`⚠️  ${config.name} exited with code ` + code + ``);
+        console.log(`⚠️  ${config.name} exited with code ` + code + '');
         
         if (config.autoRestart && service.restartCount < config.maxRestarts) {
           this.restartService(config.name);
@@ -189,7 +189,7 @@ class ServiceOrchestrator extends EventEmitter {
 
       service.process.on('error', (error) => {
         service.status = 'error';
-        console.error(`❌ ` + config.name + ` error:`, error.message);
+        console.error('❌ ' + config.name + ' error:', error.message);
         this.metrics.failedStarts++;
       });
 
@@ -199,11 +199,11 @@ class ServiceOrchestrator extends EventEmitter {
       await this.waitForService(config);
       
       service.status = 'running';
-      console.log(`✅ ${config.name} started successfully (PID: ` + service.pid + `)`);
+      console.log(`✅ ${config.name} started successfully (PID: ` + service.pid + ')');
       this.metrics.successfulStarts++;
 
     } catch (error) {
-      console.error(`❌ Failed to start ` + config.name + `:`, error.message);
+      console.error('❌ Failed to start ' + config.name + ':', error.message);
       this.metrics.failedStarts++;
     }
   }
@@ -229,11 +229,11 @@ class ServiceOrchestrator extends EventEmitter {
       }
     }
     
-    throw new Error(`Service ${config.name} failed to become healthy within ` + maxAttempts + ` seconds`);
+    throw new Error(`Service ${config.name} failed to become healthy within ` + maxAttempts + ' seconds');
   }
 
   async restartService(serviceName) {
-    console.log(`🔄 Restarting ` + serviceName + `...`);
+    console.log('🔄 Restarting ' + serviceName + '...');
     
     const service = this.services.get(serviceName);
     if (!service) return;
@@ -273,13 +273,13 @@ class ServiceOrchestrator extends EventEmitter {
             });
             
             if (!response.ok) {
-              console.log(`⚠️  Health check failed for ` + serviceName + ``);
+              console.log('⚠️  Health check failed for ' + serviceName + '');
               if (service.config.autoRestart) {
                 this.restartService(serviceName);
               }
             }
           } catch (error) {
-            console.log(`❌ Health check error for ` + serviceName + `:`, error.message);
+            console.log('❌ Health check error for ' + serviceName + ':', error.message);
             if (service.config.autoRestart) {
               this.restartService(serviceName);
             }
@@ -316,12 +316,12 @@ class ServiceOrchestrator extends EventEmitter {
 
   setupGracefulShutdown() {
     const shutdown = async (signal) => {
-      console.log(`\\n🛑 Received ` + signal + `. Shutting down gracefully...`);
+      console.log('\\n🛑 Received ' + signal + '. Shutting down gracefully...');
       
       // Stop all services
       for (const [serviceName, service] of this.services) {
         if (service.process && !service.process.killed) {
-          console.log(`🛑 Stopping ` + serviceName + `...`);
+          console.log('🛑 Stopping ' + serviceName + '...');
           service.process.kill('SIGTERM');
         }
       }
@@ -332,7 +332,7 @@ class ServiceOrchestrator extends EventEmitter {
       // Force kill any remaining processes
       for (const [serviceName, service] of this.services) {
         if (service.process && !service.process.killed) {
-          console.log(`💀 Force killing ` + serviceName + `...`);
+          console.log('💀 Force killing ' + serviceName + '...');
           service.process.kill('SIGKILL');
         }
       }
@@ -358,11 +358,11 @@ class ServiceOrchestrator extends EventEmitter {
       const uptime = service.startTime ? 
         Math.floor((Date.now() - service.startTime) / 1000) + 's' : 'N/A';
       
-      console.log(`${statusIcon} ${serviceName.padEnd(25)} ${status.padEnd(10)} Port: ${service.config.port || 'N/A'} Uptime: ` + uptime + ``);
+      console.log(`${statusIcon} ${serviceName.padEnd(25)} ${status.padEnd(10)} Port: ${service.config.port || 'N/A'} Uptime: ` + uptime + '');
     }
     
     console.log('═'.repeat(80));
-    console.log(`📈 Metrics: ${this.metrics.successfulStarts} started, ${this.metrics.failedStarts} failed, ` + this.metrics.restarts + ` restarts`);
+    console.log(`📈 Metrics: ${this.metrics.successfulStarts} started, ${this.metrics.failedStarts} failed, ` + this.metrics.restarts + ' restarts');
   }
 
   displayQuickLinks() {
@@ -383,9 +383,9 @@ class ServiceOrchestrator extends EventEmitter {
   }
 
   async logToFile(serviceName, type, message) {
-    const logFile = path.join(__dirname, 'logs', 'services', `${serviceName}-` + type + `.log`);
+    const logFile = path.join(__dirname, 'logs', 'services', `${serviceName}-` + type + '.log');
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ` + message + `\n`;
+    const logEntry = `[${timestamp}] ` + message + '\n';
     
     try {
       await fs.appendFile(logFile, logEntry);
@@ -424,7 +424,7 @@ class ServiceOrchestrator extends EventEmitter {
 
   async scaleService(serviceName, instances) {
     // Placeholder for horizontal scaling
-    console.log(`🔄 Scaling ${serviceName} to ` + instances + ` instances...`);
+    console.log(`🔄 Scaling ${serviceName} to ` + instances + ' instances...');
     // Implementation would depend on container orchestration (Docker, K8s)
   }
 }
@@ -453,7 +453,7 @@ class PlatformCLI {
         if (args[0]) {
           const logs = await this.orchestrator.getServiceLogs(args[0], parseInt(args[1]) || 50);
           logs.forEach(log => {
-            console.log(`[${log.timestamp.toISOString()}] ${log.type}: ` + log.message + ``);
+            console.log(`[${log.timestamp.toISOString()}] ${log.type}: ` + log.message + '');
           });
         } else {
           console.log('Usage: logs <service-name> [lines]');
@@ -477,7 +477,7 @@ class PlatformCLI {
         break;
       
       default:
-        console.log(`Unknown command: ` + command + `. Type 'help' for available commands.`);
+        console.log('Unknown command: ' + command + '. Type \'help\' for available commands.');
     }
   }
 
@@ -522,7 +522,7 @@ async function main() {
 }
 
 // Run if this file is executed directly
-if (import.meta.url === `file://` + process.argv[1] + ``) {
+if (import.meta.url === 'file://' + process.argv[1] + '') {
   main().catch(console.error);
 }
 

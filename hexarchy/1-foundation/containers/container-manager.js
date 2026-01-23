@@ -3,22 +3,28 @@
  * Manages containerized services across all hexagonal domains
  */
 
-const EventEmitter = require('events');
-const { performance } = require('perf_hooks');
+const EventEmitter = require('events')
+const { performance } = require('perf_hooks')
 
 class ContainerManager extends EventEmitter {
   constructor() {
-    super();
-    this.containers = new Map();
-    this.services = new Map();
-    this.networks = new Map();
-    this.volumes = new Map();
+    super()
+    this.containers = new Map()
+    this.services = new Map()
+    this.networks = new Map()
+    this.volumes = new Map()
     this.domains = [
-      'foundation', 'intelligence', 'communication', 'interface',
-      'economy', 'governance', 'data', 'operations'
-    ];
-    
-    this.initializeDomainContainers();
+      'foundation',
+      'intelligence',
+      'communication',
+      'interface',
+      'economy',
+      'governance',
+      'data',
+      'operations',
+    ]
+
+    this.initializeDomainContainers()
   }
 
   initializeDomainContainers() {
@@ -27,11 +33,11 @@ class ContainerManager extends EventEmitter {
       this.createDomainContainer(domain, {
         port: 5000 + index,
         memory: this.getDomainMemory(domain),
-        cpu: this.getDomainCPU(domain)
-      });
-    });
-    
-    console.log(`🐳 Initialized ${this.containers.size} domain containers`);
+        cpu: this.getDomainCPU(domain),
+      })
+    })
+
+    console.log(`🐳 Initialized ${this.containers.size} domain containers`)
   }
 
   createDomainContainer(domainName, config = {}) {
@@ -45,11 +51,11 @@ class ContainerManager extends EventEmitter {
         PORT: 3000,
         DATABASE_URL: 'postgresql://hootner:hootner123@postgres:5432/hootner',
         REDIS_URL: 'redis://redis:6379',
-        ...config.environment
+        ...config.environment,
       },
       volumes: config.volumes || [
         `hootner-${domainName}-data:/app/data`,
-        `hootner-logs:/app/logs`
+        `hootner-logs:/app/logs`,
       ],
       networks: ['hootner-network'],
       restart: 'unless-stopped',
@@ -58,65 +64,65 @@ class ContainerManager extends EventEmitter {
         interval: '30s',
         timeout: '10s',
         retries: 3,
-        startPeriod: '40s'
+        startPeriod: '40s',
       },
       labels: {
         'hootner.domain': domainName,
         'hootner.type': 'service',
-        'hootner.version': '1.0.0'
+        'hootner.version': '1.0.0',
       },
       resources: {
         memory: config.memory || '512M',
-        cpus: config.cpu || '0.5'
+        cpus: config.cpu || '0.5',
       },
-      depends_on: ['postgres', 'redis']
-    };
+      depends_on: ['postgres', 'redis'],
+    }
 
-    this.containers.set(domainName, containerConfig);
-    this.emit('containerConfigured', { domain: domainName, config: containerConfig });
-    
-    return containerConfig;
+    this.containers.set(domainName, containerConfig)
+    this.emit('containerConfigured', { domain: domainName, config: containerConfig })
+
+    return containerConfig
   }
 
   getDomainMemory(domain) {
     const memoryMap = {
-      'intelligence': '1G',    // AI services need more memory
-      'data': '1G',           // Database operations
-      'economy': '512M',      // Business logic
-      'interface': '512M',    // Frontend services
-      'communication': '512M', // API services
-      'operations': '256M',   // Monitoring
-      'governance': '256M',   // Security
-      'foundation': '256M'    // Core services
-    };
-    return memoryMap[domain] || '512M';
+      intelligence: '1G', // AI services need more memory
+      data: '1G', // Database operations
+      economy: '512M', // Business logic
+      interface: '512M', // Frontend services
+      communication: '512M', // API services
+      operations: '256M', // Monitoring
+      governance: '256M', // Security
+      foundation: '256M', // Core services
+    }
+    return memoryMap[domain] || '512M'
   }
 
   getDomainCPU(domain) {
     const cpuMap = {
-      'intelligence': '1.0',  // AI processing
-      'data': '0.75',         // Database operations
-      'economy': '0.5',       // Business logic
-      'interface': '0.5',     // Frontend
-      'communication': '0.5', // APIs
-      'operations': '0.25',   // Monitoring
-      'governance': '0.25',   // Security
-      'foundation': '0.25'    // Core
-    };
-    return cpuMap[domain] || '0.5';
+      intelligence: '1.0', // AI processing
+      data: '0.75', // Database operations
+      economy: '0.5', // Business logic
+      interface: '0.5', // Frontend
+      communication: '0.5', // APIs
+      operations: '0.25', // Monitoring
+      governance: '0.25', // Security
+      foundation: '0.25', // Core
+    }
+    return cpuMap[domain] || '0.5'
   }
 
   // Generate Docker Compose configuration
   generateDockerCompose() {
-    const services = {};
-    
+    const services = {}
+
     // Add infrastructure services
     services.postgres = {
       image: 'postgres:15',
       environment: {
         POSTGRES_DB: 'hootner',
         POSTGRES_USER: 'hootner',
-        POSTGRES_PASSWORD: 'hootner123'
+        POSTGRES_PASSWORD: 'hootner123',
       },
       volumes: ['postgres_data:/var/lib/postgresql/data'],
       networks: ['hootner-network'],
@@ -126,9 +132,9 @@ class ContainerManager extends EventEmitter {
         test: 'pg_isready -U hootner -d hootner',
         interval: '10s',
         timeout: '5s',
-        retries: 5
-      }
-    };
+        retries: 5,
+      },
+    }
 
     services.redis = {
       image: 'redis:7-alpine',
@@ -140,9 +146,9 @@ class ContainerManager extends EventEmitter {
         test: 'redis-cli ping',
         interval: '10s',
         timeout: '3s',
-        retries: 3
-      }
-    };
+        retries: 3,
+      },
+    }
 
     // Add domain services
     for (const [domainName, config] of this.containers.entries()) {
@@ -158,23 +164,23 @@ class ContainerManager extends EventEmitter {
           interval: config.healthCheck.interval,
           timeout: config.healthCheck.timeout,
           retries: config.healthCheck.retries,
-          start_period: config.healthCheck.startPeriod
+          start_period: config.healthCheck.startPeriod,
         },
         labels: config.labels,
         deploy: {
           resources: {
             limits: {
               memory: config.resources.memory,
-              cpus: config.resources.cpus
+              cpus: config.resources.cpus,
             },
             reservations: {
               memory: this.getReservationMemory(config.resources.memory),
-              cpus: this.getReservationCPU(config.resources.cpus)
-            }
-          }
+              cpus: this.getReservationCPU(config.resources.cpus),
+            },
+          },
         },
-        depends_on: config.depends_on
-      };
+        depends_on: config.depends_on,
+      }
     }
 
     return {
@@ -184,42 +190,44 @@ class ContainerManager extends EventEmitter {
         'hootner-network': {
           driver: 'bridge',
           ipam: {
-            config: [{
-              subnet: '172.20.0.0/16'
-            }]
-          }
-        }
+            config: [
+              {
+                subnet: '172.20.0.0/16',
+              },
+            ],
+          },
+        },
       },
       volumes: {
         postgres_data: {},
         redis_data: {},
         'hootner-logs': {},
-        ...this.generateDomainVolumes()
-      }
-    };
+        ...this.generateDomainVolumes(),
+      },
+    }
   }
 
   generateDomainVolumes() {
-    const volumes = {};
+    const volumes = {}
     for (const domain of this.domains) {
-      volumes[`hootner-${domain}-data`] = {};
+      volumes[`hootner-${domain}-data`] = {}
     }
-    return volumes;
+    return volumes
   }
 
   getReservationMemory(limit) {
-    const limitValue = parseInt(limit);
-    const unit = limit.replace(/[0-9]/g, '');
-    return Math.floor(limitValue * 0.5) + unit;
+    const limitValue = parseInt(limit)
+    const unit = limit.replace(/[0-9]/g, '')
+    return Math.floor(limitValue * 0.5) + unit
   }
 
   getReservationCPU(limit) {
-    return (parseFloat(limit) * 0.5).toString();
+    return (parseFloat(limit) * 0.5).toString()
   }
 
   // Generate Kubernetes manifests
   generateKubernetesManifests() {
-    const manifests = [];
+    const manifests = []
 
     // Namespace
     manifests.push({
@@ -229,10 +237,10 @@ class ContainerManager extends EventEmitter {
         name: 'hootner',
         labels: {
           'app.kubernetes.io/name': 'hootner',
-          'app.kubernetes.io/version': '1.0.0'
-        }
-      }
-    });
+          'app.kubernetes.io/version': '1.0.0',
+        },
+      },
+    })
 
     // ConfigMap
     manifests.push({
@@ -240,24 +248,24 @@ class ContainerManager extends EventEmitter {
       kind: 'ConfigMap',
       metadata: {
         name: 'hootner-config',
-        namespace: 'hootner'
+        namespace: 'hootner',
       },
       data: {
         NODE_ENV: 'production',
         DATABASE_URL: 'postgresql://hootner:hootner123@postgres-service:5432/hootner',
-        REDIS_URL: 'redis://redis-service:6379'
-      }
-    });
+        REDIS_URL: 'redis://redis-service:6379',
+      },
+    })
 
     // Infrastructure services
-    manifests.push(...this.generateInfrastructureManifests());
+    manifests.push(...this.generateInfrastructureManifests())
 
     // Domain services
     for (const [domainName, config] of this.containers.entries()) {
-      manifests.push(...this.generateDomainManifests(domainName, config));
+      manifests.push(...this.generateDomainManifests(domainName, config))
     }
 
-    return manifests;
+    return manifests
   }
 
   generateInfrastructureManifests() {
@@ -268,7 +276,7 @@ class ContainerManager extends EventEmitter {
         kind: 'Deployment',
         metadata: {
           name: 'postgres',
-          namespace: 'hootner'
+          namespace: 'hootner',
         },
         spec: {
           replicas: 1,
@@ -276,41 +284,47 @@ class ContainerManager extends EventEmitter {
           template: {
             metadata: { labels: { app: 'postgres' } },
             spec: {
-              containers: [{
-                name: 'postgres',
-                image: 'postgres:15',
-                ports: [{ containerPort: 5432 }],
-                env: [
-                  { name: 'POSTGRES_DB', value: 'hootner' },
-                  { name: 'POSTGRES_USER', value: 'hootner' },
-                  { name: 'POSTGRES_PASSWORD', value: 'hootner123' }
-                ],
-                volumeMounts: [{
+              containers: [
+                {
+                  name: 'postgres',
+                  image: 'postgres:15',
+                  ports: [{ containerPort: 5432 }],
+                  env: [
+                    { name: 'POSTGRES_DB', value: 'hootner' },
+                    { name: 'POSTGRES_USER', value: 'hootner' },
+                    { name: 'POSTGRES_PASSWORD', value: 'hootner123' },
+                  ],
+                  volumeMounts: [
+                    {
+                      name: 'postgres-storage',
+                      mountPath: '/var/lib/postgresql/data',
+                    },
+                  ],
+                },
+              ],
+              volumes: [
+                {
                   name: 'postgres-storage',
-                  mountPath: '/var/lib/postgresql/data'
-                }]
-              }],
-              volumes: [{
-                name: 'postgres-storage',
-                persistentVolumeClaim: {
-                  claimName: 'postgres-pvc'
-                }
-              }]
-            }
-          }
-        }
+                  persistentVolumeClaim: {
+                    claimName: 'postgres-pvc',
+                  },
+                },
+              ],
+            },
+          },
+        },
       },
       {
         apiVersion: 'v1',
         kind: 'Service',
         metadata: {
           name: 'postgres-service',
-          namespace: 'hootner'
+          namespace: 'hootner',
         },
         spec: {
           selector: { app: 'postgres' },
-          ports: [{ port: 5432, targetPort: 5432 }]
-        }
+          ports: [{ port: 5432, targetPort: 5432 }],
+        },
       },
       // Redis
       {
@@ -318,7 +332,7 @@ class ContainerManager extends EventEmitter {
         kind: 'Deployment',
         metadata: {
           name: 'redis',
-          namespace: 'hootner'
+          namespace: 'hootner',
         },
         spec: {
           replicas: 1,
@@ -326,28 +340,30 @@ class ContainerManager extends EventEmitter {
           template: {
             metadata: { labels: { app: 'redis' } },
             spec: {
-              containers: [{
-                name: 'redis',
-                image: 'redis:7-alpine',
-                ports: [{ containerPort: 6379 }]
-              }]
-            }
-          }
-        }
+              containers: [
+                {
+                  name: 'redis',
+                  image: 'redis:7-alpine',
+                  ports: [{ containerPort: 6379 }],
+                },
+              ],
+            },
+          },
+        },
       },
       {
         apiVersion: 'v1',
         kind: 'Service',
         metadata: {
           name: 'redis-service',
-          namespace: 'hootner'
+          namespace: 'hootner',
         },
         spec: {
           selector: { app: 'redis' },
-          ports: [{ port: 6379, targetPort: 6379 }]
-        }
-      }
-    ];
+          ports: [{ port: 6379, targetPort: 6379 }],
+        },
+      },
+    ]
   }
 
   generateDomainManifests(domainName, config) {
@@ -359,60 +375,62 @@ class ContainerManager extends EventEmitter {
         metadata: {
           name: `${config.name}-deployment`,
           namespace: 'hootner',
-          labels: config.labels
+          labels: config.labels,
         },
         spec: {
           replicas: domainName === 'interface' ? 3 : 2, // More replicas for frontend
           selector: {
-            matchLabels: { app: config.name }
+            matchLabels: { app: config.name },
           },
           template: {
             metadata: {
               labels: {
                 app: config.name,
                 domain: domainName,
-                ...config.labels
-              }
+                ...config.labels,
+              },
             },
             spec: {
-              containers: [{
-                name: config.name,
-                image: config.image,
-                ports: [{ containerPort: 3000 }],
-                env: Object.entries(config.environment).map(([name, value]) => ({
-                  name,
-                  value: String(value)
-                })),
-                resources: {
-                  limits: {
-                    memory: config.resources.memory,
-                    cpu: config.resources.cpus
+              containers: [
+                {
+                  name: config.name,
+                  image: config.image,
+                  ports: [{ containerPort: 3000 }],
+                  env: Object.entries(config.environment).map(([name, value]) => ({
+                    name,
+                    value: String(value),
+                  })),
+                  resources: {
+                    limits: {
+                      memory: config.resources.memory,
+                      cpu: config.resources.cpus,
+                    },
+                    requests: {
+                      memory: this.getReservationMemory(config.resources.memory),
+                      cpu: this.getReservationCPU(config.resources.cpus),
+                    },
                   },
-                  requests: {
-                    memory: this.getReservationMemory(config.resources.memory),
-                    cpu: this.getReservationCPU(config.resources.cpus)
-                  }
+                  livenessProbe: {
+                    httpGet: {
+                      path: '/health',
+                      port: 3000,
+                    },
+                    initialDelaySeconds: 30,
+                    periodSeconds: 10,
+                  },
+                  readinessProbe: {
+                    httpGet: {
+                      path: '/ready',
+                      port: 3000,
+                    },
+                    initialDelaySeconds: 5,
+                    periodSeconds: 5,
+                  },
                 },
-                livenessProbe: {
-                  httpGet: {
-                    path: '/health',
-                    port: 3000
-                  },
-                  initialDelaySeconds: 30,
-                  periodSeconds: 10
-                },
-                readinessProbe: {
-                  httpGet: {
-                    path: '/ready',
-                    port: 3000
-                  },
-                  initialDelaySeconds: 5,
-                  periodSeconds: 5
-                }
-              }]
-            }
-          }
-        }
+              ],
+            },
+          },
+        },
       },
       // Service
       {
@@ -420,116 +438,118 @@ class ContainerManager extends EventEmitter {
         kind: 'Service',
         metadata: {
           name: `${config.name}-service`,
-          namespace: 'hootner'
+          namespace: 'hootner',
         },
         spec: {
           selector: { app: config.name },
-          ports: [{
-            port: 80,
-            targetPort: 3000,
-            protocol: 'TCP'
-          }],
-          type: domainName === 'interface' ? 'LoadBalancer' : 'ClusterIP'
-        }
-      }
-    ];
+          ports: [
+            {
+              port: 80,
+              targetPort: 3000,
+              protocol: 'TCP',
+            },
+          ],
+          type: domainName === 'interface' ? 'LoadBalancer' : 'ClusterIP',
+        },
+      },
+    ]
   }
 
   // Container health monitoring
   async monitorHealth() {
-    const healthStatus = new Map();
+    const healthStatus = new Map()
 
     for (const [domainName, config] of this.containers.entries()) {
       try {
-        const health = await this.checkContainerHealth(domainName, config);
-        healthStatus.set(domainName, health);
+        const health = await this.checkContainerHealth(domainName, config)
+        healthStatus.set(domainName, health)
 
         if (!health.healthy) {
-          console.warn(`⚠️ Container ${domainName} unhealthy:`, health.status);
-          this.emit('containerUnhealthy', { domain: domainName, health });
+          console.warn(`⚠️ Container ${domainName} unhealthy:`, health.status)
+          this.emit('containerUnhealthy', { domain: domainName, health })
         }
       } catch (error) {
-        console.error(`❌ Health check failed for ${domainName}:`, error.message);
+        console.error(`❌ Health check failed for ${domainName}:`, error.message)
         healthStatus.set(domainName, {
           healthy: false,
           status: 'error',
-          error: error.message
-        });
+          error: error.message,
+        })
       }
     }
 
-    return Object.fromEntries(healthStatus);
+    return Object.fromEntries(healthStatus)
   }
 
   async checkContainerHealth(domainName, config) {
     // Simulate health check - in production would use Docker/K8s APIs
-    const isHealthy = Math.random() > 0.1; // 90% uptime simulation
-    
+    const isHealthy = Math.random() > 0.1 // 90% uptime simulation
+
     return {
       healthy: isHealthy,
       status: isHealthy ? 'running' : 'unhealthy',
       uptime: Math.floor(Math.random() * 86400),
       memoryUsage: Math.floor(Math.random() * 80) + '%',
       cpuUsage: Math.floor(Math.random() * 60) + '%',
-      lastCheck: Date.now()
-    };
+      lastCheck: Date.now(),
+    }
   }
 
   // Start all containers
   async startAll() {
-    console.log('🚀 Starting all HOOTNER containers...');
-    
-    const results = [];
+    console.log('🚀 Starting all HOOTNER containers...')
+
+    const results = []
     for (const [domainName, config] of this.containers.entries()) {
       try {
-        const result = await this.startContainer(domainName);
-        results.push({ domain: domainName, status: 'started', ...result });
-        console.log(`✅ Started ${domainName} container`);
+        const result = await this.startContainer(domainName)
+        results.push({ domain: domainName, status: 'started', ...result })
+        console.log(`✅ Started ${domainName} container`)
       } catch (error) {
-        results.push({ domain: domainName, status: 'failed', error: error.message });
-        console.error(`❌ Failed to start ${domainName}:`, error.message);
+        results.push({ domain: domainName, status: 'failed', error: error.message })
+        console.error(`❌ Failed to start ${domainName}:`, error.message)
       }
     }
-    
-    return results;
+
+    return results
   }
 
   async startContainer(domainName) {
-    const config = this.containers.get(domainName);
+    const config = this.containers.get(domainName)
     if (!config) {
-      throw new Error(`Container configuration not found: ${domainName}`);
+      throw new Error(`Container configuration not found: ${domainName}`)
     }
 
     // Simulate container startup
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
-    
-    this.emit('containerStarted', { domain: domainName, config });
-    
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000 + 1000))
+
+    this.emit('containerStarted', { domain: domainName, config })
+
     return {
       containerId: `container_${domainName}_${Date.now()}`,
       image: config.image,
-      ports: config.ports
-    };
+      ports: config.ports,
+    }
   }
 
   // Stop all containers
   async stopAll() {
-    console.log('🛑 Stopping all containers...');
-    
+    console.log('🛑 Stopping all containers...')
+
     for (const domainName of this.containers.keys()) {
       try {
-        await this.stopContainer(domainName);
-        console.log(`✅ Stopped ${domainName} container`);
+        await this.stopContainer(domainName)
+        console.log(`✅ Stopped ${domainName} container`)
       } catch (error) {
-        console.error(`❌ Failed to stop ${domainName}:`, error.message);
+        console.error(`❌ Failed to stop ${domainName}:`, error.message)
       }
     }
   }
 
   async stopContainer(domainName) {
     // Simulate container stop
-    await new Promise(resolve => setTimeout(resolve, 500));
-    this.emit('containerStopped', { domain: domainName });
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    this.emit('containerStopped', { domain: domainName })
   }
 
   // Get container statistics
@@ -540,26 +560,26 @@ class ContainerManager extends EventEmitter {
       totalMemoryAllocated: this.calculateTotalMemory(),
       totalCPUAllocated: this.calculateTotalCPU(),
       networks: this.networks.size,
-      volumes: this.volumes.size
-    };
+      volumes: this.volumes.size,
+    }
   }
 
   calculateTotalMemory() {
-    let total = 0;
+    let total = 0
     for (const config of this.containers.values()) {
-      const memory = config.resources.memory;
-      const value = parseInt(memory);
-      total += memory.includes('G') ? value * 1024 : value;
+      const memory = config.resources.memory
+      const value = parseInt(memory)
+      total += memory.includes('G') ? value * 1024 : value
     }
-    return `${total}M`;
+    return `${total}M`
   }
 
   calculateTotalCPU() {
-    let total = 0;
+    let total = 0
     for (const config of this.containers.values()) {
-      total += parseFloat(config.resources.cpus);
+      total += parseFloat(config.resources.cpus)
     }
-    return total.toFixed(2);
+    return total.toFixed(2)
   }
 
   // Health check endpoint
@@ -568,45 +588,47 @@ class ContainerManager extends EventEmitter {
       status: 'healthy',
       containers: this.containers.size,
       domains: this.domains.length,
-      uptime: process.uptime()
-    };
+      uptime: process.uptime(),
+    }
   }
 }
 
 // Create and export container manager instance
-const containerManager = new ContainerManager();
+const containerManager = new ContainerManager()
 
 // Auto-start if run directly
 if (require.main === module) {
   // Example usage
   async function demo() {
     try {
-      console.log('🐳 Container Manager Demo');
-      
+      console.log('🐳 Container Manager Demo')
+
       // Generate Docker Compose
-      const dockerCompose = containerManager.generateDockerCompose();
-      console.log('📄 Docker Compose services:', Object.keys(dockerCompose.services).length);
-      
+      const dockerCompose = containerManager.generateDockerCompose()
+      console.log(
+        '📄 Docker Compose services:',
+        Object.keys(dockerCompose.services).length
+      )
+
       // Generate Kubernetes manifests
-      const k8sManifests = containerManager.generateKubernetesManifests();
-      console.log('☸️ Kubernetes manifests:', k8sManifests.length);
-      
+      const k8sManifests = containerManager.generateKubernetesManifests()
+      console.log('☸️ Kubernetes manifests:', k8sManifests.length)
+
       // Show stats
-      console.log('📊 Container Stats:', containerManager.getStats());
-      
+      console.log('📊 Container Stats:', containerManager.getStats())
     } catch (error) {
-      console.error('Demo failed:', error.message);
+      console.error('Demo failed:', error.message)
     }
   }
-  
-  demo();
-  
+
+  demo()
+
   // Graceful shutdown
   process.on('SIGINT', async () => {
-    console.log('\n🛑 Shutting down Container Manager...');
-    await containerManager.stopAll();
-    process.exit(0);
-  });
+    console.log('\n🛑 Shutting down Container Manager...')
+    await containerManager.stopAll()
+    process.exit(0)
+  })
 }
 
-module.exports = containerManager;
+module.exports = containerManager

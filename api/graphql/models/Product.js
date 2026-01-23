@@ -24,20 +24,24 @@ async function createProduct(input) {
     sellerId: input.sellerId,
     active: input.active !== false,
     createdAt: now,
-    updatedAt: now
+    updatedAt: now,
   };
   await docClient.send(new PutCommand({ TableName: TABLE_NAME, Item: item }));
   return item;
 }
 
 async function listProducts(limit = 50) {
-  const res = await docClient.send(new ScanCommand({
-    TableName: TABLE_NAME,
-    FilterExpression: '#type = :type',
-    ExpressionAttributeNames: { '#type': 'entityType' },
-    ExpressionAttributeValues: { ':type': 'PRODUCT' }
-  }));
-  return (res.Items || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, limit);
+  const res = await docClient.send(
+    new ScanCommand({
+      TableName: TABLE_NAME,
+      FilterExpression: '#type = :type',
+      ExpressionAttributeNames: { '#type': 'entityType' },
+      ExpressionAttributeValues: { ':type': 'PRODUCT' },
+    })
+  );
+  return (res.Items || [])
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, limit);
 }
 
 export { createProduct, listProducts };

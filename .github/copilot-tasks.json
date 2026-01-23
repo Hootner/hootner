@@ -12,9 +12,7 @@
     {
       "id": 1769141149275,
       "description": "Test task delegation",
-      "files": [
-        "package.json"
-      ],
+      "files": ["package.json"],
       "priority": "medium",
       "status": "pending",
       "created": "2026-01-23T04:05:49.275Z",

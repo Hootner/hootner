@@ -5,10 +5,7 @@
     "browser": true,
     "es2022": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:security/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:security/recommended"],
   "plugins": ["security"],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -40,11 +37,5 @@
       }
     }
   ],
-  "ignorePatterns": [
-    "*.ts",
-    "*.tsx",
-    "node_modules/",
-    "dist/",
-    "build/"
-  ]
+  "ignorePatterns": ["*.ts", "*.tsx", "node_modules/", "dist/", "build/"]
 }

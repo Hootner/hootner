@@ -42,6 +42,7 @@ Merge: [Brief summary]
 ## Integration
 
 Works with existing `copilot-delegate.js` commands:
+
 - `analyze` - Code review
 - `security` - Security scan
 - `validate` - Commit validation

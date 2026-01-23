@@ -16,26 +16,26 @@ The HOOTNER video generation service now supports **long-form videos up to 4 hou
 
 ### Maximum Limits
 
-| Parameter | Development | Production |
-|-----------|-------------|------------|
-| **Max Frames** | 345,600 | 345,600 |
-| **Max Duration** | 4 hours | 4 hours |
-| **Max Resolution** | 8K (7680×4320) | 8K (7680×4320) |
-| **Chunk Size** | N/A | 1200 frames (50s) |
-| **Overlap** | N/A | 24 frames (1s) |
-| **Checkpoints** | N/A | Every 5 minutes |
+| Parameter          | Development    | Production        |
+| ------------------ | -------------- | ----------------- |
+| **Max Frames**     | 345,600        | 345,600           |
+| **Max Duration**   | 4 hours        | 4 hours           |
+| **Max Resolution** | 8K (7680×4320) | 8K (7680×4320)    |
+| **Chunk Size**     | N/A            | 1200 frames (50s) |
+| **Overlap**        | N/A            | 24 frames (1s)    |
+| **Checkpoints**    | N/A            | Every 5 minutes   |
 
 ### At 24fps (Cinema Standard)
 
-| Duration | Total Frames | File Size (4K HDR) | File Size (8K HDR) |
-|----------|--------------|--------------------|--------------------|
-| 10 seconds | 240 | ~62 MB | ~187 MB |
-| 1 minute | 1,440 | ~370 MB | ~1.1 GB |
-| 10 minutes | 14,400 | ~3.7 GB | ~11 GB |
-| 30 minutes | 43,200 | ~11 GB | ~33 GB |
-| 1 hour | 86,400 | ~22 GB | ~66 GB |
-| 2 hours | 172,800 | ~44 GB | ~132 GB |
-| **4 hours** | **345,600** | **~88 GB** | **~264 GB** |
+| Duration    | Total Frames | File Size (4K HDR) | File Size (8K HDR) |
+| ----------- | ------------ | ------------------ | ------------------ |
+| 10 seconds  | 240          | ~62 MB             | ~187 MB            |
+| 1 minute    | 1,440        | ~370 MB            | ~1.1 GB            |
+| 10 minutes  | 14,400       | ~3.7 GB            | ~11 GB             |
+| 30 minutes  | 43,200       | ~11 GB             | ~33 GB             |
+| 1 hour      | 86,400       | ~22 GB             | ~66 GB             |
+| 2 hours     | 172,800      | ~44 GB             | ~132 GB            |
+| **4 hours** | **345,600**  | **~88 GB**         | **~264 GB**        |
 
 ---
 
@@ -46,10 +46,10 @@ The HOOTNER video generation service now supports **long-form videos up to 4 hou
 Processing requires 2-3x the final output size for temporary files:
 
 | Resolution | 4-Hour Video | Temp Storage Required |
-|------------|--------------|----------------------|
-| HD (1080p) | ~22 GB | ~66 GB |
-| 4K | ~88 GB | ~264 GB |
-| 8K | ~264 GB | ~792 GB |
+| ---------- | ------------ | --------------------- |
+| HD (1080p) | ~22 GB       | ~66 GB                |
+| 4K         | ~88 GB       | ~264 GB               |
+| 8K         | ~264 GB      | ~792 GB               |
 
 ### Recommended Storage
 
@@ -130,21 +130,21 @@ print(f"Ratio: {estimates['processing_ratio']}")
 
 ### Hardware: NVIDIA RTX 4090 (24GB VRAM)
 
-| Duration | HD (1080p) | 4K | 8K |
-|----------|------------|----|----|
-| **10 minutes** | ~5 min | ~15 min | ~60 min |
-| **30 minutes** | ~15 min | ~45 min | ~3 hours |
-| **1 hour** | ~30 min | ~1.5 hours | ~6 hours |
-| **2 hours** | ~1 hour | ~3 hours | ~12 hours |
-| **4 hours** | **~2 hours** | **~6 hours** | **~24 hours** |
+| Duration       | HD (1080p)   | 4K           | 8K            |
+| -------------- | ------------ | ------------ | ------------- |
+| **10 minutes** | ~5 min       | ~15 min      | ~60 min       |
+| **30 minutes** | ~15 min      | ~45 min      | ~3 hours      |
+| **1 hour**     | ~30 min      | ~1.5 hours   | ~6 hours      |
+| **2 hours**    | ~1 hour      | ~3 hours     | ~12 hours     |
+| **4 hours**    | **~2 hours** | **~6 hours** | **~24 hours** |
 
 ### Hardware: NVIDIA A100 (80GB VRAM)
 
 Processing times are approximately **40% faster** with A100:
 
-| Duration | 4K | 8K |
-|----------|----|----|
-| **1 hour** | ~54 min | ~3.6 hours |
+| Duration    | 4K             | 8K              |
+| ----------- | -------------- | --------------- |
+| **1 hour**  | ~54 min        | ~3.6 hours      |
 | **4 hours** | **~3.6 hours** | **~14.4 hours** |
 
 ---
@@ -159,21 +159,22 @@ Long videos are processed in **chunks** to avoid memory issues:
 # config/production.yaml
 long_form:
   enabled: true
-  chunk_size: 1200        # 50 seconds at 24fps
-  overlap_frames: 24      # 1 second overlap for smooth transitions
-  streaming_mode: true    # Stream output, don't buffer in RAM
-  checkpoint_interval: 7200  # Save checkpoint every 5 minutes
+  chunk_size: 1200 # 50 seconds at 24fps
+  overlap_frames: 24 # 1 second overlap for smooth transitions
+  streaming_mode: true # Stream output, don't buffer in RAM
+  checkpoint_interval: 7200 # Save checkpoint every 5 minutes
 ```
 
 ### Memory Usage
 
 | Resolution | Chunk Size (50s) | RAM Required |
-|------------|------------------|--------------|
-| HD | 1200 frames | ~2 GB |
-| 4K | 1200 frames | ~8 GB |
-| 8K | 1200 frames | ~32 GB |
+| ---------- | ---------------- | ------------ |
+| HD         | 1200 frames      | ~2 GB        |
+| 4K         | 1200 frames      | ~8 GB        |
+| 8K         | 1200 frames      | ~32 GB       |
 
 **Recommended System RAM:**
+
 - HD/4K: 32GB minimum, 64GB recommended
 - 8K: 128GB minimum, 256GB recommended
 
@@ -198,6 +199,7 @@ if checkpoint:
 ### Checkpoint Files
 
 Stored in temporary directory:
+
 ```
 /tmp/video_checkpoint_xxxxx/
   checkpoint_0.txt
@@ -213,6 +215,7 @@ Stored in temporary directory:
 ### 1. **Use Appropriate Resolution**
 
 For 4-hour videos, consider your use case:
+
 - **Streaming**: HD (1080p) is sufficient
 - **Cinema**: 4K is standard
 - **IMAX/Premium**: 8K for highest quality
@@ -268,6 +271,7 @@ def my_processor_with_progress(frames, chunk_idx=0, total_chunks=1):
 **Symptom**: CUDA out of memory or system RAM exhausted
 
 **Solutions:**
+
 1. Reduce chunk size: `chunk_size=600` (25 seconds)
 2. Lower resolution: Use 4K instead of 8K
 3. Disable audio: `audio_enabled=False`
@@ -278,6 +282,7 @@ def my_processor_with_progress(frames, chunk_idx=0, total_chunks=1):
 **Symptom**: Processing takes longer than estimated
 
 **Solutions:**
+
 1. Check GPU utilization: `nvidia-smi`
 2. Ensure GPU is not thermal throttling
 3. Use faster storage (NVMe SSD)
@@ -288,6 +293,7 @@ def my_processor_with_progress(frames, chunk_idx=0, total_chunks=1):
 **Symptom**: Cannot resume from checkpoint
 
 **Solutions:**
+
 1. Check checkpoint directory exists
 2. Verify checkpoint files are not corrupted
 3. Restart processing from beginning
@@ -298,6 +304,7 @@ def my_processor_with_progress(frames, chunk_idx=0, total_chunks=1):
 **Symptom**: Disk space runs out mid-processing
 
 **Solutions:**
+
 1. Free up storage space
 2. Use external drive for output
 3. Process in smaller segments
@@ -341,11 +348,13 @@ processor = LongFormVideoProcessor(
 ### Cloud Processing (AWS/GCP/Azure)
 
 **AWS p3.2xlarge** (V100 GPU):
+
 - **Hourly Rate**: ~$3.06/hour
 - **4K, 4-hour movie**: ~6 hours processing = **~$18.36**
 - **8K, 4-hour movie**: ~24 hours processing = **~$73.44**
 
 **AWS p4d.24xlarge** (8x A100 GPUs):
+
 - **Hourly Rate**: ~$32.77/hour
 - **4K, 4-hour movie**: ~45 min processing = **~$24.58**
 - **8K, 4-hour movie**: ~3 hours processing = **~$98.31**
@@ -353,6 +362,7 @@ processor = LongFormVideoProcessor(
 ### Local Processing
 
 **One-time Hardware Investment**:
+
 - RTX 4090 GPU: ~$1,599
 - Additional RAM (128GB): ~$400
 - NVMe SSD (2TB): ~$150

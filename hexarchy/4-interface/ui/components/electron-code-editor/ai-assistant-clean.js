@@ -5,45 +5,45 @@
 
 class AIAssistant {
   constructor() {
-    this.apiKey = localStorage.getItem('hootner_ai_key');
-    this.model = 'gpt-3.5-turbo';
-    this.context = [];
-    this.isConnected = false;
+    this.apiKey = localStorage.getItem('hootner_ai_key')
+    this.model = 'gpt-3.5-turbo'
+    this.context = []
+    this.isConnected = false
     this.features = {
       codeCompletion: true,
       codeReview: true,
       refactoring: true,
       debugging: true,
-      documentation: true
-    };
+      documentation: true,
+    }
   }
 
   async init() {
-    this.setupUI();
-    this.setupEventListeners();
-    this.checkConnection();
-    console.log('🤖 AI Assistant initialized');
+    this.setupUI()
+    this.setupEventListeners()
+    this.checkConnection()
+    console.log('🤖 AI Assistant initialized')
   }
 
   setupUI() {
     // Create AI panel button
-    const aiButton = document.createElement('button');
-    aiButton.id = 'ai-assistant-btn';
-    aiButton.innerHTML = '🤖 AI';
-    aiButton.className = 'toolbar-btn';
-    aiButton.onclick = () => this.togglePanel();
-    
-    const toolbar = document.querySelector('.toolbar') || document.body;
-    toolbar.appendChild(aiButton);
+    const aiButton = document.createElement('button')
+    aiButton.id = 'ai-assistant-btn'
+    aiButton.innerHTML = '🤖 AI'
+    aiButton.className = 'toolbar-btn'
+    aiButton.onclick = () => this.togglePanel()
+
+    const toolbar = document.querySelector('.toolbar') || document.body
+    toolbar.appendChild(aiButton)
 
     // Create AI panel
-    this.createAIPanel();
+    this.createAIPanel()
   }
 
   createAIPanel() {
-    const panel = document.createElement('div');
-    panel.id = 'ai-panel';
-    panel.className = 'ai-panel hidden';
+    const panel = document.createElement('div')
+    panel.id = 'ai-panel'
+    panel.className = 'ai-panel hidden'
     panel.innerHTML = `
       <div class="ai-header">
         <h3>🤖 AI Assistant</h3>
@@ -51,9 +51,10 @@ class AIAssistant {
       </div>
       
       <div class="ai-connection">
-        ${this.isConnected ? 
-          '<div class="status connected">✓ AI Connected</div>' : 
-          `<div class="status disconnected">⚠ AI Offline</div>
+        ${
+          this.isConnected
+            ? '<div class="status connected">✓ AI Connected</div>'
+            : `<div class="status disconnected">⚠ AI Offline</div>
            <input type="password" id="ai-api-key" placeholder="OpenAI API Key (optional)">
            <button onclick="aiAssistant.connect()">Connect</button>`
         }
@@ -93,10 +94,10 @@ class AIAssistant {
       <div class="ai-output" id="ai-output">
         <div class="output-placeholder">AI analysis will appear here...</div>
       </div>
-    `;
+    `
 
-    document.body.appendChild(panel);
-    this.addStyles();
+    document.body.appendChild(panel)
+    this.addStyles()
   }
 
   addStyles() {
@@ -255,263 +256,269 @@ class AIAssistant {
         font-size: 12px;
         margin-left: 8px;
       }
-    `;
+    `
 
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = styles;
-    document.head.appendChild(styleSheet);
+    const styleSheet = document.createElement('style')
+    styleSheet.textContent = styles
+    document.head.appendChild(styleSheet)
   }
 
   setupEventListeners() {
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
-        e.preventDefault();
-        this.togglePanel();
+        e.preventDefault()
+        this.togglePanel()
       }
-    });
+    })
   }
 
   togglePanel() {
-    const panel = document.getElementById('ai-panel');
-    panel.classList.toggle('hidden');
+    const panel = document.getElementById('ai-panel')
+    panel.classList.toggle('hidden')
   }
 
   async connect() {
-    const apiKey = document.getElementById('ai-api-key')?.value.trim();
+    const apiKey = document.getElementById('ai-api-key')?.value.trim()
     if (apiKey) {
-      this.apiKey = apiKey;
-      localStorage.setItem('hootner_ai_key', apiKey);
-      this.isConnected = true;
-      this.updateConnectionStatus();
-      this.addOutput('🤖 AI connected successfully', 'success');
+      this.apiKey = apiKey
+      localStorage.setItem('hootner_ai_key', apiKey)
+      this.isConnected = true
+      this.updateConnectionStatus()
+      this.addOutput('🤖 AI connected successfully', 'success')
     }
   }
 
   checkConnection() {
-    this.isConnected = !!this.apiKey;
+    this.isConnected = !!this.apiKey
   }
 
   updateConnectionStatus() {
-    const connectionDiv = document.querySelector('.ai-connection');
+    const connectionDiv = document.querySelector('.ai-connection')
     if (connectionDiv) {
-      connectionDiv.innerHTML = this.isConnected ? 
-        '<div class="status connected">✓ AI Connected</div>' :
-        `<div class="status disconnected">⚠ AI Offline</div>
+      connectionDiv.innerHTML = this.isConnected
+        ? '<div class="status connected">✓ AI Connected</div>'
+        : `<div class="status disconnected">⚠ AI Offline</div>
          <input type="password" id="ai-api-key" placeholder="OpenAI API Key (optional)">
-         <button onclick="aiAssistant.connect()">Connect</button>`;
+         <button onclick="aiAssistant.connect()">Connect</button>`
     }
   }
 
   // Core AI Features
   async analyzeCode() {
-    const code = this.getCurrentCode();
+    const code = this.getCurrentCode()
     if (!code.trim()) {
-      this.addOutput('No code to analyze', 'warning');
-      return;
+      this.addOutput('No code to analyze', 'warning')
+      return
     }
 
-    this.addOutput('📊 Analyzing code...', 'info');
-    
-    const analysis = this.performStaticAnalysis(code);
-    const stats = this.getCodeStats(code);
-    
-    this.addOutput(`Code Statistics:`, 'info');
-    this.addOutput(`• Lines: ${stats.lines}`, 'log');
-    this.addOutput(`• Functions: ${stats.functions}`, 'log');
-    this.addOutput(`• Classes: ${stats.classes}`, 'log');
-    this.addOutput(`• Complexity: ${stats.complexity}/10`, 'log');
-    
+    this.addOutput('📊 Analyzing code...', 'info')
+
+    const analysis = this.performStaticAnalysis(code)
+    const stats = this.getCodeStats(code)
+
+    this.addOutput(`Code Statistics:`, 'info')
+    this.addOutput(`• Lines: ${stats.lines}`, 'log')
+    this.addOutput(`• Functions: ${stats.functions}`, 'log')
+    this.addOutput(`• Classes: ${stats.classes}`, 'log')
+    this.addOutput(`• Complexity: ${stats.complexity}/10`, 'log')
+
     if (analysis.issues.length > 0) {
-      this.addOutput(`\nFound ${analysis.issues.length} issues:`, 'warning');
-      analysis.issues.slice(0, 5).forEach(issue => {
-        this.addOutput(`Line ${issue.line}: ${issue.message}`, issue.type);
-      });
+      this.addOutput(`\nFound ${analysis.issues.length} issues:`, 'warning')
+      analysis.issues.slice(0, 5).forEach((issue) => {
+        this.addOutput(`Line ${issue.line}: ${issue.message}`, issue.type)
+      })
     } else {
-      this.addOutput('✓ No issues found', 'success');
+      this.addOutput('✓ No issues found', 'success')
     }
 
     if (this.isConnected) {
-      await this.getAIAnalysis(code);
+      await this.getAIAnalysis(code)
     }
   }
 
   async reviewCode() {
-    const code = this.getCurrentCode();
-    if (!code.trim()) return;
+    const code = this.getCurrentCode()
+    if (!code.trim()) return
 
-    this.addOutput('🔍 Code Review:', 'info');
-    
+    this.addOutput('🔍 Code Review:', 'info')
+
     const suggestions = [
       'Add error handling for edge cases',
       'Consider input validation',
       'Use meaningful variable names',
       'Add unit tests for functions',
-      'Document complex logic'
-    ];
+      'Document complex logic',
+    ]
 
-    this.addOutput('Suggestions:', 'info');
-    suggestions.slice(0, 3).forEach(suggestion => {
-      this.addOutput(`• ${suggestion}`, 'log');
-    });
+    this.addOutput('Suggestions:', 'info')
+    suggestions.slice(0, 3).forEach((suggestion) => {
+      this.addOutput(`• ${suggestion}`, 'log')
+    })
 
     if (this.isConnected) {
-      await this.getAIReview(code);
+      await this.getAIReview(code)
     }
   }
 
   refactorCode() {
-    const code = this.getCurrentCode();
-    if (!code.trim()) return;
+    const code = this.getCurrentCode()
+    if (!code.trim()) return
 
-    this.addOutput('🔧 Refactoring code...', 'info');
-    
+    this.addOutput('🔧 Refactoring code...', 'info')
+
     let refactored = code
       .replace(/var\s+/g, 'const ')
       .replace(/==\s/g, '=== ')
-      .replace(/function\s+(\w+)\s*\(/g, 'const $1 = (');
+      .replace(/function\s+(\w+)\s*\(/g, 'const $1 = (')
 
     if (refactored !== code) {
-      this.setCurrentCode(refactored);
-      this.addOutput('✓ Code refactored successfully', 'success');
+      this.setCurrentCode(refactored)
+      this.addOutput('✓ Code refactored successfully', 'success')
     } else {
-      this.addOutput('No refactoring needed', 'info');
+      this.addOutput('No refactoring needed', 'info')
     }
   }
 
   debugCode() {
-    this.addOutput('🐛 Debug Suggestions:', 'info');
-    
+    this.addOutput('🐛 Debug Suggestions:', 'info')
+
     const suggestions = [
       'Add console.log to trace execution',
       'Check variable types with typeof',
       'Verify function parameters',
       'Use debugger statement for breakpoints',
-      'Check for null/undefined values'
-    ];
+      'Check for null/undefined values',
+    ]
 
-    suggestions.forEach(suggestion => {
-      this.addOutput(`• ${suggestion}`, 'log');
-    });
+    suggestions.forEach((suggestion) => {
+      this.addOutput(`• ${suggestion}`, 'log')
+    })
   }
 
   generateDocs() {
-    const code = this.getCurrentCode();
-    const functions = this.extractFunctions(code);
-    
+    const code = this.getCurrentCode()
+    const functions = this.extractFunctions(code)
+
     if (functions.length === 0) {
-      this.addOutput('No functions found to document', 'warning');
-      return;
+      this.addOutput('No functions found to document', 'warning')
+      return
     }
 
-    this.addOutput(`📝 Generating docs for ${functions.length} functions...`, 'info');
-    
-    let documented = code;
-    functions.forEach(func => {
-      const docComment = `/**\n * ${func.name} - Function description\n * @param {*} param - Parameter description\n * @returns {*} Return value description\n */\n`;
-      documented = documented.replace(func.signature, docComment + func.signature);
-    });
+    this.addOutput(`📝 Generating docs for ${functions.length} functions...`, 'info')
 
-    this.setCurrentCode(documented);
-    this.addOutput('✓ Documentation added', 'success');
+    let documented = code
+    functions.forEach((func) => {
+      const docComment = `/**\n * ${func.name} - Function description\n * @param {*} param - Parameter description\n * @returns {*} Return value description\n */\n`
+      documented = documented.replace(func.signature, docComment + func.signature)
+    })
+
+    this.setCurrentCode(documented)
+    this.addOutput('✓ Documentation added', 'success')
   }
 
   explainCode() {
-    const code = this.getCurrentCode();
-    
-    this.addOutput('💡 Code Explanation:', 'info');
-    
+    const code = this.getCurrentCode()
+
+    this.addOutput('💡 Code Explanation:', 'info')
+
     if (code.includes('function') || code.includes('=>')) {
-      this.addOutput('Contains function definitions', 'log');
+      this.addOutput('Contains function definitions', 'log')
     }
     if (code.includes('for') || code.includes('while')) {
-      this.addOutput('Uses loops for iteration', 'log');
+      this.addOutput('Uses loops for iteration', 'log')
     }
     if (code.includes('if') || code.includes('switch')) {
-      this.addOutput('Contains conditional logic', 'log');
+      this.addOutput('Contains conditional logic', 'log')
     }
     if (code.includes('class')) {
-      this.addOutput('Defines classes (OOP structure)', 'log');
+      this.addOutput('Defines classes (OOP structure)', 'log')
     }
     if (code.includes('async') || code.includes('await')) {
-      this.addOutput('Uses asynchronous operations', 'log');
+      this.addOutput('Uses asynchronous operations', 'log')
     }
   }
 
   // Quick Actions
   fixSyntax() {
-    const code = this.getCurrentCode();
+    const code = this.getCurrentCode()
     const fixed = code
       .replace(/;\s*\n\s*\n/g, ';\n')
       .replace(/{\s*\n\s*\n/g, '{\n')
       .replace(/}\s*\n\s*\n/g, '}\n')
-      .replace(/\s+$/gm, '');
-    
-    this.setCurrentCode(fixed);
-    this.addOutput('✓ Syntax cleaned', 'success');
+      .replace(/\s+$/gm, '')
+
+    this.setCurrentCode(fixed)
+    this.addOutput('✓ Syntax cleaned', 'success')
   }
 
   optimizeCode() {
-    this.addOutput('🚀 Optimization suggestions:', 'info');
-    this.addOutput('• Cache DOM queries', 'log');
-    this.addOutput('• Use const for immutable values', 'log');
-    this.addOutput('• Minimize nested loops', 'log');
+    this.addOutput('🚀 Optimization suggestions:', 'info')
+    this.addOutput('• Cache DOM queries', 'log')
+    this.addOutput('• Use const for immutable values', 'log')
+    this.addOutput('• Minimize nested loops', 'log')
   }
 
   addComments() {
-    const code = this.getCurrentCode();
-    const lines = code.split('\n');
-    
-    const commented = lines.map(line => {
-      if (line.includes('function') && !line.includes('//')) {
-        return `// Function definition\n${line}`;
-      }
-      if (line.includes('for') && !line.includes('//')) {
-        return `// Loop iteration\n${line}`;
-      }
-      if (line.includes('if') && !line.includes('//')) {
-        return `// Conditional check\n${line}`;
-      }
-      return line;
-    }).join('\n');
-    
-    this.setCurrentCode(commented);
-    this.addOutput('✓ Comments added', 'success');
+    const code = this.getCurrentCode()
+    const lines = code.split('\n')
+
+    const commented = lines
+      .map((line) => {
+        if (line.includes('function') && !line.includes('//')) {
+          return `// Function definition\n${line}`
+        }
+        if (line.includes('for') && !line.includes('//')) {
+          return `// Loop iteration\n${line}`
+        }
+        if (line.includes('if') && !line.includes('//')) {
+          return `// Conditional check\n${line}`
+        }
+        return line
+      })
+      .join('\n')
+
+    this.setCurrentCode(commented)
+    this.addOutput('✓ Comments added', 'success')
   }
 
   convertToTS() {
-    const code = this.getCurrentCode();
+    const code = this.getCurrentCode()
     const typescript = code
       .replace(/\.js/g, '.ts')
       .replace(/const\s+(\w+)\s*=/g, 'const $1: any =')
-      .replace(/let\s+(\w+)\s*=/g, 'let $1: any =');
-    
-    this.setCurrentCode(typescript);
-    this.addOutput('🔷 Converted to TypeScript', 'success');
+      .replace(/let\s+(\w+)\s*=/g, 'let $1: any =')
+
+    this.setCurrentCode(typescript)
+    this.addOutput('🔷 Converted to TypeScript', 'success')
   }
 
   // AI API Integration
   async getAIAnalysis(code) {
-    if (!this.isConnected) return;
-    
+    if (!this.isConnected) return
+
     try {
-      const response = await this.callAI(`Analyze this code for issues and improvements:\n\n${code}`);
-      this.addOutput('🤖 AI Analysis:', 'info');
-      this.addOutput(response, 'log');
+      const response = await this.callAI(
+        `Analyze this code for issues and improvements:\n\n${code}`
+      )
+      this.addOutput('🤖 AI Analysis:', 'info')
+      this.addOutput(response, 'log')
     } catch (error) {
-      this.addOutput('AI analysis unavailable', 'warning');
+      this.addOutput('AI analysis unavailable', 'warning')
     }
   }
 
   async getAIReview(code) {
-    if (!this.isConnected) return;
-    
+    if (!this.isConnected) return
+
     try {
-      const response = await this.callAI(`Review this code for best practices:\n\n${code}`);
-      this.addOutput('🤖 AI Review:', 'info');
-      this.addOutput(response, 'log');
+      const response = await this.callAI(
+        `Review this code for best practices:\n\n${code}`
+      )
+      this.addOutput('🤖 AI Review:', 'info')
+      this.addOutput(response, 'log')
     } catch (error) {
-      this.addOutput('AI review unavailable', 'warning');
+      this.addOutput('AI review unavailable', 'warning')
     }
   }
 
@@ -519,119 +526,131 @@ class AIAssistant {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: this.model,
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 500
-      })
-    });
-    
-    const data = await response.json();
-    return data.choices[0].message.content;
+        max_tokens: 500,
+      }),
+    })
+
+    const data = await response.json()
+    return data.choices[0].message.content
   }
 
   // Utility Methods
   getCurrentCode() {
     if (typeof window !== 'undefined' && window.editor) {
-      return window.editor.getValue();
+      return window.editor.getValue()
     }
-    return document.querySelector('textarea, .monaco-editor')?.value || '';
+    return document.querySelector('textarea, .monaco-editor')?.value || ''
   }
 
   setCurrentCode(code) {
     if (typeof window !== 'undefined' && window.editor) {
-      window.editor.setValue(code);
+      window.editor.setValue(code)
     }
   }
 
   performStaticAnalysis(code) {
-    const issues = [];
-    const lines = code.split('\n');
-    
+    const issues = []
+    const lines = code.split('\n')
+
     lines.forEach((line, index) => {
-      const lineNum = index + 1;
-      
+      const lineNum = index + 1
+
       if (line.includes('eval(')) {
-        issues.push({ line: lineNum, type: 'error', message: 'Avoid eval() - security risk' });
+        issues.push({
+          line: lineNum,
+          type: 'error',
+          message: 'Avoid eval() - security risk',
+        })
       }
       if (line.includes('var ')) {
-        issues.push({ line: lineNum, type: 'warning', message: 'Use const/let instead of var' });
+        issues.push({
+          line: lineNum,
+          type: 'warning',
+          message: 'Use const/let instead of var',
+        })
       }
       if (line.includes('console.log')) {
-        issues.push({ line: lineNum, type: 'info', message: 'Remove console.log in production' });
+        issues.push({
+          line: lineNum,
+          type: 'info',
+          message: 'Remove console.log in production',
+        })
       }
-    });
-    
-    return { issues };
+    })
+
+    return { issues }
   }
 
   getCodeStats(code) {
-    const lines = code.split('\n').length;
-    const functions = (code.match(/function\s+\w+/g) || []).length;
-    const classes = (code.match(/class\s+\w+/g) || []).length;
-    const complexity = Math.min(10, Math.floor(lines / 20) + functions);
-    
-    return { lines, functions, classes, complexity };
+    const lines = code.split('\n').length
+    const functions = (code.match(/function\s+\w+/g) || []).length
+    const classes = (code.match(/class\s+\w+/g) || []).length
+    const complexity = Math.min(10, Math.floor(lines / 20) + functions)
+
+    return { lines, functions, classes, complexity }
   }
 
   extractFunctions(code) {
-    const functionRegex = /function\s+(\w+)\s*\([^)]*\)\s*\{/g;
-    const functions = [];
-    let match;
-    
+    const functionRegex = /function\s+(\w+)\s*\([^)]*\)\s*\{/g
+    const functions = []
+    let match
+
     while ((match = functionRegex.exec(code)) !== null) {
       functions.push({
         name: match[1],
-        signature: match[0]
-      });
+        signature: match[0],
+      })
     }
-    
-    return functions;
+
+    return functions
   }
 
   addOutput(message, type = 'log') {
-    const output = document.getElementById('ai-output');
-    if (!output) return;
-    
+    const output = document.getElementById('ai-output')
+    if (!output) return
+
     const colors = {
       info: '#007acc',
       success: '#4caf50',
       warning: '#ff9800',
       error: '#f44336',
-      log: '#fff'
-    };
-    
-    const entry = document.createElement('div');
-    entry.style.color = colors[type] || colors.log;
-    entry.style.marginBottom = '4px';
-    entry.textContent = message;
-    
-    output.appendChild(entry);
-    output.scrollTop = output.scrollHeight;
-    
+      log: '#fff',
+    }
+
+    const entry = document.createElement('div')
+    entry.style.color = colors[type] || colors.log
+    entry.style.marginBottom = '4px'
+    entry.textContent = message
+
+    output.appendChild(entry)
+    output.scrollTop = output.scrollHeight
+
     // Remove placeholder
-    const placeholder = output.querySelector('.output-placeholder');
-    if (placeholder) placeholder.remove();
+    const placeholder = output.querySelector('.output-placeholder')
+    if (placeholder) placeholder.remove()
   }
 }
 
 // Initialize AI Assistant
 if (typeof window !== 'undefined') {
-  window.aiAssistant = new AIAssistant();
-  
+  window.aiAssistant = new AIAssistant()
+
   // Auto-initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      window.aiAssistant.init();
-    });
+      window.aiAssistant.init()
+    })
   } else {
-    window.aiAssistant.init();
+    window.aiAssistant.init()
   }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = AIAssistant;
+  module.exports = AIAssistant
 }

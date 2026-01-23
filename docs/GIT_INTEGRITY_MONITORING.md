@@ -5,6 +5,7 @@ Post-cleanup monitoring and enforcement to prevent large files from creeping bac
 ## 🔍 Overview
 
 The Git integrity system consists of:
+
 1. **Pre-commit integrity check** – Blocks commits with files > 10 MB
 2. **Git health monitor** – Tracks repository metrics and trends
 3. **Git LFS configuration** – Automatically tracks large file types
@@ -23,6 +24,7 @@ npm run git:integrity:check
 ```
 
 **Output:**
+
 - ✅ **PASS** – No violations, safe to commit
 - ❌ **FAIL** – Large files detected, commit blocked
 - ⚠️ **WARNING** – Files approaching limit
@@ -41,6 +43,7 @@ npm run git:health:save
 ```
 
 **Metrics Tracked:**
+
 - .git directory size
 - Total commits
 - Uncommitted files
@@ -60,6 +63,7 @@ npm run git:integrity:check
 ```
 
 **If violations detected:**
+
 ```
 ❌ Commit blocked: Large files detected
   src/models/checkpoint.pt: 15.50 MB (max: 10 MB)
@@ -72,10 +76,10 @@ Edit file size limits in `scripts/git-integrity-check.js`:
 
 ```javascript
 const CONFIG = {
-  maxFileSize: 10 * 1024 * 1024,        // 10 MB max per file
-  maxCommitSize: 50 * 1024 * 1024,      // 50 MB max per commit
-  warningThreshold: 5 * 1024 * 1024,    // Warn at 5 MB
-};
+  maxFileSize: 10 * 1024 * 1024, // 10 MB max per file
+  maxCommitSize: 50 * 1024 * 1024, // 50 MB max per commit
+  warningThreshold: 5 * 1024 * 1024, // Warn at 5 MB
+}
 ```
 
 ## 🔐 Git LFS Configuration
@@ -111,11 +115,11 @@ git lfs migrate import --include="*.whl" --everything
 
 ### Status Indicators
 
-| Status | Condition | Action |
-|--------|-----------|--------|
-| 🟢 HEALTHY | All checks pass | Continue normal work |
-| 🟡 WARNING | Git size > 100 MB or LFS not configured | Monitor, consider cleanup |
-| 🔴 CRITICAL | Git size > 500 MB | Run filter-repo to clean history |
+| Status      | Condition                               | Action                           |
+| ----------- | --------------------------------------- | -------------------------------- |
+| 🟢 HEALTHY  | All checks pass                         | Continue normal work             |
+| 🟡 WARNING  | Git size > 100 MB or LFS not configured | Monitor, consider cleanup        |
+| 🔴 CRITICAL | Git size > 500 MB                       | Run filter-repo to clean history |
 
 ### Metrics File
 
@@ -279,12 +283,14 @@ git gc --aggressive --prune=now
 ## 🎯 Summary
 
 ✅ **Post-Cleanup Protection:**
+
 - Prevents files > 10 MB from being committed
 - Automatically tracks known large file types via LFS
 - Monitors repository health continuously
 - Enforces standards via git hooks
 
 ✅ **Metrics:**
+
 - Before cleanup: 2,171 MB total, 703 MB .git
 - After cleanup: ~10 MB .git (98.75% reduction)
 - **Status:** 🟢 HEALTHY and protected

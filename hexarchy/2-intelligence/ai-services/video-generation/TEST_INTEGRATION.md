@@ -5,6 +5,7 @@
 ## Overview
 
 The cinema player is now fully integrated with the backend API, featuring:
+
 - ✅ Dynamic video loading from backend
 - ✅ Real-time analytics tracking
 - ✅ Scene/chapter markers integration
@@ -23,6 +24,7 @@ python api.py
 ```
 
 Expected output:
+
 ```
 🚀 Initializing Video Generator...
 ✅ Generator ready!
@@ -64,6 +66,7 @@ curl -X POST http://localhost:5003/generate \
 ```
 
 Response:
+
 ```json
 {
   "job_id": "abc123-def456-...",
@@ -75,16 +78,19 @@ Response:
 ### 3. Open Video Player
 
 Open in browser:
+
 ```
 http://localhost:3000/cinema-player.html?video=abc123-def456
 ```
 
 Or use direct URL:
+
 ```
 http://localhost:3000/cinema-player.html?url=/api/video/stream/abc123-def456.mp4
 ```
 
 Or load sample:
+
 ```
 http://localhost:3000/cinema-player.html
 ```
@@ -98,25 +104,27 @@ http://localhost:3000/cinema-player.html
 The player automatically loads videos from the backend based on URL parameters:
 
 **URL Patterns:**
+
 - `?video=<video_id>` - Load by video ID (fetches metadata)
 - `?url=<video_url>` - Load by direct URL
 - No params - Loads sample/default video
 
 **JavaScript Code:**
+
 ```javascript
 // Automatically called on page load
 async function loadVideoFromBackend() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('video');
-    const videoUrl = urlParams.get('url');
+  const urlParams = new URLSearchParams(window.location.search)
+  const videoId = urlParams.get('video')
+  const videoUrl = urlParams.get('url')
 
-    if (videoUrl) {
-        loadVideoUrl(videoUrl);
-    } else if (videoId) {
-        await fetchVideoMetadata(videoId);
-    } else {
-        loadVideoUrl(`${API_BASE_URL}/api/video/sample`);
-    }
+  if (videoUrl) {
+    loadVideoUrl(videoUrl)
+  } else if (videoId) {
+    await fetchVideoMetadata(videoId)
+  } else {
+    loadVideoUrl(`${API_BASE_URL}/api/video/sample`)
+  }
 }
 ```
 
@@ -125,11 +133,13 @@ async function loadVideoFromBackend() {
 When loading by video ID, the player fetches rich metadata:
 
 **API Request:**
+
 ```
 GET /api/video/<video_id>
 ```
 
 **Response:**
+
 ```json
 {
   "id": "video-123",
@@ -146,6 +156,7 @@ GET /api/video/<video_id>
 ```
 
 **Player Actions:**
+
 - Updates page title with video title
 - Loads chapter markers from scenes
 - Initializes analytics tracking
@@ -156,6 +167,7 @@ GET /api/video/<video_id>
 The player automatically tracks user interactions:
 
 **Events Tracked:**
+
 - `session_start` - User loads video
 - `play` - Playback started
 - `pause` - Playback paused
@@ -164,10 +176,12 @@ The player automatically tracks user interactions:
 - `session_end` - User leaves page
 
 **Playback Position:**
+
 - Tracked every 5 seconds during playback
 - Includes current time and playback rate
 
 **API Calls:**
+
 ```javascript
 // Track event
 POST /api/analytics/track
@@ -189,6 +203,7 @@ POST /api/analytics/playback
 ```
 
 **Analytics Storage:**
+
 - Stored in `services/video-generation/analytics/` directory
 - One file per session: `<session_id>.jsonl`
 - JSONL format (one JSON event per line)
@@ -199,27 +214,29 @@ If the backend provides scene data, the player displays chapter markers:
 
 ```javascript
 function loadChapterMarkers(scenes) {
-    const container = document.getElementById('chapterMarkers');
-    container.innerHTML = '';
+  const container = document.getElementById('chapterMarkers')
+  container.innerHTML = ''
 
-    scenes.forEach(scene => {
-        const marker = document.createElement('div');
-        marker.className = 'chapter-marker';
-        marker.style.left = `${(scene.start_time / video.duration) * 100}%`;
-        marker.title = `Scene at ${formatTime(scene.start_time)}`;
-        container.appendChild(marker);
-    });
+  scenes.forEach((scene) => {
+    const marker = document.createElement('div')
+    marker.className = 'chapter-marker'
+    marker.style.left = `${(scene.start_time / video.duration) * 100}%`
+    marker.title = `Scene at ${formatTime(scene.start_time)}`
+    container.appendChild(marker)
+  })
 }
 ```
 
 ### 5. **CORS Configuration**
 
 Backend allows cross-origin requests from:
+
 - `http://localhost:5173` (Vite dev server)
 - `http://localhost:3000` (Frontend server)
 - `https://hootner.com` (Production)
 
 **Python Configuration:**
+
 ```python
 CORS(
     app,
@@ -233,19 +250,19 @@ CORS(
 
 ### Video Endpoints
 
-| Endpoint | Method | Description | Example |
-|----------|--------|-------------|---------|
-| `/api/video/<id>` | GET | Get video metadata | `/api/video/abc123` |
-| `/api/video/stream/<file>` | GET | Stream video file | `/api/video/stream/video.mp4` |
-| `/api/video/sample` | GET | Get sample video | `/api/video/sample` |
+| Endpoint                   | Method | Description        | Example                       |
+| -------------------------- | ------ | ------------------ | ----------------------------- |
+| `/api/video/<id>`          | GET    | Get video metadata | `/api/video/abc123`           |
+| `/api/video/stream/<file>` | GET    | Stream video file  | `/api/video/stream/video.mp4` |
+| `/api/video/sample`        | GET    | Get sample video   | `/api/video/sample`           |
 
 ### Analytics Endpoints
 
-| Endpoint | Method | Description | Body |
-|----------|--------|-------------|------|
-| `/api/analytics/track` | POST | Track event | `{session_id, video_id, event_type, timestamp}` |
-| `/api/analytics/playback` | POST | Track position | `{session_id, video_id, current_time, playback_rate}` |
-| `/api/analytics/<id>` | GET | Get video analytics | N/A |
+| Endpoint                  | Method | Description         | Body                                                  |
+| ------------------------- | ------ | ------------------- | ----------------------------------------------------- |
+| `/api/analytics/track`    | POST   | Track event         | `{session_id, video_id, event_type, timestamp}`       |
+| `/api/analytics/playback` | POST   | Track position      | `{session_id, video_id, current_time, playback_rate}` |
+| `/api/analytics/<id>`     | GET    | Get video analytics | N/A                                                   |
 
 ---
 
@@ -266,6 +283,7 @@ open http://localhost:3000/cinema-player.html?video=xyz789
 ```
 
 **Expected Behavior:**
+
 - Loading spinner appears
 - Video loads from backend
 - Title updates to "Sunset over mountains"
@@ -280,6 +298,7 @@ open http://localhost:3000/cinema-player.html
 ```
 
 **Expected Behavior:**
+
 - Loads first available video from outputs directory
 - If no videos exist, shows error message
 - Analytics track as "sample" video
@@ -295,6 +314,7 @@ curl http://localhost:5003/api/analytics/$VIDEO_ID
 ```
 
 **Expected Response:**
+
 ```json
 {
   "video_id": "abc123",
@@ -338,11 +358,13 @@ Loading video metadata...
 ### Issue: "Failed to load video"
 
 **Causes:**
+
 - Backend API not running
 - CORS errors
 - Video file doesn't exist
 
 **Solutions:**
+
 ```bash
 # Check backend is running
 curl http://localhost:5003/health
@@ -361,25 +383,29 @@ ls services/video-generation/outputs/
 ### Issue: "Analytics not tracking"
 
 **Check:**
+
 - Browser console for errors
 - Analytics directory exists: `services/video-generation/analytics/`
 - Permissions to write files
 
 **Debug:**
+
 ```javascript
 // Open browser console
-localStorage.debug = '*';
+localStorage.debug = '*'
 // Reload page and check analytics calls
 ```
 
 ### Issue: "Video not playing"
 
 **Check:**
+
 - Video codec support (H.264/H.265)
 - File format (MP4 recommended)
 - Browser compatibility
 
 **Test:**
+
 ```bash
 # Check video file
 ffprobe services/video-generation/outputs/video.mp4
@@ -390,6 +416,7 @@ ffprobe services/video-generation/outputs/video.mp4
 ## Integration Checklist
 
 ✅ **Backend API:**
+
 - [x] `/api/video/<id>` endpoint implemented
 - [x] `/api/video/stream/<file>` endpoint implemented
 - [x] `/api/analytics/track` endpoint implemented
@@ -398,6 +425,7 @@ ffprobe services/video-generation/outputs/video.mp4
 - [x] Analytics directory created
 
 ✅ **Frontend Player:**
+
 - [x] Backend API URL configured
 - [x] Dynamic video loading implemented
 - [x] Metadata fetching implemented
@@ -407,6 +435,7 @@ ffprobe services/video-generation/outputs/video.mp4
 - [x] Loading states implemented
 
 ✅ **Data Flow:**
+
 - [x] Player → Backend (video requests)
 - [x] Backend → Player (video streaming)
 - [x] Player → Backend (analytics events)
@@ -437,10 +466,10 @@ Connect to GraphQL API for unified data access:
 
 ```javascript
 // In cinema-player.html
-const GRAPHQL_URL = 'http://localhost:4000/graphql';
+const GRAPHQL_URL = 'http://localhost:4000/graphql'
 
 async function fetchVideoViaGraphQL(videoId) {
-    const query = `
+  const query = `
         query GetVideo($id: ID!) {
             video(id: $id) {
                 id
@@ -450,15 +479,15 @@ async function fetchVideoViaGraphQL(videoId) {
                 analytics { views engagement }
             }
         }
-    `;
+    `
 
-    const response = await fetch(GRAPHQL_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, variables: { id: videoId } })
-    });
+  const response = await fetch(GRAPHQL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables: { id: videoId } }),
+  })
 
-    return await response.json();
+  return await response.json()
 }
 ```
 
@@ -467,15 +496,15 @@ async function fetchVideoViaGraphQL(videoId) {
 Add WebSocket connection for real-time collaboration:
 
 ```javascript
-const ws = new WebSocket('ws://localhost:5004/watch-party/abc123');
+const ws = new WebSocket('ws://localhost:5004/watch-party/abc123')
 
 ws.onmessage = (event) => {
-    const message = JSON.parse(event.data);
+  const message = JSON.parse(event.data)
 
-    if (message.type === 'playback_state') {
-        syncPlayback(message.data);
-    }
-};
+  if (message.type === 'playback_state') {
+    syncPlayback(message.data)
+  }
+}
 ```
 
 ---
@@ -485,6 +514,7 @@ ws.onmessage = (event) => {
 **Status:** ✅ **FULLY INTEGRATED**
 
 The backend and frontend are now connected with:
+
 - Dynamic video loading via REST API
 - Real-time analytics tracking
 - Metadata synchronization
@@ -493,6 +523,7 @@ The backend and frontend are now connected with:
 - Error handling and loading states
 
 **Test it now:**
+
 ```bash
 # Terminal 1: Start backend
 cd services/video-generation && python api.py

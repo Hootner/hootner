@@ -38,6 +38,7 @@
 ## 🎯 Key Features
 
 ### Real-time Subscriptions
+
 ✅ **Video Processing** - `videoProcessed`, `videoProgress`
 ✅ **Video Generation** - `generationProgress`, `generationCompleted`
 ✅ **Live Streaming** - `streamStarted`, `streamViewers`, `streamQuality`
@@ -45,6 +46,7 @@
 ✅ **System Alerts** - `systemAlert`
 
 ### Error Handling
+
 ✅ **Error Boundaries** - Wrap all resolvers with try-catch
 ✅ **Custom Error Types** - 9 error codes with proper formatting
 ✅ **Validation Helpers** - Input validation with detailed messages
@@ -52,6 +54,7 @@
 ✅ **Logging** - Comprehensive error logging with stack traces
 
 ### Authentication & Security
+
 ✅ **JWT Tokens** - Generate, verify, refresh
 ✅ **Role-Based Access** - USER, CREATOR, MODERATOR, ADMIN
 ✅ **Ownership Validation** - Verify resource ownership
@@ -59,6 +62,7 @@
 ✅ **CORS** - Configurable cross-origin support
 
 ### Integration
+
 ✅ **Video Generation** - Direct integration with `services/video-generation/api.py`
 ✅ **File Uploads** - Support for videos and images (100MB max)
 ✅ **Redis PubSub** - Multi-server subscription support
@@ -160,16 +164,17 @@ Response / Subscription Stream
 subscription GenerationProgress($jobId: ID!) {
   generationProgress(jobId: $jobId) {
     jobId
-    progress          # 0-100
-    status           # PROCESSING, COMPLETED
-    message          # "Generating frame 25/50"
-    estimatedTimeRemaining  # Seconds
+    progress # 0-100
+    status # PROCESSING, COMPLETED
+    message # "Generating frame 25/50"
+    estimatedTimeRemaining # Seconds
     timestamp
   }
 }
 ```
 
 **Response Stream:**
+
 ```json
 {"progress": 20, "message": "Generating frame 10/50"}
 {"progress": 40, "message": "Generating frame 20/50"}
@@ -184,13 +189,14 @@ subscription GenerationProgress($jobId: ID!) {
 subscription StreamViewers($streamId: ID!) {
   streamViewers(streamId: $streamId) {
     streamId
-    viewers          # Current viewer count
+    viewers # Current viewer count
     timestamp
   }
 }
 ```
 
 **Response Stream (every 5 seconds):**
+
 ```json
 {"viewers": 42, "timestamp": "2026-01-10T12:00:00Z"}
 {"viewers": 47, "timestamp": "2026-01-10T12:00:05Z"}
@@ -203,10 +209,10 @@ subscription StreamViewers($streamId: ID!) {
 subscription StreamQuality($streamId: ID!) {
   streamQuality(streamId: $streamId) {
     streamId
-    bitrate          # kbps
-    fps              # frames per second
-    droppedFrames    # count
-    latency          # ms
+    bitrate # kbps
+    fps # frames per second
+    droppedFrames # count
+    latency # ms
     timestamp
   }
 }
@@ -220,7 +226,8 @@ subscription StreamQuality($streamId: ID!) {
 
 ```graphql
 mutation {
-  generateVideo(input: { prompt: "Hi" }) {  # Too short
+  generateVideo(input: { prompt: "Hi" }) {
+    # Too short
     success
     errors {
       field
@@ -232,6 +239,7 @@ mutation {
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -261,6 +269,7 @@ query {
 ```
 
 **Response (no token):**
+
 ```json
 {
   "errors": [
@@ -299,9 +308,9 @@ query {
 ### React Apollo Client
 
 ```typescript
-import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
+import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 
 // HTTP link for queries and mutations
 const httpLink = new HttpLink({
@@ -309,33 +318,35 @@ const httpLink = new HttpLink({
   headers: {
     authorization: `Bearer ${localStorage.getItem('token')}`,
   },
-});
+})
 
 // WebSocket link for subscriptions
-const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:4000/graphql',
-  connectionParams: {
-    authorization: `Bearer ${localStorage.getItem('token')}`,
-  },
-}));
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: 'ws://localhost:4000/graphql',
+    connectionParams: {
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+)
 
 // Split traffic between HTTP and WebSocket
 const splitLink = split(
   ({ query }) => {
-    const definition = getMainDefinition(query);
+    const definition = getMainDefinition(query)
     return (
       definition.kind === 'OperationDefinition' &&
       definition.operation === 'subscription'
-    );
+    )
   },
   wsLink,
-  httpLink,
-);
+  httpLink
+)
 
 const client = new ApolloClient({
   link: splitLink,
   cache: new InMemoryCache(),
-});
+})
 ```
 
 ### Using Subscriptions in Components
@@ -374,12 +385,14 @@ function VideoGenerationProgress({ jobId }) {
 ## 🚀 Deployment Checklist
 
 ### Environment Variables
+
 - [ ] Set `JWT_SECRET` (strong random string)
 - [ ] Set `REDIS_URL` for production
 - [ ] Configure `NODE_ENV=production`
 - [ ] Set allowed CORS origins
 
 ### Security
+
 - [ ] Use HTTPS in production
 - [ ] Enable Helmet.js with strict CSP
 - [ ] Implement rate limiting per user
@@ -387,6 +400,7 @@ function VideoGenerationProgress({ jobId }) {
 - [ ] Enable query complexity limits
 
 ### Monitoring
+
 - [ ] Set up Apollo Studio
 - [ ] Configure error tracking (Sentry)
 - [ ] Enable request logging
@@ -394,6 +408,7 @@ function VideoGenerationProgress({ jobId }) {
 - [ ] Track subscription performance
 
 ### Scaling
+
 - [ ] Use Redis for PubSub (multi-server)
 - [ ] Implement database connection pooling
 - [ ] Add DataLoader for N+1 queries
@@ -405,11 +420,13 @@ function VideoGenerationProgress({ jobId }) {
 ## 📚 Additional Resources
 
 ### Documentation
+
 - [Apollo Server Docs](https://www.apollographql.com/docs/apollo-server/)
 - [GraphQL Subscriptions](https://www.apollographql.com/docs/react/data/subscriptions/)
 - [GraphQL Best Practices](https://graphql.org/learn/best-practices/)
 
 ### Tools
+
 - **Apollo Studio** - GraphQL monitoring and analytics
 - **GraphQL Playground** - Interactive API explorer
 - **GraphiQL** - Alternative API explorer

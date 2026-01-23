@@ -20,12 +20,12 @@ class AgentOrchestrator {
     const workflows = fs.readdirSync(workflowDir);
     
     workflows.forEach(file => {
-      const path = `${workflowDir}/` + file + ``;
+      const path = `${workflowDir}/` + file + '';
       const content = fs.readFileSync(path, 'utf8');
       
       if (!content.includes('# DISABLED')) {
-        fs.writeFileSync(path, `# DISABLED\n` + content + ``);
-        console.log(chalk.yellow(`  Disabled ` + file + ``));
+        fs.writeFileSync(path, '# DISABLED\n' + content + '');
+        console.log(chalk.yellow('  Disabled ' + file + ''));
       }
     });
     
@@ -45,7 +45,7 @@ class AgentOrchestrator {
     console.log(chalk.blue('📊 Agent Status:'));
     Object.entries(this.agents).forEach(([name, config]) => {
       const status = config.active ? '🟢 ACTIVE' : '🔴 INACTIVE';
-      console.log(`  ${name}: ${status} (Priority: ` + config.priority + `)`);
+      console.log(`  ${name}: ${status} (Priority: ` + config.priority + ')');
     });
   }
 }

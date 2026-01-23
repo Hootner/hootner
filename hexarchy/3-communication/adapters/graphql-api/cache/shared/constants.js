@@ -59,4 +59,4 @@ module.exports = {
     BYPASS: 'BYPASS',
     ERROR: 'ERROR',
   },
-};
+}

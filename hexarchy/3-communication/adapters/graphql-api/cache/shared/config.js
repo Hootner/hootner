@@ -60,7 +60,7 @@ const baseConfig = {
     ],
     excludeFields: ['currentUser'],
   },
-};
+}
 
 const developmentConfig = {
   ...baseConfig,
@@ -72,7 +72,7 @@ const developmentConfig = {
     ...baseConfig.ttl,
     default: 60, // Shorter TTL in dev
   },
-};
+}
 
 const productionConfig = {
   ...baseConfig,
@@ -85,7 +85,7 @@ const productionConfig = {
     ...baseConfig.ttl,
     default: 600, // Longer TTL in production
   },
-};
+}
 
 const testConfig = {
   ...baseConfig,
@@ -97,15 +97,15 @@ const testConfig = {
     ...baseConfig.ttl,
     default: 10, // Very short TTL for tests
   },
-};
+}
 
 const configs = {
   development: developmentConfig,
   production: productionConfig,
   test: testConfig,
-};
+}
 
-const env = process.env.NODE_ENV || 'development';
-const selectedConfig = configs[env] || developmentConfig;
+const env = process.env.NODE_ENV || 'development'
+const selectedConfig = configs[env] || developmentConfig
 
-module.exports = selectedConfig;
+module.exports = selectedConfig

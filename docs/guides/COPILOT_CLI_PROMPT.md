@@ -5,6 +5,7 @@
 ## 🎯 Overview
 
 The enhanced Copilot CLI provides a suite of commands for:
+
 - **Task Delegation** – Route complex work to specialized agents
 - **Code Analysis** – Automated security, performance, and quality checks
 - **Refactoring** – Suggest and guide code improvements
@@ -41,6 +42,7 @@ node copilot-delegate.js analyze src/handlers/auth.js
 ```
 
 **Output:**
+
 - 🔴 Security issues (hardcoded credentials, injection risks)
 - 🟡 Performance concerns (nested loops, inefficient patterns)
 - 🔵 Style violations (line length, complexity)
@@ -58,6 +60,7 @@ node copilot-delegate.js security
 ```
 
 **Checks:**
+
 - Hardcoded secrets (API keys, passwords, tokens)
 - Command injection patterns (`exec()`, `spawn()`, shell templates)
 - XSS/Template injection risks
@@ -76,6 +79,7 @@ node copilot-delegate.js refactor src/components/Player.js
 ```
 
 **Suggestions:**
+
 - Extract repeated patterns into utility functions
 - Convert single-line functions to arrow functions
 - Simplify complex conditional logic
@@ -94,6 +98,7 @@ node copilot-delegate.js optimize src/algorithms/search.js
 ```
 
 **Checks:**
+
 - Nested loops and quadratic complexity
 - Repeated JSON parsing/stringifying
 - Chained array operations (`.map().filter().reduce()`)
@@ -112,6 +117,7 @@ node copilot-delegate.js docs src/services/VideoPlayer.js
 ```
 
 **Output:**
+
 - List of exported functions
 - JSDoc template suggestions
 - Parameter and return type hints
@@ -129,6 +135,7 @@ node copilot-delegate.js validate
 ```
 
 **Checks:**
+
 - Conventional commit format (`feat:`, `fix:`, `docs:`, etc.)
 - No hardcoded secrets in staged files
 - Message length and format compliance
@@ -199,33 +206,33 @@ Use these prompts with Copilot Chat (Ctrl+I) to amplify the CLI tools:
 ### **After Running `analyze`:**
 
 ```
-I ran `node copilot-delegate.js analyze <file>` which found [X] issues. 
-The main concerns are: [list findings]. 
-Using your code analysis capabilities, help me fix these issues step-by-step. 
+I ran `node copilot-delegate.js analyze <file>` which found [X] issues.
+The main concerns are: [list findings].
+Using your code analysis capabilities, help me fix these issues step-by-step.
 Focus on security first, then performance.
 ```
 
 ### **After Running `refactor`:**
 
 ```
-The refactoring tool suggests: [findings]. 
-Can you help me extract common patterns and apply arrow function conversions? 
+The refactoring tool suggests: [findings].
+Can you help me extract common patterns and apply arrow function conversions?
 Keep backward compatibility and add comments for each change.
 ```
 
 ### **For Performance Optimization:**
 
 ```
-The performance analyzer found: [issues]. 
-Write optimized versions of the slow functions. 
+The performance analyzer found: [issues].
+Write optimized versions of the slow functions.
 Include before/after benchmarks in comments.
 ```
 
 ### **For Documentation Generation:**
 
 ```
-I have these functions needing documentation: [list]. 
-Generate comprehensive JSDoc comments with parameter types, return types, 
+I have these functions needing documentation: [list].
+Generate comprehensive JSDoc comments with parameter types, return types,
 and usage examples. Follow TypeScript-style annotations.
 ```
 
@@ -270,6 +277,7 @@ git push origin feat/my-feature
 ## 📊 Output Examples
 
 ### **Security Audit Result**
+
 ```
 🔒 Running Security Audit...
 
@@ -281,6 +289,7 @@ git push origin feat/my-feature
 ```
 
 ### **Refactoring Suggestions**
+
 ```
 ♻️  Refactoring suggestions for src/player.js...
 
@@ -292,6 +301,7 @@ git push origin feat/my-feature
 ```
 
 ### **Performance Analysis**
+
 ```
 ⚡ Performance analysis for src/search.js...
 
@@ -338,6 +348,7 @@ Run: node copilot-delegate.js delegate "Optimize search algorithm" src/search.js
 ## 📞 Support
 
 For issues or feature requests:
+
 - Check [AI_AGENT_ORCHESTRATION.md](docs/AI_AGENT_ORCHESTRATION.md)
 - Review [commit-validator.js](commit-validator.js) for validation rules
 - Run `node copilot-delegate.js` (no args) for quick help

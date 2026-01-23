@@ -3,15 +3,15 @@
  * Unified entry point for all caching functionality
  */
 
-const UnifiedCacheManager = require('./UnifiedCacheManager');
-const GraphQLCacheService = require('./GraphQLCacheService');
-const config = require('./shared/config');
-const utils = require('./shared/utils');
-const constants = require('./shared/constants');
+const UnifiedCacheManager = require('./UnifiedCacheManager')
+const GraphQLCacheService = require('./GraphQLCacheService')
+const config = require('./shared/config')
+const utils = require('./shared/utils')
+const constants = require('./shared/constants')
 
 // Legacy exports for backwards compatibility
-const GraphQLCachePlugin = require('./GraphQLCachePlugin');
-const CacheMiddleware = require('./CacheMiddleware');
+const GraphQLCachePlugin = require('./GraphQLCachePlugin')
+const CacheMiddleware = require('./CacheMiddleware')
 
 module.exports = {
   // Recommended: Use unified manager
@@ -31,4 +31,4 @@ module.exports = {
 
   // Convenience factory
   createCacheManager: (options) => new UnifiedCacheManager(options),
-};
+}

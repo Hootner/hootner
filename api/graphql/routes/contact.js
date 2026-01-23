@@ -6,12 +6,12 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-    
+
     const contact = await createContact({ name, email, subject, message });
-    
+
     // TODO: Send email notification to support team
     console.log(`📧 New contact message from ${email}`);
-    
+
     res.json({ success: true, message: 'Message received', contact });
   } catch (error) {
     res.status(500).json({ error: error.message });

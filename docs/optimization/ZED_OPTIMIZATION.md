@@ -97,11 +97,11 @@ Collab: Disconnect
 
 ```javascript
 // Start collaboration
-const collab = new RealtimeCollaboration(editor);
-collab.connect();
+const collab = new RealtimeCollaboration(editor)
+collab.connect()
 
 // Disconnect
-collab.disconnect();
+collab.disconnect()
 ```
 
 ## Technical Details
@@ -122,7 +122,7 @@ collab.disconnect();
 **Startup Time**
 
 ```javascript
-console.log(`⚡ Startup: ${lazyLoader.getStartupTime()}ms`);
+console.log(`⚡ Startup: ${lazyLoader.getStartupTime()}ms`)
 ```
 
 **Target**: <100ms for critical path
@@ -130,16 +130,16 @@ console.log(`⚡ Startup: ${lazyLoader.getStartupTime()}ms`);
 ### Lazy Loading API
 
 ```javascript
-const lazyLoader = new LazyLoader();
+const lazyLoader = new LazyLoader()
 
 // Load single module
-await lazyLoader.loadModule('name', 'path.js');
+await lazyLoader.loadModule('name', 'path.js')
 
 // Load multiple modules
 await lazyLoader.loadOnDemand([
   { name: 'module1', path: 'path1.js' },
   { name: 'module2', path: 'path2.js' },
-]);
+])
 ```
 
 ## Benefits
@@ -175,14 +175,14 @@ await lazyLoader.loadOnDemand([
 
 ```javascript
 // Custom port
-new CollaborationServer(9000);
+new CollaborationServer(9000)
 ```
 
 ### Client Configuration
 
 ```javascript
 // Custom WebSocket URL
-new RealtimeCollaboration(editor, 'ws://custom-server:8080');
+new RealtimeCollaboration(editor, 'ws://custom-server:8080')
 ```
 
 ## Monitoring
@@ -190,13 +190,13 @@ new RealtimeCollaboration(editor, 'ws://custom-server:8080');
 **Startup Performance**
 
 ```javascript
-window.lazyLoader.getStartupTime(); // Returns ms
+window.lazyLoader.getStartupTime() // Returns ms
 ```
 
 **Active Connections**
 
 ```javascript
-window.collabSession?.users.size; // Number of users
+window.collabSession?.users.size // Number of users
 ```
 
 ## Security

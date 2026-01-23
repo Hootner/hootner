@@ -10,11 +10,11 @@ export const securityConfig = {
       'http://localhost:5173',
       'http://localhost:3000',
       'https://hootner.com',
-      'https://app.hootner.com'
+      'https://app.hootner.com',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
   },
 
   // Rate limiting
@@ -22,18 +22,18 @@ export const securityConfig = {
     general: {
       windowMs: 15 * 60 * 1000, // 15 minutes
       max: 100,
-      message: 'Too many requests from this IP'
+      message: 'Too many requests from this IP',
     },
     auth: {
       windowMs: 15 * 60 * 1000,
       max: 5,
-      message: 'Too many authentication attempts'
+      message: 'Too many authentication attempts',
     },
     api: {
       windowMs: 60 * 1000, // 1 minute
       max: 60,
-      message: 'API rate limit exceeded'
-    }
+      message: 'API rate limit exceeded',
+    },
   },
 
   // Content Security Policy
@@ -42,13 +42,13 @@ export const securityConfig = {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"],
+      imgSrc: ["'self'", 'data:', 'https:'],
       connectSrc: ["'self'"],
       fontSrc: ["'self'"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
-      frameSrc: ["'none'"]
-    }
+      frameSrc: ["'none'"],
+    },
   },
 
   // Input validation patterns
@@ -56,7 +56,7 @@ export const securityConfig = {
     userId: /^[a-zA-Z0-9_-]{1,50}$/,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     secretPath: /^[a-zA-Z0-9/_-]{1,100}$/,
-    webhookUrl: /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/
+    webhookUrl: /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/,
   },
 
   // Sanitization settings
@@ -64,7 +64,7 @@ export const securityConfig = {
     allowedTags: [],
     allowedAttributes: {},
     stripIgnoreTag: true,
-    stripIgnoreTagBody: ['script']
+    stripIgnoreTagBody: ['script'],
   },
 
   // JWT settings
@@ -72,7 +72,7 @@ export const securityConfig = {
     algorithm: 'HS256',
     expiresIn: '1h',
     issuer: 'hootner-platform',
-    audience: 'hootner-users'
+    audience: 'hootner-users',
   },
 
   // Password requirements
@@ -81,7 +81,7 @@ export const securityConfig = {
     requireUppercase: true,
     requireLowercase: true,
     requireNumbers: true,
-    requireSpecialChars: true
+    requireSpecialChars: true,
   },
 
   // Session settings
@@ -89,8 +89,8 @@ export const securityConfig = {
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'strict'
-  }
-};
+    sameSite: 'strict',
+  },
+}
 
-export default securityConfig;
+export default securityConfig
