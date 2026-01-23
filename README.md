@@ -5,22 +5,10 @@
 [![Node.js](https://img.shields.io/badge/Node.js-25.2.1-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![AWS](https://img.shields.io/badge/AWS-Cloud-orange.svg)](https://aws.amazon.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Full-stack video streaming platform with AI generation, real-time collaboration, and enterprise DevOps.
-
-## ✨ Key Features
-
-🎬 **AI Video Generation** - PyTorch 2.0+ with 3D U-Net & Diffusion Models  
-🔐 **Enterprise Security** - Rate limiting, XSS protection, JWT authentication  
-⚡ **Real-time Collaboration** - WebSocket-based live streaming & chat  
-📊 **Advanced Analytics** - Prometheus + Grafana monitoring dashboard  
-🌍 **Multi-Region AWS** - S3, Lambda, DynamoDB, CloudWatch integration  
-🔄 **Zero-Downtime Deployment** - Blue-green deployment with Kubernetes + Istio  
-🤖 **Dual AI Agents** - GitHub Copilot + Amazon Q intelligent routing  
-💳 **Payment Integration** - Stripe with fraud detection  
-📱 **Mobile Optimized** - iOS, Android, responsive design for all devices
 
 ## 🚀 Day 1: One Command Start
 
@@ -33,65 +21,22 @@ This single script checks prerequisites, starts infrastructure, and launches cor
 
 **Manual setup:**
 ```bash
+docker compose -f docker-compose.dev.yml up -d  # Start DynamoDB + Redis
 npm install                   # Install dependencies
-cd hexarchy/3-communication/adapters/graphql-api && npm install # Install API dependencies
+cd api/graphql && npm install # Install API dependencies
 npm run db:setup             # Create DynamoDB table
 npm run start:all            # Start frontend + API
 ```
 
-**Access Points:**
-- 🎬 **Cinema Player**: [localhost:3000](http://localhost:3000) - Video streaming interface
-- 📊 **Dashboard**: [localhost:3000/dashboard](http://localhost:3000/dashboard) - Central hub
-- 🔌 **GraphQL API**: [localhost:4000/graphql](http://localhost:4000/graphql) - API playground
-- 💾 **DynamoDB Local**: localhost:8000 - Database
-- ⚡ **Redis**: localhost:6379 - Cache layer
-
-## 🎯 Quick Start Workflows
-
-### For Developers
-```bash
-npm run onboard              # First-time setup
-npm run start:all            # Start development
-npm run dev                  # Hot reload mode
-npm test                     # Run tests
-```
-
-### For DevOps Engineers
-```bash
-npm run platform:status      # Check platform health
-npm run monitor:performance  # Performance metrics
-npm run deploy:staging       # Deploy to staging
-npm run deploy:production    # Deploy to production
-```
-
-### For AI/ML Engineers
-```bash
-cd hexarchy/2-intelligence/ai-services/video-generation
-python install.py            # Install ML dependencies
-python api.py                # Start AI video API
-npm run dual-agent:start     # Enable AI assistants
-```
+- **Login Page**: Frontend application
+- **Dashboard**: Central hub
+- **Cinema Player**: Video streaming
+- GraphQL API: [localhost:4000/graphql](http://localhost:4000/graphql)
+- Frontend: [localhost:3000](http://localhost:3000)
+- DynamoDB Local: localhost:8000
+- Redis: localhost:6379
 
 ## 🤖 AI Development Tools
-
-### Dual AI Agent System ⭐ NEW
-
-```bash
-# Start Dual-Agent Orchestrator
-npm run dual-agent:start    # Launch GitHub Copilot + Amazon Q
-npm run dual-agent:status   # Check agent status
-npm run dual-agent:enable   # Enable dual mode
-npm run dual-agent:disable  # Disable (Copilot only)
-```
-
-**Intelligent Request Routing:**
-- AWS tasks → Amazon Q
-- Security audits → Amazon Q
-- Inline code → GitHub Copilot
-- Refactoring → GitHub Copilot
-- Codebase search → Amazon Q
-
-See [DUAL_AGENT_SETUP.md](docs/DUAL_AGENT_SETUP.md) for authentication and configuration.
 
 ### Enhanced Copilot CLI ⭐ NEW
 
@@ -129,7 +74,6 @@ npm run git:health:history        # 30-day trend analysis
 - **Size:** 10 MB (.git cleaned from 703 MB → 8.77 MB | 98.75% reduction)
 - **Health:** 🟢 HEALTHY - Protected against large file commits
 - **LFS:** 10 patterns configured for ML models, videos, executables
-- **Hooks:** Pre-commit, pre-push, commit-msg validation active
 
 See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for details.
 
@@ -138,7 +82,7 @@ See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for det
 - **Network throttling disabled** for maximum performance
 - **Prettier formatting** for JS/TS/React files
 - **Python interpreter** configured for AI services
-- **ESLint integration** for code quality
+- **Docker integration** ready when needed
 
 ## 📁 Architecture
 
@@ -146,21 +90,227 @@ See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for det
 
 ```
 Hootner/
-├── api/graphql/               # GraphQL API server
-├── apps/frontend/             # React 18 + TypeScript + Vite
-├── hexarchy/                  # Hexagonal architecture layers
-│   ├── 0-core/                # Domain logic & orchestration
-│   ├── 1-foundation/          # Infrastructure & containers
-│   ├── 2-intelligence/        # AI services & agents
-│   ├── 3-communication/       # APIs & notifications
-│   ├── 4-interface/           # UI components
-│   ├── 5-economy/             # Business & payments
-│   ├── 6-governance/          # Compliance & policies
-│   ├── 7-data/                # Storage & analytics
-│   └── 8-operations/          # CI/CD & DevOps
-├── services/video-generation/ # AI video generation (Python)
-├── scripts/                   # Automation & tooling
-└── docs/                      # Documentation
+├── api/
+│   └── graphql/               # GraphQL API server
+│       ├── middleware/        # API middleware
+│       ├── models/            # Data models
+│       ├── resolvers/         # GraphQL resolvers
+│       ├── routes/            # API routes
+│       ├── utils/             # Utility functions
+│       ├── webhooks/          # Webhook handlers
+│       └── schema.graphql     # GraphQL schema
+├── apps/
+│   └── frontend/              # React 18 + TypeScript + Vite frontend
+│       ├── html-pages/        # Standalone HTML pages (cinema-player, index)
+│       └── src/               # React components with Apollo GraphQL
+├── constants/                 # Application constants
+├── data/                      # Application data
+│   ├── logs/                  # Log files
+│   ├── uploads/               # User uploads
+│   └── usage/                 # Usage analytics
+├── frameworks/                # 🏗️ Framework Architecture
+│   ├── ai/                    # AI services, agents, MCP servers
+│   │   └── agents/            # AI agent orchestration
+│   └── backend/               # Server-side frameworks
+│       └── nestjs/            # NestJS modules & decorators
+├── scripts/                   # 🔧 Server Management & Automation
+│   ├── deployment/            # Deployment automation
+│   │   └── blue-green-deploy.sh
+│   ├── onboard-dev.js         # Developer onboarding
+│   ├── smoke-test.sh          # Smoke testing
+│   └── validate_workflows.py  # Workflow validation
+├── docs/                      # 📚 Comprehensive Documentation
+│   ├── readme/                # Component-specific READMEs
+│   │   ├── apps-README.md     # Frontend applications guide
+│   │   ├── services-README.md # AI video generation service
+│   │   ├── commands-README.md # Command references
+│   │   └── config-README.md   # Configuration guides
+│   ├── commands/              # Command references & quick guides
+│   │   ├── quick-reference.md # Essential commands
+│   │   ├── development.md     # Dev workflow
+│   │   ├── security.md       # Security commands
+│   │   └── ai-services.md    # AI service commands
+│   ├── reports/               # Project reports
+│   │   ├── lint/              # Linting and code quality
+│   │   ├── syntax/            # Syntax fix documentation
+│   │   └── phases/            # Project phase reports
+│   └── status/                # Status reports
+├── services/                  # 🔄 Microservices & AI Services
+│   └── video-generation/      # AI text-to-video service
+│       ├── config/            # Configuration files
+│       ├── unet.py            # 3D U-Net diffusion model
+│       ├── generator.py       # Video generation orchestrator
+│       ├── api.py             # Flask REST API
+│       ├── diffusion.py       # Diffusion models
+│       ├── hdr_processing.py  # HDR video processing
+│       ├── dolby_atmos.py     # Audio processing
+│       └── install.py         # Dependency installer
+├── terraform/                 # Infrastructure as Code
+│   └── main.tf                # Terraform configuration
+├── hexarchy/                  # 🏛️ Hexagonal Architecture
+│   ├── 0-core/                # Core business logic
+│   ├── 1-foundation/          # Infrastructure layer
+│   ├── 2-intelligence/        # AI and analytics
+│   ├── 3-communication/       # External interfaces
+│   ├── 4-interface/           # User interfaces
+│   ├── 5-economy/             # Business logic
+│   ├── 6-governance/          # Policies and rules
+│   ├── 7-data/                # Data management
+│   └── 8-operations/          # DevOps and monitoring
+├── k8s/                       # ☸️ Kubernetes Configuration
+│   ├── istio/                 # Istio service mesh
+│   ├── frontend-deployment.yaml
+│   ├── namespace.yaml
+│   └── redis-deployment.yaml
+├── logs/                      # 📊 Application logs
+├── tests/                     # 🧪 Testing Infrastructure
+│   ├── e2e/                   # End-to-end tests (Playwright)
+│   ├── integration/           # Integration tests
+│   ├── performance/           # Performance tests
+│   ├── electron-code-editor/  # Editor tests
+│   └── reports/               # Test reports
+├── terraform/                 # Infrastructure as Code
+│   └── main.tf                # Terraform configuration
+├── wiki/                      # Project wiki
+│   └── Home.md                # Wiki home page
+└── .github/
+    ├── workflows/             # CI/CD pipelines (11 workflows)
+    ├── scripts/               # GitHub automation scripts
+    └── ISSUE_TEMPLATE/        # Issue templates
+```
+
+## ✨ Core Features
+
+### 🎬 AI Video Platform
+
+- **Text-to-Video Generation** - 3D U-Net diffusion models, 30s generation time
+- **Jukebox Player** - Vinyl animations, touch navigation, Web Audio effects
+- **PWA Ready** - Offline caching, installable, Service Worker
+- **Real-time Streaming** - WebSocket, live collaboration
+
+### 🌐 Frontend Stack
+
+- **React 18 + TypeScript + Vite** - Modern development experience
+- **HTML Pages** - Cinema Player, Landing pages
+- **Apollo GraphQL** - Real-time subscriptions, Firebase auth, JWT
+- **Tailwind CSS** - Utility-first styling
+
+### 🤖 AI-Powered Development
+
+- **Cursor-Style Editing** - Chat (Ctrl+K), Write (Ctrl+L), Refactor modes
+- **Zed-Inspired Speed** - <100ms startup, real-time collaboration
+- **Multi-Agent System** - 12+ specialized AI agents
+- **Visual Designer** - Drag-and-drop prototyping (2025)
+- **Sustainability** - Energy tracking, AI ethics audits (2025)
+
+### 🔐 Security & Compliance
+
+- **Multi-layer Protection** - JWT/Firebase, Helmet.js, rate limiting, CORS
+- **Injection Prevention** - SQL, XSS, NoSQL, LDAP, command injection
+- **Compliance Ready** - GDPR, SOC2, audit logging, 90-day retention
+- **Automated Scanning** - Snyk, CodeQL, dependency audits
+
+### 🏗️ Enterprise Infrastructure
+
+- **Container Runtime** - Docker Alpine, 512MB-1GB memory, health checks
+- **Node.js 25.2.1** - ES modules, 4GB memory, 30 worker threads, GPU acceleration
+- **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
+- **Monitoring Stack** - Prometheus, Grafana, 10 CI/CD workflows
+- **Resilience** - Chaos engineering (8 scenarios), PITR backups, multi-region sync
+- **Git LFS** - Automated tracking for ML models, videos, executables (10+ patterns)
+
+### 💳 Integrations
+
+- **Payments** - Stripe processing, fraud detection
+- **Database** - DynamoDB, Redis
+- **Cloud** - AWS S3, Firebase, Socket.io
+- **AI/ML** - PyTorch 2.0+, 3D U-Net, BERT, OpenCV
+- **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
+
+### 🤖 AI Agent Hub (5 Production, 70+ Roadmap)
+
+**Production Agents (Active):**
+- **SecurityAgent** - Threat detection, pattern matching, real-time monitoring
+- **PaymentFraudAgent** - Transaction risk scoring, fraud detection
+- **RevenueOptimizationAgent** - Revenue analysis, ML predictions, pricing optimization
+- **AutoScalingAgent** - CPU/memory/request-based scaling
+- **ContentModerationAgent** - AI content analysis, toxicity detection
+
+**Roadmap Agents (Planned):**
+- **Core AI (12)** - Personalization, ML, NLP, Computer Vision, Speech-to-Text
+- **Business Intelligence (15)** - Analytics, KPI dashboards, Pricing algorithms
+- **Security & Compliance (18)** - GDPR automation, Penetration testing, Zero-trust
+- **Infrastructure & Operations (20)** - CDN management, Database sharding, Multi-cloud
+- **Specialized Services (10)** - Localization, Voice assistants, Blockchain, CRM integration
+
+### 🎬 Cinema Player (NEW - GitHub Copilot Integration)
+
+**Features:**
+- ✅ Theater/Cinema modes with immersive UI
+- ✅ Real-time WebSocket sync (comments, likes, watch parties)
+- ✅ Drag-drop video upload with preview
+- ✅ Playlist manager with drag-reorder
+- ✅ Watch history with localStorage
+- ✅ Advanced search with filter chips
+- ✅ 7 quality options (auto, 360p-8K)
+- ✅ Screenshot capture with download/share
+- ✅ Mini-player (Picture-in-Picture)
+- ✅ 15 keyboard shortcuts
+- ✅ Mobile touch gestures
+- ✅ Comprehensive analytics tracking
+- ✅ Social features (like, comment, share, watch parties)
+
+**Integration:**
+- ✅ WebSocket subscriptions to GraphQL API
+- ✅ Real-time comment stream
+- ✅ Live like count updates
+- ✅ User profile loading
+- ✅ Video recommendations
+- ✅ Analytics event tracking (page views, playback events, UI interactions)
+
+**Tech Stack:**
+- Frontend: HTML5, CSS3 (glassmorphism), vanilla JS, Video.js
+- Backend: GraphQL API (port 4000), Video Gen (port 5003)
+- Database: DynamoDB (videos, users, comments), Redis (caching)
+- Infrastructure: AWS S3/CloudFront
+
+### 🎭 Advanced Agent Orchestration (NEW!)
+
+**Intelligent Automation** - 5 advanced agents with sophisticated coordination:
+
+- **Intelligent Code Agent** - Auto-analysis, refactoring, security scanning
+- **Continuous Learning Agent** - Pattern recognition, adaptation, feedback loops
+- **Predictive Maintenance Agent** - Anomaly detection, failure prediction, auto-remediation
+- **Autonomous Deployment Agent** - CI/CD orchestration, canary deployments, rollbacks
+- **Intelligent Documentation Agent** - Auto-docs, API discovery, changelog generation
+
+**Quick Start:**
+```bash
+npm run orchestrator:init           # Initialize all agents
+npm run orchestrator:analyze        # Run code analysis
+npm run orchestrator:deploy         # Autonomous deployment
+npm run orchestrator:docs           # Generate documentation
+npm run orchestrator:maintenance    # Predictive maintenance
+npm run orchestrator:status         # Check agent status
+```
+
+See [docs/ADVANCED_AGENTS.md](docs/ADVANCED_AGENTS.md) for complete guide.
+
+## 🎮 Usage Examples
+
+### Video Player
+
+```bash
+cd apps/frontend/html-pages
+# Open cinema-player.html in browser
+```
+
+### AI Video Generation
+
+```bash
+cd services/video-generation
+python install.py  # Auto-install ML dependencies
+python api.py      # Start API on port 5003
 ```
 
 ### All Servers
@@ -171,12 +321,12 @@ npm run start:all  # Cross-platform orchestration
 
 ## 🛠️ Development
 
-### 🎯 Backend Infrastructure
+### 🎯 Backend Infrastructure (NEW!)
 
 **Amazon Q has optimized the complete backend infrastructure:**
 
 ✅ **NPM Dependencies Fixed** - Removed `express-graphql` conflict
-✅ **DynamoDB + Redis** - Local development & production ready
+✅ **DynamoDB + Redis** - Docker Compose for local development
 ✅ **Security Hardened** - Rate limiting, XSS protection, injection prevention
 ✅ **Backend Orchestrator** - One command to start all services
 ✅ **AWS Setup** - Automated S3, DynamoDB, Lambda configuration
@@ -184,25 +334,32 @@ npm run start:all  # Cross-platform orchestration
 
 **Quick Start Backend:**
 ```bash
-npm run db:setup             # Setup DynamoDB table
-npm run start:backend        # Start all backend services
-npm run backend:validate     # Validate setup
+
+# Setup DynamoDB table
+npm run db:setup
+
+# Start all backend services
+npm run start:backend
+
+# Validate setup
+npm run backend:validate
 ```
 
 **Backend Services:**
-- 🔌 GraphQL API: http://localhost:4000/graphql
-- 🎥 Video Generation: http://localhost:5003/health
-- 💾 DynamoDB Local: http://localhost:8000
-- ⚡ Redis: redis://localhost:6379
+- GraphQL API: http://localhost:4000/graphql
+- Video Generation: http://localhost:5003/health
+- DynamoDB Local: http://localhost:8000
+- Redis: redis://localhost:6379
 
 **Documentation:**
-- [Backend Quick Start](docs/BACKEND_QUICKSTART.md) • [Backend Status](BACKEND_STATUS.md)
-- [Architecture Diagram](docs/ARCHITECTURE_DIAGRAM.md) • [Backend Checklist](docs/BACKEND_CHECKLIST.md)
+- [Backend Quick Start](docs/BACKEND_QUICKSTART.md)
+- [Backend Status](BACKEND_STATUS.md)
+- [Architecture Diagram](docs/ARCHITECTURE_DIAGRAM.md)
+- [Backend Checklist](docs/BACKEND_CHECKLIST.md)
 
 ### Prerequisites
 
 - Node.js 18+, NPM 9+
-- Python 3.8+ (for AI services)
 - Git
 
 ### Environment Setup
@@ -210,9 +367,8 @@ npm run backend:validate     # Validate setup
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
-
 npm install              # Install dependencies
-cd hexarchy/3-communication/adapters/graphql-api && npm install
+cd api/graphql && npm install
 npm run db:setup        # Create DynamoDB table
 ```
 
@@ -225,6 +381,7 @@ npm run start:all        # Frontend + API
 # Individual services
 npm start               # Frontend only (port 3000)
 npm run start:api       # GraphQL API only (port 4000)
+docker compose -f docker-compose.dev.yml up  # Infrastructure only
 ```
 
 ## 🧪 Testing & Quality
@@ -235,22 +392,7 @@ npm run test:e2e           # End-to-end tests with Playwright
 npm run test:smoke         # Smoke tests
 npm run security:audit     # Security vulnerability scan
 npm run lint               # Code linting
-npm run format             # Code formatting
 ```
-
-**Test Coverage:**
-- ✅ Unit Tests: Core business logic
-- ✅ Integration Tests: API endpoints
-- ✅ E2E Tests: User workflows
-- ✅ Security Tests: Vulnerability scanning
-- ✅ Load Tests: Performance benchmarks
-
-**Quality Tools:**
-- **Linting**: ESLint + Prettier (JS/TS), Ruff + Black (Python)
-- **Testing**: Jest, Playwright, k6 load testing
-- **Security**: npm audit, custom security scanner
-- **Git Hooks**: Pre-commit, pre-push, commit-msg validation
-- **CI/CD**: 10 automated workflows
 
 ### 🔍 Code Quality Status
 
@@ -270,30 +412,14 @@ npm run format             # Code formatting
 k6 run load-test.js        # Performance testing
 ```
 
-## 🚀 Deployment
-
-### Docker Compose
-
-```bash
-docker-compose up -d  # Start all services
-```
-
-### Kubernetes + Istio
-
-```bash
-kubectl apply -f k8s/
-cd k8s/istio && ./install.sh
-hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh
-```
-
 ### CI/CD Pipeline (10 Active Workflows)
 
-✅ **Testing** • 🔒 **Security** • 📦 **Build & Deploy**
+✅ Testing • 🔒 Security • 📦 Docker • 🚀 Deploy • 📊 Monitoring • 🔄 Rollback
 
 **Active Workflows:**
-- 🤖 **AI Agents**: copilot-review, copilot-monitor, copilot-docs, copilot-commits
-- ✅ **Validation**: commit-validation, commit-hooks, auto-commit
-- 🔧 **Operations**: agent-orchestration, tooling, dependency-update
+- copilot-review, copilot-monitor, copilot-docs, copilot-commits
+- commit-validation, commit-hooks, auto-commit
+- agent-orchestration, tooling, dependency-update
 
 ## 📊 Monitoring & Observability
 
@@ -312,7 +438,6 @@ hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh
 - [Security](docs/security/SECURITY.md) • [TODO Guidelines](docs/TODO_GUIDELINES.md)
 - **[Frontend Integration Guide](docs/FRONTEND_INTEGRATION_GUIDE.md)** ⭐ NEW
 - **[Frontend Quick Card](FRONTEND_QUICK_CARD.md)** ⭐ NEW
-- **[Mobile Optimization](MOBILE_OPTIMIZATION.md)** ⭐ NEW
 - **[Live API Testing Guide](LIVE_API_TESTING_GUIDE.md)** ⭐ NEW
 - **[Project Completion Summary](PROJECT_COMPLETION_SUMMARY.md)** ⭐ NEW
 - **[Copilot CLI Prompt Guide](COPILOT_CLI_PROMPT.md)** ⭐ NEW
@@ -321,44 +446,18 @@ hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh
 
 ### 🔧 Developer Resources
 
-- **[Dual Agent Setup](docs/DUAL_AGENT_SETUP.md)** ⭐ NEW • [IDE MCP Setup](docs/development/IDE_MCP_SETUP.md)
+- [IDE MCP Setup](docs/development/IDE_MCP_SETUP.md) • [Dual Agent Setup](docs/DUAL_AGENT_SETUP.md)
 - [Documentation Index](docs/DOCUMENTATION_INDEX.md) • [Contributing Tooling](docs/CONTRIBUTING_TOOLING.md)
 
 ### 🤖 AI & Performance
 
 - [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md) • [Cursor AI Modes](docs/CURSOR_AI_MODES.md)
 - [Zed Optimization](docs/ZED_OPTIMIZATION.md) • [Visual Designer](docs/VISUAL_DESIGNER.md)
-- [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](hexarchy/2-intelligence/ai-services/agents/README.md)
+- [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](frameworks/ai/agents/README.md)
 
 ### 🛠️ Operations
 
-- [Deployment Guide](docs/deployment/MCP_DEPLOYMENT.md) • [Blue-Green Script](hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh)
-
-## 🚀 Production Deployment
-
-**Current Production Stack:**
-- **AWS Region**: us-east-1
-- **Stack**: hootner-platform (UPDATE_COMPLETE)
-- **API Gateway**: https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod/
-- **CloudFront CDN**: https://daxqx65ar35pp.cloudfront.net
-- **S3 Buckets**: Videos + Frontend (504165876439)
-- **Lambda Functions**: GraphQL + Video Generation
-- **Deployment**: Blue-Green with zero downtime
-- **Mobile Support**: iOS, Android, all major devices
-
-**Deploy to Production:**
-```bash
-npm run deploy:production    # Full production deployment
-npm run aws:deploy          # SAM deployment
-npm run infra:terraform:apply # Terraform infrastructure
-```
-
-**Production Monitoring:**
-```bash
-aws cloudformation describe-stacks --stack-name hootner-platform
-aws lambda list-functions --query 'Functions[?starts_with(FunctionName, `hootner`)].FunctionName'
-aws s3 ls | grep hootner
-```
+- [Deployment Guide](docs/deployment/MCP_DEPLOYMENT.md) • [Blue-Green Script](scripts/deployment/blue-green-deploy.sh)
 
 ## 📝 Essential Commands
 
@@ -388,8 +487,7 @@ aws s3 ls | grep hootner
 
 | Command                                         | Description                     |
 | ----------------------------------------------- | ------------------------------- |
-| `cd hexarchy/2-intelligence/ai-services/video-generation && python api.py` | Start AI video API (port 5003)  |
-| `npm run dual-agent:start`                      | Start dual-agent orchestrator   |
+| `cd services/video-generation && python api.py` | Start AI video API (port 5003)  |
 | `npm run agents:manage`                         | Start agent manager             |
 | `npm run orchestrator`                          | Agent orchestrator CLI          |
 | `npm run orchestrator:status`                   | Check agent status              |
@@ -408,48 +506,22 @@ aws s3 ls | grep hootner
 
 | Command                          | Description              |
 | -------------------------------- | ------------------------ |
-| `./hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh` | Zero-downtime deployment |
+| `./scripts/deployment/blue-green-deploy.sh` | Zero-downtime deployment |
 | `npm run infra:terraform`                   | Terraform infrastructure |
 | `npm run aws:validate`                      | Validate AWS config      |
-| `npm run deploy:production`                 | Deploy to production     |
-| `npm run deploy:staging`                    | Deploy to staging        |
-
-### Monitoring & Health
-
-| Command                          | Description              |
-| -------------------------------- | ------------------------ |
-| `npm run health:check`           | Health check endpoint    |
-| `npm run monitor:performance`    | Performance monitoring   |
-| `npm run logs:view`              | View system logs         |
-| `npm run backup:create`          | Create backup            |
-| `npm run platform:status`        | Platform status          |
 
 ## 🌆 Tech Stack
 
-**Frontend** • React 18, TypeScript, Vite, Tailwind CSS, Apollo Client, Mobile-First Design
-**Backend** • Node.js 18+, Express, GraphQL, NestJS
-**Database** • DynamoDB (NoSQL), Redis (Cache)
-**AI/ML** • PyTorch 2.0+, Flask, 3D U-Net, Diffusion Models
-**Infrastructure** • Docker, Kubernetes, Terraform, Istio Service Mesh
-**Monitoring** • Prometheus, Grafana, CloudWatch
-**CI/CD** • GitHub Actions (10 workflows), Blue-Green Deployment
-**Cloud** • AWS (S3, Lambda, SQS, DynamoDB, CloudWatch, CloudFront CDN)
-**Payments** • Stripe Integration
-**Auth** • Firebase, JWT, OAuth 2.0
+**Frontend** • React 18, TypeScript, Vite, Tailwind CSS
+**Backend** • Node.js, Express, GraphQL, NestJS
+**Database** • DynamoDB, Redis
+**Monitoring** • Prometheus, Grafana
+**CI/CD** • GitHub Actions (24 workflows)
+**Cloud** • AWS (S3, Lambda, SQS)
+**Payments** • Stripe
+**Auth** • Firebase, JWT
 
 ## 🏗️ Architecture Highlights
-
-### Hexagonal Architecture (8 Layers)
-
-- **0-Core**: Domain logic, orchestration, workflows
-- **1-Foundation**: Infrastructure, containers, monitoring
-- **2-Intelligence**: AI services, agents, personalization
-- **3-Communication**: APIs, notifications, localization
-- **4-Interface**: UI components, accessibility
-- **5-Economy**: Business logic, payments, fraud detection
-- **6-Governance**: Compliance, policies, rate limiting
-- **7-Data**: Storage, analytics, caching, migrations
-- **8-Operations**: CI/CD, DevOps, testing, infrastructure
 
 ### Microservices (14+ Core Services)
 
@@ -464,44 +536,10 @@ aws s3 ls | grep hootner
 - Graceful Shutdown, Rate Limiting
 - Istio Service Mesh - Traffic management, security, observability
 
-## 📈 Performance & Scale
-
-**Current Metrics:**
-- ⚡ API Response Time: <100ms (p95)
-- 🔄 Concurrent Users: 10,000+
-- 📦 Video Processing: 4K/8K HDR support
-- 💾 Database: Single-table DynamoDB design
-- 🌐 CDN: CloudFront global distribution
-- 🔐 Security: Rate limiting (100 req/15min)
-
-**Scalability:**
-- Horizontal scaling with Kubernetes
-- Auto-scaling Lambda functions
-- Redis caching layer
-- Multi-region failover ready
-
 ## 🤝 Contributing
 
 1. Fork → Create branch → Commit → Push → PR
 2. See [CONTRIBUTING_TOOLING.md](docs/CONTRIBUTING_TOOLING.md) for guidelines
-
-**Development Workflow:**
-```bash
-git checkout -b feature/your-feature
-npm run lint:fix             # Fix linting issues
-npm test                     # Run tests
-npm run security:audit       # Security check
-git add .
-npm run commit               # Commitizen prompt
-git push origin feature/your-feature
-```
-
-**Code Standards:**
-- ✅ ESLint + Prettier for JS/TS
-- ✅ Black + Ruff for Python
-- ✅ Conventional Commits
-- ✅ 80%+ test coverage
-- ✅ Security audit passing
 
 ## 📜 License & Support
 
@@ -522,17 +560,6 @@ git push origin feature/your-feature
 🧪 **Tested** • 📊 **Observable** • 🔧 **Resilient** • 🌍 **Multi-Region**
 
 > **"The Owl Never Sleeps"** - 24/7 enterprise video streaming platform
-
-**What Makes HOOTNER Different:**
-- 🏗️ **Hexagonal Architecture** - Clean separation of concerns across 8 layers
-- 🤖 **Dual AI Agents** - GitHub Copilot + Amazon Q working together
-- 🔐 **Enterprise Security** - Rate limiting, XSS protection, JWT auth, fraud detection
-- ⚡ **Real-time Everything** - WebSocket collaboration, live streaming, instant updates
-- 📊 **Full Observability** - Prometheus + Grafana monitoring, CloudWatch integration
-- 🚀 **DevOps Excellence** - Blue-green deployment, 10 CI/CD workflows, zero downtime
-- 🎬 **AI Video Generation** - PyTorch 2.0+ with 3D U-Net & Diffusion Models
-- 🌍 **AWS Native** - Multi-region, serverless, auto-scaling infrastructure
-- 📱 **Mobile Ready** - Optimized for iOS, Android, all screen sizes
 
 ---
 
