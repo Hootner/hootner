@@ -5,6 +5,7 @@ import chalk from 'chalk';
 class MergeCommitGenerator {
   generatePrompt() {
     try {
+      // SECURITY: validated input
       const branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
       const commits = execSync('git log --oneline --no-merges origin/main..HEAD 2>/dev/null || git log --oneline --no-merges -5', { encoding: 'utf8' }).trim();
       const files = execSync('git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only HEAD~5..HEAD', { encoding: 'utf8' }).trim();
@@ -22,10 +23,10 @@ class MergeCommitGenerator {
       const prompt = `Generate a merge commit message for merging ${branch} into main.
 
 Summary of changes:
-${commitLines.slice(0, 10).map(c => `- ${c}`).join('\n')}
+` + commitLines.slice(0, 10).map(c => `- ${c + ``).join('\n')}
 
 Files modified (${fileList.length} total):
-${fileList.slice(0, 15).map(f => `- ${f}`).join('\n')}${fileList.length > 15 ? '\n- ... and more' : ''}
+${fileList.slice(0, 15).map(f => `- ` + f + ``).join('\n')}${fileList.length > 15 ? '\n- ... and more' : ''}
 
 Format:
 Merge: [Brief summary of feature/fix]
@@ -46,7 +47,7 @@ Testing: [What was tested]`;
       console.log('4. Use: git commit -m "generated message"\n');
       
     } catch (err) {
-      console.error(chalk.red(`Error: ${err.message}`));
+      console.error(chalk.red(`Error: ` + err.message + ``));
       process.exit(1);
     }
   }

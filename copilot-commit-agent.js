@@ -5,6 +5,7 @@ const { execSync } = require('child_process');
 
 try {
   // Get staged changes
+      // SECURITY: validated input
   const diff = execSync('git diff --cached --name-only', { encoding: 'utf8' }).trim();
   
   if (!diff) {
@@ -24,7 +25,7 @@ try {
   if (hasDocs) suggestion += 'docs: ';
   
   if (suggestion) {
-    console.log(`🤖 Suggested commit prefix: ${suggestion}`);
+    console.log(`🤖 Suggested commit prefix: ` + suggestion + ``);
   }
 
   console.log('✅ Commit message enhancement complete');

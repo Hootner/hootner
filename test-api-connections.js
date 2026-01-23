@@ -23,10 +23,11 @@ async function testRedis() {
   try {
     await client.connect();
     await client.ping();
-    await client.disconnect();
     return { success: true, message: 'Redis connected successfully' };
   } catch (error) {
     return { success: false, message: `Redis Error: ${error.message}` };
+  } finally {
+    await client.disconnect().catch(() => {});
   }
 }
 

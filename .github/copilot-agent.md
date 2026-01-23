@@ -17,6 +17,7 @@ You are an advanced code analysis agent specializing in:
 - `security` - Security vulnerability audit
 - `optimize <file>` - Performance analysis
 - `refactor <file>` - Refactoring suggestions
+- `docs <file>` - Generate documentation
 - `validate` - Commit validation
 
 Focus on actionable improvements and security-first approach.

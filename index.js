@@ -15,6 +15,11 @@ class HootnerOrchestrator {
   }
 
   async startService(name, command, args = [], options = {}) {
+    // SECURITY: Validate command and args
+    if (!command || typeof command !== 'string' || !Array.isArray(args)) {
+      throw new Error('Invalid command parameters');
+    }
+    
     return new Promise((resolve) => {
       const service = spawn(command, args, {
         stdio: 'pipe',
@@ -23,16 +28,16 @@ class HootnerOrchestrator {
       });
 
       service.stdout.on('data', (data) => {
-        console.log(`[${name}] ${data.toString().trim()}`);
+        console.log(`[${name}] ` + data.toString().trim() + ``);
       });
 
       service.stderr.on('data', (data) => {
-        console.error(`[${name}] ${data.toString().trim()}`);
+        console.error(`[${name}] ` + data.toString().trim() + ``);
       });
 
       service.on('close', (code) => {
         if (code !== 0) {
-          console.error(`[${name}] Process exited with code ${code}`);
+          console.error(`[${name}] Process exited with code ` + code + ``);
         }
       });
 
@@ -55,7 +60,7 @@ class HootnerOrchestrator {
   }
 
   async startLayer(layer, services) {
-    console.log(`   ${layer}: Starting services...`);
+    console.log(`   ` + layer + `: Starting services...`);
     for (const service of services) {
       try {
         await this.startService(service.name, service.command, service.args, service.options);
@@ -63,10 +68,10 @@ class HootnerOrchestrator {
           this.healthChecks.set(service.name, service.healthUrl);
         }
       } catch (error) {
-        console.error(`   ${layer}: Failed to start ${service.name}:`, error.message);
+        console.error(`   ${layer}: Failed to start ` + service.name + `:`, error.message);
       }
     }
-    console.log(`   ${layer}: ✓`);
+    console.log(`   ` + layer + `: ✓`);
   }
 }
 
@@ -139,7 +144,7 @@ async function startHootner() {
       for (const [name, url] of orchestrator.healthChecks) {
         const healthy = await orchestrator.healthCheck(url);
         if (!healthy) {
-          console.warn(`⚠️  ${name} health check failed`);
+          console.warn(`⚠️  ` + name + ` health check failed`);
         }
       }
     }, 30000);

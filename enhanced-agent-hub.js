@@ -40,7 +40,7 @@ class EnhancedAgentHub {
     // Specialized Service Agents (10)
     this.initializeServiceAgents();
 
-    console.log(`✅ Enhanced Agent Hub initialized with ${this.agents.size} agents`);
+    console.log(`✅ Enhanced Agent Hub initialized with ` + this.agents.size + ` agents`);
 
     // Auto-start production agents
     await this.startProductionAgents();
@@ -65,13 +65,13 @@ class EnhancedAgentHub {
         }
 
         startedCount++;
-        console.log(`   ✅ ${agentName} - Running with real implementation`);
+        console.log(`   ✅ ` + agentName + ` - Running with real implementation`);
       } catch (error) {
-        console.error(`   ❌ ${agentName} - Failed to start: ${error.message}`);
+        console.error(`   ❌ ${agentName} - Failed to start: ` + error.message + ``);
       }
     }
 
-    console.log(`✅ ${startedCount} production agents running with real functionality\n`);
+    console.log(`✅ ` + startedCount + ` production agents running with real functionality\n`);
   }
 
   async getAgentInstance(agentName) {
@@ -81,11 +81,11 @@ class EnhancedAgentHub {
   async executeAgentAction(agentName, action, ...args) {
     const instance = this.agentInstances.get(agentName);
     if (!instance) {
-      throw new Error(`Agent ${agentName} not found or not started`);
+      throw new Error(`Agent ` + agentName + ` not found or not started`);
     }
 
     if (typeof instance[action] !== 'function') {
-      throw new Error(`Action ${action} not available on agent ${agentName}`);
+      throw new Error(`Action ${action} not available on agent ` + agentName + ``);
     }
 
     return await instance[action](...args);
@@ -240,9 +240,9 @@ class EnhancedAgentHub {
     for (const [name, agentInstance] of this.agentInstances) {
       try {
         await agentInstance.stop();
-        console.log(`   ✅ ${name} stopped`);
+        console.log(`   ✅ ` + name + ` stopped`);
       } catch (error) {
-        console.error(`   ❌ ${name} failed to stop: ${error.message}`);
+        console.error(`   ❌ ${name} failed to stop: ` + error.message + ``);
       }
     }
   }

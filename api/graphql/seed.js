@@ -14,11 +14,19 @@ const products = [
 ];
 
 async function seed() {
-  await mongoose.connect('mongodb://localhost:27017/hootner');
-  await Product.deleteMany({});
-  await Product.insertMany(products);
-  console.log('✅ Database seeded with products');
-  process.exit(0);
+  try {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Cannot run seed script in production');
+    }
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hootner');
+    await Product.deleteMany({});
+    await Product.insertMany(products);
+    console.log('✅ Database seeded with products');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Seed failed:', error.message);
+    process.exit(1);
+  }
 }
 
 seed();

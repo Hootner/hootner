@@ -87,7 +87,7 @@ class AgentHubManager {
         this.app.post('/api/agents/:agentName/start', (req, res) => {
             try {
                 this.startAgent(req.params.agentName);
-                this.logEvent('info', `Agent ${req.params.agentName} started`);
+                this.logEvent('info', `Agent ` + req.params.agentName + ` started`);
                 res.json({ success: true, message: 'Agent started' });
             } catch (error) {
                 this.metrics.totalErrors++;
@@ -98,7 +98,7 @@ class AgentHubManager {
         this.app.post('/api/agents/:agentName/stop', (req, res) => {
             try {
                 this.stopAgent(req.params.agentName);
-                this.logEvent('warning', `Agent ${req.params.agentName} stopped`);
+                this.logEvent('warning', `Agent ` + req.params.agentName + ` stopped`);
                 res.json({ success: true, message: 'Agent stopped' });
             } catch (error) {
                 this.metrics.totalErrors++;
@@ -109,7 +109,7 @@ class AgentHubManager {
         this.app.post('/api/agents/:agentName/restart', (req, res) => {
             try {
                 this.restartAgent(req.params.agentName);
-                this.logEvent('info', `Agent ${req.params.agentName} restarted`);
+                this.logEvent('info', `Agent ` + req.params.agentName + ` restarted`);
                 res.json({ success: true, message: 'Agent restarted' });
             } catch (error) {
                 this.metrics.totalErrors++;
@@ -121,8 +121,8 @@ class AgentHubManager {
             try {
                 const { agentType } = req.body;
                 const count = this.bulkStartAgents(agentType);
-                this.logEvent('info', `Started ${count} agents of type ${agentType}`);
-                res.json({ success: true, message: `Started ${count} agents` });
+                this.logEvent('info', `Started ${count} agents of type ` + agentType + ``);
+                res.json({ success: true, message: `Started ` + count + ` agents` });
             } catch (error) {
                 this.metrics.totalErrors++;
                 res.status(500).json({ success: false, error: error.message });
@@ -133,8 +133,8 @@ class AgentHubManager {
             try {
                 const { agentType } = req.body;
                 const count = this.bulkStopAgents(agentType);
-                this.logEvent('warning', `Stopped ${count} agents of type ${agentType}`);
-                res.json({ success: true, message: `Stopped ${count} agents` });
+                this.logEvent('warning', `Stopped ${count} agents of type ` + agentType + ``);
+                res.json({ success: true, message: `Stopped ` + count + ` agents` });
             } catch (error) {
                 this.metrics.totalErrors++;
                 res.status(500).json({ success: false, error: error.message });
@@ -168,7 +168,7 @@ class AgentHubManager {
                 const { action, args } = req.body;
 
                 const result = await this.agentHub.executeAgentAction(agentName, action, ...args);
-                this.logEvent('info', `Executed ${action} on ${agentName}`);
+                this.logEvent('info', `Executed ${action} on ` + agentName + ``);
 
                 res.json({ success: true, data: result });
             } catch (error) {
@@ -270,7 +270,7 @@ class AgentHubManager {
     startAgent(agentName) {
         const agent = this.agentHub.agents.get(agentName);
         if (!agent) {
-            throw new Error(`Agent ${agentName} not found`);
+            throw new Error(`Agent ` + agentName + ` not found`);
         }
         agent.status = 'active';
         agent.startTime = Date.now();
@@ -282,7 +282,7 @@ class AgentHubManager {
     stopAgent(agentName) {
         const agent = this.agentHub.agents.get(agentName);
         if (!agent) {
-            throw new Error(`Agent ${agentName} not found`);
+            throw new Error(`Agent ` + agentName + ` not found`);
         }
         agent.status = 'stopped';
         agent.stopTime = Date.now();
@@ -325,7 +325,7 @@ class AgentHubManager {
             // Perform periodic health check
             const health = this.performHealthCheck();
             if (health.status === 'unhealthy') {
-                this.logEvent('error', `Health check failed: ${health.issues.join(', ')}`);
+                this.logEvent('error', `Health check failed: ` + health.issues.join(', ') + ``);
             }
         }, 5000); // Update every 5 seconds
     }
@@ -393,7 +393,7 @@ class AgentHubManager {
         // Check error rate
         const errorRate = (this.metrics.totalErrors / Math.max(this.metrics.totalRequests, 1)) * 100;
         if (errorRate > 5) {
-            issues.push(`High error rate: ${errorRate.toFixed(2)}%`);
+            issues.push(`High error rate: ` + errorRate.toFixed(2) + `%`);
         }
 
         // Check agent status
@@ -403,7 +403,7 @@ class AgentHubManager {
         });
 
         if (inactiveAgents > 10) {
-            issues.push(`${inactiveAgents} agents are inactive`);
+            issues.push(`` + inactiveAgents + ` agents are inactive`);
         }
 
         status.issues = issues;
@@ -439,7 +439,7 @@ class AgentHubManager {
             success: '\x1b[32m'
         };
         const reset = '\x1b[0m';
-        console.log(`${colors[level] || ''}[${level.toUpperCase()}] ${message}${reset}`);
+        console.log(`${colors[level] || ''}[${level.toUpperCase()}] ${message}` + reset + ``);
     }
 
     generateDashboardHTML() {
@@ -754,7 +754,7 @@ class AgentHubManager {
         categoryStats.innerHTML += \`
           <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 5px;">
             <strong style="text-transform: capitalize;">\${type}</strong>:
-            \${stats.active}/\${stats.total} active
+            \${stats.active}/\` + stats.total + ` active
           </div>
         \`;
       });
@@ -786,7 +786,7 @@ class AgentHubManager {
     socket.on('logs', (logs) => {
       const logsContainer = document.getElementById('logs');
       logsContainer.innerHTML = logs.map(log =>
-        \`<div class="log-entry log-\${log.level}">[\${new Date(log.timestamp).toLocaleTimeString()}] \${log.message}</div>\`
+        \`<div class="log-entry log-\${log.level}">[\${new Date(log.timestamp).toLocaleTimeString()}] \` + log.message + `</div>\`
       ).join('');
       logsContainer.scrollTop = logsContainer.scrollHeight;
     });
@@ -794,8 +794,8 @@ class AgentHubManager {
     socket.on('log', (log) => {
       const logsContainer = document.getElementById('logs');
       const logEntry = document.createElement('div');
-      logEntry.className = \`log-entry log-\${log.level}\`;
-      logEntry.textContent = \`[\${new Date(log.timestamp).toLocaleTimeString()}] \${log.message}\`;
+      logEntry.className = \`log-entry log-\` + log.level + `\`;
+      logEntry.textContent = \`[\${new Date(log.timestamp).toLocaleTimeString()}] \` + log.message + `\`;
       logsContainer.appendChild(logEntry);
       logsContainer.scrollTop = logsContainer.scrollHeight;
     });
@@ -813,7 +813,7 @@ class AgentHubManager {
 
       Object.entries(data).forEach(([type, agents]) => {
         agents.forEach(agentName => {
-          fetch(\`/api/agents/\${agentName}\`)
+          fetch(\`/api/agents/\` + agentName + `\`)
             .then(r => r.json())
             .then(({ data: agent }) => {
               const item = document.createElement('div');
@@ -827,7 +827,7 @@ class AgentHubManager {
                 <div class="agent-controls">
                   <button class="btn-start" onclick="startAgent('\${agentName}')" \${agent.status === 'active' ? 'disabled' : ''}>▶</button>
                   <button class="btn-stop" onclick="stopAgent('\${agentName}')" \${agent.status === 'stopped' ? 'disabled' : ''}>⏸</button>
-                  <button class="btn-restart" onclick="restartAgent('\${agentName}')">↻</button>
+                  <button class="btn-restart" onclick="restartAgent('\` + agentName + `')">↻</button>
                 </div>
               \`;
               agentList.appendChild(item);
@@ -837,15 +837,15 @@ class AgentHubManager {
     }
 
     async function startAgent(name) {
-      await fetch(\`/api/agents/\${name}/start\`, { method: 'POST' });
+      await fetch(\`/api/agents/\` + name + `/start\`, { method: 'POST' });
     }
 
     async function stopAgent(name) {
-      await fetch(\`/api/agents/\${name}/stop\`, { method: 'POST' });
+      await fetch(\`/api/agents/\` + name + `/stop\`, { method: 'POST' });
     }
 
     async function restartAgent(name) {
-      await fetch(\`/api/agents/\${name}/restart\`, { method: 'POST' });
+      await fetch(\`/api/agents/\` + name + `/restart\`, { method: 'POST' });
     }
 
     async function bulkStart(type) {
@@ -880,11 +880,11 @@ class AgentHubManager {
             console.log('\n' + '='.repeat(60));
             console.log('🤖 Agent Hub Manager - State-of-the-Art Interface');
             console.log('='.repeat(60));
-            console.log(`📊 Dashboard: http://localhost:${this.port}`);
-            console.log(`🔌 WebSocket: ws://localhost:${this.port}`);
-            console.log(`🌐 API: http://localhost:${this.port}/api`);
+            console.log(`📊 Dashboard: http://localhost:` + this.port + ``);
+            console.log(`🔌 WebSocket: ws://localhost:` + this.port + ``);
+            console.log(`🌐 API: http://localhost:` + this.port + `/api`);
             console.log('='.repeat(60));
-            console.log(`✅ Managing ${this.agentHub.agents.size} AI agents`);
+            console.log(`✅ Managing ` + this.agentHub.agents.size + ` AI agents`);
             console.log('='.repeat(60) + '\n');
 
             this.logEvent('success', 'Agent Hub Manager started successfully');

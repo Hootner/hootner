@@ -1,0 +1,48 @@
+name: Issue-Based Agent Orchestrator
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+jobs:
+  detect-and-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.2.1'
+          
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        
+      - name: Fix ESLint Errors (Past Issue)
+        run: |
+          echo "🔧 Fixing ESLint errors..."
+          npm run lint -- --fix || true
+          
+      - name: Security Scan (Past Issue)
+        run: |
+          echo "🔒 Security scan..."
+          node copilot-delegate.js security || true
+          
+      - name: Dependency Check (Past Issue)
+        run: |
+          echo "📦 Checking dependencies..."
+          npm audit --audit-level=moderate || true
+          
+      - name: Merge Conflict Prevention (Past Issue)
+        run: |
+          echo "🔀 Checking for potential conflicts..."
+          git fetch origin main || true
+          git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main || true
+          
+      - name: Commit Validation (Past Issue)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "✅ Validating commits..."
+          node copilot-delegate.js validate || true

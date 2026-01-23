@@ -190,6 +190,13 @@ async function testGenerationProgressSubscription(jobId) {
   `;
 
     return new Promise((resolve) => {
+        const cleanup = () => {
+            if (timeoutId) clearTimeout(timeoutId);
+            wsClient.dispose();
+        };
+
+        let timeoutId;
+
         const unsubscribe = wsClient.subscribe(
             {
                 query: subscription,
@@ -202,29 +209,28 @@ async function testGenerationProgressSubscription(jobId) {
                     if (data.data.generationProgress.progress >= 100) {
                         console.log('✅ Generation Complete!');
                         unsubscribe();
-                        wsClient.dispose();
+                        cleanup();
                         resolve();
                     }
                 },
                 error: (error) => {
                     console.error('❌ Subscription Error:', error);
                     unsubscribe();
-                    wsClient.dispose();
+                    cleanup();
                     resolve();
                 },
                 complete: () => {
                     console.log('✅ Subscription Completed');
-                    wsClient.dispose();
+                    cleanup();
                     resolve();
                 },
             }
         );
 
-        // Timeout after 60 seconds
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
             console.log('⏱️  Timeout reached, unsubscribing...');
             unsubscribe();
-            wsClient.dispose();
+            cleanup();
             resolve();
         }, 60000);
     });
@@ -250,6 +256,12 @@ async function testStreamViewersSubscription(streamId) {
 
     return new Promise((resolve) => {
         let updateCount = 0;
+        const cleanup = () => {
+            if (timeoutId) clearTimeout(timeoutId);
+            wsClient.dispose();
+        };
+
+        let timeoutId;
 
         const unsubscribe = wsClient.subscribe(
             {
@@ -264,29 +276,28 @@ async function testStreamViewersSubscription(streamId) {
                     if (updateCount >= 5) {
                         console.log('✅ Received 5 updates, unsubscribing...');
                         unsubscribe();
-                        wsClient.dispose();
+                        cleanup();
                         resolve();
                     }
                 },
                 error: (error) => {
                     console.error('❌ Subscription Error:', error);
                     unsubscribe();
-                    wsClient.dispose();
+                    cleanup();
                     resolve();
                 },
                 complete: () => {
                     console.log('✅ Subscription Completed');
-                    wsClient.dispose();
+                    cleanup();
                     resolve();
                 },
             }
         );
 
-        // Timeout after 30 seconds
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
             console.log('⏱️  Timeout reached, unsubscribing...');
             unsubscribe();
-            wsClient.dispose();
+            cleanup();
             resolve();
         }, 30000);
     });
@@ -319,24 +330,21 @@ async function runAllTests() {
         console.log('\n' + '='.repeat(60));
         console.log('✅ All Tests Completed');
         console.log('='.repeat(60) + '\n');
+        process.exit(0);
     } catch (error) {
         console.error('\n❌ Test Suite Failed:', error);
+        process.exit(1);
     }
-
-    process.exit(0);
 }
 
 // Check if server is running
 async function checkServer() {
     try {
         const response = await fetch('http://localhost:4000/health');
-        if (response.ok) {
-            return true;
-        }
+        return response.ok;
     } catch (error) {
         return false;
     }
-    return false;
 }
 
 // Main

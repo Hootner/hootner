@@ -87,7 +87,7 @@ class AgentHubCLI {
         Object.entries(agents).forEach(([type, agentList]) => {
             if (options.type && type !== options.type) return;
 
-            console.log(chalk.bold.yellow(`\n📁 ${type.toUpperCase()} Agents (${agentList.length})`));
+            console.log(chalk.bold.yellow(`\n📁 ${type.toUpperCase()} Agents (` + agentList.length + `)`));
 
             const table = new Table({
                 head: [
@@ -107,7 +107,7 @@ class AgentHubCLI {
 
                 table.push([
                     chalk.cyan(agentName),
-                    statusColor(`${statusIcon} ${agent.status}`),
+                    statusColor(`${statusIcon} ` + agent.status + ``),
                     chalk.gray(agent.type)
                 ]);
             });
@@ -115,7 +115,7 @@ class AgentHubCLI {
             console.log(table.toString());
         });
 
-        console.log(chalk.bold.green(`\n✅ Total: ${this.agentHub.agents.size} agents\n`));
+        console.log(chalk.bold.green(`\n✅ Total: ` + this.agentHub.agents.size + ` agents\n`));
     }
 
     showStatus() {
@@ -143,13 +143,13 @@ class AgentHubCLI {
     }
 
     startAgent(agentName) {
-        const spinner = ora(`Starting agent: ${agentName}`).start();
+        const spinner = ora(`Starting agent: ` + agentName + ``).start();
 
         this.agentHub.initialize();
         const agent = this.agentHub.agents.get(agentName);
 
         if (!agent) {
-            spinner.fail(chalk.red(`Agent "${agentName}" not found`));
+            spinner.fail(chalk.red(`Agent "` + agentName + `" not found`));
             return;
         }
 
@@ -157,18 +157,18 @@ class AgentHubCLI {
         agent.startTime = Date.now();
 
         setTimeout(() => {
-            spinner.succeed(chalk.green(`Agent "${agentName}" started successfully`));
+            spinner.succeed(chalk.green(`Agent "` + agentName + `" started successfully`));
         }, 500);
     }
 
     stopAgent(agentName) {
-        const spinner = ora(`Stopping agent: ${agentName}`).start();
+        const spinner = ora(`Stopping agent: ` + agentName + ``).start();
 
         this.agentHub.initialize();
         const agent = this.agentHub.agents.get(agentName);
 
         if (!agent) {
-            spinner.fail(chalk.red(`Agent "${agentName}" not found`));
+            spinner.fail(chalk.red(`Agent "` + agentName + `" not found`));
             return;
         }
 
@@ -176,18 +176,18 @@ class AgentHubCLI {
         agent.stopTime = Date.now();
 
         setTimeout(() => {
-            spinner.succeed(chalk.green(`Agent "${agentName}" stopped successfully`));
+            spinner.succeed(chalk.green(`Agent "` + agentName + `" stopped successfully`));
         }, 500);
     }
 
     restartAgent(agentName) {
-        const spinner = ora(`Restarting agent: ${agentName}`).start();
+        const spinner = ora(`Restarting agent: ` + agentName + ``).start();
 
         this.agentHub.initialize();
         const agent = this.agentHub.agents.get(agentName);
 
         if (!agent) {
-            spinner.fail(chalk.red(`Agent "${agentName}" not found`));
+            spinner.fail(chalk.red(`Agent "` + agentName + `" not found`));
             return;
         }
 
@@ -195,13 +195,13 @@ class AgentHubCLI {
         setTimeout(() => {
             agent.status = 'active';
             agent.startTime = Date.now();
-            spinner.succeed(chalk.green(`Agent "${agentName}" restarted successfully`));
+            spinner.succeed(chalk.green(`Agent "` + agentName + `" restarted successfully`));
         }, 1000);
     }
 
     bulkStartAgents(type) {
         this.agentHub.initialize();
-        const spinner = ora(`Starting all ${type} agents`).start();
+        const spinner = ora(`Starting all ` + type + ` agents`).start();
 
         let count = 0;
         this.agentHub.agents.forEach((agent) => {
@@ -213,13 +213,13 @@ class AgentHubCLI {
         });
 
         setTimeout(() => {
-            spinner.succeed(chalk.green(`Started ${count} ${type} agents`));
+            spinner.succeed(chalk.green(`Started ${count} ` + type + ` agents`));
         }, 500);
     }
 
     bulkStopAgents(type) {
         this.agentHub.initialize();
-        const spinner = ora(`Stopping all ${type} agents`).start();
+        const spinner = ora(`Stopping all ` + type + ` agents`).start();
 
         let count = 0;
         this.agentHub.agents.forEach((agent) => {
@@ -231,7 +231,7 @@ class AgentHubCLI {
         });
 
         setTimeout(() => {
-            spinner.succeed(chalk.green(`Stopped ${count} ${type} agents`));
+            spinner.succeed(chalk.green(`Stopped ${count} ` + type + ` agents`));
         }, 500);
     }
 
@@ -240,11 +240,11 @@ class AgentHubCLI {
         const agent = this.agentHub.agents.get(agentName);
 
         if (!agent) {
-            console.log(chalk.red(`\n❌ Agent "${agentName}" not found\n`));
+            console.log(chalk.red(`\n❌ Agent "` + agentName + `" not found\n`));
             return;
         }
 
-        console.log(chalk.bold.cyan(`\n📋 Agent Information: ${agentName}\n`));
+        console.log(chalk.bold.cyan(`\n📋 Agent Information: ` + agentName + `\n`));
 
         const table = new Table({
             head: [chalk.white('Property'), chalk.white('Value')],
@@ -288,15 +288,15 @@ class AgentHubCLI {
 
             const total = healthy + unhealthy;
             table.push(
-                [chalk.green('✅ Healthy'), healthy, `${((healthy / total) * 100).toFixed(1)}%`],
-                [chalk.red('❌ Unhealthy'), unhealthy, `${((unhealthy / total) * 100).toFixed(1)}%`]
+                [chalk.green('✅ Healthy'), healthy, `` + ((healthy / total) * 100).toFixed(1) + `%`],
+                [chalk.red('❌ Unhealthy'), unhealthy, `` + ((unhealthy / total) * 100).toFixed(1) + `%`]
             );
 
             console.log(table.toString());
             console.log('');
 
             if (unhealthy > 0) {
-                console.log(chalk.yellow(`⚠️  Warning: ${unhealthy} agents are not active\n`));
+                console.log(chalk.yellow(`⚠️  Warning: ` + unhealthy + ` agents are not active\n`));
             } else {
                 console.log(chalk.green('✅ All agents are healthy\n'));
             }

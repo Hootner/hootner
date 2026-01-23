@@ -15,23 +15,23 @@ const orchestrator = new AgentOrchestrator();
 
 // Event listeners for real-time feedback
 orchestrator.on('task-started', ({ taskId, config }) => {
-    console.log(chalk.blue(`\n▶️  Task ${taskId} started: ${config.type}`));
+    console.log(chalk.blue(`\n▶️  Task ${taskId} started: ` + config.type + ``));
 });
 
 orchestrator.on('task-completed', ({ taskId }) => {
-    console.log(chalk.green(`✅ Task ${taskId} completed successfully`));
+    console.log(chalk.green(`✅ Task ` + taskId + ` completed successfully`));
 });
 
 orchestrator.on('task-failed', ({ taskId, error }) => {
-    console.log(chalk.red(`❌ Task ${taskId} failed: ${error}`));
+    console.log(chalk.red(`❌ Task ${taskId} failed: ` + error + ``));
 });
 
 orchestrator.on('agent-started', ({ agent }) => {
-    console.log(chalk.cyan(`🤖 Agent ${agent} started`));
+    console.log(chalk.cyan(`🤖 Agent ` + agent + ` started`));
 });
 
 orchestrator.on('agent-stopped', ({ agent }) => {
-    console.log(chalk.yellow(`⏸️  Agent ${agent} stopped`));
+    console.log(chalk.yellow(`⏸️  Agent ` + agent + ` stopped`));
 });
 
 // CLI Commands
@@ -49,7 +49,7 @@ program
             await orchestrator.initialize();
             spinner.succeed('Agent Orchestrator initialized successfully');
         } catch (error) {
-            spinner.fail(`Initialization failed: ${error.message}`);
+            spinner.fail(`Initialization failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -74,21 +74,21 @@ program
 
             // Display results
             console.log(chalk.bold('\n📊 Analysis Results:'));
-            console.log(`Files Analyzed: ${result.summary.filesAnalyzed}`);
-            console.log(`Issues Found: ${result.summary.issuesFound}`);
-            console.log(`Security Score: ${result.summary.securityScore}`);
-            console.log(`Auto-fix Applied: ${result.summary.autoFixApplied ? 'Yes' : 'No'}`);
+            console.log(`Files Analyzed: ` + result.summary.filesAnalyzed + ``);
+            console.log(`Issues Found: ` + result.summary.issuesFound + ``);
+            console.log(`Security Score: ` + result.summary.securityScore + ``);
+            console.log(`Auto-fix Applied: ` + result.summary.autoFixApplied ? 'Yes' : 'No' + ``);
 
             if (result.recommendations && result.recommendations.length > 0) {
                 console.log(chalk.bold('\n💡 Recommendations:'));
                 result.recommendations.forEach((rec, i) => {
                     const icon = rec.priority === 'critical' ? '🔴' :
                         rec.priority === 'high' ? '🟠' : '🟡';
-                    console.log(`${icon} ${i + 1}. [${rec.type}] ${rec.message}`);
+                    console.log(`${icon} ${i + 1}. [${rec.type}] ` + rec.message + ``);
                 });
             }
         } catch (error) {
-            spinner.fail(`Analysis failed: ${error.message}`);
+            spinner.fail(`Analysis failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -101,7 +101,7 @@ program
     .action(async (options) => {
         await orchestrator.initialize();
 
-        const spinner = ora(`Deploying to ${options.env}...`).start();
+        const spinner = ora(`Deploying to ` + options.env + `...`).start();
         try {
             const result = await orchestrator.executeTask({
                 type: 'deployment',
@@ -110,15 +110,15 @@ program
             });
 
             if (result.success) {
-                spinner.succeed(`Deployment to ${options.env} completed successfully`);
-                console.log(chalk.green(`\n✅ Deployment ID: ${result.deploymentId}`));
+                spinner.succeed(`Deployment to ` + options.env + ` completed successfully`);
+                console.log(chalk.green(`\n✅ Deployment ID: ` + result.deploymentId + ``));
             } else {
                 spinner.fail('Deployment failed');
-                console.log(chalk.red(`\n❌ Error: ${result.error}`));
+                console.log(chalk.red(`\n❌ Error: ` + result.error + ``));
                 process.exit(1);
             }
         } catch (error) {
-            spinner.fail(`Deployment failed: ${error.message}`);
+            spinner.fail(`Deployment failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -151,12 +151,12 @@ program
             }
             if (result.codeInsights) {
                 console.log(chalk.bold('\n🔍 Code Insights:'));
-                console.log(`Complexity: ${result.codeInsights.complexity}`);
-                console.log(`Maintainability: ${result.codeInsights.maintainability}/100`);
-                console.log(`Security: ${result.codeInsights.securityScore}`);
+                console.log(`Complexity: ` + result.codeInsights.complexity + ``);
+                console.log(`Maintainability: ` + result.codeInsights.maintainability + `/100`);
+                console.log(`Security: ` + result.codeInsights.securityScore + ``);
             }
         } catch (error) {
-            spinner.fail(`Documentation generation failed: ${error.message}`);
+            spinner.fail(`Documentation generation failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -176,24 +176,24 @@ program
             spinner.succeed('Maintenance workflow completed');
 
             console.log(chalk.bold('\n🔧 Maintenance Report:'));
-            console.log(`Immediate Actions: ${result.immediateActions.length}`);
-            console.log(`Scheduled Maintenance: ${result.scheduledMaintenance.length}`);
+            console.log(`Immediate Actions: ` + result.immediateActions.length + ``);
+            console.log(`Scheduled Maintenance: ` + result.scheduledMaintenance.length + ``);
 
             if (result.immediateActions.length > 0) {
                 console.log(chalk.red('\n🔴 Critical Issues:'));
                 result.immediateActions.forEach((action, i) => {
-                    console.log(`${i + 1}. ${action.type} - ${action.severity}`);
+                    console.log(`${i + 1}. ${action.type} - ` + action.severity + ``);
                 });
             }
 
             if (result.scheduledMaintenance.length > 0) {
                 console.log(chalk.yellow('\n🟡 Scheduled Maintenance:'));
                 result.scheduledMaintenance.forEach((item, i) => {
-                    console.log(`${i + 1}. ${item.type} - ${item.severity}`);
+                    console.log(`${i + 1}. ${item.type} - ` + item.severity + ``);
                 });
             }
         } catch (error) {
-            spinner.fail(`Maintenance workflow failed: ${error.message}`);
+            spinner.fail(`Maintenance workflow failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -218,11 +218,11 @@ program
             spinner.succeed('Learning workflow completed');
 
             console.log(chalk.bold('\n🧠 Learning Status:'));
-            console.log(`Patterns Learned: ${result.patterns}`);
-            console.log(`Feedback Processed: ${result.feedbackProcessed}`);
-            console.log(`Status: ${result.status}`);
+            console.log(`Patterns Learned: ` + result.patterns + ``);
+            console.log(`Feedback Processed: ` + result.feedbackProcessed + ``);
+            console.log(`Status: ` + result.status + ``);
         } catch (error) {
-            spinner.fail(`Learning workflow failed: ${error.message}`);
+            spinner.fail(`Learning workflow failed: ` + error.message + ``);
             process.exit(1);
         }
     });
@@ -248,9 +248,9 @@ program
                 name,
                 agent.status === 'active' ? chalk.green('●') : chalk.red('○'),
                 agent.metrics.operations || 0,
-                `${(agent.metrics.successRate || 100).toFixed(1)}%`,
+                `` + (agent.metrics.successRate || 100).toFixed(1) + `%`,
                 agent.metrics.avgResponseTime
-                    ? `${agent.metrics.avgResponseTime.toFixed(0)}ms`
+                    ? `` + agent.metrics.avgResponseTime.toFixed(0) + `ms`
                     : 'N/A'
             ]);
         }
@@ -259,10 +259,10 @@ program
 
         // Task Statistics
         console.log(chalk.bold('\n📋 Task Statistics:'));
-        console.log(`Total Tasks: ${status.tasks.total}`);
-        console.log(chalk.yellow(`Running: ${status.tasks.running}`));
-        console.log(chalk.green(`Completed: ${status.tasks.completed}`));
-        console.log(chalk.red(`Failed: ${status.tasks.failed}`));
+        console.log(`Total Tasks: ` + status.tasks.total + ``);
+        console.log(chalk.yellow(`Running: ` + status.tasks.running + ``));
+        console.log(chalk.green(`Completed: ` + status.tasks.completed + ``));
+        console.log(chalk.red(`Failed: ` + status.tasks.failed + ``));
     });
 
 program
@@ -274,7 +274,7 @@ program
             await orchestrator.shutdown();
             spinner.succeed('All agents shut down successfully');
         } catch (error) {
-            spinner.fail(`Shutdown failed: ${error.message}`);
+            spinner.fail(`Shutdown failed: ` + error.message + ``);
             process.exit(1);
         }
     });

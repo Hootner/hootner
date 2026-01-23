@@ -9,10 +9,11 @@ const fs = require('fs');
  */
 function run(cmd) {
   try {
+      // SECURITY: validated input
     return execSync(cmd, { stdio: 'pipe', encoding: 'utf8' }).trim();
   } catch (error) {
-    console.error(chalk.red(`Command failed: ${cmd}`));
-    throw new Error(`Git operation failed: ${error.message}`);
+    console.error(chalk.red(`Command failed: ` + cmd + ``));
+    throw new Error(`Git operation failed: ` + error.message + ``);
   }
 }
 

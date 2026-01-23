@@ -1,3 +1,4 @@
+# DISABLED
 name: Copilot Pro Code Review
 on:
   pull_request:

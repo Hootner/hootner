@@ -12,6 +12,7 @@ console.log('TEST 1: Simulate Login Process');
 console.log('================================');
 
 const username = 'testuser';
+// WARNING: Simplified example for testing only - use crypto.randomBytes() or JWT in production
 const authToken = Buffer.from(`${username}:${Date.now()}`).toString('base64');
 const userObj = { username, email: 'testuser@hootner.com' };
 
@@ -57,14 +58,14 @@ const protectedPages = [
 ];
 
 function checkPageAccess(path, isAuthenticated) {
-    const isPublic = publicPages.some(page => path.includes(page));
+    const isPublic = publicPages.some(page => path === page || path.startsWith(page + '/'));
 
     if (isPublic) {
         console.log(`✓ ${path} - PUBLIC PAGE - Accessible`);
         return true;
     }
 
-    if (!isAuthenticated && !isPublic) {
+    if (!isAuthenticated) {
         console.log(`❌ ${path} - PROTECTED - Redirect to /login`);
         return false;
     }
@@ -89,12 +90,13 @@ function simulatePostLoginRedirect() {
     const intendedPage = '/marketplace';
     const storedRedirect = intendedPage;
     const defaultRedirect = 'http://localhost:3005';
+    const finalRedirect = storedRedirect || defaultRedirect;
 
     console.log('1. User tries to access:', intendedPage);
     console.log('2. Redirected to /login (not authenticated)');
     console.log('3. Stored redirect URL:', storedRedirect);
     console.log('4. User logs in successfully');
-    console.log('5. Redirect to:', storedRedirect || defaultRedirect);
+    console.log('5. Redirect to:', finalRedirect);
     console.log('✓ User lands on intended page');
 }
 
@@ -112,6 +114,11 @@ function validateToken(token) {
     }
 
     try {
+        // Validate token format before deserialization
+        if (typeof token !== 'string' || token.length > 1000) {
+            console.log('❌ Invalid token format');
+            return false;
+        }
         const decoded = Buffer.from(token, 'base64').toString('utf-8');
         const [user, timestamp] = decoded.split(':');
 
@@ -160,6 +167,14 @@ console.log('================================');
 function validateRegistration(email, username, password, confirm) {
     const errors = [];
 
+    // Input validation
+    if (!email || !username || !password || !confirm) {
+        errors.push('All fields are required');
+        console.log('❌ Registration validation failed:');
+        errors.forEach(err => console.log('   -', err));
+        return false;
+    }
+
     // Email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('Invalid email format');
@@ -170,7 +185,7 @@ function validateRegistration(email, username, password, confirm) {
         errors.push('Username must be 3-30 characters, alphanumeric with _ or -');
     }
 
-    // Password match - use constant time comparison
+    // Password match
     const passwordsMatch = password === confirm;
     if (!passwordsMatch) {
         errors.push('Passwords must match');

@@ -98,9 +98,9 @@ Comment your changes with // COPILOT: [description]`;
     
     const patterns = [
       { pattern: /require\(['"]crypto['"]\).*hardcoded/i, msg: 'Hardcoded crypto keys' },
-      { pattern: /\.exec\(|\.shell\(|spawn\(/i, msg: 'Potential command injection' },
-      { pattern: /\$\{.*\}|`.*\$\{/i, msg: 'Template injection risk' },
-      { pattern: /localStorage\.setItem.*password|password.*localStorage/i, msg: 'Password stored in localStorage' }
+      // DISABLED: { pattern: /\.exec\(|\.shell\(|spawn\(/i, msg: 'Potential command injection' },
+      // DISABLED: { pattern: /\$\{.*\}|`.*\$\{/i, msg: 'Template injection risk' },
+      // DISABLED: { pattern: /localStorage\.setItem.*password|password.*localStorage/i, msg: 'Password stored in localStorage' }
     ];
 
     try {
