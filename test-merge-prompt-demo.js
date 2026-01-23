@@ -3,7 +3,11 @@
  * Demo: Generate merge commit message for HOOTNER enhancements
  * 
  * This demonstrates the copilot-merge-prompt.js tool generating
- * a professional merge commit message based on the problem statement
+ * a professional merge commit message based on the problem statement.
+ * 
+ * Note: This demo uses static mock data from the original problem statement
+ * to showcase the expected output format. For real-time generation from
+ * actual git history, use: node copilot-merge-prompt.js
  */
 
 import chalk from 'chalk';
@@ -13,6 +17,7 @@ console.log(chalk.blue('║   HOOTNER Platform - Merge Commit Message Generator 
 console.log(chalk.blue('╚═════════════════════════════════════════════════════════════╝\n'));
 
 // Create mock data based on the problem statement
+// Using static data to demonstrate the exact scenario from requirements
 const mockCommits = [
   { hash: 'e515b49', message: 'feat: add GitHub Copilot CLI merge commit prompt generator' },
   { hash: '058f311', message: 'feat: add husky pre-commit hook for git integrity checks' },

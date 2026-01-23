@@ -45,7 +45,14 @@ class MergePromptGenerator {
    */
   getChangedFiles(base = 'main') {
     try {
-      const output = execSync(`git diff --name-only ${base}...HEAD 2>/dev/null || git diff --name-only --cached`, {
+      // Validate base branch name to prevent command injection
+      const safeBranch = base.replace(/[^a-zA-Z0-9_\-./]/g, '');
+      if (safeBranch !== base) {
+        console.error(chalk.yellow('Warning: Invalid branch name characters detected'));
+        return [];
+      }
+      
+      const output = execSync(`git diff --name-only ${safeBranch}...HEAD 2>/dev/null || git diff --name-only --cached`, {
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'pipe']
       }).trim();
@@ -430,7 +437,9 @@ function showHelp() {
 }
 
 // Run CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] === __filename) {
   main();
 }
 
