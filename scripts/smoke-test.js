@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Smoke Test Script for Deployment Validation
 
-const http = require('http');
+import http from 'http';
 
 const VERSION = process.argv[2] || 'unknown';
 
