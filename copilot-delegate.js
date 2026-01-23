@@ -104,7 +104,9 @@ Comment your changes with // COPILOT: [description]`;
     ];
 
     try {
-      const files = execSync('find . -name "*.js" -type f 2>/dev/null | head -20', { encoding: 'utf8' }).split('\n').filter(Boolean);
+      const files = fs.readdirSync('.', { recursive: true })
+        .filter(f => f.endsWith('.js') && !f.includes('node_modules'))
+        .slice(0, 20);
       let vulnerabilities = 0;
 
       files.forEach(file => {
