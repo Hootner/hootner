@@ -9,6 +9,10 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
+    "agents:scan": "node scripts/agents/multi-agent-orchestrator.js scan",
+    "agents:check": "node scripts/agents/multi-agent-orchestrator.js check",
+    "agents:status": "node scripts/agents/multi-agent-orchestrator.js status",
+    "agents:report": "node scripts/agents/multi-agent-orchestrator.js report",
     "onboard": "node scripts/onboard-dev.js",
     "start": "node index.js",
     "start:hootner": "node start-hootner.js",

@@ -6,12 +6,18 @@ Author: HOOTNER Code Guardian
 Date: January 10, 2026
 """
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import torch  # type: ignore
+import torch.nn as nn  # type: ignore
+import torch.nn.functional as F  # type: ignore
 from typing import Optional, Tuple, Callable
 import numpy as np
-from tqdm import tqdm
+
+try:
+    from tqdm import tqdm  # type: ignore
+except ImportError:
+    # Fallback if tqdm is not available
+    def tqdm(iterable, desc=None):
+        return iterable
 
 
 class GaussianDiffusion:
@@ -66,13 +72,11 @@ class GaussianDiffusion:
         )
 
         # Calculations for posterior q(x_{t-1} | x_t, x_0)
-        self.register_buffer(
-            "posterior_variance",
-            betas * (1.0 - alphas_cumprod_prev) / (1.0 - alphas_cumprod),
-        )
+        posterior_variance = betas * (1.0 - alphas_cumprod_prev) / (1.0 - alphas_cumprod)
+        self.register_buffer("posterior_variance", posterior_variance)
         self.register_buffer(
             "posterior_log_variance_clipped",
-            torch.log(torch.clamp(self.posterior_variance, min=1e-20)),
+            torch.log(torch.clamp(posterior_variance, min=1e-20)),
         )
         self.register_buffer(
             "posterior_mean_coef1",
@@ -83,7 +87,7 @@ class GaussianDiffusion:
             (1.0 - alphas_cumprod_prev) * torch.sqrt(alphas) / (1.0 - alphas_cumprod),
         )
 
-    def register_buffer(self, name: str, tensor: torch.Tensor):
+    def register_buffer(self, name: str, tensor: torch.Tensor):  # type: ignore
         """Helper to store tensors as class attributes"""
         setattr(self, name, tensor)
 
@@ -139,7 +143,7 @@ class GaussianDiffusion:
             self._extract(self.posterior_mean_coef1, t, x_t.shape) * x_start
             + self._extract(self.posterior_mean_coef2, t, x_t.shape) * x_t
         )
-        posterior_variance = self._extract(self.posterior_variance, t, x_t.shape)
+        posterior_variance = self._extract(self.posterior_variance, t, x_t.shape)  # type: ignore
         posterior_log_variance = self._extract(
             self.posterior_log_variance_clipped, t, x_t.shape
         )
@@ -177,7 +181,7 @@ class GaussianDiffusion:
             # Model predicts x_0 directly
             x_start = model_output
 
-        if clip_denoised:
+        if clip_denoised:  # cSpell:ignore denoised
             x_start = torch.clamp(x_start, -1, 1)
 
         model_mean, posterior_variance, posterior_log_variance = (
@@ -196,7 +200,7 @@ class GaussianDiffusion:
         clip_denoised: bool = True,
     ) -> torch.Tensor:
         """
-        Single denoising step: sample x_{t-1} from x_t
+        Single denoising step: sample x_{t-1} from x_t  # cSpell:ignore denoising
         """
         model_mean, _, model_log_variance = self.p_mean_variance(
             model, x_t, t, context, clip_denoised
@@ -247,7 +251,7 @@ class GaussianDiffusion:
         return video
 
     @torch.no_grad()
-    def ddim_sample(
+    def ddim_sample(  # cSpell:ignore ddim
         self,
         model: nn.Module,
         shape: Tuple[int, ...],
@@ -265,7 +269,7 @@ class GaussianDiffusion:
             shape: (B, C, T, H, W)
             context: Optional conditioning
             steps: Number of sampling steps (< timesteps for speedup)
-            eta: Stochasticity parameter (0 = deterministic)
+            eta: Stochasticity parameter (0 = deterministic)  # cSpell:ignore Stochasticity
             progress: Show progress bar
             device: Device to run on
 
@@ -440,7 +444,7 @@ class ClassifierFreeGuidance:
             shape: Output shape
             context: Conditional context (e.g., text embeddings)
             unconditional_context: Null context for unconditional generation
-            method: 'ddpm' or 'ddim'
+            method: 'ddpm' or 'ddim'  # cSpell:ignore ddpm
             steps: Number of sampling steps
             device: Device to run on
 
@@ -472,7 +476,7 @@ class ClassifierFreeGuidance:
             pred_noise_double = model(video_double, t_double, context_double)
 
             # Split predictions
-            pred_noise_uncond, pred_noise_cond = pred_noise_double.chunk(2, dim=0)
+            pred_noise_uncond, pred_noise_cond = pred_noise_double.chunk(2, dim=0)  # cSpell:ignore uncond
 
             # Apply guidance
             pred_noise = pred_noise_uncond + self.guidance_scale * (
@@ -508,7 +512,7 @@ if __name__ == "__main__":
     print(f"✅ Diffusion initialized with {diffusion.timesteps} timesteps")
 
     # Test forward diffusion
-    x_start = torch.randn(batch_size, channels, frames, height, width)
+    x_start = torch.randn(batch_size, channels, frames, height, width)  # cSpell:ignore randn
     t = torch.randint(0, 1000, (batch_size,))
     x_t = diffusion.q_sample(x_start, t)
 

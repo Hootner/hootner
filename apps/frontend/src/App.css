@@ -4,6 +4,32 @@
 
 .App {
   text-align: left;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile Touch Optimization */
+* {
+  -webkit-tap-highlight-color: rgba(0, 255, 0, 0.2);
+}
+
+button, a, [role="button"] {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 255, 0, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Ensure interactive elements work */
+button, a, input, select, textarea, [role="button"], [onclick] {
+  pointer-events: auto !important;
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding: 0;
+  }
 }
 
 /* Custom scrollbar */
@@ -23,6 +49,33 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 255, 0, 0.7);
+}
+
+/* Toast Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Loading Spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
 /* Animations */

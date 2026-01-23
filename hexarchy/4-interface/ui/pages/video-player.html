@@ -20,115 +20,265 @@
         padding: 0;
         box-sizing: border-box;
       }
-      
-      html {
-        zoom: 1.5;
-        -moz-transform: scale(1.5);
-        -moz-transform-origin: 0 0;
+
+      :root {
+        --bg: #0b1020;
+        --panel: #11182c;
+        --accent: #6ce6c1;
+        --accent-2: #80b3ff;
+        --text: #e9eef6;
+        --muted: #9db2cb;
+        --border: rgba(255, 255, 255, 0.06);
+        --radius-lg: 18px;
+        --radius-sm: 10px;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+        --lib-surface: #0d1526;
+        --lib-surface-2: #0f1a30;
+        --lib-accent: #9ee9cb;
+        --lib-accent-2: #8bbcff;
+        --lib-outline: rgba(255, 255, 255, 0.08);
+        --lib-muted: #a5b6cf;
+        --lib-card: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+        --lib-card-border: rgba(255, 255, 255, 0.08);
+        --lib-card-hover: rgba(158, 233, 203, 0.18);
       }
-      
+
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
-        color: #00ff00;
-        font-size: 1rem;
+        font-family: 'Sora', 'Manrope', system-ui, -apple-system, sans-serif;
+        background: radial-gradient(circle at 20% 20%, rgba(110, 216, 181, 0.06), transparent 26%),
+          radial-gradient(circle at 80% 0%, rgba(122, 167, 255, 0.08), transparent 30%),
+          linear-gradient(135deg, #080d1a, #0e1424 55%, #0b1020 90%);
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.5;
       }
 
       /* Buttons below video player */
       .header {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 16px;
-        padding: 24px;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 20px 0;
         flex-wrap: wrap;
       }
 
       .top-btn {
-        padding: 24px 48px;
-        background: transparent;
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        color: #00ff00;
-        font-weight: bold;
-        font-size: 4rem;
+        padding: 10px 14px;
+        background: linear-gradient(135deg, rgba(110, 216, 181, 0.12), rgba(122, 167, 255, 0.12));
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.01em;
         cursor: pointer;
-        border-radius: 9999px;
-        transition: all 0.3s;
+        border-radius: 12px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        box-shadow: none;
       }
 
       .top-btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: #fff;
+        transform: translateY(-1px);
+        border-color: rgba(110, 216, 181, 0.4);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
       }
 
       .top-btn:active {
-        background: linear-gradient(135deg, #ff00ff, #ffff00);
-        color: #fff;
-        transform: scale(0.95);
-      }
-
-      .top-btn:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
+        transform: translateY(0);
       }
 
       .app {
-        display: flex;
-        min-height: 100vh;
-        padding-top: 60px;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 24px;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 20px 16px 64px;
       }
 
       /* Jukebox Sidebar (less than half screen) */
       .library {
-        width: 24vw;
-        background: linear-gradient(
-          180deg,
-          rgba(10, 10, 15, 0.8),
-          rgba(5, 5, 10, 0.95)
-        );
-        backdrop-filter: blur(32px);
-        border-right: 1px solid #00ff00;
-        padding: 24px;
-        overflow-y: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: radial-gradient(circle at 0% 0%, rgba(110, 216, 181, 0.06), transparent 35%),
+          linear-gradient(180deg, var(--lib-surface), var(--lib-surface-2));
+        backdrop-filter: blur(18px);
+        border: 1px solid var(--lib-outline);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        overflow: hidden;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
       }
 
       .library-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        justify-content: space-between;
         gap: 12px;
-        margin-bottom: 32px;
+      }
+
+      .library-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        font-size: 0.75rem;
+        color: var(--lib-muted);
+        margin-bottom: 4px;
       }
 
       .library-title {
-        font-size: 8rem;
-        font-weight: 900;
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .library-subtitle {
+        color: var(--lib-muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        max-width: 340px;
+      }
+
+      .library-badge {
+        align-self: flex-start;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--lib-outline);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--lib-accent);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .library-toolbar {
+        display: grid;
+        grid-template-columns: 1fr 200px;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--lib-outline);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .search-row:focus-within {
+        border-color: var(--lib-accent);
+        box-shadow: 0 0 0 2px rgba(142, 230, 195, 0.25);
+      }
+
+      .search-icon {
+        color: var(--lib-muted);
+        font-size: 1rem;
       }
 
       .search-input {
         width: 100%;
-        padding: 24px 32px;
-        background: rgba(10, 10, 15, 0.8);
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        color: #00ff00;
-        margin-bottom: 24px;
-        border-radius: 16px;
-        font-size: 5rem;
+        padding: 0;
+        background: transparent;
+        border: none;
+        color: var(--text);
+        border-radius: var(--radius-sm);
+        font-size: 0.98rem;
+        outline: none;
       }
 
-      .search-input:focus {
-        outline: 3px solid #00ffff;
-        outline-offset: 2px;
-        border-color: #00ff00;
+      .library-select {
+        width: 100%;
+        padding: 11px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--lib-outline);
+        color: var(--text);
+        border-radius: var(--radius-sm);
+        font-size: 0.95rem;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .library-select:focus {
+        outline: none;
+        border-color: var(--lib-accent);
+        box-shadow: 0 0 0 2px rgba(142, 230, 195, 0.25);
+      }
+
+      .library-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
+
+      .library-actions .top-btn {
+        width: 100%;
+      }
+
+      .library-actions .top-btn.ghost {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--lib-outline);
+      }
+
+      .chip-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .library-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border: 1px solid var(--lib-outline);
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .library-stats-label {
+        color: var(--lib-muted);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .library-grid {
+        position: relative;
+        overflow-y: auto;
+        height: min(560px, calc(100vh - 360px));
+        border: 1px solid var(--lib-outline);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.02);
+        padding: 6px;
+      }
+
+      #videoGrid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 8px;
+        position: absolute;
+        inset: 0;
+      }
+
+      #videoGridSpacer {
+        width: 100%;
+        height: 1px;
+      }
+
+      .library-placeholder {
+        text-align: center;
+        padding: 20px;
+        color: var(--lib-muted);
       }
 
       /* Jukebox Carousel */
@@ -138,31 +288,27 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 48px 0;
+        padding: 32px 0;
       }
 
       .jukebox-title {
-        font-size: 1.5rem;
-        font-weight: 900;
-        color: #00ff00;
-        margin-bottom: 48px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 20px;
       }
 
       .carousel-container {
         position: relative;
-        width: 320px;
-        height: 600px;
+        width: 100%;
+        height: 440px;
         overflow: hidden;
         -ms-overflow-style: none;
         scrollbar-width: none;
-        border: 3px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        border-radius: 16px;
-        box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
       }
 
       .carousel-container::-webkit-scrollbar {
@@ -183,57 +329,46 @@
 
       .video-card {
         position: relative;
-        width: 256px;
+        width: 220px;
         cursor: pointer;
-        transition: all 0.5s ease;
+        transition: all 0.25s ease;
       }
 
       .video-card.active {
-        transform: scale(1.1);
+        transform: scale(1.03);
         z-index: 20;
-        filter: drop-shadow(0 20px 40px #00ff00);
+        filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45));
       }
 
       .video-card:not(.active) {
-        transform: scale(0.9);
-        opacity: 0.6;
+        transform: scale(0.94);
+        opacity: 0.7;
         z-index: 10;
       }
 
       .video-card:not(.active):hover {
-        transform: scale(1.05);
+        transform: scale(1);
         opacity: 1;
       }
 
       .card-image {
         position: relative;
         overflow: hidden;
-        border-radius: 24px;
-        background: rgba(10, 10, 15, 0.8);
-        backdrop-filter: blur(20px);
-        border: 2px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
+        border-radius: 18px;
+        background: rgba(10, 12, 18, 0.9);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border);
       }
 
       .card-image img {
         width: 100%;
-        height: 384px;
+        height: 320px;
         object-fit: cover;
       }
 
       .video-card.active .card-image {
-        border: 3px solid transparent;
-        background-image:
-          linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-          linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-        animation: pulse 2s infinite;
+        border: 1px solid var(--accent);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.36);
       }
 
       .video-card.active .card-image::before,
@@ -241,44 +376,20 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, transparent, rgba(0, 255, 0, 0.6));
-        border-radius: 24px;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.28));
+        border-radius: 18px;
       }
 
       /* Owl Eyes Easter Egg */
       .video-card:hover .card-image::after {
-        content: '';
-        position: absolute;
-        top: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 32px;
-        height: 32px;
-        background: radial-gradient(circle, #ffff00 30%, transparent 70%);
-        border-radius: 50%;
-        box-shadow:
-          0 0 20px #ffff00,
-          -64px 0 0 0 #ffff00,
-          -64px 0 20px #ffff00;
-        animation: blink 2s infinite;
+        display: none;
       }
 
       /* Vinyl Record Spin */
       .video-card.active .card-image::before {
-        content: '';
-        position: absolute;
-        inset: 20%;
-        background: radial-gradient(
-          circle,
-          transparent 40%,
-          white 42%,
-          white 45%,
-          transparent 46%
-        );
-        border-radius: 50%;
-        animation: spin 8s linear infinite;
-        z-index: 30;
-        pointer-events: none;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.28));
+        animation: none;
       }
 
       @keyframes spin {
@@ -330,16 +441,16 @@
       }
 
       .card-title {
-        font-weight: bold;
-        font-size: 3.5rem;
-        margin-bottom: 6px;
-        color: #00ff00;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+        color: var(--text);
       }
 
       .card-duration {
-        font-size: 2.5rem;
-        opacity: 0.7;
-        color: #00ff00;
+        font-size: 0.95rem;
+        opacity: 0.75;
+        color: var(--muted);
       }
 
       .offline-btn {
@@ -747,29 +858,40 @@
       /* Tabs */
       .library-tabs {
         display: flex;
-        gap: 8px;
+        gap: 10px;
         margin-bottom: 16px;
         overflow-x: auto;
         padding-bottom: 4px;
       }
+
       .tab-btn {
-        padding: 2px 4px;
-        background: transparent;
-        border: 1px solid #00ff00;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--lib-outline);
         border-radius: 9999px;
-        color: #00ff00;
-        font-weight: bold;
+        color: var(--text);
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.5rem;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
       }
+
       .tab-btn.active {
-        background: linear-gradient(135deg, #00ff00, #00ffff);
-        color: #000;
+        background: linear-gradient(135deg, rgba(158, 233, 203, 0.25), rgba(139, 188, 255, 0.25));
+        border-color: var(--lib-accent);
+        color: #e7f7f1;
+        box-shadow: 0 10px 26px rgba(110, 216, 181, 0.25);
       }
+
       .tab-btn:hover {
-        background: linear-gradient(135deg, #00ffff, #ff00ff);
-        color: #fff;
+        border-color: var(--lib-accent);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .tab-btn:focus-visible {
+        outline: 3px solid rgba(158, 233, 203, 0.6);
+        outline-offset: 2px;
       }
 
       /* Tooltips */
@@ -834,6 +956,107 @@
 
       .card-exit {
         animation: cardFadeOut 0.2s ease-in forwards;
+      }
+
+      /* Library list cards */
+      .library-card {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        background: var(--lib-card);
+        border: 1px solid var(--lib-card-border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.2s ease;
+        min-height: 118px;
+      }
+
+      .library-card:hover,
+      .library-card:focus-visible {
+        border-color: var(--lib-card-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.36);
+        outline: none;
+      }
+
+      .library-card.is-active {
+        border-color: var(--lib-accent);
+        box-shadow: 0 16px 34px rgba(110, 216, 181, 0.25);
+        background: linear-gradient(135deg, rgba(158, 233, 203, 0.14), rgba(139, 188, 255, 0.08));
+      }
+
+      .library-card-thumb {
+        width: 132px;
+        height: 92px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--lib-outline);
+        background: rgba(255, 255, 255, 0.02);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        flex-shrink: 0;
+      }
+
+      .library-card-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .library-card-body {
+        display: grid;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .library-card-title {
+        font-weight: 800;
+        color: var(--text);
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+      }
+
+      .library-card-meta {
+        color: var(--lib-muted);
+        font-size: 0.92rem;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .library-card-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .pill-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--lib-outline);
+        font-size: 0.8rem;
+        color: var(--text);
+      }
+
+      .favorite-btn {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--lib-outline);
+        color: var(--text);
+        border-radius: 10px;
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+      }
+
+      .favorite-btn:hover {
+        transform: scale(1.06);
+        border-color: var(--lib-accent);
       }
       .modal-overlay {
         position: fixed;
@@ -1997,94 +2220,42 @@
       <!-- Jukebox Library (less than half screen) -->
       <div class="library" role="navigation" aria-label="Video library">
         <div class="library-header">
-          <span class="library-title" role="heading" aria-level="1"
-            >📹 Library</span
-          >
+          <div>
+            <div class="library-eyebrow">Library</div>
+            <div class="library-title" role="heading" aria-level="1">
+              Curated Jukebox
+            </div>
+            <div class="library-subtitle">
+              Browse, sort, and stage your sessions with a calmer, more intentional layout.
+            </div>
+          </div>
+          <div class="library-badge">Live sync</div>
         </div>
 
         <div class="library-tabs" role="tablist" aria-label="Library views">
-          <button
-            class="tab-btn active"
-            data-view="all"
-            aria-selected="true"
-            role="tab"
-          >
-            All
-          </button>
-          <button
-            class="tab-btn"
-            data-view="favorites"
-            aria-selected="false"
-            role="tab"
-          >
-            ⭐ Favorites
-          </button>
-          <button
-            class="tab-btn"
-            data-view="history"
-            aria-selected="false"
-            role="tab"
-          >
-            🕐 History
-          </button>
-          <button
-            class="tab-btn"
-            data-view="playlists"
-            aria-selected="false"
-            role="tab"
-          >
-            📁 Playlists
-          </button>
-          <button
-            class="tab-btn"
-            data-view="recommendations"
-            aria-selected="false"
-            role="tab"
-          >
-            🔍 Recommendations
-          </button>
-          <button
-            class="tab-btn"
-            data-view="continue"
-            aria-selected="false"
-            role="tab"
-          >
-            ▶️ Continue Watching
-          </button>
+          <button class="tab-btn active" data-view="all" aria-selected="true" role="tab">All</button>
+          <button class="tab-btn" data-view="favorites" aria-selected="false" role="tab">⭐ Favorites</button>
+          <button class="tab-btn" data-view="history" aria-selected="false" role="tab">🕐 History</button>
+          <button class="tab-btn" data-view="playlists" aria-selected="false" role="tab">📁 Playlists</button>
+          <button class="tab-btn" data-view="recommendations" aria-selected="false" role="tab">🔍 Recommendations</button>
+          <button class="tab-btn" data-view="continue" aria-selected="false" role="tab">▶️ Continue Watching</button>
         </div>
 
-        <input
-          type="text"
-          placeholder="Search videos..."
-          class="search-input"
-          id="searchInput"
-          aria-label="Search videos"
-          role="searchbox"
-        />
-
-        <!-- Enhanced Playlist Controls -->
-        <div class="playlist-controls">
-          <button class="playlist-btn" id="shuffleBtn" title="Shuffle playlist">
-            🔀 Shuffle
-          </button>
-          <button class="playlist-btn" id="repeatBtn" title="Repeat mode">
-            🔁 Repeat
-          </button>
-          <button class="playlist-btn" id="sortBtn" title="Sort playlist">
-            ↕️ Sort
-          </button>
-          <button class="playlist-btn" id="clearBtn" title="Clear playlist">
-            🗑️ Clear
-          </button>
-        </div>
-
-        <div
-          style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap"
-        >
+        <div class="library-toolbar">
+          <div class="search-row" role="search">
+            <span class="search-icon" aria-hidden="true">🔎</span>
+            <input
+              type="text"
+              placeholder="Search the vault..."
+              class="search-input"
+              id="searchInput"
+              aria-label="Search videos"
+              role="searchbox"
+            />
+          </div>
           <select
             id="sortSelector"
-            class="search-input"
-            style="flex: 1; padding: 8px"
+            class="library-select"
             aria-label="Sort videos by"
           >
             <option value="default">Sort: Default</option>
@@ -2095,142 +2266,42 @@
           </select>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 16px">
-          <button
-            class="top-btn"
-            style="flex: 1"
-            onclick="createPlaylist()"
-            aria-label="Create new playlist"
-          >
-            ➕ Playlist
-          </button>
-          <button
-            class="top-btn"
-            style="flex: 1"
-            onclick="clearHistory()"
-            aria-label="Clear watch history"
-          >
-            🗑️ Clear History
-          </button>
+        <div class="library-actions">
+          <button class="top-btn" onclick="createPlaylist()" aria-label="Create new playlist">➕ Playlist</button>
+          <button class="top-btn" onclick="clearHistory()" aria-label="Clear watch history">🗑️ Clear History</button>
+          <button class="top-btn ghost" onclick="exportLibrary()" aria-label="Export library data">📤 Export</button>
+          <button class="top-btn ghost" onclick="importLibrary()" aria-label="Import library data">📥 Import</button>
+        </div>
+        <input type="file" id="importInput" accept=".json" style="display: none" aria-label="Import file input" />
+
+        <div class="chip-row">
+          <button class="playlist-btn" id="shuffleBtn" title="Shuffle playlist">🔀 Shuffle</button>
+          <button class="playlist-btn" id="repeatBtn" title="Repeat mode">🔁 Repeat</button>
+          <button class="playlist-btn" id="sortBtn" title="Sort playlist">↕️ Sort</button>
+          <button class="playlist-btn" id="clearBtn" title="Clear playlist">🗑️ Clear</button>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 16px">
-          <button
-            class="top-btn"
-            style="flex: 1"
-            onclick="exportLibrary()"
-            aria-label="Export library data"
-          >
-            📤 Export
-          </button>
-          <button
-            class="top-btn"
-            style="flex: 1"
-            onclick="importLibrary()"
-            aria-label="Import library data"
-          >
-            📥 Import
-          </button>
-        </div>
-        <input
-          type="file"
-          id="importInput"
-          accept=".json"
-          style="display: none"
-          aria-label="Import file input"
-        />
-
-        <div style="margin-bottom: 16px">
-          <div
-            id="libraryStats"
-            style="font-size: 0.45rem; opacity: 0.85; font-weight: 700"
-            role="status"
-            aria-live="polite"
-          ></div>
+        <div class="library-stats">
+          <div>
+            <div class="library-stats-label">Library Insight</div>
+            <div id="libraryStats" role="status" aria-live="polite" style="font-weight: 700"></div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center">
+            <button class="scroll-btn" id="autoplayBtn" title="Autoplay" aria-label="Toggle autoplay" aria-pressed="true">▶️▶️</button>
+            <button class="scroll-btn" id="jumpTop" title="Jump to top" aria-label="Jump to top">⤴️</button>
+          </div>
         </div>
 
-        <!-- Video Grid -->
         <div
           id="videoGridContainer"
-          style="
-            overflow-y: auto;
-            height: calc(100vh - 300px);
-            position: relative;
-          "
+          class="library-grid"
           role="list"
           aria-label="Video list"
         >
-          <div
-            id="loadingSpinner"
-            style="display: none; text-align: center; padding: 20px"
-          >
-            Loading...
-          </div>
-          <div
-            id="emptyState"
-            style="
-              display: none;
-              text-align: center;
-              padding: 20px;
-              color: #00ffff;
-            "
-          >
-            No videos found. Try adding some or adjusting your search!
-          </div>
-          <div id="videoGridSpacer" style="width: 100%"></div>
-          <div
-            id="videoGrid"
-            style="
-              display: grid;
-              grid-template-columns: 1fr;
-              gap: 12px;
-              padding: 8px;
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-            "
-          ></div>
-        </div>
-
-        <div
-          style="
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            justify-content: center;
-            padding: 8px;
-          "
-          role="group"
-          aria-label="Playback controls"
-        >
-          <button
-            class="scroll-btn"
-            id="shuffleBtn"
-            title="Shuffle"
-            aria-label="Toggle shuffle mode"
-            aria-pressed="false"
-          >
-            🔀
-          </button>
-          <button
-            class="scroll-btn"
-            id="repeatBtn"
-            title="Repeat"
-            aria-label="Toggle repeat mode"
-            aria-pressed="false"
-          >
-            🔁
-          </button>
-          <button
-            class="scroll-btn"
-            id="autoplayBtn"
-            title="Autoplay Queue"
-            aria-label="Toggle autoplay"
-            aria-pressed="true"
-          >
-            ▶️▶️
-          </button>
+          <div id="loadingSpinner" style="display: none; text-align: center; padding: 20px">Loading...</div>
+          <div id="emptyState" class="library-placeholder" style="display: none">No videos found. Try adding some or adjusting your search!</div>
+          <div id="videoGridSpacer"></div>
+          <div id="videoGrid"></div>
         </div>
       </div>
 
@@ -3071,7 +3142,7 @@
       // Video Grid with Virtual Scrolling
       let currentIndex = 0;
       let filteredVideos = videos;
-      const CARD_HEIGHT = 132;
+      const CARD_HEIGHT = 136;
       const BUFFER = 2;
 
       function renderVideoGrid(filtered = videos, animate = false) {
@@ -3114,17 +3185,22 @@
           .map((v, i) => {
             const actualIdx = startIdx + i;
             const videoIdx = videos.indexOf(v);
+            const isActive = videoIdx === currentIndex;
+            const fave = favorites.includes(v.id);
             return `
-          <div class="${isAnimating ? 'card-enter' : ''}" tabindex="0" data-video-idx="${videoIdx}" data-card-idx="${actualIdx}" onclick="loadVideo(${videoIdx})" onkeydown="handleCardKeydown(event, ${videoIdx})" style="cursor:pointer;background:rgba(10,10,15,0.9);border-radius:16px;padding:16px;border:3px solid ${videoIdx === currentIndex ? '#00ff00' : 'transparent'};transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3);height:${CARD_HEIGHT - 12}px;outline:none;animation-delay:${i * 0.03}s;" onmouseover="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)'" onmouseout="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'" onfocus="this.style.borderColor='#00ff00';this.style.transform='scale(1.02)';focusedCardIndex=${actualIdx}" onblur="this.style.borderColor='${videoIdx === currentIndex ? '#00ff00' : 'transparent'}';this.style.transform='scale(1)'">
-            <div style="display:flex;gap:16px;align-items:center;">
-              <img src="${v.poster}" style="width:140px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 2px 8px rgba(0,255,0,0.2);">
-              <div style="flex:1;">
-                <div style="font-weight:bold;color:#00ff00;margin-bottom:8px;font-size:1.25rem;">${v.title}</div>
-                <div style="font-size:0.875rem;opacity:0.8;color:#00ffff;">${v.duration} ${v.watchCount > 0 ? `• ${v.watchCount}▶ views` : ''}</div>
+          <div class="library-card ${isActive ? 'is-active' : ''} ${isAnimating ? 'card-enter' : ''}" tabindex="0" data-video-idx="${videoIdx}" data-card-idx="${actualIdx}" onclick="loadVideo(${videoIdx})" onkeydown="handleCardKeydown(event, ${videoIdx})" onfocus="focusedCardIndex=${actualIdx}" aria-label="${v.title} ${v.duration}">
+            <div class="library-card-thumb">
+              <img src="${v.poster}" alt="${v.title}">
+            </div>
+            <div class="library-card-body">
+              <div class="library-card-title">${v.title}</div>
+              <div class="library-card-meta">
+                <span class="pill-badge">${v.duration}</span>
+                ${v.watchCount > 0 ? `<span class="pill-badge">${v.watchCount} ▶</span>` : ''}
               </div>
-              <div style="display:flex;gap:8px;">
-                <button onclick="event.stopPropagation();toggleFavorite(${v.id})" style="background:none;border:none;font-size:1.5rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">${favorites.includes(v.id) ? '⭐' : '☆'}</button>
-              </div>
+            </div>
+            <div class="library-card-actions">
+              <button class="favorite-btn" onclick="event.stopPropagation();toggleFavorite(${v.id})" aria-pressed="${fave}" aria-label="${fave ? 'Remove favorite' : 'Add favorite'}">${fave ? '⭐' : '☆'}</button>
             </div>
           </div>
         `;

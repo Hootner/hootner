@@ -4,9 +4,9 @@ import fs from 'fs';
 import path from 'path';
 
 const pathMappings = {
-  'hexarchy/0-core/configs/constants/': 'hexarchy/0-core/configs/hexarchy/0-core/configs/constants/',
+  'hexarchy/0-core/configs/hexarchy/0-core/configs/constants/': 'hexarchy/0-core/configs/hexarchy/0-core/configs/hexarchy/0-core/configs/constants/',
   'hexarchy/1-foundation/frameworks/nestjs': 'hexarchy/1-foundation/frameworks/nestjs',
-  'hexarchy/2-intelligence/ai-services/video-generation': 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
+  'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation': 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
   'hexarchy/2-intelligence/ai-services/agents': 'hexarchy/2-intelligence/ai-services/agents',
   'hexarchy/3-communication/adapters/graphql-api': 'hexarchy/3-communication/adapters/graphql-api',
   'hexarchy/4-interface/ui/frontend': 'hexarchy/4-interface/ui/frontend',
@@ -16,7 +16,7 @@ const pathMappings = {
   'hexarchy/8-operations/infrastructure/aws-setup': 'hexarchy/8-operations/infrastructure/aws-setup',
   'hexarchy/8-operations/ci-cd/deployment': 'hexarchy/8-operations/ci-cd/deployment',
   'hexarchy/8-operations/testing/': 'hexarchy/8-operations/testing/',
-  'hexarchy/8-operations/infrastructure/terraform/': 'hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/terraform/'
+  'hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/terraform/': 'hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/terraform/'
 };
 
 function updateFile(filePath) {

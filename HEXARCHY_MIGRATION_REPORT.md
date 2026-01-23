@@ -9,13 +9,13 @@
 ## Migrated Items
 
 ### Layer 0 - Core (1 item)
-- ✅ `hexarchy/0-core/configs/constants/` → `hexarchy/0-core/configs/constants`
+- ✅ `hexarchy/0-core/configs/hexarchy/0-core/configs/constants/` → `hexarchy/0-core/configs/constants`
 
 ### Layer 1 - Foundation (1 item)
 - ✅ `hexarchy/1-foundation/frameworks/nestjs/` → `hexarchy/1-foundation/frameworks/nestjs`
 
 ### Layer 2 - Intelligence (2 items)
-- ✅ `hexarchy/2-intelligence/ai-services/video-generation/` → `hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation`
+- ✅ `hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation/` → `hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation`
 - ✅ `hexarchy/2-intelligence/ai-services/agents/` → `hexarchy/2-intelligence/ai-services/agents`
 
 ### Layer 3 - Communication (1 item)
@@ -35,7 +35,7 @@
 - ✅ `hexarchy/8-operations/infrastructure/aws-setup.js` → `hexarchy/8-operations/infrastructure/aws-setup.js`
 - ✅ `hexarchy/8-operations/ci-cd/deployment/` → `hexarchy/8-operations/ci-cd/deployment`
 - ✅ `hexarchy/8-operations/testing/` → `hexarchy/8-operations/testing`
-- ✅ `hexarchy/8-operations/infrastructure/terraform/` → `hexarchy/8-operations/infrastructure/terraform`
+- ✅ `hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/terraform/` → `hexarchy/8-operations/infrastructure/terraform`
 
 ## Post-Migration Metrics
 

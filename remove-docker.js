@@ -6,8 +6,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const files = [
   'README.md',
-  'hexarchy/2-intelligence/ai-services/video-generation/README.md',
-  'hexarchy/2-intelligence/ai-services/video-generation/README_ENHANCED.md',
+  'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation/README.md',
+  'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation/README_ENHANCED.md',
   'hexarchy/3-communication/adapters/graphql-api/README.md'
 ];
 

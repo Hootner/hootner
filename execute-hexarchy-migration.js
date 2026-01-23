@@ -7,7 +7,7 @@ import path from 'path';
 const migrations = [
   { src: 'constants', dest: 'hexarchy/0-core/configs/constants' },
   { src: 'hexarchy/1-foundation/frameworks/nestjs', dest: 'hexarchy/1-foundation/frameworks/nestjs' },
-  { src: 'hexarchy/2-intelligence/ai-services/video-generation', dest: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation' },
+  { src: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation', dest: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation' },
   { src: 'hexarchy/2-intelligence/ai-services/agents', dest: 'hexarchy/2-intelligence/ai-services/agents' },
   { src: 'hexarchy/3-communication/adapters/graphql-api', dest: 'hexarchy/3-communication/adapters/graphql-api' },
   { src: 'hexarchy/4-interface/ui/frontend', dest: 'hexarchy/4-interface/ui/frontend' },

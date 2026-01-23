@@ -5,8 +5,8 @@ const migrations = {
     target: 'hexarchy/3-communication/adapters/graphql-api',
     reason: 'API communication layer'
   },
-  'hexarchy/2-intelligence/ai-services/video-generation': {
-    target: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
+  'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation': {
+    target: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
     reason: 'AI service'
   },
   'hexarchy/8-operations/infrastructure/aws-setup.js': {
