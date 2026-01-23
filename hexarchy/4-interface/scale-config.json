@@ -1,0 +1,14 @@
+{
+  "layer": "Interface",
+  "replicas": 8,
+  "services": 2723,
+  "resources": {
+    "cpu": "4",
+    "memory": "4096Mi"
+  },
+  "autoscaling": {
+    "min": 8,
+    "max": 24,
+    "targetCPU": 70
+  }
+}

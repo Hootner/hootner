@@ -1,0 +1,14 @@
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Content-Length: 23
+Connection: keep-alive
+Date: Fri, 23 Jan 2026 10:55:11 GMT
+x-amz-apigw-id: Xon-dHbHIAMEKFg=
+x-amzn-RequestId: 90882f4c-12c0-4431-b3ce-51232876b81c
+x-amzn-ErrorType: ForbiddenException
+X-Cache: Error from cloudfront
+Via: 1.1 7232dc40bbe46d9fbc45ec194ca42e44.cloudfront.net (CloudFront)
+X-Amz-Cf-Pop: DEN53-P4
+X-Amz-Cf-Id: 6wuW0Qg0P4tsXp1w_5tx7nagzSUtUcWKKdcZysIGueHZDmouqn3J4Q==
+
+{"message":"Forbidden"}

@@ -1,0 +1,14 @@
+{
+  "layer": "Operations",
+  "replicas": 4,
+  "services": 14,
+  "resources": {
+    "cpu": "2",
+    "memory": "2048Mi"
+  },
+  "autoscaling": {
+    "min": 4,
+    "max": 12,
+    "targetCPU": 70
+  }
+}

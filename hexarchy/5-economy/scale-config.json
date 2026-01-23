@@ -1,0 +1,14 @@
+{
+  "layer": "Economy",
+  "replicas": 5,
+  "services": 90,
+  "resources": {
+    "cpu": "2.5",
+    "memory": "2560Mi"
+  },
+  "autoscaling": {
+    "min": 5,
+    "max": 15,
+    "targetCPU": 70
+  }
+}
