@@ -23,6 +23,10 @@ type Query {
   myVideos: [Video!]!
   trendingVideos(limit: Int): [Video!]!
 
+  playlists(userId: ID, limit: Int): [Playlist!]!
+  playlist(id: ID!): Playlist
+  myPlaylists: [Playlist!]!
+
   # Video Generation
   generationJob(id: ID!): GenerationJob
   myGenerationJobs: [GenerationJob!]!
@@ -57,6 +61,13 @@ type Mutation {
   addComment(videoId: ID!, text: String!): VideoPayload!
   deleteComment(videoId: ID!, commentId: ID!): VideoPayload!
 
+  # Playlists
+  createPlaylist(input: CreatePlaylistInput!): Playlist!
+  updatePlaylist(id: ID!, input: UpdatePlaylistInput!): Playlist!
+  deletePlaylist(id: ID!): Boolean!
+  addVideoToPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+  removeVideoFromPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+
   # Video Generation (AI)
   generateVideo(input: GenerateVideoInput!): GenerationJobPayload!
   cancelGeneration(jobId: ID!): Boolean!
@@ -75,6 +86,10 @@ type Mutation {
 # ==================== SUBSCRIPTIONS ====================
 
 type Subscription {
+  # Video processing
+  videoProcessed(userId: ID): VideoProcessedEvent!
+  videoProgress(videoId: ID!): VideoProgressEvent!
+
   # Video likes
   videoLiked(videoId: ID): VideoLikedEvent!
 
@@ -93,6 +108,9 @@ type Subscription {
 
   # User Activity
   userActivity(userId: ID!): UserActivityEvent!
+
+  # Activity Stream
+  activityStream: ActivityEvent!
 
   # System Events
   systemAlert: SystemAlertEvent!
@@ -149,6 +167,18 @@ type Comment {
   user: User!
   text: String!
   createdAt: DateTime!
+}
+
+type Playlist {
+  id: ID!
+  name: String!
+  description: String
+  userId: ID!
+  videos: [ID!]!
+  visibility: PlaylistVisibility!
+  thumbnail: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type GenerationJob {
@@ -282,6 +312,22 @@ input UpdateVideoInput {
   description: String
   visibility: VideoVisibility
   thumbnailUrl: String
+}
+
+input CreatePlaylistInput {
+  name: String!
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+  videos: [ID!]
+}
+
+input UpdatePlaylistInput {
+  name: String
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+  videos: [ID!]
 }
 
 input GenerateVideoInput {
@@ -464,6 +510,18 @@ type SystemAlertEvent {
   timestamp: DateTime!
 }
 
+type ActivityEvent {
+  id: ID!
+  type: String!
+  message: String!
+  description: String
+  category: String
+  service: String
+  timestamp: DateTime!
+  userId: ID
+  metadata: JSON
+}
+
 type VideoLikedEvent {
   video: Video!
   timestamp: DateTime!
@@ -536,6 +594,11 @@ enum VideoStatus {
 enum VideoVisibility {
   PUBLIC
   UNLISTED
+  PRIVATE
+}
+
+enum PlaylistVisibility {
+  PUBLIC
   PRIVATE
 }
 

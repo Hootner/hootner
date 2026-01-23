@@ -281,4 +281,4 @@ process.on('SIGINT', async () => {
 // Start the server
 startServer();
 
-module.exports = { app, apolloServer, httpServer };
+export { app, apolloServer, httpServer };

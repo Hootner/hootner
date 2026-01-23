@@ -1,17 +1,18 @@
-const Video = require('../models/Video');
-const User = require('../models/User');
+import { listVideos } from '../models/Video.js';
+import { getUserById } from '../models/User.js';
 
-module.exports = {
+const typeResolvers = {
   User: {
     videos: async (parent) => {
-      return Video.find({ userId: parent._id }).sort({ createdAt: -1 });
+      const userId = parent.id || parent.userId;
+      const { items } = await listVideos({ userId }, 50, 0);
+      return items;
     }
   },
-
   Video: {
-    user: async (parent) => {
-      return User.findById(parent.userId);
-    },
-    likes: (parent) => parent.likes.length
+    user: async (parent) => getUserById(parent.userId),
+    likes: (parent) => Array.isArray(parent.likes) ? parent.likes.length : parent.likes || 0
   }
 };
+
+export default typeResolvers;
