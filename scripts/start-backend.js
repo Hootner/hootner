@@ -94,29 +94,29 @@ async function main() {
   // Check infrastructure services
   console.log('📊 Checking infrastructure services...\n');
   
-  const mongoRunning = await checkPort(27017);
+  const dynamoRunning = await checkPort(8000);
   const redisRunning = await checkPort(6379);
   
-  if (!mongoRunning) {
-    console.log('❌ MongoDB not running on port 27017');
-    console.log('   Start with: docker-compose -f docker-compose.dev.yml up -d mongodb');
+  if (!dynamoRunning) {
+    console.log('❌ DynamoDB Local not running on port 8000');
+    console.log('   Start with: docker compose -f docker-compose.dev.yml up -d');
     process.exit(1);
   }
-  console.log('✅ MongoDB running on port 27017');
+  console.log('✅ DynamoDB Local running on port 8000');
   
   if (!redisRunning) {
     console.log('❌ Redis not running on port 6379');
-    console.log('   Start with: docker-compose -f docker-compose.dev.yml up -d redis');
+    console.log('   Start with: docker compose -f docker-compose.dev.yml up -d');
     process.exit(1);
   }
   console.log('✅ Redis running on port 6379');
   
-  // Optimize databases
-  console.log('\n🔧 Optimizing databases...');
-  const optimizeScript = path.join(__dirname, 'optimize-databases.js');
-  if (existsSync(optimizeScript)) {
-    const optimize = spawn('node', [optimizeScript], { stdio: 'inherit' });
-    await new Promise((resolve) => optimize.on('close', resolve));
+  // Setup DynamoDB table
+  console.log('\n🔧 Setting up DynamoDB table...');
+  const setupScript = path.join(__dirname, 'setup-dynamodb.js');
+  if (existsSync(setupScript)) {
+    const setup = spawn('node', [setupScript], { stdio: 'inherit' });
+    await new Promise((resolve) => setup.on('close', resolve));
   }
   
   // Start application services
@@ -152,7 +152,7 @@ async function main() {
   console.log('   Health Check:       http://localhost:4000/health');
   console.log('   Video Generation:   http://localhost:5003/health');
   console.log('\n💾 Infrastructure:');
-  console.log('   MongoDB:            mongodb://localhost:27017/hootner');
+  console.log('   DynamoDB Local:     http://localhost:8000');
   console.log('   Redis:              redis://localhost:6379');
   console.log('\n📝 Logs: Check console output above');
   console.log('🛑 Stop: Press Ctrl+C\n');

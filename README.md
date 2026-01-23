@@ -21,9 +21,10 @@ This single script checks prerequisites, starts infrastructure, and launches cor
 
 **Manual setup:**
 ```bash
-docker-compose up -d          # Start MongoDB + Redis
+docker compose -f docker-compose.dev.yml up -d  # Start DynamoDB + Redis
 npm install                   # Install dependencies
 cd api/graphql && npm install # Install API dependencies
+npm run db:setup             # Create DynamoDB table
 npm run start:all            # Start frontend + API
 ```
 
@@ -32,7 +33,7 @@ npm run start:all            # Start frontend + API
 - **Cinema Player**: Video streaming
 - GraphQL API: [localhost:4000/graphql](http://localhost:4000/graphql)
 - Frontend: [localhost:3000](http://localhost:3000)
-- MongoDB: localhost:27017
+- DynamoDB Local: localhost:8000
 - Redis: localhost:6379
 
 ## 🤖 AI Development Tools
@@ -221,7 +222,7 @@ Hootner/
 ### 💳 Integrations
 
 - **Payments** - Stripe processing, fraud detection
-- **Database** - MongoDB, Redis, Prisma ORM
+- **Database** - DynamoDB, Redis
 - **Cloud** - AWS S3, Firebase, Socket.io
 - **AI/ML** - PyTorch 2.0+, 3D U-Net, BERT, OpenCV
 - **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
@@ -270,7 +271,7 @@ Hootner/
 **Tech Stack:**
 - Frontend: HTML5, CSS3 (glassmorphism), vanilla JS, Video.js
 - Backend: GraphQL API (port 4000), Video Gen (port 5003)
-- Database: MongoDB (videos, users, comments), Redis (caching)
+- Database: DynamoDB (videos, users, comments), Redis (caching)
 - Infrastructure: Docker, AWS S3/CloudFront
 
 ### 🎭 Advanced Agent Orchestration (NEW!)
@@ -325,16 +326,19 @@ npm run start:all  # Cross-platform orchestration
 **Amazon Q has optimized the complete backend infrastructure:**
 
 ✅ **NPM Dependencies Fixed** - Removed `express-graphql` conflict
-✅ **MongoDB + Redis** - Docker Compose for local development
+✅ **DynamoDB + Redis** - Docker Compose for local development
 ✅ **Security Hardened** - Rate limiting, XSS protection, injection prevention
 ✅ **Backend Orchestrator** - One command to start all services
 ✅ **AWS Setup** - Automated S3, DynamoDB, Lambda configuration
-✅ **Database Optimization** - Indexes, caching, performance tuning
+✅ **Database Optimization** - Single-table design, caching, performance tuning
 
 **Quick Start Backend:**
 ```bash
 # Start infrastructure
-docker-compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up -d
+
+# Setup DynamoDB table
+npm run db:setup
 
 # Start all backend services
 npm run start:backend
@@ -346,7 +350,7 @@ npm run backend:validate
 **Backend Services:**
 - GraphQL API: http://localhost:4000/graphql
 - Video Generation: http://localhost:5003/health
-- MongoDB: mongodb://localhost:27017/hootner
+- DynamoDB Local: http://localhost:8000
 - Redis: redis://localhost:6379
 
 **Documentation:**
@@ -366,9 +370,10 @@ npm run backend:validate
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
-docker-compose up -d     # Start infrastructure
+docker compose -f docker-compose.dev.yml up -d  # Start infrastructure
 npm install              # Install dependencies
 cd api/graphql && npm install
+npm run db:setup        # Create DynamoDB table
 ```
 
 ### Development Modes
@@ -380,7 +385,7 @@ npm run start:all        # Frontend + API
 # Individual services
 npm start               # Frontend only (port 3000)
 npm run start:api       # GraphQL API only (port 4000)
-docker-compose up       # Infrastructure only
+docker compose -f docker-compose.dev.yml up  # Infrastructure only
 ```
 
 ## 🧪 Testing & Quality
@@ -485,7 +490,7 @@ scripts/deployment/blue-green-deploy.sh
 | `npm run start:all`            | Start all servers (cross-platform)   |
 | `npm run start:backend`        | Start backend services only          |
 | `npm run backend:validate`     | Validate backend setup               |
-| `npm run db:optimize`          | Optimize MongoDB and Redis           |
+| `npm run db:setup`             | Create DynamoDB table                |
 | `npm run dev`                  | Development server with nodemon      |
 | `npm run collaboration`        | Real-time collaboration server       |
 | `npm run launch:platform`      | Launch platform services             |
@@ -530,7 +535,7 @@ scripts/deployment/blue-green-deploy.sh
 
 **Frontend** • React 18, TypeScript, Vite, Tailwind CSS
 **Backend** • Node.js, Express, GraphQL, NestJS
-**Database** • MongoDB, Redis, Prisma ORM
+**Database** • DynamoDB, Redis
 **Infrastructure** • Docker, Kubernetes, Istio
 **Monitoring** • Prometheus, Grafana
 **CI/CD** • GitHub Actions (24 workflows)

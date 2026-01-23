@@ -100,9 +100,8 @@ async function main() {
   // Check scripts
   log('\n🔧 Checking Scripts...\n');
   checkFile('scripts/start-backend.js', 'Backend orchestrator');
-  checkFile('scripts/optimize-databases.js', 'Database optimization');
   checkFile('scripts/aws-setup.js', 'AWS setup script');
-  checkFile('scripts/mongo-init.js', 'MongoDB initialization');
+  checkFile('scripts/setup-dynamodb.js', 'DynamoDB setup');
   
   // Check middleware
   log('\n🛡️  Checking Security Middleware...\n');
@@ -156,12 +155,12 @@ async function main() {
   try {
     const containers = execSync('docker ps --format "{{.Names}}"', { encoding: 'utf8' });
     
-    if (containers.includes('mongodb')) {
-      log('✅ MongoDB container running', GREEN);
+    if (containers.includes('dynamodb')) {
+      log('✅ DynamoDB Local container running', GREEN);
       passed++;
     } else {
-      log('❌ MongoDB container not running', RED);
-      log('   Start with: docker-compose -f docker-compose.dev.yml up -d mongodb', YELLOW);
+      log('❌ DynamoDB Local container not running', RED);
+      log('   Start with: docker compose -f docker-compose.dev.yml up -d', YELLOW);
       failed++;
     }
     
@@ -170,7 +169,7 @@ async function main() {
       passed++;
     } else {
       log('❌ Redis container not running', RED);
-      log('   Start with: docker-compose -f docker-compose.dev.yml up -d redis', YELLOW);
+      log('   Start with: docker compose -f docker-compose.dev.yml up -d', YELLOW);
       failed++;
     }
   } catch (error) {
@@ -193,13 +192,13 @@ async function main() {
     log('\n🎉 All checks passed! Backend is ready.', GREEN);
     console.log('\n📝 Next steps:');
     console.log('   1. Start backend: npm run start:backend');
-    console.log('   2. Optimize databases: npm run db:optimize');
+    console.log('   2. Setup DynamoDB: npm run db:setup');
     console.log('   3. Setup AWS (optional): npm run aws:setup');
   } else {
     log('\n⚠️  Some checks failed. Review the output above.', YELLOW);
     console.log('\n📝 Common fixes:');
     console.log('   • Install dependencies: npm install');
-    console.log('   • Start infrastructure: docker-compose -f docker-compose.dev.yml up -d');
+    console.log('   • Start infrastructure: docker compose -f docker-compose.dev.yml up -d');
     console.log('   • Create .env file: cp .env.example .env');
   }
   
