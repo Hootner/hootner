@@ -263,6 +263,9 @@ program
         console.log(chalk.yellow(`Running: ${status.tasks.running}`));
         console.log(chalk.green(`Completed: ${status.tasks.completed}`));
         console.log(chalk.red(`Failed: ${status.tasks.failed}`));
+        
+        // Exit after displaying status to prevent hanging
+        process.exit(0);
     });
 
 program
