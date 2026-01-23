@@ -97,7 +97,7 @@ function handleResolverError(error, resolverName, args) {
     }
 
     if (error.stack) {
-        const sanitizedStack = error.stack.replace(/[^\w\s\n\r\t\-.(){}:;,/\\]/g, '');
+        const sanitizedStack = error.stack.split('\n').slice(0, 10).join('\n');
         console.error('Stack:', sanitizedStack);
     }
 

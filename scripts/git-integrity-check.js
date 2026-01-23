@@ -8,7 +8,6 @@
 import fs from 'fs';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
-import path from 'path';
 
 const CONFIG = {
   maxFileSize: 10 * 1024 * 1024, // 10 MB

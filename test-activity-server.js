@@ -96,7 +96,6 @@ wss.on('connection', (ws) => {
 });
 
 // Override pubsub publish to broadcast via our pubsub
-const originalPublish = ActivityPublisher.publishActivity;
 ActivityPublisher.publishActivity = async function(activity) {
   const enrichedActivity = {
     id: activity.id || `activity_${Date.now()}`,

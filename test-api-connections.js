@@ -2,11 +2,9 @@ import { docClient, TABLE_NAME } from './api/graphql/models/dynamoClient.js';
 import { createClient } from 'redis';
 import { ScanCommand } from '@aws-sdk/lib-dynamodb';
 
-const tests = [];
-
 async function testDynamoDB() {
   try {
-    const result = await docClient.send(new ScanCommand({
+    await docClient.send(new ScanCommand({
       TableName: TABLE_NAME,
       Limit: 1
     }));

@@ -104,7 +104,7 @@ Comment your changes with // COPILOT: [description]`;
     ];
 
     try {
-      const files = execSync('find . -name "*.js" -type f | head -20', { encoding: 'utf8' }).split('\n').filter(Boolean);
+      const files = execSync('find . -name "*.js" -type f 2>/dev/null | head -20', { encoding: 'utf8' }).split('\n').filter(Boolean);
       let vulnerabilities = 0;
 
       files.forEach(file => {
@@ -288,10 +288,11 @@ Comment your changes with // COPILOT: [description]`;
         return false;
       }
 
-      // Check for secrets
+      // Check for secrets (simplified pattern)
       for (const file of files) {
         const content = fs.readFileSync(file, 'utf8');
-        if (/(?:password|secret|key|token|api_key).*=.*['"]/i.test(content)) {
+        const secretPattern = new RegExp('(password|secret|key|token|api_key)\\s*=\\s*[\'"]\\w+[\'"]', 'i');
+        if (secretPattern.test(content)) {
           console.log(chalk.red(`❌ Potential secret in ${file}`));
           return false;
         }

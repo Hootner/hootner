@@ -52,7 +52,7 @@ async function setupTable() {
     console.log('   Single-table design with PK/SK pattern');
     console.log('   Supports: Users, Videos, Comments, Playlists, etc.');
   } catch (err) {
-    console.error(`❌ Error setting up table:`, err.message);
+    console.error('❌ Error setting up table:', err.message);
     process.exit(1);
   }
 }

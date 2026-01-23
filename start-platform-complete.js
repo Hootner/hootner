@@ -61,7 +61,7 @@ async function main() {
     console.log('   Status: ⏳ Starting...\n');
 
     // Start Docker compose
-    const dockerProc = startService(
+    startService(
         'Docker',
         'docker-compose',
         ['-f', 'docker-compose.dev.yml', 'up'],
