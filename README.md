@@ -58,6 +58,23 @@ node copilot-delegate.js validate                 # Validate commit
 
 See [COPILOT_CLI_PROMPT.md](COPILOT_CLI_PROMPT.md) for complete guide and integration examples.
 
+### Merge Commit Message Generator ⭐ NEW
+
+```bash
+# Generate professional merge commit messages
+node copilot-merge-prompt.js                           # Auto-generate from current branch
+node copilot-merge-prompt.js --type feat --save        # Save to MERGE_MSG.txt
+node copilot-merge-prompt.js --copy                    # Copy to clipboard
+node copilot-merge-prompt.js --branch feature/new      # Analyze specific branch
+```
+
+**Features:**
+- Conventional commit format (feat/fix/refactor/chore/docs)
+- 3-5 key bullet points from recent commits
+- Professional enterprise tone
+- Under 10 lines for readability
+- Auto-analysis of changed files and commit history
+
 ### Git Integrity & Health Monitoring ⭐ NEW
 
 ```bash

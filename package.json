@@ -56,6 +56,8 @@
     "git:health:monitor": "node scripts/git-health-monitor.js",
     "git:health:history": "node scripts/git-health-monitor.js history",
     "git:health:save": "node scripts/git-health-monitor.js save",
+    "merge:prompt": "node copilot-merge-prompt.js",
+    "merge:prompt:save": "node copilot-merge-prompt.js --save",
     "commit": "cz",
     "docker:build": "docker build -t hootner:latest .",
     "docker:run": "docker run -p 3000:3000 hootner:latest",
