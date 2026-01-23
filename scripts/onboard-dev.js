@@ -15,17 +15,13 @@ const nodeVersion = process.version.slice(1).split('.')[0];
 if (nodeVersion < 18) throw new Error(`Node ${nodeVersion} found. Need 18+`);
 console.log(`✓ Node.js ${process.version}`);
 
-// Check Docker
-if (!check('docker --version')) throw new Error('Docker not found');
-console.log('✓ Docker installed');
+// Check Java for DynamoDB
+if (!check('java -version')) console.log('⚠️  Java not found - needed for DynamoDB Local');
+else console.log('✓ Java installed');
 
-// Check Docker running
-if (!check('docker ps')) throw new Error('Docker not running');
-console.log('✓ Docker running');
-
-// Start infrastructure
-console.log('\n📦 Starting MongoDB + Redis...');
-exec('docker-compose up -d');
+// Check Couchbase
+if (!check('curl -s http://localhost:8091')) console.log('⚠️  Couchbase not running - start Couchbase Server');
+else console.log('✓ Couchbase running');
 
 // Install dependencies
 if (!existsSync('node_modules')) {
@@ -39,15 +35,16 @@ if (!existsSync('api/graphql/node_modules')) {
 }
 
 // Start services
-console.log('\n🚀 Starting frontend + GraphQL API...\n');
+console.log('\n🚀 Starting services natively...\n');
 setTimeout(() => {
   console.log('\n✨ HOOTNER is ready!\n');
   console.log('🔗 Key URLs:');
-  console.log('   Login:      http://localhost:3001');
-  console.log('   Dashboard:  http://localhost:3005');
-  console.log('   Player:     http://localhost:3001/video-player');
+  console.log('   Frontend:   http://localhost:3000');
   console.log('   GraphQL:    http://localhost:4000/graphql');
+  console.log('   Video Gen:  http://localhost:5003');
+  console.log('   DynamoDB:   http://localhost:8000');
+  console.log('   Couchbase:  http://localhost:8091');
   console.log('\n🦉 The owl is flying. Press Ctrl+C to stop.\n');
 }, 2000);
 
-exec('npm run start:all');
+exec('npm run start:native');
