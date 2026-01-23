@@ -69,7 +69,7 @@ function videoPlayerReducer(state: VideoPlayerState, action: VideoPlayerAction):
     }
 }
 
-export function useVideoPlayer(video: VideoMetadata, autoPlay = false) {
+export function useVideoPlayer(_video: VideoMetadata, autoPlay = false) {
     const [state, dispatch] = useReducer(videoPlayerReducer, {
         ...initialState,
         isPlaying: autoPlay,

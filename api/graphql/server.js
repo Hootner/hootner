@@ -1,5 +1,5 @@
 import express from 'express';
-import { graphqlHTTP } from 'express-graphql';
+import { createHandler } from 'graphql-http/lib/use/express';
 import { buildSchema } from 'graphql';
 import 'dotenv/config';
 import helmet from 'helmet';
@@ -187,7 +187,7 @@ const root = {
   },
 };
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
 // Security middleware
@@ -237,42 +237,12 @@ app.use((req, res, next) => {
 });
 
 // GraphQL endpoint with enhanced features
-app.use(
+app.all(
   '/graphql',
-  graphqlHTTP({
-    schema: schema,
+  createHandler({
+    schema,
     rootValue: root,
-    // Disable GraphiQL in production (CWE-200 fix)
-    graphiql:
-      process.env.NODE_ENV !== 'production'
-        ? {
-            headerEditorEnabled: true,
-            shouldPersistHeaders: false, // Don't persist sensitive headers
-          }
-        : false,
-    formatError: (error) => {
-      console.error('GraphQL Error:', {
-        message: error.message,
-        path: error.path,
-        timestamp: new Date().toISOString()
-      });
-      
-      // Don't expose internal error details in production
-      if (process.env.NODE_ENV === 'production') {
-        return {
-          message: 'Internal server error',
-          extensions: {
-            code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
-          },
-        };
-      }
-      
-      return {
-        message: error.message,
-        locations: error.locations,
-        path: error.path,
-      };
-    },
+    graphiql: process.env.NODE_ENV !== 'production'
   })
 );
 
@@ -299,17 +269,27 @@ app.get('/metrics', (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
+let isInitialized = false;
 
-(async () => {
-  try {
-    // Initialize database connection
+export const initializeApp = async () => {
+  if (isInitialized) return;
+  if (process.env.MONGODB_URI) {
     await connectDB();
-    
+  } else {
+    console.warn('MONGODB_URI not set; skipping DB connection.');
+  }
+  isInitialized = true;
+};
+
+export const startServer = async () => {
+  try {
+    await initializeApp();
+
     app.listen(PORT, () => {
       console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
       console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
-      
+
       // Start activity stream generator for real-time events
       console.log('\n🎬 Initializing real-time activity stream...');
       ActivityStreamGenerator.startGenerator(3000); // Emit events every 3 seconds
@@ -319,4 +299,8 @@ const PORT = process.env.PORT || 4000;
     console.error('❌ Failed to start server:', error);
     process.exit(1);
   }
-})();
+};
+
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME && process.env.NODE_ENV !== 'test') {
+  startServer();
+}

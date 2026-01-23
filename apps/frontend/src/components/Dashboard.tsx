@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
 
@@ -6,12 +7,12 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [stats, setStats] = useState({
+  const stats = {
     posts: 127,
     users: 1234,
     engagement: 89,
     revenue: 12400
-  });
+  };
 
   const trafficData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -112,7 +113,13 @@ const Dashboard = () => {
   );
 };
 
-const StatCard = ({ title, value, trend }) => (
+type StatCardProps = {
+  title: string;
+  value: ReactNode;
+  trend?: string;
+};
+
+const StatCard = ({ title, value, trend }: StatCardProps) => (
   <div className="bg-black/20 backdrop-blur-lg border border-green-400/20 rounded-lg p-6 hover:border-green-400/40 transition-all">
     <h3 className="text-cyan-400 text-sm mb-2">{title}</h3>
     <p className="text-2xl font-bold text-green-400 mb-2">{value}</p>
@@ -153,7 +160,12 @@ const ActivityCard = () => (
   </div>
 );
 
-const ActivityItem = ({ emoji, text }) => (
+type ActivityItemProps = {
+  emoji: string;
+  text: string;
+};
+
+const ActivityItem = ({ emoji, text }: ActivityItemProps) => (
   <div className="flex items-start gap-2 py-2 border-b border-green-400/10 last:border-b-0">
     <span className="text-lg flex-shrink-0">{emoji}</span>
     <div className="flex-1">
@@ -163,7 +175,12 @@ const ActivityItem = ({ emoji, text }) => (
   </div>
 );
 
-const ChartCard = ({ title, chart }) => (
+type ChartCardProps = {
+  title: string;
+  chart: ReactNode;
+};
+
+const ChartCard = ({ title, chart }: ChartCardProps) => (
   <div className="bg-black/20 backdrop-blur-lg border border-green-400/20 rounded-lg p-6">
     <h2 className="text-xl font-bold mb-4 text-green-400">{title}</h2>
     <div className="h-64">{chart}</div>
@@ -190,7 +207,14 @@ const ModerationPanel = () => (
   </div>
 );
 
-const ModerationItem = ({ user, content, type, score }) => (
+type ModerationItemProps = {
+  user: string;
+  content: string;
+  type: string;
+  score: string;
+};
+
+const ModerationItem = ({ user, content, type, score }: ModerationItemProps) => (
   <div className="bg-black/30 p-4 rounded-lg border border-green-400/20">
     <div className="mb-2">
       <strong>{user}</strong>
@@ -232,7 +256,13 @@ const SystemPanel = () => (
   </div>
 );
 
-const ServiceStatus = ({ name, status, uptime }) => (
+type ServiceStatusProps = {
+  name: string;
+  status: 'healthy' | 'warning' | 'critical' | string;
+  uptime: string;
+};
+
+const ServiceStatus = ({ name, status, uptime }: ServiceStatusProps) => (
   <div className="flex items-center justify-between p-3 bg-black/30 rounded border-l-4 border-green-400">
     <div className="flex items-center gap-3">
       <div className={`w-3 h-3 rounded-full ${
@@ -245,7 +275,12 @@ const ServiceStatus = ({ name, status, uptime }) => (
   </div>
 );
 
-const ResourceBar = ({ label, value }) => (
+type ResourceBarProps = {
+  label: string;
+  value: number;
+};
+
+const ResourceBar = ({ label, value }: ResourceBarProps) => (
   <div className="mb-4">
     <div className="flex justify-between mb-2">
       <span>{label}</span>

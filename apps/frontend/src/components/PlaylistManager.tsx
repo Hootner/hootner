@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
 
 const GET_PLAYLISTS = gql`
@@ -39,7 +40,7 @@ interface Playlist {
   createdAt: string;
 }
 
-export const PlaylistManager: React.FC = () => {
+export const PlaylistManager = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -57,7 +58,7 @@ export const PlaylistManager: React.FC = () => {
     onCompleted: () => refetch()
   });
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleCreate = async (e: FormEvent) => {
     e.preventDefault();
     await createPlaylist({ variables: { input: { name, description } } });
   };

@@ -15,7 +15,6 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
   currentTime,
   duration,
   volume,
-  buffered,
   playbackRate,
   onPlayPause,
   onSeek,

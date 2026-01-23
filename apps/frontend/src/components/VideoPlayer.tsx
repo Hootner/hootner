@@ -3,7 +3,7 @@
  * Modern video player with custom controls, TypeScript, and Tailwind CSS
  */
 
-import React from "react";
+import { useEffect } from "react";
 import { useVideoPlayer } from "../hooks/useVideoPlayer";
 import type { VideoPlayerProps } from "../types/videoPlayer";
 import { VideoControls } from "./VideoControls";
@@ -37,7 +37,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   } = useVideoPlayer(video, autoPlay);
 
   // Callbacks
-  React.useEffect(() => {
+  useEffect(() => {
     if (state.isPlaying) {
       onPlay?.();
     } else {
@@ -45,19 +45,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   }, [state.isPlaying, onPlay, onPause]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onTimeUpdate?.(state.currentTime);
   }, [state.currentTime, onTimeUpdate]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onVolumeChange?.(state.volume);
   }, [state.volume, onVolumeChange]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onFullscreenChange?.(state.isFullscreen);
   }, [state.isFullscreen, onFullscreenChange]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (state.error) {
       onError?.(state.error);
     }
@@ -78,6 +78,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         preload={preload}
         className="w-full h-full object-contain"
         onClick={togglePlay}
+        onEnded={onEnded}
       />
 
       {/* Loading Spinner */}

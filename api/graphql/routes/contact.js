@@ -1,5 +1,5 @@
 import express from 'express';
-import Contact from '../models/Contact.js';
+import { createContact, listContacts } from '../models/Contact.js';
 
 const router = express.Router();
 
@@ -7,13 +7,12 @@ router.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
     
-    const contact = new Contact({ name, email, subject, message });
-    await contact.save();
+    const contact = await createContact({ name, email, subject, message });
     
     // TODO: Send email notification to support team
     console.log(`📧 New contact message from ${email}`);
     
-    res.json({ success: true, message: 'Message received' });
+    res.json({ success: true, message: 'Message received', contact });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -21,7 +20,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const messages = await Contact.find().sort({ createdAt: -1 }).limit(50);
+    const messages = await listContacts(50);
     res.json(messages);
   } catch (error) {
     res.status(500).json({ error: error.message });
