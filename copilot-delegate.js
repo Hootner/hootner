@@ -307,6 +307,23 @@ Comment your changes with // COPILOT: [description]`;
       return false;
     }
   }
+
+  // Generate Merge Commit Prompt
+  mergePrompt() {
+    console.log(chalk.blue('🔀 Merge Commit Prompt\n'));
+    try {
+      const branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
+      const commits = execSync('git log --oneline --no-merges origin/main..HEAD 2>/dev/null || git log --oneline -5', { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+      const files = execSync('git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only HEAD~5..HEAD', { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+      
+      console.log(chalk.cyan(`Branch: ${branch} → main`));
+      console.log(chalk.cyan(`Commits: ${commits.length} | Files: ${files.length}\n`));
+      console.log(chalk.green('Copilot Prompt:'));
+      console.log(`\nMerge ${branch}: [summary]\n\n${commits.slice(0, 8).map(c => `- ${c}`).join('\n')}\n\nFiles: ${files.slice(0, 10).join(', ')}\n`);
+    } catch (err) {
+      console.error(chalk.red(`Error: ${err.message}`));
+    }
+  }
 }
 
 // CLI Interface
@@ -371,6 +388,10 @@ switch (command) {
     manager.validateCommit();
     break;
   }
+  case 'merge': {
+    manager.mergePrompt();
+    break;
+  }
   default: {
     console.log(chalk.yellow('🤖 Copilot CLI - Enhanced Code Assistant\n'));
     console.log(chalk.cyan('Task Delegation:'));
@@ -385,5 +406,6 @@ switch (command) {
     console.log('  node copilot-delegate.js docs <file.js>             # Generate documentation\n');
     console.log(chalk.cyan('Validation:'));
     console.log('  node copilot-delegate.js validate                   # Validate commit');
+    console.log('  node copilot-delegate.js merge                      # Generate merge commit prompt');
   }
 }

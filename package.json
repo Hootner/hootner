@@ -57,6 +57,7 @@
     "git:health:history": "node scripts/git-health-monitor.js history",
     "git:health:save": "node scripts/git-health-monitor.js save",
     "commit": "cz",
+    "commit:merge": "node copilot-delegate.js merge",
     "docker:build": "docker build -t hootner:latest .",
     "docker:run": "docker run -p 3000:3000 hootner:latest",
     "docker:compose": "docker-compose up -d",
