@@ -377,13 +377,13 @@ Comment your changes with // COPILOT: [description]`;
     const functions = [];
     
     // Find regular function declarations (function name(...))
-    const funcMatches = content.matchAll(/function\s+(\w+)\s*\(/g);
+    const funcMatches = Array.from(content.matchAll(/function\s+(\w+)\s*\(/g));
     for (const match of funcMatches) {
       functions.push({ name: match[1], params: 'detected' });
     }
     
-    // Find arrow functions (const/let/var name = ...)
-    const arrowMatches = content.matchAll(/(?:const|let|var)\s+(\w+)\s*=/g);
+    // Find arrow functions (const/let/var name = ... =>)
+    const arrowMatches = Array.from(content.matchAll(/(?:const|let|var)\s+(\w+)\s*=\s*[^;]*=>/g));
     for (const match of arrowMatches) {
       if (!functions.find(f => f.name === match[1])) {
         functions.push({ name: match[1], params: 'detected' });
