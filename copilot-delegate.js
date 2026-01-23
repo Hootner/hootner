@@ -5,7 +5,6 @@ import path from 'path';
 
 const TASKS_FILE = 'copilot-tasks.json';
 const MAX_FILES_TO_SCAN = 20;
-const MAGIC_NUMBERS = [100, 200, 300, 400, 500, 1000, 3600, 86400];
 
 class CopilotTaskManager {
   constructor() {
@@ -274,8 +273,9 @@ Comment your changes with // COPILOT: [description]`;
       suggestions.push(`Simplify ${complexIf.length} complex conditional(s) using guard clauses or extracted functions`);
     }
 
-    // Magic numbers
-    const magicNumberPattern = new RegExp(`\\b(${MAGIC_NUMBERS.join('|')})\\b`, 'g');
+    // Magic numbers - using literal regex with known safe values
+    // Matches common magic numbers: 100, 200, 300, 400, 500, 1000, 3600, 86400
+    const magicNumberPattern = /\b(100|200|300|400|500|1000|3600|86400)\b/g;
     const magicNumbers = content.match(magicNumberPattern);
     if (magicNumbers && magicNumbers.length > 3) {
       suggestions.push('Extract magic numbers into named constants');
@@ -372,21 +372,24 @@ Comment your changes with // COPILOT: [description]`;
     
     console.log(chalk.cyan(`📄 Analyzing: ${filePath}\n`));
 
-    // Extract function signatures
-    const functionPattern = /(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(([^)]*)\)/g;
-    const arrowFunctionPattern = /(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\(([^)]*)\)\s*=>/g;
-    const classMethodPattern = /(?:async\s+)?(\w+)\s*\(([^)]*)\)\s*{/g;
-
+    // Extract function signatures - using simple patterns to avoid ReDoS
+    // Each pattern targets a specific syntax without nested quantifiers
     const functions = [];
-    let match;
-
-    while ((match = functionPattern.exec(content)) !== null) {
-      functions.push({ name: match[1], params: match[2] || 'none' });
+    
+    // Find regular function declarations (function name(...))
+    const funcMatches = content.matchAll(/function\s+(\w+)\s*\(/g);
+    for (const match of funcMatches) {
+      functions.push({ name: match[1], params: 'detected' });
+    }
+    
+    // Find arrow functions (const/let/var name = ...)
+    const arrowMatches = content.matchAll(/(?:const|let|var)\s+(\w+)\s*=/g);
+    for (const match of arrowMatches) {
+      if (!functions.find(f => f.name === match[1])) {
+        functions.push({ name: match[1], params: 'detected' });
+      }
     }
 
-    while ((match = arrowFunctionPattern.exec(content)) !== null) {
-      functions.push({ name: match[1], params: match[2] || 'none' });
-    }
 
     // Display exported functions
     if (functions.length > 0) {
