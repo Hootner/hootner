@@ -20,8 +20,12 @@ class AgentOrchestrator extends EventEmitter {
     async initialize() {
         console.log('🎭 Initializing Agent Orchestrator...');
 
-        // Initialize advanced agents
+        // Initialize advanced agents (skip PredictiveMaintenanceAgent)
         for (const [name, AgentClass] of Object.entries(advancedAgents)) {
+            if (name === 'PredictiveMaintenanceAgent') {
+                console.log(`   ⏭️  ${name} skipped (demo mode)`);
+                continue;
+            }
             try {
                 const instance = new AgentClass();
                 await instance.start();

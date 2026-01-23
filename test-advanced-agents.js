@@ -35,7 +35,6 @@ async function runTests() {
         console.log(chalk.red(`   ❌ Initialization failed: ${error.message}`));
         results.failed++;
         results.tests.push({ name: 'Initialization', status: 'failed', error: error.message });
-        return results;
     }
 
     // Test 2: Agent Status

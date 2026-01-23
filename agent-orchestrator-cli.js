@@ -163,39 +163,11 @@ program
 
 program
     .command('maintenance')
-    .description('Run predictive maintenance workflow')
+    .description('Run predictive maintenance workflow (DISABLED)')
     .action(async () => {
-        await orchestrator.initialize();
-
-        const spinner = ora('Running maintenance workflow...').start();
-        try {
-            const result = await orchestrator.executeTask({
-                type: 'maintenance'
-            });
-
-            spinner.succeed('Maintenance workflow completed');
-
-            console.log(chalk.bold('\n🔧 Maintenance Report:'));
-            console.log(`Immediate Actions: ` + result.immediateActions.length + ``);
-            console.log(`Scheduled Maintenance: ` + result.scheduledMaintenance.length + ``);
-
-            if (result.immediateActions.length > 0) {
-                console.log(chalk.red('\n🔴 Critical Issues:'));
-                result.immediateActions.forEach((action, i) => {
-                    console.log(`${i + 1}. ${action.type} - ` + action.severity + ``);
-                });
-            }
-
-            if (result.scheduledMaintenance.length > 0) {
-                console.log(chalk.yellow('\n🟡 Scheduled Maintenance:'));
-                result.scheduledMaintenance.forEach((item, i) => {
-                    console.log(`${i + 1}. ${item.type} - ` + item.severity + ``);
-                });
-            }
-        } catch (error) {
-            spinner.fail(`Maintenance workflow failed: ` + error.message + ``);
-            process.exit(1);
-        }
+        console.log(chalk.yellow('\n⚠️  Predictive maintenance workflow is disabled in this version.'));
+        console.log('This feature runs in demo mode only.\n');
+        process.exit(0);
     });
 
 program

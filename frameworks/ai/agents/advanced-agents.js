@@ -310,10 +310,10 @@ class PredictiveMaintenanceAgent extends AdvancedAgentBase {
     }
 
     startMonitoring() {
-        // Monitor system health every minute
-        this.monitoringInterval = setInterval(() => {
-            this.performHealthCheck();
-        }, 60 * 1000);
+        // DISABLED: Demo mode only - uncomment to enable real monitoring
+        // this.monitoringInterval = setInterval(() => {
+        //     this.performHealthCheck();
+        // }, 60 * 1000);
     }
 
     async performHealthCheck() {
