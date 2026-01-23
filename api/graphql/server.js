@@ -4,7 +4,6 @@ import { buildSchema } from 'graphql';
 import 'dotenv/config';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import connectDB from './db.js';
 import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
@@ -98,39 +97,22 @@ const root = {
   version: () => '1.0.0',
 
   users: async () => {
-    // Mock data - integrate with database
-    return [
-      {
-        id: '1',
-        email: 'user@hootner.com',
-        name: 'Demo User',
-        subscription: 'premium',
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    // Demo data - No real users yet
+    return [];
   },
 
   videos: async () => {
-    // Mock data - integrate with video service
-    return [
-      {
-        id: '1',
-        title: 'Demo Video',
-        url: '/videos/demo.mp4',
-        status: 'ready',
-        userId: '1',
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    // Demo data - No real videos yet
+    return [];
   },
 
   analytics: async () => {
-    // Mock analytics - integrate with analytics service
+    // Demo data - No real transactions yet
     return {
-      totalUsers: 1250,
-      totalVideos: 3400,
-      revenue: 125000.5,
-      activeStreams: 45,
+      totalUsers: 0,
+      totalVideos: 0,
+      revenue: 0,
+      activeStreams: 0,
     };
   },
 
@@ -220,15 +202,15 @@ app.use((req, res, next) => {
     'https://hootner.com',
     process.env.FRONTEND_URL
   ].filter(Boolean);
-  
+
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
-  
+
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -273,11 +255,7 @@ let isInitialized = false;
 
 export const initializeApp = async () => {
   if (isInitialized) return;
-  if (process.env.MONGODB_URI) {
-    await connectDB();
-  } else {
-    console.warn('MONGODB_URI not set; skipping DB connection.');
-  }
+  console.log('✅ Using DynamoDB (MongoDB not configured)');
   isInitialized = true;
 };
 

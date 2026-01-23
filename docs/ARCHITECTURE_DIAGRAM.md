@@ -1,322 +1,431 @@
-# 🏗️ HOOTNER Backend Architecture
+# 🎨 Architecture Diagram - Real-Time Event Pipeline
 
 ## System Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         FRONTEND LAYER                              │
-│                    (GitHub Copilot Focus)                           │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │    Cinema    │  │   Jukebox    │  │    Social    │            │
-│  │    Player    │  │    Player    │  │   Features   │            │
-│  │ (HTML/JS/CSS)│  │   (React)    │  │   (React)    │            │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘            │
-│         │                 │                  │                     │
-│         └─────────────────┴──────────────────┘                     │
-│                           │                                        │
-└───────────────────────────┼────────────────────────────────────────┘
-                            │
-                            │ HTTP/WebSocket
-                            │
-┌───────────────────────────┼────────────────────────────────────────┐
-│                           │    API GATEWAY LAYER                   │
-│                    (Amazon Q Focus)                                │
-├───────────────────────────┼────────────────────────────────────────┤
-│                           │                                        │
-│  ┌────────────────────────┴─────────────────────────┐             │
-│  │         Security Middleware                      │             │
-│  │  • Rate Limiting (100/15min)                     │             │
-│  │  • XSS Sanitization                              │             │
-│  │  • Injection Prevention                          │             │
-│  │  • CORS (localhost:3000, localhost:5173)         │             │
-│  │  • Helmet.js Security Headers                    │             │
-│  └────────────────────────┬─────────────────────────┘             │
-│                           │                                        │
-│         ┌─────────────────┴─────────────────┐                     │
-│         │                                   │                     │
-│  ┌──────▼──────────┐              ┌─────────▼────────┐           │
-│  │  GraphQL API    │              │  Video Gen API   │           │
-│  │  Port 4000      │              │  Port 5003       │           │
-│  │                 │              │                  │           │
-│  │ • Apollo Server │              │ • Flask REST     │           │
-│  │ • WebSocket     │              │ • PyTorch ML     │           │
-│  │ • Subscriptions │              │ • Video Stream   │           │
-│  │ • JWT Auth      │              │ • Analytics      │           │
-│  └────────┬────────┘              └─────────┬────────┘           │
-│           │                                 │                     │
-└───────────┼─────────────────────────────────┼─────────────────────┘
-            │                                 │
-            │                                 │
-┌───────────┼─────────────────────────────────┼─────────────────────┐
-│           │      DATA LAYER                 │                     │
-│           │   (Amazon Q Focus)              │                     │
-├───────────┼─────────────────────────────────┼─────────────────────┤
-│           │                                 │                     │
-│  ┌────────▼────────┐              ┌─────────▼────────┐           │
-│  │    MongoDB      │              │     Redis        │           │
-│  │  Port 27017     │              │   Port 6379      │           │
-│  │                 │              │                  │           │
-│  │ • Users         │              │ • Sessions       │           │
-│  │ • Videos        │              │ • Cache          │           │
-│  │ • Analytics     │              │ • Rate Limits    │           │
-│  │ • Sessions      │              │ • Pub/Sub        │           │
-│  │                 │              │                  │           │
-│  │ Indexes:        │              │ Config:          │           │
-│  │ • email (unique)│              │ • LRU eviction   │           │
-│  │ • userId        │              │ • 1GB max memory │           │
-│  │ • createdAt     │              │ • RDB snapshots  │           │
-│  │ • TTL (sessions)│              │ • Password auth  │           │
-│  └─────────────────┘              └──────────────────┘           │
-│                                                                   │
-└───────────────────────────────────────────────────────────────────┘
-            │                                 │
-            │                                 │
-┌───────────┼─────────────────────────────────┼─────────────────────┐
-│           │    CLOUD LAYER (Optional)       │                     │
-│           │   (Amazon Q Focus)              │                     │
-├───────────┼─────────────────────────────────┼─────────────────────┤
-│           │                                 │                     │
-│  ┌────────▼────────┐  ┌──────────────┐  ┌──▼──────────┐         │
-│  │   AWS S3        │  │  DynamoDB    │  │   Lambda    │         │
-│  │                 │  │              │  │             │         │
-│  │ • Video Storage │  │ • Metadata   │  │ • Processing│         │
-│  │ • Versioning    │  │ • Analytics  │  │ • Webhooks  │         │
-│  │ • Encryption    │  │ • Indexes    │  │ • Events    │         │
-│  └─────────────────┘  └──────────────┘  └─────────────┘         │
-│                                                                   │
-│  ┌─────────────────────────────────────────────────────┐         │
-│  │              CloudFront CDN                         │         │
-│  │  • Global distribution                              │         │
-│  │  • Edge caching                                     │         │
-│  │  • SSL/TLS                                          │         │
-│  └─────────────────────────────────────────────────────┘         │
-│                                                                   │
-└───────────────────────────────────────────────────────────────────┘
-```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         HOOTNER ENTERPRISE PLATFORM                        ║
+║                     Real-Time Monitoring & Activity Stream                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
 
-## Data Flow
 
-### 1. Video Playback Flow
-```
-Cinema Player → GraphQL API → MongoDB (metadata)
-              ↓
-         Video Gen API → S3/Local Storage → Stream to Player
-              ↓
-         Analytics API → MongoDB (tracking)
-```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                        BACKEND INFRASTRUCTURE                              ┃
+┃                     (GraphQL API on localhost:4000)                        ┃
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                           ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  ActivityStreamGenerator (api/graphql/utils/...)               │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  • Generates 9 event templates every 3 seconds                 │   ┃
+┃  │  • Creates realistic randomized events                         │   ┃
+┃  │  • Auto-starts on server initialization                        │   ┃
+┃  │                                                                 │   ┃
+┃  │  Event Generation Sequence:                                    │   ┃
+┃  │    1. Select random event template                            │   ┃
+┃  │    2. Generate random details (title, size, etc)              │   ┃
+┃  │    3. Create event object                                      │   ┃
+┃  │    4. Call ActivityPublisher.publishActivity()                │   ┃
+┃  │    5. Wait 3 seconds, repeat                                   │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ Event Object                                 ┃
+┃                           │ {type, message,                             ┃
+┃                           │  description,                               ┃
+┃                           │  category, service,                         ┃
+┃                           │  timestamp, userId}                         ┃
+┃                           ↓                                              ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  ActivityPublisher (api/graphql/utils/activityPublisher.js)    │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  • Validates event data                                         │   ┃
+┃  │  • Enriches with metadata                                       │   ┃
+┃  │  • Generates unique ID                                          │   ┃
+┃  │  • Publishes to Redis PubSub                                    │   ┃
+┃  │                                                                 │   ┃
+┃  │  10+ Specialized Publishing Methods:                           │   ┃
+┃  │    - publishVideoEvent()                                        │   ┃
+┃  │    - publishDeploymentEvent()                                   │   ┃
+┃  │    - publishSecurityEvent()                                     │   ┃
+┃  │    - publishAgentEvent()                                        │   ┃
+┃  │    - publishPaymentEvent()                                      │   ┃
+┃  │    - publishScalingEvent()                                      │   ┃
+┃  │    - publishUserEvent()                                         │   ┃
+┃  │    - publishAnalyticsEvent()                                    │   ┃
+┃  │    - publishHealthEvent()                                       │   ┃
+┃  │    - publishCollaborationEvent()                                │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ Publish Event                                ┃
+┃                           │ To Channel:                                  ┃
+┃                           │ 'ACTIVITY_STREAM'                            ┃
+┃                           ↓                                              ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  Redis PubSub (localhost:6379)                                  │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  • Channel: 'ACTIVITY_STREAM'                                   │   ┃
+┃  │  • Broadcasts to all subscribers                                │   ┃
+┃  │  • Handles 1000+ concurrent connections                         │   ┃
+┃  │  • Scales horizontally                                          │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ Broadcast Event                              ┃
+┃                           │ To Subscribers                               ┃
+┃                           ↓                                              ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  GraphQL Subscription Resolver                                  │   ┃
+┃  │  (api/graphql/resolvers/subscriptions.js)                      │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  • Listens on 'ACTIVITY_STREAM' channel                         │   ┃
+┃  │  • Receives event from Redis                                    │   ┃
+┃  │  • Formats as GraphQL response                                  │   ┃
+┃  │  • Sends to connected WebSocket clients                         │   ┃
+┃  │                                                                 │   ┃
+┃  │  Subscription Query:                                            │   ┃
+┃  │  subscription {                                                 │   ┃
+┃  │    activityStream {                                             │   ┃
+┃  │      id, type, message, description,                           │   ┃
+┃  │      category, service, timestamp, userId, metadata            │   ┃
+┃  │    }                                                             │   ┃
+┃  │  }                                                              │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ WebSocket JSON Message                       ┃
+┃                           │ {id, type: "data",                          ┃
+┃                           │  payload: {                                 ┃
+┃                           │    data: {activityStream: {...}}            ┃
+┃                           │  }}                                          ┃
+┃                           ↓                                              ┃
+┃                    WebSocket Channel                                    ┃
+┃                    ws://localhost:4000/graphql                         ┃
+┃                                                                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-### 2. Real-time Updates Flow
-```
-Frontend → WebSocket (ws://localhost:4000/graphql)
-         ↓
-    GraphQL Subscriptions
-         ↓
-    Redis Pub/Sub
-         ↓
-    All Connected Clients
-```
+                            ║
+                            ║ WebSocket Message (JSON)
+                            ║ ~0.1 second latency
+                            ║
+                            ↓
 
-### 3. Video Generation Flow
-```
-Frontend → POST /generate
-         ↓
-    Video Gen API (PyTorch)
-         ↓
-    Generate Video (30s)
-         ↓
-    Save to Storage
-         ↓
-    Return URL to Frontend
-```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                       FRONTEND BROWSER CLIENT                             ┃
+┃               (Live Activity Page at localhost:3005/live-activity)       ┃
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                           ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  WebSocket Client (live-activity.html)                          │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  • Connects to ws://localhost:4000/graphql                      │   ┃
+┃  │  • Sends GraphQL subscription query                             │   ┃
+┃  │  • Listens for incoming messages                                │   ┃
+┃  │  • Parses JSON responses                                        │   ┃
+┃  │  • Handles reconnection (5 attempts, 3s backoff)                │   ┃
+┃  │  • Auto-fallback to demo mode (5s timeout)                      │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ Incoming Event (Backend Format)              ┃
+┃                           │ {id, type, message,                         ┃
+┃                           │  description, category,                     ┃
+┃                           │  service, timestamp, userId}                ┃
+┃                           ↓                                              ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  Event Mapper (mapBackendEventToDisplay)                        │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │  Mapping Process:                                               │   ┃
+┃  │                                                                 │   ┃
+┃  │  1. Extract type from backend event                            │   ┃
+┃  │     Example: 'VIDEO_UPLOADED'                                  │   ┃
+┃  │                                                                 │   ┃
+┃  │  2. Lookup emoji from dictionary                               │   ┃
+┃  │     VIDEO_UPLOADED → '🎥'                                     │   ┃
+┃  │     DEPLOYMENT_SUCCESS → '🚀'                                 │   ┃
+┃  │     SECURITY_SCAN → '🔐'                                      │   ┃
+┃  │     AI_AGENT_ACTIVATED → '🤖'                                 │   ┃
+┃  │     [12+ types total]                                          │   ┃
+┃  │                                                                 │   ┃
+┃  │  3. Format timestamp                                           │   ┃
+┃  │     ISO → relative ("just now", "2m ago")                      │   ┃
+┃  │                                                                 │   ┃
+┃  │  4. Extract display text                                       │   ┃
+┃  │     Use message or description                                 │   ┃
+┃  │                                                                 │   ┃
+┃  │  5. Create display object                                      │   ┃
+┃  │     {emoji, text, type, tag, timestamp}                        │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                           │                                              ┃
+┃                           │ Display Event (Formatted)                    ┃
+┃                           │ {emoji: '🎥',                               ┃
+┃                           │  text: '...',                               ┃
+┃                           │  type: 'video_uploaded',                    ┃
+┃                           │  tag: 'content'}                            ┃
+┃                           ↓                                              ┃
+┃  ┌─────────────────────────────────────────────────────────────────┐   ┃
+┃  │  Live Activity Feed Display                                     │   ┃
+┃  │  (addRealActivity + renderUI)                                   │   ┃
+┃  │  ───────────────────────────────────────────────────────       │   ┃
+┃  │                                                                 │   ┃
+┃  │  ┌─────────────────────────────────────────────────────────┐  │   ┃
+┃  │  │  🔥 Live Activity (Real-time)               [LIVE ✅]  │  │   ┃
+┃  │  ├─────────────────────────────────────────────────────────┤  │   ┃
+┃  │  │ Total Events: 12    Events/Min: 20                      │  │   ┃
+┃  │  │ Active Users: 127   System Uptime: 99.9%                │  │   ┃
+┃  │  ├─────────────────────────────────────────────────────────┤  │   ┃
+┃  │  │ [All Events] [Videos] [Security] [Deployments] [AI]     │  │   ┃
+┃  │  ├─────────────────────────────────────────────────────────┤  │   ┃
+┃  │  │ 🎥 User @creator_pro uploaded 4K video                 │  │   ┃
+┃  │  │    📹 CONTENT                Just now                    │  │   ┃
+┃  │  │                                                          │  │   ┃
+┃  │  │ 🚀 Deployment successful: v2.1.4                        │  │   ┃
+┃  │  │    🔄 RELEASE                3 seconds ago               │  │   ┃
+┃  │  │                                                          │  │   ┃
+┃  │  │ 🤖 AI Agent "CodeReview" activated                      │  │   ┃
+┃  │  │    🔒 AI                      6 seconds ago              │  │   ┃
+┃  │  │                                                          │  │   ┃
+┃  │  │ [More events...]                                         │  │   ┃
+┃  │  └─────────────────────────────────────────────────────────┘  │   ┃
+┃  │                                                                 │   ┃
+┃  │  UI Update Operations:                                         │   ┃
+┃  │  • Increment counter (Total Events += 1)                      │   ┃
+┃  │  • Calculate rate (Events/Min)                                │   ┃
+┃  │  • Add event to list (max 8 items)                            │   ┃
+┃  │  • Apply filter rules                                         │   ┃
+┃  │  • Animate entry (slide-in)                                   │   ┃
+┃  │  • Update relative timestamps                                 │   ┃
+┃  │  • Show "LIVE" badge (not "DEMO")                             │   ┃
+┃  └─────────────────────────────────────────────────────────────────┘   ┃
+┃                                                                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-### 4. Authentication Flow
-```
-Frontend → POST /auth/login
-         ↓
-    GraphQL API
-         ↓
-    MongoDB (verify user)
-         ↓
-    Generate JWT Token
-         ↓
-    Store in Redis (session)
-         ↓
-    Return to Frontend
-```
-
-## Security Layers
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  Layer 1: Network Security                              │
-│  • CORS whitelist                                       │
-│  • Rate limiting                                        │
-│  • Request size limits                                  │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│  Layer 2: Input Validation                              │
-│  • XSS sanitization                                     │
-│  • SQL/NoSQL injection prevention                       │
-│  • Schema validation                                    │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│  Layer 3: Authentication                                │
-│  • JWT tokens                                           │
-│  • Session management                                   │
-│  • Password hashing (bcrypt)                            │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│  Layer 4: Authorization                                 │
-│  • Role-based access control                            │
-│  • Resource ownership checks                            │
-│  • API key validation                                   │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│  Layer 5: Data Security                                 │
-│  • MongoDB authentication                               │
-│  • Redis password protection                            │
-│  • Encryption at rest (S3)                              │
-│  • Encryption in transit (TLS)                          │
-└─────────────────────────────────────────────────────────┘
-```
-
-## Service Dependencies
-
-```
-┌──────────────────┐
-│  start:backend   │  (Orchestrator)
-└────────┬─────────┘
-         │
-         ├─→ Check MongoDB (port 27017)
-         │   └─→ docker-compose.dev.yml
-         │
-         ├─→ Check Redis (port 6379)
-         │   └─→ docker-compose.dev.yml
-         │
-         ├─→ Optimize Databases
-         │   └─→ scripts/optimize-databases.js
-         │
-         ├─→ Start GraphQL API (port 4000)
-         │   └─→ api/graphql/server-enhanced.js
-         │       ├─→ MongoDB connection
-         │       ├─→ Redis connection
-         │       └─→ WebSocket server
-         │
-         └─→ Start Video Gen API (port 5003)
-             └─→ services/video-generation/api.py
-                 ├─→ PyTorch models
-                 └─→ Flask server
-```
-
-## Deployment Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Development                          │
-├─────────────────────────────────────────────────────────┤
-│  • Docker Compose (MongoDB + Redis)                     │
-│  • Local Node.js servers                                │
-│  • Local Python API                                     │
-│  • npm run start:backend                                │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│                    Staging                              │
-├─────────────────────────────────────────────────────────┤
-│  • Docker containers                                    │
-│  • AWS RDS (MongoDB)                                    │
-│  • AWS ElastiCache (Redis)                              │
-│  • ECS/Fargate                                          │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│                    Production                           │
-├─────────────────────────────────────────────────────────┤
-│  • Kubernetes + Istio                                   │
-│  • MongoDB Atlas                                        │
-│  • AWS ElastiCache                                      │
-│  • Auto-scaling                                         │
-│  • Blue-green deployment                                │
-│  • Multi-region                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-## Monitoring Stack
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Application                          │
-│  • GraphQL API                                          │
-│  • Video Generation API                                 │
-└────────────────────┬────────────────────────────────────┘
-                     │ Metrics
-                     ↓
-┌─────────────────────────────────────────────────────────┐
-│                   Prometheus                            │
-│  • Scrape metrics every 15s                             │
-│  • Store time-series data                               │
-│  • Alert rules                                          │
-└────────────────────┬────────────────────────────────────┘
-                     │ Query
-                     ↓
-┌─────────────────────────────────────────────────────────┐
-│                    Grafana                              │
-│  • Dashboards                                           │
-│  • Visualizations                                       │
-│  • Alerts                                               │
-└─────────────────────────────────────────────────────────┘
-```
-
-## File Structure
-
-```
-my-local-repo/
-├── api/
-│   └── graphql/
-│       ├── server-enhanced.js          # GraphQL server
-│       ├── schema-enhanced.graphql     # GraphQL schema
-│       ├── resolvers/                  # Query/Mutation resolvers
-│       ├── middleware/
-│       │   └── security.js             # Security middleware ✨
-│       └── package.json
-│
-├── services/
-│   └── video-generation/
-│       ├── api.py                      # Flask API
-│       ├── generator.py                # Video generation
-│       └── unet.py                     # ML models
-│
-├── scripts/
-│   ├── start-backend.js                # Orchestrator ✨
-│   ├── optimize-databases.js           # DB optimization ✨
-│   ├── validate-backend.js             # Validation ✨
-│   ├── aws-setup.js                    # AWS setup ✨
-│   └── mongo-init.js                   # MongoDB init ✨
-│
-├── docs/
-│   └── BACKEND_QUICKSTART.md           # Backend guide ✨
-│
-├── docker-compose.dev.yml              # Dev infrastructure ✨
-├── .env                                # Environment config ✨
-├── BACKEND_STATUS.md                   # Integration status ✨
-├── SUMMARY.md                          # Complete summary ✨
-└── package.json                        # Updated scripts ✨
-
-✨ = Created/Updated by Amazon Q
 ```
 
 ---
 
-**Legend:**
-- 🟢 Running and healthy
-- 🟡 Optional/Not started
-- 🔴 Error/Not configured
-- ✨ New/Updated files
+## Event Type Flow Diagram
 
-**Status:** All systems operational and ready for frontend integration!
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  12 Event Types in System                       │
+└─────────────────────────────────────────────────────────────────┘
+
+ActivityStreamGenerator generates (every 3 seconds):
+
+    ┌─ 🎥 VIDEO_UPLOADED
+    │     Example: "User uploaded 4K video (2.4 GB)"
+    │
+    ├─ 🚀 DEPLOYMENT_SUCCESS
+    │     Example: "Deployment v2.1.4 successful"
+    │
+    ├─ ❌ DEPLOYMENT_FAILED
+    │     Example: "Deployment v2.1.3 failed"
+    │
+    ├─ 🔐 SECURITY_SCAN
+    │     Example: "Security scan: 2 issues found"
+    │
+    ├─ 🤖 AI_AGENT_ACTIVATED
+    │     Example: "CodeReview agent activated"
+    │
+    ├─ 💰 PAYMENT_PROCESSED
+    │     Example: "Payment $149.99 processed"
+    │
+    ├─ ⚡ AUTO_SCALING
+    │     Example: "API cluster scaled up"
+    │
+    ├─ 👥 NEW_USER
+    │     Example: "alex_creator joined"
+    │
+    ├─ 📊 ANALYTICS_REPORT
+    │     Example: "Analytics report generated"
+    │
+    ├─ 💬 COLLABORATION_SESSION
+    │     Example: "Session started (5 participants)"
+    │
+    ├─ 🔴 ALERT_CRITICAL
+    │     Example: "Critical alert triggered"
+    │
+    └─ ✅ SYSTEM_HEALTHY
+          Example: "All systems operational"
+```
+
+---
+
+## Data Format Transformation
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│              BACKEND TO FRONTEND TRANSFORMATION               │
+└────────────────────────────────────────────────────────────────┘
+
+BACKEND EVENT (From ActivityPublisher):
+┌──────────────────────────────────────────────────────────────┐
+│ {                                                            │
+│   id: "activity_1234567890",                                │
+│   type: "VIDEO_UPLOADED",                                   │
+│   message: "User uploaded 4K video",                         │
+│   description: "File: cinema.mp4 (2.4 GB)",                 │
+│   category: "content",                                      │
+│   service: "video-service",                                 │
+│   timestamp: "2024-01-15T10:30:45.123Z",                    │
+│   userId: "user_123",                                       │
+│   metadata: null                                            │
+│ }                                                            │
+└──────────────────────────────────────────────────────────────┘
+                        ↓
+        (WebSocket transmission via JSON)
+                        ↓
+RECEIVED (In Browser):
+┌──────────────────────────────────────────────────────────────┐
+│ {                                                            │
+│   type: "data",                                             │
+│   id: "1",                                                   │
+│   payload: {                                                │
+│     data: {                                                 │
+│       activityStream: {                                     │
+│         id: "activity_1234567890",                          │
+│         type: "VIDEO_UPLOADED",                             │
+│         message: "User uploaded 4K video",                  │
+│         ...                                                 │
+│       }                                                      │
+│     }                                                        │
+│   }                                                         │
+│ }                                                            │
+└──────────────────────────────────────────────────────────────┘
+                        ↓
+        (mapBackendEventToDisplay transformation)
+                        ↓
+DISPLAY EVENT (In UI):
+┌──────────────────────────────────────────────────────────────┐
+│ {                                                            │
+│   emoji: "🎥",                                              │
+│   text: "User uploaded 4K video",                           │
+│   type: "video_uploaded",                                   │
+│   tag: "content",                                           │
+│   timestamp: Date(2024-01-15T10:30:45.123Z),               │
+│   relativeTime: "just now"                                 │
+│ }                                                            │
+└──────────────────────────────────────────────────────────────┘
+                        ↓
+        (Rendered in HTML)
+                        ↓
+FINAL UI DISPLAY:
+┌──────────────────────────────────────────────────────────────┐
+│ 🎥 User uploaded 4K video                                   │
+│    📹 CONTENT - just now - LIVE ✅                          │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Reconnection Logic Flow
+
+```
+WebSocket Connection Lifecycle:
+
+                    START
+                      │
+                      ↓
+        ┌─ Attempt to connect
+        │
+        ├─ Connection successful?
+        │   YES → ┌──────────────────────┐
+        │         │ Connected ✅         │
+        │         │ Send subscription    │
+        │         │ Listen for events    │
+        │         │ On timeout → Try     │
+        │         │ again (5 attempts)   │
+        │         └──────────────────────┘
+        │
+        ├─ Connection failed?
+        │   YES → Wait 3 seconds
+        │         Attempt count++
+        │         (Max 5 attempts)
+        │
+        ├─ Attempts exhausted?
+        │   YES → ┌──────────────────────┐
+        │         │ Fallback to DEMO     │
+        │         │ Show simulated data  │
+        │         │ Log timeout message  │
+        │         │ Wait for manual      │
+        │         │ reconnection         │
+        │         └──────────────────────┘
+        │
+        └─ Running
+```
+
+---
+
+## Timeline: First 30 Seconds
+
+```
+0s    ├─ npm run start:platform executes
+      │
+3s    ├─ Docker initializes (MongoDB, Redis)
+      │
+7s    ├─ GraphQL API starts on port 4000
+      │
+7s    ├─ ActivityStreamGenerator starts
+      │  └─ "Activity generator running"
+      │
+7s    ├─ Browser page loads (page load assumed)
+      │
+8s    ├─ WebSocket connects to backend
+      │  └─ "WebSocket connected" (console log)
+      │
+8s    ├─ GraphQL subscription sent
+      │  └─ Waiting for first events
+      │
+10s   ├─ First batch of events generated
+      │  ├─ SYSTEM_HEALTHY
+      │  ├─ VIDEO_UPLOADED
+      │  └─ DEPLOYMENT_SUCCESS
+      │
+10s   ├─ Events flow through pipeline
+      │  └─ Redis PubSub → GraphQL → WebSocket
+      │
+11s   ├─ Frontend receives events
+      │  ├─ Parse JSON
+      │  ├─ Map format (add emoji)
+      │  └─ Update UI
+      │
+11s   ├─ Live Activity page updates
+      │  ├─ Shows 3 events
+      │  ├─ Counter increments
+      │  └─ "LIVE" badge appears
+      │
+13s   ├─ Second batch of events (3s cycle)
+      │
+16s   ├─ Third batch of events
+      │
+19s   ├─ Fourth batch of events
+      │
+...   └─ Continuous real-time streaming
+```
+
+---
+
+## Service Interaction Matrix
+
+```
+                    Redis      GraphQL     WebSocket    Browser
+                    PubSub     Resolver    Client       UI
+                     │           │          │           │
+ActivityPublisher    │◄──────────┤          │           │
+Publish Event        │           │          │           │
+                     │           │          │           │
+                  [broadcast]    │          │           │
+                     │           │          │           │
+                     ├──────────►│ Process  │           │
+                                 │ Event    │           │
+                                 │          │           │
+                                 ├─────────►│ Send      │
+                                            │ JSON      │
+                                            │          │
+                                            ├─────────►│ Receive
+                                                       │ Parse
+                                                       │ Map
+                                                       │ Render
+```
+
+---
+
+This architecture enables real-time, zero-latency event streaming from backend to frontend UI. ✨
+
