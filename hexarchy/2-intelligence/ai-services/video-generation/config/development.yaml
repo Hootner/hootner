@@ -124,6 +124,7 @@ api:
 # Redis Configuration (for job queue and caching)
 # ============================================================================
 redis:
+  enabled: false
   host: "localhost"
   port: 6379
   db: 0
