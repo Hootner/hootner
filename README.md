@@ -214,7 +214,7 @@ Hootner/
 - **Container Runtime** - Docker Alpine, 512MB-1GB memory, health checks
 - **Node.js 25.2.1** - ES modules, 4GB memory, 30 worker threads, GPU acceleration
 - **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
-- **Monitoring Stack** - Prometheus, Grafana, 24 CI/CD workflows
+- **Monitoring Stack** - Prometheus, Grafana, 10 CI/CD workflows
 - **Resilience** - Chaos engineering (8 scenarios), PITR backups, multi-region sync
 - **Git LFS** - Automated tracking for ML models, videos, executables (10+ patterns)
 
@@ -226,12 +226,20 @@ Hootner/
 - **AI/ML** - PyTorch 2.0+, 3D U-Net, BERT, OpenCV
 - **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
 
-### 🤖 AI Agent Hub (75+ Agents)
+### 🤖 AI Agent Hub (5 Production, 70+ Roadmap)
 
+**Production Agents (Active):**
+- **SecurityAgent** - Threat detection, pattern matching, real-time monitoring
+- **PaymentFraudAgent** - Transaction risk scoring, fraud detection
+- **RevenueOptimizationAgent** - Revenue analysis, ML predictions, pricing optimization
+- **AutoScalingAgent** - CPU/memory/request-based scaling
+- **ContentModerationAgent** - AI content analysis, toxicity detection
+
+**Roadmap Agents (Planned):**
 - **Core AI (12)** - Personalization, ML, NLP, Computer Vision, Speech-to-Text
-- **Business Intelligence (15)** - Revenue optimization, Analytics, Pricing algorithms
-- **Security & Compliance (18)** - Fraud detection, GDPR, Penetration testing, Zero-trust
-- **Infrastructure & Operations (20)** - Auto-scaling, CDN, Database sharding, Multi-cloud
+- **Business Intelligence (15)** - Analytics, KPI dashboards, Pricing algorithms
+- **Security & Compliance (18)** - GDPR automation, Penetration testing, Zero-trust
+- **Infrastructure & Operations (20)** - CDN management, Database sharding, Multi-cloud
 - **Specialized Services (10)** - Localization, Voice assistants, Blockchain, CRM integration
 
 ### 🎬 Cinema Player (NEW - GitHub Copilot Integration)
@@ -420,9 +428,14 @@ cd k8s/istio && ./install.sh
 scripts/deployment/blue-green-deploy.sh
 ```
 
-### CI/CD Pipeline (11 Workflows)
+### CI/CD Pipeline (10 Active Workflows)
 
 ✅ Testing • 🔒 Security • 📦 Docker • 🚀 Deploy • 📊 Monitoring • 🔄 Rollback
+
+**Active Workflows:**
+- copilot-review, copilot-monitor, copilot-docs, copilot-commits
+- commit-validation, commit-hooks, auto-commit
+- agent-orchestration, tooling, dependency-update
 
 ## 📊 Monitoring & Observability
 

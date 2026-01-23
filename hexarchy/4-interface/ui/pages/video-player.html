@@ -11,15 +11,22 @@
     <title>Cinema Player • HOOTNER - The Owl Never Sleeps</title>
     <link rel="stylesheet" href="shared-styles.css" />
     <link rel="manifest" href="manifest.json" />
-    <link href="./libs/video-js.css" rel="stylesheet" />
-    <script src="./libs/video.min.js" crossorigin="anonymous"></script>
-    <script src="./libs/peerjs.min.js" crossorigin="anonymous"></script>
+    <link href="../assets/libs/video-js.css" rel="stylesheet" />
+    <script src="../assets/libs/video.min.js" crossorigin="anonymous"></script>
+    <script src="../assets/libs/peerjs.min.js" crossorigin="anonymous"></script>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+      
+      html {
+        zoom: 1.5;
+        -moz-transform: scale(1.5);
+        -moz-transform-origin: 0 0;
+      }
+      
       body {
         font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
@@ -38,7 +45,7 @@
       }
 
       .top-btn {
-        padding: 2px 4px;
+        padding: 24px 48px;
         background: transparent;
         border: 2px solid transparent;
         background-image:
@@ -48,7 +55,7 @@
         background-clip: padding-box, border-box;
         color: #00ff00;
         font-weight: bold;
-        font-size: 0.5rem;
+        font-size: 4rem;
         cursor: pointer;
         border-radius: 9999px;
         transition: all 0.3s;
@@ -98,13 +105,13 @@
       }
 
       .library-title {
-        font-size: 0.5rem;
+        font-size: 8rem;
         font-weight: 900;
       }
 
       .search-input {
         width: 100%;
-        padding: 2px 4px;
+        padding: 24px 32px;
         background: rgba(10, 10, 15, 0.8);
         border: 2px solid transparent;
         background-image:
@@ -115,7 +122,7 @@
         color: #00ff00;
         margin-bottom: 24px;
         border-radius: 16px;
-        font-size: 0.5rem;
+        font-size: 5rem;
       }
 
       .search-input:focus {
@@ -324,13 +331,13 @@
 
       .card-title {
         font-weight: bold;
-        font-size: 1.25rem;
+        font-size: 3.5rem;
         margin-bottom: 6px;
         color: #00ff00;
       }
 
       .card-duration {
-        font-size: 1rem;
+        font-size: 2.5rem;
         opacity: 0.7;
         color: #00ff00;
       }
@@ -345,7 +352,7 @@
         border: 2px solid #00ff00;
         border-radius: 50%;
         color: #00ff00;
-        font-size: 4px;
+        font-size: 14px;
         cursor: pointer;
         z-index: 40;
         transition: all 0.3s;
@@ -381,7 +388,7 @@
         color: #fff;
         cursor: pointer;
         transition: all 0.3s;
-        font-size: 0.5rem;
+        font-size: 2.5rem;
       }
 
       .scroll-btn:hover {
@@ -472,13 +479,13 @@
       }
 
       .play-icon {
-        width: 20px;
-        height: 20px;
-        background: radial-gradient(circle, #00ff00, #ffff00);
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
+        background: radial-gradient(circle, #00ff00, #ffff00);
         display: grid;
         place-items: center;
-        font-size: 8px;
+        font-size: 48px;
         box-shadow: 0 0 60px #00ff00;
         animation: pulse 2s infinite;
         color: #301934;
@@ -500,9 +507,9 @@
       }
 
       .progress-container {
-        height: 8px;
+        height: 20px;
         background: rgba(0, 255, 0, 0.2);
-        border-radius: 4px;
+        border-radius: 10px;
         margin-bottom: 20px;
         cursor: pointer;
         position: relative;
@@ -523,8 +530,8 @@
       }
 
       .btn {
-        width: 24px;
-        height: 24px;
+        width: 60px;
+        height: 60px;
         background: rgba(10, 10, 15, 0.9);
         border: 2px solid transparent;
         background-image:
@@ -534,10 +541,10 @@
         background-clip: padding-box, border-box;
         border-radius: 50%;
         color: #fff;
-        font-size: 10px;
+        font-size: 28px;
         cursor: pointer;
         transition: all 0.3s;
-        padding: 4px;
+        padding: 12px;
       }
 
       .btn:hover {
@@ -558,13 +565,13 @@
       }
 
       .play-btn {
-        width: 32px;
-        height: 32px;
+        width: 80px;
+        height: 80px;
         background: linear-gradient(135deg, #00ffff, #ff00ff);
         color: #fff;
-        font-size: 14px;
+        font-size: 40px;
         box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-        padding: 6px;
+        padding: 16px;
       }
 
       .play-btn:hover {
@@ -582,10 +589,11 @@
       }
 
       .time-display {
-        min-width: 140px;
+        min-width: 200px;
         font-variant-numeric: tabular-nums; /* cspell:disable-line */
         color: #00ff00;
-        font-size: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
       }
 
       /* Next Up Section */
@@ -1351,8 +1359,8 @@
         background: rgba(0, 255, 0, 0.05);
         border: 2px solid rgba(0, 255, 0, 0.2);
         border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
         cursor: move;
         transition: all 0.3s;
         border-left: 4px solid #00ff00;
@@ -1368,11 +1376,12 @@
       .playlist-item-title {
         color: #00ff00;
         font-weight: bold;
-        margin-bottom: 4px;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
       }
       .playlist-item-duration {
         color: #00ffff;
-        font-size: 0.85rem;
+        font-size: 1.2rem;
       }
 
       /* History Panel */
@@ -1677,6 +1686,7 @@
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               text-decoration: none;
+              font-size: 3rem;
             "
             >🦉 HOOTNER</a
           >
@@ -1688,7 +1698,7 @@
                 border: none;
                 color: #00ffff;
                 cursor: pointer;
-                font-size: 12px;
+                font-size: 2rem;
                 padding: 4px 8px;
                 position: relative;
               "
@@ -1943,44 +1953,41 @@
           </div>
         </div>
         <div class="flex gap-2 items-center">
-          <a href="/ai-video" class="text-slate-300 hover:text-white"
+          <a href="/ai-video" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >🎥 AI Video</a
           >
-          <a href="/live-stream" class="text-slate-300 hover:text-white"
+          <a href="/live-stream" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >📱 Live</a
           >
-          <a href="/analytics" class="text-slate-300 hover:text-white"
+          <a href="/analytics" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >🧠 Analytics</a
           >
-          <a href="/profile" class="text-slate-300 hover:text-white"
+          <a href="/profile" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >👤 Profile</a
           >
-          <a href="/design-showcase" class="text-slate-300 hover:text-white"
+          <a href="/design-showcase" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >🎨 Design</a
           >
-          <a href="/feed-react" class="text-slate-300 hover:text-white"
+          <a href="/feed-react" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >📰 Social</a
           >
-          <a href="/marketplace" class="text-slate-300 hover:text-white"
+          <a href="/marketplace" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >🛒 Marketplace</a
           >
-          <a href="/dashboard" class="text-slate-300 hover:text-white"
+          <a href="/dashboard" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >📈 Dashboard</a
           >
-          <a href="/video-player" class="text-green-400 font-medium"
+          <a href="/video-player" class="text-green-400 font-medium" style="font-size: 2rem"
             >▶️ Video</a
           >
-          <a href="/auto-editor" class="text-slate-300 hover:text-white"
+          <a href="/auto-editor" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >✂️ Editor</a
           >
-          <a href="/code-editor" class="text-slate-300 hover:text-white"
+          <a href="/code-editor" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >💻 Code</a
           >
-          <a href="/settings" class="text-slate-300 hover:text-white"
+          <a href="/settings" class="text-slate-300 hover:text-white" style="font-size: 2rem"
             >⚙️ Settings</a
-          >
-          <a href="/login" class="text-slate-300 hover:text-white"
-            >🔐 Login</a
           >
         </div>
       </div>
@@ -2311,7 +2318,7 @@
               <select
                 class="btn"
                 id="speedSelector"
-                style="width: auto; font-size: 14px"
+                style="width: auto; font-size: 28px"
                 aria-label="Playback speed"
               >
                 <option value="0.5">0.5x</option>
@@ -2322,7 +2329,7 @@
               <select
                 class="btn"
                 id="qualitySelector"
-                style="width: auto; font-size: 14px"
+                style="width: auto; font-size: 28px"
                 aria-label="Video quality"
               >
                 <option value="auto" selected>Auto</option>
