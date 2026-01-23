@@ -79,7 +79,7 @@ PORT=5003 python api_enhanced.py
 ENVIRONMENT=production python api_enhanced.py
 
 # With Redis (for job queue)
-docker run -d -p 6379:6379 redis:alpine
+
 python api_enhanced.py
 ```
 
@@ -531,23 +531,23 @@ video = sampler.sample(
 
 ---
 
-## 🐳 Docker Deployment
+## 🐳 
 
 ### Build Image
 
 ```bash
 # Build production image
-docker build -t hootner/video-generation:latest .
+
 
 # Build with specific Python version
-docker build --build-arg PYTHON_VERSION=3.10 -t hootner/video-generation:latest .
+
 ```
 
 ### Run Container
 
 ```bash
 # Run with GPU support
-docker run -d \
+
   --name video-generation \
   --gpus all \
   -p 5003:5003 \
@@ -558,14 +558,14 @@ docker run -d \
   hootner/video-generation:latest
 
 # Run with CPU only
-docker run -d \
+
   --name video-generation \
   -p 5003:5003 \
   -e DEVICE=cpu \
   hootner/video-generation:latest
 ```
 
-### Docker Compose
+### 
 
 ```yaml
 version: '3.8'

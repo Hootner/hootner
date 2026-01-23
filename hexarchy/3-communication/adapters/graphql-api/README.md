@@ -441,9 +441,9 @@ curl -X POST http://localhost:4000/graphql \
 
 ## 🚀 Deployment
 
-### Docker
+### 
 
-```dockerfile
+```
 FROM node:18-alpine
 
 WORKDIR /app

@@ -6,16 +6,16 @@ import path from 'path';
 
 const migrations = [
   { src: 'constants', dest: 'hexarchy/0-core/configs/constants' },
-  { src: 'frameworks/backend/nestjs', dest: 'hexarchy/1-foundation/frameworks/nestjs' },
-  { src: 'services/video-generation', dest: 'hexarchy/2-intelligence/ai-services/video-generation' },
-  { src: 'frameworks/ai/agents', dest: 'hexarchy/2-intelligence/ai-services/agents' },
-  { src: 'api/graphql', dest: 'hexarchy/3-communication/adapters/graphql-api' },
-  { src: 'apps/frontend', dest: 'hexarchy/4-interface/ui/frontend' },
-  { src: 'scripts/security', dest: 'hexarchy/6-governance/compliance/security-scripts' },
-  { src: 'data/logs', dest: 'hexarchy/7-data/storage/logs' },
-  { src: 'data/uploads', dest: 'hexarchy/7-data/storage/uploads' },
-  { src: 'scripts/aws-setup.js', dest: 'hexarchy/8-operations/infrastructure/aws-setup.js' },
-  { src: 'scripts/deployment', dest: 'hexarchy/8-operations/ci-cd/deployment' },
+  { src: 'hexarchy/1-foundation/frameworks/nestjs', dest: 'hexarchy/1-foundation/frameworks/nestjs' },
+  { src: 'hexarchy/2-intelligence/ai-services/video-generation', dest: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation' },
+  { src: 'hexarchy/2-intelligence/ai-services/agents', dest: 'hexarchy/2-intelligence/ai-services/agents' },
+  { src: 'hexarchy/3-communication/adapters/graphql-api', dest: 'hexarchy/3-communication/adapters/graphql-api' },
+  { src: 'hexarchy/4-interface/ui/frontend', dest: 'hexarchy/4-interface/ui/frontend' },
+  { src: 'hexarchy/6-governance/compliance/security-scripts', dest: 'hexarchy/6-governance/compliance/security-scripts' },
+  { src: 'hexarchy/7-data/storage/logs', dest: 'hexarchy/7-data/storage/logs' },
+  { src: 'hexarchy/7-data/storage/uploads', dest: 'hexarchy/7-data/storage/uploads' },
+  { src: 'hexarchy/8-operations/infrastructure/aws-setup.js', dest: 'hexarchy/8-operations/infrastructure/aws-setup.js' },
+  { src: 'hexarchy/8-operations/ci-cd/deployment', dest: 'hexarchy/8-operations/ci-cd/deployment' },
   { src: 'tests', dest: 'hexarchy/8-operations/testing' },
   { src: 'terraform', dest: 'hexarchy/8-operations/infrastructure/terraform' }
 ];

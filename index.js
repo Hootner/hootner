@@ -106,7 +106,7 @@ async function startHootner() {
     
     // 3-communication: APIs
     await orchestrator.startLayer('3-communication', [
-      { name: 'graphql-api', command: 'node', args: ['server.js'], options: { cwd: 'api/graphql' }, healthUrl: 'http://localhost:4000/graphql' }
+      { name: 'graphql-api', command: 'node', args: ['server.js'], options: { cwd: 'hexarchy/3-communication/adapters/graphql-api' }, healthUrl: 'http://localhost:4000/graphql' }
     ]);
     
     // 4-interface: Frontend

@@ -4,24 +4,25 @@ import fs from 'fs';
 import path from 'path';
 
 const pathMappings = {
-  'constants/': 'hexarchy/0-core/configs/constants/',
-  'frameworks/backend/nestjs': 'hexarchy/1-foundation/frameworks/nestjs',
-  'services/video-generation': 'hexarchy/2-intelligence/ai-services/video-generation',
-  'frameworks/ai/agents': 'hexarchy/2-intelligence/ai-services/agents',
-  'api/graphql': 'hexarchy/3-communication/adapters/graphql-api',
-  'apps/frontend': 'hexarchy/4-interface/ui/frontend',
-  'scripts/security': 'hexarchy/6-governance/compliance/security-scripts',
-  'data/logs': 'hexarchy/7-data/storage/logs',
-  'data/uploads': 'hexarchy/7-data/storage/uploads',
-  'scripts/aws-setup': 'hexarchy/8-operations/infrastructure/aws-setup',
-  'scripts/deployment': 'hexarchy/8-operations/ci-cd/deployment',
-  'tests/': 'hexarchy/8-operations/testing/',
-  'terraform/': 'hexarchy/8-operations/infrastructure/terraform/'
+  'hexarchy/0-core/configs/constants/': 'hexarchy/0-core/configs/hexarchy/0-core/configs/constants/',
+  'hexarchy/1-foundation/frameworks/nestjs': 'hexarchy/1-foundation/frameworks/nestjs',
+  'hexarchy/2-intelligence/ai-services/video-generation': 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
+  'hexarchy/2-intelligence/ai-services/agents': 'hexarchy/2-intelligence/ai-services/agents',
+  'hexarchy/3-communication/adapters/graphql-api': 'hexarchy/3-communication/adapters/graphql-api',
+  'hexarchy/4-interface/ui/frontend': 'hexarchy/4-interface/ui/frontend',
+  'hexarchy/6-governance/compliance/security-scripts': 'hexarchy/6-governance/compliance/security-scripts',
+  'hexarchy/7-data/storage/logs': 'hexarchy/7-data/storage/logs',
+  'hexarchy/7-data/storage/uploads': 'hexarchy/7-data/storage/uploads',
+  'hexarchy/8-operations/infrastructure/aws-setup': 'hexarchy/8-operations/infrastructure/aws-setup',
+  'hexarchy/8-operations/ci-cd/deployment': 'hexarchy/8-operations/ci-cd/deployment',
+  'hexarchy/8-operations/testing/': 'hexarchy/8-operations/testing/',
+  'hexarchy/8-operations/infrastructure/terraform/': 'hexarchy/8-operations/infrastructure/hexarchy/8-operations/infrastructure/terraform/'
 };
 
 function updateFile(filePath) {
-  let content = fs.readFileSync(filePath, 'utf8');
-  let updated = false;
+  try {
+    let content = fs.readFileSync(filePath, 'utf8');
+    let updated = false;
 
   for (const [oldPath, newPath] of Object.entries(pathMappings)) {
     const regex = new RegExp(oldPath.replace(/\//g, '\\/'), 'g');
@@ -36,6 +37,9 @@ function updateFile(filePath) {
     return true;
   }
   return false;
+  } catch (error) {
+    return false;
+  }
 }
 
 function scanDirectory(dir, extensions = ['.js', '.ts', '.json', '.md']) {

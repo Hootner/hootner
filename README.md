@@ -5,7 +5,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-25.2.1-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Full-stack video streaming platform with AI generation, real-time collaboration, and enterprise DevOps.
@@ -21,9 +21,9 @@ This single script checks prerequisites, starts infrastructure, and launches cor
 
 **Manual setup:**
 ```bash
-docker compose -f docker-compose.dev.yml up -d  # Start DynamoDB + Redis
+
 npm install                   # Install dependencies
-cd api/graphql && npm install # Install API dependencies
+cd hexarchy/3-communication/adapters/graphql-api && npm install # Install API dependencies
 npm run db:setup             # Create DynamoDB table
 npm run start:all            # Start frontend + API
 ```
@@ -82,7 +82,7 @@ See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for det
 - **Network throttling disabled** for maximum performance
 - **Prettier formatting** for JS/TS/React files
 - **Python interpreter** configured for AI services
-- **Docker integration** ready when needed
+- **
 
 ## 📁 Architecture
 
@@ -103,7 +103,7 @@ Hootner/
 │   └── frontend/              # React 18 + TypeScript + Vite frontend
 │       ├── html-pages/        # Standalone HTML pages (cinema-player, index)
 │       └── src/               # React components with Apollo GraphQL
-├── constants/                 # Application constants
+├── hexarchy/0-core/configs/constants/                 # Application constants
 ├── data/                      # Application data
 │   ├── logs/                  # Log files
 │   ├── uploads/               # User uploads
@@ -145,7 +145,7 @@ Hootner/
 │       ├── hdr_processing.py  # HDR video processing
 │       ├── dolby_atmos.py     # Audio processing
 │       └── install.py         # Dependency installer
-├── terraform/                 # Infrastructure as Code
+├── hexarchy/8-operations/infrastructure/terraform/                 # Infrastructure as Code
 │   └── main.tf                # Terraform configuration
 ├── hexarchy/                  # 🏛️ Hexagonal Architecture
 │   ├── 0-core/                # Core business logic
@@ -163,13 +163,13 @@ Hootner/
 │   ├── namespace.yaml
 │   └── redis-deployment.yaml
 ├── logs/                      # 📊 Application logs
-├── tests/                     # 🧪 Testing Infrastructure
+├── hexarchy/8-operations/testing/                     # 🧪 Testing Infrastructure
 │   ├── e2e/                   # End-to-end tests (Playwright)
 │   ├── integration/           # Integration tests
 │   ├── performance/           # Performance tests
 │   ├── electron-code-editor/  # Editor tests
 │   └── reports/               # Test reports
-├── terraform/                 # Infrastructure as Code
+├── hexarchy/8-operations/infrastructure/terraform/                 # Infrastructure as Code
 │   └── main.tf                # Terraform configuration
 ├── wiki/                      # Project wiki
 │   └── Home.md                # Wiki home page
@@ -212,7 +212,7 @@ Hootner/
 
 ### 🏗️ Enterprise Infrastructure
 
-- **Container Runtime** - Docker Alpine, 512MB-1GB memory, health checks
+- **Container Runtime** - 
 - **Node.js 25.2.1** - ES modules, 4GB memory, 30 worker threads, GPU acceleration
 - **Kubernetes + Istio** - Service mesh, blue-green deployments, auto-rollback
 - **Monitoring Stack** - Prometheus, Grafana, 10 CI/CD workflows
@@ -272,7 +272,7 @@ Hootner/
 - Frontend: HTML5, CSS3 (glassmorphism), vanilla JS, Video.js
 - Backend: GraphQL API (port 4000), Video Gen (port 5003)
 - Database: DynamoDB (videos, users, comments), Redis (caching)
-- Infrastructure: Docker, AWS S3/CloudFront
+- Infrastructure: 
 
 ### 🎭 Advanced Agent Orchestration (NEW!)
 
@@ -301,14 +301,14 @@ See [docs/ADVANCED_AGENTS.md](docs/ADVANCED_AGENTS.md) for complete guide.
 ### Video Player
 
 ```bash
-cd apps/frontend/html-pages
+cd hexarchy/4-interface/ui/frontend/html-pages
 # Open cinema-player.html in browser
 ```
 
 ### AI Video Generation
 
 ```bash
-cd services/video-generation
+cd hexarchy/2-intelligence/ai-services/video-generation
 python install.py  # Auto-install ML dependencies
 python api.py      # Start API on port 5003
 ```
@@ -326,7 +326,7 @@ npm run start:all  # Cross-platform orchestration
 **Amazon Q has optimized the complete backend infrastructure:**
 
 ✅ **NPM Dependencies Fixed** - Removed `express-graphql` conflict
-✅ **DynamoDB + Redis** - Docker Compose for local development
+✅ **DynamoDB + Redis** - 
 ✅ **Security Hardened** - Rate limiting, XSS protection, injection prevention
 ✅ **Backend Orchestrator** - One command to start all services
 ✅ **AWS Setup** - Automated S3, DynamoDB, Lambda configuration
@@ -335,7 +335,6 @@ npm run start:all  # Cross-platform orchestration
 **Quick Start Backend:**
 ```bash
 # Start infrastructure
-docker compose -f docker-compose.dev.yml up -d
 
 # Setup DynamoDB table
 npm run db:setup
@@ -362,7 +361,7 @@ npm run backend:validate
 ### Prerequisites
 
 - Node.js 18+, NPM 9+
-- Docker & Docker Compose
+- 
 - Git
 
 ### Environment Setup
@@ -370,9 +369,9 @@ npm run backend:validate
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
-docker compose -f docker-compose.dev.yml up -d  # Start infrastructure
+
 npm install              # Install dependencies
-cd api/graphql && npm install
+cd hexarchy/3-communication/adapters/graphql-api && npm install
 npm run db:setup        # Create DynamoDB table
 ```
 
@@ -385,7 +384,7 @@ npm run start:all        # Frontend + API
 # Individual services
 npm start               # Frontend only (port 3000)
 npm run start:api       # GraphQL API only (port 4000)
-docker compose -f docker-compose.dev.yml up  # Infrastructure only
+
 ```
 
 ## 🧪 Testing & Quality
@@ -418,11 +417,10 @@ k6 run load-test.js        # Performance testing
 
 ## 🚀 Deployment
 
-### Docker
+### 
 
 ```bash
-docker build -t hootner-frontend -f Dockerfile.frontend .
-docker build -t hootner-server -f Dockerfile .
+
 ```
 
 ### Kubernetes + Istio
@@ -430,12 +428,12 @@ docker build -t hootner-server -f Dockerfile .
 ```bash
 kubectl apply -f k8s/
 cd k8s/istio && ./install.sh
-scripts/deployment/blue-green-deploy.sh
+hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh
 ```
 
 ### CI/CD Pipeline (10 Active Workflows)
 
-✅ Testing • 🔒 Security • 📦 Docker • 🚀 Deploy • 📊 Monitoring • 🔄 Rollback
+✅ Testing • 🔒 Security • 📦 
 
 **Active Workflows:**
 - copilot-review, copilot-monitor, copilot-docs, copilot-commits
@@ -474,11 +472,11 @@ scripts/deployment/blue-green-deploy.sh
 
 - [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md) • [Cursor AI Modes](docs/CURSOR_AI_MODES.md)
 - [Zed Optimization](docs/ZED_OPTIMIZATION.md) • [Visual Designer](docs/VISUAL_DESIGNER.md)
-- [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](frameworks/ai/agents/README.md)
+- [Sustainability](docs/SUSTAINABILITY_COMPLIANCE.md) • [Enhanced Agents](hexarchy/2-intelligence/ai-services/agents/README.md)
 
 ### 🛠️ Operations
 
-- [Deployment Guide](docs/deployment/MCP_DEPLOYMENT.md) • [Blue-Green Script](scripts/deployment/blue-green-deploy.sh)
+- [Deployment Guide](docs/deployment/MCP_DEPLOYMENT.md) • [Blue-Green Script](hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh)
 
 ## 📝 Essential Commands
 
@@ -508,7 +506,7 @@ scripts/deployment/blue-green-deploy.sh
 
 | Command                                         | Description                     |
 | ----------------------------------------------- | ------------------------------- |
-| `cd services/video-generation && python api.py` | Start AI video API (port 5003)  |
+| `cd hexarchy/2-intelligence/ai-services/video-generation && python api.py` | Start AI video API (port 5003)  |
 | `npm run agents:manage`                         | Start agent manager             |
 | `npm run orchestrator`                          | Agent orchestrator CLI          |
 | `npm run orchestrator:status`                   | Check agent status              |
@@ -527,7 +525,7 @@ scripts/deployment/blue-green-deploy.sh
 
 | Command                          | Description              |
 | -------------------------------- | ------------------------ |
-| `./scripts/deployment/blue-green-deploy.sh` | Zero-downtime deployment |
+| `./hexarchy/8-operations/ci-cd/deployment/blue-green-deploy.sh` | Zero-downtime deployment |
 | `npm run infra:terraform`                   | Terraform infrastructure |
 | `npm run aws:validate`                      | Validate AWS config      |
 
@@ -536,7 +534,7 @@ scripts/deployment/blue-green-deploy.sh
 **Frontend** • React 18, TypeScript, Vite, Tailwind CSS
 **Backend** • Node.js, Express, GraphQL, NestJS
 **Database** • DynamoDB, Redis
-**Infrastructure** • Docker, Kubernetes, Istio
+**Infrastructure** • 
 **Monitoring** • Prometheus, Grafana
 **CI/CD** • GitHub Actions (24 workflows)
 **Cloud** • AWS (S3, Lambda, SQS)

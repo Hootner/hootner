@@ -1,35 +1,35 @@
 #!/usr/bin/env node
 
 const migrations = {
-  'api/graphql': {
+  'hexarchy/3-communication/adapters/graphql-api': {
     target: 'hexarchy/3-communication/adapters/graphql-api',
     reason: 'API communication layer'
   },
-  'services/video-generation': {
-    target: 'hexarchy/2-intelligence/ai-services/video-generation',
+  'hexarchy/2-intelligence/ai-services/video-generation': {
+    target: 'hexarchy/2-intelligence/ai-hexarchy/2-intelligence/ai-services/video-generation',
     reason: 'AI service'
   },
-  'scripts/aws-setup.js': {
+  'hexarchy/8-operations/infrastructure/aws-setup.js': {
     target: 'hexarchy/8-operations/infrastructure/aws-setup.js',
     reason: 'Infrastructure operations'
   },
-  'scripts/deployment': {
+  'hexarchy/8-operations/ci-cd/deployment': {
     target: 'hexarchy/8-operations/ci-cd/deployment',
     reason: 'Deployment operations'
   },
-  'scripts/security': {
+  'hexarchy/6-governance/compliance/security-scripts': {
     target: 'hexarchy/6-governance/compliance/security-scripts',
     reason: 'Security governance'
   },
-  'frameworks/ai/agents': {
+  'hexarchy/2-intelligence/ai-services/agents': {
     target: 'hexarchy/2-intelligence/ai-services/agents',
     reason: 'AI intelligence layer'
   },
-  'frameworks/backend/nestjs': {
+  'hexarchy/1-foundation/frameworks/nestjs': {
     target: 'hexarchy/1-foundation/frameworks/nestjs',
     reason: 'Backend foundation'
   },
-  'apps/frontend': {
+  'hexarchy/4-interface/ui/frontend': {
     target: 'hexarchy/4-interface/ui/frontend',
     reason: 'User interface layer'
   },
@@ -41,11 +41,11 @@ const migrations = {
     target: 'hexarchy/8-operations/testing',
     reason: 'Operations testing'
   },
-  'data/logs': {
+  'hexarchy/7-data/storage/logs': {
     target: 'hexarchy/7-data/storage/logs',
     reason: 'Data storage'
   },
-  'data/uploads': {
+  'hexarchy/7-data/storage/uploads': {
     target: 'hexarchy/7-data/storage/uploads',
     reason: 'Data storage'
   },

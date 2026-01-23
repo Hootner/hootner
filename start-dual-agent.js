@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import DualAgentOrchestrator from './frameworks/ai/agents/dual-agent-orchestrator.js';
+import DualAgentOrchestrator from './hexarchy/2-intelligence/ai-services/agents/dual-agent-orchestrator.js';
 
 console.log('🤖 Starting HOOTNER Dual-Agent System...\n');
 

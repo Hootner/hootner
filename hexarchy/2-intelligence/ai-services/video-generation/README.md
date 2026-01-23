@@ -458,9 +458,9 @@ RATE_LIMIT_REQUESTS = 20  # Instead of 10
 
 ## 🚀 Production Deployment
 
-### Docker Deployment
+### 
 
-```dockerfile
+```
 FROM python:3.10-slim
 
 # Install system dependencies
