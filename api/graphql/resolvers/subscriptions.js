@@ -1,6 +1,6 @@
-const { PubSub, withFilter } = require('graphql-subscriptions');
-const { RedisPubSub } = require('graphql-redis-subscriptions');
-const Redis = require('ioredis');
+import { PubSub, withFilter } from 'graphql-subscriptions';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+import Redis from 'ioredis';
 
 // Use Redis for production, in-memory for development
 const pubsub = process.env.REDIS_URL 
@@ -10,7 +10,7 @@ const pubsub = process.env.REDIS_URL
     })
   : new PubSub();
 
-module.exports = {
+const resolvers = {
   // Video events
   videoProcessed: {
     subscribe: withFilter(
@@ -119,8 +119,16 @@ module.exports = {
   // System alerts
   systemAlert: {
     subscribe: () => pubsub.asyncIterator(['SYSTEM_ALERT'])
+  },
+
+  // Real-time activity stream for dashboard/monitoring
+  activityStream: {
+    subscribe: () => pubsub.asyncIterator(['ACTIVITY_STREAM']),
+    resolve: (payload) => payload.activityStream
   }
 };
 
 // Export pubsub for use in other resolvers
-module.exports.pubsub = pubsub;
+export { pubsub };
+
+export default resolvers;

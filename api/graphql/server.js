@@ -9,6 +9,7 @@ import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
 import messagesRoutes from './routes/messages.js';
+import ActivityStreamGenerator from './utils/activityStreamGenerator.js';
 
 // Validate environment variables at startup
 validateEnvironment('api');
@@ -308,6 +309,11 @@ const PORT = process.env.PORT || 4000;
       console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
       console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
+      
+      // Start activity stream generator for real-time events
+      console.log('\n🎬 Initializing real-time activity stream...');
+      ActivityStreamGenerator.startGenerator(3000); // Emit events every 3 seconds
+      console.log('✅ Activity stream generator ready!\n');
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

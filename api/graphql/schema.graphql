@@ -17,6 +17,14 @@ type Mutation {
 
 type Subscription {
   _empty: String
+  videoProcessed(userId: ID): Video!
+  videoProgress(videoId: ID!): VideoProgress!
+  videoLiked(videoId: ID): VideoLike!
+  commentAdded(videoId: ID): Comment!
+  playlistUpdated(playlistId: ID!): Playlist!
+  userActivity(userId: ID!): UserActivity!
+  systemAlert: SystemAlert!
+  activityStream: Activity!
 }
 
 type Playlist {
@@ -50,4 +58,70 @@ input PlaylistInput {
 enum PlaylistVisibility {
   PUBLIC
   PRIVATE
+}
+
+# Activity Stream Types
+type Activity {
+  id: ID!
+  type: ActivityType!
+  message: String!
+  description: String
+  category: String
+  service: String
+  timestamp: String!
+  userId: ID
+  metadata: String
+}
+
+enum ActivityType {
+  VIDEO_UPLOADED
+  DEPLOYMENT_SUCCESS
+  SECURITY_SCAN
+  AI_AGENT_ACTIVATED
+  PAYMENT_PROCESSED
+  AUTO_SCALING
+  NEW_USER
+  ANALYTICS_REPORT
+  COLLABORATION_SESSION
+  ALERT_CRITICAL
+  SYSTEM_HEALTHY
+  DEPLOYMENT_FAILED
+  USER_ACTIVITY
+  SYSTEM_ALERT
+}
+
+type VideoProgress {
+  videoId: ID!
+  progress: Int!
+  status: String!
+}
+
+type VideoLike {
+  id: ID!
+  videoId: ID!
+  userId: ID!
+  likeCount: Int!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  userId: ID!
+  video: Video!
+  createdAt: String!
+}
+
+type UserActivity {
+  id: ID!
+  userId: ID!
+  action: String!
+  timestamp: String!
+  metadata: String
+}
+
+type SystemAlert {
+  id: ID!
+  level: String!
+  message: String!
+  timestamp: String!
 }

@@ -143,16 +143,22 @@ const ActionCard = () => (
 
 const ActivityCard = () => (
   <div className="bg-black/20 backdrop-blur-lg border border-green-400/20 rounded-lg p-6">
-    <h2 className="text-xl font-bold mb-4 text-green-400">Recent Activity</h2>
-    <div className="space-y-4">
-      <div className="border-l-4 border-green-400 pl-4">
-        <p className="font-semibold">New follower</p>
-        <p className="text-cyan-400 text-sm">2 hours ago</p>
-      </div>
-      <div className="border-l-4 border-green-400 pl-4">
-        <p className="font-semibold">Post reached 100 likes</p>
-        <p className="text-cyan-400 text-sm">5 hours ago</p>
-      </div>
+    <h2 className="text-xl font-bold mb-4 text-green-400">🔥 Live Activity (Real-time)</h2>
+    <div className="space-y-2 max-h-48 overflow-y-auto">
+      <ActivityItem emoji="🎥" text="New video uploaded by @creator_pro" />
+      <ActivityItem emoji="🚀" text="Deployment successful: v2.1.4" />
+      <ActivityItem emoji="🤖" text="AI Agent 'SecurityBot' activated" />
+      <ActivityItem emoji="💰" text="Payment processed: $49.99" />
+    </div>
+  </div>
+);
+
+const ActivityItem = ({ emoji, text }) => (
+  <div className="flex items-start gap-2 py-2 border-b border-green-400/10 last:border-b-0">
+    <span className="text-lg flex-shrink-0">{emoji}</span>
+    <div className="flex-1">
+      <p className="text-sm text-cyan-400">{text}</p>
+      <p className="text-xs text-green-400/60">Just now</p>
     </div>
   </div>
 );

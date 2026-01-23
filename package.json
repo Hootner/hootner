@@ -24,6 +24,7 @@
     "platform:restart": "node advanced-platform-launcher.js restart",
     "start:api": "cd api/graphql && npm start",
     "start:backend": "node scripts/start-backend.js",
+    "start:platform": "node start-platform-complete.js",
     "start:all": "node index.js",
     "db:optimize": "node scripts/optimize-databases.js",
     "aws:setup": "node scripts/aws-setup.js",
@@ -102,14 +103,16 @@
     "esbuild": "^0.27.2",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
-    "graphql": "^16.8.1",
+    "graphql": "^16.12.0",
+    "graphql-subscriptions": "^3.0.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3",
+    "mongoose": "^8.21.0",
     "pg": "^8.11.3",
     "redis": "^4.6.10",
     "socket.io": "^4.8.3",
     "stripe": "^14.9.0",
+    "ws": "^8.19.0",
     "xss": "^1.0.14"
   },
   "devDependencies": {
@@ -131,7 +134,7 @@
     "nodemon": "^3.0.2",
     "ora": "^7.0.1",
     "prettier": "^3.1.0",
-    "vitest": "^4.0.18"
+    "vitest": "^1.6.0"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
