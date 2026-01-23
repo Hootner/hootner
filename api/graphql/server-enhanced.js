@@ -6,6 +6,9 @@
  * Date: January 10, 2026
  */
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { createServer } = require('http');
@@ -19,7 +22,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 // Import resolvers and utilities
-const resolvers = require('./resolvers');
+const resolvers = require('./resolvers').default;
 const { getUserFromRequest } = require('./utils/auth');
 const { formatError } = require('./utils/errorBoundary');
 

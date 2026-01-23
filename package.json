@@ -26,6 +26,7 @@
     "start:backend": "node scripts/start-backend.js",
     "start:platform": "node start-platform-complete.js",
     "start:all": "node index.js",
+    "db:setup": "node scripts/setup-dynamodb.js",
     "db:optimize": "node scripts/optimize-databases.js",
     "aws:setup": "node scripts/aws-setup.js",
     "backend:validate": "node scripts/validate-backend.js",
@@ -97,6 +98,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.974.0",
+    "@aws-sdk/lib-dynamodb": "^3.974.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -112,6 +115,7 @@
     "redis": "^4.6.10",
     "socket.io": "^4.8.3",
     "stripe": "^14.9.0",
+    "uuid": "^13.0.0",
     "ws": "^8.19.0",
     "xss": "^1.0.14"
   },

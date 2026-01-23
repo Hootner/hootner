@@ -1,26 +1,22 @@
 # HOOTNER Development Environment
-# MongoDB + Redis for local development
+# DynamoDB Local + Redis for local development
 
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:7-jammy
-    container_name: hootner-mongodb-dev
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    container_name: hootner-dynamodb-dev
     ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: dev_password_change_in_prod
-      MONGO_INITDB_DATABASE: hootner
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
     volumes:
-      - mongodb_dev_data:/data/db
-      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - dynamodb_dev_data:/data
     networks:
       - hootner-dev
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,5 +43,5 @@ networks:
     driver: bridge
 
 volumes:
-  mongodb_dev_data:
+  dynamodb_dev_data:
   redis_dev_data:

@@ -1,39 +1,19 @@
-/**
- * GraphQL Resolvers - Main Entry Point
- * Combines all resolvers with error boundaries
- *
- * Author: HOOTNER Code Guardian
- * Date: January 10, 2026
- */
+import queryResolvers from './queries.js';
+import mutationResolvers from './mutations.js';
+import subscriptionResolvers from './subscriptions.js';
+import typeResolvers from './types.js';
+import { GraphQLDateTime, GraphQLJSON } from 'graphql-scalars';
+import { GraphQLUpload } from 'graphql-upload';
+import { withErrorBoundary } from '../utils/errorBoundary.js';
 
-const queryResolvers = require('./queries');
-const mutationResolvers = require('./mutations');
-const subscriptionResolvers = require('./subscriptions');
-const typeResolvers = require('./types');
-const { GraphQLDateTime, GraphQLJSON } = require('graphql-scalars');
-const { GraphQLUpload } = require('graphql-upload');
-const { withErrorBoundary } = require('../utils/errorBoundary');
-
-/**
- * Combined resolvers with error boundaries
- */
 const resolvers = {
-    // Custom Scalars
     DateTime: GraphQLDateTime,
     JSON: GraphQLJSON,
     Upload: GraphQLUpload,
-
-    // Queries
     Query: withErrorBoundary(queryResolvers, 'Query'),
-
-    // Mutations
     Mutation: withErrorBoundary(mutationResolvers, 'Mutation'),
-
-    // Subscriptions
     Subscription: subscriptionResolvers,
-
-    // Type Resolvers
-    ...typeResolvers,
+    ...typeResolvers
 };
 
-module.exports = resolvers;
+export default resolvers;

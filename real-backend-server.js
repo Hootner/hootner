@@ -1,157 +1,165 @@
 #!/usr/bin/env node
 
 /**
- * Real Backend Server - Connects to MongoDB for Real Data
- * Replaces test server with actual database integration
+ * Real Backend Server - DynamoDB-backed
+ * Publishes real events on writes; supports DynamoDB Local via DYNAMO_ENDPOINT
  */
 
 import express from 'express';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { PubSub } from 'graphql-subscriptions';
-import mongoose from 'mongoose';
 import cors from 'cors';
+import { v4 as uuidv4 } from 'uuid';
+import { DynamoDBClient, CreateTableCommand, DescribeTableCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 
-// MongoDB Models
-const UserSchema = new mongoose.Schema({
-  email: String,
-  name: String,
-  createdAt: { type: Date, default: Date.now }
+const REGION = process.env.AWS_REGION || 'us-east-1';
+const TABLE_NAME = process.env.DYNAMO_TABLE || 'HootnerActivities';
+const DYNAMO_ENDPOINT = process.env.DYNAMO_ENDPOINT; // Optional: http://localhost:8000 for DynamoDB Local
+
+const dynamoClient = new DynamoDBClient({
+  region: REGION,
+  endpoint: DYNAMO_ENDPOINT || undefined
 });
 
-const VideoSchema = new mongoose.Schema({
-  title: String,
-  userId: String,
-  url: String,
-  status: String,
-  createdAt: { type: Date, default: Date.now }
+const docClient = DynamoDBDocumentClient.from(dynamoClient, {
+  marshallOptions: { removeUndefinedValues: true }
 });
 
-const PaymentSchema = new mongoose.Schema({
-  userId: String,
-  amount: Number,
-  status: String,
-  createdAt: { type: Date, default: Date.now }
-});
-
-const DeploymentSchema = new mongoose.Schema({
-  version: String,
-  status: String,
-  createdAt: { type: Date, default: Date.now }
-});
-
-const SecurityScanSchema = new mongoose.Schema({
-  issuesFound: Number,
-  status: String,
-  createdAt: { type: Date, default: Date.now }
-});
-
-const User = mongoose.model('User', UserSchema);
-const Video = mongoose.model('Video', VideoSchema);
-const Payment = mongoose.model('Payment', PaymentSchema);
-const Deployment = mongoose.model('Deployment', DeploymentSchema);
-const SecurityScan = mongoose.model('SecurityScan', SecurityScanSchema);
-
-// Initialize PubSub
 const pubsub = new PubSub();
-
-// Create Express app
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hootner';
 let dbConnected = false;
 
-async function connectDatabase() {
+async function ensureTable() {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000
-    });
+    await docClient.send(new DescribeTableCommand({ TableName: TABLE_NAME }));
     dbConnected = true;
-    console.log('✅ MongoDB connected:', MONGODB_URI);
-    
-    // Start monitoring for real changes
-    startRealEventMonitoring();
+    console.log(`✅ DynamoDB table ready: ${TABLE_NAME}`);
   } catch (error) {
-    console.error('❌ MongoDB connection failed:', error.message);
-    console.log('⚠️  Falling back to in-memory mode (no persistence)');
-    dbConnected = false;
+    if (error.name === 'ResourceNotFoundException') {
+      console.log(`ℹ️ Table ${TABLE_NAME} not found. Creating with on-demand billing...`);
+      await docClient.send(new CreateTableCommand({
+        TableName: TABLE_NAME,
+        BillingMode: 'PAY_PER_REQUEST',
+        KeySchema: [
+          { AttributeName: 'PK', KeyType: 'HASH' },
+          { AttributeName: 'SK', KeyType: 'RANGE' }
+        ],
+        AttributeDefinitions: [
+          { AttributeName: 'PK', AttributeType: 'S' },
+          { AttributeName: 'SK', AttributeType: 'S' }
+        ]
+      }));
+      dbConnected = true;
+      console.log(`✅ Table ${TABLE_NAME} created`);
+    } else {
+      dbConnected = false;
+      console.error('❌ DynamoDB unavailable:', error.message);
+    }
   }
 }
 
-// Real-time event monitoring from MongoDB
-function startRealEventMonitoring() {
-  console.log('🔍 Monitoring database for real-time changes...');
-  
-  // Watch for new users
-  const userChangeStream = User.watch();
-  userChangeStream.on('change', async (change) => {
-    if (change.operationType === 'insert') {
-      const user = await User.findById(change.fullDocument._id);
-      publishActivity({
-        type: 'NEW_USER',
-        message: `New user registered: ${user.name}`,
-        timestamp: new Date().toISOString(),
-        data: { userId: user._id, email: user.email }
-      });
-    }
-  });
-  
-  // Watch for new videos
-  const videoChangeStream = Video.watch();
-  videoChangeStream.on('change', async (change) => {
-    if (change.operationType === 'insert') {
-      const video = await Video.findById(change.fullDocument._id);
-      publishActivity({
-        type: 'VIDEO_UPLOADED',
-        message: `User uploaded video: "${video.title}"`,
-        timestamp: new Date().toISOString(),
-        data: { videoId: video._id, title: video.title }
-      });
-    }
-  });
-  
-  // Watch for new payments
-  const paymentChangeStream = Payment.watch();
-  paymentChangeStream.on('change', async (change) => {
-    if (change.operationType === 'insert') {
-      const payment = await Payment.findById(change.fullDocument._id);
-      publishActivity({
-        type: 'PAYMENT_PROCESSED',
-        message: `Payment processed: $${payment.amount.toFixed(2)}`,
-        timestamp: new Date().toISOString(),
-        data: { paymentId: payment._id, amount: payment.amount }
-      });
-    }
-  });
-  
-  console.log('✅ Real-time monitoring active for Users, Videos, Payments');
+async function putEntity(item) {
+  await docClient.send(new PutCommand({
+    TableName: TABLE_NAME,
+    Item: item
+  }));
 }
 
-// Publish activity to subscribers
+async function getRecentActivities(limit = 30) {
+  if (!dbConnected) return [];
+  const result = await docClient.send(new ScanCommand({
+    TableName: TABLE_NAME,
+    Limit: 200
+  }));
+  const items = result.Items || [];
+  return items
+    .filter(i => i.entityType)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, limit)
+    .map(i => ({
+      type: i.entityType,
+      message: i.message || '',
+      timestamp: i.createdAt,
+      data: i.data || {}
+    }));
+}
+
 function publishActivity(activity) {
-  console.log('📨 Real activity:', activity.type, '-', activity.message);
-  pubsub.publish('ACTIVITY_STREAM', { activityStream: activity });
+  const payload = {
+    type: activity.type,
+    message: activity.message,
+    timestamp: activity.timestamp || new Date().toISOString(),
+    data: activity.data || {}
+  };
+  console.log('📨 Real activity:', payload.type, '-', payload.message);
+  pubsub.publish('ACTIVITY_STREAM', { activityStream: payload });
 }
 
-// REST Endpoints for data creation
+function buildUserItem({ userId, email, name, createdAt }) {
+  return {
+    PK: `USER#${userId}`,
+    SK: 'PROFILE',
+    entityType: 'NEW_USER',
+    userId,
+    email,
+    name,
+    createdAt,
+    message: `New user registered: ${name}`
+  };
+}
+
+function buildVideoItem({ videoId, userId, title, url, createdAt }) {
+  return {
+    PK: `VIDEO#${videoId}`,
+    SK: 'META',
+    entityType: 'VIDEO_UPLOADED',
+    videoId,
+    userId,
+    title,
+    url,
+    status: 'processing',
+    createdAt,
+    message: `User uploaded video: "${title}"`
+  };
+}
+
+function buildPaymentItem({ paymentId, userId, amount, createdAt }) {
+  return {
+    PK: `PAYMENT#${paymentId}`,
+    SK: 'RECORD',
+    entityType: 'PAYMENT_PROCESSED',
+    paymentId,
+    userId,
+    amount,
+    status: 'completed',
+    createdAt,
+    message: `Payment processed: $${amount.toFixed(2)}`
+  };
+}
+
 app.post('/api/users', async (req, res) => {
   try {
     if (!dbConnected) {
-      return res.status(503).json({ error: 'Database not connected' });
+      return res.status(503).json({ error: 'DynamoDB not connected' });
     }
-    
-    const user = new User({
-      email: req.body.email,
-      name: req.body.name
-    });
-    await user.save();
-    
-    res.json({ success: true, user });
+
+    const { email, name } = req.body;
+    if (!email || !name) {
+      return res.status(400).json({ error: 'email and name are required' });
+    }
+
+    const timestamp = new Date().toISOString();
+    const userId = uuidv4();
+    const item = buildUserItem({ userId, email, name, createdAt: timestamp });
+    await putEntity(item);
+    publishActivity({ type: item.entityType, message: item.message, timestamp, data: { userId, email } });
+
+    res.json({ success: true, user: { userId, email, name, createdAt: timestamp } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -160,18 +168,21 @@ app.post('/api/users', async (req, res) => {
 app.post('/api/videos', async (req, res) => {
   try {
     if (!dbConnected) {
-      return res.status(503).json({ error: 'Database not connected' });
+      return res.status(503).json({ error: 'DynamoDB not connected' });
     }
-    
-    const video = new Video({
-      title: req.body.title,
-      userId: req.body.userId,
-      url: req.body.url || 'pending',
-      status: 'processing'
-    });
-    await video.save();
-    
-    res.json({ success: true, video });
+
+    const { title, userId, url } = req.body;
+    if (!title || !userId) {
+      return res.status(400).json({ error: 'title and userId are required' });
+    }
+
+    const timestamp = new Date().toISOString();
+    const videoId = uuidv4();
+    const item = buildVideoItem({ videoId, userId, title, url: url || 'pending', createdAt: timestamp });
+    await putEntity(item);
+    publishActivity({ type: item.entityType, message: item.message, timestamp, data: { videoId, userId } });
+
+    res.json({ success: true, video: { videoId, userId, title, url: url || 'pending', status: 'processing', createdAt: timestamp } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -180,87 +191,73 @@ app.post('/api/videos', async (req, res) => {
 app.post('/api/payments', async (req, res) => {
   try {
     if (!dbConnected) {
-      return res.status(503).json({ error: 'Database not connected' });
+      return res.status(503).json({ error: 'DynamoDB not connected' });
     }
-    
-    const payment = new Payment({
-      userId: req.body.userId,
-      amount: req.body.amount,
-      status: 'completed'
-    });
-    await payment.save();
-    
-    res.json({ success: true, payment });
+
+    const { userId, amount } = req.body;
+    if (!userId || typeof amount !== 'number') {
+      return res.status(400).json({ error: 'userId and numeric amount are required' });
+    }
+
+    const timestamp = new Date().toISOString();
+    const paymentId = uuidv4();
+    const item = buildPaymentItem({ paymentId, userId, amount, createdAt: timestamp });
+    await putEntity(item);
+    publishActivity({ type: item.entityType, message: item.message, timestamp, data: { paymentId, userId, amount } });
+
+    res.json({ success: true, payment: { paymentId, userId, amount, status: 'completed', createdAt: timestamp } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Health check
 app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     database: dbConnected ? 'connected' : 'disconnected',
-    mode: dbConnected ? 'REAL DATA' : 'IN-MEMORY',
+    table: TABLE_NAME,
+    region: REGION,
+    mode: dbConnected ? 'REAL DATA (DynamoDB)' : 'INACTIVE',
     timestamp: new Date().toISOString()
   });
 });
 
-// Get recent activities
 app.get('/api/activities/recent', async (req, res) => {
   try {
-    if (!dbConnected) {
-      return res.json({ activities: [], mode: 'in-memory' });
-    }
-    
-    const [users, videos, payments] = await Promise.all([
-      User.find().sort({ createdAt: -1 }).limit(5),
-      Video.find().sort({ createdAt: -1 }).limit(5),
-      Payment.find().sort({ createdAt: -1 }).limit(5)
-    ]);
-    
-    const activities = [
-      ...users.map(u => ({ type: 'NEW_USER', data: u, timestamp: u.createdAt })),
-      ...videos.map(v => ({ type: 'VIDEO_UPLOADED', data: v, timestamp: v.createdAt })),
-      ...payments.map(p => ({ type: 'PAYMENT_PROCESSED', data: p, timestamp: p.createdAt }))
-    ].sort((a, b) => b.timestamp - a.timestamp);
-    
-    res.json({ activities, mode: 'real-data', count: activities.length });
+    const activities = await getRecentActivities();
+    res.json({ activities, mode: dbConnected ? 'dynamodb' : 'offline', count: activities.length });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Create HTTP server
 const httpServer = createServer(app);
 const PORT = process.env.PORT || 4000;
 
-// Create WebSocket server
 const wss = new WebSocketServer({
   server: httpServer,
   path: '/graphql'
 });
 
-// WebSocket connection handler
 wss.on('connection', (ws) => {
   console.log('🔌 WebSocket client connected');
-  
+
   let subscriptionIterator;
-  
+
   ws.on('message', async (data) => {
     try {
       const message = JSON.parse(data);
-      
+
       if (message.type === 'connection_init') {
         ws.send(JSON.stringify({ type: 'connection_ack' }));
         console.log('✅ WebSocket connection acknowledged');
       }
-      
+
       if (message.type === 'start' || message.type === 'subscribe') {
         console.log('📡 Starting activity stream subscription');
-        
+
         subscriptionIterator = pubsub.asyncIterator('ACTIVITY_STREAM');
-        
+
         (async () => {
           for await (const event of subscriptionIterator) {
             if (ws.readyState === ws.OPEN) {
@@ -272,13 +269,8 @@ wss.on('connection', (ws) => {
             }
           }
         })();
-        
-        ws.send(JSON.stringify({
-          type: 'complete',
-          id: message.id || '1'
-        }));
       }
-      
+
       if (message.type === 'stop') {
         if (subscriptionIterator && subscriptionIterator.return) {
           await subscriptionIterator.return();
@@ -288,7 +280,7 @@ wss.on('connection', (ws) => {
       console.error('WebSocket message error:', error);
     }
   });
-  
+
   ws.on('close', () => {
     console.log('🔌 WebSocket client disconnected');
     if (subscriptionIterator && subscriptionIterator.return) {
@@ -297,15 +289,13 @@ wss.on('connection', (ws) => {
   });
 });
 
-// Start server
 async function start() {
   console.log('\n====================================================');
-  console.log('🚀 Real Backend Server - Starting...');
+  console.log('🚀 Real Backend Server - Starting (DynamoDB)');
   console.log('====================================================\n');
-  
-  // Try to connect to database
-  await connectDatabase();
-  
+
+  await ensureTable();
+
   httpServer.listen(PORT, () => {
     console.log('\n====================================================');
     console.log('✅ Real Backend Server Started');
@@ -314,38 +304,30 @@ async function start() {
     console.log('🔌 WebSocket:', `ws://localhost:${PORT}/graphql`);
     console.log('📊 Health:', `http://localhost:${PORT}/health`);
     console.log('📈 Recent:', `http://localhost:${PORT}/api/activities/recent`);
-    console.log('\n💾 Database:', dbConnected ? '✅ MongoDB CONNECTED' : '❌ Disconnected (in-memory mode)');
-    console.log('🔄 Mode:', dbConnected ? '📊 REAL DATA FROM DATABASE' : '⚠️  IN-MEMORY (no persistence)');
-    
+    console.log(`\n💾 DynamoDB: ${dbConnected ? '✅ Connected' : '❌ Unavailable'} (table: ${TABLE_NAME}, region: ${REGION})`);
+    if (DYNAMO_ENDPOINT) {
+      console.log(`🔗 Endpoint override: ${DYNAMO_ENDPOINT}`);
+    }
+
     if (dbConnected) {
       console.log('\n📡 API Endpoints:');
       console.log('   POST /api/users - Create user (triggers real event)');
       console.log('   POST /api/videos - Upload video (triggers real event)');
       console.log('   POST /api/payments - Process payment (triggers real event)');
-      console.log('\n🔍 Monitoring: Real-time change streams active');
-      console.log('✨ Events will publish automatically when data changes');
+      console.log('\n🔍 Events publish immediately after writes');
     } else {
-      console.log('\n⚠️  Database not available');
-      console.log('💡 To connect real data:');
-      console.log('   1. Install MongoDB: https://www.mongodb.com/try/download/community');
-      console.log('   2. Start MongoDB: mongod --dbpath /data/db');
-      console.log('   3. Restart this server');
-      console.log('\n📝 Or use MongoDB Atlas (cloud):');
-      console.log('   Set MONGODB_URI environment variable');
+      console.log('\n⚠️  DynamoDB not available');
+      console.log('   Set AWS credentials + AWS_REGION, or set DYNAMO_ENDPOINT for DynamoDB Local');
+      console.log('   Example (local): DYNAMO_ENDPOINT=http://localhost:8000 npm start');
     }
-    
+
     console.log('\n📱 Frontend: http://localhost:3005/live-activity.html');
     console.log('====================================================\n');
   });
 }
 
-// Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('\n🛑 Shutting down...');
-  if (dbConnected) {
-    await mongoose.connection.close();
-    console.log('✅ MongoDB connection closed');
-  }
   httpServer.close(() => {
     console.log('✅ Server stopped');
     process.exit(0);

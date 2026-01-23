@@ -1,8 +1,8 @@
-const Video = require('../models/Video');
-const User = require('../models/User');
-const Playlist = require('../models/Playlist');
+import { listVideos, getVideoById, incrementViews, trendingVideos as listTrendingVideos } from '../models/Video.js';
+import { listUsers, getUserById } from '../models/User.js';
+import { listPlaylists, getPlaylistById } from '../models/Playlist.js';
 
-module.exports = {
+const resolvers = {
   health: () => ({
     status: 'OK',
     timestamp: new Date(),
@@ -19,82 +19,63 @@ module.exports = {
   version: () => '2.0.0',
 
   videos: async (_, { filter, limit = 20, offset = 0 }) => {
-    const query = {};
-    if (filter?.status) query.status = filter.status;
-    if (filter?.visibility) query.visibility = filter.visibility;
-    if (filter?.userId) query.userId = filter.userId;
-    if (filter?.search) {
-      query.$or = [
-        { title: { $regex: filter.search, $options: 'i' } },
-        { description: { $regex: filter.search, $options: 'i' } }
-      ];
-    }
-
-    const videos = await Video.find(query)
-      .sort({ createdAt: -1 })
-      .skip(offset)
-      .limit(limit)
-      .populate('userId');
-
-    const totalCount = await Video.countDocuments(query);
-
+    const { items, totalCount } = await listVideos(filter || {}, limit, offset);
     return {
-      edges: videos.map(v => ({ node: v, cursor: v._id.toString() })),
+      edges: items.map(v => ({ node: v, cursor: v.videoId })),
       pageInfo: {
         hasNextPage: offset + limit < totalCount,
         hasPreviousPage: offset > 0,
-        startCursor: videos[0]?._id.toString(),
-        endCursor: videos[videos.length - 1]?._id.toString()
+        startCursor: items[0]?.videoId,
+        endCursor: items[items.length - 1]?.videoId
       },
       totalCount
     };
   },
 
   video: async (_, { id }) => {
-    const video = await Video.findById(id).populate('userId');
+    const video = await getVideoById(id);
     if (video) {
-      video.views += 1;
-      await video.save();
+      await incrementViews(id);
+      video.views = (video.views || 0) + 1;
     }
     return video;
   },
 
   myVideos: async (_, __, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    return Video.find({ userId: user.id }).sort({ createdAt: -1 }).populate('userId');
+    const { items } = await listVideos({ userId: user.id }, 100, 0);
+    return items;
   },
 
   trendingVideos: async (_, { limit = 10 }) => {
-    return Video.find({ visibility: 'PUBLIC', status: 'READY' })
-      .sort({ views: -1, likes: -1 })
-      .limit(limit)
-      .populate('userId');
+    return listTrendingVideos(limit);
   },
 
   users: async (_, { limit = 20, offset = 0 }) => {
-    return User.find().skip(offset).limit(limit);
+    return listUsers(limit, offset);
   },
 
   user: async (_, { id }) => {
-    return User.findById(id);
+    return getUserById(id);
   },
 
   me: async (_, __, { user }) => {
     if (!user) return null;
-    return User.findById(user.id);
+    return getUserById(user.id);
   },
 
   playlists: async (_, { userId, limit = 20 }) => {
-    const query = userId ? { userId } : { visibility: 'PUBLIC' };
-    return Playlist.find(query).limit(limit).populate('userId').populate('videos');
+    return listPlaylists({ userId, limit });
   },
 
   playlist: async (_, { id }) => {
-    return Playlist.findById(id).populate('userId').populate('videos');
+    return getPlaylistById(id);
   },
 
   myPlaylists: async (_, __, { user }) => {
     if (!user) throw new Error('Not authenticated');
-    return Playlist.find({ userId: user.id }).populate('videos');
+    return listPlaylists({ userId: user.id, limit: 50 });
   }
 };
+
+export default resolvers;
