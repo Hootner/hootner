@@ -6,7 +6,7 @@
 export const securityConfig = {
   // Environment
   production: window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1',
-  
+
   // Session Management
   session: {
     timeout: 30 * 60 * 1000, // 30 minutes
@@ -14,7 +14,7 @@ export const securityConfig = {
     enableFingerprinting: true,
     enableHijackDetection: true
   },
-  
+
   // Rate Limiting
   rateLimits: {
     api: {
@@ -38,14 +38,14 @@ export const securityConfig = {
       window: 60000
     }
   },
-  
+
   // CSRF Protection
   csrf: {
     tokenRotation: true,
     rotationProbability: 0.1, // 10% chance per request
     doubleSubmit: true
   },
-  
+
   // Content Security Policy
   csp: {
     enableNonces: true,
@@ -53,7 +53,7 @@ export const securityConfig = {
     rotationInterval: 300000, // 5 minutes
     reportUri: '/api/security/csp-report'
   },
-  
+
   // Input Validation
   validation: {
     maxInputLength: 10000,
@@ -65,7 +65,7 @@ export const securityConfig = {
     enableCommandInjectionPrevention: true,
     enableXSSPrevention: true
   },
-  
+
   // Encryption
   encryption: {
     algorithm: 'AES-GCM',
@@ -73,7 +73,7 @@ export const securityConfig = {
     tagLength: 128,
     enableLocalStorageEncryption: true
   },
-  
+
   // Logging
   logging: {
     maxEvents: 5000,
@@ -83,7 +83,7 @@ export const securityConfig = {
     enablePatternAnalysis: true,
     patternThreshold: 10 // Alert after 10 occurrences
   },
-  
+
   // API Security
   api: {
     timeout: 10000, // 10 seconds
@@ -92,7 +92,7 @@ export const securityConfig = {
     replayWindow: 300000, // 5 minutes
     requireHTTPS: true
   },
-  
+
   // DOM Security
   dom: {
     enableMutationObserver: true,
@@ -100,7 +100,7 @@ export const securityConfig = {
     blockUnauthorizedIframes: true,
     blockFormActionTampering: true
   },
-  
+
   // SRI (Subresource Integrity)
   sri: {
     enabled: true,
@@ -108,14 +108,14 @@ export const securityConfig = {
     validateOnLoad: true,
     blockInvalidScripts: false // Set to true in production
   },
-  
+
   // IP-Based Protection
   ip: {
     enableTracking: true,
     blockDuration: 600000, // 10 minutes
     enableDistributedLimiting: true
   },
-  
+
   // Production Hardening
   hardening: {
     disableConsole: true,
@@ -123,7 +123,7 @@ export const securityConfig = {
     obfuscateErrors: true,
     enableIntegrityChecks: true
   },
-  
+
   // Callbacks
   callbacks: {
     onSessionExpire: null,
@@ -132,7 +132,7 @@ export const securityConfig = {
     onCSRFFailure: null,
     onInjectionAttempt: null
   },
-  
+
   // Feature Flags
   features: {
     enableP0Security: true,

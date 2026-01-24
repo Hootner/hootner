@@ -1,9 +1,37 @@
 {
-  "name": "HOOTNER",
-  "short_name": "Hootner",
-  "start_url": "/pages/dashboard.html",
+  "name": "HOOTNER Dashboard",
+  "short_name": "HOOTNER",
+  "description": "Enterprise Video Streaming Platform - The Owl Never Sleeps",
+  "start_url": "/hexarchy/4-interface/ui/pages/dashboard.html",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
-  "icons": []
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "productivity", "business"],
+  "shortcuts": [
+    {
+      "name": "Search",
+      "url": "/hexarchy/4-interface/ui/pages/dashboard.html#search",
+      "description": "Quick search"
+    },
+    {
+      "name": "Analytics",
+      "url": "/hexarchy/4-interface/ui/pages/dashboard.html#analytics",
+      "description": "View analytics"
+    }
+  ]
 }

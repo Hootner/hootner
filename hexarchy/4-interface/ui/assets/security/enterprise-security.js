@@ -658,7 +658,7 @@ export const isContentValid = (content) => xssProtection.isContentValid(content)
 // 12: CORS MANAGER
 export const corsManager = {
   allowedOrigins: ['https://hootner.com', 'https://*.hootner.com'],
-  
+
   isOriginAllowed(origin) {
     return this.allowedOrigins.some(allowed => {
       if (allowed.includes('*')) {
@@ -668,13 +668,13 @@ export const corsManager = {
       return allowed === origin;
     });
   },
-  
+
   addOrigin(origin) {
     if (!this.allowedOrigins.includes(origin)) {
       this.allowedOrigins.push(origin);
     }
   },
-  
+
   getCorsHeaders(origin) {
     if (this.isOriginAllowed(origin)) {
       return {
@@ -695,7 +695,7 @@ export const clickjackingPrevention = {
     if (window.top !== window.self) {
       window.top.location = window.self.location;
     }
-    
+
     // Add visual indicator if framed
     if (window.self !== window.top) {
       document.body.style.display = 'none';
@@ -714,26 +714,26 @@ export const secureCookies = {
       sameSite: 'Strict',
       httpOnly: false
     };
-    
+
     const config = { ...defaults, ...options };
     const expires = new Date();
     expires.setTime(expires.getTime() + (config.days * 24 * 60 * 60 * 1000));
-    
+
     let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
     cookieString += `; expires=${expires.toUTCString()}`;
     cookieString += `; path=${config.path}`;
-    
+
     if (config.secure) cookieString += '; Secure';
     if (config.sameSite) cookieString += `; SameSite=${config.sameSite}`;
     if (config.domain) cookieString += `; Domain=${config.domain}`;
-    
+
     document.cookie = cookieString;
   },
-  
+
   get(name) {
     const nameEQ = encodeURIComponent(name) + '=';
     const cookies = document.cookie.split(';');
-    
+
     for (let cookie of cookies) {
       cookie = cookie.trim();
       if (cookie.indexOf(nameEQ) === 0) {
@@ -742,11 +742,11 @@ export const secureCookies = {
     }
     return null;
   },
-  
+
   delete(name) {
     this.set(name, '', { days: -1 });
   },
-  
+
   deleteAll() {
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
@@ -762,7 +762,7 @@ export const sriAutoFix = {
     if (!scriptElement.src || scriptElement.getAttribute('integrity')) {
       return true;
     }
-    
+
     try {
       const response = await fetch(scriptElement.src);
       const content = await response.text();
@@ -770,7 +770,7 @@ export const sriAutoFix = {
       const data = encoder.encode(content);
       const hashBuffer = await crypto.subtle.digest('SHA-384', data);
       const hash = 'sha384-' + btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
-      
+
       scriptElement.setAttribute('integrity', hash);
       scriptElement.setAttribute('crossorigin', 'anonymous');
       return true;
@@ -779,16 +779,16 @@ export const sriAutoFix = {
       return false;
     }
   },
-  
+
   async fixAllScripts() {
     const scripts = document.querySelectorAll('script[src]:not([integrity])');
     const results = [];
-    
+
     for (const script of scripts) {
       const success = await this.fixScript(script);
       results.push({ src: script.src, success });
     }
-    
+
     return results;
   }
 };
@@ -800,14 +800,14 @@ export const memoryGuard = {
     critical: 200 * 1024 * 1024  // 200MB
   },
   monitoring: false,
-  
+
   startMonitoring(interval = 30000) {
     if (this.monitoring || !performance.memory) return;
-    
+
     this.monitoring = true;
     this.intervalId = setInterval(() => {
       const used = performance.memory.usedJSHeapSize;
-      
+
       if (used > this.thresholds.critical) {
         console.error('CRITICAL: Memory usage:', (used / 1024 / 1024).toFixed(2), 'MB');
         this.triggerGarbageCollection();
@@ -816,24 +816,24 @@ export const memoryGuard = {
       }
     }, interval);
   },
-  
+
   stopMonitoring() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.monitoring = false;
     }
   },
-  
+
   triggerGarbageCollection() {
     // Clear large data structures
     if (typeof gc === 'function') {
       gc(); // Available in Node.js with --expose-gc flag
     }
   },
-  
+
   getMemoryStats() {
     if (!performance.memory) return null;
-    
+
     return {
       used: performance.memory.usedJSHeapSize,
       total: performance.memory.totalJSHeapSize,
@@ -850,54 +850,54 @@ export const timingSafe = {
     if (typeof a !== 'string' || typeof b !== 'string') {
       return false;
     }
-    
+
     const strA = String(a);
     const strB = String(b);
     const lenA = strA.length;
     const lenB = strB.length;
-    
+
     // Ensure constant time by always comparing same length
     const maxLen = Math.max(lenA, lenB);
     let result = lenA === lenB ? 0 : 1;
-    
+
     for (let i = 0; i < maxLen; i++) {
       const charA = i < lenA ? strA.charCodeAt(i) : 0;
       const charB = i < lenB ? strB.charCodeAt(i) : 0;
       result |= charA ^ charB;
     }
-    
+
     return result === 0;
   },
-  
+
   async compareAsync(a, b) {
     // Use Web Crypto API for constant-time comparison
     const encoder = new TextEncoder();
     const dataA = encoder.encode(String(a));
     const dataB = encoder.encode(String(b));
-    
+
     if (dataA.length !== dataB.length) {
       // Perform dummy operation to maintain timing
       await crypto.subtle.digest('SHA-256', dataA);
       return false;
     }
-    
+
     const hashA = await crypto.subtle.digest('SHA-256', dataA);
     const hashB = await crypto.subtle.digest('SHA-256', dataB);
-    
+
     return this.compareBuffers(hashA, hashB);
   },
-  
+
   compareBuffers(a, b) {
     const viewA = new Uint8Array(a);
     const viewB = new Uint8Array(b);
-    
+
     if (viewA.length !== viewB.length) return false;
-    
+
     let result = 0;
     for (let i = 0; i < viewA.length; i++) {
       result |= viewA[i] ^ viewB[i];
     }
-    
+
     return result === 0;
   }
 };
@@ -911,24 +911,24 @@ export const headerGuard = {
     'Referrer-Policy',
     'Permissions-Policy'
   ],
-  
+
   validateResponse(response) {
     const missing = [];
-    
+
     this.requiredHeaders.forEach(header => {
       if (!response.headers.has(header)) {
         missing.push(header);
       }
     });
-    
+
     if (missing.length > 0) {
       console.warn('Missing security headers:', missing);
       return false;
     }
-    
+
     return true;
   },
-  
+
   getRecommendedHeaders() {
     return {
       'X-Content-Type-Options': 'nosniff',
@@ -947,22 +947,22 @@ export const headerGuard = {
 // 19: WEBSOCKET SECURITY (Enhanced)
 export const webSocketSecurity = {
   connections: new Map(),
-  
+
   async createSecureConnection(url, options = {}) {
     const wsUrl = url.replace(/^ws:/, 'wss:');
     const token = options.token || sessionManager.token;
     const authenticatedUrl = `${wsUrl}?token=${encodeURIComponent(token)}`;
-    
+
     const ws = new WebSocket(authenticatedUrl);
     const connId = crypto.randomUUID();
-    
+
     this.connections.set(connId, {
       ws,
       url: wsUrl,
       created: Date.now(),
       messageCount: 0
     });
-    
+
     ws.onmessage = (event) => {
       const conn = this.connections.get(connId);
       if (conn) {
@@ -972,20 +972,20 @@ export const webSocketSecurity = {
         }
       }
     };
-    
+
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       options.onError?.(error);
     };
-    
+
     ws.onclose = () => {
       this.connections.delete(connId);
       options.onClose?.();
     };
-    
+
     return { ws, id: connId };
   },
-  
+
   validateMessage(data) {
     try {
       const parsed = JSON.parse(data);
@@ -994,7 +994,7 @@ export const webSocketSecurity = {
       return false;
     }
   },
-  
+
   closeAll() {
     this.connections.forEach(conn => {
       conn.ws.close();
@@ -1009,11 +1009,11 @@ export const encryptedStorage = {
     const encrypted = await aes256Encryption.encryptObject(value);
     localStorage.setItem(`secure_${key}`, JSON.stringify(encrypted));
   },
-  
+
   async get(key) {
     const encrypted = localStorage.getItem(`secure_${key}`);
     if (!encrypted) return null;
-    
+
     try {
       return await aes256Encryption.decryptObject(JSON.parse(encrypted));
     } catch (error) {
@@ -1021,11 +1021,11 @@ export const encryptedStorage = {
       return null;
     }
   },
-  
+
   remove(key) {
     localStorage.removeItem(`secure_${key}`);
   },
-  
+
   clear() {
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
@@ -1083,7 +1083,7 @@ export const crossOriginPolicies = {
       coop: document.querySelector('meta[http-equiv="Cross-Origin-Opener-Policy"]'),
       corp: document.querySelector('meta[http-equiv="Cross-Origin-Resource-Policy"]')
     };
-    
+
     return {
       coep: meta.coep?.content === 'require-corp',
       coop: meta.coop?.content === 'same-origin',
@@ -1096,22 +1096,22 @@ export const crossOriginPolicies = {
 export const sessionHijackingDetection = {
   initialFingerprint: null,
   checksEnabled: true,
-  
+
   async initialize() {
     this.initialFingerprint = await browserFingerprint.generate();
   },
-  
+
   async checkForHijacking() {
     if (!this.checksEnabled || !this.initialFingerprint) return true;
-    
+
     const currentFingerprint = await browserFingerprint.generate();
     const match = timingSafe.compare(this.initialFingerprint, currentFingerprint);
-    
+
     if (!match) {
       console.error('SESSION HIJACKING DETECTED');
       await enhancedSecurityLogger.log(
         'session_hijacking_detected',
-        { 
+        {
           initial: this.initialFingerprint.substring(0, 16),
           current: currentFingerprint.substring(0, 16)
         },
@@ -1121,7 +1121,7 @@ export const sessionHijackingDetection = {
       sessionManager.destroySession();
       return false;
     }
-    
+
     return true;
   }
 };
@@ -1129,18 +1129,18 @@ export const sessionHijackingDetection = {
 // 23: DOUBLE-SUBMIT CSRF
 export const doubleSubmitCSRF = {
   tokenName: 'csrf_token',
-  
+
   generateToken() {
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
     const token = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
-    
+
     // Store in cookie
     secureCookies.set(this.tokenName, token, { sameSite: 'Strict', secure: true });
-    
+
     return token;
   },
-  
+
   getToken() {
     let token = secureCookies.get(this.tokenName);
     if (!token) {
@@ -1148,7 +1148,7 @@ export const doubleSubmitCSRF = {
     }
     return token;
   },
-  
+
   validateRequest(cookieToken, headerToken) {
     if (!cookieToken || !headerToken) return false;
     return timingSafe.compare(cookieToken, headerToken);
@@ -1159,10 +1159,10 @@ export const doubleSubmitCSRF = {
 export const consoleProtection = {
   originalConsole: {},
   disabled: false,
-  
+
   disable() {
     if (this.disabled) return;
-    
+
     this.originalConsole = {
       log: console.log,
       warn: console.warn,
@@ -1170,19 +1170,19 @@ export const consoleProtection = {
       info: console.info,
       debug: console.debug
     };
-    
+
     console.log = () => {};
     console.warn = () => {};
     console.error = () => {};
     console.info = () => {};
     console.debug = () => {};
-    
+
     this.disabled = true;
   },
-  
+
   enable() {
     if (!this.disabled) return;
-    
+
     Object.assign(console, this.originalConsole);
     this.disabled = false;
   }
@@ -1192,15 +1192,15 @@ export const consoleProtection = {
 export const devToolsDetection = {
   threshold: 160,
   checking: false,
-  
+
   isOpen() {
     return window.outerWidth - window.innerWidth > this.threshold ||
            window.outerHeight - window.innerHeight > this.threshold;
   },
-  
+
   startMonitoring(callback) {
     if (this.checking) return;
-    
+
     this.checking = true;
     this.intervalId = setInterval(() => {
       if (this.isOpen()) {
@@ -1209,7 +1209,7 @@ export const devToolsDetection = {
       }
     }, 1000);
   },
-  
+
   stopMonitoring() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -1222,11 +1222,11 @@ export const devToolsDetection = {
 export const patternAnalysis = {
   patterns: new Map(),
   threshold: 10,
-  
+
   recordEvent(eventType) {
     const count = (this.patterns.get(eventType) || 0) + 1;
     this.patterns.set(eventType, count);
-    
+
     if (count >= this.threshold) {
       console.error(`PATTERN DETECTED: ${eventType} occurred ${count} times`);
       enhancedSecurityLogger.log(
@@ -1237,10 +1237,10 @@ export const patternAnalysis = {
       );
       return true;
     }
-    
+
     return false;
   },
-  
+
   reset(eventType) {
     if (eventType) {
       this.patterns.delete(eventType);
@@ -1248,7 +1248,7 @@ export const patternAnalysis = {
       this.patterns.clear();
     }
   },
-  
+
   getStats() {
     return Object.fromEntries(this.patterns);
   }
@@ -1260,14 +1260,14 @@ export const validators = {
     if (!email || typeof email !== 'string' || email.length > 320) return false;
     const [local, domain] = email.split('@');
     if (!local || !domain || local.length > 64 || domain.length > 255) return false;
-    
+
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     return emailRegex.test(email) && xssProtection.isContentValid(email);
   },
-  
+
   url(url) {
     if (!url || typeof url !== 'string' || url.length > 2048) return false;
-    
+
     try {
       const parsed = new URL(url);
       return parsed.protocol === 'https:' && xssProtection.isContentValid(url);
@@ -1275,7 +1275,7 @@ export const validators = {
       return false;
     }
   },
-  
+
   text(text, maxLength = 500) {
     if (!text || typeof text !== 'string') return false;
     if (text.length > maxLength) return false;
@@ -1283,37 +1283,37 @@ export const validators = {
            injectionPrevention.validateSQL(text) &&
            injectionPrevention.validateCommand(text);
   },
-  
+
   username(username) {
     if (!username || typeof username !== 'string') return false;
     return /^[a-zA-Z0-9_]{3,30}$/.test(username) && xssProtection.isContentValid(username);
   },
-  
+
   phoneNumber(phone) {
     if (!phone || typeof phone !== 'string') return false;
     return /^\+?[1-9]\d{1,14}$/.test(phone.replace(/[\s()-]/g, ''));
   },
-  
+
   creditCard(number) {
     if (!number || typeof number !== 'string') return false;
     const cleaned = number.replace(/\s/g, '');
-    
+
     // Luhn algorithm
     let sum = 0;
     let isEven = false;
-    
+
     for (let i = cleaned.length - 1; i >= 0; i--) {
       let digit = parseInt(cleaned[i]);
-      
+
       if (isEven) {
         digit *= 2;
         if (digit > 9) digit -= 9;
       }
-      
+
       sum += digit;
       isEven = !isEven;
     }
-    
+
     return sum % 10 === 0;
   }
 };
@@ -1322,10 +1322,10 @@ export const validators = {
 export const tokenRotation = {
   rotationInterval: 300000, // 5 minutes
   autoRotate: false,
-  
+
   startAutoRotation() {
     if (this.autoRotate) return;
-    
+
     this.autoRotate = true;
     this.intervalId = setInterval(() => {
       csrfManager.generateToken();
@@ -1333,7 +1333,7 @@ export const tokenRotation = {
       cspNonceSystem.rotateNonce();
     }, this.rotationInterval);
   },
-  
+
   stopAutoRotation() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -1347,12 +1347,12 @@ export const tokenRotation = {
 // 31: REQUEST TIMEOUT (Enhanced)
 export const requestTimeout = {
   defaultTimeout: 10000,
-  
+
   async withTimeout(promise, timeout = this.defaultTimeout) {
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(() => reject(new Error('Request timeout')), timeout);
     });
-    
+
     return Promise.race([promise, timeoutPromise]);
   }
 };
@@ -1364,13 +1364,13 @@ export const cryptoTokenGenerator = {
     crypto.getRandomValues(array);
     return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
   },
-  
+
   generateBase64(length = 32) {
     const array = new Uint8Array(length);
     crypto.getRandomValues(array);
     return btoa(String.fromCharCode(...array));
   },
-  
+
   generateUUID() {
     return crypto.randomUUID();
   }
@@ -1390,7 +1390,7 @@ export const realIPDetection = {
       return await browserFingerprint.generate();
     }
   },
-  
+
   async getDetailedInfo() {
     try {
       const response = await fetch('https://ipapi.co/json/');
@@ -1411,26 +1411,26 @@ export const endpointLimiter = {
     sensitive: { max: 10, window: 60000 }
   },
   requests: new Map(),
-  
+
   isAllowed(endpoint, tier = 'public') {
     const now = Date.now();
     const key = `${tier}:${endpoint}`;
     const limit = this.tiers[tier];
-    
+
     if (!this.requests.has(key)) {
       this.requests.set(key, []);
     }
-    
+
     const requests = this.requests.get(key);
     const recentRequests = requests.filter(time => now - time < limit.window);
-    
+
     if (recentRequests.length >= limit.max) {
       return { allowed: false, remaining: 0, resetAt: Math.min(...recentRequests) + limit.window };
     }
-    
+
     recentRequests.push(now);
     this.requests.set(key, recentRequests);
-    
+
     return { allowed: true, remaining: limit.max - recentRequests.length };
   }
 };
@@ -1438,10 +1438,10 @@ export const endpointLimiter = {
 // 35: IP STATISTICS
 export const ipStatistics = {
   stats: new Map(),
-  
+
   async record(action) {
     const ip = await realIPDetection.getIP();
-    
+
     if (!this.stats.has(ip)) {
       this.stats.set(ip, {
         firstSeen: Date.now(),
@@ -1450,18 +1450,18 @@ export const ipStatistics = {
         requestCount: 0
       });
     }
-    
+
     const stat = this.stats.get(ip);
     stat.lastSeen = Date.now();
     stat.actions.push({ action, timestamp: Date.now() });
     stat.requestCount++;
-    
+
     // Keep only last 100 actions
     if (stat.actions.length > 100) {
       stat.actions.shift();
     }
   },
-  
+
   async getStats() {
     const ip = await realIPDetection.getIP();
     return this.stats.get(ip) || null;
@@ -1472,7 +1472,7 @@ export const ipStatistics = {
 export const violationRecorder = {
   violations: [],
   maxViolations: 1000,
-  
+
   record(type, details) {
     const violation = {
       id: crypto.randomUUID(),
@@ -1481,13 +1481,13 @@ export const violationRecorder = {
       timestamp: Date.now(),
       fingerprint: browserFingerprint.fingerprint
     };
-    
+
     this.violations.push(violation);
-    
+
     if (this.violations.length > this.maxViolations) {
       this.violations.shift();
     }
-    
+
     enhancedSecurityLogger.log(
       'security_violation',
       violation,
@@ -1495,7 +1495,7 @@ export const violationRecorder = {
       'violations'
     );
   },
-  
+
   getViolations(filter = {}) {
     return this.violations.filter(v => {
       if (filter.type && v.type !== filter.type) return false;
@@ -1509,7 +1509,7 @@ export const violationRecorder = {
 export const formGuard = {
   protectForm(formElement) {
     const originalAction = formElement.action;
-    
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach(mutation => {
         if (mutation.attributeName === 'action') {
@@ -1521,7 +1521,7 @@ export const formGuard = {
         }
       });
     });
-    
+
     observer.observe(formElement, { attributes: true });
     return observer;
   }
@@ -1533,7 +1533,7 @@ export const attributeGuard = {
     attributes.forEach(attr => {
       originalValues[attr] = element.getAttribute(attr);
     });
-    
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach(mutation => {
         if (attributes.includes(mutation.attributeName)) {
@@ -1550,7 +1550,7 @@ export const attributeGuard = {
         }
       });
     });
-    
+
     observer.observe(element, { attributes: true });
     return observer;
   }
@@ -1559,7 +1559,7 @@ export const attributeGuard = {
 // 39: HASH REGISTRY
 export const hashRegistry = {
   hashes: new Map(),
-  
+
   async register(key, data) {
     const encoder = new TextEncoder();
     const dataBuffer = encoder.encode(JSON.stringify(data));
@@ -1567,19 +1567,19 @@ export const hashRegistry = {
     const hash = Array.from(new Uint8Array(hashBuffer))
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
-    
+
     this.hashes.set(key, hash);
     return hash;
   },
-  
+
   async verify(key, data) {
     const storedHash = this.hashes.get(key);
     if (!storedHash) return false;
-    
+
     const currentHash = await this.register(key + '_temp', data);
     const match = timingSafe.compare(storedHash, currentHash);
     this.hashes.delete(key + '_temp');
-    
+
     return match;
   }
 };
@@ -1588,7 +1588,7 @@ export const hashRegistry = {
 export const validationLogger = {
   logs: [],
   maxLogs: 5000,
-  
+
   log(field, value, isValid, reason) {
     const entry = {
       timestamp: Date.now(),
@@ -1597,13 +1597,13 @@ export const validationLogger = {
       isValid,
       reason
     };
-    
+
     this.logs.push(entry);
-    
+
     if (this.logs.length > this.maxLogs) {
       this.logs.shift();
     }
-    
+
     if (!isValid) {
       enhancedSecurityLogger.log(
         'validation_failed',
@@ -1613,11 +1613,11 @@ export const validationLogger = {
       );
     }
   },
-  
+
   getStats() {
     const total = this.logs.length;
     const failed = this.logs.filter(l => !l.isValid).length;
-    
+
     return {
       total,
       failed,
