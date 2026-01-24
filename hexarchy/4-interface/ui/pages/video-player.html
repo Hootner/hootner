@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; media-src 'self' https:; connect-src 'self' https:; worker-src 'self' blob:;"
-    />
     <title>Cinema Player • HOOTNER - The Owl Never Sleeps</title>
     <link rel="stylesheet" href="shared-styles.css" />
     <link rel="manifest" href="manifest.json" />
@@ -525,16 +521,17 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 40px;
+        padding: 16px;
       }
 
       .video-player {
         position: relative;
         width: 100%;
-        max-width: 1400px;
+        max-width: 95vw;
+        max-height: 85vh;
         aspect-ratio: 16/9;
         background: #000;
-        border-radius: 32px;
+        border-radius: 24px;
         overflow: hidden;
         border: 4px solid transparent;
         background-image:

@@ -7,14 +7,14 @@
 #### 1. **CSS Custom Properties System** (Design System)
 ```css
 :root {
-  /* Color Palette */
-  --color-primary: #00ff00
-  --color-secondary: #00ffff
-  --color-accent: #ff00ff
-  --color-danger: #ff0055
-  --color-warning: #ffaa00
-  --color-success: #00ff88
-  --color-info: #0088ff
+  /* Color Palette - Softer Tones */
+  --color-primary: #4caf50
+  --color-secondary: #4dd0e1
+  --color-accent: #ba68c8
+  --color-danger: #ef5350
+  --color-warning: #ffa726
+  --color-success: #66bb6a
+  --color-info: #42a5f5
   
   /* Background Layers */
   --bg-primary: #0a0a0f
