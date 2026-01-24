@@ -77,6 +77,26 @@ npm run git:health:history        # 30-day trend analysis
 
 See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for details.
 
+### Legal & Community Protection ⭐ NEW
+
+Comprehensive copyright protection for homeschool creators:
+
+```bash
+# Auto-copyright notices on all uploads
+# 6 license types including Creative Commons
+# Full DMCA takedown/counter-notice system
+# Community guidelines and onboarding
+```
+
+**Key Features:**
+- ✅ Automatic © notices (© Creator Name Year)
+- ✅ CC BY-NC-SA recommended for homeschool sharing
+- ✅ DMCA compliance with statutory timelines
+- ✅ Counter-notice support
+- ✅ Community education about respecting creators
+
+See [docs/LEGAL_COMPLIANCE_GUIDE.md](docs/LEGAL_COMPLIANCE_GUIDE.md) for complete guide.
+
 ### VSCode Optimization
 
 - **Network throttling disabled** for maximum performance
@@ -91,92 +111,316 @@ See [docs/GIT_INTEGRITY_MONITORING.md](docs/GIT_INTEGRITY_MONITORING.md) for det
 ```
 Hootner/
 ├── api/
-│   └── graphql/               # GraphQL API server
-│       ├── middleware/        # API middleware
-│       ├── models/            # Data models
-│       ├── resolvers/         # GraphQL resolvers
-│       ├── routes/            # API routes
-│       ├── utils/             # Utility functions
-│       ├── webhooks/          # Webhook handlers
-│       └── schema.graphql     # GraphQL schema
+│   └── graphql/                       # GraphQL API server
+│       ├── middleware/                # API middleware
+│       │   ├── auth.js                # Authentication middleware
+│       │   ├── errorHandler.js        # Error handling
+│       │   └── validation.js          # Request validation
+│       ├── models/                    # Data models
+│       │   ├── User.js                # User model
+│       │   ├── Video.js               # Video model
+│       │   └── Comment.js             # Comment model
+│       ├── resolvers/                 # GraphQL resolvers
+│       │   ├── videoResolvers.js      # Video queries/mutations
+│       │   ├── userResolvers.js       # User queries/mutations
+│       │   └── commentResolvers.js    # Comment queries/mutations
+│       ├── routes/                    # API routes
+│       │   ├── auth.js                # Authentication routes
+│       │   └── webhooks.js            # Webhook routes
+│       ├── utils/                     # Utility functions
+│       │   ├── dynamodb.js            # DynamoDB helpers
+│       │   ├── jwt.js                 # JWT utilities
+│       │   └── validators.js          # Input validators
+│       ├── webhooks/                  # Webhook handlers
+│       │   ├── stripe.js              # Stripe webhooks
+│       │   └── github.js              # GitHub webhooks
+│       ├── schema.graphql             # GraphQL schema
+│       ├── server.js                  # Express server
+│       ├── lambda.js                  # Lambda handler
+│       └── package.json               # Dependencies
 ├── apps/
-│   └── frontend/              # React 18 + TypeScript + Vite frontend
-│       ├── html-pages/        # Standalone HTML pages (cinema-player, index)
-│       └── src/               # React components with Apollo GraphQL
-├── constants/                 # Application constants
-├── data/                      # Application data
-│   ├── logs/                  # Log files
-│   ├── uploads/               # User uploads
-│   └── usage/                 # Usage analytics
-├── frameworks/                # 🏗️ Framework Architecture
-│   ├── ai/                    # AI services, agents, MCP servers
-│   │   └── agents/            # AI agent orchestration
-│   └── backend/               # Server-side frameworks
-│       └── nestjs/            # NestJS modules & decorators
-├── scripts/                   # 🔧 Server Management & Automation
-│   ├── deployment/            # Deployment automation
-│   │   └── blue-green-deploy.sh
-│   ├── onboard-dev.js         # Developer onboarding
-│   ├── smoke-test.sh          # Smoke testing
-│   └── validate_workflows.py  # Workflow validation
-├── docs/                      # 📚 Comprehensive Documentation
-│   ├── readme/                # Component-specific READMEs
-│   │   ├── apps-README.md     # Frontend applications guide
-│   │   ├── services-README.md # AI video generation service
-│   │   ├── commands-README.md # Command references
-│   │   └── config-README.md   # Configuration guides
-│   ├── commands/              # Command references & quick guides
-│   │   ├── quick-reference.md # Essential commands
-│   │   ├── development.md     # Dev workflow
-│   │   ├── security.md       # Security commands
-│   │   └── ai-services.md    # AI service commands
-│   ├── reports/               # Project reports
-│   │   ├── lint/              # Linting and code quality
-│   │   ├── syntax/            # Syntax fix documentation
-│   │   └── phases/            # Project phase reports
-│   └── status/                # Status reports
-├── services/                  # 🔄 Microservices & AI Services
-│   └── video-generation/      # AI text-to-video service
-│       ├── config/            # Configuration files
-│       ├── unet.py            # 3D U-Net diffusion model
-│       ├── generator.py       # Video generation orchestrator
-│       ├── api.py             # Flask REST API
-│       ├── diffusion.py       # Diffusion models
-│       ├── hdr_processing.py  # HDR video processing
-│       ├── dolby_atmos.py     # Audio processing
-│       └── install.py         # Dependency installer
-├── terraform/                 # Infrastructure as Code
-│   └── main.tf                # Terraform configuration
-├── hexarchy/                  # 🏛️ Hexagonal Architecture
-│   ├── 0-core/                # Core business logic
-│   ├── 1-foundation/          # Infrastructure layer
-│   ├── 2-intelligence/        # AI and analytics
-│   ├── 3-communication/       # External interfaces
-│   ├── 4-interface/           # User interfaces
-│   ├── 5-economy/             # Business logic
-│   ├── 6-governance/          # Policies and rules
-│   ├── 7-data/                # Data management
-│   └── 8-operations/          # DevOps and monitoring
-├── k8s/                       # ☸️ Kubernetes Configuration
-│   ├── istio/                 # Istio service mesh
-│   ├── frontend-deployment.yaml
-│   ├── namespace.yaml
-│   └── redis-deployment.yaml
-├── logs/                      # 📊 Application logs
-├── tests/                     # 🧪 Testing Infrastructure
-│   ├── e2e/                   # End-to-end tests (Playwright)
-│   ├── integration/           # Integration tests
-│   ├── performance/           # Performance tests
-│   ├── electron-code-editor/  # Editor tests
-│   └── reports/               # Test reports
-├── terraform/                 # Infrastructure as Code
-│   └── main.tf                # Terraform configuration
-├── wiki/                      # Project wiki
-│   └── Home.md                # Wiki home page
-└── .github/
-    ├── workflows/             # CI/CD pipelines (11 workflows)
-    ├── scripts/               # GitHub automation scripts
-    └── ISSUE_TEMPLATE/        # Issue templates
+│   └── frontend/                      # React 18 + TypeScript + Vite
+│       ├── html-pages/                # Standalone HTML pages
+│       │   ├── cinema-player.html     # Video player page
+│       │   ├── index.html             # Landing page
+│       │   ├── login.html             # Login page
+│       │   ├── dashboard.html         # Dashboard page
+│       │   ├── styles.css             # Global styles
+│       │   └── video-player-server.js # Dev server
+│       ├── src/                       # React components
+│       │   ├── components/            # UI components
+│       │   │   ├── VideoPlayer.tsx    # Video player component
+│       │   │   ├── Playlist.tsx       # Playlist manager
+│       │   │   ├── Comments.tsx       # Comments section
+│       │   │   └── SearchBar.tsx      # Search component
+│       │   ├── pages/                 # Page components
+│       │   │   ├── Home.tsx           # Home page
+│       │   │   ├── Watch.tsx          # Watch video page
+│       │   │   └── Profile.tsx        # User profile
+│       │   ├── hooks/                 # Custom React hooks
+│       │   │   ├── useAuth.ts         # Authentication hook
+│       │   │   └── useVideo.ts        # Video management hook
+│       │   ├── graphql/               # GraphQL queries
+│       │   │   ├── queries.ts         # GraphQL queries
+│       │   │   └── mutations.ts       # GraphQL mutations
+│       │   ├── App.tsx                # Main app component
+│       │   └── main.tsx               # Entry point
+│       ├── public/                    # Static assets
+│       ├── vite.config.ts             # Vite configuration
+│       └── package.json               # Frontend dependencies
+├── constants/                         # Application constants
+│   ├── apiEndpoints.js                # API endpoint constants
+│   ├── errorCodes.js                  # Error code constants
+│   └── config.js                      # Configuration constants
+├── data/                              # Application data
+│   ├── logs/                          # Log files
+│   │   ├── api.log                    # API logs
+│   │   ├── error.log                  # Error logs
+│   │   └── access.log                 # Access logs
+│   ├── uploads/                       # User uploads
+│   │   └── videos/                    # Uploaded videos
+│   └── usage/                         # Usage analytics
+│       └── metrics.json               # Usage metrics
+├── frameworks/                        # 🏗️ Framework Architecture
+│   ├── ai/                            # AI services & agents
+│   │   ├── agents/                    # AI agent orchestration
+│   │   │   ├── SecurityAgent.js       # Security monitoring
+│   │   │   ├── PaymentFraudAgent.js   # Fraud detection
+│   │   │   ├── RevenueOptimizationAgent.js # Revenue optimization
+│   │   │   ├── AutoScalingAgent.js    # Auto-scaling
+│   │   │   ├── ContentModerationAgent.js # Content moderation
+│   │   │   └── README.md              # Agent documentation
+│   │   ├── mcp-servers/               # MCP server integrations
+│   │   └── models/                    # AI model definitions
+│   └── backend/                       # Server-side frameworks
+│       └── nestjs/                    # NestJS modules
+│           ├── modules/               # NestJS modules
+│           └── decorators/            # Custom decorators
+├── scripts/                           # 🔧 Automation Scripts
+│   ├── deployment/                    # Deployment scripts
+│   │   ├── blue-green-deploy.sh       # Blue-green deployment
+│   │   └── rollback.sh                # Rollback script
+│   ├── add-dependencies.js            # Add SAM dependencies
+│   ├── onboard-dev.js                 # Developer onboarding
+│   ├── smoke-test.sh                  # Smoke testing
+│   ├── validate_workflows.py          # Workflow validation
+│   ├── start-all-servers.js           # Start all servers
+│   └── shutdown-servers.bat           # Shutdown servers
+├── docs/                              # 📚 Documentation
+│   ├── readme/                        # Component READMEs
+│   │   ├── apps-README.md             # Frontend guide
+│   │   ├── services-README.md         # AI services guide
+│   │   ├── commands-README.md         # Command reference
+│   │   └── config-README.md           # Configuration guide
+│   ├── commands/                      # Command references
+│   │   ├── quick-reference.md         # Essential commands
+│   │   ├── development.md             # Dev workflow
+│   │   ├── security.md                # Security commands
+│   │   └── ai-services.md             # AI service commands
+│   ├── reports/                       # Project reports
+│   │   ├── lint/                      # Linting reports
+│   │   ├── syntax/                    # Syntax fix docs
+│   │   └── phases/                    # Project phases
+│   ├── status/                        # Status reports
+│   ├── AI_AGENT_ORCHESTRATION.md      # Agent orchestration guide
+│   ├── ARCHITECTURE_DIAGRAM.md        # Architecture diagram
+│   ├── BACKEND_QUICKSTART.md          # Backend quick start
+│   ├── LEGAL_COMPLIANCE_GUIDE.md      # Legal compliance
+│   ├── GIT_INTEGRITY_MONITORING.md    # Git integrity guide
+│   └── ADVANCED_AGENTS.md             # Advanced agent guide
+├── services/                          # 🔄 Microservices
+│   └── video-generation/              # AI video generation
+│       ├── config/                    # Configuration files
+│       │   ├── model_config.yaml      # Model configuration
+│       │   └── generation_params.yaml # Generation parameters
+│       ├── unet.py                    # 3D U-Net model
+│       ├── generator.py               # Video generator
+│       ├── api.py                     # Flask REST API
+│       ├── diffusion.py               # Diffusion models
+│       ├── hdr_processing.py          # HDR processing
+│       ├── dolby_atmos.py             # Audio processing
+│       ├── install.py                 # Dependency installer
+│       ├── requirements.txt           # Python dependencies
+│       └── README.md                  # Service documentation
+├── hexarchy/                          # 🏛️ Hexagonal Architecture (8 Layers)
+│   ├── 0-core/                        # Core business logic
+│   │   ├── domain/                    # Domain models
+│   │   │   ├── entities/              # Business entities
+│   │   │   ├── value-objects/         # Value objects
+│   │   │   └── aggregates/            # Aggregate roots
+│   │   ├── use-cases/                 # Business use cases
+│   │   ├── services/                  # Domain services
+│   │   └── README.md                  # Layer documentation
+│   ├── 1-foundation/                  # Infrastructure layer
+│   │   ├── persistence/               # Data persistence
+│   │   │   ├── repositories/          # Repository pattern
+│   │   │   └── dynamodb/              # DynamoDB adapters
+│   │   ├── cache/                     # Caching layer
+│   │   │   └── redis/                 # Redis adapters
+│   │   ├── messaging/                 # Message queues
+│   │   ├── storage/                   # File storage
+│   │   └── README.md                  # Layer documentation
+│   ├── 2-intelligence/                # AI and analytics
+│   │   ├── ml-models/                 # Machine learning models
+│   │   ├── analytics/                 # Analytics engines
+│   │   ├── recommendations/           # Recommendation system
+│   │   ├── predictions/               # Predictive analytics
+│   │   └── README.md                  # Layer documentation
+│   ├── 3-communication/               # External interfaces
+│   │   ├── api/                       # API interfaces
+│   │   │   ├── rest/                  # REST APIs
+│   │   │   ├── graphql/               # GraphQL APIs
+│   │   │   └── websocket/             # WebSocket connections
+│   │   ├── webhooks/                  # Webhook handlers
+│   │   ├── events/                    # Event publishers
+│   │   └── README.md                  # Layer documentation
+│   ├── 4-interface/                   # User interfaces
+│   │   ├── web/                       # Web UI
+│   │   ├── mobile/                    # Mobile UI
+│   │   ├── admin/                     # Admin panel
+│   │   └── README.md                  # Layer documentation
+│   ├── 5-economy/                     # Business logic
+│   │   ├── payments/                  # Payment processing
+│   │   │   ├── stripe/                # Stripe integration
+│   │   │   ├── fraud-detection/       # Fraud detection
+│   │   │   └── billing/               # Billing system
+│   │   ├── subscriptions/             # Subscription management
+│   │   ├── marketplace/               # Marketplace logic
+│   │   └── README.md                  # Layer documentation
+│   ├── 6-governance/                  # Policies and rules
+│   │   ├── policies/                  # Business policies
+│   │   ├── compliance/                # Compliance rules
+│   │   │   ├── gdpr/                  # GDPR compliance
+│   │   │   ├── dmca/                  # DMCA compliance
+│   │   │   └── copyright/             # Copyright protection
+│   │   ├── audit/                     # Audit logging
+│   │   └── README.md                  # Layer documentation
+│   ├── 7-data/                        # Data management
+│   │   ├── models/                    # Data models
+│   │   ├── migrations/                # Database migrations
+│   │   ├── seeds/                     # Data seeding
+│   │   ├── transformations/           # Data transformations
+│   │   └── README.md                  # Layer documentation
+│   └── 8-operations/                  # DevOps and monitoring
+│       ├── deployment/                # Deployment services
+│       │   └── DeploymentService.js   # Blue-green, canary, rolling
+│       ├── monitoring/                # Monitoring services
+│       │   └── MonitoringService.js   # Prometheus, Grafana, alerts
+│       ├── infrastructure/            # Infrastructure as code
+│       │   └── InfrastructureService.js # Terraform, CloudFormation, Ansible
+│       ├── backup/                    # Backup and recovery
+│       │   └── BackupService.js       # Backup, restore, disaster recovery
+│       ├── index.js                   # Layer exports
+│       └── README.md                  # Layer documentation
+├── k8s/                               # ☸️ Kubernetes Configuration
+│   ├── istio/                         # Istio service mesh
+│   │   ├── gateway.yaml               # Istio gateway
+│   │   ├── virtual-service.yaml       # Virtual service
+│   │   └── destination-rule.yaml      # Destination rules
+│   ├── frontend-deployment.yaml       # Frontend deployment
+│   ├── api-deployment.yaml            # API deployment
+│   ├── namespace.yaml                 # Kubernetes namespace
+│   ├── redis-deployment.yaml          # Redis deployment
+│   ├── secrets.yaml                   # Kubernetes secrets
+│   └── configmap.yaml                 # Configuration maps
+├── logs/                              # 📊 Application logs
+│   ├── api/                           # API logs
+│   ├── services/                      # Service logs
+│   └── errors/                        # Error logs
+├── tests/                             # 🧪 Testing Infrastructure
+│   ├── e2e/                           # End-to-end tests (Playwright)
+│   │   ├── video-player.spec.ts       # Player tests
+│   │   ├── authentication.spec.ts     # Auth tests
+│   │   └── upload.spec.ts             # Upload tests
+│   ├── integration/                   # Integration tests
+│   │   ├── api.test.js                # API integration tests
+│   │   └── graphql.test.js            # GraphQL tests
+│   ├── performance/                   # Performance tests
+│   │   └── load-test.js               # Load testing (k6)
+│   ├── unit/                          # Unit tests
+│   │   ├── resolvers.test.js          # Resolver tests
+│   │   └── services.test.js           # Service tests
+│   ├── electron-code-editor/          # Editor tests
+│   └── reports/                       # Test reports
+│       ├── coverage/                  # Coverage reports
+│       └── results/                   # Test results
+├── terraform/                         # 🏗️ Infrastructure as Code
+│   ├── main.tf                        # Main configuration
+│   ├── variables.tf                   # Variables
+│   ├── outputs.tf                     # Outputs
+│   └── modules/                       # Terraform modules
+│       ├── vpc/                       # VPC module
+│       ├── ecs/                       # ECS module
+│       └── rds/                       # RDS module
+├── wiki/                              # 📖 Project wiki
+│   ├── Home.md                        # Wiki home page
+│   ├── Getting-Started.md             # Getting started guide
+│   └── Deployment.md                  # Deployment guide
+├── .github/                           # 🔄 GitHub Configuration
+│   ├── workflows/                     # CI/CD pipelines
+│   │   ├── copilot-review.yml         # Copilot review
+│   │   ├── copilot-monitor.yml        # Copilot monitoring
+│   │   ├── copilot-docs.yml           # Documentation
+│   │   ├── copilot-commits.yml        # Commit validation
+│   │   ├── commit-validation.yml      # Validation workflow
+│   │   ├── commit-hooks.yml           # Git hooks
+│   │   ├── auto-commit.yml            # Auto-commit
+│   │   ├── agent-orchestration.yml    # Agent orchestration
+│   │   ├── tooling.yml                # Tooling workflow
+│   │   └── dependency-update.yml      # Dependency updates
+│   ├── scripts/                       # GitHub automation
+│   │   ├── validate-pr.js             # PR validation
+│   │   └── auto-label.js              # Auto-labeling
+│   ├── copilot-instructions.md        # Copilot instructions
+│   └── ISSUE_TEMPLATE/                # Issue templates
+│       ├── bug_report.md              # Bug report template
+│       └── feature_request.md         # Feature request template
+├── template-with-keys.yaml            # 🚀 AWS SAM Template (120 connections)
+│   # Core Resources (5)
+│   # ├── HootnerApi (API Gateway)
+│   # ├── HootnerTable (DynamoDB)
+│   # ├── APISecrets (API keys secret)
+│   # ├── JWTSecret (Authentication secret)
+│   # └── StripeKey (Payment secret)
+│   # Lambda Layer (1)
+│   # └── APIKeysLayer (Shared utilities)
+│   # Lambda Functions (20) - Each with 6 dependencies
+│   # ├── VideoPlayerFunction (/api/videos)
+│   # ├── AIVideoGenFunction (/api/ai-video)
+│   # ├── LiveStreamFunction (/api/live-stream)
+│   # ├── CodeEditorFunction (/api/editor)
+│   # ├── CollaborationFunction (/api/collaboration)
+│   # ├── MessagesFunction (/api/messages)
+│   # ├── AnalyticsFunction (/api/analytics)
+│   # ├── MarketplaceFunction (/api/marketplace)
+│   # ├── AIAgentsFunction (/api/agents)
+│   # ├── DevOpsFunction (/api/devops)
+│   # ├── GraphQLFunction (/graphql)
+│   # ├── ProfileFunction (/api/profile)
+│   # ├── SettingsFunction (/api/settings)
+│   # ├── UploadFunction (/api/upload)
+│   # ├── SearchFunction (/api/search)
+│   # ├── NotificationsFunction (/api/notifications)
+│   # ├── PaymentsFunction (/api/payments)
+│   # ├── SubscriptionsFunction (/api/subscriptions)
+│   # ├── DashboardFunction (/api/dashboard)
+│   # └── FeedFunction (/api/feed)
+├── docker-compose.dev.yml             # Docker Compose for local dev
+├── docker-compose.yml                 # Production Docker Compose
+├── Dockerfile                         # Docker image definition
+├── package.json                       # Root dependencies & scripts
+├── package-lock.json                  # Dependency lock file
+├── tsconfig.json                      # TypeScript configuration
+├── jest.config.js                     # Jest test configuration
+├── playwright.config.js               # Playwright E2E config
+├── .eslintrc.js                       # ESLint configuration
+├── .prettierrc                        # Prettier configuration
+├── .gitignore                         # Git ignore rules
+├── .gitattributes                     # Git LFS configuration
+├── .env.example                       # Environment variables template
+├── README.md                          # This file
+├── LICENSE                            # MIT License
+└── CONTRIBUTING.md                    # Contribution guidelines
 ```
 
 ## ✨ Core Features
@@ -209,6 +453,8 @@ Hootner/
 - **Injection Prevention** - SQL, XSS, NoSQL, LDAP, command injection
 - **Compliance Ready** - GDPR, SOC2, audit logging, 90-day retention
 - **Automated Scanning** - Snyk, CodeQL, dependency audits
+- **Copyright Protection** ⭐ NEW - Auto © notices, Creative Commons, DMCA compliance
+- **Creator Rights** ⭐ NEW - License management, takedown notices, community norms
 
 ### 🏗️ Enterprise Infrastructure
 
@@ -225,7 +471,52 @@ Hootner/
 - **Database** - DynamoDB, Redis
 - **Cloud** - AWS S3, Firebase, Socket.io
 - **AI/ML** - PyTorch 2.0+, 3D U-Net, BERT, OpenCV
-- **Serverless** - AWS SAM, SQS+Lambda, CloudWatch
+- **Serverless** - AWS SAM (20 Lambda functions, 120 connections), SQS+Lambda, CloudWatch
+- **Secrets Management** - AWS Secrets Manager (APISecrets, JWTSecret, StripeKey)
+
+**AWS SAM Template Structure:**
+```
+template-with-keys.yaml
+├── Core Resources (5)
+│   ├── HootnerApi (API Gateway)
+│   ├── HootnerTable (DynamoDB)
+│   ├── APISecrets (API keys secret)
+│   ├── JWTSecret (Authentication secret)
+│   └── StripeKey (Payment secret)
+├── Lambda Layer
+│   └── APIKeysLayer (Shared utilities)
+└── Lambda Functions (20)
+    ├── VideoPlayerFunction (/api/videos)
+    ├── AIVideoGenFunction (/api/ai-video)
+    ├── LiveStreamFunction (/api/live-stream)
+    ├── CodeEditorFunction (/api/editor)
+    ├── CollaborationFunction (/api/collaboration)
+    ├── MessagesFunction (/api/messages)
+    ├── AnalyticsFunction (/api/analytics)
+    ├── MarketplaceFunction (/api/marketplace)
+    ├── AIAgentsFunction (/api/agents)
+    ├── DevOpsFunction (/api/devops)
+    ├── GraphQLFunction (/graphql)
+    ├── ProfileFunction (/api/profile)
+    ├── SettingsFunction (/api/settings)
+    ├── UploadFunction (/api/upload)
+    ├── SearchFunction (/api/search)
+    ├── NotificationsFunction (/api/notifications)
+    ├── PaymentsFunction (/api/payments)
+    ├── SubscriptionsFunction (/api/subscriptions)
+    ├── DashboardFunction (/api/dashboard)
+    └── FeedFunction (/api/feed)
+
+Each Lambda Function has 6 dependencies:
+  • HootnerTable (DynamoDB access)
+  • APISecrets (API keys)
+  • HootnerApi (API Gateway routing)
+  • APIKeysLayer (Shared code)
+  • StripeKey (Payment processing)
+  • JWTSecret (Authentication)
+
+Total: 20 functions × 6 dependencies = 120 connections
+```
 
 ### 🤖 AI Agent Hub (5 Production, 70+ Roadmap)
 
@@ -443,6 +734,9 @@ k6 run load-test.js        # Performance testing
 - **[Copilot CLI Prompt Guide](COPILOT_CLI_PROMPT.md)** ⭐ NEW
 - **[Git Integrity Monitoring](docs/GIT_INTEGRITY_MONITORING.md)** ⭐ NEW
 - **[Repository Cleanup Summary](REPO_CLEANUP_SUMMARY.md)** ⭐ NEW
+- **[Legal Compliance Guide](docs/LEGAL_COMPLIANCE_GUIDE.md)** ⭐ NEW
+- **[Legal Quick Reference](docs/LEGAL_QUICK_REFERENCE.md)** ⭐ NEW
+- **[DMCA Registration Guide](docs/DMCA_REGISTRATION_GUIDE.md)** ⭐ NEW
 
 ### 🔧 Developer Resources
 
@@ -509,6 +803,9 @@ k6 run load-test.js        # Performance testing
 | `./scripts/deployment/blue-green-deploy.sh` | Zero-downtime deployment |
 | `npm run infra:terraform`                   | Terraform infrastructure |
 | `npm run aws:validate`                      | Validate AWS config      |
+| `sam validate`                              | Validate SAM template    |
+| `sam sync --watch`                          | Deploy with live sync    |
+| `sam deploy --guided`                       | Full CloudFormation deploy |
 
 ## 🌆 Tech Stack
 
@@ -528,7 +825,10 @@ k6 run load-test.js        # Performance testing
 - **AI Agents** - Security, Compliance, BI, Operations, Payment Fraud
 - **Core Services** - Audit, Backup, Marketplace, Payment, Content Moderation
 - **Video Generation** - PyTorch 2.0+, 3D U-Net, Flask API (port 5003)
-- **AWS Serverless** - SQS+Lambda, DLQ, CloudWatch, IAM
+- **AWS Serverless** - 20 Lambda functions with full secret management
+  - **Functions**: VideoPlayer, AIVideoGen, LiveStream, CodeEditor, Collaboration, Messages, Analytics, Marketplace, AIAgents, DevOps, GraphQL, Profile, Settings, Upload, Search, Notifications, Payments, Subscriptions, Dashboard, Feed
+  - **Secrets**: APISecrets (API keys), JWTSecret (authentication), StripeKey (payments)
+  - **Architecture**: 120 connections (20 functions × 6 dependencies), SQS+Lambda, DLQ, CloudWatch, IAM
 
 ### Resilience Patterns
 

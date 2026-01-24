@@ -1,0 +1,65 @@
+<!-- Add this to ALL 20 CloudFront HTML pages in <head> section -->
+
+<!-- API Configuration -->
+<script>
+const API_CONFIG = {
+  apiKey: 'REPLACE_AFTER_DEPLOYMENT',
+  endpoints: {
+    graphql: 'https://REPLACE_AFTER_DEPLOYMENT/prod/graphql',
+    videos: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/videos',
+    aiVideo: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/ai-video',
+    liveStream: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/live-stream',
+    editor: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/editor',
+    collaboration: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/collaboration',
+    messages: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/messages',
+    analytics: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/analytics',
+    marketplace: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/marketplace',
+    agents: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/agents',
+    devops: 'https://REPLACE_AFTER_DEPLOYMENT/prod/api/devops'
+  }
+};
+
+// API Helper Functions
+async function apiRequest(endpoint, options = {}) {
+  return fetch(endpoint, {
+    ...options,
+    headers: {
+      'x-api-key': API_CONFIG.apiKey,
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+  });
+}
+
+async function graphqlRequest(query, variables = {}) {
+  const response = await apiRequest(API_CONFIG.endpoints.graphql, {
+    method: 'POST',
+    body: JSON.stringify({ query, variables })
+  });
+  return response.json();
+}
+</script>
+
+<!-- Usage Examples:
+
+// Get videos
+const videos = await apiRequest(API_CONFIG.endpoints.videos);
+
+// GraphQL query
+const data = await graphqlRequest(`
+  query GetVideos {
+    videos {
+      id
+      title
+      url
+    }
+  }
+`);
+
+// Create video
+await apiRequest(API_CONFIG.endpoints.videos, {
+  method: 'POST',
+  body: JSON.stringify({ title: 'My Video', url: 'https://...' })
+});
+
+-->

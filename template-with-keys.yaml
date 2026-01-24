@@ -1,0 +1,926 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER API Keys & Secrets for CloudFront Apps
+
+Resources:
+  # API Gateway with API Key
+  HootnerApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: hootner-cloudfront-key
+      Enabled: true
+
+  HootnerUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      UsagePlanName: hootner-plan
+      ApiStages:
+        - ApiId: !Ref HootnerApi
+          Stage: prod
+      Quota:
+        Limit: 100000
+        Period: MONTH
+      Throttle:
+        BurstLimit: 200
+        RateLimit: 100
+
+  UsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref HootnerApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref HootnerUsagePlan
+
+  # Secrets Manager - All API Keys
+  APISecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/api-keys
+      SecretString: !Sub |
+        {
+          "API_GATEWAY_KEY": "${HootnerApiKey}",
+          "GRAPHQL_ENDPOINT": "https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql",
+          "JWT_SECRET": "${JWTSecret}",
+          "STRIPE_KEY": "${StripeKey}",
+          "CLOUDFRONT_DOMAIN": "daxqx65ar35pp.cloudfront.net"
+        }
+
+  JWTSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/jwt-secret
+      GenerateSecretString:
+        SecretStringTemplate: '{}'
+        GenerateStringKey: secret
+        PasswordLength: 64
+
+  StripeKey:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/stripe-key
+      SecretString: '{"key": "REPLACE_WITH_STRIPE_KEY"}'
+
+  # Lambda Layer for API Keys
+  APIKeysLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: hootner-api-keys
+      ContentUri: layers/api-keys/
+      CompatibleRuntimes:
+        - nodejs18.x
+
+  # Environment Config for All Functions
+  SharedConfig:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /hootner/config
+      Type: String
+      Value: !Sub |
+        {
+          "apiGatewayKey": "${HootnerApiKey}",
+          "graphqlEndpoint": "https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql",
+          "cloudfrontDomain": "daxqx65ar35pp.cloudfront.net",
+          "dynamoTable": "${HootnerTable}",
+          "region": "${AWS::Region}"
+        }
+
+  # API Gateway
+  HootnerApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Auth:
+        ApiKeyRequired: true
+      Cors:
+        AllowOrigin: '''https://daxqx65ar35pp.cloudfront.net'''
+        AllowHeaders: '''*'''
+        AllowMethods: '''*'''
+
+  # DynamoDB Table
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: HootnerActivities
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+  # Lambda Functions with API Key Access
+  VideoPlayerFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/videos
+            Method: ANY
+
+  AIVideoGenFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/ai-video
+            Method: ANY
+
+  LiveStreamFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/live-stream
+            Method: ANY
+
+  CodeEditorFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/editor
+            Method: ANY
+
+  CollaborationFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/collaboration
+            Method: ANY
+
+  MessagesFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/messages
+            Method: ANY
+
+  AnalyticsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/analytics
+            Method: ANY
+
+  MarketplaceFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/marketplace
+            Method: ANY
+
+  AIAgentsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/agents
+            Method: ANY
+
+  DevOpsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/devops
+            Method: ANY
+
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        GraphQL:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /graphql
+            Method: ANY
+
+  ProfileFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/profile
+            Method: ANY
+
+  SettingsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/settings
+            Method: ANY
+
+  UploadFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/upload
+            Method: ANY
+
+  SearchFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/search
+            Method: ANY
+
+  NotificationsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/notifications
+            Method: ANY
+
+  PaymentsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/payments
+            Method: ANY
+
+  SubscriptionsFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/subscriptions
+            Method: ANY
+
+  DashboardFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/dashboard
+            Method: ANY
+
+  FeedFunction:
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - HootnerTable
+      - APISecrets
+      - HootnerApi
+      - APIKeysLayer
+      - StripeKey
+      - JWTSecret
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      Layers:
+        - !Ref APIKeysLayer
+      Environment:
+        Variables:
+          API_KEY_SECRET: !Ref APISecrets
+          DYNAMODB_TABLE: !Ref HootnerTable
+          STRIPE_SECRET: !Ref StripeKey
+          JWT_SECRET: !Ref JWTSecret
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref APISecrets
+                - !Ref StripeKey
+                - !Ref JWTSecret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/feed
+            Method: ANY
+
+Outputs:
+  ApiGatewayKey:
+    Description: API Gateway Key for CloudFront Apps
+    Value: !Ref HootnerApiKey
+    Export:
+      Name: HootnerApiKey
+
+  ApiEndpoint:
+    Description: API Gateway Endpoint
+    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod
+    Export:
+      Name: HootnerApiEndpoint
+
+  GraphQLEndpoint:
+    Description: GraphQL Endpoint
+    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
+    Export:
+      Name: HootnerGraphQLEndpoint
+
+  SecretsArn:
+    Description: Secrets Manager ARN
+    Value: !Ref APISecrets
+    Export:
+      Name: HootnerSecretsArn
+
+  ConfigParameter:
+    Description: SSM Parameter with all config
+    Value: !Ref SharedConfig
+    Export:
+      Name: HootnerConfigParam

@@ -4,6 +4,21 @@ type Query {
   playlists(userId: ID, limit: Int): [Playlist!]!
   playlist(id: ID!): Playlist
   myPlaylists: [Playlist!]!
+  
+  # Copyright & Licensing
+  copyrightInfo(contentId: ID!, contentType: ContentType!): CopyrightInfo
+  availableLicenses: [LicenseInfo!]!
+  recommendedLicenses(userType: UserType): [LicenseRecommendation!]!
+  creatorProfile(userId: ID!): CreatorProfile
+  
+  # DMCA Compliance
+  dmcaNotice(noticeId: ID!): DMCANotice
+  dmcaNotices(contentId: ID, status: DMCAStatus, limit: Int): [DMCANotice!]!
+  myDMCANotices: [DMCANotice!]!
+  
+  # Community Guidelines
+  communityGuidelines: CommunityGuidelines!
+  onboardingFlow(userType: UserType!): OnboardingFlow!
 }
 
 type Mutation {
@@ -13,6 +28,16 @@ type Mutation {
   deletePlaylist(id: ID!): Boolean!
   addVideoToPlaylist(playlistId: ID!, videoId: ID!): Playlist!
   removeVideoFromPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+  
+  # Copyright & Licensing
+  setCreatorLicense(userId: ID!, licenseType: LicenseType!): CreatorProfile!
+  updateContentLicense(contentId: ID!, contentType: ContentType!, licenseType: LicenseType!): CopyrightInfo!
+  
+  # DMCA Compliance
+  submitDMCATakedown(input: DMCATakedownInput!): DMCANotice!
+  submitDMCACounterNotice(input: DMCACounterNoticeInput!): DMCANotice!
+  processDMCANotice(noticeId: ID!, action: DMCAAction!, reviewData: DMCAReviewInput!): DMCANotice!
+  withdrawDMCANotice(noticeId: ID!, reason: String): DMCANotice!
 }
 
 type Subscription {
@@ -124,4 +149,302 @@ type SystemAlert {
   level: String!
   message: String!
   timestamp: String!
+}
+
+# Copyright & Licensing Types
+type CopyrightInfo {
+  copyrightId: ID!
+  notice: String!
+  fullNotice: String!
+  creatorName: String!
+  creatorId: ID!
+  year: Int!
+  license: LicenseType!
+  licenseInfo: LicenseDetails!
+  contentType: ContentType!
+  contentTitle: String!
+  timestamp: String!
+  metadata: CopyrightMetadata!
+}
+
+type LicenseDetails {
+  name: String!
+  url: String
+  description: String!
+  icon: String!
+  allowCommercial: Boolean!
+  allowModification: Boolean!
+  requireAttribution: Boolean!
+  requireShareAlike: Boolean
+}
+
+type CopyrightMetadata {
+  canCopy: Boolean!
+  canModify: Boolean!
+  canCommercialize: Boolean!
+  requiresAttribution: Boolean!
+  requiresShareAlike: Boolean!
+}
+
+type LicenseInfo {
+  type: LicenseType!
+  name: String!
+  url: String
+  description: String!
+  icon: String!
+  allowCommercial: Boolean!
+  allowModification: Boolean!
+  requireAttribution: Boolean!
+  requireShareAlike: Boolean
+}
+
+type LicenseRecommendation {
+  type: LicenseType!
+  name: String!
+  url: String
+  description: String!
+  icon: String!
+  recommended: Boolean!
+  reason: String!
+  allowCommercial: Boolean!
+  allowModification: Boolean!
+  requireAttribution: Boolean!
+  requireShareAlike: Boolean
+}
+
+type CreatorProfile {
+  userId: ID!
+  defaultLicense: LicenseType!
+  licensePreferences: String
+  copyrightedContentCount: Int!
+  dmcaNoticesReceived: Int!
+  dmcaNoticesFiled: Int!
+}
+
+enum LicenseType {
+  ALL_RIGHTS_RESERVED
+  CC_BY_NC
+  CC_BY_NC_SA
+  CC_BY
+  CC_BY_SA
+  PUBLIC_DOMAIN
+}
+
+enum ContentType {
+  VIDEO
+  CODE
+  LISTING
+  PROFILE
+  COMMENT
+}
+
+enum UserType {
+  CREATOR
+  CONSUMER
+  EDUCATOR
+}
+
+# DMCA Compliance Types
+type DMCANotice {
+  noticeId: ID!
+  type: String!
+  status: DMCAStatus!
+  submittedAt: String!
+  updatedAt: String!
+  complainant: DMCAComplainant!
+  content: DMCAContent!
+  copyrightedWork: DMCACopyrightedWork!
+  statements: DMCAStatements!
+  signature: DMCASignature!
+  allegedInfringer: DMCAAllegedInfringer!
+  reviewedBy: ID
+  reviewedAt: String
+  reviewNotes: [DMCAReviewNote!]
+  actions: [DMCAAction!]
+  counterNotice: DMCACounterNotice
+  restorationDate: String
+  contentRemovedAt: String
+  restoredAt: String
+}
+
+type DMCAComplainant {
+  name: String!
+  address: String!
+  phone: String
+  email: String!
+  isRightsHolder: Boolean!
+  authorizedAgent: String
+}
+
+type DMCAContent {
+  type: ContentType!
+  id: ID!
+  url: String!
+  description: String!
+}
+
+type DMCACopyrightedWork {
+  description: String!
+  url: String
+  registrationNumber: String
+}
+
+type DMCAStatements {
+  goodFaith: Boolean!
+  accuracy: Boolean!
+  penaltyOfPerjury: Boolean!
+}
+
+type DMCASignature {
+  name: String!
+  date: String!
+  ipAddress: String
+}
+
+type DMCAAllegedInfringer {
+  userId: ID!
+  username: String!
+  email: String!
+}
+
+type DMCAReviewNote {
+  note: String!
+  reviewer: ID!
+  timestamp: String!
+}
+
+type DMCACounterNotice {
+  submittedAt: String!
+  subscriber: DMCASubscriber!
+  statements: DMCACounterStatements!
+  signature: DMCASignature!
+  explanation: String!
+}
+
+type DMCASubscriber {
+  name: String!
+  address: String!
+  phone: String!
+  email: String!
+}
+
+type DMCACounterStatements {
+  goodFaith: Boolean!
+  consent: Boolean!
+  penaltyOfPerjury: Boolean!
+}
+
+enum DMCAStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  CONTENT_REMOVED
+  COUNTER_NOTICE_RECEIVED
+  COUNTER_NOTICE_FORWARDED
+  RESTORED
+  REJECTED
+  WITHDRAWN
+}
+
+enum DMCAAction {
+  APPROVE
+  REJECT
+  REMOVE_CONTENT
+  RESTORE_CONTENT
+  FORWARD_COUNTER_NOTICE
+}
+
+# Community Guidelines Types
+type CommunityGuidelines {
+  title: String!
+  subtitle: String!
+  principles: [GuidelinePrinciple!]!
+  legal: LegalInfo!
+}
+
+type GuidelinePrinciple {
+  id: ID!
+  title: String!
+  description: String!
+  icon: String!
+  actions: [String!]
+  warnings: [String!]
+  encouragement: [String!]
+}
+
+type LegalInfo {
+  title: String!
+  description: String!
+  points: [String!]!
+}
+
+type OnboardingFlow {
+  userType: UserType!
+  welcome: OnboardingWelcome!
+  steps: [OnboardingStep!]
+  guidelines: [String!]
+}
+
+type OnboardingWelcome {
+  title: String!
+  message: String!
+}
+
+type OnboardingStep {
+  step: Int!
+  title: String!
+  description: String!
+  cta: String
+  link: String
+}
+
+# Input Types
+input DMCATakedownInput {
+  complainantName: String!
+  complainantAddress: String!
+  complainantPhone: String
+  complainantEmail: String!
+  isRightsHolder: Boolean!
+  authorizedAgent: String
+  
+  contentType: ContentType!
+  contentId: ID!
+  contentUrl: String!
+  contentDescription: String!
+  
+  copyrightedWorkDescription: String!
+  copyrightedWorkUrl: String
+  registrationNumber: String
+  
+  goodFaithStatement: Boolean!
+  accuracyStatement: Boolean!
+  penaltyOfPerjuryStatement: Boolean!
+  
+  signatureName: String!
+  ipAddress: String
+  
+  uploaderUserId: ID!
+  uploaderUsername: String!
+  uploaderEmail: String!
+}
+
+input DMCACounterNoticeInput {
+  originalNoticeId: ID!
+  
+  subscriberName: String!
+  subscriberAddress: String!
+  subscriberPhone: String!
+  subscriberEmail: String!
+  
+  goodFaithStatement: Boolean!
+  consentToJurisdiction: Boolean!
+  penaltyOfPerjuryStatement: Boolean!
+  
+  signatureName: String!
+  explanation: String!
+}
+
+input DMCAReviewInput {
+  reviewerId: ID!
+  notes: String!
+  reason: String
 }
