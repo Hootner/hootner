@@ -11,12 +11,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load environment variables from .env file if present
-try {
-  const dotenv = await import('dotenv');
-  dotenv.config();
-} catch (err) {
-  // dotenv is optional - environment variables can be set directly
-}
+// This is optional - environment variables can be set directly via shell
+(async () => {
+  try {
+    const dotenv = await import('dotenv');
+    dotenv.config();
+  } catch (err) {
+    // dotenv is optional - environment variables can be set directly
+    // Silently continue if not available
+  }
+})();
 
 // Get configuration from environment variables
 const BUCKET_NAME = process.env.AWS_S3_BUCKET || 'hootner-frontend';

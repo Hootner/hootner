@@ -18,12 +18,14 @@
 function getEnvVar(key, defaultValue) {
   // Browser environment (Vite injects import.meta.env)
   if (typeof import.meta !== 'undefined' && import.meta.env) {
-    return import.meta.env[key] || defaultValue;
+    const value = import.meta.env[key];
+    return value !== undefined ? value : defaultValue;
   }
   
   // Node.js environment
   if (typeof process !== 'undefined' && process.env) {
-    return process.env[key] || defaultValue;
+    const value = process.env[key];
+    return value !== undefined ? value : defaultValue;
   }
   
   // Fallback to default

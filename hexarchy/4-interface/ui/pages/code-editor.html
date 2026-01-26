@@ -811,7 +811,10 @@
           vm = require('vm');
           // Also load API config in Node.js environment
           if (!window.API_ENDPOINTS) {
-            const { API_ENDPOINTS: apiConfig } = require('/config/api-endpoints.js');
+            // Use relative path for Node.js/Electron
+            const path = require('path');
+            const configPath = path.resolve(__dirname, '../../../../config/api-endpoints.js');
+            const { API_ENDPOINTS: apiConfig } = require(configPath);
             window.API_ENDPOINTS = apiConfig;
           }
         }
