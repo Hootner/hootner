@@ -1,0 +1,1046 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - Complete Enterprise Video Platform Infrastructure
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+    - dev
+    - staging
+    - prod
+    Description: Environment name
+  AdminEmail:
+    Type: String
+    Default: admin@hootner.com
+    Description: Email for alarm notifications
+  LambdaMemorySize:
+    Type: Number
+    Default: 1024
+    Description: Lambda memory size in MB
+  LambdaTimeout:
+    Type: Number
+    Default: 30
+    Description: Lambda timeout in seconds
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize:
+      Ref: LambdaMemorySize
+    Timeout:
+      Ref: LambdaTimeout
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV:
+          Ref: Environment
+        LOG_LEVEL: info
+        TABLE_NAME:
+          Ref: HootnerTable
+Resources:
+  LoggingBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: hootner-logs-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LoggingConfiguration:
+        DestinationBucketName:
+          Fn::Sub: hootner-logs-${AWS::AccountId}
+        LogFilePrefix: logs/
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+    Metadata:
+      SamResourceId: LoggingBucket
+  VideoStorageBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: hootner-videos-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      LoggingConfiguration:
+        DestinationBucketName:
+          Ref: LoggingBucket
+        LogFilePrefix: videos/
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+        - Id: DeleteOldVersions
+          Status: Enabled
+          NoncurrentVersionExpirationInDays: 90
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins:
+          - '*'
+          AllowedMethods:
+          - GET
+          - PUT
+          - POST
+          - DELETE
+          AllowedHeaders:
+          - '*'
+          MaxAge: 3000
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+      - Key: Purpose
+        Value: VideoStorage
+      - Key: Project
+        Value: Hootner
+    Metadata:
+      SamResourceId: VideoStorageBucket
+  VideoStorageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: VideoStorageBucket
+      PolicyDocument:
+        Statement:
+        - Sid: DenyInsecureTransport
+          Effect: Deny
+          Principal: '*'
+          Action: s3:*
+          Resource:
+          - Fn::GetAtt:
+            - VideoStorageBucket
+            - Arn
+          - Fn::Sub: ${VideoStorageBucket.Arn}/*
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+    Metadata:
+      SamResourceId: VideoStorageBucketPolicy
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: hootner-uploads-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LoggingConfiguration:
+        DestinationBucketName:
+          Ref: LoggingBucket
+        LogFilePrefix: uploads/
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins:
+          - '*'
+          AllowedMethods:
+          - GET
+          - PUT
+          - POST
+          AllowedHeaders:
+          - '*'
+      NotificationConfiguration:
+        QueueConfigurations:
+        - Event: s3:ObjectCreated:*
+          Queue:
+            Fn::GetAtt:
+            - VideoProcessingQueue
+            - Arn
+      Tags:
+      - Key: Purpose
+        Value: UserUploads
+    Metadata:
+      SamResourceId: UploadBucket
+  UploadBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: UploadBucket
+      PolicyDocument:
+        Statement:
+        - Sid: DenyInsecureTransport
+          Effect: Deny
+          Principal: '*'
+          Action: s3:*
+          Resource:
+          - Fn::GetAtt:
+            - UploadBucket
+            - Arn
+          - Fn::Sub: ${UploadBucket.Arn}/*
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+    Metadata:
+      SamResourceId: UploadBucketPolicy
+  StaticAssetsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: hootner-frontend-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LoggingConfiguration:
+        DestinationBucketName:
+          Ref: LoggingBucket
+        LogFilePrefix: frontend/
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      WebsiteConfiguration:
+        IndexDocument: dashboard.html
+        ErrorDocument: error.html
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins:
+          - '*'
+          AllowedMethods:
+          - GET
+      Tags:
+      - Key: Purpose
+        Value: StaticAssets
+    Metadata:
+      SamResourceId: StaticAssetsBucket
+  StaticAssetsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: StaticAssetsBucket
+      PolicyDocument:
+        Statement:
+        - Sid: DenyInsecureTransport
+          Effect: Deny
+          Principal: '*'
+          Action: s3:*
+          Resource:
+          - Fn::GetAtt:
+            - StaticAssetsBucket
+            - Arn
+          - Fn::Sub: ${StaticAssetsBucket.Arn}/*
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+    Metadata:
+      SamResourceId: StaticAssetsBucketPolicy
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      UserPoolName:
+        Fn::Sub: ${AWS::StackName}-users
+      AutoVerifiedAttributes:
+      - email
+      UsernameAttributes:
+      - email
+      Schema:
+      - Name: email
+        Required: true
+        Mutable: false
+      - Name: name
+        Required: true
+        Mutable: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      MfaConfiguration: OPTIONAL
+      EnabledMfas:
+      - SOFTWARE_TOKEN_MFA
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+        - Name: verified_email
+          Priority: 1
+      UserPoolTags:
+        Project: Hootner
+    Metadata:
+      SamResourceId: UserPool
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId:
+        Ref: UserPool
+      ClientName:
+        Fn::Sub: ${AWS::StackName}-web-client
+      GenerateSecret: false
+      ExplicitAuthFlows:
+      - ALLOW_USER_PASSWORD_AUTH
+      - ALLOW_REFRESH_TOKEN_AUTH
+      - ALLOW_USER_SRP_AUTH
+      PreventUserExistenceErrors: ENABLED
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      RefreshTokenValidity: 30
+      TokenValidityUnits:
+        AccessToken: hours
+        IdToken: hours
+        RefreshToken: days
+    Metadata:
+      SamResourceId: UserPoolClient
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain:
+        Fn::Sub: hootner-${AWS::AccountId}
+      UserPoolId:
+        Ref: UserPool
+    Metadata:
+      SamResourceId: UserPoolDomain
+  VideoProcessingQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      QueueName:
+        Fn::Sub: ${AWS::StackName}-video-processing
+      VisibilityTimeout: 900
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+          - DeadLetterQueue
+          - Arn
+        maxReceiveCount: 3
+    Metadata:
+      SamResourceId: VideoProcessingQueue
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      QueueName:
+        Fn::Sub: ${AWS::StackName}-dlq
+      MessageRetentionPeriod: 1209600
+    Metadata:
+      SamResourceId: DeadLetterQueue
+  NotificationQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      QueueName:
+        Fn::Sub: ${AWS::StackName}-notifications
+      VisibilityTimeout: 300
+      MessageRetentionPeriod: 1209600
+    Metadata:
+      SamResourceId: NotificationQueue
+  VideoProcessingQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+      - Ref: VideoProcessingQueue
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: s3.amazonaws.com
+          Action: SQS:SendMessage
+          Resource:
+            Fn::GetAtt:
+            - VideoProcessingQueue
+            - Arn
+          Condition:
+            ArnLike:
+              aws:SourceArn:
+                Fn::Sub: arn:aws:s3:::hootner-uploads-${AWS::AccountId}
+    Metadata:
+      SamResourceId: VideoProcessingQueuePolicy
+  EncryptionKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: Hootner data encryption key
+      KeyPolicy:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: Enable IAM permissions
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
+          Action: kms:*
+          Resource: '*'
+        - Sid: Allow Lambda
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action:
+          - kms:Decrypt
+          - kms:DescribeKey
+          Resource: '*'
+    Metadata:
+      SamResourceId: EncryptionKey
+  EncryptionKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName:
+        Fn::Sub: alias/${AWS::StackName}-key
+      TargetKeyId:
+        Ref: EncryptionKey
+    Metadata:
+      SamResourceId: EncryptionKeyAlias
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: HootnerActivities
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
+        KMSMasterKeyId:
+          Ref: EncryptionKey
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      AttributeDefinitions:
+      - AttributeName: PK
+        AttributeType: S
+      - AttributeName: SK
+        AttributeType: S
+      - AttributeName: GSI1PK
+        AttributeType: S
+      - AttributeName: GSI1SK
+        AttributeType: S
+      - AttributeName: email
+        AttributeType: S
+      - AttributeName: createdAt
+        AttributeType: N
+      KeySchema:
+      - AttributeName: PK
+        KeyType: HASH
+      - AttributeName: SK
+        KeyType: RANGE
+      GlobalSecondaryIndexes:
+      - IndexName: GSI1
+        KeySchema:
+        - AttributeName: GSI1PK
+          KeyType: HASH
+        - AttributeName: GSI1SK
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+      - IndexName: UserByEmail
+        KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+        Projection:
+          ProjectionType: ALL
+      - IndexName: VideosByDate
+        KeySchema:
+        - AttributeName: GSI1PK
+          KeyType: HASH
+        - AttributeName: createdAt
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+      Tags:
+      - Key: Project
+        Value: Hootner
+    Metadata:
+      SamResourceId: HootnerTable
+  APISecrets:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name:
+        Fn::Sub: ${AWS::StackName}/api-keys
+      Description: API keys and secrets
+      SecretString:
+        Fn::Sub: "{\n  \"OPENAI_API_KEY\": \"your-openai-key\",\n  \"STRIPE_SECRET_KEY\"\
+          : \"your-stripe-key\",\n  \"FIREBASE_API_KEY\": \"your-firebase-key\"\n\
+          }\n"
+    Metadata:
+      SamResourceId: APISecrets
+  JWTSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name:
+        Fn::Sub: ${AWS::StackName}/jwt-secret
+      GenerateSecretString:
+        SecretStringTemplate: '{}'
+        GenerateStringKey: secret
+        PasswordLength: 32
+    Metadata:
+      SamResourceId: JWTSecret
+  APISecretsRotationSchedule:
+    Type: AWS::SecretsManager::RotationSchedule
+    Properties:
+      SecretId:
+        Ref: APISecrets
+      RotationRules:
+        AutomaticallyAfterDays: 90
+    Metadata:
+      SamResourceId: APISecretsRotationSchedule
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins:
+        - '*'
+        AllowMethods:
+        - '*'
+        AllowHeaders:
+        - '*'
+    Metadata:
+      SamResourceId: HttpApi
+  AlarmNotificationTopic:
+    Type: AWS::SNS::Topic
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TopicName:
+        Fn::Sub: ${AWS::StackName}-alarms
+      Subscription:
+      - Protocol: email
+        Endpoint:
+          Ref: AdminEmail
+    Metadata:
+      SamResourceId: AlarmNotificationTopic
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName:
+        Fn::Sub: ${AWS::StackName}-lambda-errors
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+      - Ref: AlarmNotificationTopic
+    Metadata:
+      SamResourceId: LambdaErrorAlarm
+  DLQAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName:
+        Fn::Sub: ${AWS::StackName}-dlq-messages
+      MetricName: ApproximateNumberOfMessagesVisible
+      Namespace: AWS/SQS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+      - Name: QueueName
+        Value:
+          Fn::GetAtt:
+          - DeadLetterQueue
+          - QueueName
+      AlarmActions:
+      - Ref: AlarmNotificationTopic
+    Metadata:
+      SamResourceId: DLQAlarm
+  APIKeysLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: api-keys-layer
+      ContentUri: s3://aws-sam-cli-managed-default-samclisourcebucket-ljfri0alqtmp/ac2e50dc1f657a90c8b1190afce696ef
+      CompatibleRuntimes:
+      - nodejs20.x
+    Metadata:
+      SamResourceId: APIKeysLayer
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Fn::Sub: ${AWS::StackName}-graphql
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-ljfri0alqtmp/bcc5b02bdeedbbe97d2ff7c968ec6326
+      Handler: lambda.handler
+      Layers:
+      - Ref: APIKeysLayer
+      ReservedConcurrentExecutions: 10
+      DeadLetterQueue:
+        Type: SQS
+        TargetArn:
+          Fn::GetAtt:
+          - DeadLetterQueue
+          - Arn
+      Environment:
+        Variables:
+          VIDEO_BUCKET:
+            Ref: VideoStorageBucket
+          UPLOAD_BUCKET:
+            Ref: UploadBucket
+          STATIC_BUCKET:
+            Ref: StaticAssetsBucket
+          USER_POOL_ID:
+            Ref: UserPool
+          VIDEO_QUEUE_URL:
+            Ref: VideoProcessingQueue
+          NOTIFICATION_QUEUE_URL:
+            Ref: NotificationQueue
+          KMS_KEY_ID:
+            Ref: EncryptionKey
+          API_SECRETS_ARN:
+            Ref: APISecrets
+          JWT_SECRET_ARN:
+            Ref: JWTSecret
+          HOOTNER_REGION:
+            Ref: AWS::Region
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: HootnerTable
+      - S3CrudPolicy:
+          BucketName:
+            Ref: VideoStorageBucket
+      - S3CrudPolicy:
+          BucketName:
+            Ref: UploadBucket
+      - SQSSendMessagePolicy:
+          QueueName:
+            Fn::GetAtt:
+            - VideoProcessingQueue
+            - QueueName
+      - SQSSendMessagePolicy:
+          QueueName:
+            Fn::GetAtt:
+            - NotificationQueue
+            - QueueName
+      - Statement:
+        - Effect: Allow
+          Action:
+          - secretsmanager:GetSecretValue
+          Resource:
+          - Ref: APISecrets
+          - Ref: JWTSecret
+        - Effect: Allow
+          Action:
+          - kms:Decrypt
+          - kms:DescribeKey
+          Resource:
+            Fn::GetAtt:
+            - EncryptionKey
+            - Arn
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+          - '*'
+          AllowMethods:
+          - '*'
+          AllowHeaders:
+          - '*'
+    Metadata:
+      SamResourceId: GraphQLFunction
+  S3EventProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Fn::Sub: ${AWS::StackName}-s3-processor
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-ljfri0alqtmp/fbb622622bb5366e1f68acc6991499d1
+      Handler: s3-event-handler.handler
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          VIDEO_BUCKET:
+            Ref: VideoStorageBucket
+          UPLOAD_BUCKET:
+            Ref: UploadBucket
+          VIDEO_QUEUE_URL:
+            Ref: VideoProcessingQueue
+          NOTIFICATION_QUEUE_URL:
+            Ref: NotificationQueue
+          KMS_KEY_ID:
+            Ref: EncryptionKey
+          HOOTNER_REGION:
+            Ref: AWS::Region
+      Policies:
+      - S3CrudPolicy:
+          BucketName:
+            Ref: VideoStorageBucket
+      - S3CrudPolicy:
+          BucketName:
+            Ref: UploadBucket
+      - SQSSendMessagePolicy:
+          QueueName:
+            Fn::GetAtt:
+            - VideoProcessingQueue
+            - QueueName
+      - SQSSendMessagePolicy:
+          QueueName:
+            Fn::GetAtt:
+            - NotificationQueue
+            - QueueName
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: HootnerTable
+      - Statement:
+        - Effect: Allow
+          Action:
+          - kms:Decrypt
+          - kms:DescribeKey
+          Resource:
+            Fn::GetAtt:
+            - EncryptionKey
+            - Arn
+      Events:
+        S3Event:
+          Type: SQS
+          Properties:
+            Queue:
+              Fn::GetAtt:
+              - VideoProcessingQueue
+              - Arn
+            BatchSize: 10
+    Metadata:
+      SamResourceId: S3EventProcessorFunction
+Outputs:
+  GraphQLFunctionURL:
+    Description: GraphQL API HTTPS URL
+    Value:
+      Fn::GetAtt:
+      - GraphQLFunctionUrl
+      - FunctionUrl
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-GraphQLFunctionURL
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value:
+      Ref: UserPool
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-UserPoolId
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value:
+      Ref: UserPoolClient
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-UserPoolClientId
+  VideoStorageBucket:
+    Description: Video Storage S3 Bucket
+    Value:
+      Ref: VideoStorageBucket
+  UploadBucket:
+    Description: Upload S3 Bucket
+    Value:
+      Ref: UploadBucket
+  StaticAssetsBucket:
+    Description: Static Assets S3 Bucket
+    Value:
+      Ref: StaticAssetsBucket
+  VideoProcessingQueueUrl:
+    Description: Video Processing Queue URL
+    Value:
+      Ref: VideoProcessingQueue
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-VideoQueueUrl
+  DynamoDBTableName:
+    Description: DynamoDB Table Name
+    Value:
+      Ref: HootnerTable
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-TableName
+Metadata:
+  AWS::Composer::Groups:
+    FrontendLayer:
+      Label: Frontend & CDN
+      Members:
+      - StaticAssetsBucket
+    ApiLayer:
+      Label: API & Functions
+      Members:
+      - HttpApi
+      - GraphQLFunction
+      - APIKeysLayer
+    DataLayer:
+      Label: Data Storage
+      Members:
+      - HootnerTable
+      - VideoStorageBucket
+      - UploadBucket
+    AuthLayer:
+      Label: Authentication
+      Members:
+      - UserPool
+      - UserPoolClient
+      - UserPoolDomain
+      - APISecrets
+      - JWTSecret
+      - EncryptionKey
+    ProcessingLayer:
+      Label: Async Processing
+      Members:
+      - VideoProcessingQueue
+      - DeadLetterQueue
+      - NotificationQueue
+    MonitoringLayer:
+      Label: Monitoring
+      Members:
+      - AlarmNotificationTopic
+      - ApiErrorAlarm
+      - LambdaErrorAlarm
+      - DLQAlarm
+  StripeWebhookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/webhooks/
+      Handler: stripeWebhookHandler.handler
+      Runtime: nodejs18.x
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: HootnerActivities
+          STRIPE_SECRET_KEY:
+            Fn::Sub: '{{resolve:secretsmanager:${StripeSecretKey}}}'
+          STRIPE_WEBHOOK_SECRET:
+            Fn::Sub: '{{resolve:secretsmanager:${StripeWebhookSecret}}}'
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: HootnerActivities
+  StripeWebhookRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      RouteKey: POST /webhooks/stripe
+      Target:
+        Fn::Sub: integrations/${StripeWebhookIntegration}
+  StripeWebhookIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::GetAtt:
+        - StripeWebhookFunction
+        - Arn
+      PayloadFormatVersion: '2.0'
+  StripeWebhookPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: StripeWebhookFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*
+  StripeWebhookSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name:
+        Fn::Sub: ${AWS::StackName}-stripe-webhook-secret
+      Description: Stripe webhook signing secret for verifying requests
+      SecretString:
+        Fn::Sub: "{\n  \"webhookSecret\": \"whsec_YOUR_WEBHOOK_SECRET_HERE\"\n}\n"
+  UsageTrackingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/
+      Handler: usage-pricing-service.trackUsage
+      Runtime: nodejs18.x
+      MemorySize: 256
+      Timeout: 15
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: HootnerActivities
+          STRIPE_SECRET_KEY:
+            Fn::Sub: '{{resolve:secretsmanager:${StripeSecretKey}}}'
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: HootnerActivities
+      Events:
+        S3VideoUpload:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: VideosBucket
+            Events: s3:ObjectCreated:*
+  PricingCalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/
+      Handler: usage-pricing-service.calculateMonthlyBill
+      Runtime: nodejs18.x
+      MemorySize: 256
+      Timeout: 15
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: HootnerActivities
+          STRIPE_SECRET_KEY:
+            Fn::Sub: '{{resolve:secretsmanager:${StripeSecretKey}}}'
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: HootnerActivities
+  MonthlyBillingRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name:
+        Fn::Sub: ${AWS::StackName}-monthly-billing
+      Description: Trigger monthly billing calculation
+      ScheduleExpression: cron(0 0 1 * ? *)
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - PricingCalculatorFunction
+          - Arn
+        Id: PricingCalculatorTarget
+  PricingCalculatorEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: PricingCalculatorFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+        - MonthlyBillingRule
+        - Arn
+  UsageMetricsDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName:
+        Fn::Sub: ${AWS::StackName}-usage-pricing
+      DashboardBody:
+        Fn::Sub: "{\n  \"widgets\": [\n    {\n      \"type\": \"metric\",\n      \"\
+          properties\": {\n        \"metrics\": [\n          [\"Hootner\", \"ActiveUsers\"\
+          , {\"stat\": \"Sum\"}],\n          [\".\", \"TotalVideos\", {\"stat\": \"\
+          Sum\"}],\n          [\".\", \"StorageGB\", {\"stat\": \"Sum\"}]\n      \
+          \  ],\n        \"period\": 86400,\n        \"stat\": \"Average\",\n    \
+          \    \"region\": \"${AWS::Region}\",\n        \"title\": \"Usage Metrics\
+          \ (drives pricing)\",\n        \"yAxis\": {\n          \"left\": {\n   \
+          \         \"label\": \"Count\"\n          }\n        }\n      }\n    },\n\
+          \    {\n      \"type\": \"metric\",\n      \"properties\": {\n        \"\
+          metrics\": [\n          [\"AWS/Lambda\", \"Invocations\", {\"stat\": \"\
+          Sum\", \"label\": \"Stripe Webhooks\"}],\n          [\".\", \"Duration\"\
+          , {\"stat\": \"Average\", \"label\": \"Webhook Latency\"}]\n        ],\n\
+          \        \"period\": 300,\n        \"stat\": \"Sum\",\n        \"region\"\
+          : \"${AWS::Region}\",\n        \"title\": \"Stripe Integration Health\"\n\
+          \      }\n    }\n  ]\n}\n"
+  PricingTiersParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name:
+        Fn::Sub: /${AWS::StackName}/pricing/tiers
+      Type: String
+      Description: "Usage-based pricing tiers (base pay \u2192 cheaper with scale)"
+      Value:
+        Fn::Sub: "{\n  \"starter\": {\n    \"basePrice\": 29.99,\n    \"includedUsers\"\
+          : 100,\n    \"perUserPrice\": 0.50\n  },\n  \"growth\": {\n    \"basePrice\"\
+          : 99.99,\n    \"includedUsers\": 500,\n    \"perUserPrice\": 0.40\n  },\n\
+          \  \"scale\": {\n    \"basePrice\": 299.99,\n    \"includedUsers\": 2000,\n\
+          \    \"perUserPrice\": 0.30\n  },\n  \"enterprise\": {\n    \"basePrice\"\
+          : 999.99,\n    \"includedUsers\": 10000,\n    \"perUserPrice\": 0.20\n \
+          \ }\n}\n"
+  VolumeDiscountsParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name:
+        Fn::Sub: /${AWS::StackName}/pricing/volume-discounts
+      Type: String
+      Description: Automatic volume discounts (gets cheaper as you scale)
+      Value:
+        Fn::Sub: "[\n  {\"threshold\": 1000, \"discount\": 0.05, \"label\": \"5% off\
+          \ at 1K users\"},\n  {\"threshold\": 5000, \"discount\": 0.10, \"label\"\
+          : \"10% off at 5K users\"},\n  {\"threshold\": 10000, \"discount\": 0.15,\
+          \ \"label\": \"15% off at 10K users\"},\n  {\"threshold\": 50000, \"discount\"\
+          : 0.20, \"label\": \"20% off at 50K users\"},\n  {\"threshold\": 100000,\
+          \ \"discount\": 0.25, \"label\": \"25% off at 100K users\"}\n]\n"
+  HighUsageAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName:
+        Fn::Sub: ${AWS::StackName}-high-usage
+      AlarmDescription: Alert when usage exceeds tier limits
+      MetricName: ActiveUsers
+      Namespace: Hootner
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 5000
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+      - Ref: AlarmNotificationTopic
+  GraphQLPricingPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName:
+        Fn::Sub: ${AWS::StackName}-graphql-pricing-access
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - lambda:InvokeFunction
+          Resource:
+          - Fn::GetAtt:
+            - PricingCalculatorFunction
+            - Arn
+          - Fn::GetAtt:
+            - UsageTrackingFunction
+            - Arn
+        - Effect: Allow
+          Action:
+          - ssm:GetParameter
+          Resource:
+          - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/pricing/*
+      Roles:
+      - Ref: GraphQLFunctionRole
+  ApiDeploymentWithStripe:
+    Type: AWS::ApiGatewayV2::Deployment
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      Description: Production deployment with Stripe webhooks

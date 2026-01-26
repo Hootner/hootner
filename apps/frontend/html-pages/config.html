@@ -1,0 +1,260 @@
+<!-- Frontend Configuration for DynamoDB Backend -->
+<script>
+  // Configuration: Auto-detect environment and set endpoints
+  const CONFIG = (() => {
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    
+    // Check if running in AWS (CloudFront or API Gateway)
+    const isAWS = hostname.includes('cloudfront.net') || hostname.includes('execute-api');
+    
+    // Default to environment variables or fallback
+    return {
+      // API Endpoints
+      API_ENDPOINT: window.ENV?.API_ENDPOINT || 
+                    (isLocal ? 'http://localhost:4000' : 
+                     isAWS ? `https://${hostname}/prod` : 'http://localhost:4000'),
+      
+      GRAPHQL_ENDPOINT: window.ENV?.GRAPHQL_ENDPOINT || 
+                        (isLocal ? 'http://localhost:4000/graphql' : 
+                         isAWS ? `https://${hostname}/prod/graphql` : 'http://localhost:4000/graphql'),
+      
+      // Upload endpoint
+      UPLOAD_ENDPOINT: window.ENV?.UPLOAD_ENDPOINT ||
+                       (isLocal ? 'http://localhost:4000/api/upload' :
+                        isAWS ? `https://${hostname}/prod/api/upload` : 'http://localhost:4000/api/upload'),
+      
+      // CloudFront domain (for video streaming)
+      CDN_DOMAIN: window.ENV?.CLOUDFRONT_DOMAIN || hostname,
+      
+      // Feature flags
+      USE_DYNAMODB: true, // Always use DynamoDB backend
+      USE_WEBSOCKETS: !isAWS, // WebSockets only work in local mode
+      
+      // Debug mode
+      DEBUG: isLocal
+    };
+  })();
+
+  // Log configuration in development
+  if (CONFIG.DEBUG) {
+    console.log('Frontend Configuration:', CONFIG);
+  }
+
+  // GraphQL Client
+  class GraphQLClient {
+    constructor(endpoint) {
+      this.endpoint = endpoint;
+    }
+
+    async query(query, variables = {}) {
+      try {
+        const response = await fetch(this.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+          },
+          body: JSON.stringify({ query, variables })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.errors) {
+          throw new Error(result.errors[0].message);
+        }
+
+        return result.data;
+      } catch (error) {
+        console.error('GraphQL Error:', error);
+        throw error;
+      }
+    }
+
+    // Helper methods for common queries
+    async getVideos(filter = {}, limit = 20) {
+      const query = `
+        query GetVideos($filter: VideoFilter, $limit: Int) {
+          videos(filter: $filter, limit: $limit) {
+            edges {
+              node {
+                id
+                title
+                description
+                status
+                visibility
+                thumbnailKey
+                duration
+                views
+                likes
+                createdAt
+                updatedAt
+              }
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            totalCount
+          }
+        }
+      `;
+
+      return this.query(query, { filter, limit });
+    }
+
+    async getVideo(id) {
+      const query = `
+        query GetVideo($id: ID!) {
+          video(id: $id) {
+            id
+            title
+            description
+            status
+            visibility
+            sourceKey
+            thumbnailKey
+            duration
+            views
+            likes
+            createdAt
+            updatedAt
+            userId
+          }
+        }
+      `;
+
+      return this.query(query, { id });
+    }
+
+    async createVideo(input) {
+      const mutation = `
+        mutation CreateVideo($input: CreateVideoInput!) {
+          createVideo(input: $input) {
+            id
+            title
+            status
+            createdAt
+          }
+        }
+      `;
+
+      return this.query(mutation, { input });
+    }
+  }
+
+  // Upload Service
+  class UploadService {
+    constructor(endpoint) {
+      this.endpoint = endpoint;
+    }
+
+    async getPresignedUrl(filename, contentType, fileSize) {
+      const response = await fetch(`${this.endpoint}/presign`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        },
+        body: JSON.stringify({ filename, contentType, fileSize })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get upload URL');
+      }
+
+      return response.json();
+    }
+
+    async uploadFile(uploadURL, file) {
+      const response = await fetch(uploadURL, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      return true;
+    }
+
+    async completeUpload(fileKey, title, description, visibility = 'private') {
+      const response = await fetch(`${this.endpoint}/complete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        },
+        body: JSON.stringify({ fileKey, title, description, visibility })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to complete upload');
+      }
+
+      return response.json();
+    }
+
+    async checkStatus(videoId) {
+      const response = await fetch(`${this.endpoint}/status/${videoId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to check status');
+      }
+
+      return response.json();
+    }
+
+    // Complete upload flow
+    async uploadVideo(file, metadata) {
+      try {
+        // Step 1: Get presigned URL
+        console.log('Getting presigned URL...');
+        const { uploadURL, fileKey } = await this.getPresignedUrl(
+          file.name,
+          file.type,
+          file.size
+        );
+
+        // Step 2: Upload to S3
+        console.log('Uploading to S3...');
+        await this.uploadFile(uploadURL, file);
+
+        // Step 3: Complete upload and trigger processing
+        console.log('Completing upload...');
+        const result = await this.completeUpload(
+          fileKey,
+          metadata.title,
+          metadata.description,
+          metadata.visibility
+        );
+
+        console.log('Upload complete:', result);
+        return result;
+
+      } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
+      }
+    }
+  }
+
+  // Initialize global clients
+  window.graphqlClient = new GraphQLClient(CONFIG.GRAPHQL_ENDPOINT);
+  window.uploadService = new UploadService(CONFIG.UPLOAD_ENDPOINT);
+  window.APP_CONFIG = CONFIG;
+
+  console.log('✅ HOOTNER Frontend initialized with DynamoDB backend');
+</script>

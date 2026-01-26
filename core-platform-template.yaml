@@ -1,0 +1,244 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - Core Platform with Essential Features
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+  AdminEmail:
+    Type: String
+    Default: admin@hootner.com
+  LambdaMemorySize:
+    Type: Number
+    Default: 1024
+  LambdaTimeout:
+    Type: Number
+    Default: 30
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: !Ref LambdaMemorySize
+    Timeout: !Ref LambdaTimeout
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV: !Ref Environment
+        LOG_LEVEL: info
+
+Resources:
+  # ==================== CORE TABLE ====================
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        - AttributeName: gsi1pk
+          AttributeType: S
+        - AttributeName: gsi1sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: gsi1pk
+              KeyType: HASH
+            - AttributeName: gsi1sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  # ==================== STORAGE BUCKETS ====================
+  VideoStorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-videos-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-uploads-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  # ==================== GRAPHQL API FUNCTION ====================
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-graphql
+      CodeUri: api/graphql/
+      Handler: index.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          VIDEO_BUCKET: !Ref VideoStorageBucket
+          UPLOAD_BUCKET: !Ref UploadBucket
+          HOOTNER_REGION: !Ref AWS::Region
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - "*"
+          AllowMethods:
+            - "*"
+          AllowHeaders:
+            - "*"
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - S3CrudPolicy:
+            BucketName: !Ref VideoStorageBucket
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+
+  # ==================== STRIPE INTEGRATION ====================
+  # PIPE 106: Stripe API Secrets
+  StripeAPISecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${AWS::StackName}-stripe-keys"
+      Description: "Stripe API keys for payment processing"
+      SecretString: !Sub |
+        {
+          "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY_HERE",
+          "secretKey": "sk_test_YOUR_SECRET_KEY_HERE"
+        }
+
+  # PIPE 107: Usage Tracking Function
+  UsageTrackingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-usage-tracking
+      CodeUri: services/
+      Handler: usage-pricing-service.trackUsage
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          STRIPE_SECRET_ARN: !Ref StripeAPISecrets
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - SecretManagerReadWrite
+
+  # PIPE 108: Pricing Calculator Function
+  PricingCalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-pricing-calculator
+      CodeUri: services/
+      Handler: usage-pricing-service.calculateMonthlyBill
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          STRIPE_SECRET_ARN: !Ref StripeAPISecrets
+          PLATFORM_LAUNCH_DATE: "2026-01-26"
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - SecretManagerReadWrite
+
+  # ==================== HTTP API FOR WEBHOOKS ====================
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - "*"
+        AllowHeaders:
+          - "*"
+
+  # ==================== COGNITO AUTHENTICATION ====================
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub ${AWS::StackName}-users
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub ${AWS::StackName}-client
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ADMIN_NO_SRP_AUTH
+        - USER_PASSWORD_AUTH
+
+Outputs:
+  # API Endpoints
+  GraphQLFunctionURL:
+    Description: GraphQL API HTTPS URL (works on all phones)
+    Value: !GetAtt GraphQLFunctionUrl.FunctionUrl
+    Export:
+      Name: !Sub ${AWS::StackName}-GraphQLURL
+
+  HttpApiURL:
+    Description: HTTP API for webhooks
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+    Export:
+      Name: !Sub ${AWS::StackName}-HttpApiURL
+
+  # Storage
+  VideoStorageBucket:
+    Description: Video Storage Bucket
+    Value: !Ref VideoStorageBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-VideoBucket
+
+  UploadBucket:
+    Description: Upload Bucket
+    Value: !Ref UploadBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-UploadBucket
+
+  # Database
+  TableName:
+    Description: DynamoDB Table Name
+    Value: !Ref HootnerTable
+    Export:
+      Name: !Sub ${AWS::StackName}-TableName
+
+  # Authentication
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref UserPool
+    Export:
+      Name: !Sub ${AWS::StackName}-UserPoolId
+
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value: !Ref UserPoolClient
+    Export:
+      Name: !Sub ${AWS::StackName}-UserPoolClientId

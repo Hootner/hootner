@@ -1,0 +1,9 @@
+{
+  "name": "api-keys-layer",
+  "version": "1.0.0",
+  "description": "Shared API keys and secrets utilities for Lambda functions",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.700.0"
+  }
+}

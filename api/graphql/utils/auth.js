@@ -8,26 +8,49 @@
 const jwt = require('jsonwebtoken');
 const { AuthenticationError, ForbiddenError } = require('apollo-server-express');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// Import Lambda layer for AWS Secrets Manager (if available)
+let getJWTSecret;
+try {
+  const layer = require('/opt/nodejs/index');
+  getJWTSecret = layer.getJWTSecret;
+} catch {
+  // Fallback for local development
+  getJWTSecret = async () => process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+}
+
 const JWT_EXPIRATION = '24h';
+let JWT_SECRET_CACHE = null;
+
+/**
+ * Get JWT secret with caching
+ * @returns {Promise<string>} JWT secret
+ */
+async function getSecret() {
+  if (!JWT_SECRET_CACHE) {
+    JWT_SECRET_CACHE = await getJWTSecret();
+  }
+  return JWT_SECRET_CACHE;
+}
 
 /**
  * Generate JWT token for user
  * @param {object} user - User object
- * @returns {string} JWT token
+ * @returns {Promise<string>} JWT token
  */
-function generateToken(user) {
+async function generateToken(user) {
+  const secret = await getSecret();
+  return jwt.sign(
+    {
+      id: usePromise<string>} Refresh token
+ */
+async function generateRefreshToken(user) {
+  const secret = await getSecret();
   return jwt.sign(
     {
       id: user.id,
-      email: user.email,
-      role: user.role,
+      type: 'refresh',
     },
-    JWT_SECRET,
-    { expiresIn: JWT_EXPIRATION }
-  );
-}
-
+    secret
 /**
  * Generate refresh token
  * @param {object} user - User object
@@ -46,12 +69,13 @@ function generateRefreshToken(user) {
 
 /**
  * Verify JWT token
- * @param {string} token - JWT token
- * @returns {object} Decoded token payload
+ * @param {stPromise<object>} Decoded token payload
  * @throws {AuthenticationError} If token is invalid
  */
-function verifyToken(token) {
+async function verifyToken(token) {
   try {
+    const secret = await getSecret();
+    return jwt.verify(token, secret
     return jwt.verify(token, JWT_SECRET);
   } catch (error) {
     throw new AuthenticationError('Invalid or expired token');
@@ -86,7 +110,7 @@ async function getUserFromRequest(req) {
       return null;
     }
 
-    const decoded = verifyToken(token);
+    const decoded = await verifyToken(token);
 
     // TODO: Fetch full user from database
     // For now, return decoded token data

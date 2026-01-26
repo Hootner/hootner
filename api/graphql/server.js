@@ -10,6 +10,7 @@ import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
 import messagesRoutes from './routes/messages.js';
+import uploadRoutes from './routes/upload.js';
 import ActivityStreamGenerator from './utils/activityStreamGenerator.js';
 
 // Validate environment variables at startup

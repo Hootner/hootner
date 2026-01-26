@@ -216,13 +216,6 @@ Resources:
       Bucket: !Ref StaticAssetsBucket
       PolicyDocument:
         Statement:
-          - Sid: CloudFrontReadAccess
-            Effect: Allow
-            Principal:
-              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity
-                ${CloudFrontOAI}
-            Action: s3:GetObject
-            Resource: !Sub ${StaticAssetsBucket.Arn}/*
           - Sid: DenyInsecureTransport
             Effect: Deny
             Principal: '*'
@@ -233,99 +226,6 @@ Resources:
             Condition:
               Bool:
                 aws:SecureTransport: false
-
-  # ==================== CLOUDFRONT CDN ====================
-  CloudFrontOAI:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub ${AWS::StackName} OAI
-
-  CloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Origins:
-          - Id: S3Origin
-            DomainName: !GetAtt StaticAssetsBucket.RegionalDomainName
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
-          - Id: ApiOrigin
-            DomainName: !Sub ${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com
-            OriginPath: /prod
-            CustomOriginConfig:
-              HTTPSPort: 443
-              OriginProtocolPolicy: https-only
-        DefaultCacheBehavior:
-          TargetOriginId: S3Origin
-          ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-          CachedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
-          Compress: true
-          MinTTL: 0
-          DefaultTTL: 86400
-          MaxTTL: 31536000
-        CacheBehaviors:
-          - PathPattern: /api/*
-            TargetOriginId: ApiOrigin
-            ViewerProtocolPolicy: https-only
-            AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-              - PUT
-              - POST
-              - PATCH
-              - DELETE
-            ForwardedValues:
-              QueryString: true
-              Headers:
-                - Authorization
-                - x-api-key
-              Cookies:
-                Forward: all
-            MinTTL: 0
-            DefaultTTL: 0
-            MaxTTL: 0
-          - PathPattern: /graphql
-            TargetOriginId: ApiOrigin
-            ViewerProtocolPolicy: https-only
-            AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-              - PUT
-              - POST
-              - PATCH
-              - DELETE
-            ForwardedValues:
-              QueryString: true
-              Headers:
-                - '*'
-            MinTTL: 0
-            DefaultTTL: 0
-            MaxTTL: 0
-        Enabled: true
-        HttpVersion: http2
-        PriceClass: PriceClass_100
-        ViewerCertificate:
-          CloudFrontDefaultCertificate: true
-        CustomErrorResponses:
-          - ErrorCode: 404
-            ResponseCode: 200
-            ResponsePagePath: /dashboard.html
-            ErrorCachingMinTTL: 300
-        Comment: !Sub ${AWS::StackName} CDN
 
   # ==================== COGNITO AUTHENTICATION ====================
   UserPool:
@@ -563,47 +463,18 @@ Resources:
       RotationRules:
         AutomaticallyAfterDays: 90
 
-  # ==================== API GATEWAY ====================
-  HootnerApi:
-    Type: AWS::Serverless::Api
+  # ==================== HTTP API (for webhooks) ====================
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
     Properties:
-      Name: HootnerAPI
       StageName: prod
-      Cors:
-        AllowOrigin: '''*'''
-        AllowHeaders: '''*'''
-        AllowMethods: '''*'''
-      Auth:
-        ApiKeyRequired: true
-      TracingEnabled: true
-
-  HootnerApiKey:
-    Type: AWS::ApiGateway::ApiKey
-    Properties:
-      Name: HootnerAPIKey
-      Enabled: true
-
-  ApiUsagePlan:
-    Type: AWS::ApiGateway::UsagePlan
-    DependsOn: HootnerApiProdStage
-    Properties:
-      UsagePlanName: HootnerUsagePlan
-      ApiStages:
-        - ApiId: !Ref HootnerApi
-          Stage: prod
-      Quota:
-        Limit: 10000
-        Period: DAY
-      Throttle:
-        RateLimit: 100
-        BurstLimit: 200
-
-  ApiUsagePlanKey:
-    Type: AWS::ApiGateway::UsagePlanKey
-    Properties:
-      KeyId: !Ref HootnerApiKey
-      KeyType: API_KEY
-      UsagePlanId: !Ref ApiUsagePlan
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - "*"
+        AllowHeaders:
+          - "*"
 
   # ==================== CLOUDWATCH MONITORING ====================
   AlarmNotificationTopic:
@@ -615,23 +486,6 @@ Resources:
       Subscription:
         - Protocol: email
           Endpoint: !Ref AdminEmail
-
-  ApiErrorAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: !Sub ${AWS::StackName}-api-5xx-errors
-      MetricName: 5XXError
-      Namespace: AWS/ApiGateway
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 10
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: ApiName
-          Value: !Ref HootnerApi
-      AlarmActions:
-        - !Ref AlarmNotificationTopic
 
   LambdaErrorAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -673,7 +527,8 @@ Resources:
       CompatibleRuntimes:
         - nodejs20.x
 
-  # ==================== LAMBDA FUNCTIONS (Sample - GraphQL) ====================
+  # ==================== LAMBDA FUNCTIONS ====================
+
   GraphQLFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -690,8 +545,14 @@ Resources:
         Variables:
           VIDEO_BUCKET: !Ref VideoStorageBucket
           UPLOAD_BUCKET: !Ref UploadBucket
+          STATIC_BUCKET: !Ref StaticAssetsBucket
           USER_POOL_ID: !Ref UserPool
           VIDEO_QUEUE_URL: !Ref VideoProcessingQueue
+          NOTIFICATION_QUEUE_URL: !Ref NotificationQueue
+          KMS_KEY_ID: !Ref EncryptionKey
+          API_SECRETS_ARN: !Ref APISecrets
+          JWT_SECRET_ARN: !Ref JWTSecret
+          HOOTNER_REGION: !Ref AWS::Region
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref HootnerTable
@@ -701,6 +562,8 @@ Resources:
             BucketName: !Ref UploadBucket
         - SQSSendMessagePolicy:
             QueueName: !GetAtt VideoProcessingQueue.QueueName
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt NotificationQueue.QueueName
         - Statement:
             - Effect: Allow
               Action:
@@ -708,38 +571,68 @@ Resources:
               Resource:
                 - !Ref APISecrets
                 - !Ref JWTSecret
+            - Effect: Allow
+              Action:
+                - kms:Decrypt
+                - kms:DescribeKey
+              Resource: !GetAtt EncryptionKey.Arn
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - "*"
+          AllowMethods:
+            - "*"
+          AllowHeaders:
+            - "*"
+
+  S3EventProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-s3-processor
+      CodeUri: api/lambda/
+      Handler: s3-event-handler.handler
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          VIDEO_BUCKET: !Ref VideoStorageBucket
+          UPLOAD_BUCKET: !Ref UploadBucket
+          VIDEO_QUEUE_URL: !Ref VideoProcessingQueue
+          NOTIFICATION_QUEUE_URL: !Ref NotificationQueue
+          KMS_KEY_ID: !Ref EncryptionKey
+          HOOTNER_REGION: !Ref AWS::Region
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref VideoStorageBucket
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt VideoProcessingQueue.QueueName
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt NotificationQueue.QueueName
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - kms:Decrypt
+                - kms:DescribeKey
+              Resource: !GetAtt EncryptionKey.Arn
       Events:
-        GraphQLApi:
-          Type: Api
+        S3Event:
+          Type: SQS
           Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /graphql
-            Method: ANY
+            Queue: !GetAtt VideoProcessingQueue.Arn
+            BatchSize: 10
 
 Outputs:
-  # API Endpoints
-  ApiEndpoint:
-    Description: API Gateway Endpoint
-    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod
+  # Lambda Function URL (HTTPS enabled, works on all phones)
+  GraphQLFunctionURL:
+    Description: GraphQL API HTTPS URL
+    Value: !GetAtt GraphQLFunctionUrl.FunctionUrl
     Export:
-      Name: !Sub ${AWS::StackName}-ApiEndpoint
-
-  GraphQLEndpoint:
-    Description: GraphQL Endpoint
-    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
-    Export:
-      Name: !Sub ${AWS::StackName}-GraphQLEndpoint
-
-  # CloudFront
-  CloudFrontDomain:
-    Description: CloudFront Distribution Domain
-    Value: !GetAtt CloudFrontDistribution.DomainName
-    Export:
-      Name: !Sub ${AWS::StackName}-CloudFrontDomain
-
-  CloudFrontURL:
-    Description: CloudFront HTTPS URL
-    Value: !Sub https://${CloudFrontDistribution.DomainName}
+      Name: !Sub ${AWS::StackName}-GraphQLFunctionURL
 
   # Authentication
   UserPoolId:
@@ -781,23 +674,16 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-TableName
 
-  # API Key
-  ApiKeyId:
-    Description: API Gateway Key ID
-    Value: !Ref HootnerApiKey
-
 Metadata:
   AWS::Composer::Groups:
     FrontendLayer:
       Label: Frontend & CDN
       Members:
         - StaticAssetsBucket
-        - CloudFrontDistribution
-        - CloudFrontOAI
     ApiLayer:
       Label: API & Functions
       Members:
-        - HootnerApi
+        - HttpApi
         - GraphQLFunction
         - APIKeysLayer
     DataLayer:
@@ -828,3 +714,260 @@ Metadata:
         - ApiErrorAlarm
         - LambdaErrorAlarm
         - DLQAlarm
+
+  # ==========================================
+  # STRIPE USAGE-BASED PRICING SYSTEM
+  # Base pay → gets cheaper with scale
+  # PIPES 106-120
+  # ==========================================
+
+  # PIPE 106: Stripe Webhook Handler Lambda
+  StripeWebhookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/webhooks/
+      Handler: stripeWebhookHandler.handler
+      Runtime: nodejs18.x
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerActivities
+          STRIPE_SECRET_KEY: !Sub '{{resolve:secretsmanager:${StripeSecretKey}}}'
+          STRIPE_WEBHOOK_SECRET: !Sub '{{resolve:secretsmanager:${StripeWebhookSecret}}}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerActivities
+
+  # PIPE 107: Stripe Webhook Route
+  StripeWebhookRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: "POST /webhooks/stripe"
+      Target: !Sub "integrations/${StripeWebhookIntegration}"
+
+  # PIPE 108: Stripe Webhook Integration
+  StripeWebhookIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt StripeWebhookFunction.Arn
+      PayloadFormatVersion: "2.0"
+
+  # PIPE 109: Stripe Webhook Lambda Permission
+  StripeWebhookPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref StripeWebhookFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*"
+
+  # PIPE 110: Stripe Webhook Secret (for signature verification)
+  StripeWebhookSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${AWS::StackName}-stripe-webhook-secret"
+      Description: "Stripe webhook signing secret for verifying requests"
+      SecretString: !Sub |
+        {
+          "webhookSecret": "whsec_YOUR_WEBHOOK_SECRET_HERE"
+        }
+
+  # PIPE 111: Usage Tracking Lambda (tracks users, videos, storage)
+  UsageTrackingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/
+      Handler: usage-pricing-service.trackUsage
+      Runtime: nodejs18.x
+      MemorySize: 256
+      Timeout: 15
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerActivities
+          STRIPE_SECRET_KEY: !Sub '{{resolve:secretsmanager:${StripeSecretKey}}}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerActivities
+      Events:
+        S3VideoUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref VideosBucket
+            Events: s3:ObjectCreated:*
+
+  # PIPE 112: Pricing Calculator Lambda
+  PricingCalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/
+      Handler: usage-pricing-service.calculateMonthlyBill
+      Runtime: nodejs18.x
+      MemorySize: 256
+      Timeout: 15
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerActivities
+          STRIPE_SECRET_KEY: !Sub '{{resolve:secretsmanager:${StripeSecretKey}}}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerActivities
+
+  # PIPE 113: Monthly billing EventBridge rule
+  MonthlyBillingRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${AWS::StackName}-monthly-billing"
+      Description: "Trigger monthly billing calculation"
+      ScheduleExpression: "cron(0 0 1 * ? *)"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt PricingCalculatorFunction.Arn
+          Id: "PricingCalculatorTarget"
+
+  # PIPE 114: Allow EventBridge to invoke Pricing Calculator
+  PricingCalculatorEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PricingCalculatorFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt MonthlyBillingRule.Arn
+
+  # PIPE 115: Usage Metrics CloudWatch Dashboard
+  UsageMetricsDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub "${AWS::StackName}-usage-pricing"
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  ["Hootner", "ActiveUsers", {"stat": "Sum"}],
+                  [".", "TotalVideos", {"stat": "Sum"}],
+                  [".", "StorageGB", {"stat": "Sum"}]
+                ],
+                "period": 86400,
+                "stat": "Average",
+                "region": "${AWS::Region}",
+                "title": "Usage Metrics (drives pricing)",
+                "yAxis": {
+                  "left": {
+                    "label": "Count"
+                  }
+                }
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  ["AWS/Lambda", "Invocations", {"stat": "Sum", "label": "Stripe Webhooks"}],
+                  [".", "Duration", {"stat": "Average", "label": "Webhook Latency"}]
+                ],
+                "period": 300,
+                "stat": "Sum",
+                "region": "${AWS::Region}",
+                "title": "Stripe Integration Health"
+              }
+            }
+          ]
+        }
+
+  # PIPE 116: Stripe pricing tier management
+  PricingTiersParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/${AWS::StackName}/pricing/tiers"
+      Type: String
+      Description: "Usage-based pricing tiers (base pay → cheaper with scale)"
+      Value: !Sub |
+        {
+          "starter": {
+            "basePrice": 29.99,
+            "includedUsers": 100,
+            "perUserPrice": 0.50
+          },
+          "growth": {
+            "basePrice": 99.99,
+            "includedUsers": 500,
+            "perUserPrice": 0.40
+          },
+          "scale": {
+            "basePrice": 299.99,
+            "includedUsers": 2000,
+            "perUserPrice": 0.30
+          },
+          "enterprise": {
+            "basePrice": 999.99,
+            "includedUsers": 10000,
+            "perUserPrice": 0.20
+          }
+        }
+
+  # PIPE 117: Volume discount configuration
+  VolumeDiscountsParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/${AWS::StackName}/pricing/volume-discounts"
+      Type: String
+      Description: "Automatic volume discounts (gets cheaper as you scale)"
+      Value: !Sub |
+        [
+          {"threshold": 1000, "discount": 0.05, "label": "5% off at 1K users"},
+          {"threshold": 5000, "discount": 0.10, "label": "10% off at 5K users"},
+          {"threshold": 10000, "discount": 0.15, "label": "15% off at 10K users"},
+          {"threshold": 50000, "discount": 0.20, "label": "20% off at 50K users"},
+          {"threshold": 100000, "discount": 0.25, "label": "25% off at 100K users"}
+        ]
+
+  # PIPE 118: Billing alarm (high usage alert)
+  HighUsageAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-high-usage"
+      AlarmDescription: "Alert when usage exceeds tier limits"
+      MetricName: ActiveUsers
+      Namespace: Hootner
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 5000
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref AlarmNotificationTopic
+
+  # PIPE 119: Connect GraphQL to pricing service
+  GraphQLPricingPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub "${AWS::StackName}-graphql-pricing-access"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource:
+              - !GetAtt PricingCalculatorFunction.Arn
+              - !GetAtt UsageTrackingFunction.Arn
+          - Effect: Allow
+            Action:
+              - ssm:GetParameter
+            Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/pricing/*"
+      Roles:
+        - !Ref GraphQLFunctionRole
+
+  # PIPE 120: Update API Deployment to include Stripe webhook
+  ApiDeploymentWithStripe:
+    Type: AWS::ApiGatewayV2::Deployment
+    Properties:
+      ApiId: !Ref HttpApi
+      Description: "Production deployment with Stripe webhooks"

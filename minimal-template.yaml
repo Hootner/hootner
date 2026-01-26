@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - Minimal Test Deployment
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+
+Resources:
+  # ==================== CORE TABLE ====================
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+
+  # ==================== SIMPLE FUNCTION ====================
+  TestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-test
+      Runtime: nodejs20.x
+      Handler: index.handler
+      InlineCode: |
+        exports.handler = async (event) => {
+          return {
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'HOOTNER Platform Test - SUCCESS!',
+              timestamp: new Date().toISOString()
+            })
+          };
+        };
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - "*"
+          AllowMethods:
+            - "*"
+          AllowHeaders:
+            - "*"
+
+Outputs:
+  TestFunctionURL:
+    Description: Test Function URL
+    Value: !GetAtt TestFunctionUrl.FunctionUrl
+    Export:
+      Name: !Sub ${AWS::StackName}-TestURL

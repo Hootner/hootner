@@ -87,42 +87,69 @@ npm run lint:fix         # Auto-fix linting issues
 
 ```
 my-local-repo/
-├── apps/                # Frontend applications
-├── hexarchy/            # Hexagonal architecture layers
-│   ├── 1-foundation/    # Core utilities
-│   ├── 2-intelligence/  # AI services
-│   ├── 3-communication/ # APIs & adapters
-│   ├── 4-interface/     # UI components
-│   ├── 5-economy/       # Business logic
-│   ├── 6-information/   # Data models
-│   ├── 7-data/          # Storage & databases
-│   └── 8-operations/    # Infrastructure & DevOps
-├── services/            # Microservices
-├── docs/                # Documentation
-└── scripts/             # Automation scripts
+├── 📄 template-enhanced.yaml        # 120-pipe AWS infrastructure
+├── apps/                            # Frontend applications
+├── hexarchy/                        # Hexagonal architecture layers
+│   ├── 1-foundation/                # Core utilities
+│   ├── 2-intelligence/              # AI services
+│   ├── 3-communication/             # APIs & adapters (GraphQL, REST)
+│   ├── 4-interface/                 # UI components
+│   ├── 5-economy/                   # Business logic (payments)
+│   ├── 6-information/               # Data models
+│   ├── 7-data/                      # Storage & databases (DynamoDB)
+│   └── 8-operations/                # Infrastructure & DevOps
+├── api/                             # Lambda functions & GraphQL server
+├── services/                        # Microservices (S3, SQS processing)
+├── docs/                            # Documentation
+└── scripts/                         # Automation & deployment scripts
 ```
+
+**🌳 See complete infrastructure mapping:** [INFRASTRUCTURE_TREE_120_PIPES.md](INFRASTRUCTURE_TREE_120_PIPES.md)
+- All 120 connection pipes mapped to code
+- Data flow visualizations
+- AWS resource connections
 
 ## 🌟 Key Features
 
-- 📹 **Video Streaming** - Upload, process, and stream videos
+- 📹 **Video Streaming** - Upload, process, and stream videos via CloudFront CDN
 - 🤖 **AI Integration** - AI-powered video generation and analysis  
-- 🔐 **Authentication** - Secure user management
-- 💳 **Payment Processing** - Stripe integration
-- 📊 **Analytics** - Real-time performance monitoring
-- 🛡️ **Security** - Enterprise-grade security features
+- 🔐 **Authentication** - Cognito user management with JWT tokens
+- 💳 **Payment Processing** - ✅ **Stripe integration with usage-based pricing**
+  - **Start at base price, get cheaper with scale!**
+  - Starter: $29.99 + $0.50/user → Enterprise: $999.99 + $0.20/user (60% cheaper)
+  - Automatic volume discounts up to 25% off at 100K+ users
+  - Real-time usage tracking (users, videos, storage)
+  - See [STRIPE_USAGE_PRICING_GUIDE.md](STRIPE_USAGE_PRICING_GUIDE.md) for details
+- 📊 **Analytics** - Real-time CloudWatch monitoring
+- 🛡️ **Security** - KMS encryption, API Gateway auth, IAM policies
+- ⚡ **120 Connection Pipes** - Fully integrated AWS infrastructure
 
 ## 🎓 Learning Resources
 
 ### New to the Project?
 1. [AWS for Beginners](docs/AWS_FOR_BEGINNERS.md) - Complete AWS guide
-2. [Day One Guide](docs/DAY_ONE.md) - Your first day with HOOTNER
-3. [Architecture Diagram](docs/ARCHITECTURE_DIAGRAM.md) - How it all fits together
+2. [Infrastructure Tree](INFRASTRUCTURE_TREE_120_PIPES.md) - **NEW!** See all 120 pipes mapped to code
+3. [Architecture Diagram](ARCHITECTURE_DIAGRAM_120_PIPES.md) - Visual infrastructure overview
+4. [Day One Guide](docs/DAY_ONE.md) - Your first day with HOOTNER
 
 ### Developer Guides
 - [Backend Quick Start](docs/BACKEND_QUICKSTART.md)
 - [API Documentation](docs/API.md)
 - [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md)
+
+### 120-Pipe Infrastructure
+- **[Infrastructure Tree](INFRASTRUCTURE_TREE_120_PIPES.md)** - Complete project → AWS mapping
+  - **NEW:** Stripe usage-based pricing (PIPES 106-120)
+  - Base pay → gets cheaper with scale (volume discounts)
+  - Real-time usage tracking for billing
+- **[Stripe Integration](STRIPE_INTEGRATION_SUMMARY.md)** - Complete implementation summary
+- **[Stripe Pricing Guide](STRIPE_USAGE_PRICING_GUIDE.md)** - Setup & usage examples
+- **[Stripe Cost Comparison](STRIPE_COST_COMPARISON.md)** - See how much you save at scale
+- **[Stripe Connection Diagram](STRIPE_CONNECTION_DIAGRAM.md)** - Visual flow diagrams
+- [Connections Map](TEMPLATE_CONNECTIONS_MAP.md) - All 120 pipes documented
+- [Deployment Checklist](DEPLOYMENT_CHECKLIST_120_PIPES.md) - Deploy to AWS
+- [Quick Reference](QUICK_REFERENCE_120_PIPES.md) - One-page cheat sheet
 
 ### Advanced Topics
 - [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md)
