@@ -2984,7 +2984,10 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
     <script src="../../../scripts/monitoring/error-tracker.js"></script>
     <script src="../../../scripts/monitoring/behavior-analytics.js"></script>
 
-    <script>
+    <script type="module">
+      // Import API configuration
+      import { API_ENDPOINTS } from '/config/api-endpoints.js';
+      
       // Security: Input sanitization with DOMPurify fallback
       const sanitize = (html) => {
         if (!html) return '';
@@ -3327,7 +3330,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
 
       function connectWebSocket() {
         try {
-          socket = io('http://localhost:3005', {
+          socket = io(API_ENDPOINTS.WS_URL, {
             transports: ['websocket', 'polling'],
             timeout: 5000,
             reconnection: true,

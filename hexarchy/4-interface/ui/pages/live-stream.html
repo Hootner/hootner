@@ -132,7 +132,10 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    // Import API configuration
+    import { API_ENDPOINTS } from '/config/api-endpoints.js';
+    
     let socket;
     let isStreaming = false;
     let streamStartTime = null;
@@ -140,7 +143,7 @@
     
     function initStreaming() {
       try {
-        socket = io('http://localhost:3005');
+        socket = io(API_ENDPOINTS.WS_URL);
         socket.on('streamStats', updateStreamStats);
         socket.on('chatMessage', addChatMessage);
         socket.on('viewerUpdate', updateViewers);

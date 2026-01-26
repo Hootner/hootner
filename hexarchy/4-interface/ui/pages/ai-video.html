@@ -595,7 +595,10 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    // Import API configuration
+    import { API_ENDPOINTS } from '/config/api-endpoints.js';
+    
     // State Management
     let socket;
     let currentJobId = null;
@@ -624,7 +627,7 @@
     // Initialize
     function getApiBase() {
       const configured = window.AI_VIDEO_API_BASE || localStorage.getItem('hootner_video_api_base');
-      return configured || 'http://localhost:5003';
+      return configured || API_ENDPOINTS.VIDEO_API;
     }
 
     function sanitize(str = '') {
@@ -1067,7 +1070,7 @@
     
     function cancelGeneration() {
       if (currentJobId) {
-        fetch(`http://localhost:5003/cancel/${currentJobId}`, { method: 'POST' })
+        fetch(`${API_ENDPOINTS.VIDEO_API}/cancel/${currentJobId}`, { method: 'POST' })
           .catch(() => console.log('Cancel request failed'));
       }
       

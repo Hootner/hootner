@@ -81,13 +81,16 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    // Import API configuration
+    import { API_ENDPOINTS } from '/config/api-endpoints.js';
+    
     // Initialize advanced analytics
     let socket;
     
     function initAnalytics() {
       try {
-        socket = io('http://localhost:3005');
+        socket = io(API_ENDPOINTS.WS_URL);
         socket.on('analytics', updateAnalytics);
         socket.on('predictions', updatePredictions);
       } catch (e) {
