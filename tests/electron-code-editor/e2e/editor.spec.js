@@ -1,11 +1,11 @@
 // Constants imported
 import { ONE_MINUTE_MS } from '../../constants/timeouts.js';
-
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('HOOTNER Code Editor', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:DEFAULT_PORT');
+    // cSpell:disable-next-line
     await page.waitForLoadState('networkidle');
   });
 

@@ -10,6 +10,8 @@ const PORT = 3000;
 // Serve static files
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use('/utils', express.static(path.join(__dirname, '../utils')));
+app.use('/tailwind-output.css', express.static(path.join(__dirname, '../pages/tailwind-output.css')));
+app.use(express.static(path.join(__dirname, '../pages'))); // Serve all static files from pages
 
 // Serve HTML pages
 app.get('/', (req, res) => {

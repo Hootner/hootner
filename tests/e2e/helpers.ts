@@ -23,6 +23,7 @@ export function generateTestUser(): TestUser {
     return {
         email: `test-${timestamp}@example.com`,
         password: 'TestPassword123!',
+        // cSpell:disable-next-line
         username: `testuser_${timestamp}`,
     };
 }
@@ -91,10 +92,10 @@ export async function deleteVideo(videoId: string, authToken?: string): Promise<
         });
 
         if (!response.ok) {
-            console.error(`Failed to delete video ${videoId}: ${response.status}`);
+            console.error('Failed to delete video:', { videoId: videoId.replace(/[\r\n]/g, ''), status: response.status });
         }
     } catch (error) {
-        console.error('Error deleting video:', error);
+        console.error('Error deleting video');
     }
 }
 
@@ -117,10 +118,10 @@ export async function deleteUser(userId: string, authToken?: string): Promise<vo
         });
 
         if (!response.ok) {
-            console.error(`Failed to delete user ${userId}: ${response.status}`);
+            console.error('Failed to delete user:', { userId: userId.replace(/[\r\n]/g, ''), status: response.status });
         }
     } catch (error) {
-        console.error('Error deleting user:', error);
+        console.error('Error deleting user');
     }
 }
 
@@ -173,6 +174,7 @@ export async function waitForNetworkIdle(
     page: Page,
     timeout = 5000
 ): Promise<void> {
+    // cSpell:disable-next-line
     await page.waitForLoadState('networkidle', { timeout });
 }
 

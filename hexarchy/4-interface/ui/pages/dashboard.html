@@ -10,7 +10,7 @@
   
   <meta name="description" content="HOOTNER Enterprise Dashboard - AI-powered video streaming platform with real-time analytics" />
   <meta name="theme-color" content="#0a0a0f" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://cdn.socket.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:* ws://localhost:* wss://*; font-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdn.socket.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:* ws://localhost:* wss://*; font-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
@@ -18,10 +18,10 @@
   <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="" />
   <title>Dashboard - HOOTNER | Enterprise Video Platform</title>
   <link rel="stylesheet" href="shared-styles.css" />
-  <script src="https://cdn.tailwindcss.com" crossorigin="anonymous" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" onerror="this.remove();document.body.classList.add('no-tailwind')"></script>
+  <link rel="stylesheet" href="/tailwind-output.css">
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" crossorigin="anonymous" integrity="sha384-/RzZdHy8yAKYP0j0UT0gnvYVnTLpP8MpgqJaJLHCHqzN5H7XMKqXX3xJOJqKHqzN" onerror="console.warn('Socket.io unavailable')"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-5VLbVvGaxKBxvJqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qVqN5qV" onerror="console.warn('Chart.js unavailable')"></script>
   <style>
@@ -4411,7 +4411,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
       ['dns-prefetch', 'preconnect'].forEach(rel => {
         const link = document.createElement('link');
         link.rel = rel;
-        link.href = 'https://cdn.tailwindcss.com';
+        link.href = '';
         document.head.appendChild(link);
       });
       

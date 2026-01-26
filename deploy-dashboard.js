@@ -4,20 +4,34 @@ const { CloudFrontClient, CreateInvalidationCommand } = require('@aws-sdk/client
 const fs = require('fs');
 const path = require('path');
 
-const BUCKET_NAME = 'hootner-frontend'; // Update if different
-const CLOUDFRONT_DIST_ID = 'E3QJZQXQXQXQXQ'; // Update with your distribution ID
+// Configuration from environment variables
+const BUCKET_NAME = process.env.AWS_S3_BUCKET || process.env.S3_BUCKET || 'hootner-frontend';
+const CLOUDFRONT_DIST_ID = process.env.CLOUDFRONT_DIST_ID;
+const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
 const FILE_PATH = 'hexarchy/4-interface/ui/pages/dashboard.html';
 const S3_KEY = 'pages/dashboard.html';
+
+// Validate required environment variables
+if (!CLOUDFRONT_DIST_ID) {
+  console.error('❌ ERROR: CLOUDFRONT_DIST_ID environment variable is required');
+  console.error('   Set it in your .env file or export it:');
+  console.error('   export CLOUDFRONT_DIST_ID=E3QJZQXQXQXQXQ');
+  process.exit(1);
+}
 
 async function deploy() {
   console.log('🚀 Deploying enhanced dashboard...\n');
 
   // Read file
   const fileContent = fs.readFileSync(path.join(__dirname, FILE_PATH));
-  
+
+  console.log(`📦 Deploying to S3 bucket: ${BUCKET_NAME}`);
+  console.log(`🌐 CloudFront distribution: ${CLOUDFRONT_DIST_ID}`);
+  console.log(`🗺️  Region: ${AWS_REGION}\n`);
+
   // Upload to S3
-  const s3Client = new S3Client({ region: 'us-east-1' });
-  
+  const s3Client = new S3Client({ region: AWS_REGION });
+
   try {
     await s3Client.send(new PutObjectCommand({
       Bucket: BUCKET_NAME,
@@ -33,8 +47,8 @@ async function deploy() {
   }
 
   // Invalidate CloudFront
-  const cfClient = new CloudFrontClient({ region: 'us-east-1' });
-  
+  const cfClient = new CloudFrontClient({ region: AWS_REGION });
+
   try {
     await cfClient.send(new CreateInvalidationCommand({
       DistributionId: CLOUDFRONT_DIST_ID,

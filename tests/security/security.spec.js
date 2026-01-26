@@ -6,10 +6,10 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Security Tests', () => {
-  
+
   // Authentication & Authorization
   test.describe('Authentication', () => {
-    
+
     test('should reject invalid JWT tokens', async ({ request }) => {
       const response = await request.get('/api/protected', {
         headers: { 'Authorization': 'Bearer invalid_token' }
@@ -20,7 +20,7 @@ test.describe('Security Tests', () => {
     test('should enforce password complexity', async ({ request }) => {
       const weakPasswords = ['123456', 'password', 'abc123'];
       const testEmail = `test-${Date.now()}@example.com`;
-      
+
       for (const password of weakPasswords) {
         const response = await request.post('/api/auth/register', {
           data: {
@@ -37,15 +37,16 @@ test.describe('Security Tests', () => {
     test('should implement rate limiting on login', async ({ request }) => {
       const attempts = [];
       const testEmail = `test-${Date.now()}@example.com`;
-      
+      const testPassword = process.env.TEST_INVALID_PASSWORD || 'wrong';
+
       for (let i = 0; i < 10; i++) {
         attempts.push(
           request.post('/api/auth/login', {
-            data: { email: testEmail, password: 'wrong' }
+            data: { email: testEmail, password: testPassword }
           })
         );
       }
-      
+
       const responses = await Promise.all(attempts);
       const rateLimited = responses.some(r => r.status() === 429);
       expect(rateLimited).toBe(true);
@@ -53,16 +54,16 @@ test.describe('Security Tests', () => {
 
     test('should expire sessions after timeout', async ({ page }) => {
       const testEmail = `test-${Date.now()}@example.com`;
-      const testPassword = 'ValidPass123!';
-      
+      const testPassword = process.env.TEST_PASSWORD || 'ValidPass123!';
+
       await page.goto('/login');
       await page.fill('[name="email"]', testEmail);
       await page.fill('[name="password"]', testPassword);
       await page.click('button[type="submit"]');
-      
+
       // Simulate session timeout by clearing cookies
       await page.context().clearCookies();
-      
+
       await page.goto('/dashboard');
       await expect(page).toHaveURL('/login');
     });
@@ -70,14 +71,14 @@ test.describe('Security Tests', () => {
 
   // Injection Attacks
   test.describe('Injection Prevention', () => {
-    
+
     test('should prevent SQL injection', async ({ request }) => {
       const sqlPayloads = [
         "' OR '1'='1",
         "'; DROP TABLE users--",
         "1' UNION SELECT * FROM users--"
       ];
-      
+
       for (const payload of sqlPayloads) {
         const response = await request.get(`/api/users?id=${payload}`);
         expect(response.status()).not.toBe(200);
@@ -90,7 +91,7 @@ test.describe('Security Tests', () => {
         { $ne: null },
         { $regex: '.*' }
       ];
-      
+
       for (const payload of noSqlPayloads) {
         const response = await request.post('/api/auth/login', {
           data: {
@@ -108,12 +109,12 @@ test.describe('Security Tests', () => {
         '<img src=x onerror=alert("XSS")>',
         'javascript:alert("XSS")'
       ];
-      
+
       for (const payload of xssPayloads) {
         await page.goto('/profile');
         await page.fill('[name="bio"]', payload);
         await page.click('button[type="submit"]');
-        
+
         await page.reload();
         const bio = await page.textContent('.user-bio');
         expect(bio).not.toContain('<script>');
@@ -127,7 +128,7 @@ test.describe('Security Tests', () => {
         '| cat /etc/passwd',
         '`whoami`'
       ];
-      
+
       for (const payload of cmdPayloads) {
         const response = await request.post('/api/process', {
           data: { filename: payload }
@@ -139,7 +140,7 @@ test.describe('Security Tests', () => {
 
   // CSRF Protection
   test.describe('CSRF Protection', () => {
-    
+
     test('should require CSRF token for state-changing operations', async ({ request }) => {
       const response = await request.post('/api/users/delete', {
         data: { userId: '123' }
@@ -151,7 +152,7 @@ test.describe('Security Tests', () => {
     test('should validate CSRF token', async ({ page, request }) => {
       await page.goto('/dashboard');
       const csrfToken = await page.getAttribute('meta[name="csrf-token"]', 'content');
-      
+
       const response = await request.post('/api/users/update', {
         headers: { 'X-CSRF-Token': 'invalid_token' },
         data: { name: 'Test' }
@@ -162,11 +163,11 @@ test.describe('Security Tests', () => {
 
   // Data Exposure
   test.describe('Data Protection', () => {
-    
+
     test('should not expose sensitive data in responses', async ({ request }) => {
       const response = await request.get('/api/users/me');
       const body = await response.json();
-      
+
       expect(body).not.toHaveProperty('password');
       expect(body).not.toHaveProperty('passwordHash');
       expect(body).not.toHaveProperty('salt');
@@ -176,7 +177,7 @@ test.describe('Security Tests', () => {
     test('should not expose stack traces in production', async ({ request }) => {
       const response = await request.get('/api/error-endpoint');
       const body = await response.json();
-      
+
       expect(body).not.toHaveProperty('stack');
       expect(JSON.stringify(body)).not.toContain('at Object');
     });
@@ -190,14 +191,14 @@ test.describe('Security Tests', () => {
 
   // File Upload Security
   test.describe('File Upload Security', () => {
-    
+
     test('should validate file types', async ({ request }) => {
       const maliciousFiles = [
         { name: 'malware.exe', type: 'application/x-msdownload' },
         { name: 'script.php', type: 'application/x-php' },
         { name: 'shell.sh', type: 'application/x-sh' }
       ];
-      
+
       for (const file of maliciousFiles) {
         const response = await request.post('/api/upload', {
           multipart: {
@@ -214,7 +215,7 @@ test.describe('Security Tests', () => {
 
     test('should enforce file size limits', async ({ request }) => {
       const largeFile = Buffer.alloc(100 * 1024 * 1024); // 100MB
-      
+
       const response = await request.post('/api/upload', {
         multipart: {
           file: {
@@ -233,7 +234,7 @@ test.describe('Security Tests', () => {
         'file;rm -rf /',
         'file<script>.mp4'
       ];
-      
+
       for (const name of maliciousNames) {
         const response = await request.post('/api/upload', {
           multipart: {
@@ -244,7 +245,7 @@ test.describe('Security Tests', () => {
             }
           }
         });
-        
+
         if (response.status() === 200) {
           const body = await response.json();
           expect(body.filename).not.toContain('..');
@@ -257,12 +258,12 @@ test.describe('Security Tests', () => {
 
   // API Security
   test.describe('API Security', () => {
-    
+
     test('should implement rate limiting', async ({ request }) => {
-      const requests = Array(100).fill(null).map(() => 
+      const requests = Array(100).fill(null).map(() =>
         request.get('/api/videos')
       );
-      
+
       const responses = await Promise.all(requests);
       const rateLimited = responses.filter(r => r.status() === 429);
       expect(rateLimited.length).toBeGreaterThan(0);
@@ -279,7 +280,7 @@ test.describe('Security Tests', () => {
     test('should set security headers', async ({ request }) => {
       const response = await request.get('/');
       const headers = response.headers();
-      
+
       expect(headers['x-frame-options']).toBe('DENY');
       expect(headers['x-content-type-options']).toBe('nosniff');
       expect(headers['x-xss-protection']).toBe('1; mode=block');
@@ -290,19 +291,19 @@ test.describe('Security Tests', () => {
 
   // Session Management
   test.describe('Session Security', () => {
-    
+
     test('should use secure cookies', async ({ page }) => {
       const testEmail = `test-${Date.now()}@example.com`;
-      const testPassword = 'ValidPass123!';
-      
+      const testPassword = process.env.TEST_PASSWORD || 'ValidPass123!';
+
       await page.goto('/login');
       await page.fill('[name="email"]', testEmail);
       await page.fill('[name="password"]', testPassword);
       await page.click('button[type="submit"]');
-      
+
       const cookies = await page.context().cookies();
       const sessionCookie = cookies.find(c => c.name === 'session');
-      
+
       expect(sessionCookie.secure).toBe(true);
       expect(sessionCookie.httpOnly).toBe(true);
       expect(sessionCookie.sameSite).toBe('Strict');
@@ -310,32 +311,32 @@ test.describe('Security Tests', () => {
 
     test('should invalidate session on logout', async ({ page }) => {
       const testEmail = `test-${Date.now()}@example.com`;
-      const testPassword = 'ValidPass123!';
-      
+      const testPassword = process.env.TEST_PASSWORD || 'ValidPass123!';
+
       await page.goto('/login');
       await page.fill('[name="email"]', testEmail);
       await page.fill('[name="password"]', testPassword);
       await page.click('button[type="submit"]');
-      
+
       const cookiesBefore = await page.context().cookies();
-      
+
       await page.click('[data-testid="logout"]');
-      
+
       const cookiesAfter = await page.context().cookies();
       const sessionCookie = cookiesAfter.find(c => c.name === 'session');
-      
+
       expect(sessionCookie).toBeUndefined();
     });
   });
 
   // GDPR Compliance
   test.describe('GDPR Compliance', () => {
-    
+
     test('should allow data export', async ({ request }) => {
       const response = await request.get('/api/users/me/export', {
         headers: { 'Authorization': 'Bearer valid_token' }
       });
-      
+
       expect(response.status()).toBe(200);
       const data = await response.json();
       expect(data).toHaveProperty('personal_data');
@@ -347,7 +348,7 @@ test.describe('Security Tests', () => {
       const response = await request.delete('/api/users/me', {
         headers: { 'Authorization': 'Bearer valid_token' }
       });
-      
+
       expect(response.status()).toBe(200);
     });
 
@@ -360,17 +361,17 @@ test.describe('Security Tests', () => {
 
 // Performance & Load Testing
 test.describe('Performance Tests', () => {
-  
+
   test('should handle concurrent requests', async ({ request }) => {
     const concurrentRequests = 20;
     const requests = Array(concurrentRequests).fill(null).map(() =>
       request.get('/api/videos')
     );
-    
+
     const start = Date.now();
     const responses = await Promise.allSettled(requests);
     const duration = Date.now() - start;
-    
+
     const successful = responses.filter(r => r.status === 'fulfilled' && r.value.status() === 200).length;
     const successRate = successful / concurrentRequests;
     expect(successRate).toBeGreaterThan(0.95); // 95% success rate
@@ -383,12 +384,12 @@ test.describe('Performance Tests', () => {
       '/api/users/me',
       '/api/dashboard'
     ];
-    
+
     for (const endpoint of endpoints) {
       const start = Date.now();
       await request.get(endpoint);
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(500); // 500ms SLA
     }
   });

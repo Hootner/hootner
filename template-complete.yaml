@@ -1,0 +1,497 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - Complete Enterprise Infrastructure Spiral
+
+Parameters:
+  StripeSecretKey:
+    Type: String
+    NoEcho: true
+    Default: sk_test_placeholder
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: 1024
+    Timeout: 30
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref HootnerTable
+        JWT_SECRET_ARN: !Ref JWTSecret
+        STRIPE_SECRET_ARN: !Ref StripeSecret
+
+Resources:
+  # API Gateway
+  HootnerApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: '''*'''
+        AllowHeaders: '''*'''
+        AllowOrigin: '''*'''
+
+  ApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: hootner-api-key
+      Enabled: true
+
+  UsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+        - ApiId: !Ref HootnerApi
+          Stage: prod
+      Quota:
+        Limit: 100000
+        Period: MONTH
+      Throttle:
+        RateLimit: 400
+        BurstLimit: 500
+
+  UsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref ApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref UsagePlan
+
+  # Secrets
+  JWTSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/jwt
+      GenerateSecretString:
+        PasswordLength: 64
+
+  StripeSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/stripe
+      SecretString: !Sub '{"key":"${StripeSecretKey}"}'
+
+  APISecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/api-secrets
+      SecretString: !Sub |
+        {
+          "graphqlEndpoint": "https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql",
+          "cloudfrontDomain": "${CloudFront.DomainName}"
+        }
+
+  # DynamoDB
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: hootner-activities
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+  # Lambda
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource:
+                - !Ref JWTSecret
+                - !Ref StripeSecret
+                - !Ref APISecrets
+            - Effect: Allow
+              Action: s3:*
+              Resource:
+                - !Sub ${VideoStorageBucket.Arn}/*
+                - !Sub ${UploadBucket.Arn}/*
+            - Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !GetAtt VideoProcessingQueue.Arn
+      Events:
+        GraphQL:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /graphql
+            Method: ANY
+        ApiProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /api/{proxy+}
+            Method: ANY
+
+  # S3 Buckets
+  VideoStorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-videos-${AWS::AccountId}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+            AllowedHeaders:
+              - '*'
+
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-uploads-${AWS::AccountId}
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-frontend-${AWS::AccountId}
+
+  # CloudFront
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Hootner OAI
+
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
+            Action: s3:GetObject
+            Resource: !Sub ${FrontendBucket.Arn}/*
+
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Origins:
+          - Id: S3
+            DomainName: !GetAtt FrontendBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
+          - Id: API
+            DomainName: !Sub ${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        DefaultCacheBehavior:
+          TargetOriginId: S3
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+        CacheBehaviors:
+          - PathPattern: /graphql
+            TargetOriginId: API
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - '*'
+            MinTTL: 0
+            DefaultTTL: 0
+          - PathPattern: /api/*
+            TargetOriginId: API
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - '*'
+            MinTTL: 0
+
+  # Cognito
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: hootner-users
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: email
+          Required: true
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: hootner-web
+      GenerateSecret: false
+
+  # VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+
+  # Redis
+  RedisSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Redis access
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 6379
+          ToPort: 6379
+          CidrIp: 10.0.0.0/16
+
+  RedisSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: Redis subnet group
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  RedisCluster:
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      CacheNodeType: cache.t3.micro
+      Engine: redis
+      NumCacheNodes: 1
+      VpcSecurityGroupIds:
+        - !Ref RedisSecurityGroup
+      CacheSubnetGroupName: !Ref RedisSubnetGroup
+
+  # SQS
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: hootner-dlq
+
+  VideoProcessingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: hootner-video-processing
+      VisibilityTimeout: 900
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn
+        maxReceiveCount: 3
+
+  # SNS
+  NotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: hootner-notifications
+      Subscription:
+        - Protocol: email
+          Endpoint: admin@hootner.com
+
+  # CloudWatch Alarms
+  ApiErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: hootner-api-errors
+      MetricName: 5XXError
+      Namespace: AWS/ApiGateway
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref NotificationTopic
+
+  LambdaThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: hootner-lambda-throttles
+      MetricName: Throttles
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+
+  DynamoDBThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: hootner-dynamodb-throttles
+      MetricName: UserErrors
+      Namespace: AWS/DynamoDB
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+
+  # EventBridge
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: hootner-events
+
+  VideoUploadRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: !Ref EventBus
+      EventPattern:
+        source:
+          - hootner.videos
+        detail-type:
+          - VideoUploaded
+      Targets:
+        - Arn: !GetAtt VideoProcessingQueue.Arn
+          Id: ProcessVideo
+
+  # Step Functions
+  StepFunctionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: states.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+
+  VideoTranscodeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+
+  ThumbnailFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+
+  VideoProcessingStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: video-processing-workflow
+      RoleArn: !GetAtt StepFunctionsRole.Arn
+      DefinitionString: !Sub |
+        {
+          "StartAt": "TranscodeVideo",
+          "States": {
+            "TranscodeVideo": {
+              "Type": "Task",
+              "Resource": "${VideoTranscodeFunction.Arn}",
+              "Next": "GenerateThumbnail"
+            },
+            "GenerateThumbnail": {
+              "Type": "Task",
+              "Resource": "${ThumbnailFunction.Arn}",
+              "End": true
+            }
+          }
+        }
+
+Outputs:
+  GraphQLEndpoint:
+    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
+    Export:
+      Name: HootnerGraphQLEndpoint
+  ApiKey:
+    Value: !Ref ApiKey
+    Export:
+      Name: HootnerApiKey
+  CloudFrontURL:
+    Value: !GetAtt CloudFront.DomainName
+    Export:
+      Name: HootnerCloudFrontURL
+  UserPoolId:
+    Value: !Ref UserPool
+    Export:
+      Name: HootnerUserPoolId
+  UserPoolClientId:
+    Value: !Ref UserPoolClient
+  VideoStorageBucket:
+    Value: !Ref VideoStorageBucket
+  UploadBucket:
+    Value: !Ref UploadBucket
+  FrontendBucket:
+    Value: !Ref FrontendBucket
+  RedisEndpoint:
+    Value: !GetAtt RedisCluster.RedisEndpoint.Address
+  VideoProcessingQueueUrl:
+    Value: !Ref VideoProcessingQueue
+  StateMachineArn:
+    Value: !Ref VideoProcessingStateMachine

@@ -5,6 +5,7 @@ Multi-bitrate streaming for optimal playback quality
 Author: HOOTNER AI Platform
 Date: January 11, 2026
 """
+# cSpell:ignore maxrate bufsize nokey noprint ffprobe xywh millis WEBVTT libx mbps EXTM
 
 import subprocess
 import os
@@ -203,7 +204,11 @@ class AdaptiveStreamGenerator:
                 f.write(f"RESOLUTION={width}x{height},")
                 f.write(f"NAME=\"{variant['name']}\"\n")
 
-                # Relative path to variant playlist
+                # Relative path to variant playlist (sanitized)
+                variant_path = Path(variant["path"]).resolve()
+                output_path = Path(output_dir).resolve()
+                if not str(variant_path).startswith(str(output_path)):
+                    raise ValueError("Path traversal detected")
                 rel_path = os.path.relpath(variant["path"], output_dir)
                 f.write(f"{rel_path}\n\n")
 

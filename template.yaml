@@ -1,117 +1,88 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: HOOTNER - Complete Infrastructure (Layer + API Keys + DB)
+Description: HOOTNER - Enterprise Video Streaming Platform
+
+Parameters:
+  StripeSecretKey:
+    Type: String
+    NoEcho: true
+    Default: sk_test_placeholder
 
 Globals:
   Function:
-    Timeout: 30
-    Runtime: nodejs18.x
+    Runtime: nodejs20.x
     MemorySize: 1024
-    Layers:
-      - !Ref APIKeysLayer
+    Timeout: 30
     Environment:
       Variables:
-        DYNAMODB_TABLE: !Ref HootnerTable
-        API_KEY_SECRET: !Ref APISecrets
-        AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+        TABLE_NAME: !Ref HootnerTable
+        JWT_SECRET_ARN: !Ref JWTSecret
+        STRIPE_SECRET_ARN: !Ref StripeSecret
 
 Resources:
-  # Lambda Layer
-  APIKeysLayer:
-    Type: AWS::Serverless::LayerVersion
+  HootnerApi:
+    Type: AWS::Serverless::Api
     Properties:
-      LayerName: hootner-api-keys
-      ContentUri: layers/api-keys/
-      CompatibleRuntimes:
-        - nodejs18.x
+      StageName: prod
+      Cors:
+        AllowMethods: '''*'''
+        AllowHeaders: '''*'''
+        AllowOrigin: '''*'''
 
-  # Secrets Manager
-  APISecrets:
+  ApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: hootner-api-key
+      Enabled: true
+
+  UsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+        - ApiId: !Ref HootnerApi
+          Stage: prod
+      Throttle:
+        RateLimit: 400
+        BurstLimit: 500
+
+  UsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref ApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref UsagePlan
+
+  JWTSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: hootner/api-keys
+      Name: hootner/jwt
       GenerateSecretString:
-        SecretStringTemplate: '{"STRIPE_KEY":"REPLACE","CLOUDFRONT_DOMAIN":"daxqx65ar35pp.cloudfront.net"}'
-        GenerateStringKey: JWT_SECRET
         PasswordLength: 64
 
-  # DynamoDB
+  StripeSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: hootner/stripe
+      SecretString: !Sub '{"key":"${StripeSecretKey}"}'
+
   HootnerTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: HootnerActivities
+      TableName: hootner-activities
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: PK
           AttributeType: S
         - AttributeName: SK
           AttributeType: S
-        - AttributeName: GSI1PK
-          AttributeType: S
-        - AttributeName: GSI1SK
-          AttributeType: S
       KeySchema:
         - AttributeName: PK
           KeyType: HASH
         - AttributeName: SK
           KeyType: RANGE
-      GlobalSecondaryIndexes:
-        - IndexName: GSI1
-          KeySchema:
-            - AttributeName: GSI1PK
-              KeyType: HASH
-            - AttributeName: GSI1SK
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
 
-  # API Gateway
-  HootnerApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-      Auth:
-        ApiKeyRequired: true
-      Cors:
-        AllowOrigin: '''https://daxqx65ar35pp.cloudfront.net'''
-        AllowHeaders: '''*'''
-        AllowMethods: '''*'''
-
-  HootnerApiKey:
-    Type: AWS::ApiGateway::ApiKey
-    Properties:
-      Name: hootner-cloudfront-key
-      Enabled: true
-
-  UsagePlan:
-    Type: AWS::ApiGateway::UsagePlan
-    Properties:
-      UsagePlanName: hootner-plan
-      ApiStages:
-        - ApiId: !Ref HootnerApi
-          Stage: prod
-      Quota:
-        Limit: 100000
-        Period: MONTH
-      Throttle:
-        BurstLimit: 200
-        RateLimit: 100
-
-  UsagePlanKey:
-    Type: AWS::ApiGateway::UsagePlanKey
-    Properties:
-      KeyId: !Ref HootnerApiKey
-      KeyType: API_KEY
-      UsagePlanId: !Ref UsagePlan
-
-  # Lambda Functions (All use Layer via Globals)
   GraphQLFunction:
     Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
     Properties:
       CodeUri: api/graphql/
       Handler: lambda.handler
@@ -121,481 +92,172 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
+              Resource:
+                - !Ref JWTSecret
+                - !Ref StripeSecret
       Events:
-        Api:
+        GraphQL:
           Type: Api
           Properties:
             RestApiId: !Ref HootnerApi
             Path: /graphql
             Method: ANY
-
-  VideoFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
+        ApiProxy:
           Type: Api
           Properties:
             RestApiId: !Ref HootnerApi
-            Path: /api/videos
+            Path: /api/{proxy+}
             Method: ANY
 
-  AIVideoFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  VideoStorageBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/ai-video
-            Method: ANY
+      BucketName: !Sub hootner-videos-${AWS::AccountId}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+            AllowedHeaders:
+              - '*'
 
-  LiveStreamFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  UploadBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/live-stream
-            Method: ANY
+      BucketName: !Sub hootner-uploads-${AWS::AccountId}
 
-  EditorFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  FrontendBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/editor
-            Method: ANY
+      BucketName: !Sub hootner-frontend-${AWS::AccountId}
 
-  CollaborationFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/collaboration
-            Method: ANY
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Hootner OAI
 
-  MessagesFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/messages
-            Method: ANY
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
+            Action: s3:GetObject
+            Resource: !Sub ${FrontendBucket.Arn}/*
 
-  AnalyticsFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/analytics
-            Method: ANY
+      DistributionConfig:
+        Enabled: true
+        Origins:
+          - Id: S3
+            DomainName: !GetAtt FrontendBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
+          - Id: API
+            DomainName: !Sub ${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        DefaultCacheBehavior:
+          TargetOriginId: S3
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+        CacheBehaviors:
+          - PathPattern: /graphql
+            TargetOriginId: API
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - '*'
+            MinTTL: 0
+          - PathPattern: /api/*
+            TargetOriginId: API
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - '*'
+            MinTTL: 0
 
-  MarketplaceFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  UserPool:
+    Type: AWS::Cognito::UserPool
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/marketplace
-            Method: ANY
+      UserPoolName: hootner-users
+      AutoVerifiedAttributes:
+        - email
 
-  AgentsFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/agents
-            Method: ANY
+      UserPoolId: !Ref UserPool
+      ClientName: hootner-web
+      GenerateSecret: false
 
-  DevOpsFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/devops
-            Method: ANY
+      QueueName: hootner-dlq
 
-  DesignFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  VideoProcessingQueue:
+    Type: AWS::SQS::Queue
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/design
-            Method: ANY
+      QueueName: hootner-video-processing
+      VisibilityTimeout: 900
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn
+        maxReceiveCount: 3
 
-  SocialFeedFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  NotificationTopic:
+    Type: AWS::SNS::Topic
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/feed
-            Method: ANY
+      TopicName: hootner-notifications
 
-  LiveActivityFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
+  ApiErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
     Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/activity
-            Method: ANY
-
-  ProfileFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/profile
-            Method: ANY
-
-  SettingsFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/settings
-            Method: ANY
-
-  ContactFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/contact
-            Method: ANY
-
-  DashboardFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/dashboard
-            Method: ANY
-
-  LoginFunction:
-    Type: AWS::Serverless::Function
-    DependsOn:
-      - HootnerTable
-      - APISecrets
-      - APIKeysLayer
-      - HootnerApi
-    Properties:
-      CodeUri: api/graphql/
-      Handler: lambda.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref HootnerTable
-        - Statement:
-            - Effect: Allow
-              Action: secretsmanager:GetSecretValue
-              Resource: !Ref APISecrets
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HootnerApi
-            Path: /api/login
-            Method: ANY
+      AlarmName: hootner-api-errors
+      MetricName: 5XXError
+      Namespace: AWS/ApiGateway
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref NotificationTopic
 
 Outputs:
-  ApiKey:
-    Description: API Gateway Key
-    Value: !Ref HootnerApiKey
-  ApiEndpoint:
-    Description: API Gateway Endpoint
-    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod
   GraphQLEndpoint:
-    Description: GraphQL Endpoint
     Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
-  LayerArn:
-    Description: Lambda Layer ARN
-    Value: !Ref APIKeysLayer
-  DynamoDBTable:
-    Description: DynamoDB Table Name
-    Value: !Ref HootnerTable
-  SecretsArn:
-    Description: Secrets Manager ARN
-    Value: !Ref APISecrets
+  ApiKey:
+    Value: !Ref ApiKey
+  CloudFrontURL:
+    Value: !GetAtt CloudFront.DomainName
+  UserPoolId:
+    Value: !Ref UserPool

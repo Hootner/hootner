@@ -4,6 +4,8 @@ import { buildSchema } from 'graphql';
 import 'dotenv/config';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import crypto from 'crypto';
+import cookieParser from 'cookie-parser';
 import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
@@ -12,6 +14,168 @@ import ActivityStreamGenerator from './utils/activityStreamGenerator.js';
 
 // Validate environment variables at startup
 validateEnvironment('api');
+
+// ========== CSRF TOKEN MANAGEMENT ==========
+const csrfTokenStore = new Map(); // In production, use Redis
+const TOKEN_EXPIRY = 30 * 60 * 1000; // 30 minutes
+
+function generateCSRFToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function cleanExpiredTokens() {
+  const now = Date.now();
+  for (const [token, data] of csrfTokenStore.entries()) {
+    if (now - data.timestamp > TOKEN_EXPIRY) {
+      csrfTokenStore.delete(token);
+    }
+  }
+}
+
+// Clean expired tokens every 5 minutes
+setInterval(cleanExpiredTokens, 5 * 60 * 1000);
+
+// ========== SECURITY EVENT LOGGING ==========
+const securityEvents = [];
+const MAX_EVENTS = 1000;
+const blockedIPs = new Map(); // IP -> { reason, until, attempts }
+const suspiciousPatterns = new Map(); // IP -> { events: [], score: number }
+
+function calculateThreatScore(ip) {
+  const patterns = suspiciousPatterns.get(ip);
+  if (!patterns) return 0;
+
+  let score = 0;
+  const recentEvents = patterns.events.filter(e =>
+    Date.now() - new Date(e.timestamp).getTime() < 5 * 60 * 1000 // Last 5 minutes
+  );
+
+  // Score based on event types
+  recentEvents.forEach(event => {
+    switch(event.event_type) {
+      case 'csrf_invalid': score += 10; break;
+      case 'csrf_missing': score += 5; break;
+      case 'rate_limit_exceeded': score += 15; break;
+      case 'invalid_file_upload': score += 20; break;
+      case 'sql_injection_attempt': score += 50; break;
+      case 'xss_attempt': score += 50; break;
+      case 'suspicious_filename': score += 25; break;
+      default: score += 1;
+    }
+  });
+
+  // Bonus for rapid-fire attempts
+  if (recentEvents.length > 10) score += recentEvents.length * 2;
+
+  return score;
+}
+
+function autoBlockIP(ip, reason, durationMs = 3600000) { // 1 hour default
+  const until = Date.now() + durationMs;
+  blockedIPs.set(ip, {
+    reason,
+    until,
+    attempts: (blockedIPs.get(ip)?.attempts || 0) + 1,
+    blockedAt: new Date().toISOString()
+  });
+
+  console.log(`🚫 Auto-blocked IP ${ip} for ${durationMs/60000}min: ${reason}`);
+
+  // Clean up after duration
+  setTimeout(() => {
+    if (blockedIPs.has(ip)) {
+      console.log(`✓ Unblocked IP ${ip}`);
+      blockedIPs.delete(ip);
+    }
+  }, durationMs);
+}
+
+function logSecurityEvent(event) {
+  const logEntry = {
+    ...event,
+    timestamp: new Date().toISOString(),
+    id: crypto.randomUUID()
+  };
+
+  securityEvents.unshift(logEntry);
+  if (securityEvents.length > MAX_EVENTS) {
+    securityEvents.pop();
+  }
+
+  // Track suspicious patterns
+  if (event.ip) {
+    if (!suspiciousPatterns.has(event.ip)) {
+      suspiciousPatterns.set(event.ip, { events: [], score: 0 });
+    }
+    const patterns = suspiciousPatterns.get(event.ip);
+    patterns.events.push(logEntry);
+    patterns.score = calculateThreatScore(event.ip);
+
+    // Auto-block if threat score too high
+    if (patterns.score > 100) {
+      autoBlockIP(event.ip, `High threat score: ${patterns.score}`, 3600000); // 1 hour
+    } else if (patterns.score > 50) {
+      console.log(`⚠️  Elevated threat from ${event.ip}: Score ${patterns.score}`);
+    }
+  }
+
+  // Log to console in development
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('🔒 Security Event:', logEntry.event_type, logEntry);
+  }
+
+  // In production, send to logging service (CloudWatch, etc.)
+  return logEntry;
+}
+
+// ========== CSRF VALIDATION MIDDLEWARE ==========
+function validateCSRF(req, res, next) {
+  // Skip CSRF for health/metrics endpoints
+  if (req.path === '/health' || req.path === '/metrics' || req.path === '/api/csrf-token') {
+    return next();
+  }
+
+  // Skip for GET requests (read-only)
+  if (req.method === 'GET' || req.method === 'OPTIONS') {
+    return next();
+  }
+
+  const token = req.headers['x-csrf-token'] || req.cookies['csrf-token'];
+
+  if (!token) {
+    logSecurityEvent({
+      event_type: 'csrf_missing',
+      ip: req.ip,
+      path: req.path,
+      method: req.method
+    });
+    return res.status(403).json({ error: 'CSRF token missing' });
+  }
+
+  const tokenData = csrfTokenStore.get(token);
+
+  if (!tokenData) {
+    logSecurityEvent({
+      event_type: 'csrf_invalid',
+      ip: req.ip,
+      path: req.path
+    });
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+
+  // Check if token is expired
+  if (Date.now() - tokenData.timestamp > TOKEN_EXPIRY) {
+    csrfTokenStore.delete(token);
+    logSecurityEvent({
+      event_type: 'csrf_expired',
+      ip: req.ip,
+      path: req.path
+    });
+    return res.status(403).json({ error: 'CSRF token expired' });
+  }
+
+  next();
+}
 
 // Enhanced GraphQL Schema
 const schema = buildSchema(`
@@ -171,15 +335,45 @@ const root = {
 
 export const app = express();
 app.use(express.json());
+app.use(cookieParser());
+
+// IP Blocking Middleware (before everything else)
+app.use((req, res, next) => {
+  const clientIP = req.ip || req.connection.remoteAddress;
+  const blocked = blockedIPs.get(clientIP);
+
+  if (blocked && Date.now() < blocked.until) {
+    logSecurityEvent({
+      event_type: 'blocked_ip_attempt',
+      ip: clientIP,
+      reason: blocked.reason,
+      attempts: blocked.attempts
+    });
+    return res.status(403).json({
+      error: 'Access denied',
+      retryAfter: Math.ceil((blocked.until - Date.now()) / 1000)
+    });
+  }
+
+  // Clean up expired blocks
+  if (blocked && Date.now() >= blocked.until) {
+    blockedIPs.delete(clientIP);
+  }
+
+  next();
+});
+
+// Apply CSRF validation to all routes (except excluded ones)
+app.use(validateCSRF);
 
 // Security middleware
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ['\'self\''],
-        scriptSrc: ['\'self\''],
-        styleSrc: ['\'self\'', '\'unsafe-inline\''],
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
       },
     },
   })
@@ -197,6 +391,137 @@ app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/messages', messagesRoutes);
 
+// ========== SECURITY ENDPOINTS ==========
+
+// CSRF Token Endpoint
+app.get('/api/csrf-token', (req, res) => {
+  const token = generateCSRFToken();
+  const sessionId = req.cookies['session-id'] || crypto.randomUUID();
+
+  csrfTokenStore.set(token, {
+    timestamp: Date.now(),
+    sessionId,
+    ip: req.ip
+  });
+
+  res.cookie('csrf-token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: TOKEN_EXPIRY
+  });
+
+  res.json({ token });
+
+  logSecurityEvent({
+    event_type: 'csrf_token_generated',
+    ip: req.ip,
+    sessionId
+  });
+});
+
+// Security Event Tracking Endpoint
+app.post('/api/security/track', (req, res) => {
+  const event = req.body;
+
+  // Validate event structure
+  if (!event || !event.event_type) {
+    return res.status(400).json({ error: 'Invalid event data' });
+  }
+
+  const logEntry = logSecurityEvent({
+    ...event,
+    ip: req.ip,
+    user_agent: req.headers['user-agent'],
+    origin: req.headers.origin
+  });
+
+  res.json({ success: true, eventId: logEntry.id });
+});
+
+// Security Events Dashboard (admin only - add auth in production)
+app.get('/api/security/events', (req, res) => {
+  const limit = parseInt(req.query.limit) || 100;
+  const type = req.query.type;
+
+  let events = securityEvents;
+
+  if (type) {
+    events = events.filter(e => e.event_type === type);
+  }
+
+  res.json({
+    total: events.length,
+    events: events.slice(0, limit)
+  });
+});
+
+// Threat Intelligence Endpoint
+app.get('/api/security/threats', (req, res) => {
+  const threats = [];
+
+  for (const [ip, data] of suspiciousPatterns.entries()) {
+    if (data.score > 20) {
+      threats.push({
+        ip,
+        score: data.score,
+        eventCount: data.events.length,
+        recentEvents: data.events.slice(0, 5).map(e => ({
+          type: e.event_type,
+          timestamp: e.timestamp
+        })),
+        blocked: blockedIPs.has(ip)
+      });
+    }
+  }
+
+  threats.sort((a, b) => b.score - a.score);
+
+  res.json({
+    activeThreats: threats.length,
+    blockedIPs: blockedIPs.size,
+    threats: threats.slice(0, 50)
+  });
+});
+
+// Manual IP Block/Unblock (admin only)
+app.post('/api/security/block-ip', (req, res) => {
+  const { ip, reason, duration } = req.body;
+
+  if (!ip) {
+    return res.status(400).json({ error: 'IP address required' });
+  }
+
+  autoBlockIP(ip, reason || 'Manual block', duration || 3600000);
+
+  res.json({ success: true, message: `Blocked ${ip}` });
+});
+
+app.post('/api/security/unblock-ip', (req, res) => {
+  const { ip } = req.body;
+
+  if (!ip) {
+    return res.status(400).json({ error: 'IP address required' });
+  }
+
+  if (blockedIPs.has(ip)) {
+    blockedIPs.delete(ip);
+    res.json({ success: true, message: `Unblocked ${ip}` });
+  } else {
+    res.status(404).json({ error: 'IP not blocked' });
+  }
+});
+
+// Analytics Tracking Endpoint (similar to security tracking)
+app.post('/api/analytics/track', (req, res) => {
+  const event = req.body;
+
+  // In production, send to analytics service
+  console.log('📊 Analytics Event:', event.event_type, event);
+
+  res.json({ success: true });
+});
+
 // CORS with proper configuration
 app.use((req, res, next) => {
   const allowedOrigins = [
@@ -210,8 +535,9 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', origin);
   }
 
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
@@ -232,6 +558,12 @@ app.all(
 
 // Health check endpoint
 app.get('/health', (req, res) => {
+  // Calculate security stats
+  const highThreatIPs = Array.from(suspiciousPatterns.values()).filter(p => p.score > 50).length;
+  const recentEvents = securityEvents.filter(e =>
+    Date.now() - new Date(e.timestamp).getTime() < 5 * 60 * 1000
+  ).length;
+
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -240,6 +572,19 @@ app.get('/health', (req, res) => {
       database: 'connected',
       redis: 'connected',
     },
+    security: {
+      csrf_enabled: true,
+      rate_limiting: true,
+      ip_blocking: true,
+      threat_detection: true,
+      active_tokens: csrfTokenStore.size,
+      security_events_logged: securityEvents.length,
+      blocked_ips: blockedIPs.size,
+      monitored_ips: suspiciousPatterns.size,
+      high_threat_ips: highThreatIPs,
+      recent_events_5min: recentEvents,
+      status: blockedIPs.size > 10 ? 'UNDER_ATTACK' : highThreatIPs > 5 ? 'ELEVATED' : 'NORMAL'
+    }
   });
 });
 
@@ -269,6 +614,14 @@ export const startServer = async () => {
       console.log(`🚀 GraphQL API running on http://localhost:${PORT}/graphql`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
       console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
+      console.log(`🔒 CSRF Token: http://localhost:${PORT}/api/csrf-token`);
+      console.log(`🛡️  Security Events: http://localhost:${PORT}/api/security/events`);
+      console.log(`\n🔐 Security Features Enabled:`);
+      console.log(`   ✓ CSRF Protection`);
+      console.log(`   ✓ Rate Limiting (100 req/15min)`);
+      console.log(`   ✓ Security Event Logging`);
+      console.log(`   ✓ Helmet Security Headers`);
+      console.log(`   ✓ Input Validation`);
 
       // Start activity stream generator for real-time events
       console.log('\n🎬 Initializing real-time activity stream...');

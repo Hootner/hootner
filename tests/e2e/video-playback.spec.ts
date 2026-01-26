@@ -214,12 +214,13 @@ test.describe('Video Playback', () => {
         await page.waitForTimeout(5000);
 
         // Check that analytics event was sent
-        const analyticsRequests = page.context().waitForEvent('request', {
-            predicate: (request) => request.url().includes('/api/analytics'),
-        });
+        const analyticsRequest = await page.waitForRequest(
+            (request) => request.url().includes('/api/analytics'),
+            { timeout: 10000 }
+        );
 
         // Should have sent view tracking
-        expect(analyticsRequests).toBeTruthy();
+        expect(analyticsRequest).toBeTruthy();
     });
 
     test('should allow liking/disliking video', async () => {
@@ -301,7 +302,11 @@ test.describe('Video Playback', () => {
         });
 
         // Wait for video to end
-        await page.waitForEvent('video', { predicate: (v) => v.ended });
+        await video.evaluate((v: HTMLVideoElement) => {
+            return new Promise<void>((resolve) => {
+                v.addEventListener('ended', () => resolve(), { once: true });
+            });
+        });
 
         // Check that next video started loading
         await page.waitForURL(/.*\/video\/.+/, { timeout: 10000 });

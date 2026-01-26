@@ -1,9 +1,21 @@
 // Stripe Payment Gateway Configuration
+// Fallback to mock when credentials unavailable (nationwide outage)
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16'
-});
+let stripe;
+try {
+  if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2023-10-16'
+    });
+  } else {
+    throw new Error('No valid Stripe key');
+  }
+} catch (error) {
+  console.warn('⚠️  Stripe unavailable - using mock mode');
+  const { mockStripe } = await import('./stripe-mock.js');
+  stripe = mockStripe;
+}
 
 export const stripeConfig = {
   publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,

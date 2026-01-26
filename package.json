@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "npm": ">=9.0.0"
   },
   "scripts": {
@@ -41,8 +41,13 @@
     "backend:validate": "node scripts/validate-backend.js",
     "dev": "nodemon index.js",
     "build": "npm run build:frontend && npm run build:api",
+    "build:css": "npx @tailwindcss/cli -i ./apps/frontend/html-pages/input.css -o ./apps/frontend/html-pages/styles.css --watch",
+    "build:css:prod": "npx @tailwindcss/cli -i ./hexarchy/4-interface/ui/pages/tailwind-input.css -o ./hexarchy/4-interface/ui/pages/tailwind-output.css --minify",
+    "build:css:watch": "npx @tailwindcss/cli -i ./hexarchy/4-interface/ui/pages/tailwind-input.css -o ./hexarchy/4-interface/ui/pages/tailwind-output.css --watch",
+    "tailwind:replace-cdn": "node scripts/replace-tailwind-cdn.mjs",
     "build:frontend": "echo 'Building frontend...'",
     "build:api": "cd hexarchy/3-communication/adapters/graphql-api && npm run build",
+    "config:validate": "node config/validate-config.js",
     "test": "jest --config jest.config.js",
     "test:unit": "jest --config jest.config.js",
     "test:e2e": "playwright test",
@@ -60,6 +65,9 @@
     "security:audit": "npm audit && node security-audit.js",
     "security:fix": "npm audit fix",
     "security:report": "node security-audit.js",
+    "security:scan:api": "node agents/api-security-scanner-agent.cjs",
+    "security:scan:api:detailed": "node agents/api-security-scanner-agent.cjs --detailed --fix",
+    "security:scan:api:all": "node agents/api-security-scanner-agent.cjs --path . --detailed --fix",
     "git:integrity:report": "node scripts/git-integrity-check.js report",
     "git:integrity:check": "node scripts/git-integrity-check.js pre-commit",
     "git:health:monitor": "node scripts/git-health-monitor.js",
@@ -95,9 +103,11 @@
     "dual-agent:enable": "node scripts/dual-agent-switcher.js enable",
     "dual-agent:disable": "node scripts/dual-agent-switcher.js disable",
     "dual-agent:status": "node scripts/dual-agent-switcher.js status",
+    "aws:onboard": "node scripts/aws-onboarding-wizard.js",
     "aws:validate": "node scripts/aws-config-validator.js",
     "aws:configure": "aws configure",
     "aws:identity": "aws sts get-caller-identity",
+    "aws:status": "node scripts/aws-status-check.js",
     "postinstall": "cd hexarchy/3-communication/adapters/graphql-api && npm install",
     "py:precommit:install": "python -m pip install --user pre-commit || true && python -m pre_commit install || true",
     "py:precommit:run": "python -m pre_commit run --all-files || true",
@@ -125,7 +135,9 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.975.0",
     "@playwright/test": "^1.40.0",
+    "@tailwindcss/cli": "^4.1.18",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
@@ -144,6 +156,7 @@
     "nodemon": "^3.0.2",
     "ora": "^7.0.1",
     "prettier": "^3.1.0",
+    "tailwindcss": "^4.1.18",
     "ts-jest": "^29.4.6"
   },
   "lint-staged": {

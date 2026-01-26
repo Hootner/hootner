@@ -17,3 +17,25 @@ __pycache__/
 *.pyo
 .idea/
 .vscode/
+
+# Media files (don't upload videos)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.flv
+uploads/
+media/
+videos/
+
+# Large binaries
+*.zip
+*.tar.gz
+*.exe
+*.dll
+
+# Database files
+*.db
+*.sqlite
+dynamodb-local/

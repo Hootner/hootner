@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Visual Reference - Complete Layout Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    h1 {
+      color: #00ff88;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+    }
+    
+    h2 {
+      color: #80b3ff;
+      margin: 40px 0 20px;
+      font-size: 1.8rem;
+      border-bottom: 3px solid #80b3ff;
+      padding-bottom: 10px;
+    }
+    
+    h3 {
+      color: #ff6b9d;
+      margin: 30px 0 15px;
+      font-size: 1.4rem;
+    }
+    
+    .section {
+      background: #2a2a2a;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      border: 2px solid #3a3a3a;
+    }
+    
+    .demo-box {
+      background: #3a3a3a;
+      padding: 20px;
+      margin: 20px 0;
+      border: 3px solid #00ff88;
+      border-radius: 8px;
+      position: relative;
+    }
+    
+    .box-model {
+      width: 400px;
+      margin: 30px auto;
+      position: relative;
+    }
+    
+    .margin-box {
+      background: #ff9800;
+      padding: 30px;
+      text-align: center;
+      color: #000;
+      font-weight: bold;
+    }
+    
+    .border-box {
+      background: #ffc107;
+      padding: 20px;
+      border: 5px solid #ff5722;
+      margin-top: 10px;
+    }
+    
+    .padding-box {
+      background: #8bc34a;
+      padding: 20px;
+      margin-top: 10px;
+    }
+    
+    .content-box {
+      background: #2196f3;
+      padding: 20px;
+      color: white;
+      margin-top: 10px;
+    }
+    
+    code {
+      background: #1a1a1a;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #00ff88;
+      font-size: 0.95em;
+    }
+    
+    pre {
+      background: #0a0a0a;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border-left: 4px solid #00ff88;
+      margin: 15px 0;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .flex {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    
+    .example {
+      background: #2a2a2a;
+      padding: 15px;
+      border: 2px solid #00ff88;
+      border-radius: 6px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .property {
+      background: #1a1a1a;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #ff6b9d;
+      border-radius: 4px;
+    }
+    
+    .property-name {
+      color: #80b3ff;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 8px;
+    }
+    
+    .property-values {
+      color: #00ff88;
+      margin: 8px 0;
+    }
+    
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 20px;
+      background: #1a1a1a;
+      border: 2px solid #ff6b9d;
+      border-radius: 8px;
+    }
+    
+    .visual-grid > div {
+      background: #00ff88;
+      padding: 20px;
+      text-align: center;
+      color: #000;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    
+    .position-demo {
+      position: relative;
+      height: 300px;
+      background: #2a2a2a;
+      border: 2px solid #80b3ff;
+      margin: 20px 0;
+    }
+    
+    .pos-static { background: #ff6b9d; padding: 10px; margin: 10px; }
+    .pos-relative { position: relative; background: #00ff88; padding: 10px; left: 20px; top: 10px; }
+    .pos-absolute { position: absolute; background: #80b3ff; padding: 10px; right: 10px; top: 10px; }
+    .pos-fixed { position: fixed; background: #ffc107; padding: 10px; bottom: 20px; right: 20px; z-index: 1000; }
+    
+    .overflow-demo {
+      width: 300px;
+      height: 100px;
+      overflow: auto;
+      background: #2a2a2a;
+      padding: 10px;
+      border: 2px solid #00ff88;
+      margin: 15px 0;
+    }
+    
+    .size-units {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .unit-box {
+      background: #3a3a3a;
+      padding: 15px;
+      text-align: center;
+      border: 2px solid #ff6b9d;
+      border-radius: 6px;
+    }
+    
+    .unit-name {
+      color: #00ff88;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+    }
+    
+    .unit-desc {
+      color: #9db2cb;
+      font-size: 0.9em;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #2a2a2a;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #3a3a3a;
+    }
+    
+    th {
+      background: #1a1a1a;
+      color: #00ff88;
+      font-weight: bold;
+    }
+    
+    tr:hover {
+      background: #3a3a3a;
+    }
+    
+    .highlight {
+      background: #ff6b9d;
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    
+    .info-box {
+      background: #1a3a4a;
+      border-left: 5px solid #80b3ff;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    
+    .warning-box {
+      background: #4a3a1a;
+      border-left: 5px solid #ffc107;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>🎨 Complete CSS Visual Reference Guide</h1>
+  
+  <!-- BOX MODEL -->
+  <div class="section">
+    <h2>📦 The CSS Box Model - MOST IMPORTANT</h2>
+    
+    <div class="info-box">
+      <strong>Every element is a box with 4 layers:</strong><br>
+      1. Content (innermost)<br>
+      2. Padding (space inside border)<br>
+      3. Border (the outline)<br>
+      4. Margin (space outside border)
+    </div>
+    
+    <div class="box-model">
+      <div class="margin-box">
+        MARGIN (orange)
+        <div class="border-box">
+          BORDER (red line)
+          <div class="padding-box">
+            PADDING (green)
+            <div class="content-box">
+              CONTENT (blue)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <pre><code>/* Box Model Example */
+.box {
+  width: 200px;           /* Content width */
+  height: 100px;          /* Content height */
+  padding: 20px;          /* Space inside border */
+  border: 5px solid #000; /* Border thickness */
+  margin: 30px;           /* Space outside border */
+}
+
+/* Total width = 200 + 20+20 + 5+5 + 30+30 = 310px */
+/* Total height = 100 + 20+20 + 5+5 + 30+30 = 210px */</code></pre>
+
+    <div class="warning-box">
+      <strong>⚠️ box-sizing: border-box</strong> - Makes width/height INCLUDE padding and border<br>
+      <code>box-sizing: border-box;</code> ← USE THIS ON EVERYTHING
+    </div>
+  </div>
+  
+  <!-- SPACING -->
+  <div class="section">
+    <h2>📏 Spacing Properties</h2>
+    
+    <h3>Margin (Outside Space)</h3>
+    <div class="property">
+      <div class="property-name">margin</div>
+      <div class="property-values">
+        <code>margin: 10px;</code> - All sides<br>
+        <code>margin: 10px 20px;</code> - Top/Bottom Left/Right<br>
+        <code>margin: 10px 20px 30px 40px;</code> - Top Right Bottom Left (clockwise)<br>
+        <code>margin-top: 10px;</code> - Individual sides<br>
+        <code>margin: 0 auto;</code> - Center horizontally
+      </div>
+    </div>
+    
+    <h3>Padding (Inside Space)</h3>
+    <div class="property">
+      <div class="property-name">padding</div>
+      <div class="property-values">
+        <code>padding: 10px;</code> - All sides<br>
+        <code>padding: 10px 20px;</code> - Top/Bottom Left/Right<br>
+        <code>padding: 10px 20px 30px 40px;</code> - Top Right Bottom Left<br>
+        <code>padding-left: 10px;</code> - Individual sides
+      </div>
+    </div>
+    
+    <h3>Gap (For Flexbox/Grid)</h3>
+    <div class="property">
+      <div class="property-name">gap</div>
+      <div class="property-values">
+        <code>gap: 20px;</code> - Space between flex/grid items<br>
+        <code>gap: 20px 30px;</code> - Row gap, Column gap
+      </div>
+    </div>
+  </div>
+  
+  <!-- SIZE UNITS -->
+  <div class="section">
+    <h2>📐 Size Units - When to Use Each</h2>
+    
+    <div class="size-units">
+      <div class="unit-box">
+        <div class="unit-name">px</div>
+        <div class="unit-desc">Pixels - Fixed size<br>Use for: borders, shadows</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">%</div>
+        <div class="unit-desc">Percentage of parent<br>Use for: responsive widths</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">em</div>
+        <div class="unit-desc">Relative to font-size<br>Use for: spacing, padding</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">rem</div>
+        <div class="unit-desc">Relative to root font<br>Use for: font sizes</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">vw</div>
+        <div class="unit-desc">% of viewport width<br>Use for: full-width elements</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">vh</div>
+        <div class="unit-desc">% of viewport height<br>Use for: full-height sections</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">fr</div>
+        <div class="unit-desc">Fraction (Grid only)<br>Use for: flexible columns</div>
+      </div>
+      <div class="unit-box">
+        <div class="unit-name">auto</div>
+        <div class="unit-desc">Automatic sizing<br>Use for: natural width/height</div>
+      </div>
+    </div>
+    
+    <pre><code>/* Smart Sizing Examples */
+width: 50%;              /* Half of parent */
+width: 100vw;            /* Full viewport width */
+font-size: 1.5rem;       /* 1.5x root font size */
+padding: 2em;            /* 2x current font size */
+grid-template-columns: 1fr 2fr 1fr; /* 1:2:1 ratio */</code></pre>
+  </div>
+  
+  <!-- DISPLAY -->
+  <div class="section">
+    <h2>🎭 Display Property - Controls Layout Behavior</h2>
+    
+    <table>
+      <tr>
+        <th>Value</th>
+        <th>Behavior</th>
+        <th>Use For</th>
+      </tr>
+      <tr>
+        <td><code>block</code></td>
+        <td>Takes full width, stacks vertically</td>
+        <td>Containers, sections, divs</td>
+      </tr>
+      <tr>
+        <td><code>inline</code></td>
+        <td>Flows with text, no width/height</td>
+        <td>Spans, links, small text</td>
+      </tr>
+      <tr>
+        <td><code>inline-block</code></td>
+        <td>Flows inline but has width/height</td>
+        <td>Buttons, badges</td>
+      </tr>
+      <tr>
+        <td><code>flex</code></td>
+        <td>One-dimensional layout (row/column)</td>
+        <td>Navigation, toolbars, cards</td>
+      </tr>
+      <tr>
+        <td><code>grid</code></td>
+        <td>Two-dimensional layout (rows+columns)</td>
+        <td>Page layouts, galleries</td>
+      </tr>
+      <tr>
+        <td><code>none</code></td>
+        <td>Hidden (doesn't take space)</td>
+        <td>Hiding elements</td>
+      </tr>
+    </table>
+  </div>
+  
+  <!-- FLEXBOX -->
+  <div class="section">
+    <h2>💪 Flexbox - One-Dimensional Layout</h2>
+    
+    <div class="info-box">
+      <strong>Flexbox arranges items in a row or column</strong><br>
+      Use when: aligning items horizontally or vertically
+    </div>
+    
+    <h3>Visual Demo</h3>
+    <div class="flex" style="background: #1a1a1a; padding: 20px; border: 2px solid #00ff88;">
+      <div class="example" style="flex: 1;">Flex Item 1</div>
+      <div class="example" style="flex: 1;">Flex Item 2</div>
+      <div class="example" style="flex: 1;">Flex Item 3</div>
+    </div>
+    
+    <pre><code>/* Flexbox Container Properties */
+.container {
+  display: flex;
+  flex-direction: row;        /* row | column | row-reverse | column-reverse */
+  justify-content: center;    /* Main axis: flex-start | flex-end | center | space-between | space-around */
+  align-items: center;        /* Cross axis: flex-start | flex-end | center | stretch */
+  gap: 20px;                  /* Space between items */
+  flex-wrap: wrap;            /* Wrap items to next line */
+}
+
+/* Flexbox Item Properties */
+.item {
+  flex: 1;                    /* Grow to fill space */
+  flex-shrink: 0;             /* Don't shrink */
+  flex-basis: 200px;          /* Starting width */
+  align-self: flex-end;       /* Override container alignment */
+}</code></pre>
+
+    <h3>Common Flexbox Patterns</h3>
+    <pre><code>/* Center Everything */
+display: flex;
+justify-content: center;
+align-items: center;
+
+/* Space Between Items */
+display: flex;
+justify-content: space-between;
+
+/* Equal Width Columns */
+display: flex;
+.item { flex: 1; }</code></pre>
+  </div>
+  
+  <!-- GRID -->
+  <div class="section">
+    <h2>🎯 Grid - Two-Dimensional Layout</h2>
+    
+    <div class="info-box">
+      <strong>Grid creates rows AND columns simultaneously</strong><br>
+      Use when: complex layouts with both rows and columns
+    </div>
+    
+    <h3>Visual Demo</h3>
+    <div class="visual-grid">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+    </div>
+    
+    <pre><code>/* Grid Container */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;  /* 3 equal columns */
+  grid-template-rows: 100px 200px;      /* 2 rows with heights */
+  gap: 20px;                            /* Space between cells */
+}
+
+/* Grid Item Spanning */
+.item {
+  grid-column: 1 / 3;      /* Span from column 1 to 3 */
+  grid-row: 1 / 2;         /* Span from row 1 to 2 */
+}</code></pre>
+
+    <h3>Responsive Grid Patterns</h3>
+    <pre><code>/* Auto-fit columns (responsive) */
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+/* 12-column layout (like Bootstrap) */
+grid-template-columns: repeat(12, 1fr);
+
+/* Named areas */
+grid-template-areas:
+  "header header header"
+  "sidebar main main"
+  "footer footer footer";</code></pre>
+  </div>
+  
+  <!-- POSITION -->
+  <div class="section">
+    <h2>📍 Position - Element Placement</h2>
+    
+    <table>
+      <tr>
+        <th>Value</th>
+        <th>Behavior</th>
+        <th>top/right/bottom/left</th>
+      </tr>
+      <tr>
+        <td><code>static</code></td>
+        <td>Default - flows normally</td>
+        <td>❌ Ignored</td>
+      </tr>
+      <tr>
+        <td><code>relative</code></td>
+        <td>Offset from normal position</td>
+        <td>✅ Relative to itself</td>
+      </tr>
+      <tr>
+        <td><code>absolute</code></td>
+        <td>Removed from flow, positioned relative to nearest positioned parent</td>
+        <td>✅ Relative to parent</td>
+      </tr>
+      <tr>
+        <td><code>fixed</code></td>
+        <td>Stays in viewport (scrolls with page)</td>
+        <td>✅ Relative to viewport</td>
+      </tr>
+      <tr>
+        <td><code>sticky</code></td>
+        <td>Switches between relative and fixed</td>
+        <td>✅ Sticks when scrolling</td>
+      </tr>
+    </table>
+    
+    <div class="position-demo">
+      <div class="pos-static" style="color: #000;">Static (normal flow)</div>
+      <div class="pos-relative" style="color: #000;">Relative (shifted 20px left, 10px down)</div>
+      <div class="pos-absolute" style="color: #000;">Absolute (top-right corner)</div>
+    </div>
+    <div class="pos-fixed" style="color: #000;">Fixed (bottom-right)</div>
+    
+    <pre><code>/* Position Examples */
+.relative {
+  position: relative;
+  top: 10px;
+  left: 20px;
+}
+
+.absolute {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}</code></pre>
+  </div>
+  
+  <!-- OVERFLOW -->
+  <div class="section">
+    <h2>📜 Overflow - Content That Doesn't Fit</h2>
+    
+    <table>
+      <tr>
+        <th>Value</th>
+        <th>Behavior</th>
+      </tr>
+      <tr>
+        <td><code>visible</code></td>
+        <td>Content spills out (default)</td>
+      </tr>
+      <tr>
+        <td><code>hidden</code></td>
+        <td>Clip content that overflows</td>
+      </tr>
+      <tr>
+        <td><code>scroll</code></td>
+        <td>Always show scrollbars</td>
+      </tr>
+      <tr>
+        <td><code>auto</code></td>
+        <td>Show scrollbars only when needed</td>
+      </tr>
+    </table>
+    
+    <div class="overflow-demo">
+      This content is longer than the box and will trigger scrollbars. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+    </div>
+    
+    <pre><code>.scrollable {
+  overflow: auto;        /* Show scrollbars when needed */
+  overflow-x: hidden;    /* Only vertical scroll */
+  overflow-y: auto;      /* Only vertical scroll */
+}</code></pre>
+  </div>
+  
+  <!-- COMMON ISSUES -->
+  <div class="section">
+    <h2>⚠️ Common CSS Issues & Fixes</h2>
+    
+    <div class="property">
+      <div class="property-name">❌ Elements Overlapping</div>
+      <strong>Cause:</strong> Absolute positioning or negative margins<br>
+      <strong>Fix:</strong> Check <code>position</code>, <code>z-index</code>, margins
+    </div>
+    
+    <div class="property">
+      <div class="property-name">❌ Content Cut Off</div>
+      <strong>Cause:</strong> Fixed height with <code>overflow: hidden</code><br>
+      <strong>Fix:</strong> Use <code>min-height</code> or <code>overflow: auto</code>
+    </div>
+    
+    <div class="property">
+      <div class="property-name">❌ Element Not Centering</div>
+      <strong>Cause:</strong> Display type or container settings<br>
+      <strong>Fix:</strong> Use Flexbox: <code>display: flex; justify-content: center; align-items: center;</code>
+    </div>
+    
+    <div class="property">
+      <div class="property-name">❌ Spacing Too Large/Small</div>
+      <strong>Cause:</strong> Margin collapse or inherited padding<br>
+      <strong>Fix:</strong> Check parent margins, use <code>gap</code> in flex/grid
+    </div>
+    
+    <div class="property">
+      <div class="property-name">❌ Layout Breaks on Mobile</div>
+      <strong>Cause:</strong> Fixed widths or missing responsive rules<br>
+      <strong>Fix:</strong> Use <code>%</code>, <code>max-width</code>, media queries
+    </div>
+  </div>
+  
+  <!-- DEBUGGING -->
+  <div class="section">
+    <h2>🔍 Debugging CSS - Find The Problem</h2>
+    
+    <h3>Visual Debugging Trick</h3>
+    <pre><code>/* Add borders to EVERYTHING to see layout */
+* {
+  border: 1px solid red !important;
+}
+
+/* Or use outline (doesn't affect spacing) */
+* {
+  outline: 1px solid red !important;
+}</code></pre>
+
+    <h3>Browser DevTools (F12)</h3>
+    <div class="info-box">
+      1. Right-click element → Inspect<br>
+      2. See computed styles (actual values)<br>
+      3. See box model diagram<br>
+      4. Toggle properties on/off<br>
+      5. Edit values in real-time
+    </div>
+    
+    <h3>Key Things to Check</h3>
+    <ul style="list-style-position: inside; color: #00ff88; line-height: 2;">
+      <li><code>display</code> - Is it block/flex/grid?</li>
+      <li><code>width/height</code> - Fixed or responsive?</li>
+      <li><code>padding/margin</code> - Too much spacing?</li>
+      <li><code>position</code> - Is it taken out of flow?</li>
+      <li><code>overflow</code> - Is content hidden?</li>
+      <li><code>z-index</code> - Is it behind something?</li>
+    </ul>
+  </div>
+  
+  <!-- RESPONSIVE -->
+  <div class="section">
+    <h2>📱 Responsive Design - Media Queries</h2>
+    
+    <pre><code>/* Mobile First (start small, scale up) */
+.element {
+  width: 100%;  /* Mobile default */
+}
+
+@media (min-width: 768px) {  /* Tablet */
+  .element { width: 50%; }
+}
+
+@media (min-width: 1200px) {  /* Desktop */
+  .element { width: 33%; }
+}
+
+/* Desktop First (start big, scale down) */
+.element {
+  width: 33%;  /* Desktop default */
+}
+
+@media (max-width: 1200px) {  /* Tablet */
+  .element { width: 50%; }
+}
+
+@media (max-width: 768px) {  /* Mobile */
+  .element { width: 100%; }
+}</code></pre>
+
+    <h3>Common Breakpoints</h3>
+    <table>
+      <tr>
+        <th>Device</th>
+        <th>Breakpoint</th>
+      </tr>
+      <tr>
+        <td>Mobile</td>
+        <td><code>@media (max-width: 768px)</code></td>
+      </tr>
+      <tr>
+        <td>Tablet</td>
+        <td><code>@media (min-width: 768px) and (max-width: 1200px)</code></td>
+      </tr>
+      <tr>
+        <td>Desktop</td>
+        <td><code>@media (min-width: 1200px)</code></td>
+      </tr>
+      <tr>
+        <td>Large Desktop</td>
+        <td><code>@media (min-width: 1600px)</code></td>
+      </tr>
+    </table>
+  </div>
+  
+  <!-- QUICK REFERENCE -->
+  <div class="section">
+    <h2>⚡ Quick Reference Cheat Sheet</h2>
+    
+    <h3>Center Something</h3>
+    <pre><code>/* Center with Flexbox (BEST) */
+display: flex;
+justify-content: center;
+align-items: center;
+
+/* Center with Grid */
+display: grid;
+place-items: center;
+
+/* Center horizontally */
+margin: 0 auto;
+max-width: 1200px;</code></pre>
+
+    <h3>Full Width/Height</h3>
+    <pre><code>width: 100vw;   /* Full viewport width */
+height: 100vh;  /* Full viewport height */
+width: 100%;    /* Full parent width */</code></pre>
+
+    <h3>Spacing Shorthand</h3>
+    <pre><code>padding: 10px;                  /* All sides */
+padding: 10px 20px;             /* Vertical Horizontal */
+padding: 10px 20px 30px;        /* Top H-sides Bottom */
+padding: 10px 20px 30px 40px;   /* Top Right Bottom Left (🕐 clockwise) */</code></pre>
+
+    <h3>Remove Default Styling</h3>
+    <pre><code>* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}</code></pre>
+  </div>
+
+</body>
+</html>

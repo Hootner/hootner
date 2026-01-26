@@ -50,7 +50,10 @@ class GitIntegrityChecker {
       let warningsCount = 0;
 
       stagedFiles.forEach(file => {
-        if (!fs.existsSync(file)) return; // File deleted
+        if (!fs.existsSync(file)) {
+          console.log(chalk.gray(`  ⊘ ${file} (deleted)`));
+          return;
+        }
         
         const stats = fs.statSync(file);
         const sizeMB = stats.size / (1024 * 1024);

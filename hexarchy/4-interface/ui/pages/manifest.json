@@ -1,12 +1,16 @@
 {
-  "name": "HOOTNER Dashboard",
+  "name": "HOOTNER - The Owl Never Sleeps",
   "short_name": "HOOTNER",
-  "description": "Enterprise Video Streaming Platform - The Owl Never Sleeps",
+  "description": "Enterprise Video Streaming Platform with AI-powered security",
+  "version": "2.0.0",
   "start_url": "/hexarchy/4-interface/ui/pages/dashboard.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
-  "theme_color": "#0a0a0f",
+  "theme_color": "#6ce6c1",
   "orientation": "any",
+  "lang": "en-US",
+
   "icons": [
     {
       "src": "/icon-192.png",
@@ -21,17 +25,81 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["entertainment", "productivity", "business"],
+
+  "categories": ["entertainment", "productivity", "business", "video", "social"],
+
   "shortcuts": [
+    {
+      "name": "Video Player",
+      "url": "/apps/frontend/dist/video-player.html",
+      "description": "Cinema video player",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Dashboard",
+      "url": "/hexarchy/4-interface/ui/pages/dashboard.html",
+      "description": "Analytics dashboard",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
     {
       "name": "Search",
       "url": "/hexarchy/4-interface/ui/pages/dashboard.html#search",
       "description": "Quick search"
     },
     {
-      "name": "Analytics",
-      "url": "/hexarchy/4-interface/ui/pages/dashboard.html#analytics",
-      "description": "View analytics"
+      "name": "Security",
+      "url": "/health",
+      "description": "Security status"
     }
-  ]
+  ],
+
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://hootner.com/manifest.json"
+    }
+  ],
+
+  "prefer_related_applications": false,
+
+  "features": [
+    "AI video generation",
+    "Real-time collaboration",
+    "Enterprise security",
+    "Offline support",
+    "PWA capabilities"
+  ],
+
+  "security": {
+    "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https: wss:",
+    "csrf_protection": true,
+    "rate_limiting": true,
+    "threat_detection": true
+  },
+
+  "api": {
+    "graphql": "http://localhost:4000/graphql",
+    "video_generation": "http://localhost:5003",
+    "websocket": "ws://localhost:4000/graphql"
+  },
+
+  "offline_enabled": true,
+  "cache_first": true,
+
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
 }

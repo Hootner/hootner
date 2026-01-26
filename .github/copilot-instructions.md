@@ -17,9 +17,11 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
   - Enhanced agents (security, compliance, BI, etc.) are implemented as modules and accessed via `enhanced-agent-hub.js`.
 
 - **Developer workflows & commands** (use these exact commands when scripting or running tasks):
+  - **First-time setup**: `npm run aws:onboard` — beginner-friendly wizard that configures local or AWS mode
   - Install dependencies: `npm install`
   - Start dev frontend: `npm run dev`
   - Start all servers (cross-platform): `npm run start:all` or `node scripts/start-all-servers.js`
+  - Check AWS status: `npm run aws:status` — shows current AWS account and connection status
   - Start orchestration locally: `node orchestration/index.js` (dashboard runs on port 9000)
   - Start standalone video player (dev):
     - `cd apps/frontend/html-pages`
