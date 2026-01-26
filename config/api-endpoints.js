@@ -137,7 +137,7 @@ export function isDevelopment() {
 }
 
 // CommonJS export for Node.js compatibility
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports && typeof require !== 'undefined') {
   module.exports = {
     API_ENDPOINTS,
     validateEndpoints,

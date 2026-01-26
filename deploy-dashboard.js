@@ -16,8 +16,11 @@ try {
   const dotenv = await import('dotenv');
   dotenv.config();
 } catch (err) {
-  // dotenv is optional - environment variables can be set directly
-  // Silently continue if not available
+  // dotenv is optional - ignore if not installed
+  // Only fail if it's an unexpected error
+  if (err.code !== 'ERR_MODULE_NOT_FOUND') {
+    console.warn('Warning: Failed to load dotenv:', err.message);
+  }
 }
 
 // Get configuration from environment variables
@@ -92,7 +95,7 @@ async function deploy() {
   
   // Display CloudFront URL
   const cloudfrontUrl = process.env.CLOUDFRONT_URL || 
-    `https://${CLOUDFRONT_DIST_ID.toLowerCase()}.cloudfront.net`;
+    `https://${CLOUDFRONT_DIST_ID}.cloudfront.net`;
   console.log(`🌐 Live at: ${cloudfrontUrl}/${S3_KEY}`);
 }
 
