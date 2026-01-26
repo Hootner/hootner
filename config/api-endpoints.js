@@ -41,6 +41,9 @@ export const API_ENDPOINTS = {
   // Main WebSocket
   WS_URL: getEnvVar('VITE_WS_URL', 'ws://localhost:3005'),
   
+  // Dashboard URL (for redirects after login)
+  DASHBOARD_URL: getEnvVar('VITE_DASHBOARD_URL', 'http://localhost:3005'),
+  
   // GraphQL API
   GRAPHQL_API: getEnvVar('VITE_GRAPHQL_API', 'http://localhost:4000/graphql'),
   

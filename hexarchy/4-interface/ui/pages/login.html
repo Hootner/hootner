@@ -639,8 +639,8 @@
             // Redirect to original page
             window.location.href = redirectTo;
           } else {
-            // Default redirect to React dashboard
-            window.location.href = API_ENDPOINTS.WS_URL.replace('ws://', 'http://').replace('wss://', 'https://');
+            // Default redirect to dashboard
+            window.location.href = API_ENDPOINTS.DASHBOARD_URL;
           }
         }
       }
@@ -682,7 +682,7 @@
 
         alert('Registration successful! Redirecting to dashboard...');
         // Redirect to dashboard
-        window.location.href = API_ENDPOINTS.WS_URL.replace('ws://', 'http://').replace('wss://', 'https://');
+        window.location.href = API_ENDPOINTS.DASHBOARD_URL;
       }
     </script>
   </div>

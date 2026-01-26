@@ -795,11 +795,31 @@
       <div>Lines: <span id="lineCount">0</span></div>
     </div>
 
-    <script>
-      // Import API configuration
-      const { API_ENDPOINTS } = require('/config/api-endpoints.js');
+    <script type="module">
+      // Import API configuration for browser environment
+      import { API_ENDPOINTS } from '/config/api-endpoints.js';
       
-      const vm = require('vm');
+      // Make API_ENDPOINTS available globally for non-module scripts
+      window.API_ENDPOINTS = API_ENDPOINTS;
+    </script>
+    
+    <script>
+      // For Node.js/Electron environment, try to require vm module
+      let vm;
+      try {
+        if (typeof require !== 'undefined') {
+          vm = require('vm');
+          // Also load API config in Node.js environment
+          if (!window.API_ENDPOINTS) {
+            const { API_ENDPOINTS: apiConfig } = require('/config/api-endpoints.js');
+            window.API_ENDPOINTS = apiConfig;
+          }
+        }
+      } catch (e) {
+        // In browser, vm is not available - that's okay
+        console.log('Running in browser mode');
+      }
+      
       let editor;
       let errorHandler;
       let lspClient;
@@ -1005,9 +1025,9 @@
         try {
           // Try to connect to LSP servers (optional)
           const servers = {
-            javascript: API_ENDPOINTS.LSP_JAVASCRIPT,
-            typescript: API_ENDPOINTS.LSP_TYPESCRIPT,
-            python: API_ENDPOINTS.LSP_PYTHON,
+            javascript: window.API_ENDPOINTS.LSP_JAVASCRIPT,
+            typescript: window.API_ENDPOINTS.LSP_TYPESCRIPT,
+            python: window.API_ENDPOINTS.LSP_PYTHON,
           };
 
           for (const [lang, url] of Object.entries(servers)) {

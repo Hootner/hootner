@@ -139,6 +139,7 @@ node -r dotenv/config deploy-dashboard.js
 |------------------|----------------------|-------------|
 | `API_BASE` | http://localhost:4000 | Main REST API |
 | `WS_URL` | ws://localhost:3005 | Main WebSocket |
+| `DASHBOARD_URL` | http://localhost:3005 | Dashboard URL for redirects |
 | `GRAPHQL_API` | http://localhost:4000/graphql | GraphQL endpoint |
 | `GRAPHQL_WS` | ws://localhost:4000/graphql | GraphQL subscriptions |
 | `VIDEO_API` | http://localhost:5003 | Video generation API |
