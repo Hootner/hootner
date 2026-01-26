@@ -1,12 +1,19 @@
 #!/usr/bin/env node
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { CloudFrontClient, CreateInvalidationCommand } = require('@aws-sdk/client-cloudfront');
-const fs = require('fs');
-const path = require('path');
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Load environment variables from .env file if present
 try {
-  require('dotenv').config();
+  const dotenv = await import('dotenv');
+  dotenv.config();
 } catch (err) {
   // dotenv is optional - environment variables can be set directly
 }
