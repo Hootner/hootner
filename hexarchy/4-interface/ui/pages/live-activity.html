@@ -272,11 +272,14 @@
         <div class="activity-feed" id="activityFeed"></div>
     </div>
 
-    <script>
+    <script type="module">
+        // Import API configuration
+        import { API_ENDPOINTS } from '/config/api-endpoints.js';
+        
         // Configuration for backend connection
         const CONFIG = {
-            API_URL: 'http://localhost:4000/graphql',
-            WS_URL: 'ws://localhost:4000/graphql',
+            API_URL: API_ENDPOINTS.GRAPHQL_API,
+            WS_URL: API_ENDPOINTS.GRAPHQL_WS,
             FALLBACK_TO_DEMO: true // Use demo data if backend unavailable
         };
 

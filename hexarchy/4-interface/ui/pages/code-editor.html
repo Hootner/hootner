@@ -796,6 +796,9 @@
     </div>
 
     <script>
+      // Import API configuration
+      const { API_ENDPOINTS } = require('/config/api-endpoints.js');
+      
       const vm = require('vm');
       let editor;
       let errorHandler;
@@ -1002,9 +1005,9 @@
         try {
           // Try to connect to LSP servers (optional)
           const servers = {
-            javascript: 'ws://localhost:3001/lsp/javascript',
-            typescript: 'ws://localhost:3001/lsp/typescript',
-            python: 'ws://localhost:3001/lsp/python',
+            javascript: API_ENDPOINTS.LSP_JAVASCRIPT,
+            typescript: API_ENDPOINTS.LSP_TYPESCRIPT,
+            python: API_ENDPOINTS.LSP_PYTHON,
           };
 
           for (const [lang, url] of Object.entries(servers)) {

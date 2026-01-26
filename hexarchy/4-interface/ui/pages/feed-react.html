@@ -125,14 +125,20 @@
       }
     }
   </style>
-  <script>
+  <script type="module">
+    // Import API configuration
+    import { API_ENDPOINTS } from '/config/api-endpoints.js';
+    
     // Backend API Configuration
     const API_CONFIG = {
-      VIDEO_API: 'http://localhost:5003',
-      GRAPHQL_API: 'http://localhost:4000/graphql',
-      ANALYTICS_API: 'http://localhost:5003/api/analytics',
-      WATCH_PARTY_WS: 'ws://localhost:5004'
+      VIDEO_API: API_ENDPOINTS.VIDEO_API,
+      GRAPHQL_API: API_ENDPOINTS.GRAPHQL_API,
+      ANALYTICS_API: API_ENDPOINTS.ANALYTICS_API,
+      WATCH_PARTY_WS: API_ENDPOINTS.WATCH_PARTY_WS
     };
+    
+    // Make API_CONFIG available globally for non-module scripts
+    window.API_CONFIG = API_CONFIG;
   </script>
 </head>
 

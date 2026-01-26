@@ -3363,7 +3363,10 @@
       </div>
     </div>
 
-    <script>
+    <script type="module">
+      // Import API configuration
+      import { API_ENDPOINTS } from '/config/api-endpoints.js';
+      
       // ========================================================================
       // � P0 CRITICAL SECURITY FEATURES
       // ========================================================================
@@ -6332,15 +6335,15 @@
       // Load videos from server
       async function loadServerVideos() {
         try {
-          const response = await fetch('http://localhost:3000/api/videos');
+          const response = await fetch(`${API_ENDPOINTS.VIDEO_PLAYER_API}/api/videos`);
           const serverVideos = await response.json();
           serverVideos.forEach(v => {
             videos.push({
               id: videos.length + 1,
               title: v.title,
               duration: v.duration,
-              src: 'http://localhost:3000' + v.src,
-              poster: 'http://localhost:3000' + v.poster,
+              src: API_ENDPOINTS.VIDEO_PLAYER_API + v.src,
+              poster: API_ENDPOINTS.VIDEO_PLAYER_API + v.poster,
               type: 'video/mp4',
               isHLS: false,
               tags: ['server', 'video'],
@@ -7522,9 +7525,9 @@
       // ========== OPTION E: WEBSOCKET & REAL-TIME INTEGRATION ==========
 
       // Backend Configuration
-      const API_BASE = 'http://localhost:4000';
-      const VIDEO_API_BASE = 'http://localhost:5003';
-      const WS_URL = 'ws://localhost:4000/graphql';
+      const API_BASE = API_ENDPOINTS.API_BASE;
+      const VIDEO_API_BASE = API_ENDPOINTS.VIDEO_API;
+      const WS_URL = API_ENDPOINTS.GRAPHQL_WS;
       let sessionId = localStorage.getItem('sessionId') || generateSessionId();
       let currentUser = null;
       let wsConnection = null;

@@ -1200,7 +1200,10 @@
       </div>
     </div>
 
-    <script>
+    <script type="module">
+      // Import API configuration
+      import { API_ENDPOINTS } from '/config/api-endpoints.js';
+      
       // Video element
       const video = document.getElementById('cinema-video')
       const player = document.getElementById('cinemaPlayer')
@@ -1208,8 +1211,8 @@
       const volumeSlider = document.getElementById('volumeSlider')
 
       // Backend API configuration
-      const API_BASE_URL = 'http://localhost:5003'
-      const GRAPHQL_URL = 'http://localhost:4000/graphql'
+      const API_BASE_URL = API_ENDPOINTS.VIDEO_API
+      const GRAPHQL_URL = API_ENDPOINTS.GRAPHQL_API
 
       // Initialize player
       let isPlaying = false

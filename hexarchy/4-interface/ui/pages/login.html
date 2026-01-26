@@ -564,7 +564,10 @@
       </form>
     </div>
 
-    <script>
+    <script type="module">
+      // Import API configuration
+      import { API_ENDPOINTS } from '/config/api-endpoints.js';
+      
       // CENTRALIZED SESSION REVOCATION SYSTEM
       const SESSION_REVOCATION_KEY = 'hootner_session_revocation';
       
@@ -636,8 +639,8 @@
             // Redirect to original page
             window.location.href = redirectTo;
           } else {
-            // Default redirect to React dashboard on port 3005
-            window.location.href = 'http://localhost:3005';
+            // Default redirect to React dashboard
+            window.location.href = API_ENDPOINTS.WS_URL.replace('ws://', 'http://').replace('wss://', 'https://');
           }
         }
       }
@@ -678,8 +681,8 @@
         localStorage.setItem('hootner_user', JSON.stringify({ username, email }));
 
         alert('Registration successful! Redirecting to dashboard...');
-        // Redirect to dashboard on port 3005
-        window.location.href = 'http://localhost:3005';
+        // Redirect to dashboard
+        window.location.href = API_ENDPOINTS.WS_URL.replace('ws://', 'http://').replace('wss://', 'https://');
       }
     </script>
   </div>
