@@ -188,3 +188,37 @@ const { data } = useQuery(GET_VIDEO, { variables: { id: videoId } });
 5. Add playback rate persistence
 6. Implement gesture controls for mobile
 7. Add video playlist support
+
+## Algorithm Marketplace
+
+The `AlgorithmMarketplace` component provides a simple UI to execute server-provided algorithms.
+
+- Endpoints: `/api/algorithms` and `/api/algorithms/:id/execute`
+- Add component to the app: see [App.tsx](../App.tsx)
+- Inputs: JSON payload parsed in the textarea
+- Output: Execution result or error rendered as JSON
+
+### Tier Limits & Usage Tracking
+
+- Tiers: Free (10/day), Pro (1000/month), Enterprise (unlimited)
+- Server persists usage in `data/usage/algorithm-usage.json`
+- Usage endpoint: `/api/algorithms/usage?user_id=YOUR_ID`
+
+### Stripe Metered Usage (Optional)
+
+- Set `STRIPE_API_KEY` and pass `subscription_item_id` in request body to record usage
+- Uses Stripe Usage Records API to increment quantity
+
+Quick try:
+
+```bash
+cd hexarchy/4-interface/ui/frontend
+npm install
+npm run dev
+```
+
+Make sure the frontend server is running to serve the API endpoints:
+
+```bash
+node scripts/servers/frontend-server.js
+```

@@ -1,5 +1,7 @@
 // Enhanced Header Component for HOOTNER
 (function () {
+  const currentPath = window.location.pathname;
+  const isDashboard = /dashboard(\.html)?$/.test(currentPath);
   // Check authentication first
   const isAuthenticated = localStorage.getItem('hootner_auth_token') || sessionStorage.getItem('hootner_session');
 
@@ -9,7 +11,7 @@
     return;
   }
 
-  const headerHTML = `
+  const headerHTML = isDashboard ? `
     <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="height: 70px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
       <div style="padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center; gap: 24px;">
@@ -78,6 +80,18 @@
         </div>
       </div>
     </nav>
+  ` : `
+    <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50" style="height: 70px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+      <div style="padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 24px;">
+          <a href="/dashboard.html" style="font-size: 18px; font-weight: bold; background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;">🦉 HOOTNER</a>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <a href="/dashboard.html" style="font-size: 14px; text-decoration: none; padding: 8px 12px; color: #94a3b8; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">← Back to Dashboard</a>
+          <span id="notif-badge" style="display:none;width:18px;height:18px"></span>
+        </div>
+      </div>
+    </nav>
   `;
 
   document.body.insertAdjacentHTML('afterbegin', headerHTML);
@@ -94,6 +108,7 @@
 
   window.toggleNotifications = function () {
     const dropdown = document.getElementById('notif-dropdown');
+    if (!dropdown) return;
     const isVisible = dropdown.style.display === 'flex';
     dropdown.style.display = isVisible ? 'none' : 'flex';
     if (!isVisible) renderNotifications();
@@ -207,6 +222,7 @@
   function updateBadge() {
     const unreadCount = notifications.filter(n => n.unread).length;
     const badge = document.getElementById('notif-badge');
+    if (!badge) return;
     if (unreadCount > 0) {
       badge.textContent = unreadCount;
       badge.style.display = 'flex';
@@ -237,19 +253,21 @@
   }
 
   // Highlight active page
-  const currentPath = window.location.pathname;
-  document.querySelectorAll('nav a').forEach(link => {
-    if (link.getAttribute('href') === currentPath ||
-      (currentPath.includes(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
-      link.style.color = '#4ade80';
-      link.style.fontWeight = '600';
-    }
-  });
+  if (isDashboard) {
+    document.querySelectorAll('nav a').forEach(link => {
+      if (link.getAttribute('href') === currentPath ||
+        (currentPath.includes(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
+        link.style.color = '#4ade80';
+        link.style.fontWeight = '600';
+      }
+    });
+  }
 
   // Close dropdowns on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#notif-dropdown') && !e.target.closest('button[onclick="toggleNotifications()"]')) {
-      document.getElementById('notif-dropdown').style.display = 'none';
+      const dd = document.getElementById('notif-dropdown');
+      if (dd) dd.style.display = 'none';
     }
     if (!e.target.closest('#user-menu') && !e.target.closest('button[onclick="toggleUserMenu()"]')) {
       document.getElementById('user-menu').style.display = 'none';

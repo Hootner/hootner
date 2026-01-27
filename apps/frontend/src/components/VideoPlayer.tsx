@@ -6,8 +6,8 @@
 import { useEffect } from 'react'
 import { useVideoPlayer } from '../hooks/useVideoPlayer'
 import type { VideoPlayerProps } from '../types/videoPlayer'
-import { VideoControls } from './VideoControls'
-import { VideoProgressBar } from './VideoProgressBar'
+import VideoControls from '@ui-components/video/VideoControls'
+import VideoProgressBar from '@ui-components/video/VideoProgressBar'
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   video,

@@ -1,0 +1,8 @@
+{
+  "telemetry": {
+    "enabled": false,
+    "analytics": false,
+    "errorReporting": false,
+    "usageTracking": false
+  }
+}

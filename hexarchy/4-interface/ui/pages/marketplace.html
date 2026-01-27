@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="shared-styles.css" />
   <title>🛒 Marketplace - HOOTNER</title>
   <link rel="stylesheet" href="/tailwind-output.css">
+  <script src="./asset-loader.js"></script>
+  <script src="./config.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <style>
     body {
@@ -49,6 +51,7 @@
 <body class="min-h-screen">
   <script src="../components/auth-guard.js"></script>
   <script src="../components/header-enhanced.js"></script>
+  <script src="../components/navigation-policy.js"></script>
 
   <div style="padding: 20px; max-width: 1400px; margin: 0 auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
@@ -124,14 +127,14 @@
   <script src="../components/footer-enhanced.js"></script>
 
   <script>
-    const API_URL = 'http://localhost:4000/api/marketplace';
+    const API_URL = (window.HOOTNER_CONFIG.API_BASE_URL || '') + '/api/marketplace';
     let products = [];
     let currentCategory = 'all';
     let currentPage = 1;
     let hasMore = true;
     let loading = false;
     let cart = JSON.parse(localStorage.getItem('hootner_cart') || '[]');
-    const stripe = Stripe('pk_test_51234567890');
+    const stripe = Stripe(window.HOOTNER_CONFIG.STRIPE_PUBLISHABLE_KEY);
 
     async function loadProducts(reset = false) {
       if (loading || (!hasMore && !reset)) return;

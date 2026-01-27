@@ -7,6 +7,9 @@
     <!-- Session Revocation System -->
     <script src="../assets/security/session-revocation.js"></script>
     
+    <script src="./config.js"></script>
+    <script src="./asset-loader.js"></script>
+    <script src="./navigation-policy.js"></script>
     <link rel="stylesheet" href="shared-styles.css" />
     <title>🔥 Live Activity - HOOTNER</title>
     <style>
@@ -275,8 +278,8 @@
     <script>
         // Configuration for backend connection
         const CONFIG = {
-            API_URL: 'http://localhost:4000/graphql',
-            WS_URL: 'ws://localhost:4000/graphql',
+            API_URL: (window.HOOTNER_CONFIG && window.HOOTNER_CONFIG.GRAPHQL_ENDPOINT) || 'http://localhost:4000/graphql',
+            WS_URL: ((window.HOOTNER_CONFIG && window.HOOTNER_CONFIG.GRAPHQL_ENDPOINT) || 'ws://localhost:4000/graphql').replace('http', 'ws'),
             FALLBACK_TO_DEMO: true // Use demo data if backend unavailable
         };
 

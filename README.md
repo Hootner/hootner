@@ -32,6 +32,7 @@ npm run start:all
 ## 🎯 Development Modes
 
 ### Local Mode (Recommended for Beginners)
+
 - ✅ No AWS account needed
 - ✅ Everything runs on your computer  
 - ✅ Perfect for learning and building features
@@ -43,6 +44,7 @@ npm run start:all
 ```
 
 ### AWS Mode (When You're Ready)
+
 - 🚀 Deploy to real AWS infrastructure
 - 🚀 Test with real users
 - 🚀 Production-like environment
@@ -56,6 +58,7 @@ npm run aws:deploy
 ## 🔧 Common Commands
 
 ### Getting Started
+
 ```bash
 npm run onboard          # Initial project setup
 npm run aws:onboard      # AWS setup wizard (beginner-friendly!)
@@ -63,13 +66,24 @@ npm run aws:status       # Check AWS connection
 ```
 
 ### Development
+
 ```bash
 npm run start:all        # Start all services
 npm run dev              # Start with auto-reload
 npm run start:platform   # Start full platform
 ```
 
+### Frontend (HTML Pages)
+
+```bash
+cd apps/frontend/html-pages
+node server.js
+```
+
+Serves at http://localhost:3001 (cinema player at /cinema-player.html).
+
 ### AWS (Optional)
+
 ```bash
 npm run aws:check        # Verify AWS credentials
 npm run aws:deploy       # Deploy to AWS
@@ -77,6 +91,7 @@ npm run aws:validate     # Validate AWS configuration
 ```
 
 ### Testing & Quality
+
 ```bash
 npm test                 # Run tests
 npm run lint             # Check code quality
@@ -88,23 +103,134 @@ npm run lint:fix         # Auto-fix linting issues
 ```
 my-local-repo/
 ├── 📄 template-enhanced.yaml        # 120-pipe AWS infrastructure
-├── apps/                            # Frontend applications
-├── hexarchy/                        # Hexagonal architecture layers
-│   ├── 1-foundation/                # Core utilities
-│   ├── 2-intelligence/              # AI services
-│   ├── 3-communication/             # APIs & adapters (GraphQL, REST)
-│   ├── 4-interface/                 # UI components
-│   ├── 5-economy/                   # Business logic (payments)
-│   ├── 6-information/               # Data models
-│   ├── 7-data/                      # Storage & databases (DynamoDB)
-│   └── 8-operations/                # Infrastructure & DevOps
+├── .amazonq/                        # Amazon Q config
+├── .aws/                            # AWS CLI & SSO configuration
+├── .github/                         # GitHub workflows, templates, security
+├── .husky/                          # Git hooks for code quality
+├── agents/                          # API security scanner agents
 ├── api/                             # Lambda functions & GraphQL server
-├── services/                        # Microservices (S3, SQS processing)
+│   ├── graphql/                     # GraphQL API implementation
+│   │   ├── cache/                   # Caching layer
+│   │   ├── models/                  # DynamoDB models
+│   │   ├── resolvers/               # GraphQL resolvers
+│   │   ├── routes/                  # REST routes
+│   │   ├── utils/                   # Utilities
+│   │   └── webhooks/                # Stripe webhooks
+│   ├── lambda/                      # Lambda handlers
+│   └── layers/                      # Lambda layers
+├── apps/                            # Frontend applications
+│   └── frontend/                    # React/TypeScript frontend
+│       ├── html-pages/              # Static HTML pages
+│       └── src/                     # React components
+├── config/                          # Configuration files
+├── constants/                       # Application constants
+├── data/                            # Data storage
+│   ├── logs/                        # Application logs
+│   ├── uploads/                     # File uploads
+│   └── usage/                       # Usage tracking
 ├── docs/                            # Documentation
-└── scripts/                         # Automation & deployment scripts
+│   ├── ai/                          # AI & agent docs
+│   ├── architecture/                # Architecture docs
+│   ├── commands/                    # Command references
+│   ├── compliance/                  # Compliance guides
+│   ├── guides/                      # How-to guides
+│   ├── legal/                       # Legal templates
+│   ├── security/                    # Security docs
+│   └── status/                      # Project status reports
+├── frameworks/                      # Framework implementations
+│   ├── ai/agents/                   # AI agent orchestration
+│   └── backend/nestjs/              # NestJS backend
+├── hexarchy/                        # Hexagonal architecture layers
+│   ├── 0-core/                      # Core infrastructure
+│   │   ├── api/                     # API configs
+│   │   ├── auth/                    # Authentication
+│   │   ├── aws/                     # AWS service configs
+│   │   ├── database/                # Database configs
+│   │   ├── logging/                 # Logging & monitoring
+│   │   ├── security/                # Security middleware
+│   │   └── utils/                   # Core utilities
+│   ├── 1-foundation/                # Domain models & services
+│   │   ├── events/                  # Domain events
+│   │   ├── models/                  # Domain models
+│   │   ├── repositories/            # Data repositories
+│   │   ├── services/                # Business services
+│   │   └── validators/              # Business validators
+│   ├── 2-intelligence/              # AI & analytics
+│   │   ├── ai/                      # AI services
+│   │   ├── ai-services/             # Video generation, agents
+│   │   ├── analytics/               # Analytics engines
+│   │   └── ml/                      # ML models
+│   ├── 3-communication/             # APIs & integrations
+│   │   ├── adapters/                # API adapters
+│   │   ├── clients/                 # External clients
+│   │   ├── controllers/             # API controllers
+│   │   ├── graphql/                 # GraphQL resolvers
+│   │   ├── queue/                   # Message queues
+│   │   └── websocket/               # WebSocket handlers
+│   ├── 4-interface/                 # UI layer
+│   │   ├── components/              # React components
+│   │   ├── ui/                      # UI assets & pages
+│   │   │   ├── components/          # Electron code editor
+│   │   │   ├── frameworks/          # Linting, Prettier
+│   │   │   ├── frontend/            # React frontend
+│   │   │   ├── pages/               # HTML pages
+│   │   │   └── utils/               # UI utilities
+│   │   └── view-models/             # View models
+│   ├── 5-economy/                   # Business logic
+│   │   ├── business/                # Business services
+│   │   │   ├── ai/                  # AI business logic
+│   │   │   ├── analytics/           # Business analytics
+│   │   │   ├── commerce/            # Payment processing
+│   │   │   ├── compliance/          # Compliance services
+│   │   │   ├── infrastructure/      # Infrastructure services
+│   │   │   ├── integration/         # Third-party integrations
+│   │   │   ├── media/               # Media processing
+│   │   │   └── revenue/             # Revenue optimization
+│   │   ├── fraud-detection/         # Fraud prevention
+│   │   ├── monetization/            # Monetization services
+│   │   ├── payments/                # Payment services
+│   │   └── pricing/                 # Pricing engines
+│   ├── 6-governance/                # Compliance & security
+│   │   ├── compliance/              # Compliance services
+│   │   ├── legal/                   # Legal templates
+│   │   ├── moderation/              # Content moderation
+│   │   └── policies/                # Policy enforcement
+│   ├── 7-data/                      # Data layer
+│   │   ├── analytics/               # Data analytics
+│   │   ├── backup/                  # Backup services
+│   │   ├── caching/                 # Cache layer
+│   │   ├── storage/                 # Storage services
+│   │   └── warehouse/               # Data warehouse
+│   └── 8-operations/                # DevOps & infrastructure
+│       ├── backup/                  # Backup operations
+│       ├── ci-cd/                   # CI/CD pipelines
+│       ├── deployment/              # Deployment services
+│       ├── infrastructure/          # Infrastructure as code
+│       ├── monitoring/              # Monitoring services
+│       └── testing/                 # Test suites
+├── layers/                          # Lambda layers
+├── lib/                             # Shared libraries
+├── scripts/                         # Automation scripts
+│   ├── agents/                      # Agent orchestration
+│   ├── deployment/                  # Deployment scripts
+│   ├── monitoring/                  # Monitoring scripts
+│   ├── security/                    # Security scripts
+│   ├── servers/                     # Server launchers
+│   └── testing/                     # Test scripts
+├── services/                        # Microservices
+│   └── video-generation/            # AI video generation service
+├── src/                             # Source code
+├── tests/                           # Test suites
+│   ├── e2e/                         # End-to-end tests
+│   ├── integration/                 # Integration tests
+│   ├── performance/                 # Performance tests
+│   ├── security/                    # Security tests
+│   └── unit/                        # Unit tests
+└── training_images/                 # AI training data
 ```
 
 **🌳 See complete infrastructure mapping:** [INFRASTRUCTURE_TREE_120_PIPES.md](INFRASTRUCTURE_TREE_120_PIPES.md)
+
 - All 120 connection pipes mapped to code
 - Data flow visualizations
 - AWS resource connections
@@ -127,18 +253,21 @@ my-local-repo/
 ## 🎓 Learning Resources
 
 ### New to the Project?
+
 1. [AWS for Beginners](docs/AWS_FOR_BEGINNERS.md) - Complete AWS guide
 2. [Infrastructure Tree](INFRASTRUCTURE_TREE_120_PIPES.md) - **NEW!** See all 120 pipes mapped to code
 3. [Architecture Diagram](ARCHITECTURE_DIAGRAM_120_PIPES.md) - Visual infrastructure overview
 4. [Day One Guide](docs/DAY_ONE.md) - Your first day with HOOTNER
 
 ### Developer Guides
+
 - [Backend Quick Start](docs/BACKEND_QUICKSTART.md)
 - [API Documentation](docs/API.md)
 - [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md)
 
 ### 120-Pipe Infrastructure
+
 - **[Infrastructure Tree](INFRASTRUCTURE_TREE_120_PIPES.md)** - Complete project → AWS mapping
   - **NEW:** Stripe usage-based pricing (PIPES 106-120)
   - Base pay → gets cheaper with scale (volume discounts)
@@ -152,9 +281,17 @@ my-local-repo/
 - [Quick Reference](QUICK_REFERENCE_120_PIPES.md) - One-page cheat sheet
 
 ### Advanced Topics
-- [AI Agent Orchestration](docs/AI_AGENT_ORCHESTRATION.md)
+
+- [AI Agent Orchestration](docs/ai/AI_AGENT_ORCHESTRATION.md)
 - [Dual Agent Setup](docs/DUAL_AGENT_SETUP.md)
 - [DynamoDB Migration](docs/DYNAMODB_MIGRATION.md)
+- [10-Year Platform Lifecycle](PLATFORM_10_YEAR_LIFECYCLE.md) - Pricing decay model
+
+### Integration Points
+
+- **Event Bus:** [hexarchy/0-core/orchestration/event-bus.js](hexarchy/0-core/orchestration/event-bus.js)
+- **Enhanced Agent Hub:** [scripts/agents/enhanced-agent-hub.js](scripts/agents/enhanced-agent-hub.js)
+- **Agent Modules:** [frameworks/ai/agents](frameworks/ai/agents)
 
 ## 🔄 Switching AWS Accounts
 
@@ -174,6 +311,7 @@ aws configure  # Overwrites existing credentials
 ```
 
 **What happens when you switch:**
+
 - Resources stay in the old account (they're isolated)
 - You'll need to re-deploy: `npm run aws:deploy`
 - Your code doesn't change, just AWS configuration
@@ -183,10 +321,12 @@ aws configure  # Overwrites existing credentials
 ## 🛠️ Requirements
 
 ### Required
-- Node.js 18+ 
+
+- Node.js 20+ 
 - npm 9+
 
 ### Optional (depending on mode)
+
 - AWS CLI (for AWS mode)
 - Java (for local DynamoDB)
 - Python 3.8+ (for AI services)
@@ -195,12 +335,14 @@ aws configure  # Overwrites existing credentials
 ## 💡 Troubleshooting
 
 ### "AWS CLI not found"
+
 ```bash
 # Run the wizard - it will guide you through installation
 npm run aws:onboard
 ```
 
 ### "Cannot connect to AWS"
+
 ```bash
 # Check your status
 npm run aws:status
@@ -210,12 +352,14 @@ npm run aws:onboard
 ```
 
 ### "Port already in use"
+
 ```bash
 # Kill processes on common ports
 npx kill-port 3000 4000 5000 8000
 ```
 
 ### Still stuck?
+
 1. Check [AWS for Beginners](docs/AWS_FOR_BEGINNERS.md#common-issues-for-beginners)
 2. Open an issue on GitHub
 3. Review [Documentation Index](docs/DOCUMENTATION_INDEX.md)
@@ -225,17 +369,20 @@ npx kill-port 3000 4000 5000 8000
 **Worried about AWS costs?**
 
 ✅ **Free Tier Benefits:**
+
 - 12 months of free services
 - 1M Lambda requests/month
 - 25 GB DynamoDB storage
 - 5 GB S3 storage
 
 ✅ **Expected Development Costs:**
+
 - Local mode: **$0**
 - AWS mode with free tier: **$0-5/month**
 - Light production: **$10-50/month**
 
 ✅ **Set billing alerts:**
+
 ```bash
 # AWS Console → Billing → Budgets → Create Budget
 # Set $5 alert threshold
@@ -266,11 +413,12 @@ MIT License - See [LICENSE](LICENSE)
 Built with ❤️ by the HOOTNER team
 
 **Key Technologies:**
+
 - Node.js & Express
 - GraphQL & Apollo
 - DynamoDB & Redis
 - AWS Lambda & CloudFront
-- React & Tailwind CSS
+- React & hootner.css
 - AI/ML Integration
 
 ---

@@ -231,12 +231,12 @@ export class CopyrightService {
       '/**',
       ` * ${copyright.contentTitle}`,
       ` * ${copyright.notice}`,
-      ` * `,
+      ' * ',
       ` * ${copyright.licenseInfo.name}`,
       copyright.licenseInfo.url ? ` * ${copyright.licenseInfo.url}` : null,
-      ` * `,
+      ' * ',
       ` * ${copyright.licenseInfo.description}`,
-      ` */`
+      ' */'
     ].filter(Boolean);
 
     return lines.join('\n');

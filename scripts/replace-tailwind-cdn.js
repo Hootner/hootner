@@ -41,6 +41,6 @@ htmlFiles.forEach(file => {
 });
 
 console.log('\n✨ All files updated successfully!');
-console.log(`\n📝 Next steps:`);
-console.log(`   1. Run: npm run build:css:prod (to rebuild CSS)`);
-console.log(`   2. Run: npm run build:css:watch (for development)`);
+console.log('\n📝 Next steps:');
+console.log('   1. Run: npm run build:css:prod (to rebuild CSS)');
+console.log('   2. Run: npm run build:css:watch (for development)');

@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="shared-styles.css" />
   <title>🦉 Social Feed - Hootner (React)</title>
   <link rel="stylesheet" href="/tailwind-output.css">
+  <script src="./config.js"></script>
+  <script src="./asset-loader.js"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -127,10 +129,10 @@
   <script>
     // Backend API Configuration
     const API_CONFIG = {
-      VIDEO_API: 'http://localhost:5003',
-      GRAPHQL_API: 'http://localhost:4000/graphql',
-      ANALYTICS_API: 'http://localhost:5003/api/analytics',
-      WATCH_PARTY_WS: 'ws://localhost:5004'
+      VIDEO_API: (window.HOOTNER_CONFIG.API_BASE_URL || 'http://localhost:5003'),
+      GRAPHQL_API: (window.HOOTNER_CONFIG.GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql'),
+      ANALYTICS_API: ((window.HOOTNER_CONFIG.API_BASE_URL || 'http://localhost:5003') + '/api/analytics'),
+      WATCH_PARTY_WS: ((window.HOOTNER_CONFIG.API_BASE_URL || 'ws://localhost:5004').replace('http','ws'))
     };
   </script>
 </head>

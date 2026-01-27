@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="shared-styles.css" />
   <title>📹 My Videos - HOOTNER</title>
   <link rel="stylesheet" href="/tailwind-output.css">
+  <script src="./config.js"></script>
+  <script src="./asset-loader.js"></script>
+  <script src="./navigation-policy.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -155,9 +158,9 @@
   </div>
 
   <script>
-    const S3_BUCKET = 'hootner-videos-504165876439';
-    const CLOUDFRONT_URL = 'https://daxqx65ar35pp.cloudfront.net'; // Update if you have a CloudFront for videos
-    const API_URL = 'https://p5huox4j01.execute-api.us-east-1.amazonaws.com/prod';
+    const S3_BUCKET = (window.HOOTNER_CONFIG.S3_BUCKET || 'hootner-videos-504165876439');
+    const CLOUDFRONT_URL = (window.HOOTNER_CONFIG.CLOUDFRONT_URL || 'https://daxqx65ar35pp.cloudfront.net');
+    const API_URL = (window.HOOTNER_CONFIG.API_BASE_URL || '');
     
     let videos = [];
     

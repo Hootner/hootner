@@ -9,6 +9,9 @@
     
     <title>HOOTNER Code Editor</title>
     <link rel="stylesheet" href="/tailwind-output.css">
+    <script src="./config.js"></script>
+    <script src="./asset-loader.js"></script>
+    <script src="./navigation-policy.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
@@ -574,6 +577,11 @@
     </style>
   </head>
   <body>
+    <div id="canonical-banner" style="position:fixed; bottom:12px; left:12px; background: rgba(0, 255, 255, 0.08); border: 1px solid rgba(0, 255, 255, 0.3); padding: 8px 12px; border-radius: 8px; font-size: 12px; z-index: 2000; color: #00ffff;">
+      Canonical Editor • Prefer this for general editing.
+      <a href="auto-editor.html" style="margin-left:8px; color:#00ff00; text-decoration:underline;">Go to Auto Editor →</a>
+      <button aria-label="Hide" onclick="this.parentElement.remove()" style="margin-left:8px; background:none; border:none; color:#00ffff; cursor:pointer;">×</button>
+    </div>
     <div class="container">
       <div class="top-bar">
         <div>File Edit View Run Tools</div>

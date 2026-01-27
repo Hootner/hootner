@@ -27,7 +27,7 @@ async function createVideo(videoData) {
 
   const video = {
     PK: `VIDEO#${videoId}`,
-    SK: `METADATA`,
+    SK: 'METADATA',
     GSI1PK: `USER#${videoData.userId}`,
     GSI1SK: `VIDEO#${timestamp}`,
     id: videoId,

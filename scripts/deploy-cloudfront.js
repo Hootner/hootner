@@ -40,7 +40,7 @@ deployments.forEach(({ src, dest, desc }) => {
 // Invalidate CloudFront cache
 console.log('\n🔄 Invalidating CloudFront cache...');
 try {
-  execSync(`aws cloudfront create-invalidation --distribution-id daxqx65ar35pp --paths "/*"`, { stdio: 'inherit' });
+  execSync('aws cloudfront create-invalidation --distribution-id daxqx65ar35pp --paths "/*"', { stdio: 'inherit' });
 } catch (err) {
   console.log('⚠️  Cache invalidation skipped (run manually if needed)');
 }
