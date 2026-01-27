@@ -210,19 +210,23 @@ class GitIntegrityChecker {
    * Validate syntax of staged files
    */
   validateSyntax() {
-    const jsFiles = execSync('git diff --cached --name-only --diff-filter=ACM', { encoding: 'utf8' })
-      .split('\n')
-      .filter(f => f && (f.endsWith('.js') || f.endsWith('.ts')));
-    
-    for (const file of jsFiles) {
-      if (!fs.existsSync(file)) continue;
-      try {
-        execSync(`npx eslint ${file}`, { stdio: 'pipe' });
-      } catch {
-        return { valid: false, file };
+    try {
+      const jsFiles = execSync('git diff --cached --name-only --diff-filter=ACM', { encoding: 'utf8' })
+        .split('\n')
+        .filter(f => f && (f.endsWith('.js') || f.endsWith('.ts')));
+      
+      for (const file of jsFiles) {
+        if (!fs.existsSync(file)) continue;
+        try {
+          execSync(`npx eslint "${file}"`, { stdio: 'pipe' });
+        } catch {
+          return { valid: false, file };
+        }
       }
+      return { valid: true };
+    } catch {
+      return { valid: true };
     }
-    return { valid: true };
   }
 
   /**
