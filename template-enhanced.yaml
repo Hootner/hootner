@@ -1,6 +1,33 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: HOOTNER - Complete Enterprise Video Platform Infrastructure
+Description: |
+  HOOTNER - Complete Enterprise Video Platform Infrastructure
+  
+  🏢 PWA + SaaS + AI Video Generation + Full Stack Platform
+  ⏳ 10-Year Lifecycle Model (2026-2036)
+  💰 Pricing Decay: 100% → 75% → 50% → 25% → 0% (FREE after 10 years)
+  🎯 Revenue Goal: $250K/year development + AWS infrastructure costs
+  🚀 Launch: January 26, 2026 | Shutdown: January 26, 2036
+
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: "Platform Configuration"
+        Parameters:
+          - Environment
+          - AdminEmail
+      - Label:
+          default: "Performance Settings"
+        Parameters:
+          - LambdaMemorySize
+          - LambdaTimeout
+  LifecycleModel:
+    LaunchDate: "2026-01-26"
+    ShutdownDate: "2036-01-26" 
+    BusinessModel: "Pricing Decay (100% → 0% over 10 years)"
+    RevenueTarget: "$250,000/year + AWS costs"
+    PlatformType: "PWA + SaaS + AI Generation + Full Stack"
 
 Parameters:
   Environment:
@@ -475,6 +502,14 @@ Resources:
           - "*"
         AllowHeaders:
           - "*"
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            IdentitySource: $request.header.Authorization
+            JwtConfiguration:
+              Issuer: !Sub https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}
+              Audience:
+                - !Ref UserPoolClient
 
   # ==================== CLOUDWATCH MONITORING ====================
   AlarmNotificationTopic:
@@ -576,15 +611,15 @@ Resources:
                 - kms:Decrypt
                 - kms:DescribeKey
               Resource: !GetAtt EncryptionKey.Arn
-      FunctionUrlConfig:
-        AuthType: NONE
-        Cors:
-          AllowOrigins:
-            - "*"
-          AllowMethods:
-            - "*"
-          AllowHeaders:
-            - "*"
+      Events:
+        GraphQLApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /graphql
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer
 
   S3EventProcessorFunction:
     Type: AWS::Serverless::Function
@@ -627,12 +662,12 @@ Resources:
             BatchSize: 10
 
 Outputs:
-  # Lambda Function URL (HTTPS enabled, works on all phones)
-  GraphQLFunctionURL:
-    Description: GraphQL API HTTPS URL
-    Value: !GetAtt GraphQLFunctionUrl.FunctionUrl
+  # GraphQL API Gateway URL
+  GraphQLApiURL:
+    Description: GraphQL API URL (Cognito authenticated)
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
     Export:
-      Name: !Sub ${AWS::StackName}-GraphQLFunctionURL
+      Name: !Sub ${AWS::StackName}-GraphQLApiURL
 
   # Authentication
   UserPoolId:

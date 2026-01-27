@@ -372,9 +372,9 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
+        defaultSrc: ['\'self\''],
+        scriptSrc: ['\'self\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\''],
       },
     },
   })
@@ -557,6 +557,56 @@ app.all(
   })
 );
 
+// Stats API endpoint
+app.get('/api/stats', (req, res) => {
+  const userId = req.query.userId || 'anonymous';
+  res.json({
+    userId,
+    totalViews: Math.floor(Math.random() * 1000),
+    totalVideos: Math.floor(Math.random() * 50),
+    storageUsed: Math.floor(Math.random() * 1024) + 'MB',
+    lastActive: new Date().toISOString()
+  });
+});
+
+// Favicon endpoint
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end();
+});
+
+// SSE endpoint for real-time updates
+app.get('/api/stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*'
+  });
+
+  const sendEvent = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  // Send initial connection event
+  sendEvent({ type: 'connected', timestamp: Date.now() });
+
+  // Send periodic updates
+  const interval = setInterval(() => {
+    sendEvent({
+      type: 'stats_update',
+      data: {
+        activeUsers: Math.floor(Math.random() * 100),
+        serverLoad: Math.floor(Math.random() * 100)
+      },
+      timestamp: Date.now()
+    });
+  }, 5000);
+
+  req.on('close', () => {
+    clearInterval(interval);
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   // Calculate security stats
@@ -617,12 +667,12 @@ export const startServer = async () => {
       console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
       console.log(`🔒 CSRF Token: http://localhost:${PORT}/api/csrf-token`);
       console.log(`🛡️  Security Events: http://localhost:${PORT}/api/security/events`);
-      console.log(`\n🔐 Security Features Enabled:`);
-      console.log(`   ✓ CSRF Protection`);
-      console.log(`   ✓ Rate Limiting (100 req/15min)`);
-      console.log(`   ✓ Security Event Logging`);
-      console.log(`   ✓ Helmet Security Headers`);
-      console.log(`   ✓ Input Validation`);
+      console.log('\n🔐 Security Features Enabled:');
+      console.log('   ✓ CSRF Protection');
+      console.log('   ✓ Rate Limiting (100 req/15min)');
+      console.log('   ✓ Security Event Logging');
+      console.log('   ✓ Helmet Security Headers');
+      console.log('   ✓ Input Validation');
 
       // Start activity stream generator for real-time events
       console.log('\n🎬 Initializing real-time activity stream...');

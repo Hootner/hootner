@@ -1,0 +1,29 @@
+{
+  "model_id": "runwayml/stable-diffusion-v1-5",
+  "s3_bucket": "hootner-uploads-504165876439",
+  "s3_data_prefix": "training-data/images/",
+  "s3_output_prefix": "trained-models/stable-diffusion",
+  "prompts_file": "./training_prompts.json",
+
+  "epochs": 10,
+  "batch_size": 1,
+  "learning_rate": 5e-6,
+  "weight_decay": 0.01,
+  "warmup_steps": 100,
+  "log_steps": 10,
+  "image_size": 512,
+  "num_workers": 2,
+
+  "aws": {
+    "region": "us-east-1",
+    "instance_type": "g4dn.xlarge",
+    "security_group": "default",
+    "key_name": "default"
+  },
+
+  "optimization": {
+    "use_mixed_precision": true,
+    "gradient_checkpointing": true,
+    "use_8bit_adam": false
+  }
+}

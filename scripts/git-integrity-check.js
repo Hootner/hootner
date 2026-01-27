@@ -207,6 +207,25 @@ class GitIntegrityChecker {
   }
 
   /**
+   * Validate syntax of staged files
+   */
+  validateSyntax() {
+    const jsFiles = execSync('git diff --cached --name-only --diff-filter=ACM', { encoding: 'utf8' })
+      .split('\n')
+      .filter(f => f && (f.endsWith('.js') || f.endsWith('.ts')));
+    
+    for (const file of jsFiles) {
+      if (!fs.existsSync(file)) continue;
+      try {
+        execSync(`npx eslint ${file}`, { stdio: 'pipe' });
+      } catch {
+        return { valid: false, file };
+      }
+    }
+    return { valid: true };
+  }
+
+  /**
    * Generate report
    */
   report(context = 'manual') {
@@ -262,6 +281,12 @@ class GitIntegrityChecker {
    */
   preCommitCheck() {
     const ok = this.checkStagedFiles();
+    const syntaxCheck = this.validateSyntax();
+    
+    if (!syntaxCheck.valid) {
+      console.log(chalk.red(`\n❌ Syntax errors in ${syntaxCheck.file}\n`));
+      process.exit(1);
+    }
     
     if (!ok && this.violations.length > 0) {
       console.log(chalk.red('\n❌ Commit blocked: Large files detected\n'));
@@ -278,6 +303,9 @@ class GitIntegrityChecker {
         console.log(chalk.yellow(`  ${w.file}: ${w.sizeMB.toFixed(2)} MB`));
       });
     }
+    
+    // Success - exit with 0
+    process.exit(0);
   }
 }
 

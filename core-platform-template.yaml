@@ -88,7 +88,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-graphql
       CodeUri: api/graphql/
-      Handler: index.handler
+      Handler: ultimate-lambda.handler
       Environment:
         Variables:
           TABLE_NAME: !Ref HootnerTable
@@ -99,11 +99,11 @@ Resources:
         AuthType: NONE
         Cors:
           AllowOrigins:
-            - "*"
+            - '*'
           AllowMethods:
-            - "*"
+            - '*'
           AllowHeaders:
-            - "*"
+            - '*'
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref HootnerTable
@@ -112,13 +112,66 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref UploadBucket
 
+  # Update S3 bucket policies for CloudFront access
+  VideoStorageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref VideoStorageBucket
+      PolicyDocument:
+        Statement:
+          - Sid: CloudFrontReadAccess
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub ${VideoStorageBucket.Arn}/*
+            Condition:
+              StringEquals:
+                "AWS:SourceArn": !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt VideoStorageBucket.Arn
+              - !Sub ${VideoStorageBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+
+  UploadBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UploadBucket
+      PolicyDocument:
+        Statement:
+          - Sid: CloudFrontReadAccess
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub ${UploadBucket.Arn}/*
+            Condition:
+              StringEquals:
+                "AWS:SourceArn": !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt UploadBucket.Arn
+              - !Sub ${UploadBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+
   # ==================== STRIPE INTEGRATION ====================
   # PIPE 106: Stripe API Secrets
   StripeAPISecrets:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Sub "${AWS::StackName}-stripe-keys"
-      Description: "Stripe API keys for payment processing"
+      Name: !Sub ${AWS::StackName}-stripe-keys
+      Description: Stripe API keys for payment processing
       SecretString: !Sub |
         {
           "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY_HERE",
@@ -139,7 +192,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref HootnerTable
-        - SecretManagerReadWrite
+        - SecretsManagerReadWrite
 
   # PIPE 108: Pricing Calculator Function
   PricingCalculatorFunction:
@@ -152,11 +205,11 @@ Resources:
         Variables:
           TABLE_NAME: !Ref HootnerTable
           STRIPE_SECRET_ARN: !Ref StripeAPISecrets
-          PLATFORM_LAUNCH_DATE: "2026-01-26"
+          PLATFORM_LAUNCH_DATE: '2026-01-26'
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref HootnerTable
-        - SecretManagerReadWrite
+        - SecretsManagerReadWrite
 
   # ==================== HTTP API FOR WEBHOOKS ====================
   HttpApi:
@@ -165,11 +218,113 @@ Resources:
       StageName: prod
       CorsConfiguration:
         AllowOrigins:
-          - "*"
+          - '*'
         AllowMethods:
-          - "*"
+          - '*'
         AllowHeaders:
-          - "*"
+          - '*'
+
+  # ==================== CLOUDFRONT CDN ====================
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "HOOTNER-OAC-${AWS::StackName}"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+        Description: !Sub HOOTNER OAC for ${AWS::StackName}
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub HOOTNER CDN for ${AWS::StackName}
+        Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_100
+        Origins:
+          # GraphQL API Origin
+          - Id: GraphQLAPIOrigin
+            DomainName: !Select
+              - 2
+              - !Split
+                - /
+                - !GetAtt GraphQLFunctionUrl.FunctionUrl
+            CustomOriginConfig:
+              HTTPPort: 443
+              OriginProtocolPolicy: https-only
+          # Video Storage Origin
+          - Id: VideoStorageOrigin
+            DomainName: !GetAtt VideoStorageBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+          # Upload Bucket Origin  
+          - Id: UploadBucketOrigin
+            DomainName: !GetAtt UploadBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          TargetOriginId: GraphQLAPIOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - DELETE
+            - GET
+            - HEAD
+            - OPTIONS
+            - PATCH
+            - POST
+            - PUT
+          CachedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          ForwardedValues:
+            QueryString: true
+            Headers:
+              - Authorization
+              - Content-Type
+          MinTTL: 0
+          DefaultTTL: 0
+          MaxTTL: 0
+        CacheBehaviors:
+          # Video files - cache for longer
+          - PathPattern: /videos/*
+            TargetOriginId: VideoStorageOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            ForwardedValues:
+              QueryString: false
+            MinTTL: 86400
+            DefaultTTL: 604800
+            MaxTTL: 31536000
+          # Upload files
+          - PathPattern: /uploads/*
+            TargetOriginId: UploadBucketOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachedMethods:
+              - GET
+              - HEAD
+            ForwardedValues:
+              QueryString: true
+            MinTTL: 0
+            DefaultTTL: 3600
+            MaxTTL: 86400
 
   # ==================== COGNITO AUTHENTICATION ====================
   UserPool:
@@ -206,7 +361,7 @@ Outputs:
 
   HttpApiURL:
     Description: HTTP API for webhooks
-    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod
     Export:
       Name: !Sub ${AWS::StackName}-HttpApiURL
 
@@ -242,3 +397,16 @@ Outputs:
     Value: !Ref UserPoolClient
     Export:
       Name: !Sub ${AWS::StackName}-UserPoolClientId
+
+  # CloudFront
+  CloudFrontDomain:
+    Description: CloudFront Distribution Domain
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub ${AWS::StackName}-CloudFrontDomain
+
+  CloudFrontURL:
+    Description: HOOTNER Platform URL (Global CDN)
+    Value: !Sub https://${CloudFrontDistribution.DomainName}
+    Export:
+      Name: !Sub ${AWS::StackName}-CloudFrontURL
