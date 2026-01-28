@@ -56,7 +56,7 @@ const authenticateUser = (req, res, next) => {
 };
 
 // Create subscription
-router.post('/subscribe', subscriptionLimiter, authenticateUser, async (req, res) => {
+router.post('/subscribe', authenticateUser, subscriptionLimiter, async (req, res) => {
   const { user_id, email, tier } = req.body;
   
   // Validate and sanitize inputs
@@ -100,7 +100,7 @@ router.post('/subscribe', subscriptionLimiter, authenticateUser, async (req, res
 });
 
 // Get subscription status
-router.get('/status/:user_id', subscriptionLimiter, authenticateUser, async (req, res) => {
+router.get('/status/:user_id', authenticateUser, subscriptionLimiter, async (req, res) => {
   const { user_id } = req.params;
   
   // Validate and sanitize user_id
@@ -129,11 +129,18 @@ router.get('/status/:user_id', subscriptionLimiter, authenticateUser, async (req
 });
 
 // Upgrade subscription
-router.post('/upgrade', subscriptionLimiter, authenticateUser, async (req, res) => {
+router.post('/upgrade', authenticateUser, subscriptionLimiter, async (req, res) => {
   const { user_id, current_tier, new_tier } = req.body;
   
+  // Validate and sanitize user_id
+  if (!user_id || typeof user_id !== 'string') {
+    return res.status(400).json({ error: 'Invalid user_id' });
+  }
+  
+  const sanitizedUserId = String(user_id).replace(/[<>"'&]/g, '').substring(0, 100);
+  
   // Verify user owns the subscription
-  if (req.user.id !== user_id) {
+  if (req.user.id !== sanitizedUserId) {
     return res.status(403).json({ error: 'Access denied' });
   }
   
@@ -162,11 +169,18 @@ router.post('/upgrade', subscriptionLimiter, authenticateUser, async (req, res) 
 });
 
 // Cancel subscription
-router.post('/cancel', subscriptionLimiter, authenticateUser, async (req, res) => {
+router.post('/cancel', authenticateUser, subscriptionLimiter, async (req, res) => {
   const { user_id, reason } = req.body;
   
+  // Validate and sanitize user_id
+  if (!user_id || typeof user_id !== 'string') {
+    return res.status(400).json({ error: 'Invalid user_id' });
+  }
+  
+  const sanitizedUserId = String(user_id).replace(/[<>"'&]/g, '').substring(0, 100);
+  
   // Verify user owns the subscription
-  if (req.user.id !== user_id) {
+  if (req.user.id !== sanitizedUserId) {
     return res.status(403).json({ error: 'Access denied' });
   }
   

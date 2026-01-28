@@ -119,7 +119,12 @@ const server = createServer(app);
 
 // SECURITY: Configure CORS based on environment
 const corsOrigin = process.env.NODE_ENV === 'production' 
-  ? (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',')
+  ? (() => {
+      if (!process.env.CORS_ORIGINS) {
+        throw new Error('CORS_ORIGINS environment variable is required in production');
+      }
+      return process.env.CORS_ORIGINS.split(',');
+    })()
   : '*';
 
 if (corsOrigin === '*') {
