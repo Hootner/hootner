@@ -116,9 +116,19 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 const server = createServer(app);
+
+// SECURITY: Configure CORS based on environment
+const corsOrigin = process.env.NODE_ENV === 'production' 
+  ? (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',')
+  : '*';
+
+if (corsOrigin === '*') {
+  console.warn('⚠️  WARNING: CORS is set to allow all origins. This is only safe for local development.');
+}
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: corsOrigin,
     methods: ['GET', 'POST']
   }
 });
