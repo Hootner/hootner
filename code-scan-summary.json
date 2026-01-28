@@ -1,0 +1,223 @@
+{
+  "scanMetadata": {
+    "timestamp": "2026-01-28T18:57:35.796Z",
+    "repository": "Hootner/hootner",
+    "branch": "copilot/scan-for-code-issues",
+    "toolVersions": {
+      "eslint": "8.57.1",
+      "node": "20.x",
+      "npm": "9.x"
+    }
+  },
+  "summary": {
+    "totalIssues": 227,
+    "errors": 14,
+    "warnings": 213,
+    "dependencyVulnerabilities": 5,
+    "riskLevel": "MEDIUM-HIGH"
+  },
+  "criticalErrors": [
+    {
+      "file": "api/graphql/utils/auth.js",
+      "line": 44,
+      "type": "ParsingError",
+      "message": "Unexpected token }",
+      "severity": "CRITICAL"
+    },
+    {
+      "file": "scripts/agents/agent-hub-manager.js",
+      "line": 788,
+      "type": "ParsingError",
+      "message": "Unterminated regular expression",
+      "severity": "CRITICAL"
+    },
+    {
+      "file": "services/usage-pricing-service.js",
+      "line": 397,
+      "type": "ReferenceError",
+      "message": "PRICING_TIERS is not defined",
+      "severity": "HIGH"
+    },
+    {
+      "file": "services/usage-pricing-service.js",
+      "line": 456,
+      "type": "ReferenceError",
+      "message": "PRICING_TIERS is not defined",
+      "severity": "HIGH"
+    },
+    {
+      "file": "scripts/agents/copilot-delegate.js",
+      "line": 177,
+      "type": "UnsafeRegex",
+      "message": "Unsafe Regular Expression",
+      "severity": "HIGH"
+    },
+    {
+      "file": "scripts/add-dependencies.js",
+      "line": 14,
+      "type": "NonLiteralRegex",
+      "message": "Found non-literal argument to RegExp Constructor",
+      "severity": "HIGH"
+    },
+    {
+      "file": "update-cicd-paths.js",
+      "line": 32,
+      "type": "NonLiteralRegex",
+      "message": "Found non-literal argument to RegExp Constructor",
+      "severity": "HIGH"
+    },
+    {
+      "file": "update-import-paths.js",
+      "line": 28,
+      "type": "NonLiteralRegex",
+      "message": "Found non-literal argument to RegExp Constructor",
+      "severity": "HIGH"
+    },
+    {
+      "file": "scripts/delete-workflow-runs.js",
+      "line": 25,
+      "type": "ConstantCondition",
+      "message": "Unexpected constant condition",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "services/sqs-video-processor.js",
+      "line": 159,
+      "type": "ConstantCondition",
+      "message": "Unexpected constant condition",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "scripts/agents/multi-agent-orchestrator.js",
+      "line": 143,
+      "type": "EmptyBlock",
+      "message": "Empty block statement",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "scripts/memory-recovery.js",
+      "line": 81,
+      "type": "EmptyBlock",
+      "message": "Empty block statement",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "scripts/memory-recovery.js",
+      "line": 85,
+      "type": "EmptyBlock",
+      "message": "Empty block statement",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "scripts/auto-upload-feeder.js",
+      "line": 21,
+      "type": "UnnecessaryEscape",
+      "message": "Unnecessary escape character",
+      "severity": "LOW"
+    }
+  ],
+  "securityWarnings": {
+    "objectInjection": {
+      "count": 120,
+      "pattern": "security/detect-object-injection",
+      "severity": "MEDIUM",
+      "topFiles": [
+        "api/graphql/cache/GraphQLCacheService.js (11)",
+        "scripts/servers/frontend-server.js (10)",
+        "config/validate-config.js (8)",
+        "services/community-norms-service.js (7)"
+      ]
+    },
+    "nonLiteralFS": {
+      "count": 40,
+      "pattern": "security/detect-non-literal-fs-filename",
+      "severity": "MEDIUM",
+      "topFiles": [
+        "scripts/agents/copilot-delegate.js (7)",
+        "scripts/security/security-fixer.js (6)",
+        "scripts/agents/multi-agent-orchestrator.js (4)"
+      ]
+    },
+    "unusedVars": {
+      "count": 30,
+      "pattern": "no-unused-vars",
+      "severity": "LOW",
+      "topFiles": [
+        "api/graphql/ultimate-lambda.js (12)",
+        "api/graphql/test-examples.js (4)",
+        "api/graphql/resolvers/mutations.js (3)"
+      ]
+    }
+  },
+  "dependencies": {
+    "vulnerabilities": [
+      {
+        "package": "lodash",
+        "version": "4.0.0 - 4.17.21",
+        "severity": "moderate",
+        "vulnerability": "Prototype Pollution in _.unset and _.omit",
+        "cve": "GHSA-xxjr-mmjv-4gpg",
+        "fixAvailable": true
+      },
+      {
+        "package": "tmp",
+        "version": "<=0.2.3",
+        "severity": "low",
+        "vulnerability": "Arbitrary temporary file/directory write via symbolic link",
+        "cve": "GHSA-52f5-9888-hmc6",
+        "fixAvailable": true,
+        "dependencyChain": "commitizen → inquirer → external-editor → tmp"
+      }
+    ],
+    "totalVulnerabilities": 5,
+    "moderate": 2,
+    "low": 3
+  },
+  "recommendations": {
+    "priority1_critical": [
+      "Fix syntax error in api/graphql/utils/auth.js line 44",
+      "Fix unterminated regex in scripts/agents/agent-hub-manager.js line 788",
+      "Define missing PRICING_TIERS constant in services/usage-pricing-service.js",
+      "Fix unsafe regex in scripts/agents/copilot-delegate.js line 177",
+      "Fix non-literal RegExp constructors in add-dependencies.js, update-cicd-paths.js, update-import-paths.js"
+    ],
+    "priority2_high": [
+      "Run npm audit fix to update vulnerable dependencies",
+      "Fix infinite loop conditions in delete-workflow-runs.js and sqs-video-processor.js",
+      "Complete empty error handlers in memory-recovery.js and multi-agent-orchestrator.js"
+    ],
+    "priority3_medium": [
+      "Review and fix object injection warnings with proper input validation",
+      "Validate file paths in file system operations",
+      "Remove unused variables and dead code"
+    ],
+    "priority4_low": [
+      "Fix style issues",
+      "Add JSDoc comments",
+      "Improve code organization"
+    ]
+  },
+  "nextSteps": {
+    "immediate": [
+      "Fix all critical syntax/parsing errors",
+      "Run npm audit fix",
+      "Fix undefined variable references"
+    ],
+    "shortTerm": [
+      "Address unsafe regex patterns",
+      "Fix infinite loop conditions",
+      "Complete error handling"
+    ],
+    "mediumTerm": [
+      "Implement input validation",
+      "Add path validation",
+      "Remove unused code"
+    ],
+    "longTerm": [
+      "Establish code quality gates",
+      "Implement automated security scanning",
+      "Create coding standards",
+      "Set up pre-commit hooks"
+    ]
+  }
+}
