@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * Stripe Webhook Handler
  * Handles subscription lifecycle events from Stripe

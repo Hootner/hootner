@@ -257,4 +257,13 @@
   window.APP_CONFIG = CONFIG;
 
   console.log('✅ HOOTNER Frontend initialized with DynamoDB backend');
+  
+  // Add dashboard navigation
+  if (window.location.pathname !== '/hexarchy/4-interface/ui/pages/dashboard.html') {
+    const dashboardBtn = document.createElement('button');
+    dashboardBtn.textContent = '📊 Dashboard';
+    dashboardBtn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;padding:10px;background:#00ffff;color:#000;border:none;border-radius:5px;cursor:pointer';
+    dashboardBtn.onclick = () => window.location.href = '/hexarchy/4-interface/ui/pages/dashboard.html';
+    document.body.appendChild(dashboardBtn);
+  }
 </script>

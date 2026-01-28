@@ -1,9 +1,27 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * SUBSCRIPTION MANAGEMENT API
  * Handles Pro/Enterprise tier subscriptions
  */
 
 import express from 'express';
+
+// CSRF protection middleware
+const csrfCheck = (req, res, next) => {
+  const token = req.headers['x-csrf-token'] || req.body._token;
+  if (!token || token !== req.session?.csrfToken) {
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+  next();
+};
 import jwt from 'jsonwebtoken';
 import paymentService from '../payment-service-simple.js';
 
@@ -42,7 +60,7 @@ const authenticateUser = (req, res, next) => {
 
 // Create subscription
 router.post('/subscribe', authenticateUser, async (req, res) => {
-  const { user_id, email, tier } = req.body;
+  const { user_id: sanitizeInput(user_id), email: sanitizeInput(email), tier: sanitizeInput(tier) } = req.body;
   
   // Validate and sanitize inputs
   if (!user_id || typeof user_id !== 'string') {
@@ -115,7 +133,7 @@ router.get('/status/:user_id', authenticateUser, async (req, res) => {
 
 // Upgrade subscription
 router.post('/upgrade', authenticateUser, async (req, res) => {
-  const { user_id, current_tier, new_tier } = req.body;
+  const { user_id: sanitizeInput(user_id), current_tier: sanitizeInput(current_tier), new_tier: sanitizeInput(new_tier) } = req.body;
   
   // Verify user owns the subscription
   if (req.user.id !== user_id) {
@@ -148,7 +166,7 @@ router.post('/upgrade', authenticateUser, async (req, res) => {
 
 // Cancel subscription
 router.post('/cancel', authenticateUser, async (req, res) => {
-  const { user_id, reason } = req.body;
+  const { user_id: sanitizeInput(user_id), reason: sanitizeInput(reason) } = req.body;
   
   // Verify user owns the subscription
   if (req.user.id !== user_id) {

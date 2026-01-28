@@ -12,6 +12,8 @@ Welcome to the HOOTNER documentation! This folder contains comprehensive guides 
 
 - [Quick Reference](commands/quick-reference.md) - Essential commands
 - [Development Guide](commands/development.md) - Dev workflow
+- [Day One Guide](../docs/DAY_ONE.md) - Your first day with HOOTNER
+- [AWS for Beginners](../docs/AWS_FOR_BEGINNERS.md) - Complete AWS guide
 
 ### 🏗️ Architecture & Design
 
@@ -28,6 +30,13 @@ Welcome to the HOOTNER documentation! This folder contains comprehensive guides 
 - [NPM Scripts](commands/npm-scripts.md)
 - [Docker Commands](commands/docker-commands.md)
 - [Code Scanner](CODE_SCANNER.md)
+
+### 🎨 Frontend & UI
+
+- [Mobile Optimization](../MOBILE_OPTIMIZATION.md) - PWA features
+- [Frontend Integration](../docs/FRONTEND_INTEGRATION_GUIDE.md) - Integration guide
+- [Dashboard Best Practices](DASHBOARD_BEST_PRACTICES.md) - UI guidelines
+- [Visual Designer](VISUAL_DESIGNER.md) - UI prototyping
 
 ### 🔒 Security
 

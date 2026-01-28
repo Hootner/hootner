@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // User Controller (REST API)
 import { UserService } from '../../1-foundation/services/UserService.js';
 import { AuthService } from '../../1-foundation/services/AuthService.js';

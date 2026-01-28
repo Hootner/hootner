@@ -7,11 +7,63 @@
 
 import 'dotenv/config';
 import { spawn } from 'child_process';
+import express from 'express';
+import cors from 'cors';
+import amazonQChatRouter from './api/routes/amazon-q-chat.js';
 
 class HootnerOrchestrator {
   constructor() {
-    this.services = new Map();
-    this.healthChecks = new Map();
+    this.services = new Map()
+    this.healthChecks = new Map()
+    this.app = express()
+    this.setupExpress()
+  }
+
+  async start() {
+    const port = process.env.PORT || 3000
+    return new Promise((resolve) => {
+      this.server = this.app.listen(port, () => {
+        console.log(`🦉 HOOTNER API Server running on port ${port}`)
+        console.log(`📱 Amazon Q Chat available at http://localhost:${port}/api/mcp`)
+        resolve(this.server)
+      })
+    })
+  }
+
+  async stop() {
+    if (this.server) {
+      this.server.close()
+    }
+    for (const [name, service] of this.services) {
+      service.kill()
+    }
+  }
+
+  setupExpress() {
+    // Secure CORS configuration
+    const corsOptions = {
+      origin: process.env.ALLOWED_ORIGINS ? 
+        process.env.ALLOWED_ORIGINS.split(',') : 
+        ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000'],
+      credentials: true,
+      optionsSuccessStatus: 200
+    }
+    
+    this.app.use(cors(corsOptions))
+    this.app.use(express.json())
+    this.app.use(express.static('hexarchy/4-interface/ui/pages'))
+
+    // Amazon Q Chat API routes
+    this.app.use('/api/mcp', amazonQChatRouter)
+
+    // Health check endpoint
+    this.app.get('/api/health', (req, res) => {
+      res.json({ 
+        status: 'healthy', 
+        services: Array.from(this.services.keys()),
+        timestamp: new Date().toISOString()
+      })
+    })
   }
 
   async startService(name, command, args = [], options = {}) {
@@ -84,14 +136,17 @@ class HootnerOrchestrator {
 
 // Start main application
 async function startHootner() {
-  console.log('🦉 HOOTNER - The Owl Never Sleeps');
-  console.log('🏗️ Hexagonal Architecture Starting...\n');
+  console.log('🦉 HOOTNER - The Owl Never Sleeps')
+  console.log('🏗️ Hexagonal Architecture Starting...\n')
   
-  const orchestrator = new HootnerOrchestrator();
+  const orchestrator = new HootnerOrchestrator()
   
   try {
+    // Start the Express server first
+    await orchestrator.start()
+    
     // Initialize layers in dependency order
-    console.log('⚡ Initializing hexagonal layers...');
+    console.log('⚡ Initializing hexagonal layers...')
     
     // 0-core: Domain logic
     console.log('   0-core: Domain & business rules ✓');

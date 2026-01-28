@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express'
 import { createMessage, listMessages } from '../models/Message.js'
 import {
@@ -31,7 +40,7 @@ router.get('/conversations/:conversationId/messages', async (req, res) => {
 })
 
 // Send message
-router.post('/send', async (req, res) => {
+router.post('/send', csrfCheck, async (req, res) => {
   try {
     const { conversationId, senderId, text, type = 'text' } = req.body
 
@@ -55,7 +64,7 @@ router.post('/send', async (req, res) => {
 })
 
 // Create conversation
-router.post('/conversations', async (req, res) => {
+router.post('/conversations', csrfCheck, async (req, res) => {
   try {
     const { participants, type = 'direct', name } = req.body
 

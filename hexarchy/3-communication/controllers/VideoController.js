@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Video Controller (REST API)
 import { VideoService } from '../../1-foundation/services/VideoService.js';
 import { asyncHandler } from '../../0-core/errors/handler.js';

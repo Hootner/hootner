@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * Cache Middleware for Express/GraphQL
  * Request-level caching with Redis
@@ -23,23 +32,26 @@ class CacheMiddleware {
       }
 
       const { query, variables, operationName } = req.body;
+      const sanitizedQuery = sanitizeInput(query);
+      const sanitizedVariables = sanitizeInput(variables);
+      const sanitizedOperationName = sanitizeInput(operationName);
 
       // Skip mutations
-      if (!query || query.trim().startsWith('mutation')) {
+      if (!sanitizedQuery || sanitizedQuery.trim().startsWith('mutation')) {
         return next();
       }
 
       // Check exclusion/inclusion lists
-      if (excludeQueries.length > 0 && excludeQueries.includes(operationName)) {
+      if (excludeQueries.length > 0 && excludeQueries.includes(sanitizedOperationName)) {
         return next();
       }
 
-      if (includeQueries.length > 0 && !includeQueries.includes(operationName)) {
+      if (includeQueries.length > 0 && !includeQueries.includes(sanitizedOperationName)) {
         return next();
       }
 
       // Generate cache key
-      const cacheKey = this.cache.generateCacheKey(query, variables, {
+      const cacheKey = this.cache.generateCacheKey(sanitizedQuery, sanitizedVariables, {
         user: req.user,
       });
 
@@ -115,9 +127,11 @@ class CacheMiddleware {
   invalidateOnMutation() {
     return async (req, res, next) => {
       const { operationName, variables } = req.body;
+      const sanitizedOperationName = sanitizeInput(operationName);
+      const sanitizedVariables = sanitizeInput(variables);
 
       // Only handle mutations
-      if (!operationName || !req.body.query?.trim().startsWith('mutation')) {
+      if (!sanitizedOperationName || !req.body.query?.trim().startsWith('mutation')) {
         return next();
       }
 
@@ -127,7 +141,7 @@ class CacheMiddleware {
       res.json = function (body) {
         // Invalidate cache after mutation
         setImmediate(async () => {
-          await this.cache.invalidateOnMutation(operationName, variables, body.data);
+          await this.cache.invalidateOnMutation(sanitizedOperationName, sanitizedVariables, body.data);
         });
 
         return originalJson(body);

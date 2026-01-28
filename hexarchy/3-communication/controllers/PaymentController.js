@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Payment Controller (REST API)
 import { PaymentService } from '../../1-foundation/services/PaymentService.js';
 import { asyncHandler } from '../../0-core/errors/handler.js';
@@ -13,7 +22,7 @@ export class PaymentController {
     authenticate,
     validate(paymentSchemas.create),
     asyncHandler(async (req, res) => {
-      const { amount, currency, paymentMethodId, description, metadata } = req.body;
+      const { amount: sanitizeInput(amount), currency: sanitizeInput(currency), paymentMethodId: sanitizeInput(paymentMethodId), description: sanitizeInput(description), metadata: sanitizeInput(metadata) } = req.body;
 
       const payment = await paymentService.createPayment(
         req.user.id,
@@ -71,7 +80,7 @@ export class PaymentController {
   static refund = [
     authenticate,
     asyncHandler(async (req, res) => {
-      const { amount } = req.body;
+      const { amount: sanitizeInput(amount) } = req.body;
 
       await paymentService.refund(
         req.params.id,

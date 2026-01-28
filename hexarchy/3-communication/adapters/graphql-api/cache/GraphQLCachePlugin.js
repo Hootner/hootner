@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * GraphQL Cache Middleware
  * Apollo Server plugin for caching GraphQL queries

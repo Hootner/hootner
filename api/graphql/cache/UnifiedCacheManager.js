@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * Unified Cache Manager
  * Consolidates Apollo Server plugin and Express middleware functionality
@@ -118,7 +127,7 @@ class UnifiedCacheManager {
         return next();
       }
 
-      const { query, variables, operationName } = req.body;
+      const { query: sanitizeInput(query), variables: sanitizeInput(variables), operationName: sanitizeInput(operationName) } = req.body;
 
       // Skip mutations
       if (!query || isMutation(query)) {
@@ -228,7 +237,7 @@ class UnifiedCacheManager {
     const cache = this.cache;
 
     return async (req, res, next) => {
-      const { operationName, variables } = req.body;
+      const { operationName: sanitizeInput(operationName), variables: sanitizeInput(variables) } = req.body;
 
       // Only handle mutations
       if (!operationName || !isMutation(req.body.query)) {

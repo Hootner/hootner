@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Playlist Controller (REST API)
 import { PlaylistService } from '../../1-foundation/services/PlaylistService.js';
 import { asyncHandler } from '../../0-core/errors/handler.js';
@@ -80,7 +89,7 @@ export class PlaylistController {
   static addVideo = [
     authenticate,
     asyncHandler(async (req, res) => {
-      const { videoId } = req.body;
+      const { videoId: sanitizeInput(videoId) } = req.body;
       await playlistService.addVideo(req.params.id, videoId, req.user.id);
       res.json({ success: true, message: 'Video added to playlist' });
     })
@@ -103,7 +112,7 @@ export class PlaylistController {
   static reorder = [
     authenticate,
     asyncHandler(async (req, res) => {
-      const { videoIds } = req.body;
+      const { videoIds: sanitizeInput(videoIds) } = req.body;
       await playlistService.reorderVideos(req.params.id, videoIds, req.user.id);
       res.json({ success: true, message: 'Playlist reordered' });
     })

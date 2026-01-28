@@ -1,0 +1,18 @@
+{
+  "timestamp": 1769605103733,
+  "totalRevenue": 66.92999999999999,
+  "flow": {
+    "Stripe Account (Available)": 43.5045,
+    "Stripe Processing Fees": 1.9409699999999999,
+    "Platform Reserves": 10.039499999999999,
+    "AWS Infrastructure Costs": 5.354399999999999,
+    "Development Fund": 4.752029999999999,
+    "Tax Withholding": 0
+  },
+  "nextActions": [
+    "Transfer available Stripe balance to bank account",
+    "Monitor AWS costs vs revenue ratio",
+    "Allocate development funds for new features",
+    "Set up automatic tax withholding if needed"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "hootner-ai-platform",
+  "version": 2,
+  "builds": [
+    {
+      "src": "stripe-activation-website.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/stripe-activation-website.html"
+    }
+  ]
+}

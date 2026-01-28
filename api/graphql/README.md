@@ -13,6 +13,8 @@ Production-ready GraphQL API with real-time subscriptions, error boundaries, and
 ✅ **File Uploads** - Video and image uploads (100MB max)
 ✅ **Video Generation** - AI text-to-video integration
 ✅ **Live Streaming** - Real-time stream management
+✅ **DynamoDB Integration** - Hexarchy database connection
+✅ **AWS Secrets Manager** - Secure API key management
 
 ### Architecture
 
@@ -21,6 +23,8 @@ Production-ready GraphQL API with real-time subscriptions, error boundaries, and
 - Redis PubSub for multi-server support
 - Modular resolver structure
 - Type-safe error handling
+- DynamoDB integration via hexarchy
+- AWS Secrets Manager for API keys
 
 ---
 

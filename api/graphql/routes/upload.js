@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * Video Upload Routes
  * Handles presigned URL generation and upload completion
@@ -14,14 +23,14 @@ const { getUserFromRequest } = require('../utils/auth');
  * POST /api/upload/presign
  * Generate presigned URL for video upload
  */
-router.post('/presign', async (req, res) => {
+router.post('/presign', csrfCheck, async (req, res) => {
   try {
     const user = await getUserFromRequest(req);
     if (!user) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const { filename, contentType, fileSize } = req.body;
+    const { filename: sanitizeInput(filename), contentType: sanitizeInput(contentType), fileSize: sanitizeInput(fileSize) } = req.body;
 
     if (!filename || !contentType || !fileSize) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -53,14 +62,14 @@ router.post('/presign', async (req, res) => {
  * POST /api/upload/complete
  * Mark upload as complete and trigger processing
  */
-router.post('/complete', async (req, res) => {
+router.post('/complete', csrfCheck, async (req, res) => {
   try {
     const user = await getUserFromRequest(req);
     if (!user) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const { fileKey, title, description, visibility = 'private' } = req.body;
+    const { fileKey: sanitizeInput(fileKey), title: sanitizeInput(title), description: sanitizeInput(description), visibility = 'private': sanitizeInput(visibility = 'private') } = req.body;
 
     if (!fileKey || !title) {
       return res.status(400).json({ error: 'Missing required fields' });

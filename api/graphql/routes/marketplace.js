@@ -1,4 +1,22 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express';
+
+// CSRF protection middleware
+const csrfCheck = (req, res, next) => {
+  const token = req.headers['x-csrf-token'] || req.body._token;
+  if (!token || token !== req.session?.csrfToken) {
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+  next();
+};
 import { listProducts } from '../models/Product.js';
 import { createOrder, listOrders } from '../models/Order.js';
 import Stripe from 'stripe';
@@ -47,9 +65,9 @@ router.get('/products', async (req, res) => {
 });
 
 // POST /checkout - Create checkout session and order
-router.post('/checkout', async (req, res) => {
+router.post('/checkout', csrfCheck, async (req, res) => {
   try {
-    const { items, userId } = req.body;
+    const { items: sanitizeInput(items), userId: sanitizeInput(userId) } = req.body;
 
     const total = (items || []).reduce(
       (sum, item) => sum + item.price * item.quantity,

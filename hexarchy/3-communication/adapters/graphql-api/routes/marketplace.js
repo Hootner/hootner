@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express'
 import { listProducts } from '../models/Product.js'
 import { createOrder, listOrders } from '../models/Order.js'
@@ -47,7 +56,7 @@ router.get('/products', async (req, res) => {
 })
 
 // POST /checkout - Create checkout session and order
-router.post('/checkout', async (req, res) => {
+router.post('/checkout', csrfCheck, async (req, res) => {
   try {
     const { items, userId } = req.body
 

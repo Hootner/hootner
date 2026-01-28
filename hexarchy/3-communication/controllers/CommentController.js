@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Comment Controller (REST API)
 import { CommentService } from '../../1-foundation/services/CommentService.js';
 import { asyncHandler } from '../../0-core/errors/handler.js';

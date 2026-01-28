@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 /**
  * GraphQL Cache Middleware
  * Apollo Server plugin for caching GraphQL queries
@@ -102,7 +111,7 @@ class GraphQLCachePlugin {
         return next();
       }
 
-      const { query, variables, operationName } = req.body;
+      const { query: sanitizeInput(query), variables: sanitizeInput(variables), operationName: sanitizeInput(operationName) } = req.body;
 
       // Skip if no operation name or is mutation with type checking
       if (

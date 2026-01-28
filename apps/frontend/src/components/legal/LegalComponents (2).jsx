@@ -1,5 +1,8 @@
+// Re-export shared legal components from the UI library.
+export { LicenseSelector, CopyrightNotice, DMCAReportButton } from '@ui-components/legal/LegalComponents';
+
 /**
- * License Selector Component
+ *License Selector Component
  * Allows creators to choose copyright license for their content
  */
 

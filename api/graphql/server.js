@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
 import { buildSchema } from 'graphql';
@@ -5,13 +14,16 @@ import 'dotenv/config';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
-// import cookieParser from 'cookie-parser'; // Temporarily disabled
 import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
 import messagesRoutes from './routes/messages.js';
 import uploadRoutes from './routes/upload.js';
 import ActivityStreamGenerator from './utils/activityStreamGenerator.js';
+
+// Import hexarchy database
+import { docClient } from '../../hexarchy/0-core/database/dynamodb/config.js';
+import { PutCommand, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
 // Validate environment variables at startup
 validateEnvironment('api');
@@ -262,13 +274,35 @@ const root = {
   version: () => '1.0.0',
 
   users: async () => {
-    // Demo data - No real users yet
-    return [];
+    try {
+      const result = await docClient.send(new QueryCommand({
+        TableName: process.env.TABLE_NAME || 'HootnerActivities',
+        KeyConditionExpression: 'PK = :pk',
+        ExpressionAttributeValues: {
+          ':pk': 'USER'
+        }
+      }));
+      return result.Items || [];
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return [];
+    }
   },
 
   videos: async () => {
-    // Demo data - No real videos yet
-    return [];
+    try {
+      const result = await docClient.send(new QueryCommand({
+        TableName: process.env.TABLE_NAME || 'HootnerActivities',
+        KeyConditionExpression: 'PK = :pk',
+        ExpressionAttributeValues: {
+          ':pk': 'VIDEO'
+        }
+      }));
+      return result.Items || [];
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      return [];
+    }
   },
 
   analytics: async () => {
@@ -283,8 +317,9 @@ const root = {
 
   // Mutations
   createUser: async ({ input }) => {
-    // Business logic for user creation
     const user = {
+      PK: 'USER',
+      SK: `USER#${Date.now()}`,
       id: Date.now().toString(),
       email: input.email,
       name: input.name,
@@ -292,9 +327,17 @@ const root = {
       createdAt: new Date().toISOString(),
     };
 
-    // TODO: Hash password, save to database
-    console.log('Creating user:', user.email);
-    return user;
+    try {
+      await docClient.send(new PutCommand({
+        TableName: process.env.TABLE_NAME || 'HootnerActivities',
+        Item: user
+      }));
+      console.log('✅ User created:', user.email);
+      return user;
+    } catch (error) {
+      console.error('❌ Error creating user:', error);
+      throw new Error('Failed to create user');
+    }
   },
 
   uploadVideo: async ({ input }) => {
@@ -487,7 +530,7 @@ app.get('/api/security/threats', (req, res) => {
 
 // Manual IP Block/Unblock (admin only)
 app.post('/api/security/block-ip', (req, res) => {
-  const { ip, reason, duration } = req.body;
+  const { ip: sanitizeInput(ip), reason: sanitizeInput(reason), duration: sanitizeInput(duration) } = req.body;
 
   if (!ip) {
     return res.status(400).json({ error: 'IP address required' });
@@ -499,7 +542,7 @@ app.post('/api/security/block-ip', (req, res) => {
 });
 
 app.post('/api/security/unblock-ip', (req, res) => {
-  const { ip } = req.body;
+  const { ip: sanitizeInput(ip) } = req.body;
 
   if (!ip) {
     return res.status(400).json({ error: 'IP address required' });
@@ -653,7 +696,18 @@ let isInitialized = false;
 
 export const initializeApp = async () => {
   if (isInitialized) return;
-  console.log('✅ Using DynamoDB (MongoDB not configured)');
+  
+  try {
+    // Test hexarchy database connection
+    await docClient.send(new GetCommand({
+      TableName: process.env.TABLE_NAME || 'HootnerActivities',
+      Key: { PK: 'TEST', SK: 'CONNECTION' }
+    }));
+    console.log('✅ Connected to hexarchy DynamoDB');
+  } catch (error) {
+    console.log('⚠️  DynamoDB connection warning:', error.message);
+  }
+  
   isInitialized = true;
 };
 

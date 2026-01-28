@@ -1,42 +1,57 @@
-# Constants Module
+# Configuration Module
 
-Centralized constants to eliminate magic numbers across the codebase.
+Centralized configuration management for HOOTNER platform.
+
+## Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Copy environment template
+cp .env.example .env
+
+# Edit configuration
+nano .env
+```
 
 ## Usage
 
 ```javascript
-const { HTTP_STATUS, TIMEOUTS, LIMITS, ANIMATION, CACHE, MISC } = require('./constants')
+import { HTTP_STATUS, TIMEOUTS, LIMITS } from './config/index.js';
 
 // HTTP Status Codes
-res.status(HTTP_STATUS.OK).json({ data })
-res.status(HTTP_STATUS.NOT_FOUND).json({ error })
+res.status(HTTP_STATUS.OK).json({ data });
 
-// Timeouts
-setTimeout(callback, TIMEOUTS.FIVE_SECONDS)
-cache.set(key, value, TIMEOUTS.ONE_HOUR)
+// Timeouts for DynamoDB/Lambda
+setTimeout(callback, TIMEOUTS.LAMBDA_TIMEOUT);
 
-// Limits
-if (input.length > LIMITS.MAX_STRING_LENGTH) {
+// AWS Limits
+if (payload.length > LIMITS.LAMBDA_PAYLOAD_SIZE) {
+  throw new Error('Payload too large');
 }
-if (port > LIMITS.MAX_PORT) {
-}
-
-// Animation
-element.style.transition = `opacity ${ANIMATION.FADE_DURATION}ms`
-
-// Cache
-res.setHeader('Cache-Control', `max-age=${CACHE.ONE_DAY}`)
-
-// Miscellaneous
-const year = MISC.YEAR_2021
 ```
 
-## Files
+## Configuration Files
 
-- `http-status.js` - HTTP status codes (200, 404, 500, etc.)
-- `timeouts.js` - Time durations in milliseconds
-- `limits.js` - System limits and boundaries
-- `animation.js` - Animation durations
-- `cache.js` - Cache durations in seconds
-- `misc.js` - Other constants
-- `index.js` - Main export
+- `api-endpoints.js` - API endpoint configurations
+- `jest.config.js` - Test configuration
+- `playwright.config.js` - E2E test configuration
+- `validate-config.js` - Environment validation
+- `timeouts.js` - AWS service timeouts
+
+## Environment Variables
+
+```bash
+# AWS Configuration
+AWS_REGION=us-east-1
+TABLE_NAME=HootnerActivities
+
+# API Configuration
+JWT_SECRET=your-secret-key
+STRIPE_SECRET_KEY=sk_test_...
+
+# Development
+NODE_ENV=development
+PORT=4000
+```

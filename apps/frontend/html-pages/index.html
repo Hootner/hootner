@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#00ffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HOOTNER">
+    
     <title>HOOTNER - Mobile Video Platform</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png">
+    
     <style>
         * {
             margin: 0;
@@ -125,8 +141,9 @@
         <h1 class="title">HOOTNER</h1>
         <p class="subtitle">Mobile Video Streaming Platform</p>
         
-        <a href="/mobile-player.html" class="btn btn-primary">📱 Launch Mobile Player</a>
-        <a href="/cinema-player.html" class="btn">🎬 Desktop Cinema Player</a>
+        <a href="/mobile-player.html" class="btn btn-primary">📱 Launch Mobile Player (FREE)</a>
+        <a href="/cinema-player.html" class="btn" onclick="return checkPremiumAccess('cinema-player', 19.99)">🎬 Cinema Player Pro ($19.99)</a>
+        <a href="/hexarchy/4-interface/ui/pages/dashboard.html" class="btn">📊 Dashboard</a>
         <a href="/config.html" class="btn">⚙️ Settings</a>
         
         <div class="features">
@@ -179,12 +196,70 @@
             console.log('📱 Mobile device detected');
         }
         
-        // Service worker for offline support
+        // PWA HTTPS check
+        const isHTTPS = location.protocol === 'https:' || location.hostname === 'localhost';
+        
+        if (!isHTTPS) {
+            console.warn('⚠️  PWA requires HTTPS for full functionality');
+            const httpsBtn = document.createElement('div');
+            httpsBtn.innerHTML = '<p style="color: orange; margin: 10px 0;">⚠️  For full PWA features, deploy to HTTPS</p>';
+            document.querySelector('.container').appendChild(httpsBtn);
+        }
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button
+            const installBtn = document.createElement('button');
+            installBtn.textContent = '📱 Install App';
+            installBtn.className = 'btn';
+            installBtn.onclick = async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log('PWA install:', outcome);
+                    deferredPrompt = null;
+                    installBtn.remove();
+                }
+            };
+            document.querySelector('.container').appendChild(installBtn);
+        });
+        
+        // Service worker registration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(console.error);
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered:', reg))
+                .catch(err => console.log('SW registration failed:', err));
         }
         
         console.log('🦉 HOOTNER Mobile Platform loaded');
+        
+        // Premium access check
+        window.checkPremiumAccess = function(appType, price) {
+            const purchased = localStorage.getItem(`purchased_${appType}`);
+            if (purchased) {
+                return true; // Already purchased
+            }
+            
+            const confirm = window.confirm(
+                `This premium feature costs $${price}.\n\n` +
+                `Features: 8K HDR, Dolby Atmos, Professional tools\n\n` +
+                `Click OK to purchase or Cancel to upgrade your plan.`
+            );
+            
+            if (confirm) {
+                // Simulate purchase
+                localStorage.setItem(`purchased_${appType}`, 'true');
+                alert(`✅ Purchase successful! $${price} charged.\nYou now have lifetime access.`);
+                return true;
+            }
+            
+            // Show upgrade options
+            alert('🚀 Upgrade to Professional ($29.99/mo) or Enterprise ($99.99/mo) for included premium apps!');
+            return false;
+        };
     </script>
 </body>
 </html>

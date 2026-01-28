@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express';
 import { createMessage, listMessages } from '../models/Message.js';
 import {
@@ -8,6 +17,15 @@ import {
 } from '../models/Conversation.js';
 
 const router = express.Router();
+
+// CSRF protection middleware
+const csrfCheck = (req, res, next) => {
+  const token = req.headers['x-csrf-token'] || req.body._token;
+  if (!token || token !== req.session?.csrfToken) {
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+  next();
+};
 
 // Get user conversations
 router.get('/conversations/:userId', async (req, res) => {
@@ -31,9 +49,9 @@ router.get('/conversations/:conversationId/messages', async (req, res) => {
 });
 
 // Send message
-router.post('/send', async (req, res) => {
+router.post('/send', csrfCheck, async (req, res) => {
   try {
-    const { conversationId, senderId, text, type = 'text' } = req.body;
+    const { conversationId: sanitizeInput(conversationId), senderId: sanitizeInput(senderId), text: sanitizeInput(text), type = 'text': sanitizeInput(type = 'text') } = req.body;
 
     const message = await createMessage({
       conversationId,
@@ -55,9 +73,9 @@ router.post('/send', async (req, res) => {
 });
 
 // Create conversation
-router.post('/conversations', async (req, res) => {
+router.post('/conversations', csrfCheck, async (req, res) => {
   try {
-    const { participants, type = 'direct', name } = req.body;
+    const { participants: sanitizeInput(participants), type = 'direct': sanitizeInput(type = 'direct'), name: sanitizeInput(name) } = req.body;
 
     // Check if conversation already exists for direct messages
     if (type === 'direct' && participants.length === 2) {

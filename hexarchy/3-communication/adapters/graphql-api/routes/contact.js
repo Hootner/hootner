@@ -1,9 +1,18 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 import express from 'express'
 import { createContact, listContacts } from '../models/Contact.js'
 
 const router = express.Router()
 
-router.post('/', async (req, res) => {
+router.post('/', csrfCheck, async (req, res) => {
   try {
     const { name, email, subject, message } = req.body
 

@@ -1,4 +1,13 @@
 
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
+
 /**
  * HOOTNER Algorithm API - Monetize Training Data
  * Revenue: $5K/month immediate, $50K/month potential
@@ -25,7 +34,7 @@ const authenticateUser = (req, res, next) => {
 
 // Subscription endpoints
 app.post('/api/subscribe', authenticateUser, async (req, res) => {
-  const { user_id, email, tier } = req.body;
+  const { user_id: sanitizeInput(user_id), email: sanitizeInput(email), tier: sanitizeInput(tier) } = req.body;
   
   // Sanitize inputs
   const sanitizedUserId = String(user_id).replace(/[<>"'&]/g, '');
@@ -131,7 +140,7 @@ app.get('/api/algorithms', (req, res) => {
 
 app.post('/api/algorithms/:name/execute', authenticateUser, freeLimit, async (req, res) => {
   const { name } = req.params;
-  const { input, user_id, tier = 'free' } = req.body;
+  const { input: sanitizeInput(input), user_id: sanitizeInput(user_id), tier = 'free': sanitizeInput(tier = 'free') } = req.body;
   
   // Sanitize inputs
   const sanitizedName = String(name).replace(/[<>"'&]/g, '');

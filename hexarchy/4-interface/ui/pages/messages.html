@@ -174,11 +174,18 @@
 </head>
 
 <body class="min-h-screen">
+  <nav style="position:fixed;top:0;left:0;right:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);border-bottom:2px solid rgba(0,255,0,0.3);padding:12px 20px;z-index:1000;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <a href="dashboard.html" style="font-size:14px;font-weight:bold;background:linear-gradient(135deg,#00ff00,#00ffff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;">🦉 HOOTNER</a>
+      <a href="dashboard.html" style="color:#00ff00;text-decoration:none;font-weight:600;padding:8px 16px;border:1px solid rgba(0,255,0,0.3);border-radius:6px;transition:all 0.3s;" onmouseover="this.style.background='rgba(0,255,0,0.1)'" onmouseout="this.style.background='transparent'">← Dashboard</a>
+    </div>
+  </nav>
+  <div style="margin-top:80px;"></div>
   <script src="../components/auth-guard.js"></script>
   <script src="../components/header-enhanced.js"></script>
   <script src="../components/navigation-policy.js"></script>
 
-  <div style="padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; gap: 24px; height: calc(100vh - 120px);">
+  <div style="padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; gap: 24px; height: calc(100vh - 200px); margin-top: 20px;">
 
     <!-- Conversations List -->
     <div
@@ -398,3 +405,5 @@
 </body>
 
 </html>
+< a   h r e f = " d a s h b o a r d . h t m l " > D a s h b o a r d < / a >    
+ 

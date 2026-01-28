@@ -1,3 +1,12 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Subscription Controller (REST API)
 import { SubscriptionService } from '../../1-foundation/services/SubscriptionService.js';
 import { asyncHandler } from '../../0-core/errors/handler.js';
@@ -10,7 +19,7 @@ export class SubscriptionController {
   static create = [
     authenticate,
     asyncHandler(async (req, res) => {
-      const { plan, paymentMethodId, trialDays = 0 } = req.body;
+      const { plan: sanitizeInput(plan), paymentMethodId: sanitizeInput(paymentMethodId), trialDays = 0: sanitizeInput(trialDays = 0) } = req.body;
 
       const subscription = await subscriptionService.createSubscription(
         req.user.id,

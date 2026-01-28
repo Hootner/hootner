@@ -1,5 +1,23 @@
+
+import xss from 'xss';
+
+const sanitizeInput = (input) => {
+  if (typeof input === 'string') {
+    return xss(input);
+  }
+  return input;
+};
 // Express Routes Configuration
 import express from 'express';
+
+// CSRF protection middleware
+const csrfCheck = (req, res, next) => {
+  const token = req.headers['x-csrf-token'] || req.body._token;
+  if (!token || token !== req.session?.csrfToken) {
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+  next();
+};
 import UserController from './controllers/UserController.js';
 import VideoController from './controllers/VideoController.js';
 import CommentController from './controllers/CommentController.js';
