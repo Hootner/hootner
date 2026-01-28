@@ -14,11 +14,17 @@ try {
   const layer = require('/opt/nodejs/index');
   getJWTSecret = layer.getJWTSecret;
 } catch {
-  // Fallback for local development
-  getJWTSecret = async () => process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+  // Fallback for local development - requires JWT_SECRET to be set
+  getJWTSecret = async () => {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is required');
+    }
+    return process.env.JWT_SECRET;
+  };
 }
 
 const JWT_EXPIRATION = '24h';
+const REFRESH_TOKEN_EXPIRATION = '7d';
 let JWT_SECRET_CACHE = null;
 
 /**
@@ -41,7 +47,19 @@ async function generateToken(user) {
   const secret = await getSecret();
   return jwt.sign(
     {
-      id: usePromise<string>} Refresh token
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    secret,
+    { expiresIn: JWT_EXPIRATION }
+  );
+}
+
+/**
+ * Generate refresh token
+ * @param {object} user - User object
+ * @returns {Promise<string>} Refresh token
  */
 async function generateRefreshToken(user) {
   const secret = await getSecret();
@@ -50,33 +68,21 @@ async function generateRefreshToken(user) {
       id: user.id,
       type: 'refresh',
     },
-    secret
-/**
- * Generate refresh token
- * @param {object} user - User object
- * @returns {string} Refresh token
- */
-function generateRefreshToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      type: 'refresh',
-    },
-    JWT_SECRET,
-    { expiresIn: '7d' }
+    secret,
+    { expiresIn: REFRESH_TOKEN_EXPIRATION }
   );
 }
 
 /**
  * Verify JWT token
- * @param {stPromise<object>} Decoded token payload
+ * @param {string} token - JWT token
+ * @returns {Promise<object>} Decoded token payload
  * @throws {AuthenticationError} If token is invalid
  */
 async function verifyToken(token) {
   try {
     const secret = await getSecret();
-    return jwt.verify(token, secret
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, secret);
   } catch (error) {
     throw new AuthenticationError('Invalid or expired token');
   }
@@ -173,6 +179,6 @@ module.exports = {
   validateAuth,
   validateRole,
   validateOwnership,
-  JWT_SECRET,
   JWT_EXPIRATION,
+  REFRESH_TOKEN_EXPIRATION,
 };

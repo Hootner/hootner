@@ -24,7 +24,10 @@ import {
   getPlaylistById,
 } from '../models/Playlist.js'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_min_32_chars_change_prod'
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
 
 const resolvers = {
   login: async (_, { email, password }) => {

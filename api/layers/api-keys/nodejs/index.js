@@ -60,7 +60,10 @@ async function getAPIKeys() {
  */
 async function getJWTSecret() {
   if (process.env.NODE_ENV === 'development' || process.env.IS_OFFLINE) {
-    return process.env.JWT_SECRET || 'dev-secret-change-in-production';
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is required');
+    }
+    return process.env.JWT_SECRET;
   }
 
   const stackName = process.env.AWS_STACK_NAME || 'hootner';

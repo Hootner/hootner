@@ -22,8 +22,13 @@ const authenticateUser = (req, res, next) => {
     return res.status(401).json({ error: 'Invalid token format' });
   }
   
+  if (!process.env.JWT_SECRET) {
+    console.error('JWT_SECRET not configured');
+    return res.status(500).json({ error: 'Server configuration error' });
+  }
+  
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Validate decoded token structure
     if (!decoded.id || typeof decoded.id !== 'string') {
