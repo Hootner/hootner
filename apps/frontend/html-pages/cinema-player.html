@@ -1208,8 +1208,12 @@
       const volumeSlider = document.getElementById('volumeSlider')
 
       // Backend API configuration
-      const API_BASE_URL = 'http://localhost:5003'
-      const GRAPHQL_URL = 'http://localhost:4000/graphql'
+      const API_BASE_URL = window.location.origin.includes('s3')
+        ? 'https://ypgktpjvx9.execute-api.us-east-1.amazonaws.com/prod'
+        : 'http://localhost:5003'
+      const GRAPHQL_URL = window.location.origin.includes('s3')
+        ? 'https://ypgktpjvx9.execute-api.us-east-1.amazonaws.com/prod/graphql'
+        : 'http://localhost:4000/graphql'
 
       // Initialize player
       let isPlaying = false

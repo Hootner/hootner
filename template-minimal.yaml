@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - Minimal Serverless Lambda Deployment
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: 1024
+    Timeout: 30
+    Tracing: Active
+
+Resources:
+  # DynamoDB Table
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: HootnerActivities
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+  # S3 Bucket for uploads
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-uploads-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # HTTP API
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: ["*"]
+        AllowHeaders: ["*"]
+
+  # GraphQL Lambda Function
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-graphql
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          UPLOAD_BUCKET: !Ref UploadBucket
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+      Events:
+        GraphQLApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /graphql
+            Method: POST
+
+Outputs:
+  GraphQLApiURL:
+    Description: GraphQL API URL
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
+    
+  DynamoDBTableName:
+    Description: DynamoDB Table Name
+    Value: !Ref HootnerTable
+    
+  UploadBucket:
+    Description: Upload S3 Bucket
+    Value: !Ref UploadBucket

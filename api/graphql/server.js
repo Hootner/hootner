@@ -5,7 +5,7 @@ import 'dotenv/config';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
-import cookieParser from 'cookie-parser';
+// import cookieParser from 'cookie-parser'; // Temporarily disabled
 import { validateEnvironment } from './utils/validateEnv.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import contactRoutes from './routes/contact.js';
@@ -336,7 +336,7 @@ const root = {
 
 export const app = express();
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser()); // Temporarily disabled
 
 // IP Blocking Middleware (before everything else)
 app.use((req, res, next) => {

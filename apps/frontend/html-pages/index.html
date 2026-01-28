@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOOTNER - Mobile Video Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin: 40px 0 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover, .btn:active {
+            background: #00ffff;
+            color: #000;
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: #00ffff;
+            color: #000;
+        }
+        
+        .features {
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .feature-text {
+            font-size: 14px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 36px;
+                margin: 20px 0 15px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🦉</div>
+        <h1 class="title">HOOTNER</h1>
+        <p class="subtitle">Mobile Video Streaming Platform</p>
+        
+        <a href="/mobile-player.html" class="btn btn-primary">📱 Launch Mobile Player</a>
+        <a href="/cinema-player.html" class="btn">🎬 Desktop Cinema Player</a>
+        <a href="/config.html" class="btn">⚙️ Settings</a>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div class="feature-text">
+                    <strong>Mobile Optimized</strong><br>
+                    Touch gestures, responsive design
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🎥</div>
+                <div class="feature-text">
+                    <strong>HD Streaming</strong><br>
+                    Adaptive quality, smooth playback
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                    <strong>Fast Loading</strong><br>
+                    AWS CloudFront CDN powered
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">
+                    <strong>Secure</strong><br>
+                    Enterprise-grade security
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 HOOTNER - "The Owl Never Sleeps"</p>
+            <p>Powered by AWS Lambda & GraphQL</p>
+        </div>
+    </div>
+    
+    <script>
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Auto-redirect mobile users to mobile player
+        if (isMobile && window.location.pathname === '/') {
+            // Show mobile player by default on mobile devices
+            console.log('📱 Mobile device detected');
+        }
+        
+        // Service worker for offline support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        }
+        
+        console.log('🦉 HOOTNER Mobile Platform loaded');
+    </script>
+</body>
+</html>
