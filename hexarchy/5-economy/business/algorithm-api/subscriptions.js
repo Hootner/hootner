@@ -5,9 +5,19 @@
 
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 import paymentService from '../payment-service-simple.js';
 
 const router = express.Router();
+
+// Rate limiter for subscription endpoints
+const subscriptionLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per windowMs
+  message: 'Too many subscription requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Authentication middleware
 const authenticateUser = (req, res, next) => {
@@ -46,7 +56,7 @@ const authenticateUser = (req, res, next) => {
 };
 
 // Create subscription
-router.post('/subscribe', authenticateUser, async (req, res) => {
+router.post('/subscribe', subscriptionLimiter, authenticateUser, async (req, res) => {
   const { user_id, email, tier } = req.body;
   
   // Validate and sanitize inputs
@@ -90,7 +100,7 @@ router.post('/subscribe', authenticateUser, async (req, res) => {
 });
 
 // Get subscription status
-router.get('/status/:user_id', authenticateUser, async (req, res) => {
+router.get('/status/:user_id', subscriptionLimiter, authenticateUser, async (req, res) => {
   const { user_id } = req.params;
   
   // Validate and sanitize user_id
@@ -119,7 +129,7 @@ router.get('/status/:user_id', authenticateUser, async (req, res) => {
 });
 
 // Upgrade subscription
-router.post('/upgrade', authenticateUser, async (req, res) => {
+router.post('/upgrade', subscriptionLimiter, authenticateUser, async (req, res) => {
   const { user_id, current_tier, new_tier } = req.body;
   
   // Verify user owns the subscription
@@ -152,7 +162,7 @@ router.post('/upgrade', authenticateUser, async (req, res) => {
 });
 
 // Cancel subscription
-router.post('/cancel', authenticateUser, async (req, res) => {
+router.post('/cancel', subscriptionLimiter, authenticateUser, async (req, res) => {
   const { user_id, reason } = req.body;
   
   // Verify user owns the subscription
