@@ -57,7 +57,7 @@ npm run start:all
 
 ```bash
 npm run aws:onboard  # Choose "AWS Mode"
-npm run aws:deploy
+sam deploy --guided   # First time deployment
 ```
 
 ## 🔧 Common Commands
@@ -90,8 +90,11 @@ All services now run on http://localhost:3000 with different endpoints.
 
 ```bash
 npm run aws:check        # Verify AWS credentials
-npm run aws:deploy       # Deploy to AWS
+npm run aws:status       # Check AWS connection status
 npm run aws:validate     # Validate AWS configuration
+npm run aws:package      # Build SAM package
+sam deploy --guided      # Deploy to AWS (first time)
+sam deploy               # Deploy to AWS (subsequent)
 ```
 
 ### Testing & Quality
@@ -102,6 +105,31 @@ npm run lint             # Check code quality
 npm run lint:fix         # Auto-fix linting issues
 ```
 
+### Revenue & Analytics
+
+```bash
+npm run check-users      # View user analytics
+npm run track-money      # Track revenue flow
+npm run revenue:check    # Check revenue status
+```
+
+### Agent Orchestration
+
+```bash
+npm run agents:status    # Check agent status
+npm run agents:start     # Start agents
+npm run agents:stop      # Stop agents
+npm run dual-agent:test  # Test dual-agent setup
+```
+
+### MCP Integration
+
+```bash
+npm run mcp:enhanced     # Start enhanced MCP server
+npm run mcp:validate     # Validate MCP protocol
+npm run amazonq:connect  # Connect Amazon Q bridge
+```
+
 ## 📁 Project Structure
 
 ```
@@ -109,8 +137,12 @@ my-local-repo/
 ├── 📄 template.yaml                   # 120-pipe AWS infrastructure
 ├── .amazonq/                        # Amazon Q config
 ├── .aws/                            # AWS CLI & SSO configuration
+├── .codegpt/                        # CodeGPT integration
 ├── .github/                         # GitHub workflows, templates, security
+├── .hootner/                        # Platform configuration
 ├── .husky/                          # Git hooks for code quality
+├── .kiro/                           # MCP settings
+├── .pm2/                            # PM2 process manager
 ├── agents/                          # API security scanner agents
 ├── api/                             # Lambda functions & GraphQL server
 │   ├── graphql/                     # GraphQL API implementation
@@ -208,7 +240,7 @@ my-local-repo/
 │   └── 8-operations/                # DevOps & infrastructure
 │       ├── backup/                  # Backup operations
 │       ├── ci-cd/                   # CI/CD pipelines
-│       ├── deployment/              # Deployment services
+│       ├── devops/                  # DevOps utilities
 │       ├── infrastructure/          # Infrastructure as code
 │       ├── monitoring/              # Monitoring services
 │       └── testing/                 # Test suites
@@ -267,7 +299,7 @@ my-local-repo/
 
 - [Backend Quick Start](docs/BACKEND_QUICKSTART.md)
 - [API Documentation](docs/API.md)
-- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+- [Deployment Checklist](DEPLOYMENT_CHECKLIST_120_PIPES.md)
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md)
 
 ### 120-Pipe Infrastructure
@@ -280,7 +312,7 @@ my-local-repo/
 - **[Stripe Pricing Guide](STRIPE_USAGE_PRICING_GUIDE.md)** - Setup & usage examples
 - **[Stripe Cost Comparison](STRIPE_COST_COMPARISON.md)** - See how much you save at scale
 - **[Stripe Connection Diagram](STRIPE_CONNECTION_DIAGRAM.md)** - Visual flow diagrams
-- [Connections Map](TEMPLATE_CONNECTIONS_MAP.md) - All 120 pipes documented
+- [Architecture Diagram](ARCHITECTURE_DIAGRAM_120_PIPES.md) - Visual connection map
 - [Deployment Checklist](DEPLOYMENT_CHECKLIST_120_PIPES.md) - Deploy to AWS
 - [Quick Reference](QUICK_REFERENCE_120_PIPES.md) - One-page cheat sheet
 
@@ -317,7 +349,7 @@ aws configure  # Overwrites existing credentials
 **What happens when you switch:**
 
 - Resources stay in the old account (they're isolated)
-- You'll need to re-deploy: `npm run aws:deploy`
+- You'll need to re-deploy: `sam deploy --guided`
 - Your code doesn't change, just AWS configuration
 
 👉 See [AWS for Beginners Guide](docs/AWS_FOR_BEGINNERS.md#switching-aws-accounts) for detailed info
@@ -326,7 +358,7 @@ aws configure  # Overwrites existing credentials
 
 ### Required
 
-- Node.js 20+ 
+- Node.js 22+ 
 - npm 9+
 
 ### Optional (depending on mode)
@@ -366,7 +398,7 @@ npx kill-port 3000 4000 5000 8000
 
 1. Check [AWS for Beginners](docs/AWS_FOR_BEGINNERS.md#common-issues-for-beginners)
 2. Open an issue on GitHub
-3. Review [Documentation Index](docs/DOCUMENTATION_INDEX.md)
+3. Review [Documentation Index](DOCUMENTATION_INDEX_120_PIPES.md)
 
 ## 📊 AWS Cost Management
 
