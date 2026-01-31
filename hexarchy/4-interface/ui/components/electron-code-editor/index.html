@@ -7350,19 +7350,19 @@
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="editor.updateOptions({wordWrap: this.checked ? 'on' : 'off'})">
+              <input type="checkbox" id="wordWrapCheckbox" name="wordWrap" checked onchange="editor.updateOptions({wordWrap: this.checked ? 'on' : 'off'})">
               <span>Word Wrap</span>
             </label>
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="editor.updateOptions({minimap: {enabled: this.checked}})">
+              <input type="checkbox" id="minimapCheckbox" name="showMinimap" checked onchange="editor.updateOptions({minimap: {enabled: this.checked}})">
               <span>Show Minimap</span>
             </label>
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="autoSaveEnabled = this.checked">
+              <input type="checkbox" id="autoSaveCheckbox" name="autoSave" checked onchange="autoSaveEnabled = this.checked">
               <span>Auto Save</span>
             </label>
           </div>
