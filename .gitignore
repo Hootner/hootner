@@ -45,3 +45,6 @@ videos/
 *.db
 *.sqlite
 dynamodb-local/
+
+# Generated analysis reports
+data/reports/

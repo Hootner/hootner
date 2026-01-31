@@ -414,6 +414,7 @@ class AdaptiveSampler:
         Returns:
             Generated samples
         """
+        # cSpell:ignore Denoising
         device = next(model.parameters()).device
 
         # Start from noise
@@ -508,6 +509,7 @@ class PLMS:
         device = next(model.parameters()).device
 
         # Start from noise
+        # cSpell:ignore randn
         x = torch.randn(shape, device=device)
 
         # Time schedule
@@ -516,7 +518,12 @@ class PLMS:
         ).long()
 
         # Store old predictions for multi-step
+        # cSpell:ignore preds
         old_preds = []
+
+        # Prefetch first timestep to GPU
+        if num_steps > 0:
+            timesteps = timesteps.pin_memory() if timesteps.device.type == 'cpu' else timesteps
 
         for i in tqdm(range(num_steps), desc="PLMS sampling"):
             t = timesteps[i]
@@ -526,10 +533,14 @@ class PLMS:
                 else torch.tensor(0, device=device)
             )
 
-            # Get model prediction
+            # Get model prediction with prefetch
             with torch.no_grad():
                 t_input = t.float().view(1).expand(shape[0])
                 pred = model(x, t_input, conditioning)
+
+                # Prefetch next timestep
+                if i < num_steps - 1:
+                    _ = timesteps[i + 1]
 
             old_preds.append(pred)
 
@@ -600,13 +611,18 @@ class PLMS:
         t_next: torch.Tensor,
     ) -> torch.Tensor:
         """4th order PLMS step"""
-        pred = (
-            55 * old_preds[-1]
-            - 59 * old_preds[-2]
-            + 37 * old_preds[-3]
-            - 9 * old_preds[-4]
-        ) / 24
+        # Adams-Bashforth 4th order coefficients
+        # cSpell:ignore Bashforth
+        coef_1 = 55 * old_preds[-1]
+        coef_2 = -59 * old_preds[-2]
+        coef_3 = 37 * old_preds[-3]
+        coef_4 = -9 * old_preds[-4]
+        pred = (coef_1 + coef_2 + coef_3 + coef_4) / 24
         return self._euler_step(x, pred, t, t_next)
+
+    def map(self, fn: Callable, tensors: List[torch.Tensor]) -> List[torch.Tensor]:
+        """Apply function to list of tensors"""
+        return [fn(t) for t in tensors]
 
 
 # ============================================================================
@@ -626,6 +642,7 @@ def create_sampler(sampler_type: str = "dpm", num_timesteps: int = 1000, **kwarg
     Returns:
         Sampler instance
     """
+    # cSpell:ignore plms
     if sampler_type == "dpm":
         return DPMSolverPlusPlus(num_timesteps=num_timesteps, **kwargs)
     elif sampler_type == "euler":

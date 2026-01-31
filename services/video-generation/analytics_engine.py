@@ -64,6 +64,13 @@ class VideoAnalytics:
         self, session_id: str, user_id: str, metadata: Optional[Dict] = None
     ):
         """Start new viewing session"""
+        # Validate inputs
+        if not session_id or not user_id:
+            raise ValueError("session_id and user_id are required")
+        
+        if session_id in self.sessions:
+            logger.warning(f"Session {session_id} already exists, overwriting")
+        
         self.sessions[session_id] = {
             "session_id": session_id,
             "user_id": user_id,
@@ -94,6 +101,12 @@ class VideoAnalytics:
     ):
         """Track playback position"""
         if session_id not in self.sessions:
+            logger.warning(f"Session {session_id} not found")
+            return
+        
+        # Validate current_time
+        if current_time < 0 or current_time > self.duration:
+            logger.warning(f"Invalid current_time: {current_time}")
             return
 
         session = self.sessions[session_id]
@@ -125,6 +138,15 @@ class VideoAnalytics:
         data: Optional[Dict] = None,
     ):
         """Track video event"""
+        # Validate inputs
+        if not event_type:
+            logger.warning("event_type is required")
+            return
+        
+        if timestamp < 0 or timestamp > self.duration:
+            logger.warning(f"Invalid timestamp: {timestamp}")
+            return
+        
         event = {
             "session_id": session_id,
             "event_type": event_type,
@@ -169,14 +191,19 @@ class VideoAnalytics:
     def end_session(self, session_id: str):
         """End viewing session"""
         if session_id not in self.sessions:
+            logger.warning(f"Session {session_id} not found")
             return
 
         session = self.sessions[session_id]
         session["ended_at"] = datetime.now()
 
         # Calculate watch time
-        duration = (session["ended_at"] - session["started_at"]).total_seconds()
-        session["watch_time"] = duration
+        try:
+            duration = (session["ended_at"] - session["started_at"]).total_seconds()
+            session["watch_time"] = duration
+        except (KeyError, TypeError) as e:
+            logger.error(f"Failed to calculate watch time: {e}")
+            session["watch_time"] = 0
 
         # Calculate coverage
         session["coverage"] = len(session["positions_watched"]) * self.bucket_size
@@ -372,9 +399,14 @@ class ABTestManager:
     def assign_variant(self, user_id: str) -> str:
         """Assign user to variant (simple random)"""
         import random
+        
+        if not user_id:
+            logger.warning("user_id is required")
+            return None
 
         variant_ids = list(self.variants.keys())
         if not variant_ids:
+            logger.warning("No variants available")
             return None
 
         # Simple random assignment

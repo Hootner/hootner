@@ -1,16 +1,41 @@
 {
-  "name": "@hootner/code-editor",
+  "name": "@hootner/ai-agent-panel",
   "version": "1.0.0",
-  "description": "HOOTNER Code Editor",
-  "main": "server.js",
+  "description": "Ultra-advanced AI Agent Panel with multi-agent orchestration, streaming, analytics, and plugins",
+  "main": "ai-agent-init.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "demo": "npx http-server -p 8080 -o demo.html",
+    "test": "echo \"Tests coming soon\" && exit 0"
   },
+  "keywords": [
+    "ai",
+    "agent",
+    "panel",
+    "chat",
+    "ui",
+    "streaming",
+    "analytics",
+    "plugins"
+  ],
+  "author": "HOOTNER Team",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "dompurify": "^3.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
+    "http-server": "^14.1.1"
+  },
+  "exports": {
+    ".": "./ai-agent-init.js",
+    "./base": "./ai-agent-panel.js",
+    "./extended": "./ai-agent-panel-extended.js"
+  },
+  "files": [
+    "ai-agent-panel.js",
+    "ai-agent-panel-extended.js",
+    "ai-agent-init.js",
+    "AI_AGENT_PANEL_DOCS.md",
+    "demo.html"
+  ]
 }

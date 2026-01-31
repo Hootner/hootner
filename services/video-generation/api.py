@@ -138,14 +138,17 @@ def generate_video():
         )
 
     # Parse parameters with defaults
-    num_frames = int(data.get("num_frames", 16))
-    height = int(data.get("height", 64))
-    width = int(data.get("width", 64))
-    fps = int(data.get("fps", 8))
-    num_inference_steps = int(data.get("num_inference_steps", 50))
-    guidance_scale = float(data.get("guidance_scale", 7.5))
-    seed = data.get("seed", None)
-    output_format = data.get("format", "gif")  # 'gif' or 'mp4'
+    try:
+        num_frames = int(data.get("num_frames", 16))
+        height = int(data.get("height", 64))
+        width = int(data.get("width", 64))
+        fps = int(data.get("fps", 8))
+        num_inference_steps = int(data.get("num_inference_steps", 50))
+        guidance_scale = float(data.get("guidance_scale", 7.5))
+        seed = data.get("seed", None)
+        output_format = data.get("format", "gif")  # 'gif' or 'mp4'
+    except (ValueError, TypeError) as e:
+        return jsonify({"error": "Invalid parameter type", "message": str(e)}), 400
 
     # Validate parameters
     if not (4 <= num_frames <= 64):
@@ -239,12 +242,21 @@ def generate_video():
 @app.route("/download/<filename>", methods=["GET"])
 def download_video(filename):
     """Download generated video"""
-    # Secure filename
-    filename = secure_filename(filename)
-    file_path = os.path.join(OUTPUT_DIR, filename)
+    try:
+        # Secure filename
+        filename = secure_filename(filename)
+        if not filename:
+            return jsonify({"error": "Invalid filename"}), 400
+        
+        file_path = os.path.join(OUTPUT_DIR, filename)
+        # Prevent path traversal
+        if not os.path.abspath(file_path).startswith(os.path.abspath(OUTPUT_DIR)):
+            return jsonify({"error": "Access denied"}), 403
 
-    if not os.path.exists(file_path):
-        return jsonify({"error": "File not found"}), 404
+        if not os.path.exists(file_path):
+            return jsonify({"error": "File not found"}), 404
+    except Exception as e:
+        return jsonify({"error": "Invalid filename", "message": str(e)}), 400
 
     # Determine mimetype
     if filename.endswith(".gif"):
@@ -315,16 +327,20 @@ def generate_batch():
 
             start_time = time.time()
 
-            generator.generate(
-                prompt=prompt,
-                num_frames=data.get("num_frames", 16),
-                height=data.get("height", 64),
-                width=data.get("width", 64),
-                fps=data.get("fps", 8),
-                num_inference_steps=data.get("num_inference_steps", 50),
-                guidance_scale=data.get("guidance_scale", 7.5),
-                output_path=output_path,
-            )
+            try:
+                generator.generate(
+                    prompt=prompt,
+                    num_frames=data.get("num_frames", 16),
+                    height=data.get("height", 64),
+                    width=data.get("width", 64),
+                    fps=data.get("fps", 8),
+                    num_inference_steps=data.get("num_inference_steps", 50),
+                    guidance_scale=data.get("guidance_scale", 7.5),
+                    output_path=output_path,
+                )
+            except Exception as gen_error:
+                print(f"❌ Generation failed for prompt '{prompt}': {str(gen_error)}")
+                continue
 
             generation_time = time.time() - start_time
 
@@ -378,13 +394,16 @@ def list_models():
 @app.route("/stats", methods=["GET"])
 def get_stats():
     """Get generation statistics"""
-    output_files = os.listdir(OUTPUT_DIR)
+    try:
+        output_files = os.listdir(OUTPUT_DIR)
 
-    total_size = sum(
-        os.path.getsize(os.path.join(OUTPUT_DIR, f))
-        for f in output_files
-        if os.path.isfile(os.path.join(OUTPUT_DIR, f))
-    )
+        total_size = sum(
+            os.path.getsize(os.path.join(OUTPUT_DIR, f))
+            for f in output_files
+            if os.path.isfile(os.path.join(OUTPUT_DIR, f))
+        )
+    except OSError as e:
+        return jsonify({"error": "Failed to read statistics", "message": str(e)}), 500
 
     return jsonify(
         {
@@ -416,6 +435,11 @@ def get_video_info(video_id):
         "thumbnails": [...]
     }
     """
+    # Sanitize video_id to prevent path traversal
+    video_id = secure_filename(video_id)
+    if not video_id or '/' in video_id or '\\' in video_id:
+        return jsonify({"error": "Invalid video ID"}), 400
+    
     # Check if video exists
     video_path = os.path.join(OUTPUT_DIR, f"{video_id}.mp4")
     gif_path = os.path.join(OUTPUT_DIR, f"{video_id}.gif")
@@ -430,15 +454,25 @@ def get_video_info(video_id):
         return jsonify({"error": "Video not found"}), 404
 
     # Get file info
-    file_size = os.path.getsize(file_path)
-    created_at = datetime.fromtimestamp(os.path.getctime(file_path))
+    try:
+        file_size = os.path.getsize(file_path)
+        created_at = datetime.fromtimestamp(os.path.getctime(file_path))
+    except OSError as e:
+        return jsonify({"error": "Failed to read file info", "message": str(e)}), 500
 
     # Load metadata if exists
     metadata_path = os.path.join(OUTPUT_DIR, f"{video_id}.json")
+    # Prevent path traversal
+    if not os.path.abspath(metadata_path).startswith(os.path.abspath(OUTPUT_DIR)):
+        return jsonify({"error": "Access denied"}), 403
+    
     metadata = {}
     if os.path.exists(metadata_path):
-        with open(metadata_path, "r") as f:
-            metadata = json.load(f)
+        try:
+            with open(metadata_path, "r") as f:
+                metadata = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"Warning: Failed to load metadata: {e}")
 
     return jsonify(
         {
@@ -458,10 +492,20 @@ def get_video_info(video_id):
 @app.route("/api/video/stream/<filename>", methods=["GET"])
 def stream_video(filename):
     """Stream video file"""
-    file_path = os.path.join(OUTPUT_DIR, secure_filename(filename))
+    try:
+        filename = secure_filename(filename)
+        if not filename:
+            return jsonify({"error": "Invalid filename"}), 400
+        
+        file_path = os.path.join(OUTPUT_DIR, filename)
+        # Prevent path traversal
+        if not os.path.abspath(file_path).startswith(os.path.abspath(OUTPUT_DIR)):
+            return jsonify({"error": "Access denied"}), 403
 
-    if not os.path.exists(file_path):
-        return jsonify({"error": "File not found"}), 404
+        if not os.path.exists(file_path):
+            return jsonify({"error": "File not found"}), 404
+    except Exception as e:
+        return jsonify({"error": "Invalid request", "message": str(e)}), 400
 
     # Determine MIME type
     if filename.endswith(".mp4"):
@@ -477,13 +521,16 @@ def stream_video(filename):
 @app.route("/api/video/sample", methods=["GET"])
 def get_sample_video():
     """Get a sample video for testing"""
-    # Return first available video or error
-    files = [f for f in os.listdir(OUTPUT_DIR) if f.endswith((".mp4", ".gif"))]
+    try:
+        # Return first available video or error
+        files = [f for f in os.listdir(OUTPUT_DIR) if f.endswith((".mp4", ".gif"))]
 
-    if files:
-        return send_file(os.path.join(OUTPUT_DIR, files[0]))
-    else:
-        return jsonify({"error": "No videos available"}), 404
+        if files:
+            return send_file(os.path.join(OUTPUT_DIR, files[0]))
+        else:
+            return jsonify({"error": "No videos available"}), 404
+    except OSError as e:
+        return jsonify({"error": "Failed to access videos", "message": str(e)}), 500
 
 
 @app.route("/api/analytics/track", methods=["POST"])
@@ -508,13 +555,24 @@ def track_analytics():
     if not session_id or not video_id:
         return jsonify({"error": "Missing required fields"}), 400
 
+    # Sanitize session_id to prevent path traversal
+    session_id = secure_filename(session_id)
+    if not session_id:
+        return jsonify({"error": "Invalid session ID"}), 400
+    
     # Save analytics event
     analytics_file = os.path.join(ANALYTICS_DIR, f"{session_id}.jsonl")
+    # Prevent path traversal
+    if not os.path.abspath(analytics_file).startswith(os.path.abspath(ANALYTICS_DIR)):
+        return jsonify({"error": "Access denied"}), 403
 
     event = {**data, "recorded_at": datetime.utcnow().isoformat()}
 
-    with open(analytics_file, "a") as f:
-        f.write(json.dumps(event) + "\n")
+    try:
+        with open(analytics_file, "a") as f:
+            f.write(json.dumps(event) + "\n")
+    except OSError as e:
+        return jsonify({"error": "Failed to save analytics", "message": str(e)}), 500
 
     return jsonify({"success": True})
 
@@ -540,8 +598,16 @@ def track_playback():
     if not session_id or not video_id:
         return jsonify({"error": "Missing required fields"}), 400
 
+    # Sanitize session_id to prevent path traversal
+    session_id = secure_filename(session_id)
+    if not session_id:
+        return jsonify({"error": "Invalid session ID"}), 400
+    
     # Save playback event
     analytics_file = os.path.join(ANALYTICS_DIR, f"{session_id}.jsonl")
+    # Prevent path traversal
+    if not os.path.abspath(analytics_file).startswith(os.path.abspath(ANALYTICS_DIR)):
+        return jsonify({"error": "Access denied"}), 403
 
     event = {
         "event_type": "playback_position",
@@ -549,8 +615,11 @@ def track_playback():
         "recorded_at": datetime.utcnow().isoformat(),
     }
 
-    with open(analytics_file, "a") as f:
-        f.write(json.dumps(event) + "\n")
+    try:
+        with open(analytics_file, "a") as f:
+            f.write(json.dumps(event) + "\n")
+    except OSError as e:
+        return jsonify({"error": "Failed to save playback data", "message": str(e)}), 500
 
     return jsonify({"success": True})
 
@@ -558,21 +627,44 @@ def track_playback():
 @app.route("/api/analytics/<video_id>", methods=["GET"])
 def get_video_analytics(video_id):
     """Get analytics for a specific video"""
-    # Aggregate all sessions for this video
-    analytics_files = os.listdir(ANALYTICS_DIR)
+    # Sanitize video_id
+    video_id = secure_filename(video_id)
+    if not video_id:
+        return jsonify({"error": "Invalid video ID"}), 400
+    
+    try:
+        # Aggregate all sessions for this video
+        analytics_files = os.listdir(ANALYTICS_DIR)
 
-    total_views = 0
-    events = []
+        total_views = 0
+        events = []
 
-    for filename in analytics_files:
-        file_path = os.path.join(ANALYTICS_DIR, filename)
-        with open(file_path, "r") as f:
-            for line in f:
-                event = json.loads(line)
-                if event.get("video_id") == video_id:
-                    events.append(event)
-                    if event.get("event_type") == "session_start":
-                        total_views += 1
+        for filename in analytics_files:
+            # Sanitize filename
+            filename = secure_filename(filename)
+            if not filename:
+                continue
+            
+            file_path = os.path.join(ANALYTICS_DIR, filename)
+            # Prevent path traversal
+            if not os.path.abspath(file_path).startswith(os.path.abspath(ANALYTICS_DIR)):
+                continue
+            
+            try:
+                with open(file_path, "r") as f:
+                    for line in f:
+                        try:
+                            event = json.loads(line)
+                            if event.get("video_id") == video_id:
+                                events.append(event)
+                                if event.get("event_type") == "session_start":
+                                    total_views += 1
+                        except json.JSONDecodeError:
+                            continue
+            except OSError:
+                continue
+    except OSError as e:
+        return jsonify({"error": "Failed to read analytics", "message": str(e)}), 500
 
     return jsonify(
         {

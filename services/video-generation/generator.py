@@ -136,6 +136,13 @@ class VideoGenerator:
         Returns:
             video: (T, H, W, 3) numpy array [0-255]
         """
+        # Validate output_path to prevent path traversal
+        if output_path:
+            output_path = os.path.abspath(output_path)
+            output_dir = os.path.dirname(output_path)
+            if not output_dir or not os.path.exists(output_dir):
+                raise ValueError(f"Invalid output directory: {output_dir}")
+        
         if seed is not None:
             torch.manual_seed(seed)
             np.random.seed(seed)
@@ -233,12 +240,23 @@ class VideoGenerator:
             fps: Frames per second
             quality: Quality setting (1-10, higher is better)
         """
-        if output_path.endswith(".gif"):
-            # Save as GIF
-            imageio.mimsave(output_path, video, fps=fps, loop=0)
-        else:
-            # Save as MP4
-            imageio.mimsave(output_path, video, fps=fps, quality=quality)
+        # Validate output path to prevent path traversal
+        output_path = os.path.abspath(output_path)
+        output_dir = os.path.dirname(output_path)
+        
+        # Ensure output is within allowed directory
+        if not output_dir or not os.path.exists(output_dir):
+            raise ValueError(f"Invalid output directory: {output_dir}")
+        
+        try:
+            if output_path.endswith(".gif"):
+                # Save as GIF
+                imageio.mimsave(output_path, video, fps=fps, loop=0)
+            else:
+                # Save as MP4
+                imageio.mimsave(output_path, video, fps=fps, quality=quality)
+        except Exception as e:
+            raise IOError(f"Failed to save video to {output_path}: {str(e)}")
 
     def generate_batch(self, prompts: list, **kwargs) -> list:
         """
@@ -328,28 +346,31 @@ class VideoGenerator:
         Returns:
             metrics: Dictionary of training metrics
         """
-        videos = videos.to(self.device)
+        try:
+            videos = videos.to(self.device)
 
-        # Encode prompts
-        batch_embeddings = []
-        for prompt in prompts:
-            emb, _ = self.encode_text(prompt)
-            batch_embeddings.append(emb)
-        context = torch.cat(batch_embeddings, dim=0)
+            # Encode prompts
+            batch_embeddings = []
+            for prompt in prompts:
+                emb, _ = self.encode_text(prompt)
+                batch_embeddings.append(emb)
+            context = torch.cat(batch_embeddings, dim=0)
 
-        # Compute loss
-        losses = self.diffusion.training_losses(
-            model=self.unet, x_start=videos, context=context
-        )
+            # Compute loss
+            losses = self.diffusion.training_losses(
+                model=self.unet, x_start=videos, context=context
+            )
 
-        loss = losses["loss"]
+            loss = losses["loss"]
 
-        # Backward pass
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            # Backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-        return {"loss": loss.item(), "mse": losses["mse"]}
+            return {"loss": loss.item(), "mse": losses["mse"]}
+        except Exception as e:
+            raise RuntimeError(f"Training step failed: {str(e)}")
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@
 		"dual-agent:enable": "node -e \"console.log('✅ Dual-agent mode ENABLED')\"",
 		"dual-agent:disable": "node -e \"console.log('✅ Dual-agent mode DISABLED')\"",
 		"dual-agent:test": "node scripts/test-dual-agent-connections.js",
+		"mcp:connect": "node scripts/test-mcp-simple.js",
 		"mcp:enhanced": "node hexarchy/3-communication/adapters/enhanced-mcp-server.js",
 		"mcp:demo": "node scripts/enhanced-mcp-client.js",
 		"mcp:validate": "node scripts/validate-mcp-protocol.js",

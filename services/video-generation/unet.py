@@ -435,51 +435,54 @@ class UNet3D(nn.Module):
         Returns:
             denoised: (B, C, T, H, W) - Predicted noise or denoised video
         """
-        # Time embedding
-        t_emb = self.time_embed(timesteps)
+        try:
+            # Time embedding
+            t_emb = self.time_embed(timesteps)
 
-        # Initial convolution
-        x = self.conv_in(x)
+            # Initial convolution
+            x = self.conv_in(x)
 
-        # Store skip connections
-        skips = []
+            # Store skip connections
+            skips = []
 
-        # Encoder
-        for block in self.down_blocks:
-            if self.use_checkpoint and self.training:
-                x, skip = torch.utils.checkpoint.checkpoint(block, x)
-            else:
-                x, skip = block(x)
-            skips.append(skip)
-
-        # Bottleneck
-        for layer in self.bottleneck:
-            if isinstance(layer, FlashAttention3D):
-                B, C, T, H, W = x.shape
-                x_shaped = x.permute(0, 2, 3, 4, 1)  # (B, T, H, W, C)
+            # Encoder
+            for block in self.down_blocks:
                 if self.use_checkpoint and self.training:
-                    x_shaped = torch.utils.checkpoint.checkpoint(layer, x_shaped)
+                    x, skip = torch.utils.checkpoint.checkpoint(block, x)
                 else:
-                    x_shaped = layer(x_shaped)
-                x = x_shaped.permute(0, 4, 1, 2, 3)
-            else:
+                    x, skip = block(x)
+                skips.append(skip)
+
+            # Bottleneck
+            for layer in self.bottleneck:
+                if isinstance(layer, FlashAttention3D):
+                    B, C, T, H, W = x.shape
+                    x_shaped = x.permute(0, 2, 3, 4, 1)  # (B, T, H, W, C)
+                    if self.use_checkpoint and self.training:
+                        x_shaped = torch.utils.checkpoint.checkpoint(layer, x_shaped)
+                    else:
+                        x_shaped = layer(x_shaped)
+                    x = x_shaped.permute(0, 4, 1, 2, 3)
+                else:
+                    if self.use_checkpoint and self.training:
+                        x = torch.utils.checkpoint.checkpoint(layer, x)
+                    else:
+                        x = layer(x)
+
+            # Decoder with skip connections
+            for block in self.up_blocks:
+                skip = skips.pop()
                 if self.use_checkpoint and self.training:
-                    x = torch.utils.checkpoint.checkpoint(layer, x)
+                    x = torch.utils.checkpoint.checkpoint(block, x, skip)
                 else:
-                    x = layer(x)
+                    x = block(x, skip)
 
-        # Decoder with skip connections
-        for block in self.up_blocks:
-            skip = skips.pop()
-            if self.use_checkpoint and self.training:
-                x = torch.utils.checkpoint.checkpoint(block, x, skip)
-            else:
-                x = block(x, skip)
+            # Output
+            x = self.conv_out(x)
 
-        # Output
-        x = self.conv_out(x)
-
-        return x
+            return x
+        except RuntimeError as e:
+            raise RuntimeError(f"UNet forward pass failed: {str(e)}")
 
     def get_memory_stats(self) -> dict:
         """Get model memory statistics"""

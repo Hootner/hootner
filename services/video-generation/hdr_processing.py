@@ -53,6 +53,7 @@ class HDR10Processor:
         Returns:
             PQ encoded values (0.0-1.0)
         """
+        # cSpell:ignore Quantizer
         # Normalize to peak luminance
         linear = linear * (self.max_nits / 10000.0)
 

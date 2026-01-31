@@ -32,8 +32,14 @@ class Config:
     """
 
     def __init__(self, config_dir: str = "./config", environment: Optional[str] = None):
-        self.config_dir = Path(config_dir)
+        self.config_dir = Path(config_dir).resolve()  # Resolve to absolute path
         self.environment = environment or os.getenv("ENVIRONMENT", "development")
+        
+        # Validate config_dir exists and is a directory
+        if not self.config_dir.exists():
+            raise ConfigurationError(f"Configuration directory not found: {self.config_dir}")
+        if not self.config_dir.is_dir():
+            raise ConfigurationError(f"Configuration path is not a directory: {self.config_dir}")
 
         # Load configuration
         self.config = self._load_config()
@@ -43,7 +49,11 @@ class Config:
 
     def _load_config(self) -> dict:
         """Load configuration from YAML file"""
-        config_file = self.config_dir / f"{self.environment}.yaml"
+        config_file = (self.config_dir / f"{self.environment}.yaml").resolve()
+        
+        # Prevent path traversal - ensure config file is within config_dir
+        if not str(config_file).startswith(str(self.config_dir)):
+            raise ConfigurationError(f"Invalid configuration file path: {config_file}")
 
         if not config_file.exists():
             raise ConfigurationError(
@@ -51,8 +61,16 @@ class Config:
                 f"Available environments: {self._list_environments()}"
             )
 
-        with open(config_file, "r") as f:
-            config = yaml.safe_load(f)
+        try:
+            with open(config_file, "r") as f:
+                config = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            raise ConfigurationError(f"Failed to parse YAML configuration: {str(e)}")
+        except OSError as e:
+            raise ConfigurationError(f"Failed to read configuration file: {str(e)}")
+
+        if not config:
+            raise ConfigurationError(f"Configuration file is empty: {config_file}")
 
         # Substitute environment variables
         config = self._substitute_env_vars(config)
@@ -200,9 +218,17 @@ class Config:
         """Save configuration to file"""
         if filepath is None:
             filepath = self.config_dir / f"{self.environment}.yaml"
+        else:
+            filepath = Path(filepath).resolve()
+            # Prevent path traversal
+            if not str(filepath).startswith(str(self.config_dir)):
+                raise ConfigurationError(f"Cannot save outside config directory: {filepath}")
 
-        with open(filepath, "w") as f:
-            yaml.dump(self.config, f, default_flow_style=False)
+        try:
+            with open(filepath, "w") as f:
+                yaml.dump(self.config, f, default_flow_style=False)
+        except (yaml.YAMLError, OSError) as e:
+            raise ConfigurationError(f"Failed to save configuration: {str(e)}")
 
     def __getitem__(self, key: str) -> Any:
         """Allow dictionary-style access"""

@@ -405,9 +405,12 @@ class GaussianDiffusion:
         """
         Extract values from tensor a at indices t and reshape for broadcasting
         """
-        batch_size = t.shape[0]
-        out = a.gather(-1, t.cpu()).to(t.device)
-        return out.reshape(batch_size, *((1,) * (len(x_shape) - 1)))
+        try:
+            batch_size = t.shape[0]
+            out = a.gather(-1, t.cpu()).to(t.device)
+            return out.reshape(batch_size, *((1,) * (len(x_shape) - 1)))
+        except (RuntimeError, IndexError) as e:
+            raise ValueError(f"Failed to extract diffusion parameters: {str(e)}")
 
 
 class ClassifierFreeGuidance:

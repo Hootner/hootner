@@ -141,6 +141,13 @@ class AdaptiveStreamGenerator:
         self, input_video: str, output_dir: str, quality_config: Dict
     ) -> str:
         """Generate single HLS variant stream"""
+        # Validate paths
+        input_video = os.path.abspath(input_video)
+        output_dir = os.path.abspath(output_dir)
+        
+        if not os.path.exists(input_video):
+            raise FileNotFoundError(f"Input video not found: {input_video}")
+        
         playlist_file = os.path.join(output_dir, "playlist.m3u8")
         segment_pattern = os.path.join(output_dir, "segment_%05d.ts")
 
@@ -177,7 +184,13 @@ class AdaptiveStreamGenerator:
             playlist_file,
         ]
 
-        subprocess.run(cmd, check=True, capture_output=True)
+        try:
+            subprocess.run(cmd, check=True, capture_output=True, timeout=3600)
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("HLS generation timed out")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"HLS generation failed: {e.stderr.decode()}")
+        
         return playlist_file
 
     def _generate_hls_master_playlist(
@@ -223,6 +236,13 @@ class AdaptiveStreamGenerator:
         Returns:
             Path to MPD manifest
         """
+        # Validate paths
+        input_video = os.path.abspath(input_video)
+        output_dir = os.path.abspath(output_dir)
+        
+        if not os.path.exists(input_video):
+            raise FileNotFoundError(f"Input video not found: {input_video}")
+        
         os.makedirs(output_dir, exist_ok=True)
 
         if qualities is None:
@@ -295,7 +315,12 @@ class AdaptiveStreamGenerator:
             ]
         )
 
-        subprocess.run(cmd, check=True, capture_output=True)
+        try:
+            subprocess.run(cmd, check=True, capture_output=True, timeout=3600)
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("DASH generation timed out")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"DASH generation failed: {e.stderr.decode()}")
 
         logger.info(f"✅ DASH generation complete: {mpd_path}")
         return mpd_path
@@ -314,6 +339,13 @@ class AdaptiveStreamGenerator:
         Returns:
             Dictionary with sprite info
         """
+        # Validate paths
+        input_video = os.path.abspath(input_video)
+        output_dir = os.path.abspath(output_dir)
+        
+        if not os.path.exists(input_video):
+            raise FileNotFoundError(f"Input video not found: {input_video}")
+        
         os.makedirs(output_dir, exist_ok=True)
 
         logger.info(f"📸 Generating preview thumbnails (every {interval_seconds}s)...")
@@ -329,8 +361,11 @@ class AdaptiveStreamGenerator:
             "default=noprint_wrappers=1:nokey=1",
             input_video,
         ]
-        result = subprocess.run(probe_cmd, capture_output=True, text=True)
-        duration = float(result.stdout.strip())
+        try:
+            result = subprocess.run(probe_cmd, capture_output=True, text=True, check=True, timeout=30)
+            duration = float(result.stdout.strip())
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, ValueError) as e:
+            raise RuntimeError(f"Failed to probe video duration: {e}")
 
         # Generate thumbnails
         num_thumbnails = int(duration / interval_seconds)
@@ -347,7 +382,10 @@ class AdaptiveStreamGenerator:
             thumbnail_pattern,
         ]
 
-        subprocess.run(cmd, check=True, capture_output=True)
+        try:
+            subprocess.run(cmd, check=True, capture_output=True, timeout=600)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+            raise RuntimeError(f"Thumbnail generation failed: {e}")
 
         # Create sprite sheet (combine thumbnails)
         sprite_path = os.path.join(output_dir, "sprite.jpg")
@@ -363,7 +401,10 @@ class AdaptiveStreamGenerator:
             sprite_path,
         ]
 
-        subprocess.run(sprite_cmd, check=True, capture_output=True)
+        try:
+            subprocess.run(sprite_cmd, check=True, capture_output=True, timeout=300)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+            raise RuntimeError(f"Sprite sheet generation failed: {e}")
 
         # Generate VTT file for thumbnails
         vtt_path = self._generate_thumbnail_vtt(

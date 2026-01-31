@@ -36,8 +36,12 @@ class StructuredLogger:
 
     def __init__(self, name: str, log_dir: str = "./logs", level: str = "INFO"):
         self.name = name
-        self.log_dir = Path(log_dir)
+        self.log_dir = Path(log_dir).resolve()  # Resolve to absolute path
         self.log_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Validate log_dir is a directory
+        if not self.log_dir.is_dir():
+            raise ValueError(f"Log path is not a directory: {self.log_dir}")
 
         # Create logger
         self.logger = logging.getLogger(name)
@@ -61,8 +65,13 @@ class StructuredLogger:
         self.logger.addHandler(console_handler)
 
         # File handler (JSON)
+        log_file = (self.log_dir / f"{name}.log").resolve()
+        # Prevent path traversal
+        if not str(log_file).startswith(str(self.log_dir)):
+            raise ValueError(f"Invalid log file path: {log_file}")
+        
         file_handler = logging.handlers.RotatingFileHandler(
-            self.log_dir / f"{name}.log",
+            log_file,
             maxBytes=10 * 1024 * 1024,  # 10MB
             backupCount=5,
         )
@@ -70,8 +79,13 @@ class StructuredLogger:
         self.logger.addHandler(file_handler)
 
         # Error file handler
+        error_log_file = (self.log_dir / f"{name}_errors.log").resolve()
+        # Prevent path traversal
+        if not str(error_log_file).startswith(str(self.log_dir)):
+            raise ValueError(f"Invalid error log file path: {error_log_file}")
+        
         error_handler = logging.handlers.RotatingFileHandler(
-            self.log_dir / f"{name}_errors.log",
+            error_log_file,
             maxBytes=10 * 1024 * 1024,
             backupCount=5,
         )
@@ -403,27 +417,31 @@ class ErrorTracker:
 
     def track_error(self, error: Exception, context: Optional[Dict[str, Any]] = None):
         """Track an error occurrence"""
-        error_type = type(error).__name__
-        error_message = str(error)
+        try:
+            error_type = type(error).__name__
+            error_message = str(error)
 
-        if error_type not in self.errors:
-            self.errors[error_type] = []
+            if error_type not in self.errors:
+                self.errors[error_type] = []
 
-        error_data = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "message": error_message,
-            "traceback": traceback.format_exc(),
-            "context": context or {},
-        }
+            error_data = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "message": error_message,
+                "traceback": traceback.format_exc(),
+                "context": context or {},
+            }
 
-        self.errors[error_type].append(error_data)
+            self.errors[error_type].append(error_data)
 
-        # Log error
-        self.logger.error(f"Error tracked: {error_type}", error=error, **error_data)
+            # Log error
+            self.logger.error(f"Error tracked: {error_type}", error=error, **error_data)
 
-        # Check if threshold exceeded
-        if len(self.errors[error_type]) >= self.alert_threshold:
-            self._trigger_alert(error_type)
+            # Check if threshold exceeded
+            if len(self.errors[error_type]) >= self.alert_threshold:
+                self._trigger_alert(error_type)
+        except Exception as e:
+            # Prevent error tracking from failing the application
+            print(f"Failed to track error: {e}")
 
     def _trigger_alert(self, error_type: str):
         """Trigger alert for high error frequency"""
@@ -509,12 +527,21 @@ class MonitoringDashboard:
 
     def export_to_file(self, filepath: str):
         """Export dashboard data to JSON file"""
-        data = self.get_dashboard_data()
+        try:
+            # Validate filepath to prevent path traversal
+            filepath = os.path.abspath(filepath)
+            file_dir = os.path.dirname(filepath)
+            if not file_dir or not os.path.exists(file_dir):
+                raise ValueError(f"Invalid output directory: {file_dir}")
+            
+            data = self.get_dashboard_data()
 
-        with open(filepath, "w") as f:
-            json.dump(data, f, indent=2)
+            with open(filepath, "w") as f:
+                json.dump(data, f, indent=2)
 
-        self.logger.info(f"Dashboard data exported to {filepath}")
+            self.logger.info(f"Dashboard data exported to {filepath}")
+        except (OSError, json.JSONEncodeError) as e:
+            self.logger.error(f"Failed to export dashboard data", error=e)
 
 
 # ============================================================================

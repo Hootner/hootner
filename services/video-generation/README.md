@@ -1,603 +1,776 @@
-# 🎬 Video Generation Service
+# AI Video Generation Service - Enhanced
 
-Production-ready AI text-to-video generation using optimized 3D U-Net with memory-efficient attention.
+## 🎬 Overview
+
+Production-ready Python-based AI video generation service with advanced features:
+
+- **Text-to-Video Generation** using 3D U-Net diffusion models
+- **WebSocket Support** for real-time progress updates
+- **Async Job Queue** with Redis backend
+- **Advanced Samplers** (DPM-Solver++, Euler, PLMS, Adaptive)
+- **Video Effects** (filters, transitions, color grading)
+- **Model Optimization** (mixed precision, checkpointing, quantization)
+- **Comprehensive Monitoring** (Prometheus metrics, structured logging)
+- **Configuration Management** (YAML-based, environment-specific)
+
+---
+
+## 📁 Service Architecture
+
+```
+services/video-generation/
+├── api.py                      # Original Flask API
+├── api_enhanced.py            # Enhanced API with WebSocket + async jobs
+├── generator.py               # Video generation orchestrator
+├── unet.py                    # 3D U-Net diffusion model
+├── diffusion.py              # DDPM/DDIM diffusion process
+├── text_encoder.py           # BERT-based text encoding
+├── advanced_samplers.py      # DPM-Solver++, Euler, PLMS, Adaptive
+├── video_effects.py          # Post-processing and effects
+├── model_optimization.py     # Checkpointing, mixed precision, quantization
+├── monitoring.py             # Logging, metrics, profiling
+├── config_manager.py         # Configuration management
+├── requirements.txt          # Base dependencies
+├── requirements_enhanced.txt # Enhanced dependencies
+├── install.py                # Auto-installer script
+├── config/
+│   ├── development.yaml      # Development configuration
+│   └── production.yaml       # Production configuration
+├── outputs/                  # Generated videos
+├── cache/                    # Response cache
+├── logs/                     # Application logs
+└── checkpoints/              # Model checkpoints
+```
+
+---
 
 ## 🚀 Quick Start
 
+### Installation
+
 ```bash
-# 1. Install dependencies (auto-detects CUDA)
+# Navigate to service directory
+cd services/video-generation
+
+# Option 1: Auto-install (recommended)
 python install.py
 
-# 2. Test generation
-python generator.py
+# Option 2: Manual install
+pip install -r requirements_enhanced.txt
 
-# 3. Start REST API
-python api.py
+# Option 3: Development install
+pip install -r requirements_enhanced.txt
+pip install -e .
 ```
 
-**API Ready** → [http://localhost:5003](http://localhost:5003/health)
+### Running the Service
+
+```bash
+# Development mode (basic API)
+python api.py
+
+# Enhanced mode (WebSocket + async jobs)
+python api_enhanced.py
+
+# With custom port
+PORT=5003 python api_enhanced.py
+
+# Production mode
+ENVIRONMENT=production python api_enhanced.py
+
+# With Redis (for job queue)
+docker run -d -p 6379:6379 redis:alpine
+python api_enhanced.py
+```
+
+**Default URLs:**
+- API: http://localhost:5003
+- Health check: http://localhost:5003/health
+- Metrics: http://localhost:5003/metrics
+- WebSocket: ws://localhost:5003/generation
 
 ---
 
-## 📦 Architecture
+## 📖 API Documentation
 
-### Core Components
+### Synchronous Generation
 
-1. **unet.py** (754 lines) - 3D U-Net with Memory-Efficient Attention
-   - MemoryEfficientAttention: O(N) chunked computation vs O(N²)
-   - FlashAttention3D: Temporal windowing for video
-   - Separable 3D convolutions (spatial + temporal)
-   - Gradient checkpointing for memory optimization
-   - 3 model sizes: small (15M), base (50M), large (200M)
+**POST** `/generate`
 
-2. **diffusion.py** (461 lines) - DDPM/DDIM Diffusion Process
-   - Gaussian diffusion with cosine/linear/quadratic schedules
-   - DDIM sampling: 50 steps vs 1000 (20x faster)
-   - Classifier-free guidance for quality control
-   - Progressive sampling (coarse-to-fine)
-   - Batch processing support
+Generate video from text prompt (synchronous).
 
-3. **text_encoder.py** (257 lines) - BERT Text Conditioning
-   - BERT-based embeddings (768-dim)
-   - 6-layer transformer encoder (8 attention heads)
-   - Cross-attention blocks for U-Net conditioning
-   - Max sequence length: 77 tokens
-   - Mean pooling for text embeddings
-
-4. **generator.py** (394 lines) - Video Generation Orchestrator
-   - Main API: `generate(prompt, num_frames, ...)`
-   - Classifier-free guidance (scale 7.5)
-   - Seed control for reproducibility
-   - GIF/MP4 export with post-processing
-   - Batch generation support
-
-5. **api.py** (334 lines) - Flask REST API
-   - `/generate` - Single video generation
-   - `/batch` - Multiple videos
-   - `/download/<file>` - Download results
-   - Rate limiting (10 req/min)
-   - CORS support for frontend
-
----
-
-## 🎯 Features
-
-### Memory Optimizations
-
-✅ **Chunked Attention** - O(N) memory instead of O(N²)
-✅ **Flash Attention** - Temporal windowing for videos
-✅ **Gradient Checkpointing** - Trade compute for memory
-✅ **Separable Convolutions** - 3D → 2D spatial + 1D temporal
-
-### Quality Features
-
-✅ **Classifier-Free Guidance** - Balance quality vs diversity
-✅ **DDIM Sampling** - 50 steps vs 1000 (20x faster)
-✅ **Text Conditioning** - BERT embeddings with cross-attention
-✅ **Progressive Sampling** - Coarse-to-fine generation
-
-### Production Features
-
-✅ **REST API** - Flask with CORS, rate limiting
-✅ **Batch Processing** - Multiple prompts in one request
-✅ **Format Support** - GIF and MP4 export
-✅ **Health Checks** - `/health` endpoint
-✅ **Error Handling** - Comprehensive try/catch
-
----
-
-## 📖 API Reference
-
-### POST /generate
-
-Generate single video from text prompt.
-
-**Request:**
-
-```json
-{
-  "prompt": "A robot dancing in space",
-  "num_frames": 16,
-  "height": 64,
-  "width": 64,
-  "fps": 8,
-  "num_inference_steps": 50,
-  "guidance_scale": 7.5,
-  "seed": 42,
-  "format": "gif"
-}
+```bash
+curl -X POST http://localhost:5003/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A robot dancing in the rain",
+    "num_frames": 16,
+    "height": 64,
+    "width": 64,
+    "fps": 8,
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 42,
+    "format": "gif"
+  }'
 ```
 
 **Response:**
-
 ```json
 {
-  "job_id": "uuid-here",
+  "job_id": "uuid",
   "status": "completed",
   "download_url": "/download/uuid.gif",
   "generation_time": 30.5,
   "metadata": {
-    "prompt": "A robot dancing in space",
+    "prompt": "A robot dancing in the rain",
     "num_frames": 16,
-    "height": 64,
-    "width": 64
+    "resolution": "64x64",
+    "fps": 8,
+    "device": "cuda"
   }
 }
 ```
 
-**Parameters:**
+### Asynchronous Generation
 
-| Parameter | Type | Default | Range | Description |
-|-----------|------|---------|-------|-------------|
-| `prompt` | string | required | 1-500 chars | Text description |
-| `num_frames` | int | 16 | 4-64 | Video length |
-| `height` | int | 64 | 32-512 | Frame height |
-| `width` | int | 64 | 32-512 | Frame width |
-| `fps` | int | 8 | 1-60 | Frames per second |
-| `num_inference_steps` | int | 50 | 1-1000 | Sampling steps |
-| `guidance_scale` | float | 7.5 | 1.0-20.0 | Quality control |
-| `seed` | int | null | any | Reproducibility |
-| `format` | string | "gif" | gif/mp4 | Output format |
+**POST** `/generate` (with `"async": true`)
 
----
-
-### POST /batch
-
-Generate multiple videos from multiple prompts.
-
-**Request:**
-
-```json
-{
-  "prompts": [
-    "A robot dancing",
-    "A cat sleeping",
-    "Mountains at sunset"
-  ],
-  "num_frames": 16,
-  "height": 64,
-  "width": 64
-}
+```bash
+curl -X POST http://localhost:5003/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cat playing piano",
+    "async": true,
+    "use_cache": true
+  }'
 ```
 
 **Response:**
-
 ```json
 {
-  "status": "completed",
-  "count": 3,
-  "results": [
-    {
-      "job_id": "uuid-1",
-      "prompt": "A robot dancing",
-      "download_url": "/download/uuid-1.gif",
-      "generation_time": 28.3
-    },
-    ...
-  ]
+  "job_id": "uuid",
+  "status": "queued",
+  "message": "Job queued for processing",
+  "websocket_url": "/generation",
+  "status_url": "/status/uuid"
 }
 ```
 
-**Limits:**
+### Batch Generation
 
-- Max 10 prompts per batch
-- Max 500 characters per prompt
-- Rate limit: 10 requests per minute
+**POST** `/batch`
 
----
+Generate multiple videos from a list of prompts.
 
-### GET /download/{filename}
+```bash
+curl -X POST http://localhost:5003/batch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompts": [
+      "A sunset over mountains",
+      "Ocean waves at night",
+      "City lights timelapse"
+    ],
+    "params": {
+      "num_frames": 16,
+      "height": 64,
+      "width": 64
+    }
+  }'
+```
 
-Download generated video file.
+### Job Status
 
-**Response:** Binary file (GIF or MP4)
+**GET** `/status/<job_id>`
 
----
+Get the status of an async job.
 
-### GET /health
+```bash
+curl http://localhost:5003/status/uuid
+```
 
-Health check endpoint.
+### Download Video
+
+**GET** `/download/<filename>`
+
+Download generated video.
+
+```bash
+curl http://localhost:5003/download/uuid.gif -O
+```
+
+### Health Check
+
+**GET** `/health`
+
+```bash
+curl http://localhost:5003/health
+```
 
 **Response:**
-
 ```json
 {
   "status": "healthy",
-  "service": "video-generation",
-  "version": "1.0.0",
-  "device": "cuda:0",
-  "timestamp": "2026-01-10T12:00:00Z"
+  "service": "video-generation-enhanced",
+  "version": "2.0.0",
+  "device": "cuda",
+  "cuda_available": true,
+  "gpu_name": "NVIDIA RTX 3090",
+  "queue_size": 0,
+  "active_jobs": 0,
+  "redis_connected": true
 }
+```
+
+### Metrics
+
+**GET** `/metrics`
+
+Prometheus-compatible metrics endpoint.
+
+```bash
+curl http://localhost:5003/metrics
 ```
 
 ---
 
-### GET /models
+## 🔌 WebSocket API
 
-List available model sizes.
+Connect to `ws://localhost:5003/generation` for real-time updates.
 
-**Response:**
+### Client Example
 
-```json
-{
-  "models": [
-    {
-      "name": "base",
-      "description": "Balanced model for production",
-      "parameters": "~50M",
-      "recommended": true
-    },
+```javascript
+const socket = io('http://localhost:5003/generation');
+
+// Subscribe to job updates
+socket.emit('subscribe', { job_id: 'uuid' });
+
+// Listen for progress
+socket.on('progress', (data) => {
+  console.log(`Progress: ${data.progress}% (${data.step}/${data.total})`);
+});
+
+// Listen for completion
+socket.on('completed', (data) => {
+  console.log('Job completed!', data);
+  console.log('Download URL:', data.download_url);
+});
+
+// Listen for errors
+socket.on('error', (data) => {
+  console.error('Error:', data.error);
+});
+```
+
+### Python Client Example
+
+```python
+from socketio import Client
+
+sio = Client()
+
+@sio.on('progress', namespace='/generation')
+def on_progress(data):
+    print(f"Progress: {data['progress']}%")
+
+@sio.on('completed', namespace='/generation')
+def on_completed(data):
+    print(f"Completed! Download: {data['download_url']}")
+
+sio.connect('http://localhost:5003')
+sio.emit('subscribe', {'job_id': 'uuid'}, namespace='/generation')
+sio.wait()
+```
+
+---
+
+## 🎨 Video Effects
+
+Apply post-processing effects to generated videos.
+
+### Available Effects
+
+```python
+from video_effects import VideoEffects, apply_effects_pipeline
+
+effects = VideoEffects()
+
+# Color grading
+video = effects.adjust_brightness(video, factor=1.2)
+video = effects.adjust_contrast(video, factor=1.1)
+video = effects.adjust_saturation(video, factor=1.3)
+video = effects.color_temperature(video, temperature=20)
+
+# Artistic filters
+video = effects.blur(video, kernel_size=5)
+video = effects.sharpen(video, strength=1.0)
+video = effects.vignette(video, strength=0.5)
+video = effects.posterize(video, levels=4)
+
+# LUT presets
+video = effects.apply_lut(video, lut_name="cinematic")
+# Options: cinematic, vintage, vivid, noir
+
+# Transitions
+video = effects.fade_in(video, duration=8)
+video = effects.fade_out(video, duration=8)
+video = effects.crossfade(video1, video2, duration=8)
+
+# Motion effects
+video = effects.zoom(video, start_scale=1.0, end_scale=1.5)
+video = effects.pan(video, direction="right", distance=0.2)
+video = effects.rotate(video, start_angle=0, end_angle=45)
+
+# Temporal effects
+video = effects.temporal_smooth(video, window=3)
+video = effects.slow_motion(video, factor=2.0)
+video = effects.reverse(video)
+
+# Composite presets
+video = effects.apply_preset(video, preset="cinematic")
+# Options: cinematic, vintage, dramatic, dreamy, vivid
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment-Specific Configs
+
+Configurations are stored in YAML files:
+- `config/development.yaml` - Development settings
+- `config/production.yaml` - Production settings
+
+### Loading Configuration
+
+```python
+from config_manager import load_config
+
+# Load config for current environment (from ENVIRONMENT env var)
+config = load_config()
+
+# Load specific environment
+config = load_config(environment="production")
+
+# Access configuration values
+port = config.get('server.port')
+model_size = config.get('model.size')
+debug = config.get('server.debug')
+
+# Set configuration values
+config.set('server.port', 8080)
+
+# Save configuration
+config.save()
+```
+
+### Environment Variables
+
+Set these in your environment or `.env` file:
+
+```bash
+# Environment
+ENVIRONMENT=production
+
+# Server
+PORT=5003
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=your_password
+
+# Security
+VIDEO_GEN_API_KEY=your_api_key
+
+# Model
+MODEL_SIZE=base
+DEVICE=cuda
+```
+
+---
+
+## 📊 Monitoring
+
+### Structured Logging
+
+```python
+from monitoring import logger
+
+# Log with context
+logger.info("Video generation started",
+            job_id="uuid",
+            prompt="A robot dancing",
+            num_frames=16)
+
+# Log errors
+try:
+    generate_video()
+except Exception as e:
+    logger.error("Generation failed", error=e, job_id="uuid")
+
+# Log metrics
+logger.metric("generation_time", 30.5, job_id="uuid")
+```
+
+### Prometheus Metrics
+
+```python
+from monitoring import metrics
+
+# Increment counter
+metrics.inc_counter("video_generations_total", labels={"status": "success"})
+
+# Set gauge
+metrics.set_gauge("queue_size", 10)
+
+# Observe histogram
+metrics.observe_histogram("generation_time_seconds", 30.5)
+
+# Export metrics
+prometheus_format = metrics.export_prometheus()
+```
+
+### Performance Profiling
+
+```python
+from monitoring import profiler
+
+# Profile function
+@profiler.timer()
+def generate_video():
     ...
-  ]
-}
+
+# Profile code block
+with profiler.time_block("text_encoding"):
+    embeddings = encoder.encode(prompt)
+
+# Print statistics
+profiler.print_stats()
 ```
 
 ---
 
-### GET /stats
+## 🚀 Advanced Features
 
-Get generation statistics.
+### Model Checkpointing
 
-**Response:**
+```python
+from model_optimization import ModelCheckpointer
 
-```json
-{
-  "total_generations": 42,
-  "storage_used_mb": 156.7,
-  "device": "cuda:0",
-  "model_size": "base"
-}
+checkpointer = ModelCheckpointer(checkpoint_dir="./checkpoints")
+
+# Save checkpoint
+checkpointer.save_checkpoint(
+    model=unet,
+    version="v1.0.0",
+    optimizer=optimizer,
+    epoch=100,
+    loss=0.05
+)
+
+# Load checkpoint
+checkpoint = checkpointer.load_checkpoint(
+    version="v1.0.0",
+    model=unet,
+    optimizer=optimizer
+)
+
+# List checkpoints
+versions = checkpointer.list_checkpoints()
+
+# Cleanup old checkpoints
+checkpointer.cleanup_old_checkpoints(keep_latest=5)
+```
+
+### Mixed Precision Training
+
+```python
+from model_optimization import MixedPrecisionTrainer
+
+trainer = MixedPrecisionTrainer(enabled=True, dtype="float16")
+
+# Training loop
+for batch in dataloader:
+    optimizer.zero_grad()
+
+    with trainer.autocast():
+        output = model(batch)
+        loss = criterion(output, target)
+
+    loss_scaled = trainer.scale_loss(loss)
+    loss_scaled.backward()
+
+    trainer.step(optimizer)
+```
+
+### Advanced Samplers
+
+```python
+from advanced_samplers import create_sampler
+
+# Create DPM-Solver++ sampler
+sampler = create_sampler(
+    sampler_type="dpm",
+    num_timesteps=1000,
+    solver_order=2
+)
+
+# Generate with sampler
+video = sampler.sample(
+    model=unet,
+    shape=(1, 3, 16, 64, 64),
+    num_steps=20,
+    conditioning=text_embeddings
+)
+
+# Other samplers: euler, adaptive, plms
 ```
 
 ---
 
-## 💻 Python API
+## 🐳 Docker Deployment
 
-### Basic Usage
+### Build Image
 
-```python
-from generator import VideoGenerator
+```bash
+# Build production image
+docker build -t hootner/video-generation:latest .
 
-# Initialize generator
-generator = VideoGenerator(
-    model_size="base",      # small/base/large
-    timesteps=1000,
-    guidance_scale=7.5
-)
-
-# Generate video
-video = generator.generate(
-    prompt="A robot dancing in space",
-    num_frames=16,
-    height=64,
-    width=64,
-    fps=8,
-    num_inference_steps=50,  # DDIM: 50 steps
-    guidance_scale=7.5,      # Higher = more faithful to prompt
-    seed=42,                 # For reproducibility
-    output_path="output.gif"
-)
-
-print(f"Generated video shape: {video.shape}")  # (16, 3, 64, 64)
+# Build with specific Python version
+docker build --build-arg PYTHON_VERSION=3.10 -t hootner/video-generation:latest .
 ```
 
-### Advanced Features
+### Run Container
 
-```python
-# Batch generation
-videos = generator.generate_batch(
-    prompts=["prompt1", "prompt2", "prompt3"],
-    num_frames=16,
-    height=64,
-    width=64
-)
+```bash
+# Run with GPU support
+docker run -d \
+  --name video-generation \
+  --gpus all \
+  -p 5003:5003 \
+  -e ENVIRONMENT=production \
+  -e REDIS_HOST=redis \
+  -v /path/to/checkpoints:/app/checkpoints \
+  -v /path/to/outputs:/app/outputs \
+  hootner/video-generation:latest
 
-# Video interpolation
-long_video = generator.interpolate(
-    video,
-    target_frames=32  # Double the length
-)
+# Run with CPU only
+docker run -d \
+  --name video-generation \
+  -p 5003:5003 \
+  -e DEVICE=cpu \
+  hootner/video-generation:latest
+```
 
-# Training (if you have dataset)
-generator.train_step(
-    videos,  # (B, C, F, H, W)
-    texts    # List of text prompts
-)
+### Docker Compose
+
+```yaml
+version: '3.8'
+
+services:
+  video-generation:
+    image: hootner/video-generation:latest
+    ports:
+      - "5003:5003"
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_HOST=redis
+      - DEVICE=cuda
+    volumes:
+      - ./checkpoints:/app/checkpoints
+      - ./outputs:/app/outputs
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
 ```
 
 ---
 
-## ⚙️ Configuration
+## 📈 Performance Optimization
 
-### Model Sizes
+### Recommended Settings
 
-| Size | Parameters | Memory | Speed | Quality |
-|------|-----------|--------|-------|---------|
-| **small** | ~15M | 2GB | Fast | Good |
-| **base** | ~50M | 4GB | Medium | Better |
-| **large** | ~200M | 8GB | Slow | Best |
+**Development:**
+- Model size: `small` or `base`
+- Steps: 20-50
+- Mixed precision: Enabled
+- Compile model: Disabled
 
-### Performance Tuning
+**Production:**
+- Model size: `base` or `large`
+- Steps: 50
+- Mixed precision: Enabled
+- Compile model: Enabled
+- Gradient checkpointing: Enabled
 
-**For Low Memory (4GB GPU):**
+### Benchmarks
 
-```python
-generator = VideoGenerator(
-    model_size="small",
-    timesteps=1000,
-    guidance_scale=5.0  # Lower guidance
-)
+| Configuration | GPU | Resolution | Frames | Steps | Time |
+|--------------|-----|-----------|--------|-------|------|
+| Small + DPM | RTX 3090 | 64x64 | 16 | 20 | ~15s |
+| Base + DPM | RTX 3090 | 64x64 | 16 | 50 | ~30s |
+| Base + Euler | RTX 3090 | 128x128 | 16 | 50 | ~45s |
+| Large + DPM | A100 | 256x256 | 32 | 50 | ~120s |
 
-video = generator.generate(
-    prompt="...",
-    num_frames=8,      # Fewer frames
-    height=64,         # Lower resolution
-    width=64,
-    num_inference_steps=25  # Fewer steps
-)
+---
+
+## 🔒 Security
+
+### API Key Authentication
+
+Enable API key authentication in production:
+
+```yaml
+# config/production.yaml
+security:
+  api_key:
+    enabled: true
+    header_name: "X-API-Key"
+    key: "${VIDEO_GEN_API_KEY}"
 ```
 
-**For High Quality (16GB+ GPU):**
+Set the API key:
+```bash
+export VIDEO_GEN_API_KEY="your-secret-key"
+```
 
-```python
-generator = VideoGenerator(
-    model_size="large",
-    timesteps=1000,
-    guidance_scale=10.0  # Higher guidance
-)
+Use in requests:
+```bash
+curl -X POST http://localhost:5003/generate \
+  -H "X-API-Key: your-secret-key" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "A robot dancing"}'
+```
 
-video = generator.generate(
-    prompt="...",
-    num_frames=32,     # More frames
-    height=256,        # Higher resolution
-    width=256,
-    num_inference_steps=100  # More steps
-)
+### Rate Limiting
+
+Configured per environment:
+- Development: 20 requests / 60 seconds
+- Production: 100 requests / 60 seconds
+
+### CORS
+
+Configure allowed origins in config file:
+```yaml
+security:
+  cors:
+    enabled: true
+    origins:
+      - "https://hootner.com"
+      - "https://app.hootner.com"
 ```
 
 ---
 
 ## 🧪 Testing
 
-### Run Test Suite
+### Unit Tests
 
 ```bash
-python generator.py
+pytest tests/ -v
 ```
 
-**Test Scenarios:**
+### Integration Tests
 
-1. Basic generation (16 frames, 64x64)
-2. High resolution (128x128)
-3. Batch generation (3 prompts)
+```bash
+pytest tests/integration/ -v
+```
 
-### Load Testing API
+### Load Testing
 
 ```bash
 # Install k6
 # https://k6.io/docs/getting-started/installation/
 
 # Run load test
-k6 run - <<EOF
-import http from 'k6/http';
-import { check } from 'k6';
-
-export default function () {
-  const payload = JSON.stringify({
-    prompt: 'A robot dancing',
-    num_frames: 8,
-    height: 64,
-    width: 64
-  });
-
-  const res = http.post('http://localhost:5003/generate', payload, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  check(res, {
-    'status is 200': (r) => r.status === 200,
-  });
-}
-EOF
+k6 run load_test.js
 ```
 
 ---
 
-## 📊 Performance Benchmarks
+## 🐛 Troubleshooting
 
-### Generation Times (Base Model)
+### Common Issues
 
-| Resolution | Frames | Steps | GPU (RTX 3090) | CPU (32 cores) |
-|-----------|--------|-------|----------------|----------------|
-| 64x64 | 16 | 50 | ~8s | ~120s |
-| 128x128 | 16 | 50 | ~30s | ~450s |
-| 256x256 | 16 | 50 | ~120s | ~1800s |
+**"CUDA out of memory"**
+- Reduce batch size
+- Enable gradient checkpointing
+- Use smaller model
+- Reduce resolution/frames
 
-### Memory Usage
+**"Redis connection failed"**
+- Check Redis is running: `redis-cli ping`
+- Verify Redis host/port in config
+- Service will fall back to in-memory queue
 
-| Model Size | Training | Inference | Min GPU |
-|-----------|----------|-----------|---------|
-| Small | 4GB | 2GB | GTX 1060 (6GB) |
-| Base | 8GB | 4GB | RTX 2060 (8GB) |
-| Large | 16GB | 8GB | RTX 3090 (24GB) |
+**"Model loading failed"**
+- Check checkpoint path exists
+- Verify model weights compatibility
+- Ensure sufficient disk space
 
----
+**"Slow generation"**
+- Enable mixed precision training
+- Use DPM-Solver++ with fewer steps
+- Enable model compilation (PyTorch 2.0+)
+- Check GPU is being used: verify `device: cuda` in health check
 
-## 🔧 Troubleshooting
+### Debug Mode
 
-### CUDA Out of Memory
-
-```python
-# Solution 1: Use smaller model
-generator = VideoGenerator(model_size="small")
-
-# Solution 2: Reduce batch size
-video = generator.generate(..., num_frames=8)  # Instead of 16
-
-# Solution 3: Lower resolution
-video = generator.generate(..., height=32, width=32)
-```
-
-### Slow Generation (CPU)
-
+Enable debug logging:
 ```bash
-# Install PyTorch with CUDA
-pip uninstall torch torchvision torchaudio
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
+# In config
+monitoring:
+  logging:
+    level: "DEBUG"
 
-### API Rate Limiting
-
-Increase rate limit in `api.py`:
-
-```python
-RATE_LIMIT_REQUESTS = 20  # Instead of 10
+# Or via environment
+export LOG_LEVEL=DEBUG
+python api_enhanced.py
 ```
 
 ---
 
-## 🚀 Production Deployment
+## 📚 Additional Resources
 
-### Docker Deployment
-
-```dockerfile
-FROM python:3.10-slim
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    libsm6 \
-    libxext6 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy service files
-COPY . /app
-WORKDIR /app
-
-EXPOSE 5003
-
-CMD ["python", "api.py"]
-```
-
-### Kubernetes Deployment
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: video-generation
-spec:
-  replicas: 3
-  template:
-    spec:
-      containers:
-      - name: api
-        image: hootner/video-generation:latest
-        ports:
-        - containerPort: 5003
-        resources:
-          requests:
-            memory: "4Gi"
-            cpu: "2"
-            nvidia.com/gpu: 1
-          limits:
-            memory: "8Gi"
-            cpu: "4"
-            nvidia.com/gpu: 1
-```
+- [Original README](../README.md) - Main HOOTNER documentation
+- [Service Architecture](../../docs/services/video-generation.md) - Detailed architecture
+- [AI Agent Orchestration](../../docs/AI_AGENT_ORCHESTRATION.md) - Agent integration
+- [Deployment Guide](../../docs/deployment/) - Production deployment
 
 ---
 
-## 🤝 Integration with Frontend
+## 🤝 Contributing
 
-### React Example
-
-```typescript
-// src/services/videoGeneration.ts
-export async function generateVideo(prompt: string) {
-  const response = await fetch('http://localhost:5003/generate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt,
-      num_frames: 16,
-      height: 64,
-      width: 64,
-      format: 'gif',
-    }),
-  });
-
-  const data = await response.json();
-  return data;
-}
-
-// Usage in component
-import { generateVideo } from './services/videoGeneration';
-
-function VideoPlayer() {
-  const [loading, setLoading] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('');
-
-  const handleGenerate = async () => {
-    setLoading(true);
-    const result = await generateVideo('A robot dancing');
-    setVideoUrl(`http://localhost:5003${result.download_url}`);
-    setLoading(false);
-  };
-
-  return (
-    <div>
-      <button onClick={handleGenerate}>Generate Video</button>
-      {loading && <p>Generating...</p>}
-      {videoUrl && <img src={videoUrl} alt="Generated video" />}
-    </div>
-  );
-}
-```
+Contributions are welcome! Please see [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ---
 
-## 📚 References
-
-### Research Papers
-
-- **Denoising Diffusion Probabilistic Models (DDPM)** - Ho et al., 2020
-- **Denoising Diffusion Implicit Models (DDIM)** - Song et al., 2020
-- **Classifier-Free Guidance** - Ho & Salimans, 2021
-- **Flash Attention** - Dao et al., 2022
-
-### Implementation Details
-
-- 3D U-Net architecture based on Stable Diffusion
-- Memory-efficient attention: O(N) vs O(N²)
-- Gradient checkpointing for large batches
-- BERT text conditioning with cross-attention
-
----
-
-## 📝 License
+## 📄 License
 
 MIT License - See [LICENSE](../../LICENSE)
 
 ---
 
-## 🦉 Support
+## 🦉 HOOTNER Platform
 
-**HOOTNER Code Guardian**
-📧 <support@hootner.com>
-💬 [Discord Community](https://discord.gg/hootner)
-🐛 [GitHub Issues](https://github.com/hootner/issues)
+Part of the HOOTNER AI video streaming platform.
 
----
-
-<div align="center">
-
-**Made with 🦉 by the HOOTNER AI Team**
-
-</div>
+**Made with 🦉 by the HOOTNER Team**

@@ -15,11 +15,15 @@ import os
 def run_command(cmd):
     """Run shell command and return output"""
     try:
+        # Validate command to prevent command injection
+        if not isinstance(cmd, str) or any(c in cmd for c in [';', '|', '&', '`', '$']):
+            return None
+        
         result = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True, check=True
+            cmd, shell=True, capture_output=True, text=True, check=True, timeout=30
         )
         return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return None
 
 
@@ -46,13 +50,13 @@ def install_pytorch(has_cuda):
 
     if has_cuda:
         # CUDA 11.8 (most compatible)
-        cmd = "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118"
+        cmd = [sys.executable, "-m", "pip", "install", "torch", "torchvision", "torchaudio", "--index-url", "https://download.pytorch.org/whl/cu118"]
     else:
         # CPU only
-        cmd = "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu"
+        cmd = [sys.executable, "-m", "pip", "install", "torch", "torchvision", "torchaudio", "--index-url", "https://download.pytorch.org/whl/cpu"]
 
-    print(f"   Running: {cmd}")
-    result = subprocess.run(cmd, shell=True)
+    print(f"   Running: {' '.join(cmd)}")
+    result = subprocess.run(cmd)
 
     if result.returncode == 0:
         print("✅ PyTorch installed successfully")
@@ -65,10 +69,11 @@ def install_requirements():
     """Install remaining dependencies"""
     print("\n📦 Installing remaining dependencies...")
 
-    cmd = "pip install transformers pillow imageio imageio-ffmpeg opencv-python flask flask-cors werkzeug numpy tqdm"
-    print(f"   Running: {cmd}")
+    packages = ["transformers", "pillow", "imageio", "imageio-ffmpeg", "opencv-python", "flask", "flask-cors", "werkzeug", "numpy", "tqdm"]
+    cmd = [sys.executable, "-m", "pip", "install"] + packages
+    print(f"   Running: {' '.join(cmd)}")
 
-    result = subprocess.run(cmd, shell=True)
+    result = subprocess.run(cmd)
 
     if result.returncode == 0:
         print("✅ Dependencies installed successfully")

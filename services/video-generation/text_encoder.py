@@ -44,6 +44,7 @@ class TextEncoder(nn.Module):
         self.position_embedding = nn.Embedding(max_seq_len, embed_dim)
 
         # Transformer encoder
+        # cSpell:ignore nhead gelu
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=embed_dim,
             nhead=num_heads,
@@ -145,40 +146,43 @@ class SimpleTokenizer:
             input_ids: (seq_len,)
             attention_mask: (seq_len,)
         """
-        # Simple word-based tokenization
-        words = text.lower().split()
+        try:
+            # Simple word-based tokenization
+            words = text.lower().split()
 
-        # Add [CLS] token
-        token_ids = [self.cls_token_id]
+            # Add [CLS] token
+            token_ids = [self.cls_token_id]
 
-        # Convert words to IDs
-        for word in words:
-            if word not in self.word_to_id:
-                if self.next_id < self.vocab_size:
-                    self.word_to_id[word] = self.next_id
-                    self.id_to_word[self.next_id] = word
-                    self.next_id += 1
-                else:
-                    token_ids.append(self.unk_token_id)
-                    continue
-            token_ids.append(self.word_to_id[word])
+            # Convert words to IDs
+            for word in words:
+                if word not in self.word_to_id:
+                    if self.next_id < self.vocab_size:
+                        self.word_to_id[word] = self.next_id
+                        self.id_to_word[self.next_id] = word
+                        self.next_id += 1
+                    else:
+                        token_ids.append(self.unk_token_id)
+                        continue
+                token_ids.append(self.word_to_id[word])
 
-        # Add [SEP] token
-        token_ids.append(self.sep_token_id)
+            # Add [SEP] token
+            token_ids.append(self.sep_token_id)
 
-        # Create attention mask
-        attention_mask = [1] * len(token_ids)
+            # Create attention mask
+            attention_mask = [1] * len(token_ids)
 
-        # Pad to max_length
-        if len(token_ids) < max_length:
-            padding_length = max_length - len(token_ids)
-            token_ids.extend([self.pad_token_id] * padding_length)
-            attention_mask.extend([0] * padding_length)
-        else:
-            token_ids = token_ids[:max_length]
-            attention_mask = attention_mask[:max_length]
+            # Pad to max_length
+            if len(token_ids) < max_length:
+                padding_length = max_length - len(token_ids)
+                token_ids.extend([self.pad_token_id] * padding_length)
+                attention_mask.extend([0] * padding_length)
+            else:
+                token_ids = token_ids[:max_length]
+                attention_mask = attention_mask[:max_length]
 
-        return torch.tensor(token_ids), torch.tensor(attention_mask)
+            return torch.tensor(token_ids), torch.tensor(attention_mask)
+        except Exception as e:
+            raise ValueError(f"Failed to encode text: {str(e)}")
 
     def batch_encode(
         self, texts: list, max_length: int = 77
@@ -294,6 +298,7 @@ if __name__ == "__main__":
     cross_attn = CrossAttentionBlock(query_dim=512, context_dim=512)
 
     # Dummy query features (from U-Net)
+    # cSpell:ignore randn
     query = torch.randn(2, 64, 512)
 
     with torch.no_grad():

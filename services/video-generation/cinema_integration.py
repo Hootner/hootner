@@ -60,6 +60,7 @@ class CinemaGradeVideoGenerator:
             "hd": (1920, 1080),
             "4k": (3840, 2160),
             "8k": (7680, 4320),
+            "12k": (11520, 6480),
         }
 
     def generate(
@@ -243,7 +244,7 @@ def generate_cinema_video(
         video_frames: Input video frames (T, H, W, 3)
         video_prompt: Video description
         audio_prompt: Audio/music description
-        resolution: Target resolution ("preview", "hd", "4k", "8k")
+        resolution: Target resolution ("preview", "hd", "4k", "8k", "12k")
         hdr_max_nits: HDR peak brightness
         fps: Frame rate
         output_path: Output file path
@@ -336,7 +337,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     print("=" * 60)
-    print("8K UHD HDR10 + Dolby Atmos Video Generation")
+    print("12K UHD HDR10 + Dolby Atmos Video Generation")
     print("=" * 60)
 
     # Create dummy video

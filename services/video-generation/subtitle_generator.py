@@ -48,6 +48,7 @@ class SubtitleSegment:
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         secs = int(seconds % 60)
+        # cSpell:ignore millis
         millis = int((seconds % 1) * 1000)
 
         if vtt:

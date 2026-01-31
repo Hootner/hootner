@@ -442,16 +442,19 @@ def generate_video():
         )
 
     # Parse parameters with defaults
-    num_frames = int(data.get("num_frames", 16))
-    height = int(data.get("height", 64))
-    width = int(data.get("width", 64))
-    fps = int(data.get("fps", 8))
-    num_inference_steps = int(data.get("num_inference_steps", 50))
-    guidance_scale = float(data.get("guidance_scale", 7.5))
-    seed = data.get("seed", None)
-    output_format = data.get("format", "gif")
-    async_mode = data.get("async", False)
-    use_cache = data.get("use_cache", True)
+    try:
+        num_frames = int(data.get("num_frames", 16))
+        height = int(data.get("height", 64))
+        width = int(data.get("width", 64))
+        fps = int(data.get("fps", 8))
+        num_inference_steps = int(data.get("num_inference_steps", 50))
+        guidance_scale = float(data.get("guidance_scale", 7.5))
+        seed = data.get("seed", None)
+        output_format = data.get("format", "gif")
+        async_mode = data.get("async", False)
+        use_cache = data.get("use_cache", True)
+    except (ValueError, TypeError) as e:
+        return jsonify({"error": "Invalid parameter type", "message": str(e)}), 400
 
     # Validate parameters
     if not (4 <= num_frames <= 64):
@@ -493,6 +496,10 @@ def generate_video():
     job_id = str(uuid.uuid4())
     output_filename = f"{job_id}.{output_format}"
     output_path = os.path.join(OUTPUT_DIR, output_filename)
+    
+    # Validate output path
+    if not os.path.abspath(output_path).startswith(os.path.abspath(OUTPUT_DIR)):
+        return jsonify({"error": "Invalid output path"}), 400
 
     job_data = {
         "prompt": prompt,
@@ -634,6 +641,11 @@ def generate_batch():
 @app.route("/status/<job_id>", methods=["GET"])
 def get_job_status(job_id):
     """Get status of a generation job"""
+    # Sanitize job_id
+    job_id = secure_filename(job_id)
+    if not job_id:
+        return jsonify({"error": "Invalid job ID"}), 400
+    
     job = job_manager.get_job(job_id)
 
     if not job:
@@ -645,18 +657,32 @@ def get_job_status(job_id):
 @app.route("/download/<filename>", methods=["GET"])
 def download_video(filename):
     """Download generated video"""
-    filename = secure_filename(filename)
-    file_path = os.path.join(OUTPUT_DIR, filename)
+    try:
+        filename = secure_filename(filename)
+        if not filename:
+            return jsonify({"error": "Invalid filename"}), 400
+        
+        file_path = os.path.join(OUTPUT_DIR, filename)
+        # Prevent path traversal
+        if not os.path.abspath(file_path).startswith(os.path.abspath(OUTPUT_DIR)):
+            return jsonify({"error": "Access denied"}), 403
 
-    if not os.path.exists(file_path):
-        return jsonify({"error": "File not found"}), 404
+        if not os.path.exists(file_path):
+            return jsonify({"error": "File not found"}), 404
 
-    return send_file(file_path, as_attachment=True)
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": "Download failed", "message": str(e)}), 500
 
 
 @app.route("/cancel/<job_id>", methods=["POST"])
 def cancel_job(job_id):
     """Cancel a queued job"""
+    # Sanitize job_id
+    job_id = secure_filename(job_id)
+    if not job_id:
+        return jsonify({"error": "Invalid job ID"}), 400
+    
     job = job_manager.get_job(job_id)
 
     if not job:
@@ -705,6 +731,12 @@ def warmup():
     """Warm up the model"""
     print("🔥 Warming up model...")
     try:
+        warmup_path = os.path.join(OUTPUT_DIR, "warmup.gif")
+        # Validate warmup path
+        if not os.path.abspath(warmup_path).startswith(os.path.abspath(OUTPUT_DIR)):
+            print("⚠️  Invalid warmup path")
+            return
+        
         # Generate a small test video
         generator.generate(
             prompt="test",
@@ -713,7 +745,7 @@ def warmup():
             width=32,
             fps=8,
             num_inference_steps=10,
-            output_path=os.path.join(OUTPUT_DIR, "warmup.gif"),
+            output_path=warmup_path,
         )
         print("✅ Model warmed up successfully")
     except Exception as e:
