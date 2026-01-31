@@ -5,12 +5,17 @@
  * The central hub for all HOOTNER AI agents with REAL implementations
  */
 
-import { productionAgents } from './frameworks/ai/agents/production-agent-implementations.js';
+import { productionAgents } from '../../frameworks/ai/agents/production-agent-implementations.js';
+import { AgentCommunicationBridge } from './agent-communication-bridge.js';
 
 class EnhancedAgentHub {
   constructor() {
     this.agents = new Map();
     this.agentInstances = new Map(); // Actual running agent instances
+    this.agentCommunication = new Map(); // Agent-to-agent communication channels
+    this.manuallyControlledAgents = new Set(); // Manually managed agents
+    this.communicationBridge = new AgentCommunicationBridge();
+    this.commandQueue = new Map(); // Command queues for each agent
     this.status = {
       compliance: { dmcaRequests: 0, coppaViolations: 0 },
       security: { activeThreats: 0, vulnerabilities: 0 },
@@ -18,7 +23,8 @@ class EnhancedAgentHub {
       operations: { incidents: 0 },
       paymentFraud: { transactions: 0 },
       recommendation: { userProfiles: 0 },
-      analytics: { userBehavior: 0 }
+      analytics: { userBehavior: 0 },
+      manualControl: { active: true, controllableAgents: 0 }
     };
   }
 
@@ -88,7 +94,221 @@ class EnhancedAgentHub {
       throw new Error(`Action ${action} not available on agent ` + agentName + '');
     }
 
+    // Log bidirectional communication
+    this.communicationBridge.logInteraction(agentName, action, args);
+
     return await instance[action](...args);
+  }
+
+  /**
+   * Manually start a specific agent with bidirectional communication
+   */
+  async startAgent(agentName, options = {}) {
+    console.log(`🚀 Manually starting agent: ${agentName}`);
+    
+    if (this.agentInstances.has(agentName)) {
+      console.log(`   ⚠️  Agent ${agentName} already running`);
+      return { success: true, message: 'Agent already active' };
+    }
+
+    try {
+      const { productionAgents } = await import('./frameworks/ai/agents/production-agent-implementations.js');
+      const AgentClass = productionAgents[agentName];
+      
+      if (!AgentClass) {
+        throw new Error(`Agent class not found: ${agentName}`);
+      }
+
+      const agentInstance = new AgentClass({
+        ...options,
+        communicationBridge: this.communicationBridge,
+        manualMode: true
+      });
+      
+      await agentInstance.start();
+      this.agentInstances.set(agentName, agentInstance);
+      this.manuallyControlledAgents.add(agentName);
+      
+      // Setup bidirectional communication
+      await this.setupAgentCommunication(agentName, agentInstance);
+      
+      // Update agent metadata
+      const agent = this.agents.get(agentName) || {};
+      agent.status = 'active';
+      agent.manualMode = true;
+      agent.instance = agentInstance;
+      agent.startTime = Date.now();
+      agent.communicationEnabled = true;
+      this.agents.set(agentName, agent);
+
+      console.log(`   ✅ Agent ${agentName} started successfully with bidirectional communication`);
+      
+      return {
+        success: true,
+        agent: agentName,
+        capabilities: agentInstance.capabilities || [],
+        communicationChannels: Array.from(this.agentCommunication.get(agentName) || [])
+      };
+    } catch (error) {
+      console.error(`   ❌ Failed to start agent ${agentName}:`, error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Manually stop a specific agent
+   */
+  async stopAgent(agentName) {
+    console.log(`🛑 Manually stopping agent: ${agentName}`);
+    
+    const instance = this.agentInstances.get(agentName);
+    if (!instance) {
+      console.log(`   ⚠️  Agent ${agentName} not running`);
+      return { success: true, message: 'Agent not active' };
+    }
+
+    try {
+      await instance.stop();
+      this.agentInstances.delete(agentName);
+      this.manuallyControlledAgents.delete(agentName);
+      
+      // Cleanup communication channels
+      this.agentCommunication.delete(agentName);
+      
+      // Update agent metadata
+      const agent = this.agents.get(agentName);
+      if (agent) {
+        agent.status = 'stopped';
+        agent.manualMode = false;
+        agent.instance = null;
+        agent.stopTime = Date.now();
+        agent.communicationEnabled = false;
+      }
+
+      console.log(`   ✅ Agent ${agentName} stopped successfully`);
+      
+      return { success: true, agent: agentName };
+    } catch (error) {
+      console.error(`   ❌ Failed to stop agent ${agentName}:`, error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Setup bidirectional communication for an agent
+   */
+  async setupAgentCommunication(agentName, agentInstance) {
+    const communicationChannels = new Set();
+    
+    // Enable agent-to-agent communication
+    agentInstance.sendToAgent = async (targetAgent, message) => {
+      return await this.routeAgentMessage(agentName, targetAgent, message);
+    };
+    
+    // Enable broadcast to all agents
+    agentInstance.broadcastToAgents = async (message, filter = null) => {
+      return await this.broadcastMessage(agentName, message, filter);
+    };
+    
+    // Enable agent discovery
+    agentInstance.discoverAgents = (category = null) => {
+      return this.getAvailableAgents(category);
+    };
+    
+    // Setup command queue
+    this.commandQueue.set(agentName, []);
+    
+    // Enable command processing
+    agentInstance.processCommand = async (command) => {
+      return await this.processAgentCommand(agentName, command);
+    };
+    
+    communicationChannels.add('agent-to-agent');
+    communicationChannels.add('broadcast');
+    communicationChannels.add('discovery');
+    communicationChannels.add('command-queue');
+    
+    this.agentCommunication.set(agentName, communicationChannels);
+    
+    console.log(`   🔗 Communication channels setup for ${agentName}: ${Array.from(communicationChannels).join(', ')}`);
+  }
+
+  /**
+   * Route message from one agent to another
+   */
+  async routeAgentMessage(fromAgent, toAgent, message) {
+    const targetInstance = this.agentInstances.get(toAgent);
+    if (!targetInstance) {
+      throw new Error(`Target agent ${toAgent} not running`);
+    }
+
+    this.communicationBridge.logMessage(fromAgent, toAgent, message);
+    
+    if (typeof targetInstance.receiveMessage === 'function') {
+      return await targetInstance.receiveMessage(fromAgent, message);
+    } else {
+      console.warn(`Agent ${toAgent} does not support receiving messages`);
+      return { success: false, reason: 'Agent does not support messages' };
+    }
+  }
+
+  /**
+   * Broadcast message to multiple agents
+   */
+  async broadcastMessage(fromAgent, message, filter = null) {
+    const results = new Map();
+    
+    for (const [agentName, instance] of this.agentInstances) {
+      if (agentName === fromAgent) continue;
+      
+      if (filter && !filter(agentName, instance)) continue;
+      
+      try {
+        const result = await this.routeAgentMessage(fromAgent, agentName, message);
+        results.set(agentName, result);
+      } catch (error) {
+        results.set(agentName, { success: false, error: error.message });
+      }
+    }
+    
+    return results;
+  }
+
+  /**
+   * Get available agents for discovery
+   */
+  getAvailableAgents(category = null) {
+    const agents = [];
+    
+    for (const [agentName, agentData] of this.agents) {
+      if (category && agentData.type !== category) continue;
+      
+      agents.push({
+        name: agentName,
+        type: agentData.type,
+        status: agentData.status,
+        capabilities: agentData.instance?.capabilities || [],
+        communicationEnabled: agentData.communicationEnabled || false
+      });
+    }
+    
+    return agents;
+  }
+
+  /**
+   * Process command for a specific agent
+   */
+  async processAgentCommand(agentName, command) {
+    const queue = this.commandQueue.get(agentName) || [];
+    queue.push({ ...command, timestamp: Date.now() });
+    this.commandQueue.set(agentName, queue);
+    
+    const instance = this.agentInstances.get(agentName);
+    if (instance && typeof instance.executeCommand === 'function') {
+      return await instance.executeCommand(command);
+    }
+    
+    return { success: false, reason: 'Agent does not support commands' };
   }
 
   initializeCoreAgents() {
@@ -212,10 +432,23 @@ class EnhancedAgentHub {
   }
 
   getStatus() {
+    const manualAgents = Array.from(this.manuallyControlledAgents);
+    const communicationStats = this.communicationBridge.getStats();
+    
     return {
       ...this.status,
       totalAgents: this.agents.size,
-      activeAgents: Array.from(this.agents.values()).filter(a => a.status === 'active').length
+      activeAgents: Array.from(this.agents.values()).filter(a => a.status === 'active').length,
+      manuallyControlled: manualAgents.length,
+      manualAgents: manualAgents,
+      communication: {
+        totalMessages: communicationStats.totalMessages,
+        activeChannels: communicationStats.activeChannels,
+        connectedAgents: Array.from(this.agentCommunication.keys())
+      },
+      commandQueues: Object.fromEntries(
+        Array.from(this.commandQueue.entries()).map(([agent, queue]) => [agent, queue.length])
+      )
     };
   }
 

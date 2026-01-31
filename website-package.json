@@ -1,0 +1,18 @@
+{
+  "name": "hootner-website",
+  "version": "1.0.0",
+  "description": "HOOTNER AI Revenue Optimization Platform",
+  "main": "stripe-activation-website.html",
+  "scripts": {
+    "start": "node scripts/stripe-website-server.js",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "keywords": [
+    "ai",
+    "revenue",
+    "optimization",
+    "stripe"
+  ],
+  "author": "HOOTNER Team",
+  "license": "MIT"
+}

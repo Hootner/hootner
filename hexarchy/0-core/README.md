@@ -101,6 +101,7 @@ AWS_SECRET_ACCESS_KEY=your-secret-key
 
 # DynamoDB
 DYNAMODB_ENDPOINT=http://localhost:8000  # For local dev
+TABLE_NAME=HootnerActivities
 
 # Redis
 REDIS_URL=redis://localhost:6379
@@ -109,6 +110,9 @@ REDIS_URL=redis://localhost:6379
 GRAPHQL_PORT=4000
 API_PORT=8080
 CORS_ORIGIN=http://localhost:3000
+
+# Node.js Version
+NODE_VERSION=22  # Updated from 20
 
 # S3 Buckets
 S3_VIDEO_BUCKET=hootner-videos
@@ -130,11 +134,23 @@ CLOUDFRONT_DOMAIN=d2xg9k8zu8m8bh.cloudfront.net
 ### DynamoDB
 ```javascript
 import { docClient } from './database/dynamodb/config.js';
-import { GetCommand } from '@aws-sdk/lib-dynamodb';
+import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 
+// Get item
 const result = await docClient.send(new GetCommand({
-  TableName: 'Videos',
-  Key: { id: 'video-123' }
+  TableName: 'HootnerActivities',
+  Key: { PK: 'VIDEO#123', SK: 'METADATA' }
+}));
+
+// Put item
+await docClient.send(new PutCommand({
+  TableName: 'HootnerActivities',
+  Item: {
+    PK: 'VIDEO#123',
+    SK: 'METADATA',
+    title: 'My Video',
+    createdAt: Date.now()
+  }
 }));
 ```
 

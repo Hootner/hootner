@@ -124,9 +124,9 @@ class ComputerVisionService {
     async detectObjects(config) {
         // Simulate object detection
         const objects = [
-            { class: 'person', confidence: 0.95, bbox: [100, 150, 200, 400], count: 2 },
-            { class: 'car', confidence: 0.87, bbox: [300, 200, 450, 350], count: 1 },
-            { class: 'building', confidence: 0.92, bbox: [0, 0, 800, 300], count: 1 }
+            { class: 'person', confidence: 0.95, box: [100, 150, 200, 400], count: 2 },
+            { class: 'car', confidence: 0.87, box: [300, 200, 450, 350], count: 1 },
+            { class: 'building', confidence: 0.92, box: [0, 0, 800, 300], count: 1 }
         ];
 
         this.metrics.detectionCount += objects.length;
@@ -148,7 +148,7 @@ class ComputerVisionService {
         ];
 
         const primaryScene = scenes[0];
-        
+
         return {
             primaryScene: primaryScene.class,
             confidence: primaryScene.confidence,
@@ -179,7 +179,7 @@ class ComputerVisionService {
     async moderateContent(config) {
         // Simulate content moderation
         const safetyScore = Math.random() * 0.3 + 0.7; // 70-100% safe
-        
+
         const categories = {
             violence: Math.random() * 0.1,
             nudity: Math.random() * 0.05,
@@ -188,8 +188,8 @@ class ComputerVisionService {
             hate_symbols: Math.random() * 0.01
         };
 
-        const maxCategory = Object.entries(categories).reduce((max, [cat, score]) => 
-            score > max.score ? { category: cat, score } : max, 
+        const maxCategory = Object.entries(categories).reduce((max, [cat, score]) =>
+            score > max.score ? { category: cat, score } : max,
             { category: 'safe', score: 0 }
         );
 
@@ -212,20 +212,21 @@ class ComputerVisionService {
             artifacts: Math.random() * 0.15          // 0.0-0.15 (lower is better)
         };
 
-        const overallQuality = (metrics.sharpness + metrics.brightness + metrics.contrast + 
+        const overallQuality = (metrics.sharpness + metrics.brightness + metrics.contrast +
                                (1 - metrics.noise) + (1 - metrics.artifacts)) / 5;
 
         return {
             overallQuality,
-            qualityGrade: overallQuality > 0.9 ? 'excellent' : 
-                         overallQuality > 0.8 ? 'good' : 
+            qualityGrade: overallQuality > 0.9 ? 'excellent' :
+                         overallQuality > 0.8 ? 'good' :
                          overallQuality > 0.6 ? 'fair' : 'poor',
             metrics,
             recommendations: this.getQualityRecommendations(metrics),
             technicalSpecs: {
                 resolution: this.estimateResolution(overallQuality),
                 bitrate: this.estimateBitrate(overallQuality),
-                encoding: 'H.264'
+                hdr: this.detectHDR(config),
+                encoding: this.getEncodingSpecs(this.estimateResolution(overallQuality), config.hdrEnabled)
             }
         };
     }
@@ -241,6 +242,8 @@ class ComputerVisionService {
     }
 
     estimateResolution(quality) {
+        if (quality > 0.98) return '12K';
+        if (quality > 0.95) return '8K';
         if (quality > 0.9) return '4K';
         if (quality > 0.8) return '1080p';
         if (quality > 0.6) return '720p';
@@ -248,9 +251,51 @@ class ComputerVisionService {
     }
 
     estimateBitrate(quality) {
-        const bitrates = { '4K': 25000, '1080p': 8000, '720p': 5000, '480p': 2500 };
+        const bitrateMap = { 
+            '12K': 200000,  // 200 Megabits per second for 12K UHD
+            '8K': 100000,   // 100 Megabits per second for 8K
+            '4K': 25000,    // 25 Megabits per second for 4K
+            '1080p': 8000, 
+            '720p': 5000, 
+            '480p': 2500 
+        };
         const resolution = this.estimateResolution(quality);
-        return bitrates[resolution] || 2500;
+        return bitrateMap[resolution];
+    }
+
+    detectHDR(config) {
+        // Detect HDR metadata from video stream
+        const hdrFormats = ['HDR10', 'HDR10+', 'Dolby Vision', 'HLG'];
+        const hasHDR = config.colorDepth >= 10 && config.colorSpace === 'BT.2020';
+        
+        return {
+            supported: hasHDR,
+            format: hasHDR ? 'HDR10' : 'SDR',
+            colorDepth: config.colorDepth || 8,
+            colorSpace: config.colorSpace || 'BT.709',
+            peakBrightness: hasHDR ? 1000 : 100  // nits
+        };
+    }
+
+    getEncodingSpecs(resolution, hdrEnabled = false) {
+        const specs = {
+            '12K': { codec: 'H.266/VVC', profile: 'Main 10', level: '6.2' },
+            '8K': { codec: 'H.265/HEVC', profile: 'Main 10', level: '6.1' },
+            '4K': { codec: 'H.265/HEVC', profile: 'Main 10', level: '5.1' },
+            '1080p': { codec: 'H.264/AVC', profile: 'High', level: '4.2' },
+            '720p': { codec: 'H.264/AVC', profile: 'High', level: '4.0' },
+            '480p': { codec: 'H.264/AVC', profile: 'Main', level: '3.1' }
+        };
+
+        const spec = specs[resolution] || specs['1080p'];
+        
+        if (hdrEnabled && ['12K', '8K', '4K'].includes(resolution)) {
+            spec.hdr = 'HDR10';
+            spec.colorDepth = '10-bit';
+            spec.colorSpace = 'BT.2020';
+        }
+
+        return spec;
     }
 
     async detectFaces(config) {
@@ -260,7 +305,7 @@ class ComputerVisionService {
         for (let i = 0; i < faceCount; i++) {
             faces.push({
                 id: `face_${i}`,
-                bbox: [
+                boundingBox: [
                     Math.random() * 400,
                     Math.random() * 300,
                     Math.random() * 200 + 100,
@@ -341,10 +386,10 @@ class ComputerVisionService {
     calculateOverallSentiment(emotions) {
         const positiveEmotions = ['happy', 'surprised'];
         const negativeEmotions = ['sad', 'angry', 'fear', 'disgust'];
-        
+
         const positive = emotions.filter(e => positiveEmotions.includes(e)).length;
         const negative = emotions.filter(e => negativeEmotions.includes(e)).length;
-        
+
         if (positive > negative) return 'positive';
         if (negative > positive) return 'negative';
         return 'neutral';
@@ -403,7 +448,7 @@ class ComputerVisionService {
         return {
             dominantObjects: this.getMostFrequent(allObjects.map(obj => obj.class)),
             dominantScenes: this.getMostFrequent(allScenes),
-            overallSafety: safetyScores.length > 0 ? 
+            overallSafety: safetyScores.length > 0 ?
                 safetyScores.reduce((sum, score) => sum + score, 0) / safetyScores.length : 1,
             contentTags: this.generateContentTags(allObjects, allScenes),
             recommendation: this.generateVideoRecommendation(safetyScores)
@@ -442,7 +487,7 @@ class ComputerVisionService {
     // Analytics
     async getVisionAnalytics() {
         const analyses = Array.from(this.analyses.values());
-        
+
         return {
             overview: {
                 totalAnalyses: analyses.length,
@@ -484,7 +529,7 @@ class ComputerVisionService {
             ...this.metrics,
             accuracyScore: (avgAccuracy * 100).toFixed(1) + '%',
             avgProcessingTime: Math.round(this.metrics.avgProcessingTime) + 'ms',
-            dailyAnalyses: analyses.filter(a => 
+            dailyAnalyses: analyses.filter(a =>
                 (Date.now() - a.startTime.getTime()) < 24 * 60 * 60 * 1000
             ).length
         };

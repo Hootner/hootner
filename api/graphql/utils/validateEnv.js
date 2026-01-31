@@ -108,9 +108,18 @@ function validateEnvironment(context = 'default') {
     if (context === 'api' || context === 'server') {
       // Database
       try {
-        config.MONGODB_URI = validateEnvVar('MONGODB_URI', {
+        config.TABLE_NAME = validateEnvVar('TABLE_NAME', {
           required: true,
-          defaultValue: 'mongodb://localhost:27017/hootner',
+          defaultValue: 'HootnerActivities',
+        });
+      } catch (err) {
+        errors.push(err.message);
+      }
+
+      try {
+        config.DYNAMODB_ENDPOINT = validateEnvVar('DYNAMODB_ENDPOINT', {
+          required: false,
+          defaultValue: '',
         });
       } catch (err) {
         errors.push(err.message);

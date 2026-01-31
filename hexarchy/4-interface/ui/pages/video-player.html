@@ -2757,9 +2757,8 @@
           </div>
         </div>
         <div class="flex gap-2 items-center">
-          <a href="dashboard.html" class="text-slate-300 hover:text-white" style="font-size: 2rem"
-            >📈 Back to Dashboard</a
-          >
+          <a href="dashboard.html" class="text-slate-300 hover:text-white" style="font-size: 2rem">
+            📈 Back to Dashboard</a>
         </div>
       </div>
     </nav>
@@ -6805,9 +6804,10 @@
         );
         
         // Only register if truly in a browser environment
-        if ('serviceWorker' in navigator && !isWebview && window.location.protocol === 'https:') {
+        if ('serviceWorker' in navigator && !isWebview && 
+            (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
           navigator.serviceWorker
-            .register('sw.js')
+            .register('./sw.js')
             .then(() => console.log('✓ Service Worker registered'))
             .catch(err => console.log('ℹ SW registration failed:', err.message));
         } else {
@@ -6823,7 +6823,7 @@
           registerServiceWorker();
         }
       } catch (e) {
-        console.log('ℹ Service Worker registration blocked by environment');
+        console.log('ℹ Service Worker registration blocked by environment:', e.message || 'Unknown error');
       }
 
       // Handle audio context user interaction requirement

@@ -4404,9 +4404,41 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
         }
       });
 
-      // Service Worker for offline support
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      // Service Worker for offline support (with webview detection)
+      function registerServiceWorker() {
+        const isWebview = (
+          window.parent !== window || 
+          window.location.protocol === 'vscode-webview:' ||
+          window.location.protocol === 'vscode-file:' ||
+          window.location.href.includes('vscode-webview') ||
+          navigator.userAgent.includes('Code') ||
+          navigator.userAgent.includes('Electron') ||
+          window.location.protocol === 'file:' ||
+          window.acquireVsCodeApi !== undefined ||
+          window.chrome?.webview !== undefined ||
+          document.domain === '' ||
+          window.location.hostname === ''
+        );
+        
+        if ('serviceWorker' in navigator && !isWebview && 
+            (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+          navigator.serviceWorker
+            .register('./sw.js')
+            .then(() => console.log('✓ Service Worker registered'))
+            .catch(err => console.log('ℹ SW registration failed:', err.message));
+        } else {
+          console.log('ℹ Service Worker registration skipped (webview or invalid protocol)');
+        }
+      }
+      
+      try {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', registerServiceWorker);
+        } else {
+          registerServiceWorker();
+        }
+      } catch (e) {
+        console.log('ℹ Service Worker registration blocked:', e.message);
       }
       
       // Resource hints

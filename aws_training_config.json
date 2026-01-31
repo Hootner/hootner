@@ -1,6 +1,6 @@
 {
   "model_id": "runwayml/stable-diffusion-v1-5",
-  "s3_bucket": "hootner-uploads-504165876439",
+  "s3_bucket": "hootner-frontend-504165876439",
   "s3_data_prefix": "training-data/images/",
   "s3_output_prefix": "trained-models/stable-diffusion",
   "prompts_file": "./training_prompts.json",

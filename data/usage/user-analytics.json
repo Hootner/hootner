@@ -1,0 +1,123 @@
+{
+  "timestamp": 1769604975769,
+  "totalUsers": 10,
+  "activeUsers": 2,
+  "paidUsers": 6,
+  "totalRevenue": 66.92999999999999,
+  "users": [
+    {
+      "userId": "demo",
+      "firstSeen": 1768072500000,
+      "lastSeen": 1768073025000,
+      "sources": [
+        "server",
+        "server",
+        "server",
+        "server",
+        "server",
+        "server",
+        "server"
+      ],
+      "hasPaid": false,
+      "totalSpent": 0
+    },
+    {
+      "userId": "anonymous",
+      "firstSeen": 1768072800000,
+      "lastSeen": 1768072800000,
+      "sources": [
+        "server"
+      ],
+      "hasPaid": false,
+      "totalSpent": 0
+    },
+    {
+      "userId": "demo-customer-001",
+      "firstSeen": 1768071441150,
+      "lastSeen": 1768072175230,
+      "sources": [
+        "revenue",
+        "revenue",
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 10.97,
+      "customerId": "cus_demo_001"
+    },
+    {
+      "userId": "demo-customer-002",
+      "firstSeen": 1768071465176,
+      "lastSeen": 1768071465176,
+      "sources": [
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 1.99,
+      "customerId": "cus_demo_002"
+    },
+    {
+      "userId": "demo-customer-003",
+      "firstSeen": 1768072168440,
+      "lastSeen": 1768072168440,
+      "sources": [
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 3.99,
+      "customerId": "cus_demo_003"
+    },
+    {
+      "userId": "demo-customer-004",
+      "firstSeen": 1768072200000,
+      "lastSeen": 1768072200000,
+      "sources": [
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 19.99,
+      "customerId": "cus_demo_004"
+    },
+    {
+      "userId": "demo-customer-005",
+      "firstSeen": 1768072250000,
+      "lastSeen": 1768072250000,
+      "sources": [
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 29.99,
+      "customerId": "cus_demo_005"
+    },
+    {
+      "userId": "demo-customer-006",
+      "firstSeen": 1768072300000,
+      "lastSeen": 1768072300000,
+      "sources": [
+        "revenue"
+      ],
+      "hasPaid": true,
+      "totalSpent": 0,
+      "customerId": "cus_demo_006"
+    },
+    {
+      "userId": "browser_user_001",
+      "firstSeen": 1769601375765,
+      "lastSeen": 1769601375765,
+      "sources": [
+        "browser"
+      ],
+      "hasPaid": false,
+      "totalSpent": 0
+    },
+    {
+      "userId": "browser_user_002",
+      "firstSeen": 1769597775765,
+      "lastSeen": 1769597775765,
+      "sources": [
+        "browser"
+      ],
+      "hasPaid": false,
+      "totalSpent": 0
+    }
+  ]
+}

@@ -3,7 +3,16 @@
 /**
  * Dual-Agent Orchestrator for GitHub Copilot + Amazon Q
  * Manages request routing, capability coordination, and fallback logic
+ * Now integrates with Enhanced Agent Hub and MCP servers
  */
+
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js'
+import { eventBus } from '../../../0-core/orchestration/event-bus.js'
 
 class DualAgentOrchestrator {
   constructor() {
@@ -19,6 +28,7 @@ class DualAgentOrchestrator {
       ],
       model: 'Claude-based',
       mode: 'active',
+      mcpServer: null,
     }
 
     this.amazonQ = {
@@ -33,7 +43,11 @@ class DualAgentOrchestrator {
       ],
       model: 'Anthropic Claude',
       mode: 'active',
+      mcpServer: null,
     }
+
+    this.enhancedAgentHub = null
+    this.mcpClients = new Map()
 
     this.routingRules = {
       'aws-specific': 'amazonQ',
@@ -67,6 +81,13 @@ class DualAgentOrchestrator {
     console.log(`🤖 Routing '${type}' to ${primaryAgent}`)
 
     try {
+      // Check if we need to involve specialized agents from hub
+      const specializedAgent = this.getSpecializedAgent(type)
+      if (specializedAgent) {
+        console.log(`🎯 Using specialized agent: ${specializedAgent}`)
+        return await this.executeOnAgent(specializedAgent, 'processRequest', request)
+      }
+
       // Try primary agent
       return await this.executeAgent(primaryAgent, query, context)
     } catch (error) {
@@ -74,6 +95,22 @@ class DualAgentOrchestrator {
       this.stats.fallbacks++
       return await this.executeAgent(fallbackAgent, query, context)
     }
+  }
+
+  /**
+   * Get specialized agent for specific request types
+   */
+  getSpecializedAgent(requestType) {
+    const specializedRouting = {
+      'security-audit': 'security-service',
+      'payment-fraud': 'payment-fraud-detection-agent',
+      'content-moderation': 'content-moderation-ai',
+      'business-analytics': 'revenue-analytics',
+      'performance-monitoring': 'performance-monitor',
+      'compliance-check': 'gdpr-compliance-tools'
+    }
+
+    return specializedRouting[requestType]
   }
 
   /**
@@ -118,16 +155,193 @@ class DualAgentOrchestrator {
   }
 
   /**
+   * Initialize dual agent system with MCP servers and enhanced agent hub
+   */
+  async initialize() {
+    console.log('🤖 Initializing Dual-Agent Orchestrator with MCP integration...')
+
+    try {
+      // Connect to Enhanced Agent Hub
+      const { default: enhancedAgentHub } = await import('../../../../scripts/agents/enhanced-agent-hub.js')
+      this.enhancedAgentHub = enhancedAgentHub
+      await this.enhancedAgentHub.initialize()
+
+      // Setup manual agent controller
+      const { default: ManualAgentController } = await import('../../../../scripts/agents/manual-agent-controller.js')
+      this.manualController = new ManualAgentController()
+      await this.manualController.initialize()
+
+      // Setup MCP servers for each agent
+      await this.setupMCPServers()
+
+      // Subscribe to event bus
+      this.setupEventSubscriptions()
+
+      console.log('✅ Dual-Agent Orchestrator initialized with manual control and MCP integration')
+    } catch (error) {
+      console.error('❌ Failed to initialize Dual-Agent Orchestrator:', error.message)
+      throw error
+    }
+  }
+
+  /**
+   * Manually start an agent via the orchestrator
+   */
+  async startAgent(agentName, options = {}) {
+    if (!this.manualController) {
+      throw new Error('Manual controller not initialized. Call initialize() first.')
+    }
+    
+    return await this.manualController.startAgent(agentName, options)
+  }
+
+  /**
+   * Manually stop an agent via the orchestrator
+   */
+  async stopAgent(agentName) {
+    if (!this.manualController) {
+      throw new Error('Manual controller not initialized. Call initialize() first.')
+    }
+    
+    return await this.manualController.stopAgent(agentName)
+  }
+
+  /**
+   * Test communication between agents
+   */
+  async testAgentCommunication(fromAgent, toAgent, message) {
+    if (!this.manualController) {
+      throw new Error('Manual controller not initialized. Call initialize() first.')
+    }
+    
+    return await this.manualController.testAgentCommunication(fromAgent, toAgent, message)
+  }
+
+  /**
+   * Setup MCP servers for agent communication
+   */
+  async setupMCPServers() {
+    // Setup GitHub Copilot MCP Server
+    this.copilot.mcpServer = new Server({
+      name: 'github-copilot-mcp',
+      version: '1.0.0'
+    }, {
+      capabilities: { tools: {} }
+    })
+
+    // Setup Amazon Q MCP Server
+    this.amazonQ.mcpServer = new Server({
+      name: 'amazon-q-mcp',
+      version: '1.0.0'
+    }, {
+      capabilities: { tools: {} }
+    })
+
+    console.log('✅ MCP Servers initialized for both agents')
+  }
+
+  /**
+   * Setup event bus subscriptions for inter-agent communication
+   */
+  setupEventSubscriptions() {
+    // Subscribe to agent requests
+    eventBus.subscribe('agent:request', this.handleAgentRequest)
+    eventBus.subscribe('agent:response', this.handleAgentResponse)
+    eventBus.subscribe('agent:fallback', this.handleAgentFallback)
+
+    console.log('✅ Event bus subscriptions established')
+  }
+
+  /**
+   * Handle agent requests via event bus
+   */
+  handleAgentRequest = async (event) => {
+    const { agentType, request } = event.payload
+    console.log(`📨 Handling ${agentType} request:`, request.type)
+    
+    try {
+      const result = await this.route(request)
+      eventBus.publish({
+        type: 'agent:response',
+        correlationId: event.correlationId,
+        payload: { success: true, result }
+      })
+    } catch (error) {
+      eventBus.publish({
+        type: 'agent:response',
+        correlationId: event.correlationId,
+        payload: { success: false, error: error.message }
+      })
+    }
+  }
+
+  /**
+   * Handle agent responses via event bus
+   */
+  handleAgentResponse = async (event) => {
+    console.log('📨 Agent response received:', event.correlationId)
+  }
+
+  /**
+   * Handle agent fallbacks via event bus
+   */
+  handleAgentFallback = async (event) => {
+    console.log('⚠️ Agent fallback triggered:', event.payload)
+  }
+
+  /**
+   * Connect to external agent via MCP
+   */
+  async connectAgent(agentName, mcpEndpoint) {
+    try {
+      const agentInstance = await this.enhancedAgentHub.getAgentInstance(agentName)
+      if (agentInstance) {
+        this.mcpClients.set(agentName, agentInstance)
+        console.log(`✅ Connected to agent: ${agentName}`)
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error(`❌ Failed to connect to agent ${agentName}:`, error.message)
+      return false
+    }
+  }
+
+  /**
+   * Execute action on connected agent
+   */
+  async executeOnAgent(agentName, action, ...args) {
+    try {
+      return await this.enhancedAgentHub.executeAgentAction(agentName, action, ...args)
+    } catch (error) {
+      console.error(`❌ Failed to execute ${action} on ${agentName}:`, error.message)
+      throw error
+    }
+  }
+
+  /**
    * Get orchestrator stats
    */
   getStats() {
-    return {
+    const baseStats = {
       ...this.stats,
       agents: {
         copilot: this.copilot,
         amazonQ: this.amazonQ,
       },
+      connectedAgents: this.mcpClients.size,
+      enhancedAgentHub: this.enhancedAgentHub ? this.enhancedAgentHub.getStatus() : null
     }
+    
+    // Add manual control stats if available
+    if (this.manualController) {
+      baseStats.manualControl = {
+        available: true,
+        controller: 'initialized'
+      }
+    }
+    
+    return baseStats
   }
 
   /**

@@ -1,19 +1,24 @@
-import mongoose from 'mongoose';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION || 'us-east-1',
+  ...(process.env.DYNAMODB_ENDPOINT && {
+    endpoint: process.env.DYNAMODB_ENDPOINT
+  })
+});
+
+const docClient = DynamoDBDocumentClient.from(client);
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      process.env.MONGODB_URI || 'mongodb://localhost:27017/hootner',
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    console.log('✅ DynamoDB Client initialized');
+    return docClient;
   } catch (error) {
-    console.error(`❌ MongoDB Error: ${error.message}`);
+    console.error(`❌ DynamoDB Error: ${error.message}`);
     process.exit(1);
   }
 };
 
 export default connectDB;
+export { docClient };

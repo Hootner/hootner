@@ -21,6 +21,11 @@ npm run start:all
 
 **That's it!** Your app is now running at http://localhost:3000
 
+**Additional Services:**
+- GraphQL API: http://localhost:3000/graphql
+- Amazon Q Chat: http://localhost:3000/api/mcp
+- Health Check: http://localhost:3000/api/health
+
 ## 📚 For Complete Beginners
 
 **Never used AWS?** → Read [AWS for Beginners Guide](docs/AWS_FOR_BEGINNERS.md)
@@ -73,14 +78,13 @@ npm run dev              # Start with auto-reload
 npm run start:platform   # Start full platform
 ```
 
-### Frontend (HTML Pages)
+### Frontend (Unified Server)
 
 ```bash
-cd apps/frontend/html-pages
-node server.js
+npm run start:all        # All services on port 3000
 ```
 
-Serves at http://localhost:3001 (cinema player at /cinema-player.html).
+All services now run on http://localhost:3000 with different endpoints.
 
 ### AWS (Optional)
 
@@ -102,7 +106,7 @@ npm run lint:fix         # Auto-fix linting issues
 
 ```
 my-local-repo/
-├── 📄 template-enhanced.yaml        # 120-pipe AWS infrastructure
+├── 📄 template.yaml                   # 120-pipe AWS infrastructure
 ├── .amazonq/                        # Amazon Q config
 ├── .aws/                            # AWS CLI & SSO configuration
 ├── .github/                         # GitHub workflows, templates, security

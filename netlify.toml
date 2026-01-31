@@ -1,0 +1,8 @@
+
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/stripe-activation-website.html"
+  status = 200
