@@ -42,13 +42,13 @@ class HootnerOrchestrator {
   setupExpress() {
     // Secure CORS configuration
     const corsOptions = {
-      origin: process.env.ALLOWED_ORIGINS ? 
-        process.env.ALLOWED_ORIGINS.split(',') : 
+      origin: process.env.ALLOWED_ORIGINS ?
+        process.env.ALLOWED_ORIGINS.split(',') :
         ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:4000'],
       credentials: true,
       optionsSuccessStatus: 200
     };
-    
+
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.static('hexarchy/4-interface/ui/pages'));
@@ -58,8 +58,8 @@ class HootnerOrchestrator {
 
     // Health check endpoint
     this.app.get('/api/health', (req, res) => {
-      res.json({ 
-        status: 'healthy', 
+      res.json({
+        status: 'healthy',
         services: Array.from(this.services.keys()),
         timestamp: new Date().toISOString()
       });
@@ -71,13 +71,13 @@ class HootnerOrchestrator {
     if (!command || typeof command !== 'string' || !Array.isArray(args)) {
       throw new Error('Invalid command parameters');
     }
-    
+
     // SECURITY: Prevent command injection
     const allowedCommands = ['node', 'docker-compose', 'npm'];
     if (!allowedCommands.includes(command)) {
       throw new Error(`Command not allowed: ${command}`);
     }
-    
+
     return new Promise((resolve) => {
       const service = spawn(command, args, {
         stdio: 'pipe',
@@ -101,7 +101,7 @@ class HootnerOrchestrator {
       });
 
       this.services.set(name, service);
-      
+
       // Give service time to start
       setTimeout(() => resolve(service), 2000);
     });
@@ -138,69 +138,69 @@ class HootnerOrchestrator {
 async function startHootner() {
   console.log('🦉 HOOTNER - The Owl Never Sleeps');
   console.log('🏗️ Hexagonal Architecture Starting...\n');
-  
+
   const orchestrator = new HootnerOrchestrator();
-  
+
   try {
     // Start the Express server first
     await orchestrator.start();
-    
+
     // Initialize layers in dependency order
     console.log('⚡ Initializing hexagonal layers...');
-    
+
     // 0-core: Domain logic
     console.log('   0-core: Domain & business rules ✓');
-    
-    // 1-foundation: Infrastructure  
+
+    // 1-foundation: Infrastructure
     console.log('   1-foundation: Starting infrastructure...');
     await orchestrator.startLayer('1-foundation', [
       { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
     ]);
-    
+
     // Wait for database to be ready
     console.log('   Waiting for database connection...');
     await new Promise(resolve => setTimeout(resolve, 5000));
-    
+
     // 2-intelligence: AI services
     await orchestrator.startLayer('2-intelligence', [
       { name: 'ai-agents', command: 'node', args: ['hexarchy/5-economy/business/ai/run-all-agents.js'] }
     ]);
-    
+
     // 3-communication: APIs
     await orchestrator.startLayer('3-communication', [
       { name: 'graphql-api', command: 'node', args: ['server.js'], options: { cwd: 'hexarchy/3-communication/adapters/graphql-api' }, healthUrl: 'http://localhost:4000/graphql' }
     ]);
-    
+
     // 4-interface: Frontend
     await orchestrator.startLayer('4-interface', [
       { name: 'frontend', command: 'node', args: ['frontend-server.js'], healthUrl: 'http://localhost:3000/api/health' }
     ]);
-    
+
     // 5-economy: Business logic
     await orchestrator.startLayer('5-economy', [
       { name: 'payment-service', command: 'node', args: ['hexarchy/5-economy/business/commerce/payment-service.js'] },
       { name: 'revenue-api', command: 'node', args: ['hexarchy/5-economy/business/revenue/revenue-algorithms-api.js'] }
     ]);
-    
+
     // 6-governance: Security
     await orchestrator.startLayer('6-governance', [
       { name: 'security-service', command: 'node', args: ['hexarchy/5-economy/business/compliance/security-service.js'] }
     ]);
-    
+
     // 7-data: Data management
     await orchestrator.startLayer('7-data', [
       { name: 'database-manager', command: 'node', args: ['hexarchy/7-data/storage/database-manager.js'] }
     ]);
-    
+
     // 8-operations: DevOps
     await orchestrator.startLayer('8-operations', [
       { name: 'monitoring', command: 'node', args: ['hexarchy/5-economy/business/analytics/performance-monitor.js'] }
     ]);
-    
+
     console.log('\n🚀 HOOTNER is ready!');
     console.log('📍 Frontend: http://localhost:3000');
     console.log('📍 GraphQL: http://localhost:4000/graphql');
-    
+
     // Health monitoring
     setInterval(async () => {
       for (const [name, url] of orchestrator.healthChecks) {
@@ -210,10 +210,10 @@ async function startHootner() {
         }
       }
     }, 30000);
-    
+
     // Keep process alive
     process.stdin.resume();
-    
+
   } catch (error) {
     console.error('❌ Failed to start HOOTNER:', error.message);
     process.exit(1);

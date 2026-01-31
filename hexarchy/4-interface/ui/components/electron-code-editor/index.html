@@ -4862,6 +4862,9 @@
               window.location.protocol === 'vscode-webview:' ||
               window.location.protocol === 'vscode-file:' ||
               window.location.href.includes('vscode-webview') ||
+              window.location.hostname.includes('vscode-webview') ||
+              window.location.hostname.includes('vscode-resource') ||
+              window.location.hostname.includes('vscode-cdn') ||
               navigator.userAgent.includes('Code') ||
               navigator.userAgent.includes('Electron') ||
               window.location.protocol === 'file:' ||
@@ -4870,12 +4873,24 @@
               document.domain === '' ||
               window.location.hostname === ''
             );
+            const isPrerendering = document.prerendering === true || document.visibilityState === 'prerender';
+            const isPredeploy = new URLSearchParams(window.location.search).has('predeploy') ||
+              /predeploy|pre-deploy|staging|preview/.test(window.location.hostname);
+            const swUrl = new URL('sw.js', window.location.href).toString();
+            if (isPrerendering) {
+              document.addEventListener('visibilitychange', () => {
+                if (!(document.prerendering === true || document.visibilityState === 'prerender')) {
+                  registerServiceWorker();
+                }
+              }, { once: true });
+              return;
+            }
             
             // Only register if truly in a secure browser environment
             if ('serviceWorker' in navigator && !isWebview && 
                 (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-              navigator.serviceWorker.register('./sw.js')
-                .then(() => console.log('✓ Service Worker registered'))
+              navigator.serviceWorker.register(swUrl)
+                .then(() => console.log(isPredeploy ? '✓ Service Worker registered (predeploy)' : '✓ Service Worker registered'))
                 .catch(err => console.log('ℹ SW registration failed:', err.message));
             } else {
               console.log('ℹ Service Worker registration skipped (restricted environment detected)');
@@ -7351,19 +7366,19 @@
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="editor.updateOptions({wordWrap: this.checked ? 'on' : 'off'})">
+              <input type="checkbox" id="wordWrapCheckbox" name="wordWrap" checked onchange="editor.updateOptions({wordWrap: this.checked ? 'on' : 'off'})">
               <span>Word Wrap</span>
             </label>
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="editor.updateOptions({minimap: {enabled: this.checked}})">
+              <input type="checkbox" id="minimapCheckbox" name="showMinimap" checked onchange="editor.updateOptions({minimap: {enabled: this.checked}})">
               <span>Show Minimap</span>
             </label>
           </div>
           <div style="margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="checkbox" checked onchange="autoSaveEnabled = this.checked">
+              <input type="checkbox" id="autoSaveCheckbox" name="autoSave" checked onchange="autoSaveEnabled = this.checked">
               <span>Auto Save</span>
             </label>
           </div>

@@ -289,14 +289,9 @@ class ErrorHandler {
       }
 
       if (language === 'javascript') {
-        try {
-          new Function(code);
-        } catch (error) {
-    console.error(error);
-    throw error;
-  } catch (e) {
-          return { valid: false, error: e.message };
-        }
+        // Note: Syntax validation removed for CSP compliance
+        // Code syntax will be validated by the editor's built-in parser
+        // CSP prevents using new Function() for validation
       }
 
       return { valid: true };

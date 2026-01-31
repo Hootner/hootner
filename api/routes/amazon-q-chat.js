@@ -22,7 +22,7 @@ const initializeMCP = async () => {
 
   try {
     console.log('🤖 Starting Enhanced MCP Server for Amazon Q chat...');
-    
+
     // Start enhanced MCP server process
     mcpServerProcess = spawn('node', ['hexarchy/3-communication/adapters/enhanced-mcp-server.js'], {
       cwd: process.cwd(),
@@ -49,7 +49,7 @@ const initializeMCP = async () => {
     // Connect
     await mcpClient.connect(transport);
     console.log('✅ Amazon Q Chat MCP Client connected');
-    
+
     return mcpClient;
   } catch (error) {
     console.error('❌ Failed to initialize MCP for Amazon Q chat:', error.message);
@@ -61,25 +61,25 @@ const initializeMCP = async () => {
 router.post('/connect', async (req, res) => {
   try {
     const { agentType } = req.body;
-    
+
     if (agentType !== 'amazonQ') {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Invalid agent type. Expected: amazonQ' 
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid agent type. Expected: amazonQ'
       });
     }
 
     // Initialize MCP connection
     await initializeMCP();
-    
+
     // Get agent hub status to verify connection
-    const response = await mcpClient.callTool({ 
-      name: 'agent_hub_status', 
-      arguments: {} 
+    const response = await mcpClient.callTool({
+      name: 'agent_hub_status',
+      arguments: {}
     });
-    
+
     const status = JSON.parse(response.content[0].text);
-    
+
     res.json({
       success: true,
       message: 'Amazon Q connected successfully',
@@ -89,9 +89,9 @@ router.post('/connect', async (req, res) => {
     });
   } catch (error) {
     console.error('Amazon Q connection failed:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to connect to Amazon Q: ' + error.message 
+    res.status(500).json({
+      success: false,
+      error: 'Failed to connect to Amazon Q: ' + error.message
     });
   }
 });
@@ -100,11 +100,11 @@ router.post('/connect', async (req, res) => {
 router.post('/route', async (req, res) => {
   try {
     const { type, query, context } = req.body;
-    
+
     if (!type || !query) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Missing required fields: type and query' 
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: type and query'
       });
     }
 
@@ -112,26 +112,26 @@ router.post('/route', async (req, res) => {
     if (!mcpClient) {
       await initializeMCP();
     }
-    
+
     const startTime = Date.now();
-    
+
     // Route through dual agent system
-    const response = await mcpClient.callTool({ 
-      name: 'dual_agent_route', 
-      arguments: { 
-        type, 
-        query, 
+    const response = await mcpClient.callTool({
+      name: 'dual_agent_route',
+      arguments: {
+        type,
+        query,
         context: {
           ...context,
           chatInterface: true,
           timestamp: new Date().toISOString()
         }
-      } 
+      }
     });
-    
+
     const result = JSON.parse(response.content[0].text);
     const processingTime = Date.now() - startTime;
-    
+
     // Enhanced response for chat interface
     const chatResponse = {
       success: true,
@@ -143,13 +143,13 @@ router.post('/route', async (req, res) => {
       confidence: result.confidence || 0.95,
       suggestions: generateSuggestions(type, query)
     };
-    
+
     res.json(chatResponse);
   } catch (error) {
     console.error('Message routing failed:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to process message: ' + error.message 
+    res.status(500).json({
+      success: false,
+      error: 'Failed to process message: ' + error.message
     });
   }
 });
@@ -160,14 +160,14 @@ router.get('/capabilities', async (req, res) => {
     if (!mcpClient) {
       await initializeMCP();
     }
-    
-    const response = await mcpClient.callTool({ 
-      name: 'mcp_protocol_info', 
-      arguments: {} 
+
+    const response = await mcpClient.callTool({
+      name: 'mcp_protocol_info',
+      arguments: {}
     });
-    
+
     const info = JSON.parse(response.content[0].text);
-    
+
     res.json({
       success: true,
       capabilities: info.capabilities,
@@ -177,9 +177,9 @@ router.get('/capabilities', async (req, res) => {
     });
   } catch (error) {
     console.error('Failed to get capabilities:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to get capabilities: ' + error.message 
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get capabilities: ' + error.message
     });
   }
 });
@@ -190,14 +190,14 @@ router.get('/context', async (req, res) => {
     if (!mcpClient) {
       await initializeMCP();
     }
-    
-    const response = await mcpClient.callTool({ 
-      name: 'orchestrator_stats', 
-      arguments: {} 
+
+    const response = await mcpClient.callTool({
+      name: 'orchestrator_stats',
+      arguments: {}
     });
-    
+
     const stats = JSON.parse(response.content[0].text);
-    
+
     res.json({
       success: true,
       stats: {
@@ -211,9 +211,9 @@ router.get('/context', async (req, res) => {
     });
   } catch (error) {
     console.error('Failed to get context:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to get context: ' + error.message 
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get context: ' + error.message
     });
   }
 });
@@ -246,7 +246,7 @@ const generateSuggestions = (type, query) => {
       'Cost optimization report'
     ]
   };
-  
+
   return suggestions[type] || [
     'Help with AWS services',
     'Security best practices',

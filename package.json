@@ -9,6 +9,7 @@
 		"npm": ">=9.0.0"
 	},
 	"scripts": {
+		"repo:scan": "node scripts/agents/repo-scan.js",
 		"check-users": "node scripts/check-users.js",
 		"user-analytics": "node scripts/check-users.js",
 		"track-money": "node scripts/track-money.js",

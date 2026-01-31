@@ -3,7 +3,7 @@ import userDetection from '../../hexarchy/7-data/analytics/user-detection.js';
 export const handler = async (event) => {
   try {
     const { action } = JSON.parse(event.body || '{}');
-    
+
     let result;
     switch (action) {
       case 'detect':
@@ -15,7 +15,7 @@ export const handler = async (event) => {
       default:
         result = await userDetection.detectActiveUsers();
     }
-    
+
     return {
       statusCode: 200,
       headers: {

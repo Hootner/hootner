@@ -15,27 +15,24 @@ class PluginSystem {
   }
 
   setupMarketplace() {
-    // Built-in plugins
+    // Built-in plugins - using class references instead of string code to avoid CSP violations
     this.marketplace.set('prettier', {
       name: 'Prettier',
       description: 'Code formatter',
       version: '1.0.0',
       icon: '✨',
       category: 'formatter',
-      code: `
-        class PrettierPlugin {
-          activate() {
-            this.addCommand('format', () => this.format());
-          }
-          format() {
-            const code = editor.getValue();
-            const formatted = code.replace(/;\\s*\\n/g, ';\\n').replace(/\\{\\s*\\n/g, '{\\n  ');
-            editor.setValue(formatted);
-            addOutput('✨ Code formatted', 'success');
-          }
+      pluginClass: class PrettierPlugin {
+        activate() {
+          this.addCommand('format', () => this.format());
         }
-        return PrettierPlugin;
-      `
+        format() {
+          const code = editor.getValue();
+          const formatted = code.replace(/;\s*\n/g, ';\n').replace(/\{\s*\n/g, '{\n  ');
+          editor.setValue(formatted);
+          addOutput('✨ Code formatted', 'success');
+        }
+      }
     });
 
     this.marketplace.set('emmet', {
@@ -44,43 +41,40 @@ class PluginSystem {
       version: '1.0.0',
       icon: '⚡',
       category: 'productivity',
-      code: `
-        class EmmetPlugin {
-          activate() {
-            editor.onKeyDown((e) => {
-              if (e.key === 'Tab' && this.isEmmetAbbreviation()) {
-                e.preventDefault();
-                this.expandAbbreviation();
-              }
-            });
-          }
-          isEmmetAbbreviation() {
-            const pos = editor.getPosition();
-            const line = editor.getModel().getLineContent(pos.lineNumber);
-            const before = line.substring(0, pos.column - 1);
-            return /[a-z]+[>+*]*[a-z]*$/.test(before.trim());
-          }
-          expandAbbreviation() {
-            const pos = editor.getPosition();
-            const line = editor.getModel().getLineContent(pos.lineNumber);
-            const before = line.substring(0, pos.column - 1);
-            const abbr = before.match(/[a-z]+[>+*]*[a-z]*$/);
-            if (abbr) {
-              const expanded = this.expand(abbr[0]);
-              editor.executeEdits('emmet', [{
-                range: new monaco.Range(pos.lineNumber, pos.column - abbr[0].length, pos.lineNumber, pos.column),
-                text: expanded
-              }]);
+      pluginClass: class EmmetPlugin {
+        activate() {
+          editor.onKeyDown((e) => {
+            if (e.key === 'Tab' && this.isEmmetAbbreviation()) {
+              e.preventDefault();
+              this.expandAbbreviation();
             }
-          }
-          expand(abbr) {
-            if (abbr === 'div') return '<div></div>';
-            if (abbr === 'p') return '<p></p>';
-            return \`<\${abbr}></\${abbr}>\`;
+          });
+        }
+        isEmmetAbbreviation() {
+          const pos = editor.getPosition();
+          const line = editor.getModel().getLineContent(pos.lineNumber);
+          const before = line.substring(0, pos.column - 1);
+          return /[a-z]+[>+*]*[a-z]*$/.test(before.trim());
+        }
+        expandAbbreviation() {
+          const pos = editor.getPosition();
+          const line = editor.getModel().getLineContent(pos.lineNumber);
+          const before = line.substring(0, pos.column - 1);
+          const abbr = before.match(/[a-z]+[>+*]*[a-z]*$/);
+          if (abbr) {
+            const expanded = this.expand(abbr[0]);
+            editor.executeEdits('emmet', [{
+              range: new monaco.Range(pos.lineNumber, pos.column - abbr[0].length, pos.lineNumber, pos.column),
+              text: expanded
+            }]);
           }
         }
-        return EmmetPlugin;
-      `
+        expand(abbr) {
+          if (abbr === 'div') return '<div></div>';
+          if (abbr === 'p') return '<p></p>';
+          return `<${abbr}></${abbr}>`;
+        }
+      }
     });
 
     this.marketplace.set('live-server', {
@@ -89,23 +83,20 @@ class PluginSystem {
       version: '1.0.0',
       icon: '🌐',
       category: 'server',
-      code: `
-        class LiveServerPlugin {
-          activate() {
-            this.addCommand('start-server', () => this.startServer());
-            this.server = null;
-          }
-          startServer() {
-            if (this.server) {
-              addOutput('🌐 Server already running', 'warning');
-              return;
-            }
-            this.server = { port: ${DEFAULT_PORT}, running: true };
-            addOutput('🌐 Live server started on port ${DEFAULT_PORT}', 'success');
-          }
+      pluginClass: class LiveServerPlugin {
+        activate() {
+          this.addCommand('start-server', () => this.startServer());
+          this.server = null;
         }
-        return LiveServerPlugin;
-      `
+        startServer() {
+          if (this.server) {
+            addOutput('🌐 Server already running', 'warning');
+            return;
+          }
+          this.server = { port: DEFAULT_PORT, running: true };
+          addOutput('🌐 Live server started on port ' + DEFAULT_PORT, 'success');
+        }
+      }
     });
 
     this.marketplace.set('git-lens', {
@@ -114,18 +105,15 @@ class PluginSystem {
       version: '1.0.0',
       icon: '🔎',
       category: 'git',
-      code: `
-        class GitLensPlugin {
-          activate() {
-            this.addCommand('git-blame', () => this.showBlame());
-          }
-          showBlame() {
-            const line = editor.getPosition().lineNumber;
-            addOutput(\`📝 Line \${line}: Last modified by User (2 hours ago)\`, 'info');
-          }
+      pluginClass: class GitLensPlugin {
+        activate() {
+          this.addCommand('git-blame', () => this.showBlame());
         }
-        return GitLensPlugin;
-      `
+        showBlame() {
+          const line = editor.getPosition().lineNumber;
+          addOutput(`📝 Line ${line}: Last modified by User (2 hours ago)`, 'info');
+        }
+      }
     });
 
     this.marketplace.set('debugger', {
@@ -134,25 +122,22 @@ class PluginSystem {
       version: '1.0.0',
       icon: '🐛',
       category: 'debug',
-      code: `
-        class DebuggerPlugin {
-          activate() {
-            this.breakpoints = new Set();
-            this.addCommand('toggle-breakpoint', () => this.toggleBreakpoint());
-          }
-          toggleBreakpoint() {
-            const line = editor.getPosition().lineNumber;
-            if (this.breakpoints.has(line)) {
-              this.breakpoints.delete(line);
-              addOutput(\`🐛 Removed breakpoint at line \${line}\`, 'info');
-            } else {
-              this.breakpoints.add(line);
-              addOutput(\`🐛 Added breakpoint at line \${line}\`, 'success');
-            }
+      pluginClass: class DebuggerPlugin {
+        activate() {
+          this.breakpoints = new Set();
+          this.addCommand('toggle-breakpoint', () => this.toggleBreakpoint());
+        }
+        toggleBreakpoint() {
+          const line = editor.getPosition().lineNumber;
+          if (this.breakpoints.has(line)) {
+            this.breakpoints.delete(line);
+            addOutput(`🐛 Removed breakpoint at line ${line}`, 'info');
+          } else {
+            this.breakpoints.add(line);
+            addOutput(`🐛 Added breakpoint at line ${line}`, 'success');
           }
         }
-        return DebuggerPlugin;
-      `
+      }
     });
   }
 
@@ -250,8 +235,8 @@ class PluginSystem {
     if (!plugin) return;
 
     try {
-      // Execute plugin code safely
-      const PluginClass = new Function('return ' + plugin.code)();
+      // Use the plugin class directly instead of eval
+      const PluginClass = plugin.pluginClass;
       const instance = new PluginClass();
       
       // Add helper methods
@@ -354,38 +339,12 @@ return ${name.replace(/\\s+/g, '')}Plugin;`;
   }
 
   loadCustomPlugin() {
-    const filename = prompt('Plugin file name (e.g., my-plugin.js):');
-    if (!filename || !window.state?.fileSystem[filename]) {
-      if (window.addOutput) {
-        window.addOutput('❌ Plugin file not found', 'error');
-      }
-      return;
+    // Custom plugin loading disabled for security (CSP compliance)
+    // Dynamic code execution via new Function() or eval() violates Content Security Policy
+    if (window.addOutput) {
+      window.addOutput('❌ Custom plugin loading is disabled for security reasons. Please use built-in plugins from the marketplace.', 'error');
     }
-    
-    try {
-      const code = window.state.fileSystem[filename].content;
-      const PluginClass = new Function('return ' + code)();
-      const instance = new PluginClass();
-      
-      instance.addCommand = (name, handler) => {
-        this.addHook(`command:${name}`, handler);
-      };
-      
-      if (instance.activate) {
-        instance.activate();
-      }
-      
-      const pluginId = filename.replace('.js', '');
-      this.plugins.set(pluginId, instance);
-      if (window.addOutput) {
-        window.addOutput(`🔌 Loaded custom plugin: ${pluginId}`, 'success');
-      }
-      
-    } catch (error) {
-      if (window.addOutput) {
-        window.addOutput(`❌ Plugin load failed: ${error.message}`, 'error');
-      }
-    }
+    return;
   }
 
   // Quick install popular plugins

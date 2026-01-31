@@ -1,4 +1,7 @@
+import RepoScanAgent from './repo-scan-agent.js'
+
 export const productionAgents = {
+  'repo-scan-agent': RepoScanAgent,
   'security-service': class SecurityService {
     constructor() { this.capabilities = ['security-scan', 'vulnerability-check'] }
     async start() { console.log('Security service started') }

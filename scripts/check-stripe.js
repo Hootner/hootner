@@ -9,15 +9,15 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
 
 console.log('📋 CURRENT STRIPE CONFIGURATION:');
-console.log('=' .repeat(50));
+console.log('='.repeat(50));
 
 if (stripeKey) {
   const isReal = stripeKey.startsWith('sk_test_') && !stripeKey.includes('placeholder');
   const keyPreview = stripeKey.substring(0, 20) + '...';
-  
+
   console.log(`Secret Key: ${keyPreview}`);
   console.log(`Status: ${isReal ? '✅ REAL KEY' : '❌ PLACEHOLDER'}`);
-  
+
   if (isReal) {
     console.log('🎉 Real Stripe key detected!');
     console.log('💰 Revenue tracking will work with real payments');

@@ -105,7 +105,7 @@ class EnhancedAgentHub {
    */
   async startAgent(agentName, options = {}) {
     console.log(`🚀 Manually starting agent: ${agentName}`);
-    
+
     if (this.agentInstances.has(agentName)) {
       console.log(`   ⚠️  Agent ${agentName} already running`);
       return { success: true, message: 'Agent already active' };
@@ -114,7 +114,7 @@ class EnhancedAgentHub {
     try {
       const { productionAgents } = await import('./frameworks/ai/agents/production-agent-implementations.js');
       const AgentClass = productionAgents[agentName];
-      
+
       if (!AgentClass) {
         throw new Error(`Agent class not found: ${agentName}`);
       }
@@ -124,14 +124,14 @@ class EnhancedAgentHub {
         communicationBridge: this.communicationBridge,
         manualMode: true
       });
-      
+
       await agentInstance.start();
       this.agentInstances.set(agentName, agentInstance);
       this.manuallyControlledAgents.add(agentName);
-      
+
       // Setup bidirectional communication
       await this.setupAgentCommunication(agentName, agentInstance);
-      
+
       // Update agent metadata
       const agent = this.agents.get(agentName) || {};
       agent.status = 'active';
@@ -142,7 +142,7 @@ class EnhancedAgentHub {
       this.agents.set(agentName, agent);
 
       console.log(`   ✅ Agent ${agentName} started successfully with bidirectional communication`);
-      
+
       return {
         success: true,
         agent: agentName,
@@ -160,7 +160,7 @@ class EnhancedAgentHub {
    */
   async stopAgent(agentName) {
     console.log(`🛑 Manually stopping agent: ${agentName}`);
-    
+
     const instance = this.agentInstances.get(agentName);
     if (!instance) {
       console.log(`   ⚠️  Agent ${agentName} not running`);
@@ -171,10 +171,10 @@ class EnhancedAgentHub {
       await instance.stop();
       this.agentInstances.delete(agentName);
       this.manuallyControlledAgents.delete(agentName);
-      
+
       // Cleanup communication channels
       this.agentCommunication.delete(agentName);
-      
+
       // Update agent metadata
       const agent = this.agents.get(agentName);
       if (agent) {
@@ -186,7 +186,7 @@ class EnhancedAgentHub {
       }
 
       console.log(`   ✅ Agent ${agentName} stopped successfully`);
-      
+
       return { success: true, agent: agentName };
     } catch (error) {
       console.error(`   ❌ Failed to stop agent ${agentName}:`, error.message);
@@ -199,37 +199,37 @@ class EnhancedAgentHub {
    */
   async setupAgentCommunication(agentName, agentInstance) {
     const communicationChannels = new Set();
-    
+
     // Enable agent-to-agent communication
     agentInstance.sendToAgent = async (targetAgent, message) => {
       return await this.routeAgentMessage(agentName, targetAgent, message);
     };
-    
+
     // Enable broadcast to all agents
     agentInstance.broadcastToAgents = async (message, filter = null) => {
       return await this.broadcastMessage(agentName, message, filter);
     };
-    
+
     // Enable agent discovery
     agentInstance.discoverAgents = (category = null) => {
       return this.getAvailableAgents(category);
     };
-    
+
     // Setup command queue
     this.commandQueue.set(agentName, []);
-    
+
     // Enable command processing
     agentInstance.processCommand = async (command) => {
       return await this.processAgentCommand(agentName, command);
     };
-    
+
     communicationChannels.add('agent-to-agent');
     communicationChannels.add('broadcast');
     communicationChannels.add('discovery');
     communicationChannels.add('command-queue');
-    
+
     this.agentCommunication.set(agentName, communicationChannels);
-    
+
     console.log(`   🔗 Communication channels setup for ${agentName}: ${Array.from(communicationChannels).join(', ')}`);
   }
 
@@ -243,7 +243,7 @@ class EnhancedAgentHub {
     }
 
     this.communicationBridge.logMessage(fromAgent, toAgent, message);
-    
+
     if (typeof targetInstance.receiveMessage === 'function') {
       return await targetInstance.receiveMessage(fromAgent, message);
     } else {
@@ -257,12 +257,12 @@ class EnhancedAgentHub {
    */
   async broadcastMessage(fromAgent, message, filter = null) {
     const results = new Map();
-    
+
     for (const [agentName, instance] of this.agentInstances) {
       if (agentName === fromAgent) continue;
-      
+
       if (filter && !filter(agentName, instance)) continue;
-      
+
       try {
         const result = await this.routeAgentMessage(fromAgent, agentName, message);
         results.set(agentName, result);
@@ -270,7 +270,7 @@ class EnhancedAgentHub {
         results.set(agentName, { success: false, error: error.message });
       }
     }
-    
+
     return results;
   }
 
@@ -279,10 +279,10 @@ class EnhancedAgentHub {
    */
   getAvailableAgents(category = null) {
     const agents = [];
-    
+
     for (const [agentName, agentData] of this.agents) {
       if (category && agentData.type !== category) continue;
-      
+
       agents.push({
         name: agentName,
         type: agentData.type,
@@ -291,7 +291,7 @@ class EnhancedAgentHub {
         communicationEnabled: agentData.communicationEnabled || false
       });
     }
-    
+
     return agents;
   }
 
@@ -302,17 +302,18 @@ class EnhancedAgentHub {
     const queue = this.commandQueue.get(agentName) || [];
     queue.push({ ...command, timestamp: Date.now() });
     this.commandQueue.set(agentName, queue);
-    
+
     const instance = this.agentInstances.get(agentName);
     if (instance && typeof instance.executeCommand === 'function') {
       return await instance.executeCommand(command);
     }
-    
+
     return { success: false, reason: 'Agent does not support commands' };
   }
 
   initializeCoreAgents() {
     const coreAgents = [
+      'repo-scan-agent',
       'personalization-agent',
       'recommendation-ml',
       'content-moderation-ai',
@@ -434,7 +435,7 @@ class EnhancedAgentHub {
   getStatus() {
     const manualAgents = Array.from(this.manuallyControlledAgents);
     const communicationStats = this.communicationBridge.getStats();
-    
+
     return {
       ...this.status,
       totalAgents: this.agents.size,

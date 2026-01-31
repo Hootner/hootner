@@ -6794,6 +6794,9 @@
           window.location.protocol === 'vscode-webview:' ||
           window.location.protocol === 'vscode-file:' ||
           window.location.href.includes('vscode-webview') ||
+          window.location.hostname.includes('vscode-webview') ||
+          window.location.hostname.includes('vscode-resource') ||
+          window.location.hostname.includes('vscode-cdn') ||
           navigator.userAgent.includes('Code') ||
           navigator.userAgent.includes('Electron') ||
           window.location.protocol === 'file:' ||
@@ -6802,13 +6805,25 @@
           document.domain === '' ||
           window.location.hostname === ''
         );
+        const isPrerendering = document.prerendering === true || document.visibilityState === 'prerender';
+        const isPredeploy = new URLSearchParams(window.location.search).has('predeploy') ||
+          /predeploy|pre-deploy|staging|preview/.test(window.location.hostname);
+        const swUrl = new URL('sw.js', window.location.href).toString();
+        if (isPrerendering) {
+          document.addEventListener('visibilitychange', () => {
+            if (!(document.prerendering === true || document.visibilityState === 'prerender')) {
+              registerServiceWorker();
+            }
+          }, { once: true });
+          return;
+        }
         
         // Only register if truly in a browser environment
         if ('serviceWorker' in navigator && !isWebview && 
             (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
           navigator.serviceWorker
-            .register('./sw.js')
-            .then(() => console.log('✓ Service Worker registered'))
+            .register(swUrl)
+            .then(() => console.log(isPredeploy ? '✓ Service Worker registered (predeploy)' : '✓ Service Worker registered'))
             .catch(err => console.log('ℹ SW registration failed:', err.message));
         } else {
           console.log('ℹ Service Worker registration skipped (restricted environment detected)');
