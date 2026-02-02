@@ -18,7 +18,6 @@
 
 import { execSync } from 'child_process';
 import chalk from 'chalk';
-import { readFileSync } from 'fs';
 
 class BranchMerger {
   constructor(options = {}) {
