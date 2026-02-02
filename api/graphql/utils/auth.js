@@ -41,7 +41,19 @@ async function generateToken(user) {
   const secret = await getSecret();
   return jwt.sign(
     {
-      id: usePromise<string>} Refresh token
+      id: user.id,
+      email: user.email,
+      role: user.role || 'USER',
+    },
+    secret,
+    { expiresIn: JWT_EXPIRATION }
+  );
+}
+
+/**
+ * Generate refresh token
+ * @param {object} user - User object
+ * @returns {Promise<string>} Refresh token
  */
 async function generateRefreshToken(user) {
   const secret = await getSecret();
@@ -50,33 +62,21 @@ async function generateRefreshToken(user) {
       id: user.id,
       type: 'refresh',
     },
-    secret
-/**
- * Generate refresh token
- * @param {object} user - User object
- * @returns {string} Refresh token
- */
-function generateRefreshToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      type: 'refresh',
-    },
-    JWT_SECRET,
+    secret,
     { expiresIn: '7d' }
   );
 }
 
 /**
  * Verify JWT token
- * @param {stPromise<object>} Decoded token payload
+ * @param {string} token - JWT token to verify
+ * @returns {Promise<object>} Decoded token payload
  * @throws {AuthenticationError} If token is invalid
  */
 async function verifyToken(token) {
   try {
     const secret = await getSecret();
-    return jwt.verify(token, secret
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, secret);
   } catch (error) {
     throw new AuthenticationError('Invalid or expired token');
   }
@@ -173,6 +173,5 @@ module.exports = {
   validateAuth,
   validateRole,
   validateOwnership,
-  JWT_SECRET,
   JWT_EXPIRATION,
 };

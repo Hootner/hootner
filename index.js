@@ -78,12 +78,18 @@ class HootnerOrchestrator {
       throw new Error(`Command not allowed: ${command}`);
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const service = spawn(command, args, {
         stdio: 'pipe',
         cwd: options.cwd || process.cwd(),
         shell: false, // SECURITY: Disable shell to prevent injection
         ...options
+      });
+
+      // Handle spawn errors (e.g., command not found)
+      service.on('error', (error) => {
+        console.warn(`⚠️  ${name}: Service unavailable (${error.message})`);
+        reject(error);
       });
 
       service.stdout.on('data', (data) => {
@@ -153,53 +159,89 @@ async function startHootner() {
 
     // 1-foundation: Infrastructure
     console.log('   1-foundation: Starting infrastructure...');
-    await orchestrator.startLayer('1-foundation', [
-      { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
-    ]);
-
-    // Wait for database to be ready
-    console.log('   Waiting for database connection...');
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    try {
+      await orchestrator.startLayer('1-foundation', [
+        { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
+      ]);
+      // Wait for database to be ready
+      console.log('   Waiting for database connection...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    } catch (error) {
+      console.warn('   ⚠️  Docker services unavailable - running in local development mode');
+      console.warn('   Some features may be limited without Redis and PostgreSQL');
+    }
 
     // 2-intelligence: AI services
-    await orchestrator.startLayer('2-intelligence', [
-      { name: 'ai-agents', command: 'node', args: ['hexarchy/5-economy/business/ai/run-all-agents.js'] }
-    ]);
+    try {
+      await orchestrator.startLayer('2-intelligence', [
+        { name: 'ai-agents', command: 'node', args: ['hexarchy/5-economy/business/ai/run-all-agents.js'] }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  AI agents unavailable:', error.message);
+    }
 
     // 3-communication: APIs
-    await orchestrator.startLayer('3-communication', [
-      { name: 'graphql-api', command: 'node', args: ['server.js'], options: { cwd: 'hexarchy/3-communication/adapters/graphql-api' }, healthUrl: 'http://localhost:4000/graphql' }
-    ]);
+    try {
+      await orchestrator.startLayer('3-communication', [
+        { name: 'graphql-api', command: 'node', args: ['server.js'], options: { cwd: 'hexarchy/3-communication/adapters/graphql-api' }, healthUrl: 'http://localhost:4000/graphql' }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  GraphQL API unavailable:', error.message);
+    }
 
     // 4-interface: Frontend
-    await orchestrator.startLayer('4-interface', [
-      { name: 'frontend', command: 'node', args: ['frontend-server.js'], healthUrl: 'http://localhost:3000/api/health' }
-    ]);
+    try {
+      await orchestrator.startLayer('4-interface', [
+        { name: 'frontend', command: 'node', args: ['frontend-server.js'], healthUrl: 'http://localhost:3000/api/health' }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  Frontend server unavailable:', error.message);
+    }
 
     // 5-economy: Business logic
-    await orchestrator.startLayer('5-economy', [
-      { name: 'payment-service', command: 'node', args: ['hexarchy/5-economy/business/commerce/payment-service.js'] },
-      { name: 'revenue-api', command: 'node', args: ['hexarchy/5-economy/business/revenue/revenue-algorithms-api.js'] }
-    ]);
+    try {
+      await orchestrator.startLayer('5-economy', [
+        { name: 'payment-service', command: 'node', args: ['hexarchy/5-economy/business/commerce/payment-service.js'] },
+        { name: 'revenue-api', command: 'node', args: ['hexarchy/5-economy/business/revenue/revenue-algorithms-api.js'] }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  Business services unavailable:', error.message);
+    }
 
     // 6-governance: Security
-    await orchestrator.startLayer('6-governance', [
-      { name: 'security-service', command: 'node', args: ['hexarchy/5-economy/business/compliance/security-service.js'] }
-    ]);
+    try {
+      await orchestrator.startLayer('6-governance', [
+        { name: 'security-service', command: 'node', args: ['hexarchy/5-economy/business/compliance/security-service.js'] }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  Security service unavailable:', error.message);
+    }
 
     // 7-data: Data management
-    await orchestrator.startLayer('7-data', [
-      { name: 'database-manager', command: 'node', args: ['hexarchy/7-data/storage/database-manager.js'] }
-    ]);
+    try {
+      await orchestrator.startLayer('7-data', [
+        { name: 'database-manager', command: 'node', args: ['hexarchy/7-data/storage/database-manager.js'] }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  Database manager unavailable:', error.message);
+    }
 
     // 8-operations: DevOps
-    await orchestrator.startLayer('8-operations', [
-      { name: 'monitoring', command: 'node', args: ['hexarchy/5-economy/business/analytics/performance-monitor.js'] }
-    ]);
+    try {
+      await orchestrator.startLayer('8-operations', [
+        { name: 'monitoring', command: 'node', args: ['hexarchy/5-economy/business/analytics/performance-monitor.js'] }
+      ]);
+    } catch (error) {
+      console.warn('   ⚠️  Monitoring unavailable:', error.message);
+    }
 
     console.log('\n🚀 HOOTNER is ready!');
-    console.log('📍 Frontend: http://localhost:3000');
-    console.log('📍 GraphQL: http://localhost:4000/graphql');
+    console.log('🏠 Running in LOCAL DEVELOPMENT MODE');
+    console.log('📍 API Server: http://localhost:3000');
+    console.log('📍 Amazon Q Chat: http://localhost:3000/api/mcp');
+    console.log('📍 Health Check: http://localhost:3000/api/health');
+    console.log('\n💡 To enable full features, start Docker services:');
+    console.log('   docker-compose up -d postgres redis\n');
 
     // Health monitoring
     setInterval(async () => {

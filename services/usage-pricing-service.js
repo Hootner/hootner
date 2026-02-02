@@ -394,7 +394,7 @@ class UsagePricingService {
       });
 
       // Create subscription with base price
-      const tierConfig = PRICING_TIERS[tier];
+      const tierConfig = BASE_PRICING_TIERS[tier];
       const subscription = await stripe.subscriptions.create({
         customer: customer.id,
         items: [
@@ -453,7 +453,7 @@ class UsagePricingService {
   async getPricingEstimate(projectedUsers, projectedVideos, projectedStorageGB) {
     const estimates = {};
 
-    for (const [tierKey, tierConfig] of Object.entries(PRICING_TIERS)) {
+    for (const [tierKey, tierConfig] of Object.entries(BASE_PRICING_TIERS)) {
       let cost = tierConfig.basePrice;
 
       // Calculate overages
