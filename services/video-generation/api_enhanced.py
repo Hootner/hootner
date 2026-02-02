@@ -42,9 +42,13 @@ from generator import VideoGenerator
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.environ.get(
-    "SECRET_KEY", "dev-secret-key-change-in-production"
-)
+# Require SECRET_KEY - no fallback for security
+secret_key = os.environ.get("SECRET_KEY")
+if not secret_key:
+    raise ValueError("SECRET_KEY environment variable is required")
+if len(secret_key) < 32:
+    raise ValueError("SECRET_KEY must be at least 32 characters long")
+app.config["SECRET_KEY"] = secret_key
 CORS(
     app,
     origins=["http://localhost:5173", "http://localhost:3000", "https://hootner.com"],

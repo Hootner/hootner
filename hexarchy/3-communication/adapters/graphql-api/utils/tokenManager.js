@@ -16,10 +16,22 @@ const redis = new Redis({
   retryStrategy: (times) => Math.min(times * 50, 2000),
 })
 
-// Token configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-const REFRESH_SECRET =
-  process.env.REFRESH_SECRET || 'your-refresh-secret-change-in-production'
+// Token configuration - require environment variables
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+if (process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be at least 32 characters long');
+}
+if (!process.env.REFRESH_SECRET) {
+  throw new Error('REFRESH_SECRET environment variable is required');
+}
+if (process.env.REFRESH_SECRET.length < 32) {
+  throw new Error('REFRESH_SECRET must be at least 32 characters long');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET
+const REFRESH_SECRET = process.env.REFRESH_SECRET
 const ACCESS_TOKEN_EXPIRY = '15m' // Short-lived access tokens
 const REFRESH_TOKEN_EXPIRY = '7d' // Long-lived refresh tokens
 const BLACKLIST_PREFIX = 'blacklist:'
