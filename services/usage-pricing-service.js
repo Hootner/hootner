@@ -394,7 +394,12 @@ class UsagePricingService {
       });
 
       // Create subscription with base price
-      const tierConfig = PRICING_TIERS[tier];
+      const baseTierConfig = BASE_PRICING_TIERS[tier];
+      const lifecycleMultiplier = getLifecycleMultiplier();
+      const tierConfig = {
+        ...baseTierConfig,
+        basePrice: baseTierConfig.basePrice * lifecycleMultiplier,
+      };
       const subscription = await stripe.subscriptions.create({
         customer: customer.id,
         items: [
@@ -452,8 +457,17 @@ class UsagePricingService {
    */
   async getPricingEstimate(projectedUsers, projectedVideos, projectedStorageGB) {
     const estimates = {};
+    const lifecycleMultiplier = getLifecycleMultiplier();
 
-    for (const [tierKey, tierConfig] of Object.entries(PRICING_TIERS)) {
+    for (const [tierKey, baseTierConfig] of Object.entries(BASE_PRICING_TIERS)) {
+      const tierConfig = {
+        ...baseTierConfig,
+        basePrice: baseTierConfig.basePrice * lifecycleMultiplier,
+        perUserPrice: baseTierConfig.perUserPrice * lifecycleMultiplier,
+        perVideoPrice: baseTierConfig.perVideoPrice * lifecycleMultiplier,
+        perGBPrice: baseTierConfig.perGBPrice * lifecycleMultiplier,
+      };
+      
       let cost = tierConfig.basePrice;
 
       // Calculate overages

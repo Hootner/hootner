@@ -90,7 +90,7 @@
 		"build:frontend": "echo 'Building frontend...'",
 		"build:api": "cd hexarchy/3-communication/adapters/graphql-api && npm run build",
 		"config:validate": "node config/validate-config.js",
-		"test": "jest --config jest.config.js",
+		"test": "jest --config jest.config.cjs",
 		"test:unit": "jest --config jest.config.js",
 		"test:e2e": "playwright test",
 		"test:integration": "jest hexarchy/8-operations/testing/integration",
