@@ -22,9 +22,8 @@ import {
   addVideoToPlaylist,
   removeVideoFromPlaylist,
   getPlaylistById,
-} from '../models/Playlist.js';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_min_32_chars_change_prod';
+// Import auth utilities for secure token management
+import { generateToken, generateRefreshToken } from '../utils/auth.js';
 
 const resolvers = {
   login: async (_, { email, password }) => {
@@ -46,12 +45,8 @@ const resolvers = {
       };
     }
 
-    const token = jwt.sign(
-      { id: user.userId, email: user.email, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-    const refreshToken = jwt.sign({ id: user.userId }, JWT_SECRET, { expiresIn: '30d' });
+    const token = await generateToken(user);
+    const refreshToken = await generateRefreshToken(user);
 
     return {
       success: true,
