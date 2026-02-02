@@ -64,8 +64,8 @@ app.listen(PORT, () => {
   console.log('🦉 HOOTNER Website Server Started');
   console.log('================================');
   console.log(`🌐 Website: http://localhost:${PORT}`);
-  console.log(`📧 Contact: hello@hootner.com`);
-  console.log(`💼 Business: AI Revenue Optimization Platform`);
+  console.log('📧 Contact: hello@hootner.com');
+  console.log('💼 Business: AI Revenue Optimization Platform');
   console.log('');
   console.log('📋 For Stripe Activation:');
   console.log(`1. Use this URL: http://localhost:${PORT}`);

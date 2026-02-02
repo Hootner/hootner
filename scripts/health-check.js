@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 // Quick health check for HOOTNER platform
-import { existsSync } from 'fs'
-import { execSync } from 'child_process'
+import { existsSync } from 'fs';
+import { execSync } from 'child_process';
 
 const checks = [
   {
@@ -30,31 +30,31 @@ const checks = [
     check: () => existsSync('./.env') || existsSync('./.env.example'),
     fix: 'Copy .env.example to .env'
   }
-]
+];
 
-console.log('🔍 HOOTNER Health Check\n')
+console.log('🔍 HOOTNER Health Check\n');
 
-let issues = 0
+let issues = 0;
 for (const check of checks) {
   try {
     if (check.check()) {
-      console.log(`✅ ${check.name}`)
+      console.log(`✅ ${check.name}`);
     } else {
-      console.log(`❌ ${check.name} - ${check.fix}`)
-      issues++
+      console.log(`❌ ${check.name} - ${check.fix}`);
+      issues++;
     }
   } catch (error) {
-    console.log(`⚠️  ${check.name} - Error: ${error.message}`)
-    issues++
+    console.log(`⚠️  ${check.name} - Error: ${error.message}`);
+    issues++;
   }
 }
 
-console.log(`\n${issues === 0 ? '🎉 All checks passed!' : `⚠️  ${issues} issues found`}`)
+console.log(`\n${issues === 0 ? '🎉 All checks passed!' : `⚠️  ${issues} issues found`}`);
 
 if (issues === 0) {
-  console.log('\n🚀 Ready to run: npm run start:all')
+  console.log('\n🚀 Ready to run: npm run start:all');
 } else {
-  console.log('\n🔧 Fix issues above, then run: npm run health-check')
+  console.log('\n🔧 Fix issues above, then run: npm run health-check');
 }
 
-process.exit(issues)
+process.exit(issues);

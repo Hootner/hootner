@@ -241,7 +241,7 @@ class StripeBillingConnector {
       );
 
       console.log(`\n💰 Total billed: $${totalBilled.toFixed(2)}`);
-      console.log(`📧 Customer: demo@hootner.com`);
+      console.log('📧 Customer: demo@hootner.com');
       console.log(`🔗 Stripe Dashboard: https://dashboard.stripe.com/customers/${testCustomer.customer.id}`);
 
       return { totalBilled, customer: testCustomer.customer };

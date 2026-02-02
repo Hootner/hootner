@@ -13,18 +13,18 @@ async function createDeploymentFiles() {
 
   // Vercel deployment config
   const vercelConfig = {
-    "name": "hootner-ai-platform",
-    "version": 2,
-    "builds": [
+    'name': 'hootner-ai-platform',
+    'version': 2,
+    'builds': [
       {
-        "src": "stripe-activation-website.html",
-        "use": "@vercel/static"
+        'src': 'stripe-activation-website.html',
+        'use': '@vercel/static'
       }
     ],
-    "routes": [
+    'routes': [
       {
-        "src": "/",
-        "dest": "/stripe-activation-website.html"
+        'src': '/',
+        'dest': '/stripe-activation-website.html'
       }
     ]
   };
@@ -48,17 +48,17 @@ async function createDeploymentFiles() {
 
   // Package.json for deployment
   const deployPackage = {
-    "name": "hootner-website",
-    "version": "1.0.0",
-    "description": "HOOTNER AI Revenue Optimization Platform",
-    "main": "stripe-activation-website.html",
-    "scripts": {
-      "start": "node scripts/stripe-website-server.js",
-      "build": "echo 'Static site, no build needed'"
+    'name': 'hootner-website',
+    'version': '1.0.0',
+    'description': 'HOOTNER AI Revenue Optimization Platform',
+    'main': 'stripe-activation-website.html',
+    'scripts': {
+      'start': 'node scripts/stripe-website-server.js',
+      'build': 'echo \'Static site, no build needed\''
     },
-    "keywords": ["ai", "revenue", "optimization", "stripe"],
-    "author": "HOOTNER Team",
-    "license": "MIT"
+    'keywords': ['ai', 'revenue', 'optimization', 'stripe'],
+    'author': 'HOOTNER Team',
+    'license': 'MIT'
   };
 
   await fs.writeFile('website-package.json', JSON.stringify(deployPackage, null, 2));
