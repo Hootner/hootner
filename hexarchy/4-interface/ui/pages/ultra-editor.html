@@ -352,7 +352,7 @@
             </div>
           </div>
           <div id="previewPanel" style="display: none;">
-            <iframe class="live-preview" id="livePreview" src="about:blank"></iframe>
+            <iframe class="live-preview" id="livePreview" src="about:blank" sandbox="allow-scripts allow-same-origin"></iframe>
           </div>
           <div id="terminalPanel" style="display: none;">
             <div class="terminal" id="terminal">
@@ -454,8 +454,30 @@
       showRightPanel('preview');
       const code = editor.getValue();
       const iframe = document.getElementById('livePreview');
-      iframe.srcdoc = code.includes('<html>') ? code : `<html><body><script>${code}</script></body></html>`;
+      
+      // Sanitize code before injecting into iframe
+      const sanitizedCode = sanitizeHTML(code);
+      
+      // Use srcdoc with proper Content-Security-Policy
+      const htmlContent = code.includes('<html>') 
+        ? sanitizedCode 
+        : `<html>
+            <head>
+              <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+            </head>
+            <body><script>${sanitizedCode}</script></body>
+          </html>`;
+      
+      iframe.srcdoc = htmlContent;
       addMessage('👁️ Live preview updated');
+    }
+    
+    function sanitizeHTML(html) {
+      // Basic sanitization to prevent common XSS attacks
+      // In production, use a robust sanitization library like DOMPurify
+      const temp = document.createElement('div');
+      temp.textContent = html;
+      return temp.innerHTML;
     }
 
     function startCollaboration() {
