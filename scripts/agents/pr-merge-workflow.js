@@ -87,14 +87,47 @@ class PRMergeWorkflow {
       if (hasConflicts) {
         this.log('⚠️  Potential merge conflicts detected!', 'warning');
         
-        // Extract conflict files
-        const conflictMatches = mergeTree.matchAll(/<<<<<<< \.our\n[\s\S]*?path: (.*?)\n/g);
-        this.results.conflicts = [...conflictMatches].map(m => m[1]);
+        // Extract conflict files from merge-tree output
+        // Parse the changed files section which appears before conflict markers
+        const lines = mergeTree.split('\n');
+        const conflictFiles = new Set();
+        let inConflictBlock = false;
         
-        this.log('\nConflicting files:', 'warning');
-        this.results.conflicts.forEach(file => {
-          this.log(`  - ${file}`, 'warning');
-        });
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          
+          // Look for file markers in merge-tree output
+          if (line.startsWith('changed in both')) {
+            // Extract filename from "changed in both" lines
+            const match = line.match(/changed in both\s+(.+)/);
+            if (match) conflictFiles.add(match[1].trim());
+          } else if (line.includes('<<<<<<< ')) {
+            inConflictBlock = true;
+            // Try to extract filename from context
+            for (let j = i - 1; j >= Math.max(0, i - 10); j--) {
+              const prevLine = lines[j];
+              if (prevLine.startsWith('diff --git') || prevLine.startsWith('+++')) {
+                const fileMatch = prevLine.match(/\+\+\+ b\/(.+)|diff --git a\/.+ b\/(.+)/);
+                if (fileMatch) {
+                  conflictFiles.add(fileMatch[1] || fileMatch[2]);
+                  break;
+                }
+              }
+            }
+          }
+        }
+        
+        this.results.conflicts = Array.from(conflictFiles);
+        
+        if (this.results.conflicts.length === 0) {
+          // Fallback: just report that conflicts exist without specific files
+          this.log('Conflicts detected but unable to parse specific files', 'warning');
+        } else {
+          this.log('\nConflicting files:', 'warning');
+          this.results.conflicts.forEach(file => {
+            this.log(`  - ${file}`, 'warning');
+          });
+        }
         
         this.results.dryRun = 'conflicts';
         return false;
