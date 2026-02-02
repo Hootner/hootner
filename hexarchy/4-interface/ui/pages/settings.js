@@ -3,7 +3,7 @@
  * Handles tab navigation and form validation
  */
 
-function showTab(tab) {
+function showTab(tab, event) {
   document
     .querySelectorAll('.nav-item')
     .forEach(el => el.classList.remove('active'));

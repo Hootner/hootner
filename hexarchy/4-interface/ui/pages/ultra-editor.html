@@ -455,29 +455,21 @@
       const code = editor.getValue();
       const iframe = document.getElementById('livePreview');
       
-      // Sanitize code before injecting into iframe
-      const sanitizedCode = sanitizeHTML(code);
+      // WARNING: This preview allows execution of user code
+      // Only use in trusted environments or with proper sandboxing
+      // In production, consider using a separate sandboxed preview service
       
-      // Use srcdoc with proper Content-Security-Policy
       const htmlContent = code.includes('<html>') 
-        ? sanitizedCode 
+        ? code 
         : `<html>
             <head>
-              <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+              <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self';">
             </head>
-            <body><script>${sanitizedCode}</script></body>
+            <body><script>${code}</script></body>
           </html>`;
       
       iframe.srcdoc = htmlContent;
-      addMessage('👁️ Live preview updated');
-    }
-    
-    function sanitizeHTML(html) {
-      // Basic sanitization to prevent common XSS attacks
-      // In production, use a robust sanitization library like DOMPurify
-      const temp = document.createElement('div');
-      temp.textContent = html;
-      return temp.innerHTML;
+      addMessage('👁️ Live preview updated (sandbox mode)');
     }
 
     function startCollaboration() {

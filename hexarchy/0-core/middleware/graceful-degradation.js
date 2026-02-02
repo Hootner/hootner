@@ -5,8 +5,6 @@
  * Author: HOOTNER Security Team
  */
 
-import logger from '../utils/logger.js';
-
 /**
  * Service health status tracker
  */

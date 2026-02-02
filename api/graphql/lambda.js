@@ -31,9 +31,13 @@ async function loadSecrets() {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('Failed to load required secrets from AWS Secrets Manager');
     }
-    // Development: Check environment variables
-    if (!process.env.JWT_SECRET || !process.env.STRIPE_SECRET_KEY) {
-      throw new Error('Required environment variables not set: JWT_SECRET, STRIPE_SECRET_KEY');
+    // Development: Check required environment variables
+    const missingVars = [];
+    if (!process.env.JWT_SECRET) missingVars.push('JWT_SECRET');
+    if (!process.env.STRIPE_SECRET_KEY) missingVars.push('STRIPE_SECRET_KEY');
+    
+    if (missingVars.length > 0) {
+      throw new Error(`Required environment variables not set: ${missingVars.join(', ')}`);
     }
     console.warn('Using secrets from environment variables (development mode)');
     return null;
