@@ -49,9 +49,9 @@ cat .env.aws
 aws secretsmanager put-secret-value \
   --secret-id hootner/api-keys \
   --secret-string '{
-    "OPENAI_API_KEY": "sk-...",
-    "STRIPE_SECRET_KEY": "sk_live_...",
-    "FIREBASE_API_KEY": "AIza..."
+    "OPENAI_API_KEY": "<your-openai-api-key>",
+    "STRIPE_SECRET_KEY": "<your-stripe-secret-key>",
+    "FIREBASE_API_KEY": "<your-firebase-api-key>"
   }'
 ```
 
@@ -93,14 +93,14 @@ aws cloudformation describe-stacks \
 
 ```javascript
 // Frontend code
-const token = 'your-jwt-token';
-const apiEndpoint = 'https://xxx.execute-api.us-east-1.amazonaws.com/prod';
+const userAuth = 'jwt_value';
+const apiEndpoint = 'https://<your-api-id>.execute-api.us-east-1.amazonaws.com/prod';
 
 // 1. Get presigned URL
 const { uploadURL, fileKey } = await fetch(`${apiEndpoint}/api/upload/presign`, {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${userAuth}`,
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
@@ -120,7 +120,7 @@ await fetch(uploadURL, {
 await fetch(`${apiEndpoint}/api/upload/complete`, {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${userAuthToken}`,
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({

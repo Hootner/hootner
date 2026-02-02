@@ -1,0 +1,20 @@
+module.exports = {
+  root: true,
+  env: {
+    node: true,
+    browser: true,
+    es2022: true
+  },
+  extends: ['eslint:recommended'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module'
+  },
+  rules: {
+    'no-unused-vars': 'warn',
+    'no-console': 'off',
+    'semi': ['error', 'always'],
+    'quotes': ['error', 'single']
+  },
+  ignorePatterns: ['*.ts', '*.tsx', 'node_modules/', 'dist/', 'build/']
+};
