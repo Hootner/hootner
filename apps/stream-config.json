@@ -1,0 +1,51 @@
+{
+  "server": {
+    "port": 3005,
+    "cors": {
+      "origin": "*",
+      "methods": ["GET", "POST"]
+    },
+    "rateLimit": {
+      "messagesPerMinute": 10,
+      "connectionsPerIP": 5
+    }
+  },
+  "streaming": {
+    "qualities": {
+      "4K": { "width": 3840, "height": 2160, "bitrate": 12000, "fps": 30 },
+      "1080p": { "width": 1920, "height": 1080, "bitrate": 5000, "fps": 30 },
+      "720p": { "width": 1280, "height": 720, "bitrate": 2500, "fps": 30 },
+      "480p": { "width": 854, "height": 480, "bitrate": 1000, "fps": 30 }
+    },
+    "audio": {
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitrates": [128, 192, 320]
+    },
+    "webrtc": {
+      "iceServers": [
+        { "urls": "stun:stun.l.google.com:19302" },
+        { "urls": "stun:stun1.l.google.com:19302" }
+      ]
+    }
+  },
+  "moderation": {
+    "autoMod": true,
+    "bannedWords": ["spam", "hate", "toxic", "abuse", "scam"],
+    "maxMessageLength": 200,
+    "slowMode": false,
+    "slowModeDelay": 5
+  },
+  "analytics": {
+    "enabled": true,
+    "saveInterval": 30000,
+    "retentionDays": 30
+  },
+  "features": {
+    "multiStream": true,
+    "recording": true,
+    "screenShare": true,
+    "filters": true,
+    "scheduling": true
+  }
+}

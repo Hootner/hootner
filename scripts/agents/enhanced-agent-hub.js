@@ -16,6 +16,7 @@ class EnhancedAgentHub {
     this.manuallyControlledAgents = new Set(); // Manually managed agents
     this.communicationBridge = new AgentCommunicationBridge();
     this.commandQueue = new Map(); // Command queues for each agent
+    this.initialized = false;
     this.status = {
       compliance: { dmcaRequests: 0, coppaViolations: 0 },
       security: { activeThreats: 0, vulnerabilities: 0 },
@@ -29,6 +30,11 @@ class EnhancedAgentHub {
   }
 
   async initialize() {
+    if (this.initialized) {
+      console.log('⚠️  Enhanced Agent Hub already initialized, skipping');
+      return;
+    }
+
     console.log('🤖 Initializing Enhanced Agent Hub with 75+ agents...');
 
     // Core AI Agents (12)
@@ -50,6 +56,7 @@ class EnhancedAgentHub {
 
     // Auto-start production agents
     await this.startProductionAgents();
+    this.initialized = true;
   }
 
   async startProductionAgents() {
@@ -479,6 +486,12 @@ class EnhancedAgentHub {
         console.error(`   ❌ ${name} failed to stop: ` + error.message + '');
       }
     }
+
+    this.agentInstances.clear();
+    this.manuallyControlledAgents.clear();
+    this.agentCommunication.clear();
+    this.commandQueue.clear();
+    this.initialized = false;
   }
 }
 

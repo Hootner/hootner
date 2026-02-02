@@ -1,0 +1,31 @@
+{
+  "name": "hootner-streaming",
+  "version": "2.0.0",
+  "description": "Enhanced live streaming server with WebRTC, analytics, and multi-platform support",
+  "main": "streaming-server.js",
+  "scripts": {
+    "start": "node streaming-server.js",
+    "dev": "nodemon streaming-server.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "rate-limiter-flexible": "^3.0.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "streaming",
+    "webrtc",
+    "live",
+    "video",
+    "multi-platform",
+    "analytics"
+  ],
+  "author": "HOOTNER Team",
+  "license": "MIT"
+}

@@ -48,6 +48,7 @@ class DualAgentOrchestrator {
 
     this.enhancedAgentHub = null
     this.mcpClients = new Map()
+    this.specializedAgentsEnabled = process.env.DISABLE_SPECIALIZED_AGENTS !== 'true'
 
     this.routingRules = {
       'aws-specific': 'amazonQ',
@@ -82,10 +83,14 @@ class DualAgentOrchestrator {
 
     try {
       // Check if we need to involve specialized agents from hub
-      const specializedAgent = this.getSpecializedAgent(type)
-      if (specializedAgent) {
-        console.log(`🎯 Using specialized agent: ${specializedAgent}`)
-        return await this.executeOnAgent(specializedAgent, 'processRequest', request)
+      if (this.specializedAgentsEnabled) {
+        const specializedAgent = this.getSpecializedAgent(type)
+        if (specializedAgent) {
+          console.log(`🎯 Using specialized agent: ${specializedAgent}`)
+          return await this.executeOnAgent(specializedAgent, 'processRequest', request)
+        }
+      } else {
+        console.log('⚙️  Specialized agents disabled; routing stays within dual agents')
       }
 
       // Try primary agent
@@ -161,15 +166,19 @@ class DualAgentOrchestrator {
     console.log('🤖 Initializing Dual-Agent Orchestrator with MCP integration...')
 
     try {
-      // Connect to Enhanced Agent Hub
-      const { default: enhancedAgentHub } = await import('../../../../scripts/agents/enhanced-agent-hub.js')
-      this.enhancedAgentHub = enhancedAgentHub
-      await this.enhancedAgentHub.initialize()
+      if (this.specializedAgentsEnabled) {
+        // Connect to Enhanced Agent Hub
+        const { default: enhancedAgentHub } = await import('../../../../scripts/agents/enhanced-agent-hub.js')
+        this.enhancedAgentHub = enhancedAgentHub
+        await this.enhancedAgentHub.initialize()
 
-      // Setup manual agent controller
-      const { default: ManualAgentController } = await import('../../../../scripts/agents/manual-agent-controller.js')
-      this.manualController = new ManualAgentController()
-      await this.manualController.initialize()
+        // Setup manual agent controller
+        const { default: ManualAgentController } = await import('../../../../scripts/agents/manual-agent-controller.js')
+        this.manualController = new ManualAgentController()
+        await this.manualController.initialize()
+      } else {
+        console.log('⚠️  Specialized agents disabled via DISABLE_SPECIALIZED_AGENTS=true')
+      }
 
       // Setup MCP servers for each agent
       await this.setupMCPServers()
@@ -188,10 +197,14 @@ class DualAgentOrchestrator {
    * Manually start an agent via the orchestrator
    */
   async startAgent(agentName, options = {}) {
+    if (!this.specializedAgentsEnabled) {
+      throw new Error('Specialized agents disabled. Enable them to start manual agents.')
+    }
+
     if (!this.manualController) {
       throw new Error('Manual controller not initialized. Call initialize() first.')
     }
-    
+
     return await this.manualController.startAgent(agentName, options)
   }
 
@@ -199,10 +212,14 @@ class DualAgentOrchestrator {
    * Manually stop an agent via the orchestrator
    */
   async stopAgent(agentName) {
+    if (!this.specializedAgentsEnabled) {
+      throw new Error('Specialized agents disabled. Enable them to stop manual agents.')
+    }
+
     if (!this.manualController) {
       throw new Error('Manual controller not initialized. Call initialize() first.')
     }
-    
+
     return await this.manualController.stopAgent(agentName)
   }
 
@@ -210,10 +227,14 @@ class DualAgentOrchestrator {
    * Test communication between agents
    */
   async testAgentCommunication(fromAgent, toAgent, message) {
+    if (!this.specializedAgentsEnabled) {
+      throw new Error('Specialized agents disabled. Enable them to test agent communication.')
+    }
+
     if (!this.manualController) {
       throw new Error('Manual controller not initialized. Call initialize() first.')
     }
-    
+
     return await this.manualController.testAgentCommunication(fromAgent, toAgent, message)
   }
 
@@ -258,7 +279,7 @@ class DualAgentOrchestrator {
   handleAgentRequest = async (event) => {
     const { agentType, request } = event.payload
     console.log(`📨 Handling ${agentType} request:`, request.type)
-    
+
     try {
       const result = await this.route(request)
       eventBus.publish({
@@ -294,6 +315,10 @@ class DualAgentOrchestrator {
    */
   async connectAgent(agentName, mcpEndpoint) {
     try {
+      if (!this.specializedAgentsEnabled || !this.enhancedAgentHub) {
+        throw new Error('Specialized agents disabled. Cannot connect external agents.')
+      }
+
       const agentInstance = await this.enhancedAgentHub.getAgentInstance(agentName)
       if (agentInstance) {
         this.mcpClients.set(agentName, agentInstance)
@@ -312,6 +337,10 @@ class DualAgentOrchestrator {
    */
   async executeOnAgent(agentName, action, ...args) {
     try {
+      if (!this.specializedAgentsEnabled || !this.enhancedAgentHub) {
+        throw new Error('Specialized agents disabled. No agent hub available.')
+      }
+
       return await this.enhancedAgentHub.executeAgentAction(agentName, action, ...args)
     } catch (error) {
       console.error(`❌ Failed to execute ${action} on ${agentName}:`, error.message)
@@ -330,9 +359,12 @@ class DualAgentOrchestrator {
         amazonQ: this.amazonQ,
       },
       connectedAgents: this.mcpClients.size,
-      enhancedAgentHub: this.enhancedAgentHub ? this.enhancedAgentHub.getStatus() : null
+      enhancedAgentHub: this.enhancedAgentHub && this.specializedAgentsEnabled
+        ? this.enhancedAgentHub.getStatus()
+        : null,
+      specializedAgentsEnabled: this.specializedAgentsEnabled
     }
-    
+
     // Add manual control stats if available
     if (this.manualController) {
       baseStats.manualControl = {
@@ -340,7 +372,7 @@ class DualAgentOrchestrator {
         controller: 'initialized'
       }
     }
-    
+
     return baseStats
   }
 

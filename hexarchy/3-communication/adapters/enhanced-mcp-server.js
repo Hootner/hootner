@@ -30,7 +30,8 @@ class EnhancedMCPServer {
     )
 
     this.orchestrator = new DualAgentOrchestrator()
-    this.agentHub = enhancedAgentHub
+    this.agentHubEnabled = process.env.DISABLE_SPECIALIZED_AGENTS !== 'true'
+    this.agentHub = null
     this.isInitialized = false
     this.sessionId = crypto.randomUUID()
   }
@@ -42,7 +43,19 @@ class EnhancedMCPServer {
 
     // Initialize orchestrator and agent hub
     await this.orchestrator.initialize()
-    await this.agentHub.initialize()
+    this.agentHub = this.agentHubEnabled ? this.orchestrator.enhancedAgentHub || enhancedAgentHub : null
+
+    if (this.agentHubEnabled) {
+      if (this.agentHub && this.agentHub !== enhancedAgentHub) {
+        console.log('✅ Agent hub provided by orchestrator')
+      } else if (this.agentHub) {
+        await this.agentHub.initialize()
+      } else {
+        console.log('⚠️  Specialized agents disabled at MCP server level')
+      }
+    } else {
+      console.log('⚠️  Specialized agents disabled at MCP server level')
+    }
 
     this.setupToolHandlers()
     this.isInitialized = true
@@ -211,6 +224,9 @@ class EnhancedMCPServer {
         })
 
       case 'agent_hub_status':
+        if (!this.agentHubEnabled || !this.agentHub) {
+          throw new Error('Specialized agents disabled. Agent hub status unavailable.')
+        }
         return {
           sessionId: this.sessionId,
           agentHub: this.agentHub.getStatus(),
@@ -223,6 +239,9 @@ class EnhancedMCPServer {
         if (!args.agentName || !args.action) {
           throw new Error('Missing required arguments: agentName and action')
         }
+        if (!this.agentHubEnabled || !this.agentHub) {
+          throw new Error('Specialized agents disabled. Cannot execute agent actions.')
+        }
         return await this.agentHub.executeAgentAction(
           args.agentName,
           args.action,
@@ -230,6 +249,9 @@ class EnhancedMCPServer {
         )
 
       case 'list_agents_by_category':
+        if (!this.agentHubEnabled || !this.agentHub) {
+          throw new Error('Specialized agents disabled. No agents to list.')
+        }
         const agents = this.agentHub.listAgents()
         const result = args.category ? { [args.category]: agents[args.category] || [] } : agents
         return {
@@ -297,7 +319,9 @@ class EnhancedMCPServer {
 
   async shutdown() {
     console.log('🛑 Shutting down Enhanced MCP Server...')
-    await this.agentHub.shutdown()
+    if (this.agentHubEnabled && this.agentHub) {
+      await this.agentHub.shutdown()
+    }
     console.log('✅ Enhanced MCP Server shutdown complete')
   }
 }
@@ -305,7 +329,7 @@ class EnhancedMCPServer {
 // Start server if run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   const mcpServer = new EnhancedMCPServer()
-  
+
   process.on('SIGINT', async () => {
     await mcpServer.shutdown()
     process.exit(0)

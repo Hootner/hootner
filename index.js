@@ -78,12 +78,17 @@ class HootnerOrchestrator {
       throw new Error(`Command not allowed: ${command}`);
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const service = spawn(command, args, {
         stdio: 'pipe',
         cwd: options.cwd || process.cwd(),
         shell: false, // SECURITY: Disable shell to prevent injection
         ...options
+      });
+
+      // Handle spawn errors (like command not found)
+      service.on('error', (error) => {
+        reject(error);
       });
 
       service.stdout.on('data', (data) => {
@@ -128,6 +133,10 @@ class HootnerOrchestrator {
         }
       } catch (error) {
         console.error(`❌ ${layer}: Failed to start ${service.name}:`, error.message);
+        // Re-throw if it's a critical Docker error for upper layer to handle
+        if (error.code === 'ENOENT' && service.command === 'docker-compose') {
+          throw error;
+        }
       }
     }
     console.log(`✅ ${layer}: Complete`);
@@ -153,13 +162,19 @@ async function startHootner() {
 
     // 1-foundation: Infrastructure
     console.log('   1-foundation: Starting infrastructure...');
-    await orchestrator.startLayer('1-foundation', [
-      { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
-    ]);
 
-    // Wait for database to be ready
-    console.log('   Waiting for database connection...');
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // Check if Docker is available, if not use local mode
+    try {
+      await orchestrator.startLayer('1-foundation', [
+        { name: 'database', command: 'docker-compose', args: ['up', '-d', 'postgres', 'redis'] }
+      ]);
+      // Wait for database to be ready
+      console.log('   Waiting for database connection...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    } catch (error) {
+      console.log('   ⚠️  Docker not available, running in local mode');
+      console.log('   💡 For full features, install Docker: https://docs.docker.com/get-docker/');
+    }
 
     // 2-intelligence: AI services
     await orchestrator.startLayer('2-intelligence', [
