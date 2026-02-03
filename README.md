@@ -475,6 +475,32 @@ npx kill-port 3000 4000 5000 8000
 # Set $5 alert threshold
 ```
 
+## 🔀 Branch Management
+
+Need to merge multiple branches? We've got you covered!
+
+### Merge All Branches
+
+```bash
+# Test merges first (recommended)
+npm run git:merge:dry-run
+
+# Merge all branches into main
+npm run git:merge:all
+
+# Merge a specific branch
+npm run git:merge:branch -- --branch=feature/my-feature
+```
+
+**Via GitHub Actions (Recommended):**
+
+1. Go to **Actions** tab → "Merge All Branches into Main"
+2. Click **"Run workflow"**
+3. Select dry-run mode for testing
+4. Review results and handle conflicts
+
+📖 **Full Guide**: [docs/BRANCH_MERGE_GUIDE.md](docs/BRANCH_MERGE_GUIDE.md)
+
 ## 🤝 Contributing
 
 We welcome contributions! See [CONTRIBUTING_TOOLING.md](docs/CONTRIBUTING_TOOLING.md)
