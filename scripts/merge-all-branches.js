@@ -36,14 +36,16 @@ class BranchMerger {
    * Execute a git command safely
    */
   execGit(command, options = {}) {
+    const { silent, ignoreError, ...execOptions } = options;
     try {
-      return execSync(`git ${command}`, {
+      const result = execSync(`git ${command}`, {
         encoding: 'utf8',
-        stdio: options.silent ? 'pipe' : 'inherit',
-        ...options
-      }).trim();
+        stdio: silent ? 'pipe' : 'inherit',
+        ...execOptions
+      });
+      return typeof result === 'string' ? result.trim() : result;
     } catch (error) {
-      if (!options.ignoreError) {
+      if (!ignoreError) {
         throw error;
       }
       return null;
