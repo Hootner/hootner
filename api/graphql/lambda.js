@@ -26,14 +26,21 @@ async function loadSecrets() {
     
     return secrets;
   } catch (error) {
-    console.error('Failed to load secrets:', error);
-    // Use fallback values for development
-    secrets = {
-      JWT_SECRET: 'fallback-jwt-secret',
-      STRIPE_SECRET_KEY: 'sk_test_fallback',
-      ENCRYPTION_KEY: 'fallback-encryption-key'
-    };
-    return secrets;
+    console.error('Failed to load secrets from AWS Secrets Manager:', error);
+    // In production, secrets are required
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Failed to load required secrets from AWS Secrets Manager');
+    }
+    // Development: Check required environment variables
+    const missingVars = [];
+    if (!process.env.JWT_SECRET) missingVars.push('JWT_SECRET');
+    if (!process.env.STRIPE_SECRET_KEY) missingVars.push('STRIPE_SECRET_KEY');
+    
+    if (missingVars.length > 0) {
+      throw new Error(`Required environment variables not set: ${missingVars.join(', ')}`);
+    }
+    console.warn('Using secrets from environment variables (development mode)');
+    return null;
   }
 }
 
