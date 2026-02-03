@@ -30,12 +30,18 @@ jobs:
           npm audit --audit-level=high
           
       - name: Scan for secrets
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.base.sha != github.event.pull_request.head.sha }}
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
           
-      - name: SAST scan
-        uses: github/codeql-action/analyze@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
         
   test:
     runs-on: ubuntu-latest
