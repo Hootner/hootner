@@ -69,7 +69,16 @@ class BranchMerger {
   isBranchMerged(branch) {
     try {
       const mergedBranches = this.execGit('branch -r --merged origin/main', { silent: true });
-      return mergedBranches.includes(`origin/${branch}`);
+      if (!mergedBranches) {
+        return false;
+      }
+
+      const mergedList = mergedBranches
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      return mergedList.includes(`origin/${branch}`);
     } catch (error) {
       return false;
     }
