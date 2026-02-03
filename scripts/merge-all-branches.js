@@ -59,8 +59,12 @@ class BranchMerger {
     const branches = this.execGit('branch -r', { silent: true })
       .split('\n')
       .map(b => b.trim())
-      .filter(b => b && !b.includes('HEAD') && !b.includes('main'))
-      .map(b => b.replace('origin/', ''));
+      // Normalize symbolic refs like "origin/HEAD -> origin/main" to just "origin/HEAD"
+      .map(b => b.split('->')[0].trim())
+      // Filter out only the exact origin/main and origin/HEAD refs
+      .filter(b => b && b !== 'origin/main' && b !== 'origin/HEAD')
+      // Strip the "origin/" prefix from remaining branch names
+      .map(b => b.replace(/^origin\//, ''));
 
     return [...new Set(branches)]; // Remove duplicates
   }
