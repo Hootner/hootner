@@ -33,7 +33,7 @@ jobs:
         id: get-branches
         run: |
           # Get all remote branches except main and the current branch
-          branches=$(git branch -r | grep -v 'HEAD' | grep -v 'main' | sed 's/origin\///' | tr '\n' ' ')
+          branches=$(git branch -r | grep -v 'HEAD' | grep -vE '^[[:space:]]*origin/main$' | sed 's|origin/||' | tr '\n' ' ')
           echo "Found branches: $branches"
           
           # Convert to JSON array
