@@ -338,6 +338,7 @@ my-local-repo/
 - [API Documentation](docs/API.md)
 - [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md)
+- [Pull Request Mechanics](docs/guides/PULL_REQUEST_MECHANICS.md) - **NEW!** Understand how PRs work
 
 ### 120-Pipe Infrastructure
 
@@ -504,6 +505,8 @@ npm run git:merge:branch -- --branch=feature/my-feature
 ## 🤝 Contributing
 
 We welcome contributions! See [CONTRIBUTING_TOOLING.md](docs/CONTRIBUTING_TOOLING.md)
+
+**New to Git/Pull Requests?** Read our [Pull Request Mechanics Guide](docs/guides/PULL_REQUEST_MECHANICS.md) to understand how PRs work with HOOTNER's infrastructure!
 
 ```bash
 npm run format           # Format code
