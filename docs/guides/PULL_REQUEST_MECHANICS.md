@@ -1185,7 +1185,7 @@ Key Insight: Production and Development are COMPLETELY ISOLATED
 
 1. **[Git Basics]** - Learn Git fundamentals
 2. **[CONTRIBUTING_TOOLING.md](../CONTRIBUTING_TOOLING.md)** - Contribution guidelines
-3. **[BRANCH_MERGE_GUIDE.md](BRANCH_MERGE_GUIDE.md)** - Advanced branch management
+3. **[BRANCH_MERGE_GUIDE.md](../BRANCH_MERGE_GUIDE.md)** - Advanced branch management
 
 ### HOOTNER-Specific Guides
 
@@ -1196,7 +1196,7 @@ Key Insight: Production and Development are COMPLETELY ISOLATED
 
 ### Development Workflows
 
-8. **[DEPLOYMENT_GUIDE.md](../DEPLOYMENT_GUIDE.md)** - Deploying changes to AWS
+8. **[DEPLOYMENT_CHECKLIST_120_PIPES.md](../DEPLOYMENT_CHECKLIST_120_PIPES.md)** - Deploying changes to AWS
 9. **[DAY_ONE.md](../DAY_ONE.md)** - Your first day with HOOTNER
 10. **[STARTUP_GUIDE.md](STARTUP_GUIDE.md)** - Starting services locally
 
