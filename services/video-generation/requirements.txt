@@ -1,0 +1,29 @@
+# Video Generation Service - Python Dependencies
+# Auto-generated for HOOTNER AI Platform
+
+# Deep Learning Frameworks
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Transformer Models
+transformers>=4.30.0
+
+# Image/Video Processing
+pillow>=10.0.0
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.9
+opencv-python>=4.8.0
+
+# Flask API
+flask>=2.3.0
+flask-cors>=4.0.0
+werkzeug>=2.3.0
+
+# Utilities
+numpy>=1.24.0
+tqdm>=4.65.0
+
+# Optional: Advanced Optimizations
+# flash-attn>=2.0.0  # Requires CUDA and specific GPU
+# xformers>=0.0.20   # Memory-efficient attention

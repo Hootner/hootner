@@ -1,0 +1,32 @@
+# GitHub Copilot Configuration for HOOTNER
+copilot:
+  # Enable Copilot for all file types
+  enabled: true
+
+  # Commit message generation
+  commit_messages:
+    enabled: true
+    format: 'conventional'
+    include_files: true
+    max_length: 72
+
+  # Pull request assistance
+  pull_requests:
+    auto_description: true
+    suggest_reviewers: true
+    include_changes_summary: true
+
+  # Code review settings
+  code_review:
+    auto_suggestions: true
+    security_focus: true
+    performance_hints: true
+
+  # File type specific settings
+  languages:
+    javascript: true
+    typescript: true
+    python: true
+    yaml: true
+    dockerfile: true
+    markdown: true

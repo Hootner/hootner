@@ -1,0 +1,15 @@
+# .gitignore additions for AWS integration
+
+# AWS Environment files
+.env.aws
+.env.production
+
+# Lambda layer dependencies
+api/layers/*/nodejs/node_modules/
+api/layers/*/nodejs/package-lock.json
+
+# SAM build artifacts
+.aws-sam/
+
+# CloudFormation generated files
+packaged-template.yaml

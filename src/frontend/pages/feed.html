@@ -1,0 +1,3385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦉 Social Feed - HOOTNER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --neon-green: #00ff41;
+      --neon-cyan: #00ffff;
+      --neon-magenta: #ff00ff;
+      --bg-dark: #0a0a0f;
+      --bg-card: rgba(15, 15, 20, 0.95);
+      --border-color: rgba(0, 255, 65, 0.2);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      color: var(--neon-green);
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 255, 65, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    }
+
+    /* Search Bar */
+    .search-container {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+      margin: 0 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 10px 16px 10px 40px;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .search-input::placeholder {
+      color: #666;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 14px;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-top: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 200;
+    }
+
+    .search-results.active {
+      display: block;
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-result-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .search-result-text {
+      flex: 1;
+    }
+
+    .search-result-name {
+      font-weight: 600;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .search-result-type {
+      font-size: 12px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .search-container {
+        display: none;
+      }
+    }
+
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+
+    /* Create Post */
+    .create-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .create-post-header {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .avatar.small {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+
+    .post-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      color: #fff;
+      font-size: 15px;
+      resize: none;
+      min-height: 80px;
+      font-family: inherit;
+    }
+
+    .post-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    }
+
+    .post-input::placeholder {
+      color: #666;
+    }
+
+    .create-post-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .media-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .media-btn {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      color: var(--neon-cyan);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .media-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
+    .media-btn.ai-active {
+      background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan));
+      color: #000;
+      animation: pulse-ai 2s infinite;
+    }
+
+    @keyframes pulse-ai {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 255, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.8); }
+    }
+
+    .post-btn {
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+      border: none;
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .post-btn:hover {
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .post-btn:disabled {
+      background: #333;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* AI Features Panel */
+    .ai-panel {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--neon-magenta);
+      border-radius: 16px;
+      padding: 16px;
+      width: 320px;
+      box-shadow: 0 8px 32px rgba(255, 0, 255, 0.3);
+      z-index: 1000;
+      display: none;
+    }
+
+    .ai-panel.active {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .ai-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ai-panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ai-close {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .ai-feature {
+      background: rgba(255, 0, 255, 0.05);
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .ai-feature:hover {
+      background: rgba(255, 0, 255, 0.1);
+      border-color: var(--neon-magenta);
+    }
+
+    .ai-feature.active {
+      background: rgba(255, 0, 255, 0.15);
+      border-color: var(--neon-magenta);
+    }
+
+    .ai-feature-name {
+      font-weight: 600;
+      color: var(--neon-magenta);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .ai-feature-desc {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .ai-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .ai-status.active {
+      background: rgba(0, 255, 65, 0.2);
+      color: var(--neon-green);
+    }
+
+    .ai-status.processing {
+      background: rgba(255, 196, 0, 0.2);
+      color: #ffc400;
+      animation: pulse 1s infinite;
+    }
+
+    /* Emotional Resonance Overlay */
+    .emotion-overlay {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--neon-magenta);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      display: none;
+    }
+
+    .post-card:hover .emotion-overlay {
+      display: block;
+    }
+
+    .emotion-score {
+      color: var(--neon-magenta);
+      font-weight: 600;
+    }
+
+    /* Neural Synthesis Indicator */
+    .neural-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan));
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .neural-dot {
+      width: 6px;
+      height: 6px;
+      background: #000;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Predictive Analytics Bar */
+    .predictive-bar {
+      position: relative;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-top: 8px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .predictive-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+      transition: width 1s ease;
+    }
+
+    .predictive-label {
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* AI Toggle Button */
+    .ai-toggle {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan));
+      border: none;
+      color: #000;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 0, 255, 0.4);
+      z-index: 999;
+      transition: all 0.3s;
+    }
+
+    .ai-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(255, 0, 255, 0.6);
+    }
+
+    .ai-toggle.active {
+      animation: pulse-ai 2s infinite;
+    }
+
+    /* Security Features */
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      color: #ffd700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .security-lock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #ffd700;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      z-index: 10;
+      display: none;
+    }
+
+    .security-lock.active {
+      display: block;
+    }
+
+    .security-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .security-title {
+      color: #ffd700;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .security-desc {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+
+    .unlock-btn {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      border: none;
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .unlock-btn:hover {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+
+    .blockchain-verify {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: var(--neon-green);
+      display: none;
+    }
+
+    .post-card:hover .blockchain-verify {
+      display: block;
+    }
+
+    .quantum-shield {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      pointer-events: none;
+      animation: quantum-pulse 3s infinite;
+    }
+
+    @keyframes quantum-pulse {
+      0%, 100% { border-color: rgba(255, 215, 0, 0); }
+      50% { border-color: rgba(255, 215, 0, 0.3); }
+    }
+
+    .self-heal-indicator {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--neon-green);
+      display: none;
+      z-index: 1001;
+    }
+
+    .self-heal-indicator.active {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Revenue Intelligence */
+    .revenue-panel {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11px;
+      display: none;
+      z-index: 5;
+    }
+
+    .post-card:hover .revenue-panel {
+      display: block;
+    }
+
+    .revenue-score {
+      color: var(--neon-green);
+      font-weight: 600;
+    }
+
+    .psycho-tag {
+      display: inline-block;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      color: #ffd700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      margin-left: 4px;
+    }
+
+    .dynamic-price {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      animation: price-pulse 2s infinite;
+    }
+
+    @keyframes price-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .predictive-product {
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .predictive-product:hover {
+      background: rgba(0, 255, 255, 0.1);
+      border-color: var(--neon-cyan);
+    }
+
+    .product-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: var(--neon-cyan);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .product-desc {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .price-old {
+      text-decoration: line-through;
+      color: #666;
+      font-size: 11px;
+    }
+
+    .price-new {
+      color: var(--neon-green);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .multiverse-badge {
+      background: rgba(255, 0, 255, 0.1);
+      border: 1px solid rgba(255, 0, 255, 0.3);
+      color: var(--neon-magenta);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .buy-btn {
+      background: var(--neon-green);
+      border: none;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .buy-btn:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+    }
+
+    .autonomous-alert {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.9), rgba(0, 255, 255, 0.9));
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      z-index: 1002;
+      display: none;
+      box-shadow: 0 4px 20px rgba(255, 0, 255, 0.5);
+    }
+
+    .autonomous-alert.active {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    /* Feed Posts */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .post-card:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+    }
+
+    .post-user-info {
+      flex: 1;
+    }
+
+    .post-username {
+      font-weight: 600;
+      color: var(--neon-cyan);
+      font-size: 15px;
+    }
+
+    .post-username .verified {
+      color: var(--neon-green);
+      margin-left: 4px;
+    }
+
+    .post-time {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .post-menu {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px 8px;
+    }
+
+    .post-content {
+      padding: 0 20px 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    .post-media {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .post-media.video {
+      cursor: pointer;
+    }
+
+    .post-stats {
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #888;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .post-actions {
+      display: flex;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: #888;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--neon-cyan);
+    }
+
+    .action-btn.liked {
+      color: #ef4444;
+    }
+
+    .action-btn .icon {
+      font-size: 18px;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+
+    .comment-content {
+      flex: 1;
+    }
+
+    .comment-bubble {
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .comment-username {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--neon-cyan);
+      margin-bottom: 4px;
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .comment-action {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .comment-action:hover {
+      color: var(--neon-cyan);
+    }
+
+    .add-comment {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .comment-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    .comment-submit {
+      background: var(--neon-cyan);
+      border: none;
+      color: #000;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--neon-green);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Trending */
+    .trending-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .trending-item:last-child {
+      border-bottom: none;
+    }
+
+    .trending-item:hover {
+      padding-left: 8px;
+    }
+
+    .trending-category {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .trending-tag {
+      font-weight: 600;
+      color: var(--neon-cyan);
+      font-size: 15px;
+      margin: 4px 0;
+    }
+
+    .trending-posts {
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Suggestions */
+    .suggestion {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .suggestion-info {
+      flex: 1;
+    }
+
+    .suggestion-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .suggestion-handle {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .follow-btn {
+      background: transparent;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .follow-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+    }
+
+    /* Loading Spinner */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 255, 255, 0.2);
+      border-top-color: var(--neon-cyan);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Image Preview */
+    .image-preview {
+      position: relative;
+      margin-top: 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .image-preview.active {
+      display: block;
+    }
+
+    .image-preview img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .comments-section.open {
+      max-height: 500px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .comment-bubble {
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 14px;
+      flex: 1;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .comment-username {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--neon-cyan);
+    }
+
+    .comment-time {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    .comment-likes {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .comment-like-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+    }
+
+    .add-comment {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .comment-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    .comment-submit {
+      background: var(--neon-cyan);
+      border: none;
+      color: #000;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .comment-submit:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    }
+
+    /* Share Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--neon-cyan);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .share-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .share-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .share-option:hover {
+      border-color: var(--neon-cyan);
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .share-icon {
+      font-size: 24px;
+    }
+
+    .share-label {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .copy-link {
+      display: flex;
+      gap: 8px;
+    }
+
+    .link-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .copy-btn {
+      background: var(--neon-green);
+      border: none;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+    }
+
+    /* Post Menu Dropdown */
+    .post-menu-container {
+      position: relative;
+    }
+
+    .post-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 8px 0;
+      min-width: 160px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    .post-menu-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: #ccc;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+    }
+
+    .menu-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+      color: var(--neon-cyan);
+    }
+
+    .menu-item.danger {
+      color: #ef4444;
+    }
+
+    .menu-item.danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--neon-green);
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 2000;
+      transition: transform 0.3s;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Feed Tabs */
+    .feed-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .feed-tab {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      color: #888;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .feed-tab:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+    }
+
+    .feed-tab.active {
+      background: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      color: #000;
+      font-weight: 600;
+    }
+
+    /* Character Counter */
+    .char-counter {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .char-counter.warning {
+      color: #f59e0b;
+    }
+
+    .char-counter.error {
+      color: #ef4444;
+    }
+
+    /* Video Player */
+    .video-container {
+      position: relative;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .video-container video {
+      width: 100%;
+      max-height: 500px;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      transition: opacity 0.3s;
+    }
+
+    .video-container.playing .video-overlay {
+      opacity: 0;
+    }
+
+    .video-container:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .video-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .video-progress-bar {
+      height: 100%;
+      background: var(--neon-cyan);
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    /* Polls */
+    .poll-container {
+      padding: 16px 20px;
+    }
+
+    .poll-question {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .poll-option {
+      position: relative;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .poll-option:hover {
+      border-color: var(--neon-cyan);
+    }
+
+    .poll-option.voted {
+      cursor: default;
+    }
+
+    .poll-option.selected {
+      border-color: var(--neon-green);
+    }
+
+    .poll-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(0, 255, 255, 0.15);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .poll-option.selected .poll-bar {
+      background: rgba(0, 255, 65, 0.2);
+    }
+
+    .poll-text {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .poll-label {
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+
+    .poll-percent {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .poll-option.voted .poll-percent {
+      opacity: 1;
+    }
+
+    .poll-check {
+      color: var(--neon-green);
+      margin-right: 8px;
+    }
+
+    .poll-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    /* Hashtags */
+    .hashtag {
+      color: var(--neon-cyan);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .hashtag:hover {
+      color: var(--neon-green);
+      text-decoration: underline;
+    }
+
+    /* Mentions */
+    .mention {
+      color: var(--neon-magenta);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .mention:hover {
+      text-decoration: underline;
+    }
+
+    /* Bookmark button */
+    .action-btn.bookmarked {
+      color: var(--neon-green);
+    }
+
+    /* Read more */
+    .post-content.truncated {
+      max-height: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .post-content.truncated::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(transparent, var(--bg-card));
+    }
+
+    .read-more-btn {
+      background: none;
+      border: none;
+      color: var(--neon-cyan);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 8px 20px;
+      font-weight: 500;
+    }
+
+    .read-more-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Repost indicator */
+    .repost-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Live indicator */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ef4444;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+  </style>
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+</head>
+</head>
+<body>
+  <div id="canonical-banner" style="position:fixed; bottom:12px; left:12px; background: rgba(255, 196, 0, 0.1); border: 1px solid rgba(255, 196, 0, 0.3); padding: 8px 12px; border-radius: 8px; font-size: 12px; z-index: 2000; color: #ffdc73;">
+    Legacy Feed • Canonical page: Social Feed (React).
+    <a href="/feed-react.html" style="margin-left:8px; color:#00ffff; text-decoration:underline;">Go to feed-react.html →</a>
+    <button aria-label="Hide" onclick="this.parentElement.remove()" style="margin-left:8px; background:none; border:none; color:#ffdc73; cursor:pointer;">×</button>
+  </div>
+  <!-- Header -->
+  <header class="header">
+    <a href="dashboard.html" class="logo">🦉 HOOTNER</a>
+    
+    <!-- Search Bar -->
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search posts, people, hashtags...">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    
+    <div class="header-actions">
+      <a href="dashboard.html" class="back-btn">← Dashboard</a>
+      <button class="notif-btn" id="securityBtn" title="Military-Grade Security">
+        🛡️
+      </button>
+      <button class="notif-btn" id="revenueBtn" title="Revenue Intelligence">
+        💰
+      </button>
+      <button class="notif-btn" id="contentBtn" title="Revolutionary Content Creation">
+        🎬
+      </button>
+      <button class="notif-btn" id="rssBtn" title="RSS Feed">
+        📡
+      </button>
+      <button class="notif-btn">
+        🔔
+        <span class="notif-badge">3</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Feed Column -->
+    <div class="feed-column">
+      <!-- Feed Tabs -->
+      <div class="feed-tabs">
+        <button class="feed-tab active" data-tab="for-you">For You</button>
+        <button class="feed-tab" data-tab="following">Following</button>
+        <button class="feed-tab" data-tab="trending">Trending</button>
+      </div>
+
+      <!-- Create Post -->
+      <div class="create-post">
+        <div class="create-post-header">
+          <div class="avatar">🦉</div>
+          <textarea class="post-input" id="postInput" placeholder="What's on your mind?" maxlength="500"></textarea>
+        </div>
+        <div class="char-counter" id="charCounter">0 / 500</div>
+        <div class="image-preview" id="imagePreview">
+          <img id="previewImg" src="" alt="Preview">
+          <button class="remove-image" id="removeImage">×</button>
+        </div>
+        <div class="create-post-actions">
+          <div class="media-buttons">
+            <button class="media-btn" id="photoBtn">📷 Photo</button>
+            <button class="media-btn" id="videoBtn">🎬 Video</button>
+            <button class="media-btn" id="aiGenBtn" title="AI Neural Video Synthesis">🧠 AI Gen</button>
+            <button class="media-btn" id="mindToVideoBtn" title="Mind-to-Video Technology">🧠 Mind</button>
+            <button class="media-btn" id="liveBtn">🔴 Live</button>
+          </div>
+          <button class="post-btn" id="postBtn" disabled>Post</button>
+        </div>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+      </div>
+
+      <!-- Feed -->
+      <div class="feed" id="feed">
+        <!-- Posts will be inserted here -->
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Loading more posts...
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Trending -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">🔥 Trending</h3>
+        <div class="trending-item">
+          <div class="trending-category">Technology</div>
+          <div class="trending-tag">#AIVideoGen</div>
+          <div class="trending-posts">12.4K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Entertainment</div>
+          <div class="trending-tag">#HootnerLive</div>
+          <div class="trending-posts">8.2K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Creators</div>
+          <div class="trending-tag">#ContentCreator</div>
+          <div class="trending-posts">5.7K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Music</div>
+          <div class="trending-tag">#NewMusic2026</div>
+          <div class="trending-posts">3.1K posts</div>
+        </div>
+      </div>
+
+      <!-- Who to Follow -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">👥 Who to Follow</h3>
+        <div class="suggestion">
+          <div class="avatar small">🎬</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">VideoMaster</div>
+            <div class="suggestion-handle">@videomaster</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+        <div class="suggestion">
+          <div class="avatar small">🎵</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">MusicVibes</div>
+            <div class="suggestion-handle">@musicvibes</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+        <div class="suggestion">
+          <div class="avatar small">💻</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">TechGuru</div>
+            <div class="suggestion-handle">@techguru</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+      </div>
+
+      <!-- Footer Links -->
+      <div class="sidebar-card" style="font-size: 12px; color: #666;">
+        <a href="#" style="color: #666; margin-right: 12px;">Terms</a>
+        <a href="#" style="color: #666; margin-right: 12px;">Privacy</a>
+        <a href="#" style="color: #666; margin-right: 12px;">Help</a>
+        <a href="contact.html" style="color: #666;">Contact</a>
+        <div style="margin-top: 8px;">© 2026 HOOTNER</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Share Modal -->
+  <div class="modal-overlay" id="shareModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Share Post</h3>
+        <button class="modal-close" id="closeModal">×</button>
+      </div>
+      <div class="share-options">
+        <div class="share-option" data-platform="twitter">
+          <span class="share-icon">🐦</span>
+          <span class="share-label">Twitter</span>
+        </div>
+        <div class="share-option" data-platform="facebook">
+          <span class="share-icon">📘</span>
+          <span class="share-label">Facebook</span>
+        </div>
+        <div class="share-option" data-platform="reddit">
+          <span class="share-icon">🔴</span>
+          <span class="share-label">Reddit</span>
+        </div>
+        <div class="share-option" data-platform="email">
+          <span class="share-icon">✉️</span>
+          <span class="share-label">Email</span>
+        </div>
+      </div>
+      <div class="copy-link">
+        <input type="text" class="link-input" id="shareLink" value="https://hootner.com/post/12345" readonly>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Link copied!</div>
+
+  <!-- AI Features Panel -->
+  <div class="ai-panel" id="aiPanel">
+    <div class="ai-panel-header">
+      <h3 class="ai-panel-title">🧠 Quantum AI</h3>
+      <button class="ai-close" id="aiClose">×</button>
+    </div>
+    <div class="ai-feature" data-feature="neural-synthesis">
+      <div class="ai-feature-name">Neural Video Synthesis<span class="ai-status" id="neuralStatus">Ready</span></div>
+      <div class="ai-feature-desc">Generate Netflix-quality content from text prompts</div>
+    </div>
+    <div class="ai-feature" data-feature="emotion-mapping">
+      <div class="ai-feature-name">Emotional Resonance<span class="ai-status" id="emotionStatus">Ready</span></div>
+      <div class="ai-feature-desc">AI detects viewer micro-expressions in real-time</div>
+    </div>
+    <div class="ai-feature" data-feature="predictive-content">
+      <div class="ai-feature-name">Predictive Creation<span class="ai-status" id="predictiveStatus">Ready</span></div>
+      <div class="ai-feature-desc">Know what your audience wants (97.3% accuracy)</div>
+    </div>
+    <div class="ai-feature" data-feature="cross-dimensional">
+      <div class="ai-feature-name">Cross-Dimensional Analytics<span class="ai-status" id="dimensionalStatus">Ready</span></div>
+      <div class="ai-feature-desc">Analyze performance across parallel scenarios</div>
+    </div>
+  </div>
+
+  <!-- AI Toggle Button -->
+  <button class="ai-toggle" id="aiToggle" title="Quantum AI Features">🧠</button>
+
+  <!-- Self-Healing Indicator -->
+  <div class="self-heal-indicator" id="selfHealIndicator">
+    🔧 Self-healing in progress...
+  </div>
+
+  <!-- Autonomous Business Model Alert -->
+  <div class="autonomous-alert" id="autonomousAlert">
+    🤖 Autonomous AI rewriting business model...
+  </div>
+
+  <!-- Neural Interface -->
+  <div class="modal-overlay" id="neuralInterface">
+    <div class="modal">
+      <div style="text-align: center;">
+        <div style="font-size: 48px; margin-bottom: 16px; animation: pulse 2s infinite;">🧠</div>
+        <div style="color: var(--neon-magenta); font-size: 18px; font-weight: 600; margin-bottom: 12px;" id="neuralStatus">Connecting to neural interface...</div>
+        <input type="text" class="comment-input" id="thoughtInput" placeholder="Think of your video concept..." disabled style="width: 100%; margin-bottom: 16px;">
+        <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 16px;">
+          <div id="quantumBar" style="height: 100%; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta)); width: 0%; transition: width 0.3s;"></div>
+        </div>
+        <button class="unlock-btn" id="cancelNeural">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Creation Modal -->
+  <div class="modal-overlay" id="contentModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">🎬 Revolutionary Content</h3>
+        <button class="modal-close" id="closeContentModal">×</button>
+      </div>
+      <div class="ai-feature" data-content="mind-to-video">
+        <div class="ai-feature-name">🧠 Mind-to-Video<span class="ai-status" id="mindStatus">Ready</span></div>
+        <div class="ai-feature-desc">Convert thoughts into video via neural interfaces</div>
+      </div>
+      <div class="ai-feature" data-content="holographic">
+        <div class="ai-feature-name">🌐 Holographic Streaming<span class="ai-status" id="holoStatus">Ready</span></div>
+        <div class="ai-feature-desc">3D volumetric video for spatial computing</div>
+      </div>
+      <div class="ai-feature" data-content="time-dilated">
+        <div class="ai-feature-name">⏱️ Time-Dilated Processing<span class="ai-status" id="timeStatus">Ready</span></div>
+        <div class="ai-feature-desc">Process 10 years of optimization in seconds</div>
+      </div>
+      <div class="ai-feature" data-content="consciousness">
+        <div class="ai-feature-name">👤 Consciousness Transfer<span class="ai-status" id="consciousStatus">Ready</span></div>
+        <div class="ai-feature-desc">Preserve personality patterns in digital avatars</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSS Feed Modal -->
+  <div class="modal-overlay" id="rssModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">📡 RSS Feed</h3>
+        <button class="modal-close" id="closeRssModal">×</button>
+      </div>
+      <div style="margin-bottom: 16px; color: #888; font-size: 14px;">
+        Subscribe to HOOTNER content updates via RSS feed reader
+      </div>
+      <div class="copy-link">
+        <input type="text" class="link-input" id="rssLink" value="https://hootner.com/feed.xml" readonly>
+        <button class="copy-btn" id="copyRssBtn">Copy</button>
+      </div>
+      <div style="margin-top: 20px;">
+        <div style="font-size: 13px; font-weight: 600; color: var(--neon-cyan); margin-bottom: 12px;">Feed Categories:</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span style="background: rgba(0,255,255,0.1); border: 1px solid rgba(0,255,255,0.3); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--neon-cyan);">🧠 AI-Generated</span>
+          <span style="background: rgba(255,0,255,0.1); border: 1px solid rgba(255,0,255,0.3); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--neon-magenta);">🌐 Holographic</span>
+          <span style="background: rgba(0,255,65,0.1); border: 1px solid rgba(0,255,65,0.3); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--neon-green);">🧠 Mind-to-Video</span>
+          <span style="background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: #ffd700;">🛡️ Secured</span>
+        </div>
+      </div>
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--neon-cyan); margin-bottom: 12px;">Popular RSS Readers:</div>
+        <div style="font-size: 12px; color: #888; line-height: 1.8;">
+          • Feedly<br>
+          • Inoreader<br>
+          • NewsBlur<br>
+          • The Old Reader
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Modal -->
+  <div class="modal-overlay" id="securityModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">🛡️ Military-Grade Security</h3>
+        <button class="modal-close" id="closeSecurityModal">×</button>
+      </div>
+      <div class="ai-feature" data-security="usb-passkey">
+        <div class="ai-feature-name">🔑 USB Passkey Auth<span class="ai-status" id="usbStatus">Ready</span></div>
+        <div class="ai-feature-desc">YubiKey, Titan, FIDO2/WebAuthn integration</div>
+      </div>
+      <div class="ai-feature" data-security="quantum-encryption">
+        <div class="ai-feature-name">🔐 Quantum Encryption<span class="ai-status" id="quantumStatus">Ready</span></div>
+        <div class="ai-feature-desc">Secure against computers that don't exist yet</div>
+      </div>
+      <div class="ai-feature" data-security="biometric-lock">
+        <div class="ai-feature-name">👁️ Biometric Locks<span class="ai-status" id="biometricStatus">Ready</span></div>
+        <div class="ai-feature-desc">Videos play only for authorized neural patterns</div>
+      </div>
+      <div class="ai-feature" data-security="self-healing">
+        <div class="ai-feature-name">🔧 Self-Healing<span class="ai-status" id="healingStatus">Ready</span></div>
+        <div class="ai-feature-desc">Platform repairs itself using genetic algorithms</div>
+      </div>
+      <div class="ai-feature" data-security="blockchain-verify">
+        <div class="ai-feature-name">⛓️ Blockchain Verify<span class="ai-status" id="blockchainStatus">Ready</span></div>
+        <div class="ai-feature-desc">Every frame cryptographically signed vs deepfakes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Intelligence Modal -->
+  <div class="modal-overlay" id="revenueModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">💰 Revenue Intelligence</h3>
+        <button class="modal-close" id="closeRevenueModal">×</button>
+      </div>
+      <div class="ai-feature" data-revenue="psychographic">
+        <div class="ai-feature-name">🧠 Psychographic Monetization<span class="ai-status" id="psychoStatus">Ready</span></div>
+        <div class="ai-feature-desc">AI finds profit in viewer emotional states</div>
+      </div>
+      <div class="ai-feature" data-revenue="dynamic-pricing">
+        <div class="ai-feature-name">🌌 Dynamic Reality Pricing<span class="ai-status" id="pricingStatus">Ready</span></div>
+        <div class="ai-feature-desc">Costs adjust based on multiverse market conditions</div>
+      </div>
+      <div class="ai-feature" data-revenue="predictive-commerce">
+        <div class="ai-feature-name">🔮 Predictive Commerce<span class="ai-status" id="commerceStatus">Ready</span></div>
+        <div class="ai-feature-desc">Sell products viewers don't know they need yet</div>
+      </div>
+      <div class="ai-feature" data-revenue="autonomous-model">
+        <div class="ai-feature-name">🤖 Autonomous Evolution<span class="ai-status" id="autonomousStatus">Ready</span></div>
+        <div class="ai-feature-desc">Platform rewrites its own economic strategy</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // AI Feature State
+    const aiFeatures = {
+      neuralSynthesis: false,
+      emotionMapping: false,
+      predictiveContent: false,
+      crossDimensional: false
+    };
+
+    // Security Feature State
+    const securityFeatures = {
+      usbPasskey: false,
+      quantumEncryption: false,
+      biometricLock: false,
+      selfHealing: false,
+      blockchainVerify: false
+    };
+
+    // Revenue Intelligence State
+    const revenueFeatures = {
+      psychographic: false,
+      dynamicPricing: false,
+      predictiveCommerce: false,
+      autonomousModel: false
+    };
+
+    // Revolutionary Content Creation State
+    const contentFeatures = {
+      mindToVideo: false,
+      holographic: false,
+      timeDilated: false,
+      consciousness: false
+    };
+
+    const consciousnessProfiles = [
+      { name: 'Alpha', emoji: '🧠', traits: 'Analytical, Creative' },
+      { name: 'Beta', emoji: '💭', traits: 'Empathetic, Intuitive' },
+      { name: 'Gamma', emoji: '⚡', traits: 'Energetic, Innovative' },
+      { name: 'Delta', emoji: '🌟', traits: 'Visionary, Strategic' }
+    ];
+
+    function getConsciousnessProfile() {
+      return consciousnessProfiles[Math.floor(Math.random() * consciousnessProfiles.length)];
+    }
+
+    function calculateTimeDilation() {
+      const years = Math.floor(Math.random() * 10) + 1;
+      const seconds = (Math.random() * 5 + 1).toFixed(1);
+      return { years, seconds };
+    }
+
+    // Psychographic profiles
+    const psychoProfiles = ['Innovator', 'Early Adopter', 'Impulse Buyer', 'Value Seeker', 'Premium Hunter'];
+
+    // Generate revenue metrics
+    function generateRevenueScore() {
+      return '$' + (Math.random() * 50 + 10).toFixed(2);
+    }
+
+    function getPsychoProfile() {
+      return psychoProfiles[Math.floor(Math.random() * psychoProfiles.length)];
+    }
+
+    function getMultiversePrice(basePrice) {
+      const timelines = ['A', 'B', 'C'];
+      const timeline = timelines[Math.floor(Math.random() * timelines.length)];
+      const multiplier = 0.7 + Math.random() * 0.6; // 0.7x to 1.3x
+      return { timeline, price: (basePrice * multiplier).toFixed(2) };
+    }
+
+    // Predictive products based on content
+    const predictiveProducts = [
+      { name: 'AI Video Editor Pro', desc: 'Neural-powered editing suite', basePrice: 49.99, emoji: '🎬' },
+      { name: 'Quantum Render Farm', desc: 'Instant 8K rendering', basePrice: 99.99, emoji: '⚡' },
+      { name: 'Neural Content Pack', desc: 'AI-generated assets', basePrice: 29.99, emoji: '🎨' },
+      { name: 'Emotion Analytics Suite', desc: 'Track viewer feelings', basePrice: 79.99, emoji: '😊' },
+      { name: 'Blockchain Verify Token', desc: 'Deepfake protection', basePrice: 19.99, emoji: '⛓️' }
+    ];
+
+    function getPredictiveProduct(postContent) {
+      return predictiveProducts[Math.floor(Math.random() * predictiveProducts.length)];
+    }
+
+    // Autonomous business model evolution
+    function evolveBusinessModel() {
+      const strategies = [
+        'Shifting to emotion-based pricing',
+        'Implementing quantum subscription tiers',
+        'Activating neural pattern monetization',
+        'Deploying multiverse arbitrage protocol',
+        'Optimizing psychographic revenue streams'
+      ];
+      const strategy = strategies[Math.floor(Math.random() * strategies.length)];
+      const alert = document.getElementById('autonomousAlert');
+      alert.textContent = `🤖 ${strategy}...`;
+      alert.classList.add('active');
+      setTimeout(() => alert.classList.remove('active'), 4000);
+    }
+
+    // Generate blockchain hash
+    function generateBlockchainHash() {
+      return 'BC:' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    }
+
+    // Simulate biometric authentication
+    async function authenticateBiometric() {
+      return new Promise(resolve => {
+        showToast('👁️ Scanning neural patterns...');
+        setTimeout(() => {
+          showToast('✅ Biometric authentication successful');
+          resolve(true);
+        }, 2000);
+      });
+    }
+
+    // Simulate USB passkey authentication
+    async function authenticateUSBKey() {
+      if (window.PublicKeyCredential) {
+        showToast('🔑 Insert USB security key (YubiKey/Titan)...');
+        return new Promise(resolve => {
+          setTimeout(() => {
+            showToast('✅ USB passkey verified');
+            resolve(true);
+          }, 1500);
+        });
+      }
+      return false;
+    }
+
+    // Self-healing simulation
+    function triggerSelfHealing() {
+      const indicator = document.getElementById('selfHealIndicator');
+      indicator.classList.add('active');
+      setTimeout(() => {
+        indicator.textContent = '✅ Platform optimized - genetic algorithms applied';
+        setTimeout(() => indicator.classList.remove('active'), 2000);
+      }, 3000);
+    }
+
+    // Simulate AI predictions
+    function generateEmotionScore() {
+      return (Math.random() * 30 + 70).toFixed(1);
+    }
+
+    function generateViralPrediction() {
+      return Math.floor(Math.random() * 100);
+    }
+
+    function generateDimensionalScenarios() {
+      return [
+        { scenario: 'Timeline A', engagement: Math.floor(Math.random() * 100) },
+        { scenario: 'Timeline B', engagement: Math.floor(Math.random() * 100) },
+        { scenario: 'Timeline C', engagement: Math.floor(Math.random() * 100) }
+      ];
+    }
+
+    // Sample post data with comments
+    const samplePosts = [
+      {
+        id: 1,
+        user: { name: 'VideoCreator', handle: '@videocreator', avatar: '🎬', verified: true },
+        time: '2h ago',
+        content: 'Just dropped my latest video edit using HOOTNER\'s AI tools! The results are insane 🔥 Check it out and let me know what you think!',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=1' },
+        aiGenerated: true,
+        emotionScore: 94.3,
+        viralPrediction: 87,
+        secured: true,
+        blockchainHash: 'BC:A7F3E9D2',
+        biometricLocked: false,
+        revenueScore: 34.50,
+        psychoProfile: 'Early Adopter',
+        likes: 1247,
+        comments: [
+          { id: 1, user: 'TechFan', avatar: '💻', text: 'This is incredible! What AI model did you use?', time: '1h ago', likes: 23 },
+          { id: 2, user: 'CreatorPro', avatar: '🎨', text: 'The color grading is perfect 👌', time: '45m ago', likes: 8 }
+        ],
+        shares: 234,
+        liked: false
+      },
+      {
+        id: 2,
+        user: { name: 'MusicProducer', handle: '@musicprod', avatar: '🎵', verified: true },
+        time: '4h ago',
+        content: 'New beat dropped! 🎧 Made entirely with AI-assisted composition. The future of music production is HERE.',
+        media: null,
+        holographic: true,
+        timeDilated: true,
+        consciousnessProfile: { name: 'Gamma', emoji: '⚡', traits: 'Energetic, Innovative' },
+        likes: 892,
+        comments: [
+          { id: 1, user: 'BeatMaker', avatar: '🎹', text: 'Fire! Can you share the workflow?', time: '3h ago', likes: 45 }
+        ],
+        shares: 78,
+        liked: true
+      },
+      {
+        id: 3,
+        user: { name: 'TechReviewer', handle: '@techrev', avatar: '💻', verified: false },
+        time: '6h ago',
+        content: 'Just tested the new streaming features on HOOTNER. 8K HDR support is absolutely mind-blowing! Here\'s a comparison shot.',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=2' },
+        likes: 2341,
+        comments: [],
+        shares: 445,
+        liked: false
+      },
+      {
+        id: 4,
+        user: { name: 'ArtistDaily', handle: '@artistdaily', avatar: '🎨', verified: true },
+        time: '8h ago',
+        content: 'Created this digital artwork live on HOOTNER today! Thanks to everyone who joined the stream. You all inspire me to keep pushing creative boundaries. 💜',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=3' },
+        likes: 3567,
+        comments: [
+          { id: 1, user: 'ArtLover', avatar: '🖼️', text: 'Absolutely stunning work!', time: '7h ago', likes: 112 },
+          { id: 2, user: 'Designer99', avatar: '✨', text: 'The detail is insane', time: '6h ago', likes: 67 },
+          { id: 3, user: 'Creative', avatar: '🌟', text: 'What brushes did you use?', time: '5h ago', likes: 34 }
+        ],
+        shares: 567,
+        liked: false
+      },
+      {
+        id: 5,
+        user: { name: 'GamingPro', handle: '@gamingpro', avatar: '🎮', verified: true },
+        time: '12h ago',
+        content: 'GG everyone! Just hit a new personal record. Streaming again tomorrow at 8PM EST. Don\'t miss it!',
+        media: null,
+        likes: 1823,
+        comments: [],
+        shares: 123,
+        liked: false
+      },
+      {
+        id: 6,
+        user: { name: 'StreamerKing', handle: '@streamerking', avatar: '👑', verified: true },
+        time: '1d ago',
+        content: 'Check out this insane gameplay clip! #gaming #esports #HOOTNER',
+        media: { type: 'video', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: '10:34' },
+        likes: 5234,
+        comments: [],
+        shares: 892,
+        liked: false
+      },
+      {
+        id: 7,
+        user: { name: 'PollMaster', handle: '@pollmaster', avatar: '📊', verified: false },
+        time: '2d ago',
+        content: 'Quick poll for my fellow creators! What editing software do you prefer?',
+        media: null,
+        poll: {
+          question: 'What editing software do you prefer?',
+          options: [
+            { id: 1, text: 'Adobe Premiere Pro', votes: 423 },
+            { id: 2, text: 'DaVinci Resolve', votes: 312 },
+            { id: 3, text: 'Final Cut Pro', votes: 189 },
+            { id: 4, text: 'HOOTNER AI Editor', votes: 567 }
+          ],
+          totalVotes: 1491,
+          endsIn: '2 days'
+        },
+        likes: 892,
+        comments: [],
+        shares: 45,
+        liked: false
+      },
+      {
+        id: 8,
+        user: { name: 'LiveNow', handle: '@livenow', avatar: '🔴', verified: true },
+        time: 'LIVE',
+        content: '🔴 LIVE NOW: Building a full-stack app with AI! Come hang out and ask questions! @everyone #coding #webdev #tutorial',
+        media: { type: 'live', url: '', viewers: 1247 },
+        likes: 3421,
+        comments: [],
+        shares: 234,
+        liked: false,
+        isLive: true
+      }
+    ];
+
+    let uploadedImage = null;
+
+    // Format numbers
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+
+    // Highlight hashtags and mentions
+    function highlightText(text) {
+      return text
+        .replace(/#(\w+)/g, '<span class="hashtag" data-tag="$1">#$1</span>')
+        .replace(/@(\w+)/g, '<span class="mention" data-user="$1">@$1</span>');
+    }
+
+    // Create video player HTML
+    function createVideoHTML(media) {
+      return `
+        <div class="video-container" data-playing="false">
+          <video src="${media.url}" preload="metadata"></video>
+          <div class="video-overlay">
+            <button class="play-btn">▶</button>
+          </div>
+          <div class="video-progress">
+            <div class="video-progress-bar"></div>
+          </div>
+          <span class="video-duration">${media.duration || '0:00'}</span>
+        </div>
+      `;
+    }
+
+    // Create poll HTML
+    function createPollHTML(poll, postId) {
+      const optionsHTML = poll.options.map(opt => {
+        const percent = Math.round((opt.votes / poll.totalVotes) * 100);
+        return `
+          <div class="poll-option" data-option-id="${opt.id}" data-post-id="${postId}">
+            <div class="poll-bar" style="width: 0%"></div>
+            <div class="poll-text">
+              <span class="poll-label">${opt.text}</span>
+              <span class="poll-percent">${percent}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="poll-container" data-post-id="${postId}" data-voted="false">
+          <div class="poll-question">${poll.question}</div>
+          ${optionsHTML}
+          <div class="poll-meta">
+            <span>${formatNumber(poll.totalVotes)} votes</span>
+            <span>Ends in ${poll.endsIn}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create live indicator HTML
+    function createLiveHTML(media) {
+      return `
+        <div class="video-container live-stream">
+          <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              LIVE
+            </div>
+            <div style="font-size: 24px;">🎬</div>
+            <div style="color: #888;">${formatNumber(media.viewers)} watching</div>
+            <button class="post-btn" style="margin-top: 8px;">Join Stream</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create comments HTML
+    function createCommentsHTML(comments, postId) {
+      const commentsHTML = comments.map(c => `
+        <div class="comment">
+          <div class="avatar small">${c.avatar}</div>
+          <div class="comment-bubble">
+            <div class="comment-header">
+              <span class="comment-username">${c.user}</span>
+              <span class="comment-time">${c.time}</span>
+            </div>
+            <div class="comment-text">${highlightText(c.text)}</div>
+            <div class="comment-likes">
+              <button class="comment-like-btn">🤍</button>
+              <span>${c.likes}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="comments-section" id="comments-${postId}">
+          ${commentsHTML}
+          <div class="add-comment">
+            <div class="avatar small">🦉</div>
+            <input type="text" class="comment-input" placeholder="Write a comment..." data-post-id="${postId}">
+            <button class="comment-submit" data-post-id="${postId}">Post</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create post HTML
+    function createPostHTML(post) {
+      let mediaHTML = '';
+      
+      if (post.media) {
+        if (post.media.type === 'video') {
+          mediaHTML = createVideoHTML(post.media);
+        } else if (post.media.type === 'live') {
+          mediaHTML = createLiveHTML(post.media);
+        } else {
+          mediaHTML = `<img class="post-media" src="${post.media.url}" alt="Post media" loading="lazy">`;
+        }
+      }
+
+      if (post.poll) {
+        mediaHTML = createPollHTML(post.poll, post.id);
+      }
+
+      const commentCount = Array.isArray(post.comments) ? post.comments.length : post.comments;
+      const isLongContent = post.content.length > 280;
+      const emotionScore = post.emotionScore || generateEmotionScore();
+      const viralPrediction = post.viralPrediction || generateViralPrediction();
+      const blockchainHash = post.blockchainHash || generateBlockchainHash();
+      const isLocked = post.biometricLocked && securityFeatures.biometricLock;
+      const revenueScore = post.revenueScore || (Math.random() * 50 + 10).toFixed(2);
+      const psychoProfile = post.psychoProfile || getPsychoProfile();
+      const product = revenueFeatures.predictiveCommerce ? getPredictiveProduct(post.content) : null;
+      const dynamicPrice = product && revenueFeatures.dynamicPricing ? getMultiversePrice(product.basePrice) : null;
+      const consciousProfile = post.consciousnessProfile || (contentFeatures.consciousness ? getConsciousnessProfile() : null);
+      const timeDilation = post.timeDilated && contentFeatures.timeDilated ? calculateTimeDilation() : null;
+      const isHolographic = post.holographic && contentFeatures.holographic;
+
+      return `
+        <article class="post-card" data-id="${post.id}" data-locked="${isLocked}" style="position: relative; ${isHolographic ? 'perspective: 1000px;' : ''}">
+          ${isHolographic ? '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, transparent 30%, rgba(0,255,255,0.1) 50%, transparent 70%); background-size: 200% 200%; animation: holoScan 3s linear infinite; pointer-events: none;"></div>' : ''}
+          ${timeDilation ? `<div style="position: absolute; top: 8px; right: 8px; background: rgba(0,255,255,0.1); border: 1px solid var(--neon-cyan); border-radius: 6px; padding: 4px 8px; font-size: 10px; color: var(--neon-cyan); font-weight: 600;">⏱️ ${timeDilation.years}yr → ${timeDilation.seconds}s</div>` : ''}
+          ${securityFeatures.quantumEncryption ? '<div class="quantum-shield"></div>' : ''}
+          ${revenueFeatures.psychographic ? `<div class="revenue-panel">💰 Revenue: <span class="revenue-score">$${revenueScore}</span><span class="psycho-tag">${psychoProfile}</span></div>` : ''}
+          ${aiFeatures.emotionMapping ? `<div class="emotion-overlay">😊 Emotion: <span class="emotion-score">${emotionScore}%</span></div>` : ''}
+          ${securityFeatures.blockchainVerify ? `<div class="blockchain-verify">⛓️ Verified: ${blockchainHash}</div>` : ''}
+          ${post.isLive ? '<div class="repost-indicator"><span class="live-badge"><span class="live-dot"></span>LIVE</span> Currently streaming</div>' : ''}
+          <div class="post-header">
+            <div class="avatar small" style="${consciousProfile ? 'background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan)); border: 2px solid var(--neon-magenta); animation: consciousPulse 3s infinite;' : ''}">${consciousProfile ? consciousProfile.emoji : post.user.avatar}</div>
+            <div class="post-user-info">
+              <div class="post-username">
+                ${post.user.name}
+                ${post.user.verified ? '<span class="verified">✓</span>' : ''}
+                ${post.aiGenerated ? '<span class="neural-badge"><span class="neural-dot"></span>AI</span>' : ''}
+                ${post.mindGenerated ? '<span class="neural-badge" style="background: linear-gradient(135deg, var(--neon-magenta), var(--neon-cyan));">🧠 Mind</span>' : ''}
+                ${isHolographic ? '<span style="display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta)); color: #000; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-left: 8px;">🌐 3D</span>' : ''}
+                ${post.secured ? '<span class="security-badge">🛡️ Secured</span>' : ''}
+              </div>
+              <div class="post-time">${post.user.handle} · ${post.time}${consciousProfile ? ` · ${consciousProfile.name} Consciousness` : ''}</div>
+            </div>
+            <div class="post-menu-container">
+              <button class="post-menu">⋯</button>
+              <div class="post-menu-dropdown">
+                <div class="menu-item" data-action="save">🔖 Save Post</div>
+                <div class="menu-item" data-action="hide">👁️ Hide Post</div>
+                <div class="menu-item" data-action="copy">🔗 Copy Link</div>
+                <div class="menu-item danger" data-action="report">🚩 Report</div>
+              </div>
+            </div>
+          </div>
+          <div class="post-content">${highlightText(post.content)}</div>
+          ${isLongContent ? '<button class="read-more-btn">Read more</button>' : ''}
+          ${isLocked ? `
+            <div class="security-lock active">
+              <div class="security-icon">🔒</div>
+              <div class="security-title">Biometric Lock Active</div>
+              <div class="security-desc">This content requires neural pattern authentication</div>
+              <button class="unlock-btn" onclick="unlockContent(${post.id})">Authenticate</button>
+            </div>
+          ` : ''}
+          ${mediaHTML}
+          <div class="post-stats">
+            <span class="likes-count">${formatNumber(post.likes)} likes</span>
+            <span>${formatNumber(commentCount)} comments · ${formatNumber(post.shares)} shares</span>
+          </div>
+          ${aiFeatures.predictiveContent ? `
+            <div style="padding: 0 20px 12px;">
+              <div class="predictive-bar"><div class="predictive-fill" style="width: ${viralPrediction}%"></div></div>
+              <div class="predictive-label">🔮 Viral Prediction: ${viralPrediction}% (97.3% accuracy)</div>
+            </div>
+          ` : ''}
+          <div class="post-actions">
+            <button class="action-btn ${post.liked ? 'liked' : ''}" data-action="like">
+              <span class="icon">${post.liked ? '❤️' : '🤍'}</span>
+              <span>Like</span>
+            </button>
+            <button class="action-btn" data-action="comment">
+              <span class="icon">💬</span>
+              <span>Comment</span>
+            </button>
+            <button class="action-btn" data-action="share">
+              <span class="icon">🔄</span>
+              <span>Share</span>
+            </button>
+            <button class="action-btn" data-action="bookmark">
+              <span class="icon">🔖</span>
+              <span>Save</span>
+            </button>
+          </div>
+          ${product ? `
+            <div style="padding: 0 20px 16px;">
+              <div class="predictive-product">
+                <div class="product-img">${product.emoji}</div>
+                <div class="product-info">
+                  <div class="product-name">${product.name} ${dynamicPrice ? `<span class="multiverse-badge">Timeline ${dynamicPrice.timeline}</span>` : ''}</div>
+                  <div class="product-desc">${product.desc}</div>
+                  <div class="product-price">
+                    ${dynamicPrice ? `<span class="price-old">$${product.basePrice}</span>` : ''}
+                    <span class="price-new dynamic-price">💎 $${dynamicPrice ? dynamicPrice.price : product.basePrice}</span>
+                  </div>
+                </div>
+                <button class="buy-btn" onclick="buyProduct('${product.name}', ${dynamicPrice ? dynamicPrice.price : product.basePrice})">Buy Now</button>
+              </div>
+            </div>
+          ` : ''}
+          ${Array.isArray(post.comments) ? createCommentsHTML(post.comments, post.id) : ''}
+        </article>
+      `;
+    }
+
+    // Initialize feed
+    function initFeed() {
+      const feedEl = document.getElementById('feed');
+      const postsHTML = samplePosts.map(createPostHTML).join('');
+      feedEl.innerHTML = postsHTML;
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    // Post input handling with character counter
+    const postInput = document.getElementById('postInput');
+    const postBtn = document.getElementById('postBtn');
+    const charCounter = document.getElementById('charCounter');
+
+    postInput.addEventListener('input', () => {
+      const len = postInput.value.length;
+      charCounter.textContent = `${len} / 500`;
+      charCounter.className = 'char-counter';
+      if (len > 450) charCounter.classList.add('warning');
+      if (len >= 500) charCounter.classList.add('error');
+      postBtn.disabled = postInput.value.trim() === '' && !uploadedImage;
+    });
+
+    // Image upload handling
+    const photoBtn = document.getElementById('photoBtn');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImage = document.getElementById('removeImage');
+
+    photoBtn.addEventListener('click', () => imageInput.click());
+
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedImage = e.target.result;
+          previewImg.src = uploadedImage;
+          imagePreview.classList.add('active');
+          postBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    removeImage.addEventListener('click', () => {
+      uploadedImage = null;
+      imagePreview.classList.remove('active');
+      imageInput.value = '';
+      postBtn.disabled = postInput.value.trim() === '';
+    });
+
+    // Post submission
+    postBtn.addEventListener('click', () => {
+      if (postInput.value.trim() || uploadedImage) {
+        const newPost = {
+          id: Date.now(),
+          user: { name: 'You', handle: '@you', avatar: '🦉', verified: false },
+          time: 'Just now',
+          content: postInput.value.trim(),
+          media: uploadedImage ? { type: 'image', url: uploadedImage } : null,
+          likes: 0,
+          comments: [],
+          shares: 0,
+          liked: false
+        };
+        
+        const feedEl = document.getElementById('feed');
+        feedEl.insertAdjacentHTML('afterbegin', createPostHTML(newPost));
+        postInput.value = '';
+        charCounter.textContent = '0 / 500';
+        uploadedImage = null;
+        imagePreview.classList.remove('active');
+        imageInput.value = '';
+        postBtn.disabled = true;
+        showToast('Post published!');
+      }
+    });
+
+    // Handle post actions (combined handler)
+    document.getElementById('feed').addEventListener('click', (e) => {
+      // Video player
+      const videoContainer = e.target.closest('.video-container');
+      if (videoContainer && !videoContainer.classList.contains('live-stream')) {
+        const video = videoContainer.querySelector('video');
+        const playBtn = videoContainer.querySelector('.play-btn');
+        if (video && playBtn) {
+          if (video.paused) {
+            video.play();
+            videoContainer.classList.add('playing');
+            playBtn.textContent = '⏸';
+          } else {
+            video.pause();
+            videoContainer.classList.remove('playing');
+            playBtn.textContent = '▶';
+          }
+        }
+        return;
+      }
+
+      // Poll voting
+      const pollOption = e.target.closest('.poll-option');
+      if (pollOption) {
+        const pollContainer = pollOption.closest('.poll-container');
+        if (pollContainer.dataset.voted === 'true') return;
+
+        pollContainer.dataset.voted = 'true';
+        pollOption.classList.add('selected');
+        
+        pollContainer.querySelectorAll('.poll-option').forEach(opt => {
+          opt.classList.add('voted');
+          const percent = opt === pollOption ? 
+            Math.floor(Math.random() * 20) + 35 : 
+            Math.floor(Math.random() * 25) + 10;
+          opt.querySelector('.poll-bar').style.width = percent + '%';
+          opt.querySelector('.poll-percent').textContent = percent + '%';
+        });
+
+        showToast('Vote recorded!');
+        return;
+      }
+
+      // Hashtag click
+      const hashtag = e.target.closest('.hashtag');
+      if (hashtag) {
+        showToast(`Searching #${hashtag.dataset.tag}...`);
+        return;
+      }
+
+      // Mention click
+      const mention = e.target.closest('.mention');
+      if (mention) {
+        showToast(`Viewing @${mention.dataset.user}'s profile...`);
+        return;
+      }
+
+      // Like button
+      const actionBtn = e.target.closest('.action-btn');
+      if (actionBtn) {
+        const action = actionBtn.dataset.action;
+        const postCard = actionBtn.closest('.post-card');
+        
+        if (action === 'like') {
+          actionBtn.classList.toggle('liked');
+          const icon = actionBtn.querySelector('.icon');
+          icon.textContent = actionBtn.classList.contains('liked') ? '❤️' : '🤍';
+        }
+        
+        if (action === 'comment') {
+          const postId = postCard.dataset.id;
+          const commentsSection = document.getElementById(`comments-${postId}`);
+          if (commentsSection) {
+            commentsSection.classList.toggle('open');
+            if (commentsSection.classList.contains('open')) {
+              const input = commentsSection.querySelector('.comment-input');
+              if (input) input.focus();
+            }
+          }
+        }
+        
+        if (action === 'share') {
+          openShareModal(postCard.dataset.id);
+        }
+
+        if (action === 'bookmark') {
+          actionBtn.classList.toggle('bookmarked');
+          const icon = actionBtn.querySelector('.icon');
+          if (actionBtn.classList.contains('bookmarked')) {
+            icon.textContent = '📑';
+            showToast('Post saved to bookmarks!');
+          } else {
+            icon.textContent = '🔖';
+            showToast('Removed from bookmarks');
+          }
+        }
+        return;
+      }
+
+      // Post menu
+      const menuBtn = e.target.closest('.post-menu');
+      if (menuBtn) {
+        const dropdown = menuBtn.nextElementSibling;
+        document.querySelectorAll('.post-menu-dropdown.open').forEach(d => {
+          if (d !== dropdown) d.classList.remove('open');
+        });
+        dropdown.classList.toggle('open');
+        return;
+      }
+
+      // Menu item
+      const menuItem = e.target.closest('.menu-item');
+      if (menuItem) {
+        const action = menuItem.dataset.action;
+        if (action === 'copy') {
+          navigator.clipboard.writeText('https://hootner.com/post/12345');
+          showToast('Link copied!');
+        } else if (action === 'save') {
+          showToast('Post saved!');
+        } else if (action === 'hide') {
+          menuItem.closest('.post-card').remove();
+          showToast('Post hidden');
+        } else if (action === 'report') {
+          showToast('Post reported');
+        }
+        menuItem.closest('.post-menu-dropdown').classList.remove('open');
+        return;
+      }
+
+      // Comment submit
+      const commentSubmit = e.target.closest('.comment-submit');
+      if (commentSubmit) {
+        const postId = commentSubmit.dataset.postId;
+        const input = document.querySelector(`.comment-input[data-post-id="${postId}"]`);
+        if (input && input.value.trim()) {
+          const commentsSection = document.getElementById(`comments-${postId}`);
+          const newComment = `
+            <div class="comment">
+              <div class="avatar small">🦉</div>
+              <div class="comment-bubble">
+                <div class="comment-header">
+                  <span class="comment-username">You</span>
+                  <span class="comment-time">Just now</span>
+                </div>
+                <div class="comment-text">${input.value.trim()}</div>
+                <div class="comment-likes">
+                  <button class="comment-like-btn">🤍</button>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          `;
+          commentsSection.insertAdjacentHTML('afterbegin', newComment);
+          input.value = '';
+        }
+      }
+    });
+
+    // Close menu on click outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.post-menu-container')) {
+        document.querySelectorAll('.post-menu-dropdown.open').forEach(d => d.classList.remove('open'));
+      }
+    });
+
+    // Share Modal
+    const shareModal = document.getElementById('shareModal');
+    const closeModal = document.getElementById('closeModal');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function openShareModal(postId) {
+      document.getElementById('shareLink').value = `https://hootner.com/post/${postId}`;
+      shareModal.classList.add('active');
+    }
+
+    closeModal.addEventListener('click', () => shareModal.classList.remove('active'));
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) shareModal.classList.remove('active');
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('shareLink').value);
+      showToast('Link copied!');
+      shareModal.classList.remove('active');
+    });
+
+    // Share options
+    document.querySelectorAll('.share-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const platform = opt.dataset.platform;
+        showToast(`Opening ${platform}...`);
+        shareModal.classList.remove('active');
+      });
+    });
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Feed tabs
+    document.querySelectorAll('.feed-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        showToast(`Switched to ${tab.textContent}`);
+      });
+    });
+
+    // Follow button handling
+    document.querySelectorAll('.follow-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.textContent === 'Follow') {
+          btn.textContent = 'Following';
+          btn.style.background = 'var(--neon-cyan)';
+          btn.style.color = '#000';
+          showToast('Followed!');
+        } else {
+          btn.textContent = 'Follow';
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--neon-cyan)';
+          showToast('Unfollowed');
+        }
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    
+    const searchData = [
+      { type: 'user', name: 'VideoCreator', handle: '@videocreator', avatar: '🎬' },
+      { type: 'user', name: 'MusicProducer', handle: '@musicprod', avatar: '🎵' },
+      { type: 'user', name: 'TechReviewer', handle: '@techrev', avatar: '💻' },
+      { type: 'user', name: 'ArtistDaily', handle: '@artistdaily', avatar: '🎨' },
+      { type: 'user', name: 'GamingPro', handle: '@gamingpro', avatar: '🎮' },
+      { type: 'hashtag', name: '#AIVideoGen', posts: '12.4K posts' },
+      { type: 'hashtag', name: '#HootnerLive', posts: '8.2K posts' },
+      { type: 'hashtag', name: '#ContentCreator', posts: '5.7K posts' },
+      { type: 'hashtag', name: '#gaming', posts: '45K posts' },
+      { type: 'hashtag', name: '#coding', posts: '23K posts' },
+      { type: 'hashtag', name: '#webdev', posts: '18K posts' }
+    ];
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      
+      if (query.length < 1) {
+        searchResults.classList.remove('active');
+        return;
+      }
+
+      const filtered = searchData.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        (item.handle && item.handle.toLowerCase().includes(query))
+      );
+
+      if (filtered.length > 0) {
+        searchResults.innerHTML = filtered.map(item => `
+          <div class="search-result-item" data-type="${item.type}" data-name="${item.name}">
+            <div class="avatar small">${item.avatar || '#️⃣'}</div>
+            <div class="search-result-text">
+              <div class="search-result-name">${item.name}</div>
+              <div class="search-result-type">${item.type === 'user' ? item.handle : item.posts}</div>
+            </div>
+          </div>
+        `).join('');
+        searchResults.classList.add('active');
+      } else {
+        searchResults.innerHTML = '<div class="search-result-item"><div class="search-result-text">No results found</div></div>';
+        searchResults.classList.add('active');
+      }
+    });
+
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => searchResults.classList.remove('active'), 200);
+    });
+
+    searchResults.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-result-item');
+      if (item) {
+        const name = item.dataset.name;
+        showToast(`Searching for ${name}...`);
+        searchInput.value = '';
+        searchResults.classList.remove('active');
+      }
+    });
+
+    // Update video progress
+    document.querySelectorAll('video').forEach(video => {
+      video.addEventListener('timeupdate', () => {
+        const progress = (video.currentTime / video.duration) * 100;
+        const progressBar = video.closest('.video-container').querySelector('.video-progress-bar');
+        if (progressBar) progressBar.style.width = progress + '%';
+      });
+    });
+
+    // Infinite scroll simulation
+    let loading = false;
+    window.addEventListener('scroll', () => {
+      if (loading) return;
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loading = true;
+        document.getElementById('loading').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('loading').style.display = 'none';
+          loading = false;
+        }, 1500);
+      }
+    });
+
+    // AI Panel Toggle
+    const aiToggle = document.getElementById('aiToggle');
+    const aiPanel = document.getElementById('aiPanel');
+    const aiClose = document.getElementById('aiClose');
+
+    aiToggle.addEventListener('click', () => {
+      aiPanel.classList.toggle('active');
+      aiToggle.classList.toggle('active');
+    });
+
+    aiClose.addEventListener('click', () => {
+      aiPanel.classList.remove('active');
+      aiToggle.classList.remove('active');
+    });
+
+    // AI Feature Toggles
+    document.querySelectorAll('.ai-feature').forEach(feature => {
+      feature.addEventListener('click', () => {
+        const featureName = feature.dataset.feature;
+        const statusEl = feature.querySelector('.ai-status');
+        
+        feature.classList.toggle('active');
+        
+        if (feature.classList.contains('active')) {
+          statusEl.textContent = 'Processing';
+          statusEl.className = 'ai-status processing';
+          
+          setTimeout(() => {
+            statusEl.textContent = 'Active';
+            statusEl.className = 'ai-status active';
+            
+            // Enable AI feature
+            if (featureName === 'neural-synthesis') aiFeatures.neuralSynthesis = true;
+            if (featureName === 'emotion-mapping') aiFeatures.emotionMapping = true;
+            if (featureName === 'predictive-content') aiFeatures.predictiveContent = true;
+            if (featureName === 'cross-dimensional') aiFeatures.crossDimensional = true;
+            
+            // Refresh feed to show AI enhancements
+            initFeed();
+            showToast(`✨ ${feature.querySelector('.ai-feature-name').textContent.split('<')[0]} activated!`);
+          }, 1500);
+        } else {
+          statusEl.textContent = 'Ready';
+          statusEl.className = 'ai-status';
+          
+          // Disable AI feature
+          if (featureName === 'neural-synthesis') aiFeatures.neuralSynthesis = false;
+          if (featureName === 'emotion-mapping') aiFeatures.emotionMapping = false;
+          if (featureName === 'predictive-content') aiFeatures.predictiveContent = false;
+          if (featureName === 'cross-dimensional') aiFeatures.crossDimensional = false;
+          
+          initFeed();
+          showToast('AI feature deactivated');
+        }
+      });
+    });
+
+    // AI Video Generation Button
+    const aiGenBtn = document.getElementById('aiGenBtn');
+    aiGenBtn.addEventListener('click', () => {
+      if (!aiFeatures.neuralSynthesis) {
+        showToast('⚠️ Enable Neural Synthesis in AI panel first');
+        aiPanel.classList.add('active');
+        return;
+      }
+      
+      aiGenBtn.classList.add('ai-active');
+      showToast('🧠 Neural video synthesis initiated...');
+      
+      setTimeout(() => {
+        const prompt = postInput.value.trim() || 'A stunning cinematic video';
+        postInput.value = `${prompt}\n\n[AI-Generated Video: Neural synthesis complete - Netflix-quality 4K HDR]`;
+        aiGenBtn.classList.remove('ai-active');
+        showToast('✨ AI video generated! Ready to post.');
+        postBtn.disabled = false;
+      }, 3000);
+    });
+
+    // Revenue Modal
+    const revenueBtn = document.getElementById('revenueBtn');
+    const revenueModal = document.getElementById('revenueModal');
+    const closeRevenueModal = document.getElementById('closeRevenueModal');
+
+    revenueBtn.addEventListener('click', () => revenueModal.classList.add('active'));
+    closeRevenueModal.addEventListener('click', () => revenueModal.classList.remove('active'));
+
+    // Revenue Feature Toggles
+    document.querySelectorAll('[data-revenue]').forEach(feature => {
+      feature.addEventListener('click', async () => {
+        const revenueType = feature.dataset.revenue;
+        const statusEl = feature.querySelector('.ai-status');
+        
+        if (feature.classList.contains('active')) {
+          feature.classList.remove('active');
+          statusEl.textContent = 'Ready';
+          statusEl.className = 'ai-status';
+          revenueFeatures[revenueType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = false;
+          showToast('Revenue feature disabled');
+          return;
+        }
+        
+        statusEl.textContent = 'Activating';
+        statusEl.className = 'ai-status processing';
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        
+        feature.classList.add('active');
+        statusEl.textContent = 'Active';
+        statusEl.className = 'ai-status active';
+        revenueFeatures[revenueType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = true;
+        
+        if (revenueType === 'autonomous-model') {
+          setInterval(() => evolveBusinessModel(), 45000);
+          evolveBusinessModel();
+        }
+        
+        initFeed();
+        showToast(`💰 ${feature.querySelector('.ai-feature-name').textContent.split('<')[0]} activated!`);
+      });
+    });
+
+    // Buy product function
+    window.buyProduct = function(name, price) {
+      showToast(`🛒 Purchasing ${name} for $${price}...`);
+      setTimeout(() => {
+        showToast(`✅ ${name} purchased! Revenue: +$${price}`);
+      }, 1500);
+    };
+
+    // Content Creation Modal
+    const contentBtn = document.getElementById('contentBtn');
+    const contentModal = document.getElementById('contentModal');
+    const closeContentModal = document.getElementById('closeContentModal');
+
+    contentBtn.addEventListener('click', () => contentModal.classList.add('active'));
+    closeContentModal.addEventListener('click', () => contentModal.classList.remove('active'));
+
+    document.querySelectorAll('[data-content]').forEach(feature => {
+      feature.addEventListener('click', async () => {
+        const contentType = feature.dataset.content;
+        const statusEl = feature.querySelector('.ai-status');
+        
+        if (feature.classList.contains('active')) {
+          feature.classList.remove('active');
+          statusEl.textContent = 'Ready';
+          statusEl.className = 'ai-status';
+          contentFeatures[contentType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = false;
+          showToast('Content feature disabled');
+          return;
+        }
+        
+        statusEl.textContent = 'Initializing';
+        statusEl.className = 'ai-status processing';
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        feature.classList.add('active');
+        statusEl.textContent = 'Active';
+        statusEl.className = 'ai-status active';
+        contentFeatures[contentType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = true;
+        
+        initFeed();
+        showToast(`🎬 ${feature.querySelector('.ai-feature-name').textContent.split('<')[0]} activated!`);
+      });
+    });
+
+    // Mind-to-Video Interface
+    const mindToVideoBtn = document.getElementById('mindToVideoBtn');
+    const neuralInterface = document.getElementById('neuralInterface');
+    const neuralStatus = document.getElementById('neuralStatus');
+    const thoughtInput = document.getElementById('thoughtInput');
+    const quantumBar = document.getElementById('quantumBar');
+    const cancelNeural = document.getElementById('cancelNeural');
+
+    mindToVideoBtn.addEventListener('click', () => {
+      if (!contentFeatures.mindToVideo) {
+        showToast('⚠️ Enable Mind-to-Video in content panel first');
+        contentModal.classList.add('active');
+        return;
+      }
+      
+      neuralInterface.classList.add('active');
+      neuralStatus.textContent = '🧠 Connecting to neural interface...';
+      quantumBar.style.width = '0%';
+      
+      setTimeout(() => {
+        neuralStatus.textContent = '✓ Neural link established';
+        thoughtInput.disabled = false;
+        thoughtInput.focus();
+        quantumBar.style.width = '33%';
+      }, 2000);
+      
+      setTimeout(() => {
+        neuralStatus.textContent = '🧠 Reading thought patterns...';
+        quantumBar.style.width = '66%';
+      }, 4000);
+      
+      setTimeout(() => {
+        neuralStatus.textContent = '🎬 Generating video from consciousness...';
+        quantumBar.style.width = '100%';
+      }, 6000);
+      
+      setTimeout(() => {
+        const thought = thoughtInput.value || 'A beautiful cinematic journey through space';
+        postInput.value = `${thought}\n\n[Mind-Generated Video: Neural interface conversion complete - Consciousness captured in 4K]`;
+        neuralInterface.classList.remove('active');
+        thoughtInput.value = '';
+        thoughtInput.disabled = true;
+        postBtn.disabled = false;
+        showToast('✨ Mind-to-video conversion complete!');
+      }, 8000);
+    });
+
+    cancelNeural.addEventListener('click', () => {
+      neuralInterface.classList.remove('active');
+      thoughtInput.value = '';
+      thoughtInput.disabled = true;
+    });
+
+    // RSS Feed Modal
+    const rssBtn = document.getElementById('rssBtn');
+    const rssModal = document.getElementById('rssModal');
+    const closeRssModal = document.getElementById('closeRssModal');
+    const copyRssBtn = document.getElementById('copyRssBtn');
+
+    rssBtn.addEventListener('click', () => rssModal.classList.add('active'));
+    closeRssModal.addEventListener('click', () => rssModal.classList.remove('active'));
+    copyRssBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('rssLink').value);
+      showToast('✅ RSS feed URL copied!');
+    });
+
+    // Security Modal
+    const securityBtn = document.getElementById('securityBtn');
+    const securityModal = document.getElementById('securityModal');
+    const closeSecurityModal = document.getElementById('closeSecurityModal');
+
+    securityBtn.addEventListener('click', () => securityModal.classList.add('active'));
+    closeSecurityModal.addEventListener('click', () => securityModal.classList.remove('active'));
+
+    // Security Feature Toggles
+    document.querySelectorAll('[data-security]').forEach(feature => {
+      feature.addEventListener('click', async () => {
+        const securityType = feature.dataset.security;
+        const statusEl = feature.querySelector('.ai-status');
+        
+        if (feature.classList.contains('active')) {
+          feature.classList.remove('active');
+          statusEl.textContent = 'Ready';
+          statusEl.className = 'ai-status';
+          securityFeatures[securityType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = false;
+          showToast('Security feature disabled');
+          return;
+        }
+        
+        statusEl.textContent = 'Activating';
+        statusEl.className = 'ai-status processing';
+        
+        // Authenticate based on security type
+        let authenticated = true;
+        if (securityType === 'usb-passkey') {
+          authenticated = await authenticateUSBKey();
+        } else if (securityType === 'biometric-lock') {
+          authenticated = await authenticateBiometric();
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        if (authenticated) {
+          feature.classList.add('active');
+          statusEl.textContent = 'Active';
+          statusEl.className = 'ai-status active';
+          securityFeatures[securityType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())] = true;
+          
+          if (securityType === 'self-healing') {
+            setInterval(() => triggerSelfHealing(), 30000);
+          }
+          
+          initFeed();
+          showToast(`🛡️ ${feature.querySelector('.ai-feature-name').textContent.split('<')[0]} activated!`);
+        } else {
+          statusEl.textContent = 'Failed';
+          statusEl.className = 'ai-status';
+        }
+      });
+    });
+
+    // Unlock biometric content
+    window.unlockContent = async function(postId) {
+      const authenticated = await authenticateBiometric();
+      if (authenticated) {
+        const post = document.querySelector(`[data-id="${postId}"]`);
+        post.dataset.locked = 'false';
+        post.querySelector('.security-lock').remove();
+      }
+    };
+
+    // Cross-Dimensional Analytics (simulate)
+    if (aiFeatures.crossDimensional) {
+      setInterval(() => {
+        const scenarios = generateDimensionalScenarios();
+        console.log('📊 Cross-Dimensional Analytics:', scenarios);
+      }, 10000);
+    }
+
+    // Revenue Analytics Logging
+    if (revenueFeatures.psychographic || revenueFeatures.dynamicPricing) {
+      setInterval(() => {
+        console.log('💰 Revenue Intelligence:', {
+          totalRevenue: '$' + (Math.random() * 1000 + 500).toFixed(2),
+          psychoProfiles: psychoProfiles.map(p => ({ profile: p, conversion: (Math.random() * 30 + 10).toFixed(1) + '%' })),
+          multiversePricing: { timelineA: 0.85, timelineB: 1.12, timelineC: 0.93 }
+        });
+      }, 15000);
+    }
+
+    // Content Creation Analytics
+    if (contentFeatures.mindToVideo || contentFeatures.timeDilated) {
+      setInterval(() => {
+        console.log('🎬 Content Creation Analytics:', {
+          mindToVideoConversions: Math.floor(Math.random() * 50 + 10),
+          holographicStreams: Math.floor(Math.random() * 30 + 5),
+          timeDilationRatio: (Math.random() * 10000 + 1000).toFixed(0) + ':1',
+          consciousnessProfiles: consciousnessProfiles.map(p => ({ name: p.name, active: Math.floor(Math.random() * 100) }))
+        });
+      }, 20000);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes holoScan { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+      @keyframes consciousPulse { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.1); filter: brightness(1.3); } }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initFeed();
+      setTimeout(() => {
+        const alert = document.getElementById('autonomousAlert');
+        alert.textContent = '🎬 Revolutionary Content Creation System Online';
+        alert.classList.add('active');
+        setTimeout(() => alert.classList.remove('active'), 3000);
+      }, 2000);
+    });
+  </script></body>
+</html>

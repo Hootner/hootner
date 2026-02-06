@@ -1,0 +1,14 @@
+{
+  "layer": "Governance",
+  "replicas": 3,
+  "services": 11,
+  "resources": {
+    "cpu": "1.5",
+    "memory": "1536Mi"
+  },
+  "autoscaling": {
+    "min": 3,
+    "max": 9,
+    "targetCPU": 70
+  }
+}

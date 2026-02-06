@@ -1,0 +1,15 @@
+# CI/CD DISABLED
+# This workflow has been disabled to stop CI/CD processes
+# Original workflow backed up as upload-security-deploy.yml.disabled
+
+name: DISABLED - Upload Security & Deploy
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI/CD Disabled
+        run: echo "CI/CD has been disabled. To re-enable, restore from .disabled backup file"

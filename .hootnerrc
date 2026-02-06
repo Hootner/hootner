@@ -1,0 +1,48 @@
+# HOOTNER Satellite Internet Optimization
+# For HughesNet/Viasat users - AWS Mode
+
+# === DEVELOPMENT MODE ===
+MODE=aws
+OFFLINE_FIRST=false
+
+# === AWS OPTIMIZATION ===
+# Reduce API calls
+AWS_SDK_LOAD_CONFIG=1
+AWS_MAX_ATTEMPTS=2
+AWS_RETRY_MODE=standard
+
+# Cache AWS responses locally
+ENABLE_AWS_CACHE=true
+CACHE_TTL=3600
+
+# === BANDWIDTH LIMITS ===
+# Compress all uploads
+ENABLE_COMPRESSION=true
+COMPRESSION_LEVEL=9
+
+# Limit concurrent connections
+MAX_CONCURRENT_UPLOADS=1
+MAX_CONCURRENT_DOWNLOADS=2
+
+# === VIDEO OPTIMIZATION ===
+# Lower quality for satellite
+DEFAULT_VIDEO_QUALITY=360p
+ENABLE_ADAPTIVE_BITRATE=true
+VIDEO_CHUNK_SIZE=256kb
+
+# === DATA SAVING ===
+# Skip unnecessary downloads
+SKIP_SOURCEMAPS=true
+SKIP_DEV_DEPENDENCIES=true
+NPM_PREFER_OFFLINE=true
+
+# === DEPLOYMENT ===
+# Deploy only changed files
+INCREMENTAL_DEPLOY=true
+DEPLOY_COMPRESSION=true
+
+# === CLOUDFRONT ===
+# Aggressive edge caching
+CLOUDFRONT_TTL=86400
+ENABLE_GZIP=true
+ENABLE_BROTLI=true

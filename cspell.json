@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "HOOTNER",
+    "Hootner",
+    "hootner",
+    "hexarchy",
+    "orchestrator",
+    "cognito",
+    "dynamodb",
+    "cloudfront",
+    "webauthn",
+    "yubikey",
+    "fido"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    ".aws-sam/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.min.js",
+    "package-lock.json"
+  ]
+}

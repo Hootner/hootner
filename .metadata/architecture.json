@@ -1,0 +1,51 @@
+{
+  "generated": "2026-02-06T02:53:19.795Z",
+  "totalFiles": 1302,
+  "filesByType": {
+    "js": 797,
+    "json": 101,
+    "ts": 38,
+    "tsx": 30,
+    "jsx": 19,
+    "yaml": 10,
+    "yml": 4,
+    "py": 70,
+    "md": 220,
+    "html": 117,
+    "css": 21,
+    "cjs": 10,
+    "mjs": 1
+  },
+  "structure": {
+    "hexarchy": 9,
+    "api": 1,
+    "apps": 1,
+    "scripts": 1,
+    "services": 1,
+    "docs": 1,
+    "tests": 1,
+    "frameworks": 1,
+    "tools": 1
+  },
+  "layers": [
+    "0-core",
+    "1-foundation",
+    "2-intelligence",
+    "3-communication",
+    "4-interface",
+    "5-economy",
+    "6-governance",
+    "7-data",
+    "8-operations",
+    "9-documentation"
+  ],
+  "awsPipes": 120,
+  "coreServices": [
+    "video-generation",
+    "ai-agents",
+    "graphql",
+    "authentication",
+    "stripe-billing",
+    "mcp-integration"
+  ]
+}

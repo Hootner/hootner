@@ -1,0 +1,141 @@
+{
+  "model_id": "runwayml/stable-diffusion-v1-5",
+  "s3_bucket": "hootner-frontend-504165876439",
+  "s3_data_prefix": "training-data/images/",
+  "render_output_prefix": "training-data/offline-render/frames/",
+  "render_metadata_prefix": "training-data/offline-render/metadata/",
+  "s3_scripts_prefix": "scripts/",
+  "prompts_s3_key": "training_prompts.json",
+  "s3_output_prefix": "trained-models/stable-diffusion",
+  "prompts_file": "./training_prompts.json",
+
+  "epochs": 10,
+  "batch_size": 1,
+  "learning_rate": 5e-6,
+  "weight_decay": 0.01,
+  "warmup_steps": 100,
+  "log_steps": 10,
+  "image_size": 512,
+  "num_workers": 2,
+
+  "aws": {
+    "region": "us-east-1",
+    "instance_type": "g5.xlarge",
+    "security_group": "default",
+    "key_name": "default"
+  },
+
+  "render": {
+    "job": {
+      "enabled": false,
+      "package_s3_prefix": "training-data/offline-render/package/",
+      "work_dir": "/home/ubuntu/render_job",
+      "frames_dir": "frames",
+      "metadata_dir": "metadata",
+      "command": "/home/ubuntu/hootner/scripts/octane_unreal_render.sh --unreal-cmd \"{unreal_cmd}\" --project \"{project_file}\" --mrq-config \"{mrq_config}\" --output \"{frames_dir}\" --octane-settings \"{work_dir}/octane_settings.json\"",
+      "command_shell": true
+    },
+    "compress": {
+      "enabled": false,
+      "target": "frames",
+      "format": "zip",
+      "output_prefix": "training-data/offline-render/archives/",
+      "include_metadata": true,
+      "delete_local_after_upload": false
+    },
+    "mrq": {
+      "output_directory": "{project_dir}/Saved/MovieRenders/",
+      "output_file_name_format": "{sequence_name}_{frame_number_rel}",
+      "output_resolution": [12000, 6720],
+      "use_custom_frame_rate": true,
+      "output_frame_rate": [120, 1],
+      "output_format": "exr",
+      "override_existing_output": true,
+      "handle_frame_count": 0,
+      "output_frame_step": 1,
+      "use_custom_playback_range": false,
+      "custom_start_frame": 0,
+      "custom_end_frame": 0,
+      "deferred_rendering": {
+        "enabled": true
+      },
+      "ui_renderer": {
+        "enabled": false
+      },
+      "burn_in": {
+        "enabled": false,
+        "burn_in_class": "/Engine/MovieRenderPipeline/Blueprints/DefaultBurnIn.DefaultBurnIn_C",
+        "burn_in_to_separate_layer": false
+      },
+      "camera": {
+        "shutter_angle": 180
+      },
+      "game_overrides": {
+        "cinematic_quality_settings": true,
+        "game_mode": "",
+        "disable_hud": true,
+        "override_game_mode": false
+      },
+      "anti_aliasing": {
+        "spatial_sample_count": 8,
+        "temporal_sample_count": 128,
+        "override_anti_aliasing": true,
+        "anti_aliasing_method": "TSR"
+      },
+      "warm_up": {
+        "engine_warm_up_count": 120,
+        "render_warm_up_count": 60
+      },
+      "high_resolution": {
+        "enabled": true,
+        "tile_count": [4, 2],
+        "tile_overlap": 0.1,
+        "allocate_history_per_tile": true
+      },
+      "console_variables": {
+        "r.ScreenPercentage": 200,
+        "r.MotionBlurQuality": 4,
+        "r.DepthOfFieldQuality": 4,
+        "r.BloomQuality": 5,
+        "r.HDR.EnableHDROutput": 1,
+        "r.HDR.Display.OutputDevice": 5,
+        "r.HDR.Display.ColorGamut": 2
+      }
+    },
+    "octane": {
+      "kernel": "path_tracing",
+      "diffuse_depth": 12,
+      "specular_depth": 6,
+      "glossy_depth": 6,
+      "scatter_depth": 8,
+      "max_depth": 24,
+      "gi_clamp": 50,
+      "max_samples": 512,
+      "parallel_samples": 32,
+      "caustic_blur": 0.02,
+      "coherent_ratio": 0.1,
+      "adaptive_sampling": true,
+      "adaptive_noise_threshold": 0.03,
+      "adaptive_min_samples": 128,
+      "denoiser": true
+    },
+    "unreal": {
+      "enabled": false,
+      "ray_tracing": true,
+      "path_tracing": false,
+      "strip_dcim": true,
+      "output_format": "png",
+      "console_vars": {},
+      "command": "",
+      "unreal_cmd": "/opt/unreal/Engine/Binaries/Linux/UnrealEditor-Cmd",
+      "project_file": "/home/ubuntu/render_job/project/MyProject.uproject",
+      "mrq_config": "/Game/MoviePipeline/Configs/HighQuality"
+    }
+  },
+
+  "optimization": {
+    "use_mixed_precision": true,
+    "gradient_checkpointing": true,
+    "use_8bit_adam": false
+  }
+}

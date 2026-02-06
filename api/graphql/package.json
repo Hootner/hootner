@@ -1,0 +1,52 @@
+{
+  "name": "@hootner/graphql-api",
+  "version": "2.0.0",
+  "description": "HOOTNER GraphQL API Server with Real-time Subscriptions",
+  "type": "module",
+  "main": "server-enhanced.js",
+  "config": {
+    "schema": "schema-enhanced.graphql",
+    "port": 4000
+  },
+  "scripts": {
+    "start": "node server-enhanced.js",
+    "start:legacy": "node server.js",
+    "dev": "nodemon server-enhanced.js",
+    "schema:validate": "node -e \"require('fs').readFileSync('schema-enhanced.graphql', 'utf8'); console.log('✅ Schema valid')\"",
+    "schema:info": "echo 'Active Schema: schema-enhanced.graphql (570 lines, 45+ operations)'",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.974.0",
+    "@aws-sdk/lib-dynamodb": "^3.974.0",
+    "@graphql-tools/schema": "^10.0.2",
+    "apollo-server-core": "^3.13.0",
+    "apollo-server-express": "^3.13.0",
+    "axios": "^1.6.5",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "graphql": "^16.8.1",
+    "graphql-http": "^1.22.1",
+    "graphql-redis-subscriptions": "^2.6.0",
+    "graphql-scalars": "^1.22.4",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-upload": "^16.0.2",
+    "graphql-ws": "^5.14.3",
+    "helmet": "^7.1.0",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "serverless-http": "^3.2.0",
+    "stripe": "^14.9.0",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3"
+  }
+}

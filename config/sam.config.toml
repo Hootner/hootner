@@ -1,0 +1,20 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "hootner-platform"
+resolve_s3 = true
+s3_prefix = "hootner"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = [ ]
+disable_rollback = true
+
+[default.global.parameters]
+stack_name = "hootner-platform"
+region = "us-east-1"
+
+[default.sync.parameters]
+template_file = "c:\\Users\\12182\\Projects\\my-local-repo\\template-with-keys.yaml"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ljfri0alqtmp"
+dependency_layer = false
+watch = true

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOOTNER Login Guide</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .login-method { background: #f8f9fa; border-left: 4px solid #007bff; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .step { background: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #2196f3; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        code { background: #f1f3f4; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .form-example { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px dashed #6c757d; }
+        h1, h2 { color: #333; }
+        h1 { text-align: center; color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 HOOTNER User Authentication Guide</h1>
+        
+        <h2>📧 How Users Log In (EMAIL-BASED)</h2>
+        
+        <div class="login-method">
+            <h3>✅ Primary Login Method: Email + Password</h3>
+            <p><strong>Users log in with their EMAIL ADDRESS, not mailing address!</strong></p>
+            <ul>
+                <li><strong>Username:</strong> Email address (e.g., user@example.com)</li>
+                <li><strong>Password:</strong> Must meet security requirements</li>
+                <li><strong>Verification:</strong> Email verification required</li>
+            </ul>
+        </div>
+
+        <h2>🚀 User Registration Process</h2>
+        
+        <div class="step">
+            <h4>Step 1: User Signs Up</h4>
+            <div class="form-example">
+                <strong>Sign Up Form:</strong><br>
+                Email: <code>john.doe@example.com</code><br>
+                Password: <code>SecurePass123!</code><br>
+                Confirm Password: <code>SecurePass123!</code>
+            </div>
+        </div>
+
+        <div class="step">
+            <h4>Step 2: Email Verification</h4>
+            <p>AWS Cognito sends verification email to user's inbox:</p>
+            <div class="form-example">
+                <strong>Email Subject:</strong> "Verify your HOOTNER account"<br>
+                <strong>Content:</strong> Click link or enter verification code: <code>123456</code>
+            </div>
+        </div>
+
+        <div class="step">
+            <h4>Step 3: Account Activated</h4>
+            <div class="success">
+                ✅ User can now log in and trigger render jobs!
+            </div>
+        </div>
+
+        <h2>🔑 Password Requirements</h2>
+        
+        <div class="warning">
+            <strong>Security Policy (from template.yaml):</strong>
+            <ul>
+                <li>🔢 Minimum 8 characters</li>
+                <li>🔠 At least 1 uppercase letter</li>
+                <li>🔡 At least 1 lowercase letter</li>
+                <li>🔢 At least 1 number</li>
+                <li>🔣 At least 1 symbol (!@#$%^&*)</li>
+            </ul>
+        </div>
+
+        <h2>💻 Login Process (Frontend)</h2>
+
+        <div class="step">
+            <h4>Option 1: Custom Login Form</h4>
+            <div class="form-example">
+<pre><code>// React/JavaScript Login
+import { Auth } from 'aws-amplify';
+
+const login = async (email, password) => {
+    try {
+        const user = await Auth.signIn(email, password);
+        console.log('Logged in:', user);
+        
+        // Get access token for API calls
+        const session = await Auth.currentSession();
+        const token = session.getAccessToken().getJwtToken();
+        
+        // Now user can trigger render jobs!
+        
+    } catch (error) {
+        console.error('Login failed:', error);
+    }
+};</code></pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h4>Option 2: Cognito Hosted UI</h4>
+            <div class="form-example">
+                <strong>AWS provides a ready-made login page:</strong><br>
+                URL: <code>https://your-domain.auth.us-east-1.amazoncognito.com/login</code><br>
+                <br>
+                <strong>Features:</strong>
+                <ul>
+                    <li>Professional login/signup forms</li>
+                    <li>Password reset functionality</li>
+                    <li>Social login (Google, Facebook) - optional</li>
+                    <li>Multi-factor authentication - optional</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>🔄 Complete Authentication Flow</h2>
+
+        <div class="step">
+            <strong>1. User visits HOOTNER app</strong> → Sees "Login Required" message
+        </div>
+        
+        <div class="step">
+            <strong>2. User clicks "Login"</strong> → Redirected to login form
+        </div>
+        
+        <div class="step">
+            <strong>3. User enters email + password</strong> → Cognito validates credentials
+        </div>
+        
+        <div class="step">
+            <strong>4. Login successful</strong> → User gets JWT access token
+        </div>
+        
+        <div class="step">
+            <strong>5. User triggers render job</strong> → Token sent to Lambda function
+        </div>
+        
+        <div class="step">
+            <strong>6. Lambda verifies token</strong> → If valid, starts GPU render job
+        </div>
+
+        <h2>🛡️ Security Features</h2>
+
+        <div class="success">
+            <h4>What's Protected:</h4>
+            <ul>
+                <li>🚫 No anonymous render job submissions</li>
+                <li>🔒 Each user only sees their own jobs</li>
+                <li>💰 Prevents unauthorized GPU usage ($1-3/hour)</li>
+                <li>📊 Usage tracking per user account</li>
+                <li>⏰ Token expiration (automatic logout)</li>
+            </ul>
+        </div>
+
+        <h2>📱 User Experience</h2>
+
+        <div class="login-method">
+            <h4>For Users, Login is Simple:</h4>
+            <ol>
+                <li><strong>First time:</strong> Create account with email</li>
+                <li><strong>Verify email:</strong> Click link in inbox</li>
+                <li><strong>Regular use:</strong> Just email + password</li>
+                <li><strong>Render jobs:</strong> Click "Start Render" (authenticated automatically)</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Users need EMAIL ACCESS to verify their account initially. After that, just email + password for login.
+        </div>
+
+        <h2>🔧 Alternative Login Options (Optional)</h2>
+
+        <p>You can also configure these additional methods:</p>
+        
+        <ul>
+            <li><strong>🌐 Social Login:</strong> "Login with Google/Facebook"</li>
+            <li><strong>📱 SMS Verification:</strong> Phone number + SMS code</li>
+            <li><strong>🔐 Multi-Factor Auth:</strong> TOTP apps (Google Authenticator)</li>
+            <li><strong>🎫 SSO Integration:</strong> Corporate identity providers</li>
+        </ul>
+
+        <div class="success">
+            <h3>📧 Summary: Users log in with EMAIL ADDRESS + PASSWORD</h3>
+            <p>No physical mailing addresses needed - it's all digital email-based authentication!</p>
+        </div>
+    </div>
+</body>
+</html>

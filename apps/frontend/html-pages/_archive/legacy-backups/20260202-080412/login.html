@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Session Revocation System - Kicks out users with revoked sessions -->
+  <script src="../assets/security/session-revocation.js"></script>
+  
+  <link rel="stylesheet" href="shared-styles.css" />
+  <title>Auth - HOOTNER</title>
+  <script src="./config.js"></script>
+  <script src="./asset-loader.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgb(0,255,0);stop-opacity:0.05"/><stop offset="50%" style="stop-color:rgb(0,255,255);stop-opacity:0.03"/><stop offset="100%" style="stop-color:rgb(255,0,255);stop-opacity:0.05"/></linearGradient></defs><circle cx="960" cy="540" r="800" fill="url(%23grad1)"/><path d="M 400,300 L 1500,800 L 400,800 Z" fill="url(%23grad1)" opacity="0.3"/></svg>') center/cover no-repeat;
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .auth-form {
+      background: rgba(10, 10, 15, 0.95);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(0, 255, 0, 0.6), 0 0 120px rgba(0, 255, 255, 0.3);
+      width: 100%;
+      max-width: 400px;
+      border: 2px solid transparent;
+      background-image:
+        linear-gradient(rgba(10, 10, 15, 0.95), rgba(10, 10, 15, 0.95)),
+        linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .toggle {
+      display: flex;
+      margin-bottom: 24px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .toggle button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: rgba(0, 255, 255, 0.2);
+      color: #00ffff;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .toggle button.active {
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+      color: white;
+    }
+
+    .error-message {
+      background: rgba(255, 0, 255, 0.2);
+      color: #ff00ff;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      border: 1px solid #ff00ff;
+      display: none;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid transparent;
+      background-image:
+        linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+        linear-gradient(135deg, #00ff00, #00ffff, #ff00ff, #ffff00);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #00ff00;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    button[type='submit'] {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button[type='submit']:hover {
+      background: linear-gradient(135deg, #ff00ff, #ffff00);
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <style>
+    /* Content size fixes */
+    body {
+      padding-top: 80px !important;
+      min-height: calc(100vh - 80px) !important;
+    }
+
+    nav {
+      height: 70px !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+    }
+
+    .main-content {
+      margin-top: 0 !important;
+      padding: 20px !important;
+    }
+  </style>
+
+  <style>
+    html {
+      font-size: 12px !important;
+    }
+
+    body {
+      zoom: 0.75 !important;
+      transform: scale(0.75) !important;
+      transform-origin: 0 0 !important;
+      width: 133% !important;
+    }
+  </style>
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+</head>
+</head>
+
+<body>
+  <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
+    <div style="
+          padding: 12px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
+      <div style="display: flex; align-items: center; gap: 24px">
+        <a href="dashboard.html" style="
+              font-size: 14px;
+              font-weight: bold;
+              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              text-decoration: none;
+              margin-left: 0;
+            ">🦉 HOOTNER</a>
+        <div style="position: relative">
+          <button onclick="toggleNotifications()" style="
+                background: none;
+                border: none;
+                color: #00ffff;
+                cursor: pointer;
+                font-size: 12px;
+                padding: 4px 8px;
+                position: relative;
+              " title="Notifications">
+            🔔
+            <span id="notif-badge" style="
+                  position: absolute;
+                  top: 2px;
+                  right: 2px;
+                  background: #ef4444;
+                  color: white;
+                  border-radius: 50%;
+                  width: 14px;
+                  height: 14px;
+                  font-size: 9px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                ">3</span>
+          </button>
+          <div id="notif-dropdown" style="
+                display: none;
+                position: fixed;
+                top: 60px;
+                right: 20px;
+                width: 400px;
+                max-width: calc(100vw - 40px);
+                max-height: calc(100vh - 80px);
+                background: rgba(10, 10, 15, 0.98);
+                border: 2px solid rgba(0, 255, 0, 0.3);
+                border-radius: 8px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                flex-direction: column;
+                overflow: hidden;
+              ">
+            <div style="
+                  padding: 12px 16px;
+                  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+                  flex-shrink: 0;
+                ">
+              <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 12px;
+                  ">
+                <h3 style="
+                      color: #00ff00;
+                      font-size: 16px;
+                      font-weight: bold;
+                      margin: 0;
+                    ">
+                  Notifications
+                </h3>
+                <div style="display: flex; gap: 8px; align-items: center">
+                  <button onclick="toggleNotifSound()" id="sound-btn" style="
+                        background: none;
+                        border: none;
+                        color: #00ffff;
+                        cursor: pointer;
+                        font-size: 16px;
+                      " title="Toggle sound">
+                    🔊
+                  </button>
+                  <button onclick="clearAllNotifications()" style="
+                        background: none;
+                        border: none;
+                        color: #ef4444;
+                        cursor: pointer;
+                        font-size: 16px;
+                      " title="Clear all">
+                    🗑️
+                  </button>
+                  <button onclick="markAllRead()" style="
+                        background: none;
+                        border: none;
+                        color: #00ffff;
+                        cursor: pointer;
+                        font-size: 12px;
+                      ">
+                    Mark all read
+                  </button>
+                </div>
+              </div>
+              <input type="text" id="notif-search" oninput="filterNotifications()"
+                placeholder="🔍 Search notifications..." style="
+                    width: 100%;
+                    padding: 8px;
+                    background: rgba(0, 0, 0, 0.3);
+                    border: 1px solid rgba(0, 255, 0, 0.3);
+                    border-radius: 4px;
+                    color: #00ff00;
+                    font-size: 13px;
+                    margin-bottom: 8px;
+                  " />
+              <div style="display: flex; gap: 4px; flex-wrap: wrap">
+                <button class="notif-filter active" data-filter="all" onclick="setNotifFilter('all')" style="
+                      padding: 4px 12px;
+                      background: rgba(0, 255, 255, 0.2);
+                      border: 1px solid rgba(0, 255, 255, 0.3);
+                      border-radius: 12px;
+                      color: #00ffff;
+                      font-size: 11px;
+                      cursor: pointer;
+                    ">
+                  All
+                </button>
+                <button class="notif-filter" data-filter="like" onclick="setNotifFilter('like')" style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    ">
+                  ❤️ Likes
+                </button>
+                <button class="notif-filter" data-filter="comment" onclick="setNotifFilter('comment')" style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    ">
+                  💬 Comments
+                </button>
+                <button class="notif-filter" data-filter="follow" onclick="setNotifFilter('follow')" style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    ">
+                  👥 Follows
+                </button>
+                <button class="notif-filter" data-filter="system" onclick="setNotifFilter('system')" style="
+                      padding: 4px 12px;
+                      background: transparent;
+                      border: 1px solid rgba(0, 255, 0, 0.3);
+                      border-radius: 12px;
+                      color: #00ff00;
+                      font-size: 11px;
+                      cursor: pointer;
+                    ">
+                  ⚙️ System
+                </button>
+              </div>
+            </div>
+            <div id="notif-list" style="
+                  flex: 1;
+                  overflow-y: auto;
+                  min-height: 200px;
+                  max-height: calc(100vh - 280px);
+                "></div>
+            <div style="
+                  padding: 12px;
+                  text-align: center;
+                  border-top: 1px solid rgba(0, 255, 0, 0.2);
+                  display: flex;
+                  gap: 8px;
+                  justify-content: center;
+                ">
+              <button onclick="loadMoreNotifications()" style="
+                    background: none;
+                    border: none;
+                    color: #00ffff;
+                    font-size: 13px;
+                    cursor: pointer;
+                    text-decoration: underline;
+                  ">
+                Load more
+              </button>
+              <span style="color: #6b7280"></span>
+              <a href="#" style="color: #00ffff; font-size: 13px; text-decoration: none">View all</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <a href="dashboard.html" style="font-size: 14px; text-decoration: none; padding: 8px 12px"
+          class="text-green-400 font-medium">← Back to Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    let notifications = [
+      {
+        id: 1,
+        type: 'like',
+        user: 'Alice',
+        message: 'liked your video',
+        time: '2m ago',
+        read: false,
+      },
+      {
+        id: 2,
+        type: 'comment',
+        user: 'Bob',
+        message: 'commented on your post',
+        time: '5m ago',
+        read: false,
+      },
+      {
+        id: 3,
+        type: 'follow',
+        user: 'Charlie',
+        message: 'started following you',
+        time: '10m ago',
+        read: true,
+      },
+    ];
+    let soundEnabled = true;
+    let currentFilter = 'all';
+
+    function toggleNotifications() {
+      const dropdown = document.getElementById('notif-dropdown');
+      dropdown.style.display =
+        dropdown.style.display === 'none' ? 'flex' : 'none';
+      if (dropdown.style.display === 'flex') renderNotifications();
+    }
+
+    function toggleNotifSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-btn').textContent = soundEnabled
+        ? '🔊'
+        : '🔇';
+    }
+
+    function clearAllNotifications() {
+      notifications = [];
+      updateBadge();
+      renderNotifications();
+    }
+
+    function markAllRead() {
+      notifications.forEach(n => (n.read = true));
+      updateBadge();
+      renderNotifications();
+    }
+
+    function filterNotifications() {
+      renderNotifications();
+    }
+
+    function setNotifFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.notif-filter').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+        btn.style.background = btn.classList.contains('active')
+          ? 'rgba(0,255,255,0.2)'
+          : 'transparent';
+      });
+      renderNotifications();
+    }
+
+    function renderNotifications() {
+      const list = document.getElementById('notif-list');
+      const search = document
+        .getElementById('notif-search')
+        .value.toLowerCase();
+
+      let filtered = notifications.filter(n => {
+        const matchesSearch =
+          n.user.toLowerCase().includes(search) ||
+          n.message.toLowerCase().includes(search);
+        const matchesFilter =
+          currentFilter === 'all' || n.type === currentFilter;
+        return matchesSearch && matchesFilter;
+      });
+
+      list.innerHTML = filtered
+        .map(
+          n => `
+    <div style="padding:12px;border-bottom:1px solid rgba(0,255,0,0.1);${!n.read ? 'background:rgba(0,255,0,0.05);' : ''}" onclick="markRead(${n.id})">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div style="flex:1;">
+          <div style="color:#00ff00;font-size:13px;font-weight:bold;">${n.user}</div>
+          <div style="color:#94a3b8;font-size:12px;margin:2px 0;">${n.message}</div>
+          <div style="color:#64748b;font-size:11px;">${n.time}</div>
+        </div>
+        ${!n.read ? '<div style="width:8px;height:8px;background:#00ff00;border-radius:50%;margin-top:4px;"></div>' : ''}
+      </div>
+    </div>
+  `
+        )
+        .join('');
+    }
+
+    function markRead(id) {
+      const notif = notifications.find(n => n.id === id);
+      if (notif) notif.read = true;
+      updateBadge();
+      renderNotifications();
+    }
+
+    function updateBadge() {
+      const unread = notifications.filter(n => !n.read).length;
+      const badge = document.getElementById('notif-badge');
+      badge.textContent = unread;
+      badge.style.display = unread > 0 ? 'flex' : 'none';
+    }
+
+    function loadMoreNotifications() {
+      const newNotifs = [
+        {
+          id: Date.now(),
+          type: 'system',
+          user: 'System',
+          message: 'Backup completed',
+          time: 'now',
+          read: false,
+        },
+      ];
+      notifications.push(...newNotifs);
+      updateBadge();
+      renderNotifications();
+    }
+
+    document.addEventListener('click', e => {
+      if (
+        !e.target.closest('#notif-dropdown') &&
+        !e.target.closest('button[onclick="toggleNotifications()"]')
+      ) {
+        document.getElementById('notif-dropdown').style.display = 'none';
+      }
+    });
+
+    updateBadge();
+  </script>
+  <div class="main-content">
+    <div class="auth-form">
+      <h2>🦉 HOOTNER</h2>
+
+      <div class="toggle">
+        <button class="active" onclick="showLogin()">Login</button>
+        <button onclick="showRegister()">Register</button>
+      </div>
+
+      <div id="error" class="error-message"></div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <input type="text" id="login-username" placeholder="Username or Email" required />
+        <input type="password" id="login-password" placeholder="Password" minlength="8" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+        <input type="email" id="reg-email" placeholder="Email" maxlength="254" required />
+        <input type="text" id="reg-username" placeholder="Username" minlength="3" maxlength="30" required />
+        <input type="password" id="reg-password" placeholder="Password" minlength="8" maxlength="128" required />
+        <input type="password" id="reg-confirm" placeholder="Confirm Password" minlength="8" maxlength="128" required />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+    <script>
+      // CENTRALIZED SESSION REVOCATION SYSTEM
+      const SESSION_REVOCATION_KEY = 'hootner_session_revocation';
+      
+      function validateSessionRevocation() {
+        const revocationKey = localStorage.getItem(SESSION_REVOCATION_KEY);
+        const authToken = localStorage.getItem('hootner_auth_token');
+        
+        if (revocationKey && authToken) {
+          try {
+            const decoded = atob(authToken);
+            const sessionTimestamp = parseInt(decoded.split(':')[1]);
+            const revocationTime = parseInt(revocationKey);
+            
+            if (sessionTimestamp < revocationTime) {
+              console.warn('⚠️ Session revoked by admin - forcing logout');
+              localStorage.removeItem('hootner_auth_token');
+              localStorage.removeItem('hootner_user');
+              sessionStorage.clear();
+              return false;
+            }
+          } catch (e) {
+            // Invalid token format, ignore
+          }
+        }
+        return true;
+      }
+      
+      // Validate on page load
+      validateSessionRevocation();
+      
+      function showLogin() {
+        document
+          .querySelectorAll('.toggle button')
+          .forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('login-form').classList.remove('hidden');
+        document.getElementById('register-form').classList.add('hidden');
+        document.getElementById('error').style.display = 'none';
+      }
+
+      function showRegister() {
+        document
+          .querySelectorAll('.toggle button')
+          .forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('register-form').classList.remove('hidden');
+        document.getElementById('error').style.display = 'none';
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        if (username && password) {
+          // Set authentication token
+          const authToken = btoa(`${username}:${Date.now()}`);
+          localStorage.setItem('hootner_auth_token', authToken);
+          sessionStorage.setItem('hootner_session', 'active');
+          localStorage.setItem('hootner_user', JSON.stringify({ username, email: username + '@hootner.com' }));
+
+          // Check if there's a redirect destination in sessionStorage
+          const redirectTo = sessionStorage.getItem('hootner_redirect_after_login');
+          sessionStorage.removeItem('hootner_redirect_after_login');
+
+          alert('Login successful! Redirecting to dashboard...');
+
+          if (redirectTo) {
+            // Redirect to original page
+            window.location.href = redirectTo;
+          } else {
+            // Default redirect to React dashboard on port 3005
+            window.location.href = 'http://localhost:3005';
+          }
+        }
+      }
+
+      function handleRegister(e) {
+        e.preventDefault();
+        const error = document.getElementById('error');
+        const email = document.getElementById('reg-email').value;
+        const username = document.getElementById('reg-username').value;
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+
+        error.style.display = 'none';
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          error.textContent = 'Invalid email format';
+          error.style.display = 'block';
+          return;
+        }
+
+        if (!/^[a-zA-Z0-9_-]{3,30}$/.test(username)) {
+          error.textContent =
+            'Username must be 3-30 characters, alphanumeric with _ or -';
+          error.style.display = 'block';
+          return;
+        }
+
+        if (password !== confirm) {
+          error.textContent = 'Passwords must match';
+          error.style.display = 'block';
+          return;
+        }
+
+        // Set authentication token
+        const authToken = btoa(`${username}:${Date.now()}`);
+        localStorage.setItem('hootner_auth_token', authToken);
+        sessionStorage.setItem('hootner_session', 'active');
+        localStorage.setItem('hootner_user', JSON.stringify({ username, email }));
+
+        alert('Registration successful! Redirecting to dashboard...');
+        // Redirect to dashboard on port 3005
+        window.location.href = 'http://localhost:3005';
+      }
+    </script>
+  </div>
+</body>
+
+</html>
+

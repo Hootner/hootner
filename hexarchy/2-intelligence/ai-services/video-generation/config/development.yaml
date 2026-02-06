@@ -1,0 +1,252 @@
+# Video Generation Service Configuration
+# Environment: Development
+# Date: 2026-01-11
+
+# ============================================================================
+# Server Configuration
+# ============================================================================
+server:
+  host: "0.0.0.0"
+  port: 5003
+  debug: true
+  workers: 1
+
+# ============================================================================
+# Model Configuration
+# ============================================================================
+model:
+  size: "base" # Options: small, base, large
+  device: "cuda" # Options: cuda, cpu, mps (for Apple Silicon)
+  timesteps: 1000
+  guidance_scale: 7.5
+
+  # Model paths
+  checkpoint_dir: "./checkpoints"
+  weights_path: null # Set to load pre-trained weights
+
+  # Optimization
+  mixed_precision: true
+  precision_dtype: "float16" # Options: float16, bfloat16
+  compile_model: false # torch.compile (requires PyTorch 2.0+)
+  gradient_checkpointing: false
+
+# ============================================================================
+# Sampler Configuration
+# ============================================================================
+sampler:
+  type: "dpm" # Options: dpm, euler, adaptive, plms, ddim
+  num_steps: 50
+
+  # DPM-Solver++ settings
+  dpm:
+    solver_order: 2 # Options: 1, 2, 3
+    algorithm_type: "dpmsolver++"
+
+  # Euler settings
+  euler:
+    eta: 1.0 # Noise scale (0 = deterministic, 1 = full noise)
+
+  # Adaptive sampler settings
+  adaptive:
+    tolerance: 0.01
+    min_steps: 10
+    max_steps: 100
+
+# ============================================================================
+# Generation Defaults
+# ============================================================================
+generation:
+  default_num_frames: 16
+  default_height: 256
+  default_width: 256
+  default_fps: 24 # Cinematic frame rate
+  default_format: "mp4" # Options: gif, mp4, mkv
+
+  # Maximum limits (4-hour support at 24fps = 345,600 frames)
+  max_num_frames: 345600 # 4 hours at 24fps
+  max_duration_seconds: 14400 # 4 hours
+  max_height: 7680 # 8K UHD
+  max_width: 7680
+  min_resolution: 64
+  max_prompt_length: 2000
+
+  # 8K UHD HDR10 Support
+  hdr:
+    enabled: true
+    bit_depth: 10 # 10-bit color for HDR10
+    color_space: "rec2020" # Rec.2020 wide color gamut
+    transfer_function: "pq" # Perceptual Quantizer (SMPTE ST 2084)
+    max_nits: 1000 # Peak brightness
+    min_nits: 0.005 # Black level
+    master_display: "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(1000,0.0001)"
+
+  # Resolution Profiles
+  profiles:
+    preview:
+      height: 256
+      width: 256
+    hd:
+      height: 1080
+      width: 1920
+    4k:
+      height: 2160
+      width: 3840
+    8k:
+      height: 4320
+      width: 7680
+
+  # Limits
+  max_num_frames: 64
+  max_height: 7680 # 8K UHD
+  max_width: 7680
+  min_resolution: 32
+  max_prompt_length: 500
+
+# ============================================================================
+# API Configuration
+# ============================================================================
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_window: 20
+    window_seconds: 60
+
+  caching:
+    enabled: true
+    ttl_seconds: 3600 # 1 hour
+
+  async_jobs:
+    enabled: true
+    max_queue_size: 100
+    worker_threads: 1
+
+# ============================================================================
+# Redis Configuration (for job queue and caching)
+# ============================================================================
+redis:
+  enabled: false
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: null
+  socket_timeout: 5
+
+# ============================================================================
+# Monitoring & Logging
+# ============================================================================
+monitoring:
+  logging:
+    level: "INFO" # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    format: "json" # Options: json, text
+    log_dir: "./logs"
+
+  prometheus:
+    enabled: true
+    export_port: 9090
+
+  profiling:
+    enabled: true
+    print_stats_on_shutdown: true
+
+# ============================================================================
+# Video Effects
+# ============================================================================
+effects:
+  enabled: true
+
+  # Default presets
+  presets:
+    - "cinematic"
+    - "vintage"
+    - "dramatic"
+    - "dreamy"
+    - "vivid"
+    - "hdr10" # HDR10 color grading
+
+  # Post-processing defaults
+  post_processing:
+    temporal_smoothing: true
+    temporal_window: 3
+    auto_sharpen: false
+    sharpen_strength: 0.3
+    hdr_tone_mapping: true
+    upscaling:
+      enabled: false # AI upscaling to 8K
+      method: "esrgan" # Enhanced Super-Resolution GAN
+      scale_factor: 2
+
+# ============================================================================
+# Audio Configuration (Dolby Atmos)
+# ============================================================================
+audio:
+  enabled: true
+
+  # Dolby Atmos Settings
+  dolby_atmos:
+    enabled: true
+    channels: "7.1.4" # 7.1 bed + 4 height channels
+    sample_rate: 48000
+    bit_depth: 24
+    codec: "eac3" # Dolby Digital Plus with Atmos
+    bitrate: 768 # kbps
+
+  # Audio Generation
+  generation:
+    enabled: true
+    model: "musicgen" # MusicGen or AudioLDM
+    sync_to_video: true
+    ambient: true
+    music: false
+
+  # Spatial Audio
+  spatial:
+    object_based: true # Dolby Atmos object-based audio
+    max_objects: 118 # Dolby Atmos object limit
+    binaural: true # Binaural rendering for headphones
+    hdr_tone_mapping: true
+    upscaling:
+      enabled: false  # AI upscaling to 8K
+      method: "esrgan"  # Enhanced Super-Resolution GAN
+      scale_factor: 2
+
+# ============================================================================
+# Audio Configuration (Dolby Atmos)
+# ============================================================================
+audio:
+  enabled: true
+
+  # Dolby Atmos Settings
+  dolby_atmos:
+    enabled: true
+    channels: "7.1.4"  # 7.1 bed + 4 height channels
+    sample_rate: 48000
+    bit_depth: 24
+    codec: "eac3"  # Dolby Digital Plus with Atmos
+    bitrate: 768  # kbps
+
+  # Audio Generation
+  generation:
+    enabled: true
+    model: "musicgen"  # MusicGen or AudioLDM
+    sync_to_video: true
+    ambient: true
+    music: false
+
+  # Spatial Audio
+  spatial:
+    object_based: true  # Dolby Atmos object-based audio
+    max_objects: 118  # Dolby Atmos object limit
+    binaural: true  # Binaural rendering for headphones
+    enabled: false
+    header_name: "X-API-Key"
+    key: null # Set in production
+
+# ============================================================================
+# Storage
+# ============================================================================
+storage:
+  output_dir: "./outputs"
+  cache_dir: "./cache"
+  max_output_size_mb: 100
+  cleanup_old_files: true
+  cleanup_age_days: 7

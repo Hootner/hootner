@@ -1,0 +1,21 @@
+# Commit Message Template for GitHub Copilot
+
+# Type: feat|fix|docs|style|refactor|test|chore
+# Scope: component affected (optional)
+# Description: brief description
+
+# Example:
+# feat(video-player): add AI generation controls
+# fix(security): resolve XSS vulnerability in auth
+# docs(readme): update deployment instructions
+
+# Guidelines:
+# - Use present tense ("add" not "added")
+# - Keep first line under 72 characters
+# - Reference issues/PRs when applicable
+# - Include breaking changes in footer
+
+# Breaking Changes:
+# BREAKING CHANGE: describe what changed
+
+# Closes: #123

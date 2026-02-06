@@ -1,0 +1,14 @@
+{
+  "layer": "Communication",
+  "replicas": 6,
+  "services": 6437,
+  "resources": {
+    "cpu": "3",
+    "memory": "3072Mi"
+  },
+  "autoscaling": {
+    "min": 6,
+    "max": 18,
+    "targetCPU": 70
+  }
+}

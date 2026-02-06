@@ -1,0 +1,175 @@
+[
+  {
+    "userId": "demo-customer-001",
+    "customerId": "cus_demo_001",
+    "billable": true,
+    "algorithm": "price_optimize",
+    "result": 114.99999999999999,
+    "timestamp": 1768071441150,
+    "revenueImpact": "+$11499.999999999998/month",
+    "billedAmount": 2.99,
+    "status": "billed"
+  },
+  {
+    "userId": "demo-customer-002",
+    "customerId": "cus_demo_002", 
+    "billable": true,
+    "algorithm": "dynamic_pricing",
+    "result": 62,
+    "timestamp": 1768071465176,
+    "revenueImpact": "+$6200/month",
+    "billedAmount": 1.99,
+    "status": "billed"
+  },
+  {
+    "userId": "demo-customer-001",
+    "customerId": "cus_demo_001",
+    "billable": true,
+    "algorithm": "revenue_forecast",
+    "result": [
+      {
+        "month": 1,
+        "revenue": 10117,
+        "growth": 1.17
+      },
+      {
+        "month": 2,
+        "revenue": 10236,
+        "growth": 2.36
+      },
+      {
+        "month": 3,
+        "revenue": 10356,
+        "growth": 3.56
+      },
+      {
+        "month": 4,
+        "revenue": 10477,
+        "growth": 4.77
+      },
+      {
+        "month": 5,
+        "revenue": 10600,
+        "growth": 6
+      },
+      {
+        "month": 6,
+        "revenue": 10724,
+        "growth": 7.24
+      },
+      {
+        "month": 7,
+        "revenue": 10849,
+        "growth": 8.49
+      },
+      {
+        "month": 8,
+        "revenue": 10977,
+        "growth": 9.77
+      },
+      {
+        "month": 9,
+        "revenue": 11105,
+        "growth": 11.05
+      },
+      {
+        "month": 10,
+        "revenue": 11235,
+        "growth": 12.35
+      },
+      {
+        "month": 11,
+        "revenue": 11367,
+        "growth": 13.67
+      },
+      {
+        "month": 12,
+        "revenue": 11500,
+        "growth": 15
+      }
+    ],
+    "params": {
+      "current_revenue": 10000,
+      "growth_rate": 0.15,
+      "months": 12,
+      "market_size": 1000000,
+      "competition": 0.3
+    },
+    "timestamp": 1768072157338,
+    "revenueImpact": "+$120/month",
+    "billedAmount": 4.99,
+    "status": "billed"
+  },
+  {
+    "userId": "demo-customer-003",
+    "customerId": "cus_demo_003",
+    "billable": true,
+    "algorithm": "conversion_optimize",
+    "result": 3.02,
+    "params": {
+      "current_rate": 0.025,
+      "traffic": 50000,
+      "page_speed": 2.1,
+      "mobile_friendly": true
+    },
+    "timestamp": 1768072168440,
+    "revenueImpact": "+$302/month",
+    "billedAmount": 3.99,
+    "status": "billed"
+  },
+  {
+    "userId": "demo-customer-001",
+    "customerId": "cus_demo_001",
+    "billable": true,
+    "algorithm": "price_optimize",
+    "result": 107.28,
+    "params": {
+      "price": 100,
+      "competitors": [95, 105, 98],
+      "demand": 0.7
+    },
+    "timestamp": 1768072175230,
+    "revenueImpact": "+$10728/month",
+    "billedAmount": 2.99,
+    "status": "billed"
+  },
+  {
+    "userId": "demo-customer-004",
+    "customerId": "cus_demo_004",
+    "billable": true,
+    "type": "download",
+    "item": "cinema-player",
+    "amount": 19.99,
+    "timestamp": 1768072200000,
+    "revenueImpact": "+$19.99 one-time",
+    "status": "charged",
+    "description": "Cinema Player Pro - 8K HDR, Dolby Atmos"
+  },
+  {
+    "userId": "demo-customer-005",
+    "customerId": "cus_demo_005",
+    "billable": true,
+    "type": "download",
+    "item": "ai-video-generator",
+    "amount": 29.99,
+    "timestamp": 1768072250000,
+    "revenueImpact": "+$29.99 one-time",
+    "status": "charged",
+    "description": "AI Video Generator - Stable Diffusion, Custom models"
+  },
+  {
+    "userId": "demo-customer-006",
+    "customerId": "cus_demo_006",
+    "billable": true,
+    "type": "usage",
+    "item": "video-streaming",
+    "quantity": 15.5,
+    "baseAmount": 0.775,
+    "discount": 0.15,
+    "finalAmount": 0.66,
+    "timestamp": 1768072300000,
+    "revenueImpact": "+$0.66 (15.5 GB streamed)",
+    "status": "charged",
+    "description": "Video streaming usage - Professional tier (15% discount)"
+  }
+]

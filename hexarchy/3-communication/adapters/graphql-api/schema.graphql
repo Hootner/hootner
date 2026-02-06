@@ -1,0 +1,127 @@
+type Query {
+  health: String
+  version: String
+  playlists(userId: ID, limit: Int): [Playlist!]!
+  playlist(id: ID!): Playlist
+  myPlaylists: [Playlist!]!
+}
+
+type Mutation {
+  _empty: String
+  createPlaylist(input: PlaylistInput!): Playlist!
+  updatePlaylist(id: ID!, input: PlaylistInput!): Playlist!
+  deletePlaylist(id: ID!): Boolean!
+  addVideoToPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+  removeVideoFromPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+}
+
+type Subscription {
+  _empty: String
+  videoProcessed(userId: ID): Video!
+  videoProgress(videoId: ID!): VideoProgress!
+  videoLiked(videoId: ID): VideoLike!
+  commentAdded(videoId: ID): Comment!
+  playlistUpdated(playlistId: ID!): Playlist!
+  userActivity(userId: ID!): UserActivity!
+  systemAlert: SystemAlert!
+  activityStream: Activity!
+}
+
+type Playlist {
+  id: ID!
+  name: String!
+  description: String
+  userId: ID!
+  videos: [Video!]!
+  visibility: PlaylistVisibility!
+  thumbnail: String
+  videoCount: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Video {
+  id: ID!
+  title: String!
+  url: String
+  thumbnailUrl: String
+  duration: Int
+}
+
+input PlaylistInput {
+  name: String!
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+}
+
+enum PlaylistVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+# Activity Stream Types
+type Activity {
+  id: ID!
+  type: ActivityType!
+  message: String!
+  description: String
+  category: String
+  service: String
+  timestamp: String!
+  userId: ID
+  metadata: String
+}
+
+enum ActivityType {
+  VIDEO_UPLOADED
+  DEPLOYMENT_SUCCESS
+  SECURITY_SCAN
+  AI_AGENT_ACTIVATED
+  PAYMENT_PROCESSED
+  AUTO_SCALING
+  NEW_USER
+  ANALYTICS_REPORT
+  COLLABORATION_SESSION
+  ALERT_CRITICAL
+  SYSTEM_HEALTHY
+  DEPLOYMENT_FAILED
+  USER_ACTIVITY
+  SYSTEM_ALERT
+}
+
+type VideoProgress {
+  videoId: ID!
+  progress: Int!
+  status: String!
+}
+
+type VideoLike {
+  id: ID!
+  videoId: ID!
+  userId: ID!
+  likeCount: Int!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  userId: ID!
+  video: Video!
+  createdAt: String!
+}
+
+type UserActivity {
+  id: ID!
+  userId: ID!
+  action: String!
+  timestamp: String!
+  metadata: String
+}
+
+type SystemAlert {
+  id: ID!
+  level: String!
+  message: String!
+  timestamp: String!
+}

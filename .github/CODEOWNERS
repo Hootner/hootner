@@ -1,0 +1,37 @@
+# CODEOWNERS for GitHub Copilot Reviewer Suggestions
+
+# Global owners
+* @hootner-team
+
+# Frontend
+apps/frontend/ @frontend-team
+*.tsx @frontend-team
+*.jsx @frontend-team
+
+# Backend & API
+api/ @backend-team
+services/ @backend-team
+*.js @backend-team
+
+# AI & ML
+services/video-generation/ @ai-team
+frameworks/ai/ @ai-team
+*.py @ai-team
+
+# Infrastructure
+frameworks/infrastructure/ @devops-team
+k8s/ @devops-team
+docker-compose.yml @devops-team
+Dockerfile* @devops-team
+
+# Security
+frameworks/security/ @security-team
+SECURITY_CHECKLIST.md @security-team
+
+# Documentation
+docs/ @docs-team
+*.md @docs-team
+
+# CI/CD
+.github/ @devops-team
+scripts/ @devops-team

@@ -1,0 +1,23 @@
+{
+  "tasks": [
+    {
+      "id": 1768109050866,
+      "description": "Fix security issues",
+      "files": [],
+      "priority": "medium",
+      "status": "pending",
+      "created": "2026-01-11T05:24:10.866Z",
+      "copilotInstructions": "@workspace Fix security issues\nFiles to focus on: any relevant files\nUse /fix for code issues\nUse Ctrl+I for inline suggestions\nComment your changes with // COPILOT: [description]"
+    },
+    {
+      "id": 1769141149275,
+      "description": "Test task delegation",
+      "files": ["package.json"],
+      "priority": "medium",
+      "status": "pending",
+      "created": "2026-01-23T04:05:49.275Z",
+      "copilotInstructions": "@workspace Test task delegation\nFiles to focus on: package.json\nUse /fix for code issues\nUse Ctrl+I for inline suggestions\nComment your changes with // COPILOT: [description]"
+    }
+  ],
+  "completed": []
+}

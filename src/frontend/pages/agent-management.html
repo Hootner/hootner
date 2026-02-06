@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../html-pages/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOOTNER AI Agent Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+</head>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+    <script src="../components/auth-guard.js"></script>
+    <script src="../components/header-enhanced.js"></script>
+
+    <div style="padding-top: 20px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1 class="text-2xl font-bold text-cyan-400">🤖 AI Agent Command Center</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span id="systemStatus" class="text-green-400">System Online</span>
+                    </div>
+                    <span id="agentCount" class="text-cyan-400">🤖 75 Agents</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-80 bg-gray-800 p-4 overflow-y-auto">
+            <!-- Quick Actions -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-3 text-cyan-400">Quick Actions</h3>
+                <div class="space-y-2">
+                    <button id="startAllAgents" class="w-full px-4 py-2 bg-green-600 rounded hover:bg-green-700">
+                        <i class="fas fa-play mr-2"></i>Start All Agents
+                    </button>
+                    <button id="stopAllAgents" class="w-full px-4 py-2 bg-red-600 rounded hover:bg-red-700">
+                        <i class="fas fa-stop mr-2"></i>Stop All Agents
+                    </button>
+                    <button id="restartAgents" class="w-full px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700">
+                        <i class="fas fa-redo mr-2"></i>Restart All
+                    </button>
+                    <button id="deployAgent" class="w-full px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">
+                        <i class="fas fa-rocket mr-2"></i>Deploy New Agent
+                    </button>
+                </div>
+            </div>
+
+            <!-- Agent Categories -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-3 text-purple-400">Agent Categories</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                        <span>Core AI (12)</span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-xs">12/12</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                        <span>Business Intelligence (15)</span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-xs">15/15</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                        <span>Security & Compliance (18)</span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                            <span class="text-xs">17/18</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                        <span>Infrastructure (20)</span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-xs">20/20</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                        <span>Specialized Services (10)</span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-xs">10/10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Resources -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-3 text-green-400">System Resources</h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>CPU Usage</span>
+                            <span id="cpuUsage">45%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="cpuBar" class="bg-green-400 h-2 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Memory Usage</span>
+                            <span id="memoryUsage">62%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="memoryBar" class="bg-blue-400 h-2 rounded-full" style="width: 62%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>GPU Usage</span>
+                            <span id="gpuUsage">78%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="gpuBar" class="bg-purple-400 h-2 rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div>
+                <h3 class="text-lg font-semibold mb-3 text-red-400">Recent Alerts</h3>
+                <div id="alertsList" class="space-y-2 text-sm">
+                    <!-- Alerts will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 overflow-y-auto">
+            <!-- Performance Overview -->
+            <div class="grid grid-cols-4 gap-6 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Active Agents</p>
+                            <p id="activeAgentsCount" class="text-2xl font-bold text-green-400">74</p>
+                        </div>
+                        <i class="fas fa-robot text-3xl text-green-400"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Tasks Processed</p>
+                            <p id="tasksProcessed" class="text-2xl font-bold text-blue-400">12,847</p>
+                        </div>
+                        <i class="fas fa-tasks text-3xl text-blue-400"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Success Rate</p>
+                            <p id="successRate" class="text-2xl font-bold text-purple-400">98.7%</p>
+                        </div>
+                        <i class="fas fa-check-circle text-3xl text-purple-400"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm">Avg Response</p>
+                            <p id="avgResponse" class="text-2xl font-bold text-yellow-400">127ms</p>
+                        </div>
+                        <i class="fas fa-clock text-3xl text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Performance Chart -->
+            <div class="bg-gray-800 p-6 rounded-lg mb-6">
+                <h3 class="text-lg font-semibold mb-4 text-cyan-400">Agent Performance Metrics</h3>
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Agent List -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-cyan-400">Agent Management</h3>
+                    <div class="flex space-x-2">
+                        <select id="categoryFilter" class="px-3 py-1 bg-gray-700 rounded">
+                            <option value="all">All Categories</option>
+                            <option value="core">Core AI</option>
+                            <option value="business">Business Intelligence</option>
+                            <option value="security">Security & Compliance</option>
+                            <option value="infrastructure">Infrastructure</option>
+                            <option value="service">Specialized Services</option>
+                        </select>
+                        <input id="searchAgent" type="text" placeholder="Search agents..."
+                            class="px-3 py-1 bg-gray-700 rounded">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="text-left p-3">Agent Name</th>
+                                <th class="text-left p-3">Category</th>
+                                <th class="text-left p-3">Status</th>
+                                <th class="text-left p-3">CPU</th>
+                                <th class="text-left p-3">Memory</th>
+                                <th class="text-left p-3">Tasks/min</th>
+                                <th class="text-left p-3">Uptime</th>
+                                <th class="text-left p-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agentTableBody">
+                            <!-- Agent rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Details Modal -->
+    <div id="agentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-lg font-semibold text-cyan-400">Agent Details</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent">
+                <!-- Agent details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+
+        // Sample agent data
+        const agents = [
+            { name: 'personalization-agent', category: 'core', status: 'active', cpu: 15, memory: 45, tasks: 127, uptime: '2d 14h' },
+            { name: 'payment-fraud-detection', category: 'security', status: 'active', cpu: 32, memory: 67, tasks: 89, uptime: '1d 8h' },
+            { name: 'revenue-optimization', category: 'business', status: 'active', cpu: 8, memory: 23, tasks: 156, uptime: '3d 2h' },
+            { name: 'auto-scaling', category: 'infrastructure', status: 'warning', cpu: 78, memory: 89, tasks: 45, uptime: '12h 34m' },
+            { name: 'content-moderation-ai', category: 'core', status: 'active', cpu: 25, memory: 56, tasks: 234, uptime: '1d 22h' },
+            { name: 'gdpr-compliance-tools', category: 'security', status: 'active', cpu: 5, memory: 12, tasks: 67, uptime: '4d 6h' },
+            { name: 'multi-language-support', category: 'service', status: 'active', cpu: 18, memory: 34, tasks: 98, uptime: '2d 1h' },
+            { name: 'load-testing-tools', category: 'infrastructure', status: 'error', cpu: 0, memory: 0, tasks: 0, uptime: '0m' },
+        ];
+
+        // Initialize performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    label: 'Tasks Processed',
+                    data: [1200, 1900, 3000, 5000, 2300, 3200],
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Success Rate %',
+                    data: [98, 97, 99, 98, 97, 99],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Populate agent table
+        function populateAgentTable(filteredAgents = agents) {
+            const tbody = document.getElementById('agentTableBody');
+            tbody.innerHTML = '';
+
+            filteredAgents.forEach(agent => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 hover:bg-gray-700';
+
+                const statusColor = agent.status === 'active' ? 'text-green-400' :
+                    agent.status === 'warning' ? 'text-yellow-400' : 'text-red-400';
+
+                row.innerHTML = `
+                    <td class="p-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-robot text-cyan-400"></i>
+                            <span>${agent.name}</span>
+                        </div>
+                    </td>
+                    <td class="p-3">${agent.category}</td>
+                    <td class="p-3">
+                        <span class="${statusColor} capitalize">${agent.status}</span>
+                    </td>
+                    <td class="p-3">${agent.cpu}%</td>
+                    <td class="p-3">${agent.memory}%</td>
+                    <td class="p-3">${agent.tasks}</td>
+                    <td class="p-3">${agent.uptime}</td>
+                    <td class="p-3">
+                        <div class="flex space-x-1">
+                            <button onclick="viewAgent('${agent.name}')" class="px-2 py-1 bg-blue-600 rounded text-xs hover:bg-blue-700">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="restartAgent('${agent.name}')" class="px-2 py-1 bg-yellow-600 rounded text-xs hover:bg-yellow-700">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button onclick="stopAgent('${agent.name}')" class="px-2 py-1 bg-red-600 rounded text-xs hover:bg-red-700">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter agents
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            const category = e.target.value;
+            const filtered = category === 'all' ? agents : agents.filter(agent => agent.category === category);
+            populateAgentTable(filtered);
+        });
+
+        // Search agents
+        document.getElementById('searchAgent').addEventListener('input', (e) => {
+            const search = e.target.value.toLowerCase();
+            const filtered = agents.filter(agent => agent.name.toLowerCase().includes(search));
+            populateAgentTable(filtered);
+        });
+
+        // Agent actions
+        function viewAgent(agentName) {
+            const agent = agents.find(a => a.name === agentName);
+            document.getElementById('modalTitle').textContent = `${agentName} Details`;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="space-y-3">
+                    <div><strong>Status:</strong> ${agent.status}</div>
+                    <div><strong>Category:</strong> ${agent.category}</div>
+                    <div><strong>CPU Usage:</strong> ${agent.cpu}%</div>
+                    <div><strong>Memory Usage:</strong> ${agent.memory}%</div>
+                    <div><strong>Tasks/min:</strong> ${agent.tasks}</div>
+                    <div><strong>Uptime:</strong> ${agent.uptime}</div>
+                    <div><strong>Last Health Check:</strong> ${new Date().toLocaleString()}</div>
+                    <div class="mt-4 space-y-2">
+                        <button class="w-full px-4 py-2 bg-green-600 rounded hover:bg-green-700">Start Agent</button>
+                        <button class="w-full px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700">Restart Agent</button>
+                        <button class="w-full px-4 py-2 bg-red-600 rounded hover:bg-red-700">Stop Agent</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('agentModal').classList.remove('hidden');
+        }
+
+        function restartAgent(agentName) {
+            console.log(`Restarting agent: ${agentName}`);
+            // Add restart logic here
+        }
+
+        function stopAgent(agentName) {
+            console.log(`Stopping agent: ${agentName}`);
+            // Add stop logic here
+        }
+
+        // Modal controls
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('agentModal').classList.add('hidden');
+        });
+
+        // Quick actions
+        document.getElementById('startAllAgents').addEventListener('click', () => {
+            console.log('Starting all agents...');
+            // Add start all logic here
+        });
+
+        document.getElementById('stopAllAgents').addEventListener('click', () => {
+            console.log('Stopping all agents...');
+            // Add stop all logic here
+        });
+
+        document.getElementById('restartAgents').addEventListener('click', () => {
+            console.log('Restarting all agents...');
+            // Add restart all logic here
+        });
+
+        // Real-time updates
+        function updateMetrics() {
+            // Update system resources
+            const cpuUsage = Math.floor(Math.random() * 30) + 30;
+            const memoryUsage = Math.floor(Math.random() * 40) + 40;
+            const gpuUsage = Math.floor(Math.random() * 50) + 50;
+
+            document.getElementById('cpuUsage').textContent = `${cpuUsage}%`;
+            document.getElementById('cpuBar').style.width = `${cpuUsage}%`;
+            document.getElementById('memoryUsage').textContent = `${memoryUsage}%`;
+            document.getElementById('memoryBar').style.width = `${memoryUsage}%`;
+            document.getElementById('gpuUsage').textContent = `${gpuUsage}%`;
+            document.getElementById('gpuBar').style.width = `${gpuUsage}%`;
+
+            // Update counters
+            document.getElementById('tasksProcessed').textContent = (12847 + Math.floor(Math.random() * 100)).toLocaleString();
+            document.getElementById('successRate').textContent = `${(98 + Math.random() * 2).toFixed(1)}%`;
+            document.getElementById('avgResponse').textContent = `${Math.floor(Math.random() * 50) + 100}ms`;
+        }
+
+        // Add alerts
+        function addAlert(message, severity = 'info') {
+            const alertsList = document.getElementById('alertsList');
+            const alert = document.createElement('div');
+            alert.className = `p-2 rounded ${severity === 'error' ? 'bg-red-900' : severity === 'warning' ? 'bg-yellow-900' : 'bg-blue-900'}`;
+            alert.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-${severity === 'error' ? 'exclamation-triangle' : severity === 'warning' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <div class="text-xs text-gray-400 mt-1">${new Date().toLocaleTimeString()}</div>
+            `;
+            alertsList.insertBefore(alert, alertsList.firstChild);
+
+            // Keep only last 5 alerts
+            while (alertsList.children.length > 5) {
+                alertsList.removeChild(alertsList.lastChild);
+            }
+        }
+
+        // Initialize
+        populateAgentTable();
+
+        // Start real-time updates
+        setInterval(updateMetrics, 3000);
+
+        // Add sample alerts
+        setTimeout(() => addAlert('Agent auto-scaling triggered', 'info'), 2000);
+        setTimeout(() => addAlert('High memory usage detected', 'warning'), 5000);
+        setTimeout(() => addAlert('Load testing agent recovered', 'info'), 8000);
+    </script>
+    <script src="../components/footer-enhanced.js"></script>
+</body>
+
+</html>
+
+

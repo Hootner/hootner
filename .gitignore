@@ -1,0 +1,53 @@
+node_modules/
+*.log
+# Environment files
+.env
+.env.local
+.env.production
+
+# But keep examples
+!.env.example
+.DS_Store
+dist/
+build/
+coverage/
+.nyc_output/
+.aws/
+.aws-sam/
+.pm2/
+logs/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.idea/
+.vscode/
+
+# Local convenience junctions (keeps repo root tooling intact)
+_tooling/
+
+# Media files (don't upload videos)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.flv
+uploads/
+media/
+videos/
+
+# Large binaries
+*.zip
+*.tar.gz
+*.exe
+*.dll
+
+# Database files
+*.db
+*.sqlite
+dynamodb-local/
+
+# Generated analysis reports
+data/reports/

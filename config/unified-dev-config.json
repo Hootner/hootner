@@ -1,0 +1,253 @@
+{
+  "name": "hootner-dev-config",
+  "version": "1.0.0",
+  "description": "Unified development configuration for HOOTNER platform",
+  
+  "eslint": {
+    "root": true,
+    "env": {
+      "node": true,
+      "browser": true,
+      "es2022": true
+    },
+    "extends": ["eslint:recommended", "plugin:security/recommended"],
+    "plugins": ["security"],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off",
+      "semi": ["error", "always"],
+      "quotes": ["error", "single"],
+      "security/detect-object-injection": "warn",
+      "security/detect-non-literal-regexp": "error",
+      "security/detect-unsafe-regex": "error",
+      "security/detect-buffer-noassert": "error",
+      "security/detect-child-process": "warn",
+      "security/detect-disable-mustache-escape": "error",
+      "security/detect-eval-with-expression": "error",
+      "security/detect-no-csrf-before-method-override": "error",
+      "security/detect-pseudoRandomBytes": "error"
+    },
+    "overrides": [
+      {
+        "files": ["scripts/mongo-init.js"],
+        "env": {
+          "mongo": true
+        },
+        "globals": {
+          "db": "readonly"
+        }
+      }
+    ],
+    "ignorePatterns": ["*.ts", "*.tsx", "node_modules/", "dist/", "build/"]
+  },
+
+  "prettier": {
+    "printWidth": 88,
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "useTabs": false
+  },
+
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/unit/**/*.test.js"],
+    "collectCoverageFrom": ["api/**/*.js", "scripts/**/*.js", "!**/node_modules/**"],
+    "coverageDirectory": "coverage",
+    "verbose": true
+  },
+
+  "playwright": {
+    "testDir": "./tests/e2e",
+    "timeout": 30000,
+    "expect": {
+      "timeout": 5000
+    },
+    "fullyParallel": true,
+    "forbidOnly": true,
+    "retries": 2,
+    "workers": 1,
+    "reporter": "html",
+    "use": {
+      "baseURL": "http://localhost:3000",
+      "trace": "on-first-retry"
+    },
+    "projects": [
+      {
+        "name": "chromium",
+        "use": {
+          "channel": "chrome"
+        }
+      }
+    ]
+  },
+
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"],
+    "rules": {
+      "type-enum": [2, "always", [
+        "feat", "fix", "docs", "style", "refactor", 
+        "test", "chore", "ci", "perf", "revert"
+      ]],
+      "subject-max-length": [2, "always", 72]
+    }
+  },
+
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "npm test"
+    }
+  },
+
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+
+  "babel": {
+    "presets": [
+      ["@babel/preset-env", {
+        "targets": {
+          "node": "18"
+        }
+      }]
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-optional-chaining"
+    ]
+  },
+
+  "nodemon": {
+    "watch": ["api/", "scripts/", "hexarchy/"],
+    "ext": "js,json",
+    "ignore": ["node_modules/", "tests/", "coverage/"],
+    "exec": "node"
+  },
+
+  "docker": {
+    "compose": {
+      "version": "3.8",
+      "services": {
+        "mongodb": {
+          "image": "mongo:6.0",
+          "ports": ["27017:27017"],
+          "environment": {
+            "MONGO_INITDB_ROOT_USERNAME": "admin",
+            "MONGO_INITDB_ROOT_PASSWORD": "password"
+          }
+        },
+        "redis": {
+          "image": "redis:7-alpine",
+          "ports": ["6379:6379"]
+        }
+      }
+    }
+  },
+
+  "aws": {
+    "region": "us-east-1",
+    "profile": "default",
+    "s3": {
+      "bucket": "hootner-uploads-504165876439",
+      "region": "us-east-1"
+    },
+    "lambda": {
+      "runtime": "nodejs18.x",
+      "timeout": 30,
+      "memorySize": 512
+    },
+    "apiGateway": {
+      "stage": "dev",
+      "cors": true
+    }
+  },
+
+  "security": {
+    "helmet": {
+      "contentSecurityPolicy": {
+        "directives": {
+          "defaultSrc": ["'self'"],
+          "styleSrc": ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"],
+          "scriptSrc": ["'self'", "'unsafe-inline'"],
+          "imgSrc": ["'self'", "data:", "https:"],
+          "connectSrc": ["'self'", "wss:", "https:"]
+        }
+      }
+    },
+    "rateLimit": {
+      "windowMs": 900000,
+      "max": 100
+    }
+  },
+
+  "monitoring": {
+    "healthCheck": {
+      "interval": 30000,
+      "timeout": 5000,
+      "endpoints": [
+        "http://localhost:3000/api/health",
+        "http://localhost:4000/graphql"
+      ]
+    },
+    "logging": {
+      "level": "info",
+      "format": "json",
+      "transports": ["console", "file"]
+    }
+  },
+
+  "development": {
+    "ports": {
+      "frontend": 3000,
+      "api": 4000,
+      "graphql": 4000,
+      "videoGeneration": 5003,
+      "mongodb": 27017,
+      "redis": 6379
+    },
+    "hotReload": true,
+    "sourceMap": true,
+    "debugMode": true
+  },
+
+  "production": {
+    "minify": true,
+    "compress": true,
+    "sourceMap": false,
+    "debugMode": false,
+    "ssl": true,
+    "cdn": "https://d1234567890.cloudfront.net"
+  },
+
+  "scripts": {
+    "setup": "node scripts/unified-setup.js",
+    "dev": "node scripts/servers/unified-server-launcher.js complete",
+    "build": "npm run build:frontend && npm run build:api",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "agents": "node scripts/agents/unified-agent-orchestrator.js",
+    "train": "python scripts/training/unified-training-pipeline.py"
+  }
+}

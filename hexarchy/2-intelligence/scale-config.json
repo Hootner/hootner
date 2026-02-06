@@ -1,0 +1,14 @@
+{
+  "layer": "Intelligence",
+  "replicas": 4,
+  "services": 8,
+  "resources": {
+    "cpu": "2",
+    "memory": "2048Mi"
+  },
+  "autoscaling": {
+    "min": 4,
+    "max": 12,
+    "targetCPU": 70
+  }
+}

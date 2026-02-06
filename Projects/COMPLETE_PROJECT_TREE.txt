@@ -1,0 +1,655 @@
+# 🦉 HOOTNER - Complete Project Tree Structure
+# Generated: February 2, 2026
+# Post Root Directory Reorganization (83% file reduction)
+
+my-local-repo/
+├── 📄 index.js                           # Main platform entry point
+├── 📄 LICENSE                            # MIT License
+├── 📄 package.json                       # Node.js dependencies and scripts
+├── 📄 README.md                          # Project documentation
+├── 📄 ROOT_REORGANIZATION_PLAN.md        # Reorganization planning document
+├── 📄 ROOT_REORGANIZATION_SUMMARY.md     # Reorganization summary
+├── 📄 template.yaml                      # 120-pipe AWS infrastructure
+├── 📄 lint-test.js                       # Linting test utilities
+├── 📁 .git/                              # Git version control
+├── 📁 .github/                           # GitHub workflows and templates
+│   ├── 📄 copilot-instructions.md        # AI agent instructions
+│   ├── 📁 workflows/                     # CI/CD pipelines
+│   └── 📁 ISSUE_TEMPLATE/                # Issue templates
+├── 📁 .husky/                            # Git hooks
+│   ├── 📄 commit-msg                     # Commit message validation
+│   ├── 📄 post-merge                     # Post-merge hooks
+│   ├── 📄 pre-commit                     # Pre-commit validation
+│   ├── 📄 pre-commit-integrity           # Integrity checks
+│   ├── 📄 pre-push                       # Pre-push validation
+│   └── 📁 _/                            # Husky configuration
+├── 📄 .eslintignore                      # ESLint ignore patterns
+├── 📄 .eslintrc.cjs                      # ESLint CommonJS config
+├── 📄 .eslintrc.js                       # ESLint JavaScript config
+├── 📁 .vscode/                           # VS Code settings
+│   ├── 📄 settings.json                  # Editor settings
+│   └── 📄 extensions.json               # Recommended extensions
+│
+├── 📁 agents/                            # API security scanner agents
+│   ├── 📄 api-security-scanner-agent.cjs # Security scanner
+│   ├── 📄 fixer-agent.js                # Automated fixing agent
+│   ├── 📄 README_API_SCANNER.md          # Scanner documentation
+│   ├── 📄 scanner-agent.js              # Main scanner agent
+│   └── 📄 start-agents.js               # Agent orchestration
+│
+├── 📁 api/                              # Lambda functions & GraphQL server
+│   ├── 📁 auth/                         # Authentication services
+│   │   ├── 📄 passkey-routes.js         # USB passkey API routes
+│   │   └── 📄 middleware.js             # Auth middleware
+│   ├── 📁 graphql/                      # GraphQL implementation
+│   │   ├── 📁 cache/                    # Caching layer
+│   │   ├── 📁 models/                   # DynamoDB models
+│   │   ├── 📁 resolvers/                # GraphQL resolvers
+│   │   ├── 📁 routes/                   # REST routes
+│   │   ├── 📁 utils/                    # Utilities
+│   │   └── 📁 webhooks/                 # Stripe webhooks
+│   ├── 📁 lambda/                       # Lambda handlers
+│   │   ├── 📄 graphql.js                # GraphQL Lambda
+│   │   ├── 📄 video-process.js          # Video processing
+│   │   └── 📄 auth.js                   # Authentication Lambda
+│   └── 📁 layers/                       # Lambda layers
+│       ├── 📁 node-utils/               # Node.js utilities layer
+│       └── 📁 python-libs/              # Python libraries layer
+│
+├── 📁 apps/                             # Frontend applications
+│   ├── 📄 API_DOCUMENTATION.md          # API documentation
+│   ├── 📄 apps-scan.txt                 # Apps security scan
+│   ├── 📄 frontend-scan.txt             # Frontend security scan
+│   ├── 📄 package.json                  # Frontend dependencies
+│   ├── 📄 README_ENHANCED.md            # Enhanced README
+│   ├── 📄 README.md                     # Apps README
+│   ├── 📄 security.js                   # Security configurations
+│   ├── 📄 stream-config.json            # Streaming configuration
+│   ├── 📄 streaming-server.cjs          # Streaming server
+│   └── 📁 frontend/                     # React/TypeScript frontend
+│       ├── 📁 html-pages/               # Static HTML pages
+│       │   ├── 📄 index.html            # Main landing page
+│       │   ├── 📄 dashboard.html        # Dashboard page
+│       │   ├── 📄 player.html           # Video player
+│       │   ├── 📄 upload.html           # Upload interface
+│       │   ├── 📄 usb-passkey-demo.html # USB passkey demo
+│       │   └── 📄 server.js             # Static server
+│       └── 📁 src/                      # React source code
+│           ├── 📁 components/           # React components
+│           ├── 📁 hooks/                # Custom React hooks
+│           ├── 📁 pages/                # Page components
+│           ├── 📁 styles/               # CSS styles
+│           └── 📄 App.js                # Main React app
+│
+├── 📁 config/                           # 🆕 All configuration files
+│   ├── 📄 API_CONFIG_GUIDE.md          # API configuration guide
+│   ├── 📄 api-endpoints.js             # API endpoint definitions
+│   ├── 📄 aws_training_config.json     # AWS training configuration
+│   ├── 📄 backup.reg                   # Windows registry backup
+│   ├── 📄 commitlint.config.json       # Commit linting rules
+│   ├── 📄 disable-dist.json            # Distribution disabling
+│   ├── 📄 eslint.config.json           # ESLint configuration
+│   ├── 📄 IMPLEMENTATION_SUMMARY.md    # Implementation summary
+│   ├── 📄 jest.config.js               # Jest testing configuration
+│   ├── 📄 playwright.config.js         # Playwright testing config
+│   ├── 📄 prettier.config.json         # Prettier code formatting
+│   ├── 📄 pyproject.toml               # Python project config
+│   ├── 📄 QUICK_REFERENCE.md           # Quick configuration reference
+│   ├── 📄 README.md                    # Configuration documentation
+│   ├── 📄 requirements.txt             # Python dependencies
+│   ├── 📄 ruff.toml                    # Python linting config
+│   ├── 📄 sam.config.toml              # AWS SAM configuration
+│   ├── 📄 tailwind.config.js           # Tailwind CSS config
+│   ├── 📄 training_prompts.json        # AI training prompts
+│   ├── 📄 validate-config.js           # Configuration validator
+│   └── 📁 aws/                         # AWS-specific configurations
+│       ├── 📄 aws-security-policy.json # AWS security policies
+│       ├── 📄 cloudformation.yaml      # CloudFormation templates
+│       └── 📄 lambda-config.json       # Lambda configurations
+│
+├── 📁 constants/                        # Application constants
+│   └── 📄 timeouts.js                  # Timeout configurations
+│
+├── 📁 data/                            # Data storage
+│   ├── 📁 logs/                        # Application logs
+│   │   ├── 📄 app.log                  # Application logs
+│   │   ├── 📄 error.log                # Error logs
+│   │   └── 📄 access.log               # Access logs
+│   ├── 📁 reports/                     # Generated reports
+│   │   ├── 📄 security-report.json     # Security audit reports
+│   │   ├── 📄 performance-report.json  # Performance metrics
+│   │   └── 📄 usage-report.json        # Usage analytics
+│   ├── 📁 subscriptions/               # Subscription data
+│   │   └── 📄 stripe-data.json         # Stripe subscription data
+│   ├── 📁 uploads/                     # File uploads
+│   │   ├── 📁 videos/                  # Video uploads
+│   │   ├── 📁 images/                  # Image uploads
+│   │   └── 📁 documents/               # Document uploads
+│   └── 📁 usage/                       # Usage tracking
+│       ├── 📄 user-metrics.json        # User usage metrics
+│       └── 📄 api-usage.json           # API usage tracking
+│
+├── 📁 docs/                            # 🆕 Comprehensive documentation (30+ files)
+│   ├── 📄 ADVANCED_AGENTS.md           # Advanced agent documentation
+│   ├── 📄 AI_VIDEO_GENERATION_SETUP.md # AI video setup guide
+│   ├── 📄 API_KEYS_SUMMARY.md          # API keys documentation
+│   ├── 📄 API_SECURITY_SCANNER_GUIDE.md # Security scanner guide
+│   ├── 📄 API_SECURITY_SCANNER_IMPLEMENTATION.md # Scanner implementation
+│   ├── 📄 API_SECURITY_SCANNER_MANIFEST.md # Scanner manifest
+│   ├── 📄 API.md                       # API documentation
+│   ├── 📄 ARCHITECTURE_DIAGRAM_120_PIPES.md # Infrastructure architecture
+│   ├── 📄 ARCHITECTURE_DIAGRAM.md      # General architecture
+│   ├── 📄 AUTHENTICATION_IMPLEMENTATION.md # Auth implementation
+│   ├── 📄 AWS_ACCOUNT_SWITCHING.md     # AWS account management
+│   ├── 📄 AWS_CONFIGURATION.md         # AWS configuration guide
+│   ├── 📄 AWS_FOR_BEGINNERS.md         # AWS beginner guide
+│   ├── 📄 AWS_TOOLKIT_DEPLOYMENT.md    # AWS deployment guide
+│   ├── 📄 BACKEND_APIS.md              # Backend API documentation
+│   ├── 📄 BACKEND_CHECKLIST.md         # Backend deployment checklist
+│   ├── 📄 BACKEND_QUICKSTART.md        # Backend quick start
+│   ├── 📄 BRANCH_MERGE_REPORT.md       # Branch merge documentation
+│   ├── 📄 CLOUDFRONT_API_KEYS.md       # CloudFront API keys
+│   ├── 📄 CLOUDFRONT_SCAN_REPORT.md    # CloudFront security scan
+│   ├── 📄 COMPLETE_CHECKLIST.md        # Complete deployment checklist
+│   ├── 📄 COMPONENT_DEDUP_PLAN.md      # Component deduplication
+│   ├── 📄 CONTRIBUTING_TOOLING.md      # Contributing guidelines
+│   ├── 📄 DASHBOARD_ENHANCEMENTS.md    # Dashboard improvements
+│   ├── 📄 DAY_ONE.md                   # Day one guide
+│   ├── 📄 DEPLOY_NOTES_MARKETPLACE.md  # Marketplace deployment
+│   ├── 📄 DEPLOYMENT_CHECKLIST_120_PIPES.md # 120-pipe deployment
+│   ├── 📄 DEPLOYMENT_READINESS_CHECKLIST.md # Deployment readiness
+│   ├── 📄 DEVELOPMENT_DEPLOYMENT_MAP.md # Development deployment mapping
+│   ├── 📄 DMCA_REGISTRATION_GUIDE.md   # DMCA compliance guide
+│   ├── 📄 DOCUMENTATION_INDEX_120_PIPES.md # Documentation index
+│   ├── 📄 DOCUMENTATION_INDEX.md       # General documentation index
+│   ├── 📄 DUAL_AGENT_SETUP.md          # Dual agent setup guide
+│   ├── 📄 DUAL_AI_AGENT_MCP_INTEGRATION.md # MCP integration guide
+│   ├── 📄 DYNAMODB_MIGRATION.md        # DynamoDB migration guide
+│   ├── 📄 EXTERNAL_TESTING_GUIDE.md    # External testing procedures
+│   ├── 📄 FRONTEND_INTEGRATION_GUIDE.md # Frontend integration
+│   ├── 📄 IMPLEMENTATION_COMPLETE_120_PIPES.md # Implementation status
+│   ├── 📄 INFRASTRUCTURE_TREE_120_PIPES.md # Infrastructure tree
+│   ├── 📄 LAMBDA_LAYER_CONNECTIONS.md  # Lambda layer documentation
+│   ├── 📄 LEGAL_IMPLEMENTATION_SUMMARY.md # Legal compliance
+│   ├── 📄 MCP_PROTOCOL_STATUS.md       # MCP protocol status
+│   ├── 📄 MOBILE_OPTIMIZATION.md       # Mobile optimization guide
+│   ├── 📄 PAYMENT_STATUS.md            # Payment system status
+│   ├── 📄 PLATFORM_10_YEAR_LIFECYCLE.md # Platform lifecycle
+│   ├── 📄 QUICK_DEPLOY.md              # Quick deployment guide
+│   ├── 📄 QUICK_REFERENCE.md           # Quick reference guide
+│   ├── 📄 QUICK_REFERENCE_120_PIPES.md # 120-pipe quick reference
+│   ├── 📄 SECURITY_MANIFEST.md         # Security manifest
+│   ├── 📄 STRIPE_CONNECTION_DIAGRAM.md # Stripe integration diagram
+│   ├── 📄 STRIPE_COST_COMPARISON.md    # Stripe cost analysis
+│   ├── 📄 STRIPE_EMPLOYEE_ACCESS.md    # Stripe employee access
+│   ├── 📄 STRIPE_INTEGRATION_SUMMARY.md # Stripe integration summary
+│   ├── 📄 STRIPE_USAGE_PRICING_GUIDE.md # Stripe pricing guide
+│   ├── 📁 ai/                          # AI documentation
+│   │   ├── 📄 AI_AGENT_ORCHESTRATION.md # Agent orchestration
+│   │   └── 📄 DUAL_AGENT_ARCHITECTURE.md # Dual agent architecture
+│   ├── 📁 architecture/                # Architecture documentation
+│   │   ├── 📄 HEXARCHY_PATTERN.md      # Hexarchy architecture
+│   │   └── 📄 MICROSERVICES_DESIGN.md  # Microservices design
+│   ├── 📁 commands/                    # Command references
+│   │   ├── 📄 AWS_CLI_COMMANDS.md      # AWS CLI reference
+│   │   └── 📄 NPM_SCRIPTS.md           # NPM script reference
+│   ├── 📁 compliance/                  # Compliance documentation
+│   │   ├── 📄 GDPR_COMPLIANCE.md       # GDPR compliance
+│   │   ├── 📄 COPPA_COMPLIANCE.md      # COPPA compliance
+│   │   └── 📄 SOC2_COMPLIANCE.md       # SOC2 compliance
+│   ├── 📁 guides/                      # How-to guides
+│   │   ├── 📄 DEPLOYMENT_GUIDE.md      # Deployment guide
+│   │   ├── 📄 DEVELOPMENT_SETUP.md     # Development setup
+│   │   └── 📄 TROUBLESHOOTING.md       # Troubleshooting guide
+│   ├── 📁 legal/                       # Legal documentation
+│   │   ├── 📄 PRIVACY_POLICY.md        # Privacy policy
+│   │   ├── 📄 TERMS_OF_SERVICE.md      # Terms of service
+│   │   └── 📄 LICENSE_COMPLIANCE.md    # License compliance
+│   ├── 📁 reference/                   # Reference documentation
+│   │   ├── 📄 CLOUDFRONT_QUICK_REF.txt # CloudFront quick reference
+│   │   └── 📄 CSS-VISUAL-REFERENCE.html # CSS visual reference
+│   └── 📁 security/                    # Security documentation
+│       ├── 📄 USB_PASSKEY_AUTHENTICATION.md # USB passkey guide
+│       ├── 📄 SECURITY_POLICIES.md     # Security policies
+│       └── 📄 INCIDENT_RESPONSE.md     # Incident response plan
+│
+├── 📁 examples/                        # 🆕 Example files and demos
+│   ├── 📄 usb-passkey-integration-example.js # USB passkey integration
+│   └── 📁 html/                        # HTML example files
+│       ├── 📄 amazon-q-chat-example.html # Amazon Q chat demo
+│       ├── 📄 cloudfront-api-snippet.html # CloudFront API example
+│       ├── 📄 error.html               # Error page example
+│       ├── 📄 redirect-dashboard.html   # Dashboard redirect example
+│       ├── 📄 service-worker-test.html  # Service worker test
+│       └── 📄 stripe-activation-website.html # Stripe activation example
+│
+├── 📁 frameworks/                      # Framework implementations
+│   ├── 📁 ai/                         # AI framework
+│   │   └── 📁 agents/                  # AI agent orchestration
+│   │       ├── 📄 agent-communication-bridge.js # Agent communication
+│   │       ├── 📄 dual-agent-orchestrator.js # Dual agent system
+│   │       ├── 📄 production-agent-implementations.js # Production agents
+│   │       └── 📄 enhanced-agent-hub.js # 75+ agent hub
+│   └── 📁 backend/                     # Backend frameworks
+│       └── 📁 nestjs/                  # NestJS backend
+│           ├── 📄 main.ts              # NestJS main entry
+│           └── 📁 src/                 # NestJS source code
+│
+├── 📁 hexarchy/                        # 🆕 Hexagonal architecture layers (8 layers)
+│   ├── 📁 0-core/                     # Core infrastructure layer
+│   │   ├── 📁 api/                    # API configurations
+│   │   │   ├── 📄 gateway-config.js   # API Gateway configuration
+│   │   │   └── 📄 rate-limiting.js    # Rate limiting configuration
+│   │   ├── 📁 auth/                   # Authentication systems
+│   │   │   ├── 📄 middleware.js       # Auth middleware
+│   │   │   ├── 📄 usb-passkey.js      # 🆕 USB passkey implementation
+│   │   │   ├── 📄 jwt-handler.js      # JWT token handling
+│   │   │   └── 📄 cognito-integration.js # AWS Cognito integration
+│   │   ├── 📁 aws/                    # AWS service configurations
+│   │   │   ├── 📄 lambda-config.js    # Lambda configurations
+│   │   │   ├── 📄 dynamodb-config.js  # DynamoDB configurations
+│   │   │   ├── 📄 s3-config.js        # S3 configurations
+│   │   │   └── 📄 cloudfront-config.js # CloudFront configurations
+│   │   ├── 📁 database/               # Database configurations
+│   │   │   ├── 📄 dynamodb.js         # DynamoDB setup
+│   │   │   ├── 📄 migrations.js       # Database migrations
+│   │   │   └── 📄 connection-pool.js  # Connection pooling
+│   │   ├── 📁 logging/                # Logging and monitoring
+│   │   │   ├── 📄 cloudwatch.js       # CloudWatch integration
+│   │   │   ├── 📄 error-tracking.js   # Error tracking
+│   │   │   └── 📄 audit-logging.js    # Audit logging
+│   │   ├── 📁 orchestration/          # Event orchestration
+│   │   │   ├── 📄 event-bus.js        # Event-driven communication
+│   │   │   ├── 📄 message-queue.js    # Message queuing
+│   │   │   └── 📄 workflow-engine.js  # Workflow orchestration
+│   │   ├── 📁 security/               # Security middleware
+│   │   │   ├── 📄 encryption.js       # Encryption utilities
+│   │   │   ├── 📄 kms-integration.js  # AWS KMS integration
+│   │   │   ├── 📄 security-headers.js # Security headers
+│   │   │   └── 📄 input-validation.js # Input validation
+│   │   └── 📁 utils/                  # Core utilities
+│   │       ├── 📄 error-handler.js    # Error handling
+│   │       ├── 📄 response-formatter.js # Response formatting
+│   │       └── 📄 config-loader.js    # Configuration loading
+│   │
+│   ├── 📁 1-foundation/               # Domain models & services
+│   │   ├── 📁 events/                 # Domain events
+│   │   │   ├── 📄 user-events.js      # User domain events
+│   │   │   ├── 📄 video-events.js     # Video domain events
+│   │   │   └── 📄 payment-events.js   # Payment domain events
+│   │   ├── 📁 models/                 # Domain models
+│   │   │   ├── 📄 user.js             # User domain model
+│   │   │   ├── 📄 video.js            # Video domain model
+│   │   │   ├── 📄 subscription.js     # Subscription domain model
+│   │   │   └── 📄 payment.js          # Payment domain model
+│   │   ├── 📁 repositories/           # Data repositories
+│   │   │   ├── 📄 user-repository.js  # User data repository
+│   │   │   ├── 📄 video-repository.js # Video data repository
+│   │   │   └── 📄 payment-repository.js # Payment data repository
+│   │   ├── 📁 services/               # Business services
+│   │   │   ├── 📄 user-service.js     # User business logic
+│   │   │   ├── 📄 video-service.js    # Video business logic
+│   │   │   └── 📄 subscription-service.js # Subscription business logic
+│   │   └── 📁 validators/             # Business validators
+│   │       ├── 📄 user-validator.js   # User validation rules
+│   │       ├── 📄 video-validator.js  # Video validation rules
+│   │       └── 📄 payment-validator.js # Payment validation rules
+│   │
+│   ├── 📁 2-intelligence/             # AI & analytics layer
+│   │   ├── 📁 ai/                     # AI services
+│   │   │   ├── 📄 recommendation-engine.js # AI recommendations
+│   │   │   ├── 📄 content-moderation.js # AI content moderation
+│   │   │   └── 📄 personalization.js # AI personalization
+│   │   ├── 📁 ai-services/            # Video generation & agent services
+│   │   │   ├── 📄 video-generation.js # AI video generation
+│   │   │   ├── 📄 text-to-speech.js  # Text-to-speech AI
+│   │   │   ├── 📄 image-recognition.js # Image recognition AI
+│   │   │   └── 📁 agents/             # AI agent implementations
+│   │   │       ├── 📄 dual-agent-orchestrator.js # 🆕 Dual agent system
+│   │   │       ├── 📄 copilot-agent.js # GitHub Copilot integration
+│   │   │       ├── 📄 amazon-q-agent.js # Amazon Q integration
+│   │   │       └── 📄 specialized-agents.js # Specialized agents
+│   │   ├── 📁 analytics/              # Analytics engines
+│   │   │   ├── 📄 user-behavior.js    # User behavior analytics
+│   │   │   ├── 📄 content-analytics.js # Content performance analytics
+│   │   │   ├── 📄 revenue-analytics.js # Revenue analytics
+│   │   │   └── 📄 predictive-analytics.js # Predictive analytics
+│   │   └── 📁 ml/                     # ML models
+│   │       ├── 📄 recommendation-model.js # Recommendation ML model
+│   │       ├── 📄 fraud-detection-model.js # Fraud detection ML
+│   │       └── 📄 content-classification-model.js # Content classification
+│   │
+│   ├── 📁 3-communication/            # APIs & integrations layer
+│   │   ├── 📁 adapters/               # API adapters
+│   │   │   ├── 📄 stripe-adapter.js   # Stripe payment adapter
+│   │   │   ├── 📄 aws-adapter.js      # AWS services adapter
+│   │   │   └── 📄 third-party-adapter.js # Third-party integrations
+│   │   ├── 📁 clients/                # External clients
+│   │   │   ├── 📄 payment-client.js   # Payment processing client
+│   │   │   ├── 📄 email-client.js     # Email service client
+│   │   │   └── 📄 sms-client.js       # SMS service client
+│   │   ├── 📁 controllers/            # API controllers
+│   │   │   ├── 📄 auth-controller.js  # Authentication controller
+│   │   │   ├── 📄 video-controller.js # Video management controller
+│   │   │   ├── 📄 user-controller.js  # User management controller
+│   │   │   └── 📄 payment-controller.js # Payment controller
+│   │   ├── 📁 graphql/                # GraphQL resolvers
+│   │   │   ├── 📄 user-resolvers.js   # User GraphQL resolvers
+│   │   │   ├── 📄 video-resolvers.js  # Video GraphQL resolvers
+│   │   │   └── 📄 subscription-resolvers.js # Subscription resolvers
+│   │   ├── 📁 queue/                  # Message queues
+│   │   │   ├── 📄 video-processing-queue.js # Video processing queue
+│   │   │   ├── 📄 email-queue.js      # Email sending queue
+│   │   │   └── 📄 notification-queue.js # Notification queue
+│   │   └── 📁 websocket/              # WebSocket handlers
+│   │       ├── 📄 real-time-updates.js # Real-time updates
+│   │       └── 📄 live-streaming.js   # Live streaming WebSocket
+│   │
+│   ├── 📁 4-interface/                # UI layer
+│   │   ├── 📁 components/             # React components
+│   │   │   ├── 📄 VideoPlayer.jsx     # Video player component
+│   │   │   ├── 📄 UserProfile.jsx     # User profile component
+│   │   │   ├── 📄 PaymentForm.jsx     # Payment form component
+│   │   │   └── 📄 Dashboard.jsx       # Dashboard component
+│   │   ├── 📁 ui/                     # UI assets & pages
+│   │   │   ├── 📁 components/         # Electron code editor components
+│   │   │   │   ├── 📄 CodeEditor.jsx  # Code editor component
+│   │   │   │   └── 📄 FileExplorer.jsx # File explorer component
+│   │   │   ├── 📁 frameworks/         # UI frameworks
+│   │   │   │   ├── 📄 eslint-config.js # ESLint configuration
+│   │   │   │   └── 📄 prettier-config.js # Prettier configuration
+│   │   │   ├── 📁 frontend/           # React frontend
+│   │   │   │   ├── 📄 App.jsx         # Main React application
+│   │   │   │   ├── 📄 index.js        # React entry point
+│   │   │   │   └── 📁 pages/          # React pages
+│   │   │   ├── 📁 pages/              # HTML pages
+│   │   │   │   ├── 📄 index.html      # Main landing page
+│   │   │   │   ├── 📄 dashboard.html  # Dashboard page
+│   │   │   │   └── 📄 player.html     # Video player page
+│   │   │   ├── 📁 utils/              # UI utilities
+│   │   │   │   ├── 📄 usb-passkey-client.js # 🆕 USB passkey client
+│   │   │   │   ├── 📄 form-validation.js # Form validation utilities
+│   │   │   │   └── 📄 api-client.js   # API client utilities
+│   │   └── 📁 view-models/            # View models
+│   │       ├── 📄 user-view-model.js  # User view model
+│   │       ├── 📄 video-view-model.js # Video view model
+│   │       └── 📄 dashboard-view-model.js # Dashboard view model
+│   │
+│   ├── 📁 5-economy/                  # Business logic layer
+│   │   ├── 📁 business/               # Business services
+│   │   │   ├── 📁 ai/                 # AI business logic
+│   │   │   │   ├── 📄 ai-subscription-optimizer.js # AI subscription optimization
+│   │   │   │   └── 📄 ai-revenue-predictor.js # AI revenue prediction
+│   │   │   ├── 📁 analytics/          # Business analytics
+│   │   │   │   ├── 📄 revenue-tracker.js # Revenue tracking
+│   │   │   │   ├── 📄 user-metrics.js # User metrics analysis
+│   │   │   │   └── 📄 content-performance.js # Content performance
+│   │   │   ├── 📁 commerce/           # Payment processing
+│   │   │   │   ├── 📄 stripe-integration.js # Stripe payment integration
+│   │   │   │   ├── 📄 subscription-manager.js # Subscription management
+│   │   │   │   └── 📄 billing-engine.js # Billing engine
+│   │   │   ├── 📁 compliance/         # Compliance services
+│   │   │   │   ├── 📄 gdpr-compliance.js # GDPR compliance
+│   │   │   │   ├── 📄 coppa-compliance.js # COPPA compliance
+│   │   │   │   └── 📄 dmca-compliance.js # DMCA compliance
+│   │   │   ├── 📁 infrastructure/     # Infrastructure services
+│   │   │   │   ├── 📄 auto-scaling.js # Auto-scaling logic
+│   │   │   │   ├── 📄 cost-optimization.js # Cost optimization
+│   │   │   │   └── 📄 performance-monitoring.js # Performance monitoring
+│   │   │   ├── 📁 integration/        # Third-party integrations
+│   │   │   │   ├── 📄 social-media-integration.js # Social media
+│   │   │   │   ├── 📄 analytics-integration.js # Analytics platforms
+│   │   │   │   └── 📄 cdn-integration.js # CDN integration
+│   │   │   ├── 📁 media/               # Media processing
+│   │   │   │   ├── 📄 video-transcoding.js # Video transcoding
+│   │   │   │   ├── 📄 thumbnail-generation.js # Thumbnail generation
+│   │   │   │   └── 📄 content-delivery.js # Content delivery
+│   │   │   └── 📁 revenue/            # Revenue optimization
+│   │   │       ├── 📄 pricing-engine.js # Dynamic pricing engine
+│   │   │       ├── 📄 revenue-optimization.js # Revenue optimization
+│   │   │       └── 📄 subscription-analytics.js # Subscription analytics
+│   │   ├── 📁 fraud-detection/        # Fraud prevention
+│   │   │   ├── 📄 payment-fraud.js    # Payment fraud detection
+│   │   │   ├── 📄 account-fraud.js    # Account fraud detection
+│   │   │   └── 📄 content-fraud.js    # Content fraud detection
+│   │   ├── 📁 monetization/           # Monetization services
+│   │   │   ├── 📄 ad-revenue.js       # Advertising revenue
+│   │   │   ├── 📄 subscription-revenue.js # Subscription revenue
+│   │   │   └── 📄 premium-features.js # Premium feature monetization
+│   │   ├── 📁 payments/               # Payment services
+│   │   │   ├── 📄 payment-processor.js # Payment processing
+│   │   │   ├── 📄 refund-handler.js   # Refund processing
+│   │   │   └── 📄 payment-analytics.js # Payment analytics
+│   │   └── 📁 pricing/                # Pricing engines
+│   │       ├── 📄 dynamic-pricing.js  # Dynamic pricing algorithm
+│   │       ├── 📄 tier-pricing.js     # Tier-based pricing
+│   │       └── 📄 usage-pricing.js    # Usage-based pricing
+│   │
+│   ├── 📁 6-governance/               # Compliance & security layer
+│   │   ├── 📁 compliance/             # Compliance services
+│   │   │   ├── 📄 gdpr-handler.js     # GDPR compliance handler
+│   │   │   ├── 📄 coppa-handler.js    # COPPA compliance handler
+│   │   │   ├── 📄 ccpa-handler.js     # CCPA compliance handler
+│   │   │   └── 📄 audit-trail.js      # Audit trail management
+│   │   ├── 📁 legal/                  # Legal services
+│   │   │   ├── 📄 terms-enforcement.js # Terms of service enforcement
+│   │   │   ├── 📄 privacy-protection.js # Privacy protection
+│   │   │   └── 📄 license-management.js # License management
+│   │   ├── 📁 moderation/             # Content moderation
+│   │   │   ├── 📄 auto-moderation.js  # Automated content moderation
+│   │   │   ├── 📄 manual-review.js    # Manual content review
+│   │   │   └── 📄 community-guidelines.js # Community guidelines
+│   │   └── 📁 policies/               # Policy enforcement
+│   │       ├── 📄 content-policy.js   # Content policy enforcement
+│   │       ├── 📄 user-policy.js      # User policy enforcement
+│   │       └── 📄 data-policy.js      # Data policy enforcement
+│   │
+│   ├── 📁 7-data/                     # Data layer
+│   │   ├── 📁 analytics/              # Data analytics
+│   │   │   ├── 📄 user-analytics.js   # User data analytics
+│   │   │   ├── 📄 content-analytics.js # Content data analytics
+│   │   │   ├── 📄 revenue-analytics.js # Revenue data analytics
+│   │   │   └── 📄 performance-analytics.js # Performance analytics
+│   │   ├── 📁 backup/                 # Backup services
+│   │   │   ├── 📄 data-backup.js      # Data backup automation
+│   │   │   ├── 📄 backup-verification.js # Backup verification
+│   │   │   └── 📄 disaster-recovery.js # Disaster recovery
+│   │   ├── 📁 caching/                # Cache layer
+│   │   │   ├── 📄 redis-cache.js      # Redis caching
+│   │   │   ├── 📄 cdn-cache.js        # CDN caching
+│   │   │   └── 📄 application-cache.js # Application-level caching
+│   │   ├── 📁 storage/                # Storage services
+│   │   │   ├── 📄 s3-storage.js       # AWS S3 storage
+│   │   │   ├── 📄 file-management.js  # File management
+│   │   │   └── 📄 media-storage.js    # Media storage optimization
+│   │   └── 📁 warehouse/              # Data warehouse
+│   │       ├── 📄 etl-pipeline.js     # ETL data pipeline
+│   │       ├── 📄 data-aggregation.js # Data aggregation
+│   │       └── 📄 reporting-engine.js # Reporting engine
+│   │
+│   └── 📁 8-operations/               # DevOps & infrastructure layer
+│       ├── 📁 backup/                 # Backup operations
+│       │   ├── 📄 automated-backup.js # Automated backup systems
+│       │   ├── 📄 backup-monitoring.js # Backup monitoring
+│       │   └── 📄 recovery-procedures.js # Recovery procedures
+│       ├── 📁 ci-cd/                  # CI/CD pipelines
+│       │   ├── 📄 github-actions.js   # GitHub Actions configuration
+│       │   ├── 📄 deployment-pipeline.js # Deployment pipeline
+│       │   └── 📄 testing-pipeline.js # Testing pipeline
+│       ├── 📁 deployment/             # Deployment services
+│       │   ├── 📄 aws-deployment.js   # AWS deployment automation
+│       │   ├── 📄 blue-green-deployment.js # Blue-green deployment
+│       │   └── 📄 rollback-procedures.js # Rollback procedures
+│       ├── 📁 infrastructure/         # Infrastructure as code
+│       │   ├── 📄 cloudformation.js   # CloudFormation management
+│       │   ├── 📄 terraform.js        # Terraform configuration
+│       │   └── 📄 infrastructure-monitoring.js # Infrastructure monitoring
+│       ├── 📁 monitoring/             # Monitoring services
+│       │   ├── 📄 application-monitoring.js # Application monitoring
+│       │   ├── 📄 infrastructure-monitoring.js # Infrastructure monitoring
+│       │   ├── 📄 security-monitoring.js # Security monitoring
+│       │   └── 📄 alerting-system.js  # Alerting system
+│       └── 📁 testing/                # Test suites
+│           ├── 📄 integration-tests.js # Integration testing
+│           ├── 📄 performance-tests.js # Performance testing
+│           ├── 📄 security-tests.js   # Security testing
+│           └── 📄 load-tests.js       # Load testing
+│
+├── 📁 layers/                          # Lambda layers
+│   ├── 📁 nodejs/                     # Node.js layer
+│   │   └── 📁 node_modules/           # Node.js dependencies
+│   └── 📁 python/                     # Python layer
+│       └── 📄 requirements.txt        # Python dependencies
+│
+├── 📁 lib/                            # Shared libraries
+│   ├── 📄 utils.js                    # Utility functions
+│   ├── 📄 constants.js                # Application constants
+│   ├── 📄 validators.js               # Validation functions
+│   └── 📄 formatters.js               # Data formatting functions
+│
+├── 📁 scripts/                        # 🆕 Automation scripts
+│   ├── 📄 aws_train_sd.py             # 🆕 AWS Stable Diffusion training
+│   ├── 📄 cleanup_aws.py              # 🆕 AWS resource cleanup
+│   ├── 📄 debug_aws_launch.py         # 🆕 Debug AWS deployments
+│   ├── 📄 launch_aws_training.py      # 🆕 Training instance launcher
+│   ├── 📄 quick_gpu_launch.py         # 🆕 Quick GPU instance launcher
+│   ├── 📄 setup_aws_training.sh       # 🆕 Training environment setup
+│   ├── 📄 setup_training.py           # 🆕 Training configuration
+│   ├── 📄 start_aws_training.sh       # 🆕 Training starter script
+│   ├── 📄 train_dreambooth.sh         # 🆕 DreamBooth training
+│   ├── 📄 train_lora.py               # 🆕 LoRA training implementation
+│   ├── 📄 train_sd.py                 # 🆕 Core training script
+│   ├── 📄 commit-validator.js         # Git commit validation
+│   ├── 📄 git-integrity-check.js      # Git integrity checker
+│   ├── 📄 smoke-test.js               # Smoke testing script
+│   └── 📁 agents/                     # Agent orchestration scripts
+│       ├── 📄 enhanced-agent-hub.js   # 🆕 75+ AI agents hub
+│       ├── 📄 agent-communication-bridge.js # Agent communication
+│       └── 📄 manual-agent-controller.js # Manual agent control
+│
+├── 📁 services/                       # Microservices
+│   ├── 📁 video-generation/          # AI video generation service
+│   │   ├── 📄 app.py                 # Flask/FastAPI application
+│   │   ├── 📄 models.py              # ML model definitions
+│   │   ├── 📄 inference.py           # Model inference engine
+│   │   ├── 📄 requirements.txt       # Python dependencies
+│   │   └── 📁 models/                # Trained ML models
+│   ├── 📁 payment-service/           # Payment processing service
+│   │   ├── 📄 stripe-service.js      # Stripe integration
+│   │   ├── 📄 webhook-handler.js     # Payment webhooks
+│   │   └── 📄 billing-service.js     # Billing automation
+│   ├── 📁 notification-service/      # Notification service
+│   │   ├── 📄 email-service.js       # Email notifications
+│   │   ├── 📄 sms-service.js         # SMS notifications
+│   │   └── 📄 push-service.js        # Push notifications
+│   └── 📁 analytics-service/         # Analytics service
+│       ├── 📄 data-collector.js      # Data collection
+│       ├── 📄 metrics-processor.js   # Metrics processing
+│       └── 📄 reporting-service.js   # Report generation
+│
+├── 📁 src/                           # Source code
+│   ├── 📄 app.js                     # Main application entry
+│   ├── 📄 server.js                  # Express server setup
+│   ├── 📄 routes.js                  # Route definitions
+│   └── 📁 middleware/                # Express middleware
+│       ├── 📄 auth.js                # Authentication middleware
+│       ├── 📄 cors.js                # CORS middleware
+│       └── 📄 rate-limit.js          # Rate limiting middleware
+│
+├── 📁 tests/                         # Test suites
+│   ├── 📁 e2e/                       # End-to-end tests
+│   │   ├── 📄 auth.test.js           # Authentication E2E tests
+│   │   ├── 📄 video-upload.test.js   # Video upload E2E tests
+│   │   └── 📄 payment.test.js        # Payment E2E tests
+│   ├── 📁 integration/               # Integration tests
+│   │   ├── 📄 api.test.js            # API integration tests
+│   │   ├── 📄 database.test.js       # Database integration tests
+│   │   └── 📄 aws.test.js            # AWS integration tests
+│   ├── 📁 performance/               # Performance tests
+│   │   ├── 📄 load-test.js           # Load testing
+│   │   ├── 📄 stress-test.js         # Stress testing
+│   │   └── 📄 benchmark.js           # Performance benchmarks
+│   ├── 📁 security/                  # Security tests
+│   │   ├── 📄 auth-security.test.js  # Authentication security tests
+│   │   ├── 📄 input-validation.test.js # Input validation tests
+│   │   └── 📄 penetration.test.js    # Penetration testing
+│   └── 📁 unit/                      # Unit tests
+│       ├── 📄 user.test.js           # User unit tests
+│       ├── 📄 video.test.js          # Video unit tests
+│       └── 📄 payment.test.js        # Payment unit tests
+│
+├── 📁 tools/                         # 🆕 Development utilities (16 tools)
+│   ├── 📄 check-all-html-dashboard.js # 🆕 HTML dashboard checker
+│   ├── 📄 check-dashboard-links.js   # 🆕 Dashboard link validation
+│   ├── 📄 check-dynamic.js           # 🆕 Dynamic content checker
+│   ├── 📄 check-infrastructure.js    # 🆕 Infrastructure validation
+│   ├── 📄 check-pwa.js               # 🆕 PWA compliance checker
+│   ├── 📄 check-stack.js             # 🆕 Technology stack validator
+│   ├── 📄 check-training-status.js   # 🆕 AI training status checker
+│   ├── 📄 execute-hexarchy-migration.js # 🆕 Hexarchy migration tool
+│   ├── 📄 find-duplicates.js         # 🆕 Duplicate file finder
+│   ├── 📄 scan-connections.js        # 🆕 Connection scanner
+│   ├── 📄 scan-docs.js               # 🆕 Documentation scanner
+│   ├── 📄 setup-stable-diffusion.js  # 🆕 Stable Diffusion setup
+│   ├── 📄 setup-training.js          # 🆕 Training environment setup
+│   ├── 📄 start-dual-agent.js        # 🆕 Dual agent system starter
+│   ├── 📄 training-helper.js          # 🆕 Training helper utilities
+│   ├── 📄 update-cicd-paths.js       # 🆕 CI/CD path updater
+│   └── 📄 update-import-paths.js     # 🆕 Import path updater
+│
+└── 📁 training_images/               # AI training data
+    ├── 📁 stable-diffusion/          # Stable Diffusion training images
+    ├── 📁 dreambooth/               # DreamBooth training data
+    └── 📁 lora/                     # LoRA training datasets
+
+## 📊 Reorganization Statistics
+
+### Before Reorganization:
+- **Root Files**: ~80+ files cluttering the root directory
+- **Organization**: Mixed structure with scattered configurations
+- **Navigation**: Difficult to find specific files
+- **Maintenance**: Complex due to poor organization
+
+### After Reorganization:
+- **Root Files**: 17 essential files (83% reduction)
+- **Organization**: Logical hexarchy-based structure
+- **Navigation**: Intuitive directory structure
+- **Maintenance**: Simplified with proper categorization
+
+### Key Improvements:
+✅ **Professional Structure** - Industry-standard project layout
+✅ **Logical Grouping** - Related files grouped in appropriate directories
+✅ **Enhanced Agent Hub** - 75+ specialized AI agents organized
+✅ **Dual Agent System** - GitHub Copilot + Amazon Q orchestration
+✅ **USB Passkey Auth** - Military-grade authentication system
+✅ **Comprehensive Documentation** - 30+ properly categorized docs
+✅ **Development Tools** - 16 specialized development utilities
+✅ **AI Training Infrastructure** - Complete AWS-based training setup
+✅ **Hexarchy Architecture** - 8-layer hexagonal architecture
+✅ **120-Pipe Infrastructure** - Complete AWS integration
+
+## 🚀 Features Preserved and Enhanced:
+
+### Core Platform:
+- ✅ Enhanced Agent Hub with 75+ AI agents
+- ✅ Dual-agent orchestration (GitHub Copilot + Amazon Q)
+- ✅ USB passkey authentication implementation
+- ✅ Hexarchy-based architecture (8 layers)
+- ✅ Professional directory structure
+- ✅ Comprehensive documentation organization
+
+### Infrastructure:
+- ✅ 120+ AWS connection pipes maintained
+- ✅ Complete CI/CD pipeline preserved
+- ✅ Security and compliance systems intact
+- ✅ Monitoring and logging systems preserved
+- ✅ All microservices properly organized
+
+### Development:
+- ✅ All configuration files properly categorized
+- ✅ Development tools consolidated and organized
+- ✅ Testing infrastructure maintained
+- ✅ Documentation properly structured
+- ✅ Example files and demos organized
+
+The project now has a much more professional and maintainable structure while preserving all existing functionality!

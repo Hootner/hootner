@@ -1,0 +1,221 @@
+# Video Generation Service Configuration
+# Environment: Production
+# Date: 2026-01-11
+
+# ============================================================================
+# Server Configuration
+# ============================================================================
+server:
+  host: '0.0.0.0'
+  port: 5003
+  debug: false
+  workers: 4
+
+# ============================================================================
+# Model Configuration
+# ============================================================================
+model:
+  size: 'base'
+  device: 'cuda'
+  timesteps: 1000
+  guidance_scale: 7.5
+
+  checkpoint_dir: '/var/lib/video-generation/checkpoints'
+  weights_path: '/var/lib/video-generation/weights/model_v1.0.0.pt'
+
+  # Optimization (enabled in production)
+  mixed_precision: true
+  precision_dtype: 'float16'
+  compile_model: true
+  gradient_checkpointing: true
+
+# ============================================================================
+# Sampler Configuration
+# ============================================================================
+sampler:
+  type: 'dpm'
+  num_steps: 50
+
+  dpm:
+    solver_order: 2
+    algorithm_type: 'dpmsolver++'
+
+# ============================================================================
+# Generation Defaults
+# ============================================================================
+generation:
+  default_num_frames: 240 # 10 seconds at 24fps
+  default_height: 512 # Production: HD-ready default
+  default_width: 512
+  default_fps: 24 # Professional frame rate
+  default_format: 'mp4'
+
+  # Maximum limits (4-hour support at 24fps = 345,600 frames)
+  max_num_frames: 345600 # 4 hours at 24fps
+  max_duration_seconds: 14400 # 4 hours
+  max_height: 7680 # 8K UHD support
+  max_width: 7680
+  min_resolution: 64
+  max_prompt_length: 2000
+
+  # Long-form video optimizations
+  long_form:
+    enabled: true
+    chunk_size: 1200 # Process 50 seconds at a time (1200 frames @ 24fps)
+    overlap_frames: 24 # 1 second overlap for smooth transitions
+    streaming_mode: true # Stream output instead of loading all in memory
+    checkpoint_interval: 7200 # Save checkpoint every 5 minutes (7200 frames)
+
+  # Resolution profiles
+  profiles:
+    preview:
+      width: 256
+      height: 256
+      fps: 24
+    hd:
+      width: 1920
+      height: 1080
+      fps: 24
+    4k:
+      width: 3840
+      height: 2160
+      fps: 24
+    8k:
+      width: 7680
+      height: 4320
+      fps: 24
+
+  # HDR10 configuration
+  hdr:
+    enabled: true
+    bit_depth: 10 # 10-bit color
+    color_space: 'rec2020' # Wide color gamut
+    transfer_function: 'pq' # Perceptual Quantizer (SMPTE ST 2084)
+    max_nits: 4000 # Production: Higher peak brightness
+    min_nits: 0.005
+    max_cll: 4000 # Maximum Content Light Level
+    max_fall: 3000 # Maximum Frame Average Light Level
+    master_display:
+      red_primary: [0.708, 0.292]
+      green_primary: [0.170, 0.797]
+      blue_primary: [0.131, 0.046]
+      white_point: [0.3127, 0.3290]
+
+# ============================================================================
+# API Configuration
+# ============================================================================
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_window: 100
+    window_seconds: 60
+
+  caching:
+    enabled: true
+    ttl_seconds: 7200
+
+  async_jobs:
+    enabled: true
+    max_queue_size: 500
+    worker_threads: 4
+
+# ============================================================================
+# Redis Configuration
+# ============================================================================
+redis:
+  enabled: false
+  host: 'redis.production.local'
+  port: 6379
+  db: 0
+  password: '${REDIS_PASSWORD}'
+  socket_timeout: 10
+
+# ============================================================================
+# Monitoring & Logging
+# ============================================================================
+monitoring:
+  logging:
+    level: 'WARNING'
+    format: 'json'
+    log_dir: '/var/log/video-generation'
+
+  prometheus:
+    enabled: true
+    export_port: 9090
+
+  profiling:
+    enabled: false
+    print_stats_on_shutdown: false
+
+# ============================================================================
+# Video Effects
+# ============================================================================
+effects:
+  enabled: true
+
+  presets:
+    - 'cinematic'
+    - 'vintage'
+    - 'dramatic'
+    - 'dreamy'
+    - 'vivid'
+
+  post_processing:
+    temporal_smoothing: true
+    temporal_window: 3
+    auto_sharpen: true
+    sharpen_strength: 0.5
+
+# ============================================================================
+# Audio Configuration (Dolby Atmos)
+# ============================================================================
+audio:
+  enabled: true
+
+  # Dolby Atmos configuration
+  dolby_atmos:
+    enabled: true
+    channels: '7.1.4' # 7 bed channels + 1 LFE + 4 height channels
+    codec: 'eac3' # Enhanced AC-3 for Atmos
+    bitrate: 1536 # Production: Higher bitrate (kbps)
+    sample_rate: 48000 # 48 kHz
+    bit_depth: 24 # 24-bit audio
+
+  # Audio generation
+  generation:
+    model: 'musicgen-large' # Facebook/Meta MusicGen
+    duration_match: true # Match video duration
+    sync_to_video: true # Synchronize audio to video timing
+    style_prompt: '' # Optional music style prompt
+
+  # Spatial audio configuration
+  spatial:
+    object_based: true # Object-based audio positioning
+    max_objects: 118 # Dolby Atmos supports up to 118 audio objects
+    binaural: true # Binaural rendering for headphones
+    room_modeling: true # Virtual room acoustics
+
+# ============================================================================
+# Security
+# ============================================================================
+security:
+  cors:
+    enabled: true
+    origins:
+      - 'https://hootner.com'
+      - 'https://app.hootner.com'
+
+  api_key:
+    enabled: true
+    header_name: 'X-API-Key'
+    key: '${VIDEO_GEN_API_KEY}'
+
+# ============================================================================
+# Storage
+# ============================================================================
+storage:
+  output_dir: '/var/lib/video-generation/outputs'
+  cache_dir: '/var/lib/video-generation/cache'
+  max_output_size_mb: 200
+  cleanup_old_files: true
+  cleanup_age_days: 3

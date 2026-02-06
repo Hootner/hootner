@@ -1,0 +1,14 @@
+#!/bin/bash
+# Pre-commit hook to check git integrity
+
+echo "🦉 HOOTNER - Checking git integrity..."
+
+# Run integrity check
+node scripts/git-integrity-check.js pre-commit
+
+if [ $? -ne 0 ]; then
+  echo "❌ Commit blocked by integrity check"
+  exit 1
+fi
+
+echo "✅ Git integrity check passed!"

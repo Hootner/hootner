@@ -1,0 +1,1752 @@
+{
+  "timestamp": "2026-02-04T23:48:52.776Z",
+  "diff": {
+    "added": [
+      {
+        "path": "administrator/ai-build-optimizer.js",
+        "name": "ai-build-optimizer.js",
+        "type": "js",
+        "size": 7170
+      },
+      {
+        "path": "administrator/quantum-ai-build-system.js",
+        "name": "quantum-ai-build-system.js",
+        "type": "js",
+        "size": 4936
+      },
+      {
+        "path": "administrator/quantum-build-parallelizer.js",
+        "name": "quantum-build-parallelizer.js",
+        "type": "js",
+        "size": 3504
+      },
+      {
+        "path": "administrator/quantum-build.js",
+        "name": "quantum-build.js",
+        "type": "js",
+        "size": 538
+      },
+      {
+        "path": "administrator/self-healing-architecture.js",
+        "name": "self-healing-architecture.js",
+        "type": "js",
+        "size": 3372
+      },
+      {
+        "path": "agents/api-security-scanner-agent.cjs",
+        "name": "api-security-scanner-agent.cjs",
+        "type": "cjs",
+        "size": 18273
+      },
+      {
+        "path": "agents/fixer-agent.js",
+        "name": "fixer-agent.js",
+        "type": "js",
+        "size": 1986
+      },
+      {
+        "path": "agents/README_API_SCANNER.md",
+        "name": "README_API_SCANNER.md",
+        "type": "md",
+        "size": 8959
+      },
+      {
+        "path": "agents/scanner-agent.js",
+        "name": "scanner-agent.js",
+        "type": "js",
+        "size": 1866
+      },
+      {
+        "path": "agents/start-agents.js",
+        "name": "start-agents.js",
+        "type": "js",
+        "size": 519
+      },
+      {
+        "path": "CODEBASE_ANALYSIS_REPORT.md",
+        "name": "CODEBASE_ANALYSIS_REPORT.md",
+        "type": "md",
+        "size": 16453
+      },
+      {
+        "path": "config/api-endpoints.js",
+        "name": "api-endpoints.js",
+        "type": "js",
+        "size": 5251
+      },
+      {
+        "path": "config/API_CONFIG_GUIDE.md",
+        "name": "API_CONFIG_GUIDE.md",
+        "type": "md",
+        "size": 8217
+      },
+      {
+        "path": "config/aws/aws-security-policy.json",
+        "name": "aws-security-policy.json",
+        "type": "json",
+        "size": 244
+      },
+      {
+        "path": "config/aws_training_config.json",
+        "name": "aws_training_config.json",
+        "type": "json",
+        "size": 4277
+      },
+      {
+        "path": "config/commitlint.config.json",
+        "name": "commitlint.config.json",
+        "type": "json",
+        "size": 259
+      },
+      {
+        "path": "config/disable-dist.json",
+        "name": "disable-dist.json",
+        "type": "json",
+        "size": 2995
+      },
+      {
+        "path": "config/eslint.config.json",
+        "name": "eslint.config.json",
+        "type": "json",
+        "size": 1118
+      },
+      {
+        "path": "config/IMPLEMENTATION_SUMMARY.md",
+        "name": "IMPLEMENTATION_SUMMARY.md",
+        "type": "md",
+        "size": 8987
+      },
+      {
+        "path": "config/jest.config.js",
+        "name": "jest.config.js",
+        "type": "js",
+        "size": 224
+      },
+      {
+        "path": "config/playwright.config.js",
+        "name": "playwright.config.js",
+        "type": "js",
+        "size": 569
+      },
+      {
+        "path": "config/prettier.config.json",
+        "name": "prettier.config.json",
+        "type": "json",
+        "size": 126
+      },
+      {
+        "path": "config/QUICK_REFERENCE.md",
+        "name": "QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 4096
+      },
+      {
+        "path": "config/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 2936
+      },
+      {
+        "path": "config/tailwind.config.js",
+        "name": "tailwind.config.js",
+        "type": "js",
+        "size": 298
+      },
+      {
+        "path": "config/training_prompts.json",
+        "name": "training_prompts.json",
+        "type": "json",
+        "size": 445
+      },
+      {
+        "path": "config/unified-dev-config.json",
+        "name": "unified-dev-config.json",
+        "type": "json",
+        "size": 5828
+      },
+      {
+        "path": "config/validate-config.js",
+        "name": "validate-config.js",
+        "type": "js",
+        "size": 12828
+      },
+      {
+        "path": "CONFIG_ARCHITECTURE_DIAGRAM.md",
+        "name": "CONFIG_ARCHITECTURE_DIAGRAM.md",
+        "type": "md",
+        "size": 21750
+      },
+      {
+        "path": "CONFIG_INDEX.md",
+        "name": "CONFIG_INDEX.md",
+        "type": "md",
+        "size": 11437
+      },
+      {
+        "path": "CONFIG_QUICK_REFERENCE.md",
+        "name": "CONFIG_QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 7113
+      },
+      {
+        "path": "CONSOLIDATION_COMPLETE.md",
+        "name": "CONSOLIDATION_COMPLETE.md",
+        "type": "md",
+        "size": 10997
+      },
+      {
+        "path": "constants/timeouts.js",
+        "name": "timeouts.js",
+        "type": "js",
+        "size": 127
+      },
+      {
+        "path": "cspell.json",
+        "name": "cspell.json",
+        "type": "json",
+        "size": 389
+      },
+      {
+        "path": "data/reports/api-security-report.json",
+        "name": "api-security-report.json",
+        "type": "json",
+        "size": 54182
+      },
+      {
+        "path": "data/reports/repo-scan_2026-01-31_13-11-39-902Z.json",
+        "name": "repo-scan_2026-01-31_13-11-39-902Z.json",
+        "type": "json",
+        "size": 20861
+      },
+      {
+        "path": "data/reports/repo-scan_2026-01-31_13-11-39-902Z.md",
+        "name": "repo-scan_2026-01-31_13-11-39-902Z.md",
+        "type": "md",
+        "size": 2072
+      },
+      {
+        "path": "data/reports/repo-scan_2026-01-31_13-56-04-891Z.md",
+        "name": "repo-scan_2026-01-31_13-56-04-891Z.md",
+        "type": "md",
+        "size": 2072
+      },
+      {
+        "path": "data/reports/security-manifest.json",
+        "name": "security-manifest.json",
+        "type": "json",
+        "size": 9364
+      },
+      {
+        "path": "data/subscriptions/subscription-map.json",
+        "name": "subscription-map.json",
+        "type": "json",
+        "size": 40
+      },
+      {
+        "path": "data/usage/customer-billing.json",
+        "name": "customer-billing.json",
+        "type": "json",
+        "size": 952
+      },
+      {
+        "path": "data/usage/money-flow.json",
+        "name": "money-flow.json",
+        "type": "json",
+        "size": 566
+      },
+      {
+        "path": "data/usage/revenue-usage.json",
+        "name": "revenue-usage.json",
+        "type": "json",
+        "size": 3940
+      },
+      {
+        "path": "data/usage/user-analytics.json",
+        "name": "user-analytics.json",
+        "type": "json",
+        "size": 2583
+      },
+      {
+        "path": "docs/ADVANCED_AGENTS.md",
+        "name": "ADVANCED_AGENTS.md",
+        "type": "md",
+        "size": 11412
+      },
+      {
+        "path": "docs/ai/AI_AGENT_ORCHESTRATION.md",
+        "name": "AI_AGENT_ORCHESTRATION.md",
+        "type": "md",
+        "size": 2472
+      },
+      {
+        "path": "docs/ai/CURSOR_AI_MODES.md",
+        "name": "CURSOR_AI_MODES.md",
+        "type": "md",
+        "size": 3345
+      },
+      {
+        "path": "docs/AI_VIDEO_GENERATION_SETUP.md",
+        "name": "AI_VIDEO_GENERATION_SETUP.md",
+        "type": "md",
+        "size": 5177
+      },
+      {
+        "path": "docs/API.md",
+        "name": "API.md",
+        "type": "md",
+        "size": 603
+      },
+      {
+        "path": "docs/API_KEYS_SUMMARY.md",
+        "name": "API_KEYS_SUMMARY.md",
+        "type": "md",
+        "size": 4876
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_GUIDE.md",
+        "name": "API_SECURITY_SCANNER_GUIDE.md",
+        "type": "md",
+        "size": 3367
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_IMPLEMENTATION.md",
+        "name": "API_SECURITY_SCANNER_IMPLEMENTATION.md",
+        "type": "md",
+        "size": 8032
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_MANIFEST.md",
+        "name": "API_SECURITY_SCANNER_MANIFEST.md",
+        "type": "md",
+        "size": 16348
+      },
+      {
+        "path": "docs/architecture/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "md",
+        "size": 2297
+      },
+      {
+        "path": "docs/ARCHITECTURE_DIAGRAM.md",
+        "name": "ARCHITECTURE_DIAGRAM.md",
+        "type": "md",
+        "size": 30357
+      },
+      {
+        "path": "docs/ARCHITECTURE_DIAGRAM_120_PIPES.md",
+        "name": "ARCHITECTURE_DIAGRAM_120_PIPES.md",
+        "type": "md",
+        "size": 30565
+      },
+      {
+        "path": "docs/AUTHENTICATION_IMPLEMENTATION.md",
+        "name": "AUTHENTICATION_IMPLEMENTATION.md",
+        "type": "md",
+        "size": 8852
+      },
+      {
+        "path": "docs/AWS_ACCOUNT_SWITCHING.md",
+        "name": "AWS_ACCOUNT_SWITCHING.md",
+        "type": "md",
+        "size": 13248
+      },
+      {
+        "path": "docs/AWS_CONFIGURATION.md",
+        "name": "AWS_CONFIGURATION.md",
+        "type": "md",
+        "size": 5233
+      },
+      {
+        "path": "docs/AWS_FOR_BEGINNERS.md",
+        "name": "AWS_FOR_BEGINNERS.md",
+        "type": "md",
+        "size": 8909
+      },
+      {
+        "path": "docs/AWS_S3_TABLE_BUCKET_SETUP.md",
+        "name": "AWS_S3_TABLE_BUCKET_SETUP.md",
+        "type": "md",
+        "size": 1939
+      },
+      {
+        "path": "docs/AWS_TOOLKIT_DEPLOYMENT.md",
+        "name": "AWS_TOOLKIT_DEPLOYMENT.md",
+        "type": "md",
+        "size": 2152
+      },
+      {
+        "path": "docs/BACKEND_APIS.md",
+        "name": "BACKEND_APIS.md",
+        "type": "md",
+        "size": 7927
+      },
+      {
+        "path": "docs/BACKEND_CHECKLIST.md",
+        "name": "BACKEND_CHECKLIST.md",
+        "type": "md",
+        "size": 9968
+      },
+      {
+        "path": "docs/BACKEND_QUICKSTART.md",
+        "name": "BACKEND_QUICKSTART.md",
+        "type": "md",
+        "size": 7412
+      },
+      {
+        "path": "docs/BRANCH_MERGE_REPORT.md",
+        "name": "BRANCH_MERGE_REPORT.md",
+        "type": "md",
+        "size": 5146
+      },
+      {
+        "path": "docs/CLOUDFRONT_API_KEYS.md",
+        "name": "CLOUDFRONT_API_KEYS.md",
+        "type": "md",
+        "size": 3289
+      },
+      {
+        "path": "docs/CLOUDFRONT_SCAN_REPORT.md",
+        "name": "CLOUDFRONT_SCAN_REPORT.md",
+        "type": "md",
+        "size": 1508
+      },
+      {
+        "path": "docs/commands/ai-services.md",
+        "name": "ai-services.md",
+        "type": "md",
+        "size": 8249
+      },
+      {
+        "path": "docs/commands/deployment.md",
+        "name": "deployment.md",
+        "type": "md",
+        "size": 7495
+      },
+      {
+        "path": "docs/commands/development.md",
+        "name": "development.md",
+        "type": "md",
+        "size": 4725
+      },
+      {
+        "path": "docs/commands/maintenance.md",
+        "name": "maintenance.md",
+        "type": "md",
+        "size": 6334
+      },
+      {
+        "path": "docs/commands/npm-scripts.md",
+        "name": "npm-scripts.md",
+        "type": "md",
+        "size": 6184
+      },
+      {
+        "path": "docs/commands/quick-reference.md",
+        "name": "quick-reference.md",
+        "type": "md",
+        "size": 5429
+      },
+      {
+        "path": "docs/commands/security.md",
+        "name": "security.md",
+        "type": "md",
+        "size": 7135
+      },
+      {
+        "path": "docs/commands/testing.md",
+        "name": "testing.md",
+        "type": "md",
+        "size": 5937
+      },
+      {
+        "path": "docs/COMPLETE_CHECKLIST.md",
+        "name": "COMPLETE_CHECKLIST.md",
+        "type": "md",
+        "size": 9464
+      },
+      {
+        "path": "docs/compliance/COMPLIANCE_OFFICER_GUIDE.md",
+        "name": "COMPLIANCE_OFFICER_GUIDE.md",
+        "type": "md",
+        "size": 14716
+      },
+      {
+        "path": "docs/COMPONENT_DEDUP_PLAN.md",
+        "name": "COMPONENT_DEDUP_PLAN.md",
+        "type": "md",
+        "size": 1864
+      },
+      {
+        "path": "docs/CONTRIBUTING_TOOLING.md",
+        "name": "CONTRIBUTING_TOOLING.md",
+        "type": "md",
+        "size": 1998
+      },
+      {
+        "path": "docs/DASHBOARD_ENHANCEMENTS.md",
+        "name": "DASHBOARD_ENHANCEMENTS.md",
+        "type": "md",
+        "size": 5091
+      },
+      {
+        "path": "docs/DAY_ONE.md",
+        "name": "DAY_ONE.md",
+        "type": "md",
+        "size": 1234
+      },
+      {
+        "path": "docs/deployment/MCP_DEPLOYMENT.md",
+        "name": "MCP_DEPLOYMENT.md",
+        "type": "md",
+        "size": 4775
+      },
+      {
+        "path": "docs/DEPLOYMENT_CHECKLIST_120_PIPES.md",
+        "name": "DEPLOYMENT_CHECKLIST_120_PIPES.md",
+        "type": "md",
+        "size": 10982
+      },
+      {
+        "path": "docs/DEPLOYMENT_READINESS_CHECKLIST.md",
+        "name": "DEPLOYMENT_READINESS_CHECKLIST.md",
+        "type": "md",
+        "size": 9470
+      },
+      {
+        "path": "docs/DEPLOY_NOTES_MARKETPLACE.md",
+        "name": "DEPLOY_NOTES_MARKETPLACE.md",
+        "type": "md",
+        "size": 1193
+      },
+      {
+        "path": "docs/development/IDE_MCP_SETUP.md",
+        "name": "IDE_MCP_SETUP.md",
+        "type": "md",
+        "size": 3281
+      },
+      {
+        "path": "docs/DEVELOPMENT_DEPLOYMENT_MAP.md",
+        "name": "DEVELOPMENT_DEPLOYMENT_MAP.md",
+        "type": "md",
+        "size": 10139
+      },
+      {
+        "path": "docs/DMCA_REGISTRATION_GUIDE.md",
+        "name": "DMCA_REGISTRATION_GUIDE.md",
+        "type": "md",
+        "size": 8175
+      },
+      {
+        "path": "docs/DOCUMENTATION_INDEX.md",
+        "name": "DOCUMENTATION_INDEX.md",
+        "type": "md",
+        "size": 13633
+      },
+      {
+        "path": "docs/DOCUMENTATION_INDEX_120_PIPES.md",
+        "name": "DOCUMENTATION_INDEX_120_PIPES.md",
+        "type": "md",
+        "size": 10822
+      },
+      {
+        "path": "docs/DUAL_AGENT_SETUP.md",
+        "name": "DUAL_AGENT_SETUP.md",
+        "type": "md",
+        "size": 4630
+      },
+      {
+        "path": "docs/DUAL_AI_AGENT_MCP_INTEGRATION.md",
+        "name": "DUAL_AI_AGENT_MCP_INTEGRATION.md",
+        "type": "md",
+        "size": 7324
+      },
+      {
+        "path": "docs/DYNAMODB_MIGRATION.md",
+        "name": "DYNAMODB_MIGRATION.md",
+        "type": "md",
+        "size": 1121
+      },
+      {
+        "path": "docs/EXTERNAL_TESTING_GUIDE.md",
+        "name": "EXTERNAL_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 8690
+      },
+      {
+        "path": "docs/FRONTEND_INTEGRATION_GUIDE.md",
+        "name": "FRONTEND_INTEGRATION_GUIDE.md",
+        "type": "md",
+        "size": 11515
+      },
+      {
+        "path": "docs/FRONTEND_QUICK_CARD.md",
+        "name": "FRONTEND_QUICK_CARD.md",
+        "type": "md",
+        "size": 4885
+      },
+      {
+        "path": "docs/FRONTEND_STRUCTURE.md",
+        "name": "FRONTEND_STRUCTURE.md",
+        "type": "md",
+        "size": 1795
+      },
+      {
+        "path": "docs/GIT_INTEGRITY_MONITORING.md",
+        "name": "GIT_INTEGRITY_MONITORING.md",
+        "type": "md",
+        "size": 6711
+      },
+      {
+        "path": "docs/guides/COPILOT_AGENT_TEMPLATES.md",
+        "name": "COPILOT_AGENT_TEMPLATES.md",
+        "type": "md",
+        "size": 1866
+      },
+      {
+        "path": "docs/guides/COPILOT_CLI_PROMPT.md",
+        "name": "COPILOT_CLI_PROMPT.md",
+        "type": "md",
+        "size": 8859
+      },
+      {
+        "path": "docs/guides/DUAL_AGENT_SETUP.md",
+        "name": "DUAL_AGENT_SETUP.md",
+        "type": "md",
+        "size": 2110
+      },
+      {
+        "path": "docs/guides/LIVE_API_TESTING_GUIDE.md",
+        "name": "LIVE_API_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 10853
+      },
+      {
+        "path": "docs/guides/MERGE_PROMPT_GUIDE.md",
+        "name": "MERGE_PROMPT_GUIDE.md",
+        "type": "md",
+        "size": 1142
+      },
+      {
+        "path": "docs/guides/STARTUP_GUIDE.md",
+        "name": "STARTUP_GUIDE.md",
+        "type": "md",
+        "size": 5379
+      },
+      {
+        "path": "docs/guides/WEBSOCKET_VERIFICATION_GUIDE.md",
+        "name": "WEBSOCKET_VERIFICATION_GUIDE.md",
+        "type": "md",
+        "size": 11518
+      },
+      {
+        "path": "docs/HTML_NAVIGATION_UPDATE.md",
+        "name": "HTML_NAVIGATION_UPDATE.md",
+        "type": "md",
+        "size": 6309
+      },
+      {
+        "path": "docs/HTML_PAGES_ROUTING_MAP.md",
+        "name": "HTML_PAGES_ROUTING_MAP.md",
+        "type": "md",
+        "size": 9565
+      },
+      {
+        "path": "docs/IMPLEMENTATION_COMPLETE_120_PIPES.md",
+        "name": "IMPLEMENTATION_COMPLETE_120_PIPES.md",
+        "type": "md",
+        "size": 10008
+      },
+      {
+        "path": "docs/INDEX.md",
+        "name": "INDEX.md",
+        "type": "md",
+        "size": 1045
+      },
+      {
+        "path": "docs/INFRASTRUCTURE_TREE_120_PIPES.md",
+        "name": "INFRASTRUCTURE_TREE_120_PIPES.md",
+        "type": "md",
+        "size": 21599
+      },
+      {
+        "path": "docs/LAMBDA_LAYER_CONNECTIONS.md",
+        "name": "LAMBDA_LAYER_CONNECTIONS.md",
+        "type": "md",
+        "size": 1300
+      },
+      {
+        "path": "docs/legal/NDA_TEMPLATE.md",
+        "name": "NDA_TEMPLATE.md",
+        "type": "md",
+        "size": 13532
+      },
+      {
+        "path": "docs/legal/NDA_USAGE_GUIDE.md",
+        "name": "NDA_USAGE_GUIDE.md",
+        "type": "md",
+        "size": 7986
+      },
+      {
+        "path": "docs/LEGAL_COMPLIANCE_GUIDE.md",
+        "name": "LEGAL_COMPLIANCE_GUIDE.md",
+        "type": "md",
+        "size": 20471
+      },
+      {
+        "path": "docs/LEGAL_IMPLEMENTATION_SUMMARY.md",
+        "name": "LEGAL_IMPLEMENTATION_SUMMARY.md",
+        "type": "md",
+        "size": 13866
+      },
+      {
+        "path": "docs/LEGAL_QUICK_REFERENCE.md",
+        "name": "LEGAL_QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 2884
+      },
+      {
+        "path": "docs/MCP_INTEGRATION.md",
+        "name": "MCP_INTEGRATION.md",
+        "type": "md",
+        "size": 5024
+      },
+      {
+        "path": "docs/MCP_PROTOCOL_STATUS.md",
+        "name": "MCP_PROTOCOL_STATUS.md",
+        "type": "md",
+        "size": 5277
+      },
+      {
+        "path": "docs/MOBILE_OPTIMIZATION.md",
+        "name": "MOBILE_OPTIMIZATION.md",
+        "type": "md",
+        "size": 2645
+      },
+      {
+        "path": "docs/optimization/ELECTRON_OPTIMIZATION.md",
+        "name": "ELECTRON_OPTIMIZATION.md",
+        "type": "md",
+        "size": 5232
+      },
+      {
+        "path": "docs/optimization/ZED_OPTIMIZATION.md",
+        "name": "ZED_OPTIMIZATION.md",
+        "type": "md",
+        "size": 4116
+      },
+      {
+        "path": "docs/PASSWORD_RECOVERY_GUIDE.md",
+        "name": "PASSWORD_RECOVERY_GUIDE.md",
+        "type": "md",
+        "size": 4695
+      },
+      {
+        "path": "docs/PAYMENT_STATUS.md",
+        "name": "PAYMENT_STATUS.md",
+        "type": "md",
+        "size": 1312
+      },
+      {
+        "path": "docs/PLATFORM_10_YEAR_LIFECYCLE.md",
+        "name": "PLATFORM_10_YEAR_LIFECYCLE.md",
+        "type": "md",
+        "size": 10624
+      },
+      {
+        "path": "docs/PLATFORM_COMPARISON.md",
+        "name": "PLATFORM_COMPARISON.md",
+        "type": "md",
+        "size": 9856
+      },
+      {
+        "path": "docs/PLATFORM_SECURITY_INTEGRATION.md",
+        "name": "PLATFORM_SECURITY_INTEGRATION.md",
+        "type": "md",
+        "size": 11940
+      },
+      {
+        "path": "docs/PR_32_DESCRIPTION.md",
+        "name": "PR_32_DESCRIPTION.md",
+        "type": "md",
+        "size": 5460
+      },
+      {
+        "path": "docs/qa/DATA_ENGINEER_GUIDE.md",
+        "name": "DATA_ENGINEER_GUIDE.md",
+        "type": "md",
+        "size": 12014
+      },
+      {
+        "path": "docs/qa/QA_TESTING_GUIDE.md",
+        "name": "QA_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 9328
+      },
+      {
+        "path": "docs/QUICK_DEPLOY.md",
+        "name": "QUICK_DEPLOY.md",
+        "type": "md",
+        "size": 4966
+      },
+      {
+        "path": "docs/QUICK_REFERENCE.md",
+        "name": "QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 658
+      },
+      {
+        "path": "docs/QUICK_REFERENCE_120_PIPES.md",
+        "name": "QUICK_REFERENCE_120_PIPES.md",
+        "type": "md",
+        "size": 6624
+      },
+      {
+        "path": "docs/QUICK_REFERENCE_BACKEND.md",
+        "name": "QUICK_REFERENCE_BACKEND.md",
+        "type": "md",
+        "size": 7733
+      },
+      {
+        "path": "docs/readme/apps-README.md",
+        "name": "apps-README.md",
+        "type": "md",
+        "size": 2379
+      },
+      {
+        "path": "docs/readme/commands-README.md",
+        "name": "commands-README.md",
+        "type": "md",
+        "size": 1350
+      },
+      {
+        "path": "docs/readme/config-README.md",
+        "name": "config-README.md",
+        "type": "md",
+        "size": 1058
+      },
+      {
+        "path": "docs/readme/docs-README.md",
+        "name": "docs-README.md",
+        "type": "md",
+        "size": 346
+      },
+      {
+        "path": "docs/readme/electron-code-editor-README.md",
+        "name": "electron-code-editor-README.md",
+        "type": "md",
+        "size": 5653
+      },
+      {
+        "path": "docs/readme/libs-README.md",
+        "name": "libs-README.md",
+        "type": "md",
+        "size": 839
+      },
+      {
+        "path": "docs/readme/services-README.md",
+        "name": "services-README.md",
+        "type": "md",
+        "size": 3909
+      },
+      {
+        "path": "docs/readme/ssl-README.md",
+        "name": "ssl-README.md",
+        "type": "md",
+        "size": 949
+      },
+      {
+        "path": "docs/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 4399
+      },
+      {
+        "path": "docs/reference/CSS-VISUAL-REFERENCE.html",
+        "name": "CSS-VISUAL-REFERENCE.html",
+        "type": "html",
+        "size": 22559
+      },
+      {
+        "path": "docs/reports/DASHBOARD_FIXES.md",
+        "name": "DASHBOARD_FIXES.md",
+        "type": "md",
+        "size": 1920
+      },
+      {
+        "path": "docs/reports/DASHBOARD_MANUAL_FIXES.md",
+        "name": "DASHBOARD_MANUAL_FIXES.md",
+        "type": "md",
+        "size": 9262
+      },
+      {
+        "path": "docs/reports/NOTIFICATION_EMBEDDING_SUMMARY.md",
+        "name": "NOTIFICATION_EMBEDDING_SUMMARY.md",
+        "type": "md",
+        "size": 7628
+      },
+      {
+        "path": "docs/reports/organization-status.json",
+        "name": "organization-status.json",
+        "type": "json",
+        "size": 1180
+      },
+      {
+        "path": "docs/RSS_FEED.md",
+        "name": "RSS_FEED.md",
+        "type": "md",
+        "size": 1942
+      },
+      {
+        "path": "docs/security/SECURITY.md",
+        "name": "SECURITY.md",
+        "type": "md",
+        "size": 3906
+      },
+      {
+        "path": "docs/security/USB_PASSKEY_AUTHENTICATION.md",
+        "name": "USB_PASSKEY_AUTHENTICATION.md",
+        "type": "md",
+        "size": 12570
+      },
+      {
+        "path": "docs/SECURITY_COMPLETE.md",
+        "name": "SECURITY_COMPLETE.md",
+        "type": "md",
+        "size": 1962
+      },
+      {
+        "path": "docs/SECURITY_ENHANCEMENTS_NEEDED.md",
+        "name": "SECURITY_ENHANCEMENTS_NEEDED.md",
+        "type": "md",
+        "size": 9580
+      },
+      {
+        "path": "docs/SECURITY_IMPLEMENTATION_COMPLETE.md",
+        "name": "SECURITY_IMPLEMENTATION_COMPLETE.md",
+        "type": "md",
+        "size": 10067
+      },
+      {
+        "path": "docs/SECURITY_MANIFEST.md",
+        "name": "SECURITY_MANIFEST.md",
+        "type": "md",
+        "size": 11824
+      },
+      {
+        "path": "docs/SECURITY_MAX.md",
+        "name": "SECURITY_MAX.md",
+        "type": "md",
+        "size": 1811
+      },
+      {
+        "path": "docs/SOCIAL_FEED_FEATURES.md",
+        "name": "SOCIAL_FEED_FEATURES.md",
+        "type": "md",
+        "size": 11527
+      },
+      {
+        "path": "docs/STABLE_DIFFUSION_TRAINING.md",
+        "name": "STABLE_DIFFUSION_TRAINING.md",
+        "type": "md",
+        "size": 1478
+      },
+      {
+        "path": "docs/START_HERE.md",
+        "name": "START_HERE.md",
+        "type": "md",
+        "size": 8404
+      },
+      {
+        "path": "docs/status/COPILOT_CLI_STATUS.md",
+        "name": "COPILOT_CLI_STATUS.md",
+        "type": "md",
+        "size": 1705
+      },
+      {
+        "path": "docs/status/LINT_STATUS_REPORT.md",
+        "name": "LINT_STATUS_REPORT.md",
+        "type": "md",
+        "size": 4530
+      },
+      {
+        "path": "docs/status/PROJECT_STATUS.md",
+        "name": "PROJECT_STATUS.md",
+        "type": "md",
+        "size": 7831
+      },
+      {
+        "path": "docs/status/REFACTORING_SUMMARY.md",
+        "name": "REFACTORING_SUMMARY.md",
+        "type": "md",
+        "size": 5603
+      },
+      {
+        "path": "docs/status/TESTING_STATUS.md",
+        "name": "TESTING_STATUS.md",
+        "type": "md",
+        "size": 1324
+      },
+      {
+        "path": "docs/STRIPE_CONNECTION_DIAGRAM.md",
+        "name": "STRIPE_CONNECTION_DIAGRAM.md",
+        "type": "md",
+        "size": 19184
+      },
+      {
+        "path": "docs/STRIPE_COST_COMPARISON.md",
+        "name": "STRIPE_COST_COMPARISON.md",
+        "type": "md",
+        "size": 12823
+      },
+      {
+        "path": "docs/STRIPE_EMPLOYEE_ACCESS.md",
+        "name": "STRIPE_EMPLOYEE_ACCESS.md",
+        "type": "md",
+        "size": 1913
+      },
+      {
+        "path": "docs/STRIPE_INTEGRATION_SUMMARY.md",
+        "name": "STRIPE_INTEGRATION_SUMMARY.md",
+        "type": "md",
+        "size": 10993
+      },
+      {
+        "path": "docs/STRIPE_USAGE_PRICING_GUIDE.md",
+        "name": "STRIPE_USAGE_PRICING_GUIDE.md",
+        "type": "md",
+        "size": 10039
+      },
+      {
+        "path": "docs/SUSTAINABILITY_COMPLIANCE.md",
+        "name": "SUSTAINABILITY_COMPLIANCE.md",
+        "type": "md",
+        "size": 3004
+      },
+      {
+        "path": "docs/TECHNICAL_DEBT.md",
+        "name": "TECHNICAL_DEBT.md",
+        "type": "md",
+        "size": 8124
+      },
+      {
+        "path": "docs/TEST_PLAN.md",
+        "name": "TEST_PLAN.md",
+        "type": "md",
+        "size": 1070
+      },
+      {
+        "path": "docs/TODO_GUIDELINES.md",
+        "name": "TODO_GUIDELINES.md",
+        "type": "md",
+        "size": 4058
+      },
+      {
+        "path": "docs/UI_PAGES_ALIGNMENT_REPORT.md",
+        "name": "UI_PAGES_ALIGNMENT_REPORT.md",
+        "type": "md",
+        "size": 1465
+      },
+      {
+        "path": "docs/USER_LOGIN_GUIDE.html",
+        "name": "USER_LOGIN_GUIDE.html",
+        "type": "html",
+        "size": 8003
+      },
+      {
+        "path": "docs/VISUAL_DESIGNER.md",
+        "name": "VISUAL_DESIGNER.md",
+        "type": "md",
+        "size": 1906
+      },
+      {
+        "path": "docs/WELCOME.md",
+        "name": "WELCOME.md",
+        "type": "md",
+        "size": 2636
+      },
+      {
+        "path": "docs/_Footer.md",
+        "name": "_Footer.md",
+        "type": "md",
+        "size": 672
+      },
+      {
+        "path": "docs/_Sidebar.md",
+        "name": "_Sidebar.md",
+        "type": "md",
+        "size": 683
+      },
+      {
+        "path": "examples/html/amazon-q-chat-example.html",
+        "name": "amazon-q-chat-example.html",
+        "type": "html",
+        "size": 17426
+      },
+      {
+        "path": "examples/html/cloudfront-api-snippet.html",
+        "name": "cloudfront-api-snippet.html",
+        "type": "html",
+        "size": 1811
+      },
+      {
+        "path": "examples/html/error.html",
+        "name": "error.html",
+        "type": "html",
+        "size": 1754
+      },
+      {
+        "path": "examples/html/redirect-dashboard.html",
+        "name": "redirect-dashboard.html",
+        "type": "html",
+        "size": 596
+      },
+      {
+        "path": "examples/html/service-worker-test.html",
+        "name": "service-worker-test.html",
+        "type": "html",
+        "size": 7740
+      },
+      {
+        "path": "examples/html/stripe-activation-website.html",
+        "name": "stripe-activation-website.html",
+        "type": "html",
+        "size": 5261
+      },
+      {
+        "path": "examples/usb-passkey-integration-example.js",
+        "name": "usb-passkey-integration-example.js",
+        "type": "js",
+        "size": 7148
+      },
+      {
+        "path": "frameworks/ai/agents/advanced-agents.js",
+        "name": "advanced-agents.js",
+        "type": "js",
+        "size": 16948
+      },
+      {
+        "path": "frameworks/ai/agents/agent-orchestrator.js",
+        "name": "agent-orchestrator.js",
+        "type": "js",
+        "size": 9728
+      },
+      {
+        "path": "frameworks/ai/agents/dual-agent-orchestrator.js",
+        "name": "dual-agent-orchestrator.js",
+        "type": "js",
+        "size": 3497
+      },
+      {
+        "path": "frameworks/ai/agents/production-agent-implementations.js",
+        "name": "production-agent-implementations.js",
+        "type": "js",
+        "size": 1710
+      },
+      {
+        "path": "frameworks/ai/agents/repo-scan-agent.js",
+        "name": "repo-scan-agent.js",
+        "type": "js",
+        "size": 13776
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.controller.ts",
+        "name": "audit.controller.ts",
+        "type": "ts",
+        "size": 3445
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.module.ts",
+        "name": "audit.module.ts",
+        "type": "ts",
+        "size": 1177
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.service.ts",
+        "name": "audit.service.ts",
+        "type": "ts",
+        "size": 8210
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/dto/create-audit-log.dto.ts",
+        "name": "create-audit-log.dto.ts",
+        "type": "ts",
+        "size": 2395
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/dto/query-audit-logs.dto.ts",
+        "name": "query-audit-logs.dto.ts",
+        "type": "ts",
+        "size": 2150
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/health.controller.ts",
+        "name": "health.controller.ts",
+        "type": "ts",
+        "size": 2533
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/main.ts",
+        "name": "main.ts",
+        "type": "ts",
+        "size": 1715
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 2359
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 8666
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/schemas/audit-log.schema.ts",
+        "name": "audit-log.schema.ts",
+        "type": "ts",
+        "size": 2524
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "json",
+        "size": 664
+      },
+      {
+        "path": "index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 7692
+      },
+      {
+        "path": "jest.config.js",
+        "name": "jest.config.js",
+        "type": "js",
+        "size": 978
+      },
+      {
+        "path": "layers/api-keys/example-lambda.js",
+        "name": "example-lambda.js",
+        "type": "js",
+        "size": 933
+      },
+      {
+        "path": "lib/data-utils.js",
+        "name": "data-utils.js",
+        "type": "js",
+        "size": 72
+      },
+      {
+        "path": "offline_renders/prompts.json",
+        "name": "prompts.json",
+        "type": "json",
+        "size": 176
+      },
+      {
+        "path": "offline_renders/training_prompts.normalized.json",
+        "name": "training_prompts.normalized.json",
+        "type": "json",
+        "size": 2
+      },
+      {
+        "path": "package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 13230
+      },
+      {
+        "path": "Projects/CONSOLIDATION_SUMMARY.md",
+        "name": "CONSOLIDATION_SUMMARY.md",
+        "type": "md",
+        "size": 6174
+      },
+      {
+        "path": "Projects/HIERARCHY_OPTIMIZATION_PLAN.md",
+        "name": "HIERARCHY_OPTIMIZATION_PLAN.md",
+        "type": "md",
+        "size": 5913
+      },
+      {
+        "path": "Projects/OPTIMIZATION_REPORT.json",
+        "name": "OPTIMIZATION_REPORT.json",
+        "type": "json",
+        "size": 386
+      },
+      {
+        "path": "README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 25664
+      },
+      {
+        "path": "ROOT_CONFIG_CONSOLIDATION.md",
+        "name": "ROOT_CONFIG_CONSOLIDATION.md",
+        "type": "md",
+        "size": 8426
+      },
+      {
+        "path": "src/frontend/pages/admin-session-manager.html",
+        "name": "admin-session-manager.html",
+        "type": "html",
+        "size": 9759
+      },
+      {
+        "path": "src/frontend/pages/agent-management.html",
+        "name": "agent-management.html",
+        "type": "html",
+        "size": 23376
+      },
+      {
+        "path": "src/frontend/pages/ai-video.html",
+        "name": "ai-video.html",
+        "type": "html",
+        "size": 68045
+      },
+      {
+        "path": "src/frontend/pages/analytics.html",
+        "name": "analytics.html",
+        "type": "html",
+        "size": 6560
+      },
+      {
+        "path": "src/frontend/pages/auto-editor.html",
+        "name": "auto-editor.html",
+        "type": "html",
+        "size": 93497
+      },
+      {
+        "path": "src/frontend/pages/auto-upload-feeder.html",
+        "name": "auto-upload-feeder.html",
+        "type": "html",
+        "size": 5995
+      },
+      {
+        "path": "src/frontend/pages/cinema-player.html",
+        "name": "cinema-player.html",
+        "type": "html",
+        "size": 53063
+      },
+      {
+        "path": "src/frontend/pages/code-editor.html",
+        "name": "code-editor.html",
+        "type": "html",
+        "size": 73480
+      },
+      {
+        "path": "src/frontend/pages/collaboration.html",
+        "name": "collaboration.html",
+        "type": "html",
+        "size": 19098
+      },
+      {
+        "path": "src/frontend/pages/config.html",
+        "name": "config.html",
+        "type": "html",
+        "size": 7978
+      },
+      {
+        "path": "src/frontend/pages/contact.html",
+        "name": "contact.html",
+        "type": "html",
+        "size": 7680
+      },
+      {
+        "path": "src/frontend/pages/content-creation-features.js",
+        "name": "content-creation-features.js",
+        "type": "js",
+        "size": 1867
+      },
+      {
+        "path": "src/frontend/pages/dashboard.html",
+        "name": "dashboard.html",
+        "type": "html",
+        "size": 188735
+      },
+      {
+        "path": "src/frontend/pages/devops-monitoring.html",
+        "name": "devops-monitoring.html",
+        "type": "html",
+        "size": 25992
+      },
+      {
+        "path": "src/frontend/pages/error.html",
+        "name": "error.html",
+        "type": "html",
+        "size": 1454
+      },
+      {
+        "path": "src/frontend/pages/feed-react.html",
+        "name": "feed-react.html",
+        "type": "html",
+        "size": 72436
+      },
+      {
+        "path": "src/frontend/pages/feed.html",
+        "name": "feed.html",
+        "type": "html",
+        "size": 107621
+      },
+      {
+        "path": "src/frontend/pages/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 15981
+      },
+      {
+        "path": "src/frontend/pages/live-activity.html",
+        "name": "live-activity.html",
+        "type": "html",
+        "size": 21066
+      },
+      {
+        "path": "src/frontend/pages/live-stream.html",
+        "name": "live-stream.html",
+        "type": "html",
+        "size": 11464
+      },
+      {
+        "path": "src/frontend/pages/login.html",
+        "name": "login.html",
+        "type": "html",
+        "size": 45348
+      },
+      {
+        "path": "src/frontend/pages/marketplace-styles.css",
+        "name": "marketplace-styles.css",
+        "type": "css",
+        "size": 4277
+      },
+      {
+        "path": "src/frontend/pages/marketplace.css",
+        "name": "marketplace.css",
+        "type": "css",
+        "size": 1683
+      },
+      {
+        "path": "src/frontend/pages/marketplace.html",
+        "name": "marketplace.html",
+        "type": "html",
+        "size": 19943
+      },
+      {
+        "path": "src/frontend/pages/messages.html",
+        "name": "messages.html",
+        "type": "html",
+        "size": 21163
+      },
+      {
+        "path": "src/frontend/pages/mobile-player.html",
+        "name": "mobile-player.html",
+        "type": "html",
+        "size": 15008
+      },
+      {
+        "path": "src/frontend/pages/my-videos.html",
+        "name": "my-videos.html",
+        "type": "html",
+        "size": 11717
+      },
+      {
+        "path": "src/frontend/pages/pricing.html",
+        "name": "pricing.html",
+        "type": "html",
+        "size": 15231
+      },
+      {
+        "path": "src/frontend/pages/profile-new.html",
+        "name": "profile-new.html",
+        "type": "html",
+        "size": 87902
+      },
+      {
+        "path": "src/frontend/pages/security-command-center.html",
+        "name": "security-command-center.html",
+        "type": "html",
+        "size": 28737
+      },
+      {
+        "path": "src/frontend/pages/security-demo.html",
+        "name": "security-demo.html",
+        "type": "html",
+        "size": 20600
+      },
+      {
+        "path": "src/frontend/pages/settings.html",
+        "name": "settings.html",
+        "type": "html",
+        "size": 21942
+      },
+      {
+        "path": "src/frontend/pages/ultra-editor.html",
+        "name": "ultra-editor.html",
+        "type": "html",
+        "size": 18287
+      },
+      {
+        "path": "src/frontend/pages/upload-metrics.html",
+        "name": "upload-metrics.html",
+        "type": "html",
+        "size": 3238
+      },
+      {
+        "path": "src/frontend/pages/upload-video.html",
+        "name": "upload-video.html",
+        "type": "html",
+        "size": 34466
+      },
+      {
+        "path": "src/frontend/pages/usb-passkey-demo.html",
+        "name": "usb-passkey-demo.html",
+        "type": "html",
+        "size": 19903
+      },
+      {
+        "path": "src/frontend/pages/video-player.html",
+        "name": "video-player.html",
+        "type": "html",
+        "size": 84617
+      },
+      {
+        "path": "src/frontend/styles/main.css",
+        "name": "main.css",
+        "type": "css",
+        "size": 34531
+      },
+      {
+        "path": "src/Function/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 180
+      },
+      {
+        "path": "src/Function/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 47
+      },
+      {
+        "path": "tailwind.config.js",
+        "name": "tailwind.config.js",
+        "type": "js",
+        "size": 900
+      },
+      {
+        "path": "template.yaml",
+        "name": "template.yaml",
+        "type": "yaml",
+        "size": 27139
+      },
+      {
+        "path": "tests/advanced-agents.test.js",
+        "name": "advanced-agents.test.js",
+        "type": "js",
+        "size": 8297
+      },
+      {
+        "path": "tests/e2e/basic.spec.js",
+        "name": "basic.spec.js",
+        "type": "js",
+        "size": 313
+      },
+      {
+        "path": "tests/e2e/feed.spec.cjs",
+        "name": "feed.spec.cjs",
+        "type": "cjs",
+        "size": 820
+      },
+      {
+        "path": "tests/e2e/helpers.ts",
+        "name": "helpers.ts",
+        "type": "ts",
+        "size": 9894
+      },
+      {
+        "path": "tests/e2e/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 6875
+      },
+      {
+        "path": "tests/e2e/video-playback.spec.ts",
+        "name": "video-playback.spec.ts",
+        "type": "ts",
+        "size": 10841
+      },
+      {
+        "path": "tests/e2e/video-upload.spec.ts",
+        "name": "video-upload.spec.ts",
+        "type": "ts",
+        "size": 13409
+      },
+      {
+        "path": "tests/electron-code-editor/e2e/editor.spec.js",
+        "name": "editor.spec.js",
+        "type": "js",
+        "size": 1385
+      },
+      {
+        "path": "tests/frontend-setup.ts",
+        "name": "frontend-setup.ts",
+        "type": "ts",
+        "size": 1113
+      },
+      {
+        "path": "tests/load-test.js",
+        "name": "load-test.js",
+        "type": "js",
+        "size": 458
+      },
+      {
+        "path": "tests/playwright-report/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 516591
+      },
+      {
+        "path": "tests/postman/HOOTNER-API.postman_collection.json",
+        "name": "HOOTNER-API.postman_collection.json",
+        "type": "json",
+        "size": 1903
+      },
+      {
+        "path": "tests/reports/playwright/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 914914
+      },
+      {
+        "path": "tests/security/security.spec.js",
+        "name": "security.spec.js",
+        "type": "js",
+        "size": 12483
+      },
+      {
+        "path": "tests/service-integration-hub.test.js",
+        "name": "service-integration-hub.test.js",
+        "type": "js",
+        "size": 1701
+      },
+      {
+        "path": "tests/setup.ts",
+        "name": "setup.ts",
+        "type": "ts",
+        "size": 280
+      },
+      {
+        "path": "tests/unit/health.test.js",
+        "name": "health.test.js",
+        "type": "js",
+        "size": 202
+      },
+      {
+        "path": "tools/check-all-html-dashboard.js",
+        "name": "check-all-html-dashboard.js",
+        "type": "js",
+        "size": 2547
+      },
+      {
+        "path": "tools/check-dashboard-links.js",
+        "name": "check-dashboard-links.js",
+        "type": "js",
+        "size": 2713
+      },
+      {
+        "path": "tools/check-dynamic.js",
+        "name": "check-dynamic.js",
+        "type": "js",
+        "size": 3243
+      },
+      {
+        "path": "tools/check-infrastructure.js",
+        "name": "check-infrastructure.js",
+        "type": "js",
+        "size": 2423
+      },
+      {
+        "path": "tools/check-pwa.js",
+        "name": "check-pwa.js",
+        "type": "js",
+        "size": 2191
+      },
+      {
+        "path": "tools/check-stack.js",
+        "name": "check-stack.js",
+        "type": "js",
+        "size": 1438
+      },
+      {
+        "path": "tools/check-training-status.js",
+        "name": "check-training-status.js",
+        "type": "js",
+        "size": 5271
+      },
+      {
+        "path": "tools/scan-connections.js",
+        "name": "scan-connections.js",
+        "type": "js",
+        "size": 3984
+      },
+      {
+        "path": "tools/scan-docs.js",
+        "name": "scan-docs.js",
+        "type": "js",
+        "size": 3080
+      },
+      {
+        "path": "tools/setup-stable-diffusion.js",
+        "name": "setup-stable-diffusion.js",
+        "type": "js",
+        "size": 11344
+      },
+      {
+        "path": "tools/setup-training.js",
+        "name": "setup-training.js",
+        "type": "js",
+        "size": 2278
+      },
+      {
+        "path": "tools/start-dual-agent.js",
+        "name": "start-dual-agent.js",
+        "type": "js",
+        "size": 2697
+      },
+      {
+        "path": "tools/training-helper.js",
+        "name": "training-helper.js",
+        "type": "js",
+        "size": 2809
+      },
+      {
+        "path": "tools/update-cicd-paths.js",
+        "name": "update-cicd-paths.js",
+        "type": "js",
+        "size": 1270
+      },
+      {
+        "path": "tools/update-import-paths.js",
+        "name": "update-import-paths.js",
+        "type": "js",
+        "size": 2792
+      }
+    ],
+    "removed": [],
+    "modified": [
+      {
+        "path": "scripts/metadata/generate-codebase-metadata.js",
+        "name": "generate-codebase-metadata.js",
+        "type": "js",
+        "size": 3875
+      }
+    ]
+  },
+  "summary": {
+    "added": 288,
+    "removed": 0,
+    "modified": 1,
+    "totalFiles": 1295,
+    "previousFiles": 1007,
+    "growth": 288
+  }
+}

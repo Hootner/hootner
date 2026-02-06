@@ -1,0 +1,24 @@
+{
+  "name": "hootner-batch-render-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda function for authenticated Batch render job triggering",
+  "main": "batch-render-trigger.js",
+  "dependencies": {
+    "aws-jwt-verify": "^4.0.1",
+    "aws-sdk": "^2.1691.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node test_auth.js"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "batch",
+    "cognito",
+    "authentication",
+    "hootner"
+  ]
+}

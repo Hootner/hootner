@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="../html-pages/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Upload Feeder - HOOTNER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+</head>
+</head>
+<body class="bg-gray-900 text-white p-6">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">🔄 Auto Upload Feeder</h1>
+    
+    <div class="bg-gray-800 rounded-lg p-6 mb-6">
+      <button id="selectFolder" class="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-bold">
+        📁 Select Folder to Watch
+      </button>
+      <p class="text-gray-400 text-sm mt-2">Videos will auto-upload when added</p>
+    </div>
+    
+    <div id="status" class="bg-gray-800 rounded-lg p-6 mb-6 hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+        <span class="font-bold">Watching: <span id="folderName"></span></span>
+      </div>
+      <div class="text-sm text-gray-400">
+        <div>Queue: <span id="queueCount" class="text-cyan-400">0</span></div>
+        <div>Uploaded: <span id="uploadCount" class="text-green-400">0</span></div>
+        <div>Failed: <span id="failCount" class="text-red-400">0</span></div>
+      </div>
+    </div>
+    
+    <div id="logs" class="bg-gray-800 rounded-lg p-4 max-h-96 overflow-y-auto">
+      <div class="text-sm text-gray-400">Logs will appear here...</div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:4000';
+    let queue = [];
+    let uploading = false;
+    let stats = { uploaded: 0, failed: 0 };
+    
+    document.getElementById('selectFolder').addEventListener('click', async () => {
+      if (!('showDirectoryPicker' in window)) {
+        alert('File System Access API not supported');
+        return;
+      }
+      
+      const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+      document.getElementById('folderName').textContent = dirHandle.name;
+      document.getElementById('status').classList.remove('hidden');
+      
+      log(`📁 Watching: ${dirHandle.name}`);
+      watchFolder(dirHandle);
+    });
+    
+    async function watchFolder(dirHandle) {
+      // Initial scan
+      for await (const entry of dirHandle.values()) {
+        if (entry.kind === 'file' && isVideoFile(entry.name)) {
+          const file = await entry.getFile();
+          addToQueue(file);
+        }
+      }
+      
+      // Poll for changes every 10s
+      setInterval(async () => {
+        for await (const entry of dirHandle.values()) {
+          if (entry.kind === 'file' && isVideoFile(entry.name)) {
+            const file = await entry.getFile();
+            if (!queue.find(f => f.name === file.name && f.size === file.size)) {
+              addToQueue(file);
+            }
+          }
+        }
+      }, 10000);
+      
+      // Process queue
+      setInterval(() => processQueue(), 3000);
+    }
+    
+    function isVideoFile(name) {
+      return /\.(mp4|webm|ogg|mov)$/i.test(name);
+    }
+    
+    function addToQueue(file) {
+      queue.push(file);
+      updateUI();
+      log(`➕ Added: ${file.name} (${formatSize(file.size)})`);
+    }
+    
+    async function processQueue() {
+      if (uploading || queue.length === 0) return;
+      
+      uploading = true;
+      const file = queue.shift();
+      updateUI();
+      
+      try {
+        log(`⬆️ Uploading: ${file.name}...`);
+        await uploadFile(file);
+        stats.uploaded++;
+        log(`✅ Uploaded: ${file.name}`);
+      } catch (err) {
+        stats.failed++;
+        log(`❌ Failed: ${file.name} - ${err.message}`);
+        if (err.message.includes('fetch')) {
+          queue.unshift(file); // Re-queue on network error
+        }
+      } finally {
+        uploading = false;
+        updateUI();
+      }
+    }
+    
+    async function uploadFile(file) {
+      const hash = await calculateHash(file);
+      
+      const presignedRes = await fetch(`${API_URL}/api/upload/presigned`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+          hash
+        })
+      });
+      
+      if (!presignedRes.ok) throw new Error('Presigned failed');
+      const { url, key } = await presignedRes.json();
+      
+      const uploadRes = await fetch(url, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type }
+      });
+      
+      if (!uploadRes.ok) throw new Error('S3 upload failed');
+      
+      await fetch(`${API_URL}/api/upload/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, hash, title: file.name, encrypted: true })
+      });
+    }
+    
+    async function calculateHash(file) {
+      const buffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      return Array.from(new Uint8Array(hashBuffer), b => b.toString(16).padStart(2, '0')).join('');
+    }
+    
+    function updateUI() {
+      document.getElementById('queueCount').textContent = queue.length;
+      document.getElementById('uploadCount').textContent = stats.uploaded;
+      document.getElementById('failCount').textContent = stats.failed;
+    }
+    
+    function log(msg) {
+      const logs = document.getElementById('logs');
+      const entry = document.createElement('div');
+      entry.className = 'text-sm mb-1';
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      logs.insertBefore(entry, logs.firstChild);
+    }
+    
+    function formatSize(bytes) {
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+  </script>
+</body>
+</html>
+
+

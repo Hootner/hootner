@@ -1,0 +1,39 @@
+[
+  {
+    "customerId": "cus_demo_001",
+    "subscriptionId": "sub_demo_001",
+    "email": "customer1@example.com",
+    "userId": "demo-customer-001",
+    "createdAt": "2025-01-26T12:00:00.000Z",
+    "status": "active",
+    "totalBilled": 12.97,
+    "algorithmUsage": {
+      "price_optimize": 2,
+      "revenue_forecast": 1
+    }
+  },
+  {
+    "customerId": "cus_demo_002", 
+    "subscriptionId": "sub_demo_002",
+    "email": "customer2@example.com",
+    "userId": "demo-customer-002",
+    "createdAt": "2025-01-26T12:05:00.000Z",
+    "status": "active",
+    "totalBilled": 1.99,
+    "algorithmUsage": {
+      "dynamic_pricing": 1
+    }
+  },
+  {
+    "customerId": "cus_demo_003",
+    "subscriptionId": "sub_demo_003", 
+    "email": "customer3@example.com",
+    "userId": "demo-customer-003",
+    "createdAt": "2025-01-26T12:10:00.000Z",
+    "status": "active",
+    "totalBilled": 3.99,
+    "algorithmUsage": {
+      "conversion_optimize": 1
+    }
+  }
+]

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Worker Test - HOOTNER</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .status-box {
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+    .warning { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
+    .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+    
+    #results {
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+    
+    button {
+      background: #007cba;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover { background: #005a8a; }
+    
+    .debug-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007cba;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Service Worker Test Page</h1>
+  <p>This page helps test and debug service worker registration issues.</p>
+  
+  <div class="debug-section">
+    <h3>Environment Detection</h3>
+    <div id="environment-status"></div>
+  </div>
+  
+  <div class="debug-section">
+    <h3>Service Worker Test</h3>
+    <button onclick="testServiceWorker()">Test Service Worker Registration</button>
+    <button onclick="clearConsole()">Clear Results</button>
+    <button onclick="unregisterSW()">Unregister Service Worker</button>
+  </div>
+  
+  <div id="results"></div>
+
+  <script>
+    // Enhanced webview detection
+    function detectEnvironment() {
+      const checks = {
+        'Parent Window Check': window.parent !== window,
+        'VS Code Webview Protocol': window.location.protocol === 'vscode-webview:',
+        'VS Code File Protocol': window.location.protocol === 'vscode-file:',
+        'Webview in URL': window.location.href.includes('vscode-webview'),
+        'Code User Agent': navigator.userAgent.includes('Code'),
+        'Electron User Agent': navigator.userAgent.includes('Electron'),
+        'File Protocol': window.location.protocol === 'file:',
+        'VS Code API Available': typeof window.acquireVsCodeApi !== 'undefined',
+        'Chrome Webview API': typeof window.chrome?.webview !== 'undefined',
+        'Empty Domain': document.domain === '',
+        'Empty Hostname': window.location.hostname === '',
+        'Service Worker Support': 'serviceWorker' in navigator,
+        'HTTPS Protocol': window.location.protocol === 'https:',
+        'Localhost': window.location.hostname === 'localhost'
+      };
+      
+      const isWebview = Object.entries(checks).slice(0, 11).some(([_, value]) => value);
+      const canRegisterSW = checks['Service Worker Support'] && !isWebview && 
+        (checks['HTTPS Protocol'] || checks['Localhost']);
+      
+      let html = '<h4>Environment Analysis:</h4>';
+      
+      Object.entries(checks).forEach(([check, result]) => {
+        const icon = result ? '✅' : '❌';
+        html += `<div>${icon} ${check}: <code>${result}</code></div>`;
+      });
+      
+      const statusClass = isWebview ? 'warning' : (canRegisterSW ? 'success' : 'error');
+      const statusText = isWebview ? 'Webview Environment (SW disabled for safety)' : 
+        (canRegisterSW ? 'Browser Environment (SW allowed)' : 'Incompatible Environment');
+      
+      html += `<div class="status-box ${statusClass}">
+        <strong>Status:</strong> ${statusText}<br>
+        <strong>Protocol:</strong> ${window.location.protocol}<br>
+        <strong>Hostname:</strong> ${window.location.hostname || 'none'}<br>
+        <strong>SW Registration:</strong> ${canRegisterSW ? 'ALLOWED' : 'BLOCKED'}
+      </div>`;
+      
+      document.getElementById('environment-status').innerHTML = html;
+      return { isWebview, canRegisterSW };
+    }
+    
+    function log(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const results = document.getElementById('results');
+      results.textContent += `[${timestamp}] ${message}\n`;
+      console.log(message);
+    }
+    
+    function clearConsole() {
+      document.getElementById('results').textContent = '';
+    }
+    
+    async function testServiceWorker() {
+      log('🔍 Testing Service Worker Registration...', 'info');
+      
+      const env = detectEnvironment();
+      
+      if (!env.canRegisterSW) {
+        const reasons = [];
+        if (!('serviceWorker' in navigator)) reasons.push('Service Worker not supported');
+        if (env.isWebview) reasons.push('Webview environment detected');
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+          reasons.push('Insecure protocol');
+        }
+        
+        log(`⚠️ Registration blocked: ${reasons.join(', ')}`, 'warning');
+        return;
+      }
+      
+      try {
+        log('🚀 Attempting registration...', 'info');
+        
+        const registration = await navigator.serviceWorker.register('./sw.js');
+        log(`✅ Service Worker registered! Scope: ${registration.scope}`, 'success');
+        
+        // Check if there's an active worker
+        if (registration.active) {
+          log(`🟢 Active worker found: ${registration.active.scriptURL}`, 'success');
+        }
+        
+        if (registration.waiting) {
+          log(`🟡 Worker waiting: ${registration.waiting.scriptURL}`, 'warning');
+        }
+        
+        if (registration.installing) {
+          log(`🔄 Worker installing: ${registration.installing.scriptURL}`, 'info');
+        }
+        
+        // Listen for updates
+        registration.addEventListener('updatefound', () => {
+          log('🔄 Service Worker update found', 'info');
+        });
+        
+      } catch (error) {
+        log(`❌ Registration failed: ${error.name}: ${error.message}`, 'error');
+        
+        // Provide helpful suggestions
+        const suggestions = {
+          'InvalidStateError': 'Document is in invalid state - try refreshing the page',
+          'SecurityError': 'Security error - ensure HTTPS or localhost',
+          'TypeError': 'SW file not found - check if sw.js exists in same directory',
+          'AbortError': 'Registration aborted - page may be navigating'
+        };
+        
+        const suggestion = suggestions[error.name];
+        if (suggestion) {
+          log(`💡 Suggestion: ${suggestion}`, 'info');
+        }
+      }
+    }
+    
+    async function unregisterSW() {
+      try {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        if (registrations.length === 0) {
+          log('ℹ️ No service workers to unregister', 'info');
+          return;
+        }
+        
+        for (const registration of registrations) {
+          await registration.unregister();
+          log(`🗑️ Unregistered: ${registration.scope}`, 'success');
+        }
+      } catch (error) {
+        log(`❌ Unregister failed: ${error.message}`, 'error');
+      }
+    }
+    
+    // Auto-detect environment on load
+    detectEnvironment();
+    
+    // Listen for service worker messages
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', event => {
+        log(`📨 SW Message: ${event.data}`, 'info');
+      });
+    }
+  </script>
+</body>
+</html>

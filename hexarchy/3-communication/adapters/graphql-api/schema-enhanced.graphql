@@ -1,0 +1,642 @@
+# HOOTNER GraphQL Schema - Enhanced Video Streaming
+# Real-time subscriptions, error handling, and video generation
+
+scalar DateTime
+scalar Upload
+scalar JSON
+
+# ==================== QUERIES ====================
+
+type Query {
+  # System
+  health: HealthCheck!
+  version: String!
+
+  # Users
+  users(limit: Int, offset: Int): [User!]!
+  user(id: ID!): User
+  me: User
+
+  # Videos
+  videos(filter: VideoFilter, limit: Int, offset: Int): VideoConnection!
+  video(id: ID!): Video
+  myVideos: [Video!]!
+  trendingVideos(limit: Int): [Video!]!
+
+  playlists(userId: ID, limit: Int): [Playlist!]!
+  playlist(id: ID!): Playlist
+  myPlaylists: [Playlist!]!
+
+  # Video Generation
+  generationJob(id: ID!): GenerationJob
+  myGenerationJobs: [GenerationJob!]!
+
+  # Analytics
+  analytics: Analytics!
+  videoAnalytics(videoId: ID!): VideoAnalytics
+
+  # Streaming
+  streamStatus(streamId: ID!): StreamStatus
+  activeStreams: [StreamStatus!]!
+}
+
+# ==================== MUTATIONS ====================
+
+type Mutation {
+  # User Management
+  createUser(input: CreateUserInput!): UserPayload!
+  updateUser(id: ID!, input: UpdateUserInput!): UserPayload!
+  deleteUser(id: ID!): DeletePayload!
+
+  # Authentication
+  login(email: String!, password: String!): AuthPayload!
+  logout: Boolean!
+  refreshToken(token: String!): AuthPayload!
+
+  # Video Operations
+  uploadVideo(input: UploadVideoInput!): VideoPayload!
+  updateVideo(id: ID!, input: UpdateVideoInput!): VideoPayload!
+  deleteVideo(id: ID!): DeletePayload!
+  likeVideo(videoId: ID!): VideoPayload!
+  addComment(videoId: ID!, text: String!): VideoPayload!
+  deleteComment(videoId: ID!, commentId: ID!): VideoPayload!
+
+  # Playlists
+  createPlaylist(input: CreatePlaylistInput!): Playlist!
+  updatePlaylist(id: ID!, input: UpdatePlaylistInput!): Playlist!
+  deletePlaylist(id: ID!): Boolean!
+  addVideoToPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+  removeVideoFromPlaylist(playlistId: ID!, videoId: ID!): Playlist!
+
+  # Video Generation (AI)
+  generateVideo(input: GenerateVideoInput!): GenerationJobPayload!
+  cancelGeneration(jobId: ID!): Boolean!
+
+  # Streaming
+  startStream(input: StartStreamInput!): StreamPayload!
+  stopStream(streamId: ID!): Boolean!
+  updateStream(streamId: ID!, input: UpdateStreamInput!): StreamPayload!
+
+  # Payments
+  processPayment(input: PaymentInput!): PaymentPayload!
+  createSubscription(input: SubscriptionInput!): SubscriptionPayload!
+  cancelSubscription(subscriptionId: ID!): Boolean!
+}
+
+# ==================== SUBSCRIPTIONS ====================
+
+type Subscription {
+  # Video processing
+  videoProcessed(userId: ID): VideoProcessedEvent!
+  videoProgress(videoId: ID!): VideoProgressEvent!
+
+  # Video likes
+  videoLiked(videoId: ID): VideoLikedEvent!
+
+  # Comments
+  commentAdded(videoId: ID): CommentAddedEvent!
+
+  # Video Generation (AI)
+  generationProgress(jobId: ID!): GenerationProgressEvent!
+  generationCompleted(userId: ID): GenerationCompletedEvent!
+
+  # Real-time Streaming
+  streamStarted(userId: ID): StreamStartedEvent!
+  streamEnded(streamId: ID!): StreamEndedEvent!
+  streamViewers(streamId: ID!): StreamViewersEvent!
+  streamQuality(streamId: ID!): StreamQualityEvent!
+
+  # User Activity
+  userActivity(userId: ID!): UserActivityEvent!
+
+  # Activity Stream
+  activityStream: ActivityEvent!
+
+  # System Events
+  systemAlert: SystemAlertEvent!
+}
+
+# ==================== TYPES ====================
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  avatar: String
+  subscription: SubscriptionTier!
+  role: UserRole!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  # Relations
+  videos: [Video!]!
+  generationJobs: [GenerationJob!]!
+  streams: [StreamStatus!]!
+}
+
+type Video {
+  id: ID!
+  title: String!
+  description: String
+  url: String
+  thumbnailUrl: String
+  duration: Int
+  status: VideoStatus!
+  visibility: VideoVisibility!
+  views: Int!
+  likes: Int!
+  comments: [Comment!]!
+  userId: ID!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  # Metadata
+  resolution: String
+  format: String
+  size: Int
+  metadata: JSON
+
+  # Analytics
+  analytics: VideoAnalytics
+}
+
+type Comment {
+  id: ID!
+  userId: ID!
+  user: User!
+  text: String!
+  createdAt: DateTime!
+}
+
+type Playlist {
+  id: ID!
+  name: String!
+  description: String
+  userId: ID!
+  videos: [ID!]!
+  visibility: PlaylistVisibility!
+  thumbnail: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GenerationJob {
+  id: ID!
+  prompt: String!
+  status: GenerationStatus!
+  progress: Int!
+  userId: ID!
+  user: User!
+
+  # Configuration
+  config: GenerationConfig!
+
+  # Output
+  video: Video
+  videoUrl: String
+  thumbnailUrl: String
+
+  # Timing
+  estimatedTime: Int
+  startedAt: DateTime
+  completedAt: DateTime
+  createdAt: DateTime!
+
+  # Error handling
+  error: GenerationError
+}
+
+type GenerationConfig {
+  numFrames: Int!
+  height: Int!
+  width: Int!
+  fps: Int!
+  inferenceSteps: Int!
+  guidanceScale: Float!
+  seed: Int
+  format: String!
+}
+
+type StreamStatus {
+  id: ID!
+  title: String!
+  description: String
+  userId: ID!
+  user: User!
+  status: StreamState!
+
+  # Stream URLs
+  streamUrl: String!
+  playbackUrl: String!
+
+  # Metrics
+  viewers: Int!
+  peakViewers: Int!
+  duration: Int!
+
+  # Quality
+  bitrate: Int!
+  resolution: String!
+  fps: Int!
+
+  # Timing
+  startedAt: DateTime
+  endedAt: DateTime
+  createdAt: DateTime!
+}
+
+type Analytics {
+  totalUsers: Int!
+  totalVideos: Int!
+  totalStreams: Int!
+  totalGenerations: Int!
+  activeStreams: Int!
+  revenue: Float!
+  timestamp: DateTime!
+}
+
+type VideoAnalytics {
+  videoId: ID!
+  views: Int!
+  uniqueViews: Int!
+  likes: Int!
+  dislikes: Int!
+  avgWatchTime: Int!
+  completionRate: Float!
+  engagement: Float!
+  geography: [GeographyData!]!
+  timeline: [TimelineData!]!
+}
+
+type HealthCheck {
+  status: String!
+  timestamp: DateTime!
+  services: ServiceHealth!
+  uptime: Int!
+}
+
+type ServiceHealth {
+  graphql: String!
+  database: String!
+  redis: String!
+  videoGeneration: String!
+  streaming: String!
+}
+
+# ==================== INPUTS ====================
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String!
+  avatar: String
+}
+
+input UpdateUserInput {
+  name: String
+  avatar: String
+  subscription: SubscriptionTier
+}
+
+input UploadVideoInput {
+  title: String!
+  description: String
+  file: Upload!
+  visibility: VideoVisibility
+  thumbnailFile: Upload
+}
+
+input UpdateVideoInput {
+  title: String
+  description: String
+  visibility: VideoVisibility
+  thumbnailUrl: String
+}
+
+input CreatePlaylistInput {
+  name: String!
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+  videos: [ID!]
+}
+
+input UpdatePlaylistInput {
+  name: String
+  description: String
+  visibility: PlaylistVisibility
+  thumbnail: String
+  videos: [ID!]
+}
+
+input GenerateVideoInput {
+  prompt: String!
+  numFrames: Int
+  height: Int
+  width: Int
+  fps: Int
+  inferenceSteps: Int
+  guidanceScale: Float
+  seed: Int
+  format: String
+}
+
+input StartStreamInput {
+  title: String!
+  description: String
+  resolution: String
+  bitrate: Int
+  fps: Int
+}
+
+input UpdateStreamInput {
+  title: String
+  description: String
+  bitrate: Int
+}
+
+input PaymentInput {
+  amount: Float!
+  currency: String!
+  paymentMethod: String!
+  metadata: JSON
+}
+
+input SubscriptionInput {
+  tier: SubscriptionTier!
+  paymentMethod: String!
+}
+
+input VideoFilter {
+  status: VideoStatus
+  visibility: VideoVisibility
+  userId: ID
+  search: String
+}
+
+# ==================== PAYLOADS ====================
+
+type UserPayload {
+  success: Boolean!
+  message: String
+  user: User
+  errors: [ValidationError!]
+}
+
+type VideoPayload {
+  success: Boolean!
+  message: String
+  video: Video
+  errors: [ValidationError!]
+}
+
+type GenerationJobPayload {
+  success: Boolean!
+  message: String
+  job: GenerationJob
+  errors: [ValidationError!]
+}
+
+type StreamPayload {
+  success: Boolean!
+  message: String
+  stream: StreamStatus
+  errors: [ValidationError!]
+}
+
+type PaymentPayload {
+  success: Boolean!
+  message: String
+  transactionId: String
+  amount: Float
+  errors: [ValidationError!]
+}
+
+type SubscriptionPayload {
+  success: Boolean!
+  message: String
+  subscriptionId: String
+  user: User
+  errors: [ValidationError!]
+}
+
+type AuthPayload {
+  success: Boolean!
+  message: String
+  token: String
+  refreshToken: String
+  user: User
+  expiresIn: Int
+  errors: [ValidationError!]
+}
+
+type DeletePayload {
+  success: Boolean!
+  message: String
+  deletedId: ID
+}
+
+# ==================== EVENTS ====================
+
+type VideoProcessedEvent {
+  video: Video!
+  userId: ID!
+  timestamp: DateTime!
+}
+
+type VideoProgressEvent {
+  videoId: ID!
+  progress: Int!
+  status: VideoStatus!
+  message: String
+  timestamp: DateTime!
+}
+
+type GenerationProgressEvent {
+  jobId: ID!
+  progress: Int!
+  status: GenerationStatus!
+  message: String
+  estimatedTimeRemaining: Int
+  timestamp: DateTime!
+}
+
+type GenerationCompletedEvent {
+  job: GenerationJob!
+  userId: ID!
+  timestamp: DateTime!
+}
+
+type StreamStartedEvent {
+  stream: StreamStatus!
+  userId: ID!
+  timestamp: DateTime!
+}
+
+type StreamEndedEvent {
+  streamId: ID!
+  duration: Int!
+  peakViewers: Int!
+  timestamp: DateTime!
+}
+
+type StreamViewersEvent {
+  streamId: ID!
+  viewers: Int!
+  timestamp: DateTime!
+}
+
+type StreamQualityEvent {
+  streamId: ID!
+  bitrate: Int!
+  fps: Int!
+  droppedFrames: Int!
+  latency: Int!
+  timestamp: DateTime!
+}
+
+type UserActivityEvent {
+  userId: ID!
+  action: String!
+  metadata: JSON
+  timestamp: DateTime!
+}
+
+type SystemAlertEvent {
+  severity: AlertSeverity!
+  message: String!
+  service: String
+  timestamp: DateTime!
+}
+
+type ActivityEvent {
+  id: ID!
+  type: String!
+  message: String!
+  description: String
+  category: String
+  service: String
+  timestamp: DateTime!
+  userId: ID
+  metadata: JSON
+}
+
+type VideoLikedEvent {
+  video: Video!
+  timestamp: DateTime!
+}
+
+type CommentAddedEvent {
+  video: Video!
+  comment: Comment!
+  timestamp: DateTime!
+}
+
+# ==================== CONNECTIONS ====================
+
+type VideoConnection {
+  edges: [VideoEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type VideoEdge {
+  node: Video!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# ==================== ERRORS ====================
+
+type ValidationError {
+  field: String!
+  message: String!
+  code: String
+}
+
+type GenerationError {
+  code: String!
+  message: String!
+  details: JSON
+  timestamp: DateTime!
+}
+
+# ==================== AUXILIARY ====================
+
+type GeographyData {
+  country: String!
+  views: Int!
+  percentage: Float!
+}
+
+type TimelineData {
+  timestamp: DateTime!
+  views: Int!
+}
+
+# ==================== ENUMS ====================
+
+enum VideoStatus {
+  UPLOADING
+  PROCESSING
+  READY
+  FAILED
+  DELETED
+}
+
+enum VideoVisibility {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+enum PlaylistVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum GenerationStatus {
+  PENDING
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum StreamState {
+  IDLE
+  STARTING
+  LIVE
+  PAUSED
+  ENDED
+  ERROR
+}
+
+enum SubscriptionTier {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
+}
+
+enum UserRole {
+  USER
+  CREATOR
+  MODERATOR
+  ADMIN
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}

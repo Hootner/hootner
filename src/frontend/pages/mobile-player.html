@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>HOOTNER Mobile Player</title>
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    .mobile-player {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Video container */
+    .video-container {
+      flex: 1;
+      position: relative;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #mobile-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Mobile controls */
+    .mobile-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.9));
+      padding: 20px 15px 15px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+
+    .mobile-player.show-controls .mobile-controls {
+      opacity: 1;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
+      margin-bottom: 15px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #00ff00;
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* Control buttons */
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:active {
+      transform: scale(0.9);
+      background: rgba(0,255,0,0.3);
+    }
+
+    .play-btn {
+      font-size: 24px;
+      padding: 15px;
+      min-width: 60px;
+      min-height: 60px;
+    }
+
+    .time-display {
+      font-size: 14px;
+      color: #ccc;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* Loading */
+    .loading {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .loading.hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: #00ff00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Fullscreen mode */
+    .mobile-player.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+    }
+
+    /* Portrait orientation adjustments */
+    @media (orientation: portrait) {
+      #mobile-video {
+        object-fit: cover;
+      }
+    }
+
+    /* Landscape orientation */
+    @media (orientation: landscape) {
+      .mobile-controls {
+        padding: 15px 20px 10px;
+      }
+      
+      .control-row {
+        gap: 20px;
+      }
+    }
+
+    /* Touch gestures */
+    .gesture-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .gesture-zone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .gesture-zone.active {
+      opacity: 0.8;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Quality badge */
+    .quality-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0,0,0,0.7);
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 90;
+    }
+
+    /* Error message */
+    .error-message {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      z-index: 300;
+    }
+
+    .error-message.visible {
+      display: flex;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .error-text {
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .retry-btn {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-player" id="mobilePlayer">
+    <!-- Quality badge -->
+    <div class="quality-badge" id="qualityBadge">HD</div>
+
+    <!-- Video container -->
+    <div class="video-container">
+      <video id="mobile-video" playsinline webkit-playsinline preload="metadata">
+        Your browser doesn't support video playback.
+      </video>
+
+      <!-- Touch gesture overlay -->
+      <div class="gesture-overlay">
+        <div class="gesture-zone" data-action="seek-back">⏪</div>
+        <div class="gesture-zone" data-action="play-pause">⏯️</div>
+        <div class="gesture-zone" data-action="seek-forward">⏩</div>
+        <div class="gesture-zone" data-action="volume-down">🔉</div>
+        <div class="gesture-zone" data-action="info">ℹ️</div>
+        <div class="gesture-zone" data-action="volume-up">🔊</div>
+        <div class="gesture-zone" data-action="brightness-down">🔅</div>
+        <div class="gesture-zone" data-action="fullscreen">⛶</div>
+        <div class="gesture-zone" data-action="brightness-up">🔆</div>
+      </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading" id="loadingOverlay">
+      <div class="spinner"></div>
+      <div>Loading video...</div>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-message" id="errorMessage">
+      <div class="error-icon">⚠️</div>
+      <div class="error-text" id="errorText">Failed to load video</div>
+      <button class="retry-btn" onclick="retryLoad()">Retry</button>
+    </div>
+
+    <!-- Mobile controls -->
+    <div class="mobile-controls">
+      <!-- Progress bar -->
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <!-- Control buttons -->
+      <div class="control-row">
+        <button class="btn" onclick="skipTime(-10)">⏪</button>
+        <button class="btn play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
+        <button class="btn" onclick="skipTime(10)">⏩</button>
+        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+        <button class="btn" onclick="toggleMute()" id="muteBtn">🔊</button>
+        <button class="btn" onclick="toggleFullscreen()">⛶</button>
+        <button class="btn" onclick="window.location.href='/hexarchy/4-interface/ui/pages/dashboard.html'">📊</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('mobile-video');
+    const player = document.getElementById('mobilePlayer');
+    const loading = document.getElementById('loadingOverlay');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+    const playBtn = document.getElementById('playBtn');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const qualityBadge = document.getElementById('qualityBadge');
+    const errorMessage = document.getElementById('errorMessage');
+
+    let isPlaying = false;
+    let controlsTimeout;
+    let lastTap = 0;
+
+    // API configuration
+    const API_BASE = window.location.origin.includes('s3') 
+      ? 'https://ypgktpjvx9.execute-api.us-east-1.amazonaws.com/prod'
+      : 'http://localhost:4000';
+
+    // Initialize
+    function init() {
+      loadVideo();
+      setupEventListeners();
+      setupTouchGestures();
+    }
+
+    // Load video from backend
+    async function loadVideo() {
+      const params = new URLSearchParams(window.location.search);
+      const videoId = params.get('video') || 'sample';
+      
+      try {
+        showLoading();
+        
+        // Try to load from GraphQL API
+        const response = await fetch(`${API_BASE}/graphql`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `query GetVideo($id: String!) {
+              video(id: $id) {
+                url
+                title
+                duration
+                quality
+              }
+            }`,
+            variables: { id: videoId }
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.data?.video?.url) {
+            video.src = data.data.video.url;
+            if (data.data.video.quality) {
+              qualityBadge.textContent = data.data.video.quality;
+            }
+            hideLoading();
+            return;
+          }
+        }
+
+        // Fallback to sample video
+        video.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+        hideLoading();
+        
+      } catch (error) {
+        console.error('Load error:', error);
+        showError('Failed to load video');
+      }
+    }
+
+    // Event listeners
+    function setupEventListeners() {
+      // Video events
+      video.addEventListener('loadedmetadata', () => {
+        hideLoading();
+        updateTimeDisplay();
+      });
+
+      video.addEventListener('timeupdate', updateProgress);
+      video.addEventListener('ended', () => {
+        isPlaying = false;
+        playBtn.textContent = '▶️';
+      });
+
+      video.addEventListener('error', () => {
+        showError('Video playback failed');
+      });
+
+      // Progress bar
+      progressBar.addEventListener('click', seek);
+
+      // Show/hide controls
+      player.addEventListener('click', toggleControls);
+      
+      // Prevent context menu
+      video.addEventListener('contextmenu', e => e.preventDefault());
+    }
+
+    // Touch gestures
+    function setupTouchGestures() {
+      let startX, startY, startTime;
+
+      player.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTime = Date.now();
+      });
+
+      player.addEventListener('touchend', (e) => {
+        if (!startX || !startY) return;
+
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        const deltaTime = Date.now() - startTime;
+
+        // Double tap to play/pause
+        if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10 && deltaTime < 300) {
+          const now = Date.now();
+          if (now - lastTap < 300) {
+            togglePlay();
+          }
+          lastTap = now;
+        }
+
+        // Swipe gestures
+        if (Math.abs(deltaX) > 50 && deltaTime < 500) {
+          if (deltaX > 0) {
+            skipTime(10); // Swipe right = forward
+          } else {
+            skipTime(-10); // Swipe left = back
+          }
+        }
+
+        if (Math.abs(deltaY) > 50 && deltaTime < 500) {
+          if (deltaY < 0) {
+            // Swipe up = volume up
+            video.volume = Math.min(1, video.volume + 0.1);
+          } else {
+            // Swipe down = volume down
+            video.volume = Math.max(0, video.volume - 0.1);
+          }
+        }
+
+        startX = startY = null;
+      });
+    }
+
+    // Player controls
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+        isPlaying = true;
+        playBtn.textContent = '⏸️';
+      } else {
+        video.pause();
+        isPlaying = false;
+        playBtn.textContent = '▶️';
+      }
+    }
+
+    function skipTime(seconds) {
+      video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+    }
+
+    function toggleMute() {
+      video.muted = !video.muted;
+      document.getElementById('muteBtn').textContent = video.muted ? '🔇' : '🔊';
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        player.requestFullscreen().catch(console.error);
+      } else {
+        document.exitFullscreen().catch(console.error);
+      }
+    }
+
+    function seek(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = x / rect.width;
+      video.currentTime = percentage * video.duration;
+    }
+
+    function updateProgress() {
+      if (video.duration) {
+        const percentage = (video.currentTime / video.duration) * 100;
+        progressFill.style.width = percentage + '%';
+        updateTimeDisplay();
+      }
+    }
+
+    function updateTimeDisplay() {
+      const current = formatTime(video.currentTime);
+      const duration = formatTime(video.duration || 0);
+      timeDisplay.textContent = `${current} / ${duration}`;
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function toggleControls() {
+      player.classList.toggle('show-controls');
+      
+      clearTimeout(controlsTimeout);
+      if (player.classList.contains('show-controls')) {
+        controlsTimeout = setTimeout(() => {
+          if (isPlaying) {
+            player.classList.remove('show-controls');
+          }
+        }, 3000);
+      }
+    }
+
+    function showLoading() {
+      loading.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      loading.classList.add('hidden');
+    }
+
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      errorMessage.classList.add('visible');
+    }
+
+    function hideError() {
+      errorMessage.classList.remove('visible');
+    }
+
+    function retryLoad() {
+      hideError();
+      loadVideo();
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        // Force video resize
+        video.style.height = '100%';
+      }, 100);
+    });
+
+    console.log('📱 HOOTNER Mobile Player loaded');
+  </script>
+</body>
+</html>

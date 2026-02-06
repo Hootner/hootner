@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-01-10T19:31:06.780Z",
+  "status": "ORGANIZED",
+  "issues": [],
+  "structure": {
+    "apps/frontend/": [
+      "assets",
+      "components",
+      "config",
+      "frameworks",
+      "pages",
+      "server",
+      "src",
+      "utils"
+    ],
+    "apps/backend/": ["config", "middleware", "servers", "services", "src", "utils"],
+    "services/": [
+      "ai",
+      "analytics",
+      "commerce",
+      "compliance",
+      "core",
+      "data",
+      "infrastructure",
+      "integration",
+      "localization",
+      "revenue"
+    ],
+    "config/": [
+      "aws",
+      "database",
+      "deployment",
+      "environments",
+      "integrations",
+      "monitoring",
+      "security",
+      "services",
+      "templates",
+      "web-servers"
+    ],
+    "docs/": [
+      "ai",
+      "architecture",
+      "commands",
+      "deployment",
+      "development",
+      "optimization",
+      "reports",
+      "security",
+      "status"
+    ],
+    "scripts/": [
+      "analysis",
+      "automation",
+      "linting",
+      "security",
+      "syntax",
+      "utilities",
+      "validation"
+    ],
+    "tools/": ["analysis", "deployment", "health", "installers"]
+  }
+}

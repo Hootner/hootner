@@ -1,0 +1,56 @@
+:root {
+  --gloss-x: 50%;
+  --gloss-y: 20%;
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.28);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+  --hdr-saturation: 1.25;
+  --hdr-contrast: 1.15;
+}
+
+body {
+  background: radial-gradient(1200px 800px at var(--gloss-x) var(--gloss-y), rgba(0, 255, 255, 0.15), transparent 55%),
+              linear-gradient(135deg, #0a0a0f 0%, #151a2f 45%, #121826 100%);
+  background-attachment: fixed;
+  color: #e8f7ff;
+}
+
+.hdr10 {
+  filter: saturate(var(--hdr-saturation)) contrast(var(--hdr-contrast));
+}
+
+.glass,
+.glass-panel {
+  background: rgba(12, 16, 24, 0.55);
+  background-image: linear-gradient(135deg, rgba(0, 255, 255, 0.08), rgba(0, 255, 0, 0.04));
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-highlight);
+  border-left: 1px solid var(--glass-highlight);
+  box-shadow: 0 12px 40px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel {
+  border-radius: 18px;
+}
+
+.glossy {
+  position: relative;
+  isolation: isolate;
+}
+
+.glossy::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at var(--gloss-x) var(--gloss-y), rgba(255, 255, 255, 0.18), transparent 45%);
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 0;
+}
+
+.glossy > * {
+  position: relative;
+  z-index: 1;
+}

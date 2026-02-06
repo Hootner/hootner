@@ -1,0 +1,967 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER - 120-Pipe Enterprise Platform
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    MemorySize: 1024
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV: !Ref Environment
+        AWS_REGION: !Ref AWS::Region
+        KMS_KEY_ID: !Ref KMSKey
+
+Resources:
+  # KMS Encryption
+  KMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: HOOTNER Platform Encryption Key
+      KeyPolicy:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource: '*'
+
+  KMSAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub alias/${AWS::StackName}-key
+      TargetKeyId: !Ref KMSKey
+
+  # Cognito User Pool
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub ${AWS::StackName}-users
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      AliasAttributes:
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: name
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      UserPoolTags:
+        Project: HOOTNER
+        Service: Authentication
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+        EmailSubject: Verify your HOOTNER account
+        EmailMessage: 'Welcome to HOOTNER! Click the link to verify your email and start
+          using GPU rendering: {##Verify Email##}'
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub ${AWS::StackName}-client
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+  # ElastiCache Redis
+  RedisSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: Subnet group for Redis
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  RedisCluster:
+    Type: AWS::ElastiCache::ReplicationGroup
+    Properties:
+      ReplicationGroupId: !Sub ${AWS::StackName}-redis
+      Description: Redis cluster for caching
+      NodeType: cache.t3.micro
+      NumCacheClusters: 2
+      Engine: redis
+      EngineVersion: 7
+      Port: 6379
+      CacheSubnetGroupName: !Ref RedisSubnetGroup
+      SecurityGroupIds:
+        - !Ref RedisSecurityGroup
+      AtRestEncryptionEnabled: true
+      TransitEncryptionEnabled: true
+      KmsKeyId: !Ref KMSKey
+
+  # VPC for Redis
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
+
+  RedisSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Redis
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 6379
+          ToPort: 6379
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Lambda
+      VpcId: !Ref VPC
+
+  # SQS Queues
+  VideoProcessingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-video-processing
+      VisibilityTimeoutSeconds: 300
+      MessageRetentionPeriod: 1209600
+      KmsMasterKeyId: !Ref KMSKey
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt VideoProcessingDLQ.Arn
+        maxReceiveCount: 3
+
+  VideoProcessingDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-video-processing-dlq
+      KmsMasterKeyId: !Ref KMSKey
+
+  NotificationQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-notifications
+      KmsMasterKeyId: !Ref KMSKey
+
+  # SNS Topics
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-alerts
+      KmsMasterKeyId: !Ref KMSKey
+
+  # EventBridge
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub ${AWS::StackName}-events
+      KmsKeyId: !Ref KMSKey
+
+  # WAF
+  WebACL:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub ${AWS::StackName}-waf
+      Scope: CLOUDFRONT
+      DefaultAction:
+        Allow: {}
+      Rules:
+        - Name: RateLimitRule
+          Priority: 1
+          Statement:
+            RateBasedStatement:
+              Limit: 2000
+              AggregateKeyType: IP
+          Action:
+            Block: {}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: RateLimitRule
+
+  # SSL Certificate
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub ${AWS::StackName}.hootner.com
+      SubjectAlternativeNames:
+        - !Sub '*.${AWS::StackName}.hootner.com'
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Sub ${AWS::StackName}.hootner.com
+          HostedZoneId: !Ref HostedZone
+
+  # Route 53 Hosted Zone
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Sub ${AWS::StackName}.hootner.com
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        WebACLId: !GetAtt WebACL.Arn
+        Aliases:
+          - !Sub ${AWS::StackName}.hootner.com
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SSLCertificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt UploadBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOAI}
+          - Id: APIOrigin
+            DomainName: !Sub ${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+        CacheBehaviors:
+          - PathPattern: /graphql
+            TargetOriginId: APIOrigin
+            ViewerProtocolPolicy: https-only
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+
+  # CloudFront OAI
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub OAI for ${AWS::StackName}
+
+  # DNS Record
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub ${AWS::StackName}.hootner.com
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+
+  # Secrets
+  APISecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub ${AWS::StackName}/api-keys
+      KmsKeyId: !Ref KMSKey
+      SecretString: !Sub |
+        {
+          "JWT_SECRET": "${AWS::StackName}-jwt-secret-${AWS::AccountId}",
+          "STRIPE_SECRET_KEY": "sk_test_placeholder",
+          "STRIPE_WEBHOOK_SECRET": "whsec_placeholder",
+          "ENCRYPTION_KEY": "${AWS::StackName}-encryption-${AWS::AccountId}",
+          "REDIS_URL": "${RedisCluster.RedisEndpoint.Address}:${RedisCluster.RedisEndpoint.Port}"
+        }
+
+  # DynamoDB Tables
+  HootnerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: HootnerActivities
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+        KMSMasterKeyId: !Ref KMSKey
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  UsageTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-usage
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+        KMSMasterKeyId: !Ref KMSKey
+
+  # S3 Buckets
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-uploads-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: !Ref KMSKey
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+            AllowedHeaders:
+              - '*'
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: s3:ObjectCreated:*
+            Queue: !GetAtt VideoProcessingQueue.Arn
+
+  # API Gateway
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowMethods:
+          - '*'
+        AllowHeaders:
+          - '*'
+      Auth:
+        Authorizers:
+          CognitoAuth:
+            UserPoolArn: !GetAtt UserPool.Arn
+
+  # Lambda Functions
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-graphql
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          USAGE_TABLE: !Ref UsageTable
+          UPLOAD_BUCKET: !Ref UploadBucket
+          API_SECRETS_ARN: !Ref APISecrets
+          USER_POOL_ID: !Ref UserPool
+          USER_POOL_CLIENT_ID: !Ref UserPoolClient
+          REDIS_ENDPOINT: !GetAtt RedisCluster.RedisEndpoint.Address
+          VIDEO_QUEUE_URL: !Ref VideoProcessingQueue
+          NOTIFICATION_QUEUE_URL: !Ref NotificationQueue
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsageTable
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt VideoProcessingQueue.QueueName
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt NotificationQueue.QueueName
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+                - cognito-idp:*
+                - kms:Decrypt
+                - kms:GenerateDataKey
+              Resource:
+                - !Ref APISecrets
+                - !GetAtt UserPool.Arn
+                - !GetAtt KMSKey.Arn
+      Events:
+        GraphQLApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /graphql
+            Method: ANY
+            Auth:
+              Authorizer: CognitoAuth
+        HealthCheck:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /health
+            Method: GET
+
+  VideoProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-video-processor
+      CodeUri: api/lambda/
+      Handler: s3-event-handler.handler
+      Timeout: 300
+      MemorySize: 2048
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref HootnerTable
+          UPLOAD_BUCKET: !Ref UploadBucket
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - kms:Decrypt
+                - kms:GenerateDataKey
+              Resource: !GetAtt KMSKey.Arn
+      Events:
+        VideoQueue:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt VideoProcessingQueue.Arn
+            BatchSize: 1
+
+  StripeWebhookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-stripe-webhook
+      CodeUri: api/graphql/webhooks/
+      Handler: stripe.handler
+      Environment:
+        Variables:
+          USAGE_TABLE: !Ref UsageTable
+          API_SECRETS_ARN: !Ref APISecrets
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsageTable
+        - Statement:
+            - Effect: Allow
+              Action: secretsmanager:GetSecretValue
+              Resource: !Ref APISecrets
+      Events:
+        StripeWebhook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /webhook/stripe
+            Method: POST
+
+  # AI Video Generation Lambda
+  AIVideoGeneratorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-video-generator
+      CodeUri: services/video-generation/
+      Handler: generator.handler
+      Runtime: python3.11
+      Timeout: 900
+      MemorySize: 3008
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref UploadBucket
+          DYNAMODB_TABLE: !Ref HootnerTable
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+
+  # Stable Diffusion Lambda
+  StableDiffusionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-stable-diffusion
+      CodeUri: services/video-generation/
+      Handler: diffusion.handler
+      Runtime: python3.11
+      Timeout: 900
+      MemorySize: 3008
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref UploadBucket
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+
+  # Content Moderation Lambda
+  ContentModerationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-content-moderation
+      CodeUri: hexarchy/6-governance/moderation/
+      Handler: content-moderation.handler
+      Environment:
+        Variables:
+          DYNAMODB_TABLE: !Ref HootnerTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HootnerTable
+
+  # Security Scanner Lambda
+  SecurityScannerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-security-scanner
+      CodeUri: hexarchy/6-governance/compliance/
+      Handler: security-integration.handler
+      Environment:
+        Variables:
+          SNS_TOPIC: !Ref AlertTopic
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt AlertTopic.TopicName
+
+  # Fraud Analysis Table
+  FraudAnalysisTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-fraud-analysis
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: transactionId
+          AttributeType: S
+        - AttributeName: customerId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: transactionId
+          KeyType: HASH
+        - AttributeName: customerId
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+        KMSMasterKeyId: !Ref KMSKey
+
+  # Transactions Table
+  TransactionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-transactions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: transactionId
+          AttributeType: S
+        - AttributeName: customerId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: transactionId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: customer-timestamp-index
+          KeySchema:
+            - AttributeName: customerId
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      SSESpecification:
+        SSEEnabled: true
+        KMSMasterKeyId: !Ref KMSKey
+
+  # Fraud Alert Topic
+  FraudAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-fraud-alerts
+      KmsMasterKeyId: !Ref KMSKey
+
+  # Security Alert Topic (separate from general alerts)
+  SecurityAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-security-alerts
+      KmsMasterKeyId: !Ref KMSKey
+
+  # CloudWatch Alarms
+  HighErrorRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub ${AWS::StackName}-high-error-rate
+      AlarmDescription: High error rate detected
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref GraphQLFunction
+      AlarmActions:
+        - !Ref AlertTopic
+
+  HighLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub ${AWS::StackName}-high-latency
+      AlarmDescription: High latency detected
+      MetricName: Duration
+      Namespace: AWS/Lambda
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10000
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref GraphQLFunction
+      AlarmActions:
+        - !Ref AlertTopic
+
+  # AWS Batch Resources for GPU Rendering
+  BatchServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: batch.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
+      Tags:
+        - Key: Project
+          Value: HOOTNER
+        - Key: Service
+          Value: Batch
+
+  BatchInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Tags:
+        - Key: Project
+          Value: HOOTNER
+
+  BatchInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref BatchInstanceRole
+
+  BatchComputeEnvironment:
+    Type: AWS::Batch::ComputeEnvironment
+    Properties:
+      ComputeEnvironmentName: !Sub ${AWS::StackName}-gpu-compute-env
+      Type: MANAGED
+      State: ENABLED
+      ComputeResources:
+        Type: EC2
+        MinvCpus: 0
+        MaxvCpus: 128
+        DesiredvCpus: 0
+        InstanceTypes:
+          - g5.xlarge
+          - g5.2xlarge
+          - g5.4xlarge
+        ImageId: ami-0c02fb55956c7d316
+        Subnets:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+        SecurityGroupIds:
+          - !Ref SecurityGroup
+        InstanceRole: !GetAtt BatchInstanceProfile.Arn
+        BidPercentage: 50
+        Ec2Configuration:
+          - ImageType: ECS_AL2_NVIDIA
+        Tags:
+          Project: HOOTNER
+          Service: Render
+      ServiceRole: !GetAtt BatchServiceRole.Arn
+      Tags:
+        Project: HOOTNER
+        Service: Batch
+
+  BatchJobQueue:
+    Type: AWS::Batch::JobQueue
+    Properties:
+      JobQueueName: !Sub ${AWS::StackName}-render-queue
+      State: ENABLED
+      Priority: 1
+      ComputeEnvironmentOrder:
+        - Order: 1
+          ComputeEnvironment: !Ref BatchComputeEnvironment
+      Tags:
+        Project: HOOTNER
+        Service: Render
+
+  BatchRenderJobDefinition:
+    Type: AWS::Batch::JobDefinition
+    Properties:
+      JobDefinitionName: !Sub ${AWS::StackName}-gpu-render-job
+      Type: container
+      ContainerProperties:
+        Image: nvidia/cuda:12.1-devel-ubuntu22.04
+        Vcpus: 8
+        Memory: 30720
+        ResourceRequirements:
+          - Type: GPU
+            Value: '1'
+        JobRoleArn: !GetAtt BatchInstanceRole.Arn
+        Environment:
+          - Name: S3_BUCKET
+            Value: !Ref UploadBucket
+          - Name: S3_SCRIPTS_PREFIX
+            Value: scripts/
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref AWS::Region
+          - Name: RENDER_OUTPUT_PREFIX
+            Value: training-data/offline-render/frames/
+          - Name: RENDER_METADATA_PREFIX
+            Value: training-data/offline-render/metadata/
+          - Name: NVIDIA_VISIBLE_DEVICES
+            Value: all
+          - Name: CUDA_VISIBLE_DEVICES
+            Value: '0'
+        Command:
+          - /bin/bash
+          - '-c'
+          - |
+            set -e
+            echo "🚀 HOOTNER GPU Render Job Starting..."
+            apt-get update -y
+            apt-get install -y python3-pip awscli wget unzip
+            aws s3 cp s3://$S3_BUCKET/$S3_SCRIPTS_PREFIX ./ --recursive
+            pip3 install boto3 requests Pillow
+            echo "🎬 Starting render job..."
+            python3 aws_render_job.py
+            echo "✅ Render job completed successfully!"
+        LinuxParameters:
+          InitProcessEnabled: true
+      RetryStrategy:
+        Attempts: 2
+      Timeout:
+        AttemptDurationSeconds: 7200
+      Tags:
+        Project: HOOTNER
+        Service: Render
+
+  # Lambda function to trigger batch jobs with FULL AUTHENTICATION
+  RenderTriggerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-batch-render-trigger
+      Handler: batch-render-trigger.handler
+      Runtime: nodejs20.x
+      CodeUri: api/lambda/
+      MemorySize: 512
+      Timeout: 60
+      Environment:
+        Variables:
+          BATCH_JOB_QUEUE: !Ref BatchJobQueue
+          BATCH_JOB_DEFINITION: !Ref BatchRenderJobDefinition
+          S3_BUCKET: !Ref UploadBucket
+          USER_POOL_ID: !Ref UserPool
+          USER_POOL_CLIENT_ID: !Ref UserPoolClient
+          REQUIRE_AUTH: 'true'
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref UploadBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - batch:SubmitJob
+                - batch:DescribeJobs
+                - batch:CancelJob
+                - batch:TerminateJob
+              Resource: '*'
+            - Effect: Allow
+              Action:
+                - cognito-idp:GetUser
+                - cognito-idp:AdminGetUser
+              Resource: !GetAtt UserPool.Arn
+      Events:
+        ApiTrigger:
+          Type: Api
+          Properties:
+            RestApiId: !Ref APIGateway
+            Path: /render/trigger
+            Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
+        JobStatusApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref APIGateway
+            Path: /render/status/{jobId}
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+        S3Trigger:
+          Type: S3
+          Properties:
+            Bucket: !Ref UploadBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: training_prompts
+      Tags:
+        Project: HOOTNER
+        Service: Lambda
+
+Outputs:
+  HTTPSUrl:
+    Description: HTTPS URL for PWA
+    Value: !Sub https://${AWS::StackName}.hootner.com
+
+  CloudFrontURL:
+    Description: CloudFront Distribution URL
+    Value: !GetAtt CloudFrontDistribution.DomainName
+
+  GraphQLApiURL:
+    Description: GraphQL API URL
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/graphql
+
+  HealthCheckURL:
+    Description: Health Check URL
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/health
+
+  DynamoDBTableName:
+    Description: DynamoDB Table Name
+    Value: !Ref HootnerTable
+
+  UsageTableName:
+    Description: Usage Tracking Table Name
+    Value: !Ref UsageTable
+
+  UploadBucket:
+    Description: Upload S3 Bucket
+    Value: !Ref UploadBucket
+
+  APISecretsArn:
+    Description: API Secrets ARN
+    Value: !Ref APISecrets
+
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref UserPool
+
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value: !Ref UserPoolClient
+
+  RedisEndpoint:
+    Description: Redis Cluster Endpoint
+    Value: !GetAtt RedisCluster.RedisEndpoint.Address
+
+  VideoProcessingQueueUrl:
+    Description: Video Processing Queue URL
+    Value: !Ref VideoProcessingQueue
+
+  KMSKeyId:
+    Description: KMS Key ID
+    Value: !Ref KMSKey
+
+  FraudAnalysisTableName:
+    Description: Fraud Analysis Table Name
+    Value: !Ref FraudAnalysisTable
+
+  TransactionsTableName:
+    Description: Transactions Table Name
+    Value: !Ref TransactionsTable
+
+  FraudAlertTopicArn:
+    Description: Fraud Alert Topic ARN
+    Value: !Ref FraudAlertTopic
+
+  SecurityAlertTopicArn:
+    Description: Security Alert Topic ARN
+    Value: !Ref SecurityAlertTopic
+
+  AIVideoGeneratorArn:
+    Description: AI Video Generator Lambda ARN
+    Value: !GetAtt AIVideoGeneratorFunction.Arn
+
+  StableDiffusionArn:
+    Description: Stable Diffusion Lambda ARN
+    Value: !GetAtt StableDiffusionFunction.Arn
+
+  BatchRenderJobArn:
+    Description: Batch Render Job Definition ARN
+    Value: !Ref BatchRenderJobDefinition
+
+  BatchComputeEnvironmentArn:
+    Description: Batch Compute Environment ARN
+    Value: !Ref BatchComputeEnvironment
+
+  RenderTriggerFunctionArn:
+    Description: Render Trigger Lambda ARN
+    Value: !GetAtt RenderTriggerFunction.Arn

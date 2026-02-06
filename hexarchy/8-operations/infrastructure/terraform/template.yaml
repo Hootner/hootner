@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HOOTNER Enterprise Platform
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: nodejs20.x
+    MemorySize: 512
+    Environment:
+      Variables:
+        DYNAMODB_TABLE: !Ref VideosTable
+        REDIS_ENDPOINT: !Ref RedisEndpoint
+
+Parameters:
+  RedisEndpoint:
+    Type: String
+    Default: ""
+    Description: Optional Redis endpoint (leave blank if not using Redis)
+
+Resources:
+  # API Gateway
+  HootnerApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Auth:
+        ApiKeyRequired: true
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+
+  # GraphQL Lambda
+  GraphQLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/graphql/
+      Handler: lambda.handler
+      Events:
+        GraphQL:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /graphql
+            Method: ANY
+
+  # Video Generation Lambda
+  VideoGenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/video-generation/
+      Handler: lambda_handler.handler
+      Runtime: python3.11
+      MemorySize: 2048
+      Timeout: 300
+      Events:
+        VideoGen:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HootnerApi
+            Path: /video/generate
+            Method: POST
+
+  # DynamoDB Tables
+  VideosTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: hootner-videos
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: N
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: createdAt
+          KeyType: RANGE
+
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: hootner-users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  # S3 Buckets
+  VideosBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-videos-${AWS::AccountId}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins: ['*']
+            AllowedMethods: [GET, PUT, POST]
+            AllowedHeaders: ['*']
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub hootner-frontend-${AWS::AccountId}
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway URL
+    Value: !Sub https://${HootnerApi}.execute-api.${AWS::Region}.amazonaws.com/prod/
+
+  VideosBucket:
+    Description: S3 Videos Bucket
+    Value: !Ref VideosBucket
+
+  FrontendBucket:
+    Description: S3 Frontend Bucket
+    Value: !Ref FrontendBucket

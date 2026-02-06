@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "setup:review": "node setup-code-review.js",
+    "review": "node code-review-agent.js",
+    "lint": "eslint . --quiet",
+    "lint:fix": "eslint . --fix",
+    "docs": "jsdoc -d docs . --recurse --readme README.md"
+  }
+}
