@@ -159,6 +159,7 @@ my-local-repo/
 - [API Documentation](docs/API.md) - REST & GraphQL APIs
 - [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) - Deploy to AWS
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md) - How to contribute
+- [Pull Request Mechanics](docs/guides/PULL_REQUEST_MECHANICS.md) - Understand how PRs work
 
 ### Advanced
 - [Dual Agent Setup](docs/DUAL_AGENT_SETUP.md) - Amazon Q + GitHub Copilot
@@ -187,7 +188,11 @@ my-local-repo/
 
 ## 🤝 Contributing
 
+**New to Git/Pull Requests?** Read our [Pull Request Mechanics Guide](docs/guides/PULL_REQUEST_MECHANICS.md)
+
 We welcome contributions! See [CONTRIBUTING_TOOLING.md](docs/CONTRIBUTING_TOOLING.md)
+
+**New to Git/Pull Requests?** Read our [Pull Request Mechanics Guide](docs/guides/PULL_REQUEST_MECHANICS.md) to understand how PRs work with HOOTNER's infrastructure!
 
 ```bash
 npm run format           # Format code
