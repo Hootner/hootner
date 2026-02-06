@@ -192,6 +192,8 @@ my-local-repo/
 
 We welcome contributions! See [CONTRIBUTING_TOOLING.md](docs/CONTRIBUTING_TOOLING.md)
 
+**New to Git/Pull Requests?** Read our [Pull Request Mechanics Guide](docs/guides/PULL_REQUEST_MECHANICS.md) to understand how PRs work with HOOTNER's infrastructure!
+
 ```bash
 npm run format           # Format code
 npm run lint:fix         # Fix issues
