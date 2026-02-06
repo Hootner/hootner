@@ -1,0 +1,1068 @@
+{
+  "metadata": {
+    "scannedAt": "2026-01-31T13:11:39.902Z",
+    "rootDir": "D:\\my-local-repo",
+    "node": "v25.2.1",
+    "platform": "win32",
+    "git": {
+      "branch": "main",
+      "commit": "37416cd696784f509aca4d52ecb822e530baefe9",
+      "isDirty": true
+    },
+    "packageJson": {
+      "name": "@hootner/enterprise-platform",
+      "version": "1.0.0",
+      "dependencies": 25,
+      "devDependencies": 23
+    }
+  },
+  "counts": {
+    "totalFiles": 1263,
+    "totalDirs": 311,
+    "totalBytes": 11287394,
+    "textFilesScanned": 1259,
+    "filesSkipped": 4,
+    "skippedBinary": 4,
+    "skippedTooLarge": 0,
+    "skippedUnreadable": 0,
+    "maxFilesHit": false
+  },
+  "findings": {
+    "conflictMarkers": {
+      "count": 0,
+      "examples": []
+    },
+    "secrets": {
+      "count": 3,
+      "examples": [
+        {
+          "path": ".aws/credentials",
+          "line": 3,
+          "kind": "AWS_ACCESS_KEY_ID"
+        },
+        {
+          "path": ".pm2/dump.pm2",
+          "line": 48,
+          "kind": "STRIPE_KEY"
+        },
+        {
+          "path": "agents/README_API_SCANNER.md",
+          "line": 136,
+          "kind": "AWS_ACCESS_KEY_ID"
+        }
+      ]
+    },
+    "riskyApis": {
+      "count": 9,
+      "examples": [
+        {
+          "path": "docs/reports/DASHBOARD_FIXES.md",
+          "line": 46,
+          "match": "eval("
+        },
+        {
+          "path": "docs/reports/DASHBOARD_MANUAL_FIXES.md",
+          "line": 88,
+          "match": "eval("
+        },
+        {
+          "path": "docs/reports/DASHBOARD_MANUAL_FIXES.md",
+          "line": 248,
+          "match": "eval("
+        },
+        {
+          "path": "docs/reports/DASHBOARD_MANUAL_FIXES.md",
+          "line": 254,
+          "match": "new Function("
+        },
+        {
+          "path": "hexarchy/4-interface/ui/components/electron-code-editor/index.html",
+          "line": 5446,
+          "match": "vm.runInNewContext("
+        },
+        {
+          "path": "hexarchy/4-interface/ui/components/electron-code-editor/index.html",
+          "line": 5718,
+          "match": "vm.runInNewContext("
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/code-editor.html",
+          "line": 1327,
+          "match": "vm.runInNewContext("
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/dashboard.html",
+          "line": 4976,
+          "match": "new Function("
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/ultra-editor.html",
+          "line": 426,
+          "match": "eval("
+        }
+      ]
+    },
+    "todos": {
+      "count": 32,
+      "examples": [
+        {
+          "path": "api/graphql/cache/example.js",
+          "line": 53
+        },
+        {
+          "path": "api/graphql/middleware/authMiddleware.js",
+          "line": 42
+        },
+        {
+          "path": "api/graphql/routes/contact.js",
+          "line": 12
+        },
+        {
+          "path": "api/graphql/server.js",
+          "line": 345
+        },
+        {
+          "path": "api/graphql/utils/auth.js",
+          "line": 115
+        },
+        {
+          "path": "api/graphql/utils/pubsub.js",
+          "line": 118
+        },
+        {
+          "path": "api/graphql/webhooks/stripeWebhookHandler.js",
+          "line": 532
+        },
+        {
+          "path": "apps/frontend/html-pages/cinema-player.html",
+          "line": 1338
+        },
+        {
+          "path": "config/API_CONFIG_GUIDE.md",
+          "line": 308
+        },
+        {
+          "path": "docs/INDEX.md",
+          "line": 33
+        },
+        {
+          "path": "docs/README.md",
+          "line": 69
+        },
+        {
+          "path": "docs/status/PROJECT_STATUS.md",
+          "line": 105
+        },
+        {
+          "path": "docs/TODO_GUIDELINES.md",
+          "line": 1
+        },
+        {
+          "path": "frameworks/ai/agents/repo-scan-agent.js",
+          "line": 130
+        },
+        {
+          "path": "hexarchy/1-foundation/services/AuthService.js",
+          "line": 130
+        },
+        {
+          "path": "hexarchy/2-intelligence/ai-services/video-generation/hdr_processing.py",
+          "line": 344
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/cache/example.js",
+          "line": 53
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/middleware/authMiddleware.js",
+          "line": 42
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/routes/contact.js",
+          "line": 12
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/server.js",
+          "line": 130
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/utils/auth.js",
+          "line": 91
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/utils/pubsub.js",
+          "line": 118
+        },
+        {
+          "path": "hexarchy/3-communication/adapters/graphql-api/webhooks/stripeWebhookHandler.js",
+          "line": 532
+        },
+        {
+          "path": "hexarchy/4-interface/ui/assets/libs/video.min.js",
+          "line": 37
+        },
+        {
+          "path": "hexarchy/4-interface/ui/components/electron-code-editor/cursor-ui.js",
+          "line": 68
+        },
+        {
+          "path": "hexarchy/4-interface/ui/frontend/html-pages/cinema-player.html",
+          "line": 1292
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/auto-editor.html",
+          "line": 1409
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/feed-react.html",
+          "line": 1913
+        },
+        {
+          "path": "hexarchy/4-interface/ui/pages/ultra-editor.html",
+          "line": 482
+        },
+        {
+          "path": "scripts/agents/multi-agent-orchestrator.js",
+          "line": 55
+        },
+        {
+          "path": "services/sqs-video-processor.js",
+          "line": 72
+        },
+        {
+          "path": "services/video-generation/hdr_processing.py",
+          "line": 344
+        }
+      ]
+    }
+  },
+  "largestFiles": [
+    {
+      "path": "hexarchy/8-operations/testing/reports/playwright/index.html",
+      "sizeBytes": 914914
+    },
+    {
+      "path": "tests/reports/playwright/index.html",
+      "sizeBytes": 914914
+    },
+    {
+      "path": "hexarchy/8-operations/testing/playwright-report/index.html",
+      "sizeBytes": 516591
+    },
+    {
+      "path": "tests/playwright-report/index.html",
+      "sizeBytes": 516591
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/video-player.html",
+      "sizeBytes": 261488
+    },
+    {
+      "path": "hexarchy/4-interface/ui/components/electron-code-editor/index.html",
+      "sizeBytes": 259509
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/dashboard.html",
+      "sizeBytes": 195460
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/profile.html",
+      "sizeBytes": 148813
+    },
+    {
+      "path": ".codegpt/db.sqlite-wal",
+      "sizeBytes": 127752
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/code-editor.html",
+      "sizeBytes": 74184
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/feed-react.html",
+      "sizeBytes": 72336
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/auto-editor.html",
+      "sizeBytes": 62111
+    },
+    {
+      "path": "hexarchy/4-interface/ui/frontend/html-pages/cinema-player.html",
+      "sizeBytes": 59467
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/ai-video.html",
+      "sizeBytes": 57650
+    },
+    {
+      "path": "api-security-report.json",
+      "sizeBytes": 54182
+    },
+    {
+      "path": "apps/frontend/html-pages/cinema-player.html",
+      "sizeBytes": 52969
+    },
+    {
+      "path": "hexarchy/4-interface/ui/assets/security/enterprise-security.js",
+      "sizeBytes": 51719
+    },
+    {
+      "path": "apps/frontend/src/components/Dashboard.tsx",
+      "sizeBytes": 45840
+    },
+    {
+      "path": "docs/IMPLEMENTATION_VISUAL.txt",
+      "sizeBytes": 34576
+    },
+    {
+      "path": "lint-output.txt",
+      "sizeBytes": 32784
+    },
+    {
+      "path": ".codegpt/db.sqlite-shm",
+      "sizeBytes": 32768
+    },
+    {
+      "path": "scripts/agents/agent-hub-manager.js",
+      "sizeBytes": 30612
+    },
+    {
+      "path": "ARCHITECTURE_DIAGRAM_120_PIPES.md",
+      "sizeBytes": 30565
+    },
+    {
+      "path": "docs/ARCHITECTURE_DIAGRAM.md",
+      "sizeBytes": 30357
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/devops-monitoring.html",
+      "sizeBytes": 26152
+    },
+    {
+      "path": "hexarchy/2-intelligence/ai-services/video-generation/api.py",
+      "sizeBytes": 25330
+    },
+    {
+      "path": "hexarchy/2-intelligence/ai-services/video-generation/api_enhanced.py",
+      "sizeBytes": 24193
+    },
+    {
+      "path": "services/video-generation/api_enhanced.py",
+      "sizeBytes": 24193
+    },
+    {
+      "path": "hexarchy/5-economy/business/ai/federated-learning.js",
+      "sizeBytes": 23971
+    },
+    {
+      "path": "hexarchy/5-economy/business/ai/deep-learning-pipelines.js",
+      "sizeBytes": 23871
+    },
+    {
+      "path": "hexarchy/5-economy/business/ai/sentiment-analysis.js",
+      "sizeBytes": 23769
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/agent-management.html",
+      "sizeBytes": 23536
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/login.html",
+      "sizeBytes": 23240
+    },
+    {
+      "path": "hexarchy/5-economy/business/compliance/behavioral-biometrics.js",
+      "sizeBytes": 23003
+    },
+    {
+      "path": "services/video-generation/INTEGRATION_GUIDE.md",
+      "sizeBytes": 22595
+    },
+    {
+      "path": "CSS-VISUAL-REFERENCE.html",
+      "sizeBytes": 22559
+    },
+    {
+      "path": "hexarchy/2-intelligence/ai-services/video-generation/INTEGRATION_GUIDE.md",
+      "sizeBytes": 22184
+    },
+    {
+      "path": "hexarchy/1-foundation/monitoring/system-monitor.js",
+      "sizeBytes": 22014
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/settings.html",
+      "sizeBytes": 21845
+    },
+    {
+      "path": ".pm2/dump.pm2",
+      "sizeBytes": 21824
+    },
+    {
+      "path": "INFRASTRUCTURE_TREE_120_PIPES.md",
+      "sizeBytes": 21599
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/marketplace.html",
+      "sizeBytes": 21515
+    },
+    {
+      "path": "hexarchy/8-operations/README.md",
+      "sizeBytes": 21341
+    },
+    {
+      "path": "hexarchy/4-interface/ui/pages/live-activity.html",
+      "sizeBytes": 20966
+    },
+    {
+      "path": "hexarchy/2-intelligence/ai-services/video-generation/advanced_samplers.py",
+      "sizeBytes": 20568
+    },
+    {
+      "path": "services/video-generation/advanced_samplers.py",
+      "sizeBytes": 20568
+    },
+    {
+      "path": "docs/LEGAL_COMPLIANCE_GUIDE.md",
+      "sizeBytes": 20471
+    },
+    {
+      "path": "template.yaml",
+      "sizeBytes": 20100
+    },
+    {
+      "path": "hexarchy/5-economy/business/data/regional-data-residency.js",
+      "sizeBytes": 19946
+    },
+    {
+      "path": "hexarchy/2-intelligence/ai-services/agents/production-agent-implementations.js",
+      "sizeBytes": 19778
+    }
+  ],
+  "topExtensions": [
+    {
+      "ext": ".js",
+      "count": 686
+    },
+    {
+      "ext": ".md",
+      "count": 191
+    },
+    {
+      "ext": ".json",
+      "count": 78
+    },
+    {
+      "ext": ".py",
+      "count": 62
+    },
+    {
+      "ext": "(none)",
+      "count": 46
+    },
+    {
+      "ext": ".html",
+      "count": 45
+    },
+    {
+      "ext": ".ts",
+      "count": 37
+    },
+    {
+      "ext": ".tsx",
+      "count": 27
+    },
+    {
+      "ext": ".jsx",
+      "count": 16
+    },
+    {
+      "ext": ".txt",
+      "count": 12
+    },
+    {
+      "ext": ".yaml",
+      "count": 9
+    },
+    {
+      "ext": ".css",
+      "count": 9
+    },
+    {
+      "ext": ".toml",
+      "count": 6
+    },
+    {
+      "ext": ".sh",
+      "count": 6
+    },
+    {
+      "ext": ".cjs",
+      "count": 6
+    },
+    {
+      "ext": ".ps1",
+      "count": 5
+    },
+    {
+      "ext": ".example",
+      "count": 4
+    },
+    {
+      "ext": ".graphql",
+      "count": 4
+    },
+    {
+      "ext": ".yml",
+      "count": 2
+    },
+    {
+      "ext": ".sqlite",
+      "count": 1
+    },
+    {
+      "ext": ".sqlite-shm",
+      "count": 1
+    },
+    {
+      "ext": ".sqlite-wal",
+      "count": 1
+    },
+    {
+      "ext": ".production",
+      "count": 1
+    },
+    {
+      "ext": ".aws",
+      "count": 1
+    },
+    {
+      "ext": ".pm2",
+      "count": 1
+    },
+    {
+      "ext": ".log",
+      "count": 1
+    },
+    {
+      "ext": ".proto",
+      "count": 1
+    },
+    {
+      "ext": ".cnf",
+      "count": 1
+    },
+    {
+      "ext": ".tf",
+      "count": 1
+    },
+    {
+      "ext": ".bat",
+      "count": 1
+    },
+    {
+      "ext": ".mjs",
+      "count": 1
+    }
+  ],
+  "topDirectories": [
+    {
+      "dir": "hexarchy",
+      "count": 653
+    },
+    {
+      "dir": "scripts",
+      "count": 124
+    },
+    {
+      "dir": "docs",
+      "count": 102
+    },
+    {
+      "dir": "api",
+      "count": 70
+    },
+    {
+      "dir": "apps",
+      "count": 43
+    },
+    {
+      "dir": "services",
+      "count": 43
+    },
+    {
+      "dir": ".husky",
+      "count": 22
+    },
+    {
+      "dir": "tests",
+      "count": 18
+    },
+    {
+      "dir": ".github",
+      "count": 16
+    },
+    {
+      "dir": "frameworks",
+      "count": 16
+    },
+    {
+      "dir": ".aws",
+      "count": 15
+    },
+    {
+      "dir": "config",
+      "count": 10
+    },
+    {
+      "dir": "data",
+      "count": 6
+    },
+    {
+      "dir": ".vscode",
+      "count": 5
+    },
+    {
+      "dir": "agents",
+      "count": 5
+    },
+    {
+      "dir": ".codegpt",
+      "count": 3
+    },
+    {
+      "dir": ".pm2",
+      "count": 3
+    },
+    {
+      "dir": ".hootner",
+      "count": 2
+    },
+    {
+      "dir": "src",
+      "count": 2
+    },
+    {
+      "dir": ".amazonq",
+      "count": 1
+    },
+    {
+      "dir": ".aws-sam",
+      "count": 1
+    },
+    {
+      "dir": ".commitlintrc.json",
+      "count": 1
+    },
+    {
+      "dir": ".editorconfig",
+      "count": 1
+    },
+    {
+      "dir": ".env",
+      "count": 1
+    },
+    {
+      "dir": ".env.example",
+      "count": 1
+    },
+    {
+      "dir": ".env.production",
+      "count": 1
+    },
+    {
+      "dir": ".env.production.example",
+      "count": 1
+    },
+    {
+      "dir": ".eslintignore",
+      "count": 1
+    },
+    {
+      "dir": ".eslintrc.json",
+      "count": 1
+    },
+    {
+      "dir": ".gitattributes",
+      "count": 1
+    },
+    {
+      "dir": ".gitignore",
+      "count": 1
+    },
+    {
+      "dir": ".gitignore.aws",
+      "count": 1
+    },
+    {
+      "dir": ".gitmessage",
+      "count": 1
+    },
+    {
+      "dir": ".hootnerrc",
+      "count": 1
+    },
+    {
+      "dir": ".kiro",
+      "count": 1
+    },
+    {
+      "dir": ".npmrc",
+      "count": 1
+    },
+    {
+      "dir": ".pre-commit-config.yaml",
+      "count": 1
+    },
+    {
+      "dir": ".prettierignore",
+      "count": 1
+    },
+    {
+      "dir": ".prettierrc",
+      "count": 1
+    },
+    {
+      "dir": "amazon-q-chat-example.html",
+      "count": 1
+    },
+    {
+      "dir": "api-security-report.json",
+      "count": 1
+    },
+    {
+      "dir": "API_KEYS_SUMMARY.md",
+      "count": 1
+    },
+    {
+      "dir": "API_SECURITY_SCANNER_GUIDE.md",
+      "count": 1
+    },
+    {
+      "dir": "API_SECURITY_SCANNER_IMPLEMENTATION.md",
+      "count": 1
+    },
+    {
+      "dir": "API_SECURITY_SCANNER_MANIFEST.md",
+      "count": 1
+    },
+    {
+      "dir": "ARCHITECTURE_DIAGRAM_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "aws-security-policy.json",
+      "count": 1
+    },
+    {
+      "dir": "aws_training_config.json",
+      "count": 1
+    },
+    {
+      "dir": "aws_train_sd.py",
+      "count": 1
+    },
+    {
+      "dir": "check-all-html-dashboard.js",
+      "count": 1
+    },
+    {
+      "dir": "check-dashboard-links.js",
+      "count": 1
+    },
+    {
+      "dir": "check-dynamic.js",
+      "count": 1
+    },
+    {
+      "dir": "check-infrastructure.js",
+      "count": 1
+    },
+    {
+      "dir": "check-pwa.js",
+      "count": 1
+    },
+    {
+      "dir": "check-stack.js",
+      "count": 1
+    },
+    {
+      "dir": "check-training-status.js",
+      "count": 1
+    },
+    {
+      "dir": "cleanup_aws.py",
+      "count": 1
+    },
+    {
+      "dir": "cloudfront-api-snippet.html",
+      "count": 1
+    },
+    {
+      "dir": "CLOUDFRONT_API_KEYS.md",
+      "count": 1
+    },
+    {
+      "dir": "CLOUDFRONT_QUICK_REF.txt",
+      "count": 1
+    },
+    {
+      "dir": "CLOUDFRONT_SCAN_REPORT.md",
+      "count": 1
+    },
+    {
+      "dir": "constants",
+      "count": 1
+    },
+    {
+      "dir": "CSS-VISUAL-REFERENCE.html",
+      "count": 1
+    },
+    {
+      "dir": "debug_aws_launch.py",
+      "count": 1
+    },
+    {
+      "dir": "DEPLOYMENT_CHECKLIST_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "DEPLOY_NOTES_MARKETPLACE.md",
+      "count": 1
+    },
+    {
+      "dir": "disable-dist.json",
+      "count": 1
+    },
+    {
+      "dir": "dist-config.json",
+      "count": 1
+    },
+    {
+      "dir": "dist-disabled.json",
+      "count": 1
+    },
+    {
+      "dir": "dist-full.json",
+      "count": 1
+    },
+    {
+      "dir": "DOCUMENTATION_INDEX_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "error.html",
+      "count": 1
+    },
+    {
+      "dir": "execute-hexarchy-migration.js",
+      "count": 1
+    },
+    {
+      "dir": "find-duplicates.js",
+      "count": 1
+    },
+    {
+      "dir": "IMPLEMENTATION_COMPLETE_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "index.js",
+      "count": 1
+    },
+    {
+      "dir": "INFRASTRUCTURE_TREE_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "LAMBDA_LAYER_CONNECTIONS.md",
+      "count": 1
+    },
+    {
+      "dir": "launch_aws_training.py",
+      "count": 1
+    },
+    {
+      "dir": "layers",
+      "count": 1
+    },
+    {
+      "dir": "LEGAL_IMPLEMENTATION_SUMMARY.md",
+      "count": 1
+    },
+    {
+      "dir": "lib",
+      "count": 1
+    },
+    {
+      "dir": "LICENSE",
+      "count": 1
+    },
+    {
+      "dir": "lint-output.txt",
+      "count": 1
+    },
+    {
+      "dir": "MCP_PROTOCOL_STATUS.md",
+      "count": 1
+    },
+    {
+      "dir": "MOBILE_OPTIMIZATION.md",
+      "count": 1
+    },
+    {
+      "dir": "netlify.toml",
+      "count": 1
+    },
+    {
+      "dir": "package.json",
+      "count": 1
+    },
+    {
+      "dir": "PAYMENT_STATUS.md",
+      "count": 1
+    },
+    {
+      "dir": "PLATFORM_10_YEAR_LIFECYCLE.md",
+      "count": 1
+    },
+    {
+      "dir": "QUICK_DEPLOY.md",
+      "count": 1
+    },
+    {
+      "dir": "quick_gpu_launch.py",
+      "count": 1
+    },
+    {
+      "dir": "QUICK_REFERENCE.md",
+      "count": 1
+    },
+    {
+      "dir": "QUICK_REFERENCE_120_PIPES.md",
+      "count": 1
+    },
+    {
+      "dir": "README.md",
+      "count": 1
+    },
+    {
+      "dir": "redirect-dashboard.html",
+      "count": 1
+    },
+    {
+      "dir": "requirements.txt",
+      "count": 1
+    },
+    {
+      "dir": "samconfig.toml",
+      "count": 1
+    },
+    {
+      "dir": "scan-connections.js",
+      "count": 1
+    },
+    {
+      "dir": "scan-docs.js",
+      "count": 1
+    },
+    {
+      "dir": "security-manifest.json",
+      "count": 1
+    },
+    {
+      "dir": "SECURITY_MANIFEST.md",
+      "count": 1
+    },
+    {
+      "dir": "service-worker-test.html",
+      "count": 1
+    },
+    {
+      "dir": "setup-stable-diffusion.js",
+      "count": 1
+    },
+    {
+      "dir": "setup-training.js",
+      "count": 1
+    },
+    {
+      "dir": "setup_aws_training.sh",
+      "count": 1
+    },
+    {
+      "dir": "setup_training.py",
+      "count": 1
+    },
+    {
+      "dir": "start-dual-agent.js",
+      "count": 1
+    },
+    {
+      "dir": "start_aws_training.sh",
+      "count": 1
+    },
+    {
+      "dir": "stripe-activation-website.html",
+      "count": 1
+    },
+    {
+      "dir": "STRIPE_CONNECTION_DIAGRAM.md",
+      "count": 1
+    },
+    {
+      "dir": "STRIPE_COST_COMPARISON.md",
+      "count": 1
+    },
+    {
+      "dir": "STRIPE_EMPLOYEE_ACCESS.md",
+      "count": 1
+    },
+    {
+      "dir": "STRIPE_INTEGRATION_SUMMARY.md",
+      "count": 1
+    },
+    {
+      "dir": "STRIPE_USAGE_PRICING_GUIDE.md",
+      "count": 1
+    },
+    {
+      "dir": "tailwind.config.js",
+      "count": 1
+    },
+    {
+      "dir": "template.yaml",
+      "count": 1
+    },
+    {
+      "dir": "training-helper.js",
+      "count": 1
+    },
+    {
+      "dir": "training_prompts.json",
+      "count": 1
+    },
+    {
+      "dir": "train_dreambooth.sh",
+      "count": 1
+    },
+    {
+      "dir": "train_lora.py",
+      "count": 1
+    },
+    {
+      "dir": "train_sd.py",
+      "count": 1
+    },
+    {
+      "dir": "update-cicd-paths.js",
+      "count": 1
+    },
+    {
+      "dir": "update-import-paths.js",
+      "count": 1
+    }
+  ],
+  "timings": {
+    "elapsedMs": 1633
+  }
+}

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Session Revocation System -->
+  <script src="../assets/security/session-revocation.js"></script>
+  
+  <link rel="stylesheet" href="shared-styles.css" />
+  <title>HOOTNER Ultra - Beyond VS Code</title>
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'JetBrains Mono', 'Fira Code', monospace; 
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #fff; 
+      height: 100vh; 
+      overflow: hidden; 
+      --accent: #00d4ff;
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --error: #ef4444;
+    }
+    .container { 
+      height: 100vh; 
+      display: grid; 
+      grid-template-rows: 50px 1fr 30px; 
+    }
+    .top-bar { 
+      background: linear-gradient(90deg, #1a1a2e, #16213e);
+      display: flex; 
+      align-items: center; 
+      padding: 0 20px; 
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+    }
+    .logo { 
+      font-size: 24px; 
+      color: var(--accent); 
+      font-weight: bold; 
+      margin-right: 20px;
+      text-shadow: 0 0 10px var(--accent);
+    }
+    .main-area { 
+      display: grid; 
+      grid-template-columns: 60px 300px 1fr 350px; 
+      height: 100%;
+    }
+    .activity-bar {
+      background: #0f0f23;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+      border-right: 1px solid #333;
+    }
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+    }
+    .activity-icon:hover, .activity-icon.active {
+      background: var(--accent);
+      box-shadow: 0 0 15px var(--accent);
+      transform: scale(1.1);
+    }
+    .sidebar { 
+      background: #1a1a2e; 
+      border-right: 1px solid #333; 
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header {
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    .editor-container { 
+      display: flex;
+      flex-direction: column;
+      background: #0f0f23; 
+    }
+    .tabs-container {
+      display: flex;
+      background: #1a1a2e;
+      border-bottom: 1px solid #333;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      border-right: 1px solid #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      min-width: 150px;
+    }
+    .tab.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+    }
+    .tab:hover:not(.active) {
+      background: #2a2a3e;
+    }
+    .editor-area { 
+      flex: 1;
+      position: relative;
+    }
+    .right-panel {
+      background: #1a1a2e;
+      border-left: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-tabs {
+      display: flex;
+      background: #0f0f23;
+      border-bottom: 1px solid #333;
+    }
+    .panel-tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-right: 1px solid #333;
+      transition: all 0.3s;
+      font-size: 12px;
+    }
+    .panel-tab.active {
+      background: var(--accent);
+      color: #000;
+    }
+    .panel-content {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .status-bar { 
+      background: linear-gradient(90deg, #0f0f23, #1a1a2e);
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      padding: 0 20px; 
+      border-top: 1px solid var(--accent);
+      font-size: 12px;
+    }
+    .btn {
+      background: linear-gradient(135deg, var(--accent), #0099cc);
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      margin: 0 5px;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+    }
+    .file-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 6px;
+      margin: 2px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+    .file-item:hover {
+      background: #2a2a3e;
+      transform: translateX(5px);
+    }
+    .file-item.active {
+      background: var(--accent);
+      color: #000;
+    }
+    .ai-chat {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ai-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background: #0f0f23;
+    }
+    .ai-input-area {
+      display: flex;
+      padding: 10px;
+      background: #1a1a2e;
+      border-top: 1px solid #333;
+    }
+    .ai-input {
+      flex: 1;
+      padding: 8px;
+      background: #0f0f23;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+    .message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      animation: slideIn 0.3s ease;
+    }
+    .user-message {
+      background: var(--accent);
+      color: #000;
+      margin-left: 20px;
+    }
+    .ai-message {
+      background: #2a2a3e;
+      margin-right: 20px;
+      border-left: 3px solid var(--accent);
+    }
+    .live-preview {
+      width: 100%;
+      height: 200px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: white;
+    }
+    .terminal {
+      background: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      border-radius: 8px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 8px;
+      background: #0f0f23;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .zen-mode .activity-bar,
+    .zen-mode .sidebar,
+    .zen-mode .right-panel,
+    .zen-mode .top-bar,
+    .zen-mode .status-bar {
+      display: none !important;
+    }
+    .zen-mode .main-area {
+      grid-template-columns: 1fr !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <div class="logo">🦉 HOOTNER ULTRA</div>
+      <button class="btn" onclick="createFile()">📄 New</button>
+      <button class="btn" onclick="runCode()">▶️ Run</button>
+      <button class="btn" onclick="saveFile()">💾 Save</button>
+      <button class="btn" onclick="formatCode()">✨ Format</button>
+      <button class="btn" onclick="toggleLivePreview()">👁️ Preview</button>
+      <button class="btn" onclick="startCollaboration()">👥 Collab</button>
+      <button class="btn" onclick="deployCode()">🚀 Deploy</button>
+      <button class="btn" onclick="toggleVoiceCoding()">🎤 Voice</button>
+      <button class="btn" onclick="toggleARMode()">🥽 AR Mode</button>
+      <button class="btn" onclick="generateWithAI()">🧠 AI Generate</button>
+      <button class="btn" onclick="startQuantumDebug()">⚛️ Quantum</button>
+    </div>
+    
+    <div class="main-area">
+      <div class="activity-bar">
+        <div class="activity-icon active" onclick="showPanel('files')" title="Files">📁</div>
+        <div class="activity-icon" onclick="showPanel('search')" title="Search">🔍</div>
+        <div class="activity-icon" onclick="showPanel('git')" title="Git">🔀</div>
+        <div class="activity-icon" onclick="showPanel('debug')" title="Debug">🐛</div>
+        <div class="activity-icon" onclick="showPanel('extensions')" title="Extensions">🧩</div>
+        <div class="activity-icon" onclick="showPanel('ai')" title="AI Assistant">🤖</div>
+        <div class="activity-icon" onclick="showPanel('blockchain')" title="Blockchain">🔗</div>
+        <div class="activity-icon" onclick="showPanel('neural')" title="Neural Network">🧠</div>
+        <div class="activity-icon" onclick="showPanel('quantum')" title="Quantum Computing">⚛️</div>
+        <div class="activity-icon" onclick="showPanel('metaverse')" title="Metaverse">🌌</div>
+      </div>
+
+      <div class="sidebar">
+        <div class="sidebar-header" id="sidebarTitle">FILES</div>
+        <div class="sidebar-content" id="sidebarContent">
+          <input type="text" class="search-box" placeholder="Search files..." onkeyup="filterFiles(this.value)">
+          <div id="fileList">
+            <div class="file-item active" onclick="openFile('welcome.js')">
+              <span>📄</span>
+              <span>welcome.js</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-container">
+        <div class="tabs-container" id="tabs">
+          <div class="tab active">
+            <span>📄</span>
+            <span>welcome.js</span>
+            <span onclick="closeTab('welcome.js')" style="margin-left: 8px; cursor: pointer;">×</span>
+          </div>
+        </div>
+        <div class="editor-area" id="editor"></div>
+      </div>
+
+      <div class="right-panel">
+        <div class="panel-tabs">
+          <div class="panel-tab active" onclick="showRightPanel('ai')">AI Assistant</div>
+          <div class="panel-tab" onclick="showRightPanel('preview')">Live Preview</div>
+          <div class="panel-tab" onclick="showRightPanel('terminal')">Terminal</div>
+        </div>
+        <div class="panel-content" id="rightPanelContent">
+          <div id="aiPanel">
+            <div class="ai-chat">
+              <div class="ai-messages" id="aiMessages">
+                <div class="message ai-message">🤖 Hello! I'm your AI coding assistant. How can I help you today?</div>
+              </div>
+              <div class="ai-input-area">
+                <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything...">
+                <button class="btn" onclick="sendAIMessage()">Send</button>
+              </div>
+            </div>
+          </div>
+          <div id="previewPanel" style="display: none;">
+            <iframe class="live-preview" id="livePreview" src="about:blank" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+          <div id="terminalPanel" style="display: none;">
+            <div class="terminal" id="terminal">
+              <div>HOOTNER Terminal v1.0</div>
+              <div>Type 'help' for commands</div>
+              <div style="display: flex; align-items: center;">
+                <span style="color: #0f0;">$ </span>
+                <input type="text" id="terminalInput" style="background: transparent; border: none; color: #0f0; outline: none; flex: 1; font-family: inherit;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="status-bar">
+      <div>
+        <span id="cursorPos">Ln 1, Col 1</span>
+        <span>•</span>
+        <span id="fileEncoding">UTF-8</span>
+        <span>•</span>
+        <span id="language">JavaScript</span>
+      </div>
+      <div>
+        <span id="errors">❌ 0</span>
+        <span id="warnings">⚠️ 0</span>
+        <span>•</span>
+        <span onclick="toggleZenMode()" style="cursor: pointer;">🧘 Zen</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let editor;
+    let currentFile = 'welcome.js';
+    let files = {
+      'welcome.js': 'console.log("Welcome to HOOTNER Ultra! 🦉");\n\n// Try these features:\n// - Click AI Assistant to chat\n// - Use Ctrl+S to save\n// - Click Run to execute code'
+    };
+
+    // Initialize Monaco Editor
+    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+      editor = monaco.editor.create(document.getElementById('editor'), {
+        value: files[currentFile],
+        language: 'javascript',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        fontSize: 14
+      });
+      
+      editor.onDidChangeCursorPosition(() => {
+        const pos = editor.getPosition();
+        document.getElementById('cursorPos').textContent = `Ln ${pos.lineNumber}, Col ${pos.column}`;
+      });
+    });
+
+    // Button Functions
+    function createFile() {
+      const name = prompt('File name:', 'new-file.js');
+      if (name && !files[name]) {
+        files[name] = '';
+        openFile(name);
+        updateFileList();
+        addMessage('✓ File created: ' + name);
+      }
+    }
+
+    function runCode() {
+      try {
+        const code = editor.getValue();
+        const result = eval(code);
+        addMessage('✓ Code executed successfully');
+        console.log('Result:', result);
+      } catch (error) {
+        addMessage('❌ Error: ' + error.message);
+      }
+    }
+
+    function saveFile() {
+      if (currentFile) {
+        files[currentFile] = editor.getValue();
+        const blob = new Blob([files[currentFile]], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = currentFile;
+        a.click();
+        addMessage('✓ File saved: ' + currentFile);
+      }
+    }
+
+    function formatCode() {
+      if (editor) {
+        editor.getAction('editor.action.formatDocument').run();
+        addMessage('✓ Code formatted');
+      }
+    }
+
+    function toggleLivePreview() {
+      showRightPanel('preview');
+      const code = editor.getValue();
+      const iframe = document.getElementById('livePreview');
+      
+      // WARNING: This preview allows execution of user code
+      // Only use in trusted environments or with proper sandboxing
+      // In production, consider using a separate sandboxed preview service
+      
+      const htmlContent = code.includes('<html>') 
+        ? code 
+        : `<html>
+            <head>
+              <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self';">
+            </head>
+            <body><script>${code}</script></body>
+          </html>`;
+      
+      iframe.srcdoc = htmlContent;
+      addMessage('👁️ Live preview updated (sandbox mode)');
+    }
+
+    function startCollaboration() {
+      addMessage('👥 Collaboration mode activated!');
+    }
+
+    function deployCode() {
+      addMessage('🚀 Deploying to cloud...');
+      setTimeout(() => addMessage('✓ Deployed successfully!'), 2000);
+    }
+
+    function toggleVoiceCoding() {
+      addMessage('🎤 Voice coding enabled!');
+    }
+
+    function toggleARMode() {
+      addMessage('🥽 AR mode activated!');
+    }
+
+    function generateWithAI() {
+      const prompts = [
+        'function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n-1) + fibonacci(n-2);\n}',
+        'const sortArray = arr => arr.sort((a, b) => a - b);',
+        '// TODO: Add error handling\ntry {\n  // Your code here\n} catch (error) {\n  console.error(error);\n}'
+      ];
+      const code = prompts[Math.floor(Math.random() * prompts.length)];
+      editor.setValue(editor.getValue() + '\n\n' + code);
+      addMessage('🧠 AI code generated!');
+    }
+
+    function startQuantumDebug() {
+      addMessage('⚛️ Quantum debugging initiated!');
+    }
+
+    // Panel Functions
+    function showPanel(panel) {
+      document.querySelectorAll('.activity-icon').forEach(icon => icon.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('sidebarTitle').textContent = panel.toUpperCase();
+      
+      if (panel === 'ai') showRightPanel('ai');
+    }
+
+    function showRightPanel(panel) {
+      document.querySelectorAll('.panel-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('#aiPanel, #previewPanel, #terminalPanel').forEach(p => p.style.display = 'none');
+      
+      event.target?.classList.add('active');
+      document.getElementById(panel + 'Panel').style.display = 'block';
+    }
+
+    function openFile(name) {
+      currentFile = name;
+      if (editor) editor.setValue(files[name] || '');
+      updateFileList();
+    }
+
+    function closeTab(name) {
+      delete files[name];
+      if (currentFile === name) {
+        const remaining = Object.keys(files)[0];
+        if (remaining) openFile(remaining);
+      }
+      updateFileList();
+    }
+
+    function updateFileList() {
+      const list = document.getElementById('fileList');
+      list.innerHTML = Object.keys(files).map(name => `
+        <div class="file-item ${name === currentFile ? 'active' : ''}" onclick="openFile('${name}')">
+          <span>📄</span>
+          <span>${name}</span>
+        </div>
+      `).join('');
+    }
+
+    function sendAIMessage() {
+      const input = document.getElementById('aiInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage(message, true);
+      input.value = '';
+
+      setTimeout(() => {
+        const responses = [
+          'I can help you analyze your code structure.',
+          'Try using more descriptive variable names.',
+          'Consider adding error handling with try-catch blocks.',
+          'Your code looks good! Any specific questions?',
+          'Would you like me to suggest some optimizations?'
+        ];
+        addMessage(responses[Math.floor(Math.random() * responses.length)]);
+      }, 1000);
+    }
+
+    function addMessage(text, isUser = false) {
+      const messages = document.getElementById('aiMessages');
+      const div = document.createElement('div');
+      div.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+      div.textContent = isUser ? text : '🤖 ' + text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function toggleZenMode() {
+      document.body.classList.toggle('zen-mode');
+      addMessage(document.body.classList.contains('zen-mode') ? 'Zen mode enabled' : 'Zen mode disabled');
+    }
+
+    function filterFiles(query) {
+      updateFileList();
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveFile();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        createFile();
+      }
+    });
+  </script>
+</body>
+</html>

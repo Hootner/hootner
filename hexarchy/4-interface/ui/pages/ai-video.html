@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Session Revocation System -->
+  <script src="../assets/security/session-revocation.js"></script>
+  
+  <link rel="stylesheet" href="shared-styles.css" />
+  <title>🎬 AI Video Generator - HOOTNER</title>
+  <link rel="stylesheet" href="/tailwind-output.css">
+  <script src="./config.js"></script>
+  <script src="./asset-loader.js"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e, #0a0a0f);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: #00ff00;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .glass { 
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .glass-light {
+      background: rgba(10, 10, 15, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 0, 0.1);
+    }
+    
+    .neon { 
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3),
+                  0 0 40px rgba(0, 255, 0, 0.2);
+    }
+    
+    .neon-hover:hover {
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5),
+                  0 0 60px rgba(0, 255, 0, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .progress-bar { transition: width 0.3s ease; }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    }
+    
+    .btn-secondary {
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      color: #00ff00;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(0, 255, 0, 0.2);
+      border-color: rgba(0, 255, 255, 0.5);
+      color: #00ffff;
+    }
+    
+    .preset-card {
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.05), rgba(0, 255, 255, 0.05));
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .preset-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+    
+    .preset-card:hover::before {
+      left: 100%;
+    }
+    
+    .preset-card:hover {
+      border-color: rgba(0, 255, 255, 0.6);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+    }
+    
+    .preset-card.active {
+      border-color: #00ffff;
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.15), rgba(0, 255, 255, 0.15));
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    }
+    
+    .video-card {
+      background: rgba(10, 10, 15, 0.9);
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .video-card:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      transform: scale(1.02);
+      box-shadow: 0 8px 32px rgba(0, 255, 255, 0.3);
+    }
+    
+    .video-card video {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #000;
+    }
+    
+    .input-field {
+      background: rgba(10, 10, 15, 0.8);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      border-radius: 8px;
+      color: #00ff00;
+      padding: 12px 16px;
+      width: 100%;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #00ffff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+    
+    .tab-button {
+      background: rgba(0, 255, 0, 0.05);
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+      padding: 12px 24px;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    
+    .tab-button:hover {
+      background: rgba(0, 255, 0, 0.1);
+    }
+    
+    .tab-button.active {
+      background: rgba(0, 255, 255, 0.2);
+      border-color: #00ffff;
+      color: #00ffff;
+      box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.3);
+    }
+    
+    .badge {
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      color: #000;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    
+    .badge-pro {
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+    }
+    
+    .queue-item {
+      background: rgba(10, 10, 15, 0.7);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s;
+    }
+    
+    .queue-item:hover {
+      border-color: rgba(0, 255, 255, 0.4);
+      background: rgba(10, 10, 15, 0.9);
+    }
+    
+    .loader {
+      border: 3px solid rgba(0, 255, 0, 0.2);
+      border-top: 3px solid #00ffff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+    ::-webkit-scrollbar-thumb { 
+      background: linear-gradient(135deg, #00ff00, #00ffff);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover { 
+      background: linear-gradient(135deg, #00ffff, #ff00ff);
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr !important; }
+      .text-4xl { font-size: 2rem !important; }
+      .glass { padding: 16px !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <script src="../components/navigation-policy.js"></script>
+  
+  <!-- Header -->
+  <div style="padding: 20px; max-width: 1600px; margin: 0 auto;">
+    <!-- Dashboard Navigation -->
+    <div style="margin-bottom: 20px;">
+      <a href="dashboard.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background: rgba(0, 255, 255, 0.2); color: #00ffff; text-decoration: none; border-radius: 8px; border: 2px solid rgba(0, 255, 255, 0.3); transition: all 0.3s;">
+        🏠 Dashboard
+      </a>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="font-size: 3.5rem; font-weight: bold; background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px;">
+        🎬 AI Video Generator
+      </h1>
+      <p style="color: #00ffff; font-size: 1.25rem;">Transform your ideas into stunning videos with AI</p>
+      <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px;">
+        <span class="badge">⚡ 3D U-Net Diffusion</span>
+        <span class="badge">🎨 Multi-Style Support</span>
+        <span class="badge-pro badge">✨ Pro Features</span>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div style="display: flex; gap: 8px; margin-bottom: -2px;">
+      <button class="tab-button active" onclick="switchTab('generate', event)">🎬 Generate</button>
+      <button class="tab-button" onclick="switchTab('gallery', event)">🖼️ Gallery</button>
+      <button class="tab-button" onclick="switchTab('queue', event)">📋 Queue (<span id="queueCount">0</span>)</button>
+      <button class="tab-button" onclick="switchTab('history', event)">⏱️ History</button>
+    </div>
+    <div id="serviceStatus" style="margin: 12px 0 8px; color: #00ffff; font-weight: 600;">Connecting to generation service...</div>
+    
+    <!-- Main Container -->
+    <div class="glass neon" style="border-radius: 0 16px 16px 16px; padding: 32px;">
+      
+      <!-- Generate Tab -->
+      <div id="generateTab" class="tab-content">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px;">
+          
+          <!-- Left: Main Generator -->
+          <div>
+            <!-- Style Presets -->
+            <div style="margin-bottom: 32px;">
+              <h3 style="color: #00ffff; font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">🎨 Choose Style</h3>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                <div class="preset-card active" onclick="selectPreset('cinematic', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🎥</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Cinematic</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Hollywood style</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('anime', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🎌</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Anime</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Japanese animation</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('realistic', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">📸</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Realistic</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Photorealistic</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('cyberpunk', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🌃</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Cyberpunk</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Neon futuristic</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('fantasy', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🧙</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Fantasy</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Magical worlds</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('scifi', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🚀</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Sci-Fi</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Space & tech</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('cartoon', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">🎨</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Cartoon</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Animated style</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('horror', this)">
+                  <div style="font-size: 2rem; text-align: center; margin-bottom: 8px;">👻</div>
+                  <div style="text-align: center; font-weight: 600; color: #00ff00;">Horror</div>
+                  <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">Dark & eerie</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Prompt Input -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 12px; font-size: 1.1rem;">
+                ✍️ Your Prompt
+              </label>
+              <textarea id="prompt" class="input-field" 
+                        placeholder="Describe your video... (e.g., 'A robot dancing in a futuristic city at sunset with neon lights')" 
+                        rows="4"></textarea>
+              <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                <button class="btn-secondary" onclick="addExamplePrompt(0)">📝 Example 1</button>
+                <button class="btn-secondary" onclick="addExamplePrompt(1)">📝 Example 2</button>
+                <button class="btn-secondary" onclick="addExamplePrompt(2)">📝 Example 3</button>
+                <button class="btn-secondary" onclick="improvePrompt()">✨ AI Enhance</button>
+              </div>
+            </div>
+            
+            <!-- Settings Grid -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+              <div>
+                <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">⏱️ Duration</label>
+                <select id="duration" class="input-field">
+                  <option value="3">3 seconds</option>
+                  <option value="5" selected>5 seconds</option>
+                  <option value="10">10 seconds</option>
+                  <option value="15">15 seconds (Pro)</option>
+                  <option value="30">30 seconds (Pro)</option>
+                </select>
+              </div>
+              <div>
+                <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">📺 Quality</label>
+                <select id="quality" class="input-field">
+                  <option value="480">480p - Fast</option>
+                  <option value="720" selected>720p - HD</option>
+                  <option value="1080">1080p - Full HD</option>
+                  <option value="1440">1440p - 2K (Pro)</option>
+                  <option value="2160">2160p - 4K (Pro)</option>
+                </select>
+              </div>
+              <div>
+                <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">🎬 FPS</label>
+                <select id="fps" class="input-field">
+                  <option value="24" selected>24 FPS - Cinematic</option>
+                  <option value="30">30 FPS - Standard</option>
+                  <option value="60">60 FPS - Smooth (Pro)</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Advanced Settings Toggle -->
+            <div style="margin-bottom: 24px;">
+              <button class="btn-secondary" onclick="toggleAdvanced()" style="width: 100%;">
+                ⚙️ Advanced Settings <span id="advancedIcon">▼</span>
+              </button>
+              <div id="advancedSettings" style="display: none; margin-top: 16px; padding: 20px; background: rgba(0, 255, 0, 0.05); border-radius: 12px; border: 1px solid rgba(0, 255, 0, 0.2);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div>
+                    <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">🎨 Model</label>
+                    <select id="model" class="input-field">
+                      <option value="stable">Stable Diffusion</option>
+                      <option value="runway" selected>Runway Gen-2</option>
+                      <option value="pika">Pika Labs</option>
+                      <option value="custom">Custom Model</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">🔧 Guidance Scale</label>
+                    <input type="range" id="guidanceScale" min="1" max="20" value="7.5" class="input-field" 
+                           oninput="document.getElementById('guidanceValue').textContent = this.value">
+                    <div style="text-align: center; color: #00ff00; margin-top: 4px;">
+                      <span id="guidanceValue">7.5</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">🎲 Seed</label>
+                    <input type="number" id="seed" class="input-field" placeholder="Random" value="">
+                  </div>
+                  <div>
+                    <label style="display: block; color: #00ffff; font-weight: 600; margin-bottom: 8px;">🔄 Steps</label>
+                    <input type="number" id="steps" class="input-field" value="50" min="10" max="150">
+                  </div>
+                </div>
+                <div style="margin-top: 16px;">
+                  <label style="display: flex; align-items: center; color: #00ffff; cursor: pointer;">
+                    <input type="checkbox" id="enhancePrompt" style="margin-right: 8px;">
+                    ✨ Auto-enhance prompt with AI
+                  </label>
+                  <label style="display: flex; align-items: center; color: #00ffff; cursor: pointer; margin-top: 8px;">
+                    <input type="checkbox" id="upscale" style="margin-right: 8px;">
+                    📈 Upscale to 4K (Pro)
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Generate Button -->
+            <button id="generateBtn" onclick="generateVideo()" class="btn-primary" style="width: 100%; font-size: 1.1rem; padding: 18px;">
+              🚀 Generate Video
+            </button>
+            
+            <!-- Batch Mode -->
+            <div style="margin-top: 16px; display: flex; gap: 12px;">
+              <button class="btn-secondary" onclick="addToBatch()">➕ Add to Batch</button>
+              <button class="btn-secondary" onclick="generateBatch()">🔄 Generate Batch (<span id="batchCount">0</span>)</button>
+            </div>
+          </div>
+          
+          <!-- Right: Info & Queue -->
+          <div>
+            <!-- Quick Stats -->
+            <div class="glass-light" style="border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+              <h3 style="color: #00ffff; font-size: 1.1rem; font-weight: bold; margin-bottom: 16px;">📊 Quick Stats</h3>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #666;">Videos Generated:</span>
+                  <span style="color: #00ff00; font-weight: bold;" id="statsTotal">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #666;">In Queue:</span>
+                  <span style="color: #00ffff; font-weight: bold;" id="statsQueue">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #666;">Total Time:</span>
+                  <span style="color: #00ff00; font-weight: bold;" id="statsTime">0m</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #666;">Credits Left:</span>
+                  <span style="color: #ff00ff; font-weight: bold;">∞</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Example Prompts -->
+            <div class="glass-light" style="border-radius: 12px; padding: 20px;">
+              <h3 style="color: #00ffff; font-size: 1.1rem; font-weight: bold; margin-bottom: 16px;">💡 Example Prompts</h3>
+              <div style="display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto;">
+                <div class="preset-card" style="padding: 12px;" onclick="useExamplePrompt(0)">
+                  <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">🌃 Cyberpunk City</div>
+                  <div style="color: #666; font-size: 12px;">Futuristic neon cityscape with flying cars...</div>
+                </div>
+                <div class="preset-card" style="padding: 12px;" onclick="useExamplePrompt(1)">
+                  <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">🌊 Ocean Sunset</div>
+                  <div style="color: #666; font-size: 12px;">Beautiful sunset over calm ocean waves...</div>
+                </div>
+                <div class="preset-card" style="padding: 12px;" onclick="useExamplePrompt(2)">
+                  <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">🤖 Robot Dance</div>
+                  <div style="color: #666; font-size: 12px;">Humanoid robot performing dance moves...</div>
+                </div>
+                <div class="preset-card" style="padding: 12px;" onclick="useExamplePrompt(3)">
+                  <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">🌲 Forest Magic</div>
+                  <div style="color: #666; font-size: 12px;">Mystical forest with glowing particles...</div>
+                </div>
+                <div class="preset-card" style="padding: 12px;" onclick="useExamplePrompt(4)">
+                  <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">🚀 Space Travel</div>
+                  <div style="color: #666; font-size: 12px;">Spaceship traveling through asteroid field...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Gallery Tab -->
+      <div id="galleryTab" class="tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h3 style="color: #00ffff; font-size: 1.5rem; font-weight: bold;">🖼️ Your Gallery</h3>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn-secondary" onclick="filterGallery('all')">All</button>
+            <button class="btn-secondary" onclick="filterGallery('favorites')">⭐ Favorites</button>
+            <button class="btn-secondary" onclick="sortGallery()">🔄 Sort</button>
+          </div>
+        </div>
+        <div id="galleryGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <!-- Gallery items will be populated here -->
+        </div>
+      </div>
+      
+      <!-- Queue Tab -->
+      <div id="queueTab" class="tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h3 style="color: #00ffff; font-size: 1.5rem; font-weight: bold;">📋 Generation Queue</h3>
+          <button class="btn-secondary" onclick="clearQueue()">🗑️ Clear All</button>
+        </div>
+        <div id="queueList">
+          <div style="text-align: center; color: #666; padding: 60px;">
+            Queue is empty. Add videos to generate!
+          </div>
+        </div>
+      </div>
+      
+      <!-- History Tab -->
+      <div id="historyTab" class="tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h3 style="color: #00ffff; font-size: 1.5rem; font-weight: bold;">⏱️ Generation History</h3>
+          <button class="btn-secondary" onclick="exportHistory()">📥 Export</button>
+        </div>
+        <div id="historyList" style="max-height: 600px; overflow-y: auto;">
+          <!-- History items will be populated here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Progress Modal -->
+    <div id="progressModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 10000; align-items: center; justify-content: center;">
+      <div class="glass neon" style="border-radius: 20px; padding: 40px; max-width: 600px; width: 90%;">
+        <h3 style="color: #00ffff; font-size: 1.5rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
+          🎬 Generating Your Video
+        </h3>
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <span id="progressText" style="color: #00ff00; font-weight: 600;">Initializing...</span>
+            <span id="progressPercent" style="color: #00ffff; font-weight: bold;">0%</span>
+          </div>
+          <div style="background: rgba(0, 0, 0, 0.5); border-radius: 12px; height: 24px; overflow: hidden; border: 2px solid rgba(0, 255, 0, 0.3);">
+            <div id="progressBar" class="progress-bar" style="height: 100%; background: linear-gradient(90deg, #00ff00, #00ffff); width: 0%; transition: width 0.3s ease;"></div>
+          </div>
+          <div id="progressDetails" style="color: #666; font-size: 14px; margin-top: 8px; text-align: center;"></div>
+        </div>
+        <div id="progressPreview" style="border-radius: 12px; overflow: hidden; background: #000; height: 200px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(0, 255, 0, 0.2);">
+          <div class="loader"></div>
+        </div>
+        <button class="btn-secondary" onclick="cancelGeneration()" style="width: 100%; margin-top: 20px;">
+          ❌ Cancel Generation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Management
+    let socket;
+    let currentJobId = null;
+    let selectedPreset = 'cinematic';
+    let batchQueue = [];
+    let generationHistory = [];
+    let galleryVideos = [];
+    
+    // Example Prompts
+    const examplePrompts = [
+      'A futuristic neon cityscape with flying cars and holographic billboards at sunset',
+      'A beautiful sunset over calm ocean waves with dolphins jumping',
+      'A humanoid robot performing dance moves in a cyberpunk nightclub',
+      'A mystical forest with glowing particles and magical creatures',
+      'A spaceship traveling through an asteroid field in deep space'
+    ];
+    
+    const fullPrompts = {
+      0: 'A futuristic neon cityscape with flying cars, holographic advertisements, and rain-soaked streets reflecting bright lights. Cinematic camera movement through the city at sunset with dramatic lighting and depth of field.',
+      1: 'A serene beach scene with gentle waves lapping at the shore during golden hour. Beautiful sunset colors reflected in the water, with seagulls flying and dolphins jumping in the distance. Peaceful and calming atmosphere.',
+      2: 'A state-of-the-art humanoid robot with glowing LED accents performing fluid dance moves in a futuristic nightclub. Neon lights, laser shows, and enthusiastic crowd in the background. Dynamic camera angles.',
+      3: 'An enchanted forest at twilight with bioluminescent plants, floating magical particles, and mystical creatures peeking from behind ancient trees. Ethereal lighting and atmospheric fog creating a dreamlike quality.',
+      4: 'A sleek spaceship navigating through a dense asteroid field with planets and nebulae in the background. Epic space opera cinematography with realistic physics and stunning cosmic vistas.'
+    };
+    
+    // Initialize
+    function getApiBase() {
+      const configured = window.AI_VIDEO_API_BASE || localStorage.getItem('hootner_video_api_base');
+      return configured || 'http://localhost:5003';
+    }
+
+    function sanitize(str = '') {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function initVideoGenerator() {
+      loadHistory();
+      loadGallery();
+      loadQueue();
+      updateStats();
+      
+      const apiBase = getApiBase();
+      const serviceBanner = document.getElementById('serviceStatus');
+      
+      try {
+        socket = io(`${apiBase}`);
+        socket.on('progress', updateProgress);
+        socket.on('completed', onVideoCompleted);
+        socket.on('error', onVideoError);
+        if (serviceBanner) serviceBanner.textContent = '🟢 Connected to generation service';
+      } catch (e) {
+        if (serviceBanner) serviceBanner.textContent = '⚠️ Service unavailable (simulation mode)';
+        console.log('⚠️ Video generation service unavailable - using simulation mode');
+      }
+    }
+    
+    // Tab Switching
+    function switchTab(tab, evt) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tab + 'Tab').style.display = 'block';
+      const source = evt?.currentTarget || document.querySelector(`.tab-button[onclick*="${tab}"]`);
+      source?.classList.add('active');
+      
+      if (tab === 'gallery') loadGallery();
+      if (tab === 'history') displayHistory();
+      if (tab === 'queue') displayQueue();
+    }
+    
+    // Preset Selection
+    function selectPreset(preset, element) {
+      document.querySelectorAll('.preset-card').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      selectedPreset = preset;
+      
+      // Update prompt hint based on preset
+      const promptField = document.getElementById('prompt');
+      const hints = {
+        cinematic: 'Epic Hollywood-style scene with dramatic lighting...',
+        anime: 'Beautiful anime scene with vibrant colors...',
+        realistic: 'Photorealistic scene with natural lighting...',
+        cyberpunk: 'Neon-lit futuristic city with rain and reflections...',
+        fantasy: 'Magical world with mystical creatures...',
+        scifi: 'Advanced technology and space exploration...',
+        cartoon: 'Colorful animated scene with exaggerated features...',
+        horror: 'Dark and eerie atmosphere with suspenseful mood...'
+      };
+      
+      if (!promptField.value) {
+        promptField.placeholder = hints[preset] || promptField.placeholder;
+      }
+    }
+    
+    // Example Prompts
+    function useExamplePrompt(index) {
+      document.getElementById('prompt').value = fullPrompts[index];
+    }
+    
+    function addExamplePrompt(index) {
+      document.getElementById('prompt').value = examplePrompts[index];
+    }
+    
+    function improvePrompt() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt first');
+        return;
+      }
+      
+      const enhanced = `${prompt}, cinematic lighting, highly detailed, 8k resolution, professional cinematography, depth of field, color graded`;
+      document.getElementById('prompt').value = enhanced;
+    }
+    
+    // Advanced Settings
+    function toggleAdvanced() {
+      const panel = document.getElementById('advancedSettings');
+      const icon = document.getElementById('advancedIcon');
+      
+      if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        icon.textContent = '▲';
+      } else {
+        panel.style.display = 'none';
+        icon.textContent = '▼';
+      }
+    }
+    
+    // Video Generation
+    let generationResolve;
+    let generationReject;
+    
+    async function generateVideo() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+      
+      const duration = parseInt(document.getElementById('duration').value);
+      const quality = parseInt(document.getElementById('quality').value);
+      const fps = parseInt(document.getElementById('fps').value);
+      const model = document.getElementById('model').value;
+      const guidanceScale = parseFloat(document.getElementById('guidanceScale').value);
+      const seed = document.getElementById('seed').value ? parseInt(document.getElementById('seed').value) : Math.floor(Math.random() * 999999);
+      const steps = parseInt(document.getElementById('steps').value);
+      
+      // Show progress modal
+      document.getElementById('progressModal').style.display = 'flex';
+      document.getElementById('generateBtn').disabled = true;
+      
+      const jobData = {
+        prompt: `${prompt}, ${selectedPreset} style`,
+        duration,
+        quality,
+        fps,
+        model,
+        guidanceScale,
+        seed,
+        steps,
+        timestamp: Date.now()
+      };
+      
+      const apiBase = getApiBase();
+      
+      try {
+        // Try real Python diffusion API first
+        updateProgress({ progress: 5, step: 0, total: steps });
+        
+        const response = await fetch(`${apiBase}/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: jobData.prompt,
+            num_frames: duration * fps,
+            height: quality,
+            width: Math.floor(quality * 16/9),
+            fps: fps,
+            num_inference_steps: steps,
+            guidance_scale: guidanceScale,
+            seed: seed,
+            format: 'mp4'
+          })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          
+          // Poll for completion if job_id returned
+          if (data.job_id) {
+            await pollJobStatus(data.job_id, apiBase, steps);
+          } else if (data.status === 'completed') {
+            // Immediately completed
+            onVideoCompleted({
+              download_url: `${apiBase}${data.download_url}`,
+              thumbnail: `${apiBase}${data.thumbnail_url || data.download_url}`,
+              generation_time: data.generation_time
+            });
+          }
+        } else {
+          throw new Error(`API returned ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Python API unavailable, using canvas generation:', error);
+        showNotification('⚠️ Using local generation (Python API unavailable)', 'warning');
+        simulateGeneration(jobData);
+      }
+    }
+    
+    async function pollJobStatus(jobId, apiBase, totalSteps) {
+      const maxAttempts = 120; // 2 minutes max
+      let attempts = 0;
+      
+      while (attempts < maxAttempts) {
+        try {
+          const response = await fetch(`${apiBase}/status/${jobId}`);
+          const data = await response.json();
+          
+          if (data.status === 'completed') {
+            onVideoCompleted({
+              download_url: `${apiBase}${data.download_url}`,
+              thumbnail: `${apiBase}${data.thumbnail_url || data.download_url}`,
+              generation_time: data.generation_time
+            });
+            return;
+          } else if (data.status === 'failed') {
+            throw new Error(data.error || 'Generation failed');
+          } else if (data.status === 'processing') {
+            // Update progress
+            const progress = data.progress || (attempts / maxAttempts * 100);
+            const step = data.step || Math.floor(attempts / maxAttempts * totalSteps);
+            updateProgress({ progress, step, total: totalSteps });
+          }
+        } catch (error) {
+          console.error('Status check failed:', error);
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        attempts++;
+      }
+      
+      throw new Error('Generation timeout');
+    }
+    
+    function updateProgress(data) {
+      const percent = data.progress || 0;
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('progressPercent').textContent = Math.floor(percent) + '%';
+      document.getElementById('progressText').textContent = getProgressText(percent);
+      document.getElementById('progressDetails').textContent = 
+        `Step ${data.step || 0} of ${data.total || 100} • Estimated time: ${Math.ceil((100 - percent) / 2)}s`;
+    }
+    
+    function getProgressText(percent) {
+      if (percent < 10) return '🚀 Initializing AI model...';
+      if (percent < 30) return '📝 Processing prompt...';
+      if (percent < 60) return '🎨 Generating frames...';
+      if (percent < 85) return '✨ Applying effects...';
+      if (percent < 100) return '🎬 Finalizing video...';
+      return '✅ Complete!';
+    }
+    
+    function onVideoCompleted(data) {
+      document.getElementById('progressModal').style.display = 'none';
+      document.getElementById('generateBtn').disabled = false;
+      
+      const video = {
+        id: Date.now(),
+        url: data.download_url || '/demo-video.mp4',
+        thumbnail: data.thumbnail || '/demo-thumbnail.jpg',
+        prompt: document.getElementById('prompt').value,
+        preset: selectedPreset,
+        duration: document.getElementById('duration').value,
+        quality: document.getElementById('quality').value,
+        generationTime: data.generation_time || 45.2,
+        timestamp: new Date().toISOString(),
+        favorite: false
+      };
+      
+      generationHistory.unshift(video);
+      galleryVideos.unshift(video);
+      saveHistory();
+      saveGallery();
+      updateStats();
+      
+      // Show success notification
+      showNotification('✅ Video generated successfully!', 'success');
+      
+      // Switch to gallery tab to show result
+      switchTab('gallery');
+      loadGallery();
+      generationResolve?.(data);
+      generationResolve = null;
+      generationReject = null;
+    }
+    
+    function onVideoError(data) {
+      document.getElementById('progressModal').style.display = 'none';
+      document.getElementById('generateBtn').disabled = false;
+      showNotification('❌ Generation failed: ' + (data.error || 'Unknown error'), 'error');
+      generationReject?.(data);
+      generationResolve = null;
+      generationReject = null;
+    }
+    
+    function simulateGeneration(jobData) {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 5 + 2;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setTimeout(() => {
+            // Create actual video with canvas
+            createVideoFromPrompt(jobData).then(videoData => {
+              onVideoCompleted(videoData);
+            });
+          }, 500);
+        }
+        updateProgress({ 
+          progress: Math.floor(progress), 
+          step: Math.floor(progress / 2), 
+          total: 50 
+        });
+      }, 300);
+    }
+    
+    // Create actual video from prompt using Canvas API
+    async function createVideoFromPrompt(jobData) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const width = Math.floor(jobData.quality * 16/9);
+      const height = jobData.quality;
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Generate frames based on prompt
+      const frames = [];
+      const numFrames = jobData.duration * jobData.fps;
+      const colors = getColorsFromPreset(jobData.prompt);
+      
+      for (let i = 0; i < numFrames; i++) {
+        // Create animated gradient based on frame
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        const offset = (i / numFrames);
+        
+        gradient.addColorStop(0, colors[0]);
+        gradient.addColorStop(0.5, colors[1]);
+        gradient.addColorStop(1, colors[2]);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Add text overlay
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${height/20}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 10;
+        ctx.fillText(jobData.prompt.substring(0, 50), width/2, height/2);
+        
+        // Add animation elements
+        const time = i / jobData.fps;
+        drawAnimatedElements(ctx, width, height, time, jobData.prompt);
+        
+        // Capture frame
+        frames.push(canvas.toDataURL('image/jpeg', 0.8));
+      }
+      
+      // Create thumbnail from first frame
+      const thumbnail = frames[0];
+      
+      // Convert frames to video blob
+      const videoBlob = await framesToVideo(frames, jobData.fps);
+      const videoUrl = URL.createObjectURL(videoBlob);
+      
+      // Save to localStorage for persistence
+      const videoData = {
+        download_url: videoUrl,
+        thumbnail: thumbnail,
+        generation_time: jobData.duration * 15,
+        videoBlob: videoBlob,
+        frames: frames.length
+      };
+      
+      // Store in generatedVideos array for My Videos page
+      const savedVideos = JSON.parse(localStorage.getItem('generatedVideos') || '[]');
+      savedVideos.unshift({
+        title: jobData.prompt,
+        url: videoUrl,
+        thumbnail: thumbnail,
+        size: videoBlob.size,
+        date: new Date().toISOString(),
+        duration: jobData.duration,
+        quality: jobData.quality + 'p',
+        fps: jobData.fps
+      });
+      localStorage.setItem('generatedVideos', JSON.stringify(savedVideos));
+      
+      return videoData;
+    }
+    
+    function getColorsFromPreset(prompt) {
+      const lower = prompt.toLowerCase();
+      if (lower.includes('sunset') || lower.includes('warm')) return ['#FF6B35', '#F7931E', '#FDC830'];
+      if (lower.includes('ocean') || lower.includes('blue')) return ['#0077BE', '#00B4D8', '#90E0EF'];
+      if (lower.includes('forest') || lower.includes('nature')) return ['#2D6A4F', '#40916C', '#52B788'];
+      if (lower.includes('neon') || lower.includes('cyber')) return ['#00ff00', '#00ffff', '#ff00ff'];
+      if (lower.includes('fire') || lower.includes('hot')) return ['#FF0000', '#FF6B00', '#FFD700'];
+      return ['#6366F1', '#8B5CF6', '#EC4899']; // Default purple/pink
+    }
+    
+    function drawAnimatedElements(ctx, width, height, time, prompt) {
+      const lower = prompt.toLowerCase();
+      
+      // Particles
+      for (let i = 0; i < 20; i++) {
+        const x = (Math.sin(time + i) * 0.5 + 0.5) * width;
+        const y = (Math.cos(time * 0.7 + i * 0.5) * 0.5 + 0.5) * height;
+        const radius = 5 + Math.sin(time * 2 + i) * 3;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + Math.sin(time * 3 + i) * 0.3})`;
+        ctx.fill();
+      }
+      
+      // Waves (if ocean theme)
+      if (lower.includes('ocean') || lower.includes('wave')) {
+        for (let y = 0; y < 5; y++) {
+          ctx.beginPath();
+          ctx.moveTo(0, height/2 + y * 20);
+          for (let x = 0; x < width; x += 10) {
+            const waveY = height/2 + y * 20 + Math.sin(x * 0.02 + time * 2 + y) * 15;
+            ctx.lineTo(x, waveY);
+          }
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 - y * 0.03})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      }
+    }
+    
+    async function framesToVideo(frames, fps) {
+      // For demo: create a simple video-like blob
+      // In production, you'd use a library like MediaRecorder or ffmpeg.wasm
+      const canvas = document.createElement('canvas');
+      const video = document.createElement('video');
+      
+      // Create a simple animated data URL that cycles through frames
+      // This is a placeholder - real implementation would use MediaRecorder
+      const frameData = frames.join(',');
+      const videoContent = new Blob([JSON.stringify({
+        type: 'hootner-video',
+        frames: frames,
+        fps: fps,
+        duration: frames.length / fps
+      })], { type: 'application/json' });
+      
+      return videoContent;
+    }
+    
+    function cancelGeneration() {
+      if (currentJobId) {
+        fetch(`http://localhost:5003/cancel/${currentJobId}`, { method: 'POST' })
+          .catch(() => console.log('Cancel request failed'));
+      }
+      
+      document.getElementById('progressModal').style.display = 'none';
+      document.getElementById('generateBtn').disabled = false;
+      showNotification('⚠️ Generation canceled', 'warning');
+    }
+    
+    // Batch Generation
+    function addToBatch() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+      
+      const batchItem = {
+        id: Date.now(),
+        prompt: prompt,
+        preset: selectedPreset,
+        duration: document.getElementById('duration').value,
+        quality: document.getElementById('quality').value,
+        fps: document.getElementById('fps').value,
+        status: 'pending'
+      };
+      
+      batchQueue.push(batchItem);
+      document.getElementById('batchCount').textContent = batchQueue.length;
+      document.getElementById('queueCount').textContent = batchQueue.length;
+      updateStats();
+      saveQueue();
+      
+      showNotification('➕ Added to batch queue', 'success');
+      
+      // Clear prompt for next item
+      document.getElementById('prompt').value = '';
+    }
+    
+    async function generateBatch() {
+      if (batchQueue.length === 0) {
+        alert('Batch queue is empty');
+        return;
+      }
+      
+      showNotification(`🔄 Processing ${batchQueue.length} videos...`, 'info');
+      
+      for (let i = 0; i < batchQueue.length; i++) {
+        const item = batchQueue[i];
+        document.getElementById('prompt').value = item.prompt;
+        document.getElementById('duration').value = item.duration;
+        document.getElementById('quality').value = item.quality;
+        document.getElementById('fps').value = item.fps;
+        selectedPreset = item.preset;
+        
+        await generateVideo();
+      }
+      
+      clearQueue();
+      showNotification('✅ Batch generation complete!', 'success');
+    }
+    
+    function displayQueue() {
+      const queueList = document.getElementById('queueList');
+      
+      if (batchQueue.length === 0) {
+        queueList.innerHTML = '<div style="text-align: center; color: #666; padding: 60px;">Queue is empty. Add videos to generate!</div>';
+        return;
+      }
+      
+      queueList.innerHTML = batchQueue.map((item, index) => `
+        <div class="queue-item" style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex: 1;">
+              <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">${sanitize(item.preset)} - ${sanitize(item.quality)}p @ ${sanitize(item.fps)}fps</div>
+              <div style="color: #666; font-size: 14px;">${sanitize(item.prompt.substring(0, 60))}...</div>
+            </div>
+            <button class="btn-secondary" onclick="removeFromQueue(${index})" style="padding: 8px 12px;">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function removeFromQueue(index) {
+      batchQueue.splice(index, 1);
+      document.getElementById('batchCount').textContent = batchQueue.length;
+      document.getElementById('queueCount').textContent = batchQueue.length;
+      displayQueue();
+      updateStats();
+      saveQueue();
+    }
+    
+    function clearQueue() {
+      batchQueue = [];
+      document.getElementById('batchCount').textContent = '0';
+      document.getElementById('queueCount').textContent = '0';
+      displayQueue();
+      updateStats();
+      saveQueue();
+    }
+    
+    // History Management
+    function displayHistory() {
+      const historyList = document.getElementById('historyList');
+      
+      if (generationHistory.length === 0) {
+        historyList.innerHTML = '<div style="text-align: center; color: #666; padding: 60px;">No generation history yet</div>';
+        return;
+      }
+      
+      historyList.innerHTML = generationHistory.map((video, index) => `
+        <div class="video-card" style="margin-bottom: 16px; display: flex; gap: 16px; padding: 16px;">
+          <img src="${video.thumbnail}" alt="Thumbnail" style="width: 160px; height: 90px; object-fit: cover; border-radius: 8px; background: #000;">
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px;">${sanitize(video.preset)} • ${sanitize(video.quality)}p • ${sanitize(video.duration)}s</div>
+                <div style="color: #666; font-size: 13px; margin-bottom: 8px;">${sanitize(video.prompt.substring(0, 100))}...</div>
+                <div style="color: #555; font-size: 12px;">Generated ${new Date(video.timestamp).toLocaleString()} • ${video.generationTime}s</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <button class="btn-secondary" onclick="downloadVideoFromHistory(${index})" style="padding: 6px 12px; font-size: 13px;">📥 Download</button>
+              <button class="btn-secondary" onclick="toggleFavorite(${index})" style="padding: 6px 12px; font-size: 13px;">${video.favorite ? '⭐' : '☆'} Favorite</button>
+              <button class="btn-secondary" onclick="shareVideo(${index})" style="padding: 6px 12px; font-size: 13px;">🔗 Share</button>
+              <button class="btn-secondary" onclick="deleteFromHistory(${index})" style="padding: 6px 12px; font-size: 13px;">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function downloadVideoFromHistory(index) {
+      const video = generationHistory[index];
+      const a = document.createElement('a');
+      a.href = video.url;
+      a.download = `hootner-${video.preset}-${Date.now()}.mp4`;
+      a.click();
+      showNotification('📥 Downloading video...', 'info');
+    }
+    
+    function toggleFavorite(index) {
+      generationHistory[index].favorite = !generationHistory[index].favorite;
+      saveHistory();
+      displayHistory();
+      showNotification(generationHistory[index].favorite ? '⭐ Added to favorites' : '☆ Removed from favorites', 'info');
+    }
+    
+    function shareVideo(index) {
+      const video = generationHistory[index];
+      const shareUrl = video.url;
+      navigator.clipboard.writeText(shareUrl);
+      showNotification('🔗 Link copied to clipboard!', 'success');
+    }
+    
+    function deleteFromHistory(index) {
+      if (confirm('Delete this video from history?')) {
+        generationHistory.splice(index, 1);
+        saveHistory();
+        displayHistory();
+        updateStats();
+        showNotification('🗑️ Deleted from history', 'info');
+      }
+    }
+    
+    function exportHistory() {
+      const dataStr = JSON.stringify(generationHistory, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hootner-history-${Date.now()}.json`;
+      a.click();
+      showNotification('📥 History exported!', 'success');
+    }
+    
+    // Gallery Management
+    function loadGallery() {
+      const galleryGrid = document.getElementById('galleryGrid');
+      
+      if (galleryVideos.length === 0) {
+        galleryGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #666; padding: 60px;">No videos in gallery yet. Generate your first video!</div>';
+        return;
+      }
+      
+      galleryGrid.innerHTML = galleryVideos.map((video, index) => `
+        <div class="video-card">
+          <div style="position: relative; padding-bottom: 56.25%; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
+            <img src="${video.thumbnail}" alt="Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; top: 8px; right: 8px;">
+              <span class="badge" style="background: rgba(0, 0, 0, 0.8);">${video.quality}p</span>
+            </div>
+            ${video.favorite ? '<div style="position: absolute; top: 8px; left: 8px;"><span class="badge" style="background: rgba(255, 215, 0, 0.9); color: #000;">⭐</span></div>' : ''}
+          </div>
+          <div style="color: #00ff00; font-weight: 600; margin-bottom: 4px; font-size: 14px;">${sanitize(video.preset)}</div>
+          <div style="color: #666; font-size: 12px; margin-bottom: 8px;">${sanitize(video.prompt.substring(0, 50))}...</div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-secondary" onclick="playVideo('${video.url}')" style="flex: 1; padding: 6px; font-size: 12px;">▶️ Play</button>
+            <button class="btn-secondary" onclick="downloadVideoFromHistory(${index})" style="padding: 6px; font-size: 12px;">📥</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function filterGallery(filter) {
+      if (filter === 'favorites') {
+        galleryVideos = generationHistory.filter(v => v.favorite);
+      } else {
+        galleryVideos = [...generationHistory];
+      }
+      loadGallery();
+    }
+    
+    function sortGallery() {
+      galleryVideos.reverse();
+      loadGallery();
+    }
+    
+    function playVideo(url) {
+      window.open(url, '_blank');
+    }
+    
+    // Storage
+    function saveHistory() {
+      localStorage.setItem('hootner_video_history', JSON.stringify(generationHistory));
+    }
+    
+    function loadHistory() {
+      const saved = localStorage.getItem('hootner_video_history');
+      if (saved) {
+        try {
+          generationHistory = JSON.parse(saved);
+        } catch (e) {
+          generationHistory = [];
+        }
+      }
+    }
+    
+    function saveGallery() {
+      galleryVideos = [...generationHistory];
+    }
+
+    function saveQueue() {
+      localStorage.setItem('hootner_video_queue', JSON.stringify(batchQueue));
+    }
+
+    function loadQueue() {
+      const saved = localStorage.getItem('hootner_video_queue');
+      if (saved) {
+        try {
+          batchQueue = JSON.parse(saved);
+          document.getElementById('batchCount').textContent = batchQueue.length;
+          document.getElementById('queueCount').textContent = batchQueue.length;
+          displayQueue();
+        } catch (e) {
+          batchQueue = [];
+        }
+      }
+    }
+    
+    // Stats
+    function updateStats() {
+      document.getElementById('statsTotal').textContent = generationHistory.length;
+      document.getElementById('statsQueue').textContent = batchQueue.length;
+      
+      const totalTime = generationHistory.reduce((sum, v) => sum + (v.generationTime || 0), 0);
+      const minutes = Math.floor(totalTime / 60);
+      document.getElementById('statsTime').textContent = minutes + 'm';
+    }
+    
+    // Notifications
+    function showNotification(message, type = 'info') {
+      const colors = {
+        success: '#00ff00',
+        error: '#ff0000',
+        warning: '#ffff00',
+        info: '#00ffff'
+      };
+      
+      const notification = document.createElement('div');
+      notification.style = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.95);
+        color: ${colors[type]};
+        padding: 16px 24px;
+        border-radius: 12px;
+        border: 2px solid ${colors[type]};
+        box-shadow: 0 0 20px ${colors[type]}40;
+        z-index: 10001;
+        animation: slideIn 0.3s ease-out;
+        font-weight: 600;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initVideoGenerator);
+  </script>
+</body>
+</html>< a   h r e f = " d a s h b o a r d . h t m l " > D a s h b o a r d < / a >    
+ 

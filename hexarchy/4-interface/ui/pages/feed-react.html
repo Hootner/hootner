@@ -1,0 +1,2112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Session Revocation System -->
+  <script src="../assets/security/session-revocation.js"></script>
+  
+  <link rel="stylesheet" href="shared-styles.css" />
+  <title>🦉 Social Feed - Hootner (React)</title>
+  <link rel="stylesheet" href="/tailwind-output.css">
+  <script src="./config.js"></script>
+  <script src="./asset-loader.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --neon-green: #00ff41;
+      --neon-cyan: #00ffff;
+      --neon-magenta: #ff00ff;
+      --neon-yellow: #ffff00;
+      --text-primary: #00ff41;
+      --text-secondary: #00ffff;
+      --bg-dark: #0a0a0f;
+    }
+
+    body {
+      background: #0a0a0f;
+      color: #00ff41;
+      font-family:
+        'Inter',
+        system-ui,
+        -apple-system,
+        sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      height: 80px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .main-content {
+      margin-top: 80px;
+      padding: 20px;
+    }
+
+    /* Video Modal Styles */
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .video-modal-content {
+      width: 100%;
+      max-width: 1400px;
+      background: rgba(10, 10, 15, 0.95);
+      border: 2px solid rgba(0, 255, 65, 0.3);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .video-player-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    .video-player-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Watch Party Badge */
+    .watch-party-badge {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <script src="feed-react-config.js"></script>
+</head>
+
+<body>
+  <nav class="bg-slate-900 border-b border-slate-700">
+    <div style="
+          padding: 12px 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
+      <div style="display: flex; align-items: center; gap: 24px">
+        <a href="dashboard.html" style="
+              font-size: 24px;
+              font-weight: bold;
+              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              text-decoration: none;
+            ">🦉 HOOTNER</a>
+        <div style="position: relative">
+          <span style="
+                color: #00ffff;
+                cursor: pointer;
+                font-size: 20px;
+                padding: 8px;
+                position: relative;
+                display: inline-block;
+              ">
+            🔔
+            <span style="
+                  position: absolute;
+                  top: -2px;
+                  right: 2px;
+                  background: #ef4444;
+                  color: white;
+                  border-radius: 50%;
+                  width: 16px;
+                  height: 16px;
+                  font-size: 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                ">3</span>
+          </span>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <a href="dashboard.html" style="font-size: 16px; text-decoration: none; padding: 12px 16px"
+          class="text-green-400 font-medium">← Back to Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div id="root"></div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ============================================================================
+    // Backend API Integration
+    // ============================================================================
+
+    // Fetch video from backend
+    const fetchVideo = async (videoId) => {
+      try {
+        const response = await fetch(`${API_CONFIG.VIDEO_API}/api/video/${videoId}`);
+        return await response.json();
+      } catch (error) {
+        console.error('Failed to fetch video:', error);
+        return null;
+      }
+    };
+
+    // Generate video using AI
+    const generateVideo = async (prompt, options = {}) => {
+      try {
+        const response = await fetch(`${API_CONFIG.VIDEO_API}/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt,
+            num_frames: options.numFrames || 24,
+            format: 'mp4',
+            ...options
+          })
+        });
+        return await response.json();
+      } catch (error) {
+        console.error('Failed to generate video:', error);
+        return null;
+      }
+    };
+
+    // Track analytics event
+    const trackEvent = async (videoId, eventType, data = {}) => {
+      try {
+        await fetch(`${API_CONFIG.ANALYTICS_API}/track`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: localStorage.getItem('session_id') || generateSessionId(),
+            video_id: videoId,
+            event_type: eventType,
+            timestamp: Date.now(),
+            data
+          })
+        });
+      } catch (error) {
+        console.error('Failed to track event:', error);
+      }
+    };
+
+    // Get video analytics
+    const getVideoAnalytics = async (videoId) => {
+      try {
+        const response = await fetch(`${API_CONFIG.ANALYTICS_API}/${videoId}`);
+        return await response.json();
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error);
+        return null;
+      }
+    };
+
+    // Generate session ID
+    const generateSessionId = () => {
+      const id = 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('session_id', id);
+      return id;
+    };
+
+    // ============================================================================
+    // Toast Notification Component
+    // ============================================================================
+    const Toast = ({ message, type, onClose }) => {
+      useEffect(() => {
+        const timer = setTimeout(onClose, 3000);
+        return () => clearTimeout(timer);
+      }, [onClose]);
+
+      const bgColors = {
+        success: 'linear-gradient(135deg, #00ff41, #00ffff)',
+        error: 'linear-gradient(135deg, #ff0055, #ff00ff)',
+        info: 'linear-gradient(135deg, #00ffff, #0099ff)'
+      };
+
+      return (
+        <div style={{
+          position: 'fixed',
+          top: '100px',
+          right: '24px',
+          background: bgColors[type] || bgColors.info,
+          color: '#000',
+          padding: '16px 24px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 20px rgba(0,255,65,0.4)',
+          zIndex: 2000,
+          fontSize: '14px',
+          fontWeight: 'bold',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          animation: 'slideIn 0.3s ease-out'
+        }}>
+          {message}
+          <button onClick={onClose} style={{
+            background: 'rgba(0,0,0,0.2)',
+            border: 'none',
+            color: '#000',
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            fontSize: '12px'
+          }}>
+            ✕
+          </button>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // Stories Component
+    // ============================================================================
+    const Stories = () => {
+      const stories = [
+        { id: 1, user: 'You', avatar: '🦉', hasStory: true, isLive: false },
+        { id: 2, user: 'TechGuru', avatar: '👨‍💻', hasStory: true, isLive: true },
+        { id: 3, user: 'VideoCreator', avatar: '🎬', hasStory: true, isLive: false },
+        { id: 4, user: 'Musician', avatar: '🎵', hasStory: true, isLive: false },
+        { id: 5, user: 'Designer', avatar: '🎨', hasStory: true, isLive: false },
+      ];
+
+      return (
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          padding: '20px',
+          background: 'rgba(10,10,15,0.8)',
+          borderRadius: '12px',
+          border: '1px solid rgba(0,255,65,0.3)',
+          marginBottom: '24px',
+          overflowX: 'auto'
+        }}>
+          {stories.map(story => (
+            <div key={story.id} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              cursor: 'pointer',
+              minWidth: '80px'
+            }}>
+              <div style={{
+                width: '70px',
+                height: '70px',
+                borderRadius: '50%',
+                background: story.hasStory
+                  ? 'linear-gradient(135deg, #ff00ff, #00ffff)'
+                  : 'rgba(100,100,100,0.3)',
+                padding: '3px',
+                position: 'relative'
+              }}>
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  background: '#0a0a0f',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '28px'
+                }}>
+                  {story.avatar}
+                </div>
+                {story.isLive && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#ef4444',
+                    color: 'white',
+                    fontSize: '10px',
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    fontWeight: 'bold'
+                  }}>
+                    LIVE
+                  </div>
+                )}
+              </div>
+              <span style={{
+                fontSize: '12px',
+                color: '#00ffff',
+                textAlign: 'center'
+              }}>
+                {story.user}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // Create Post Component
+    // ============================================================================
+    const CreatePost = ({ onPost }) => {
+      const [content, setContent] = useState('');
+      const [mediaType, setMediaType] = useState(null);
+      const [showPoll, setShowPoll] = useState(false);
+      const [pollOptions, setPollOptions] = useState(['', '']);
+      const [isLive, setIsLive] = useState(false);
+
+      const handlePost = () => {
+        if (content.trim()) {
+          onPost({ content, mediaType });
+          setContent('');
+          setMediaType(null);
+        }
+      };
+
+      return (
+        <div style={{
+          background: 'rgba(10,10,15,0.8)',
+          borderRadius: '12px',
+          border: '2px solid rgba(0,255,65,0.3)',
+          padding: '24px',
+          marginBottom: '24px',
+          boxShadow: '0 0 20px rgba(0,255,65,0.3)'
+        }}>
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            marginBottom: '16px'
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              background: 'linear-gradient(135deg,#00ff41,#00ffff)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px'
+            }}>
+              🦉
+            </div>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="What's happening in the Hootner universe?"
+              style={{
+                flex: 1,
+                background: 'rgba(0,0,0,0.3)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                borderRadius: '8px',
+                padding: '12px',
+                color: '#00ffff',
+                fontSize: '14px',
+                resize: 'none',
+                minHeight: '80px'
+              }}
+            />
+          </div>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{
+                background: 'rgba(0,255,255,0.1)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                color: '#00ffff',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                🎬 Video
+              </button>
+              <button style={{
+                background: 'rgba(0,255,255,0.1)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                color: '#00ffff',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                📷 Photo
+              </button>
+              <button style={{
+                background: 'rgba(0,255,255,0.1)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                color: '#00ffff',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                🎵 Audio
+              </button>
+              <button style={{
+                background: 'rgba(255,215,0,0.1)',
+                border: '1px solid rgba(255,215,0,0.3)',
+                color: '#ffd700',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                📊 Poll
+              </button>
+              <button style={{
+                background: 'rgba(255,0,0,0.1)',
+                border: '1px solid rgba(255,0,0,0.5)',
+                color: '#ff0000',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold'
+              }}>
+                🔴 Live
+              </button>
+            </div>
+            <button
+              onClick={handlePost}
+              style={{
+                background: content.trim()
+                  ? 'linear-gradient(135deg, #00ff41, #00ffff)'
+                  : 'rgba(100,100,100,0.3)',
+                border: 'none',
+                color: '#000',
+                padding: '10px 24px',
+                borderRadius: '8px',
+                cursor: content.trim() ? 'pointer' : 'not-allowed',
+                fontSize: '14px',
+                fontWeight: 'bold'
+              }}
+              disabled={!content.trim()}
+            >
+              Post
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // AI Video Generation Modal
+    // ============================================================================
+    const AIVideoModal = ({ isOpen, onClose, onGenerate }) => {
+      const [prompt, setPrompt] = useState('');
+      const [generating, setGenerating] = useState(false);
+      const [progress, setProgress] = useState(0);
+      const [videoStyle, setVideoStyle] = useState('cinematic');
+      const [effects, setEffects] = useState([]);
+      const [soundTrack, setSoundTrack] = useState('none');
+      const [duration, setDuration] = useState(15);
+
+      const handleGenerate = async () => {
+        if (!prompt.trim()) return;
+
+        setGenerating(true);
+        setProgress(0);
+
+        const progressInterval = setInterval(() => {
+          setProgress(prev => prev >= 90 ? 90 : prev + 10);
+        }, 500);
+
+        const result = await generateVideo(prompt, { num_frames: 24 });
+
+        clearInterval(progressInterval);
+        setProgress(100);
+
+        if (result && result.job_id) {
+          setTimeout(() => {
+            onGenerate({
+              videoId: result.job_id,
+              prompt,
+              url: result.download_url || `/api/video/stream/${result.job_id}.mp4`,
+              isHDR: true,
+              duration: '0:24'
+            });
+            setGenerating(false);
+            setPrompt('');
+            onClose();
+          }, 1000);
+        } else {
+          setGenerating(false);
+          alert('Video generation failed. Check if backend is running.');
+        }
+      };
+
+      if (!isOpen) return null;
+
+      return (
+        <div className="video-modal" onClick={onClose}>
+          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '600px', padding: '32px' }}>
+            <h2 style={{ color: '#00ff41', fontSize: '24px', marginBottom: '20px' }}>
+              🎬 Generate AI Video
+            </h2>
+            <textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe your video (e.g., 'A robot dancing in space with neon lights')"
+              disabled={generating}
+              style={{
+                width: '100%',
+                background: 'rgba(0,0,0,0.3)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                borderRadius: '12px',
+                padding: '16px',
+                color: '#00ffff',
+                fontSize: '14px',
+                minHeight: '100px',
+                marginBottom: '16px'
+              }}
+            />
+
+            {/* Video Style Selector */}
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ color: '#00ffff', fontSize: '12px', marginBottom: '8px', display: 'block' }}>Style:</label>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['cinematic', 'anime', 'realistic', '3D', 'cyberpunk', 'retro'].map(style => (
+                  <button
+                    key={style}
+                    onClick={() => setVideoStyle(style)}
+                    disabled={generating}
+                    style={{
+                      background: videoStyle === style ? 'linear-gradient(135deg, #00ff41, #00ffff)' : 'rgba(0,255,255,0.1)',
+                      border: '1px solid rgba(0,255,255,0.3)',
+                      color: videoStyle === style ? '#000' : '#00ffff',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      cursor: generating ? 'not-allowed' : 'pointer',
+                      fontSize: '12px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {style}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Effects Selector */}
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ color: '#00ffff', fontSize: '12px', marginBottom: '8px', display: 'block' }}>Effects:</label>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['slow-mo', 'time-lapse', 'glitch', 'neon-glow', 'particles', 'lens-flare'].map(effect => (
+                  <button
+                    key={effect}
+                    onClick={() => {
+                      setEffects(prev =>
+                        prev.includes(effect) ? prev.filter(e => e !== effect) : [...prev, effect]
+                      );
+                    }}
+                    disabled={generating}
+                    style={{
+                      background: effects.includes(effect) ? 'linear-gradient(135deg, #ff00ff, #00ffff)' : 'rgba(255,0,255,0.1)',
+                      border: '1px solid rgba(255,0,255,0.3)',
+                      color: effects.includes(effect) ? '#fff' : '#ff00ff',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      cursor: generating ? 'not-allowed' : 'pointer',
+                      fontSize: '12px'
+                    }}
+                  >
+                    {effect}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Duration & Sound */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+              <div>
+                <label style={{ color: '#00ffff', fontSize: '12px', marginBottom: '8px', display: 'block' }}>Duration:</label>
+                <select
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  disabled={generating}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(0,255,255,0.3)',
+                    color: '#00ffff',
+                    padding: '8px',
+                    borderRadius: '8px',
+                    fontSize: '12px'
+                  }}
+                >
+                  <option value={5}>5 seconds</option>
+                  <option value={10}>10 seconds</option>
+                  <option value={15}>15 seconds</option>
+                  <option value={30}>30 seconds</option>
+                  <option value={60}>60 seconds</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ color: '#00ffff', fontSize: '12px', marginBottom: '8px', display: 'block' }}>Soundtrack:</label>
+                <select
+                  value={soundTrack}
+                  onChange={(e) => setSoundTrack(e.target.value)}
+                  disabled={generating}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(0,255,255,0.3)',
+                    color: '#00ffff',
+                    padding: '8px',
+                    borderRadius: '8px',
+                    fontSize: '12px'
+                  }}
+                >
+                  <option value="none">None</option>
+                  <option value="epic">Epic 🎵</option>
+                  <option value="chill">Chill 🎶</option>
+                  <option value="upbeat">Upbeat 🎸</option>
+                  <option value="dramatic">Dramatic 🎻</option>
+                  <option value="electronic">Electronic 🎹</option>
+                </select>
+              </div>
+            </div>
+            {generating && (
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ color: '#00ffff', marginBottom: '8px' }}>
+                  Generating: {progress}%
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '4px', height: '8px' }}>
+                  <div style={{
+                    width: `${progress}%`,
+                    height: '100%',
+                    background: 'linear-gradient(90deg, #00ff41, #00ffff)',
+                    transition: 'width 0.3s'
+                  }} />
+                </div>
+              </div>
+            )}
+            <button
+              onClick={handleGenerate}
+              disabled={!prompt.trim() || generating}
+              style={{
+                width: '100%',
+                background: prompt.trim() && !generating
+                  ? 'linear-gradient(135deg, #00ff41, #00ffff)'
+                  : 'rgba(100,100,100,0.3)',
+                border: 'none',
+                color: '#000',
+                padding: '14px',
+                borderRadius: '12px',
+                cursor: prompt.trim() && !generating ? 'pointer' : 'not-allowed',
+                fontSize: '16px',
+                fontWeight: 'bold'
+              }}
+            >
+              {generating ? '⚡ Generating...' : '🎬 Generate Video'}
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // Video Player Modal with Watch Party
+    // ============================================================================
+    const VideoPlayerModal = ({ isOpen, video, onClose }) => {
+      const videoRef = useRef(null);
+      const [analytics, setAnalytics] = useState(null);
+      const [watchPartyActive, setWatchPartyActive] = useState(false);
+      const [participants, setParticipants] = useState(0);
+      const [quality, setQuality] = useState('8K');
+
+      useEffect(() => {
+        if (isOpen && video) {
+          trackEvent(video.videoId, 'view', { source: 'social_feed' });
+
+          // Fetch analytics
+          getVideoAnalytics(video.videoId).then(data => {
+            if (data) setAnalytics(data);
+          });
+        }
+      }, [isOpen, video]);
+
+      const startWatchParty = () => {
+        setWatchPartyActive(true);
+        setParticipants(1);
+        alert('🎉 Watch Party started! Share this link with friends.');
+      };
+
+      if (!isOpen || !video) return null;
+
+      return (
+        <div className="video-modal" onClick={onClose}>
+          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="video-player-container">
+              <video
+                ref={videoRef}
+                src={`${API_CONFIG.VIDEO_API}${video.url}`}
+                controls
+                autoPlay
+                onPlay={() => trackEvent(video.videoId, 'play', {})}
+                onPause={() => trackEvent(video.videoId, 'pause', {})}
+              />
+
+              {/* Quality Badge */}
+              <div style={{
+                position: 'absolute',
+                top: '16px',
+                left: '16px',
+                background: 'linear-gradient(135deg, #00ff00, #00ffff)',
+                color: '#000',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}>
+                {quality} HDR10
+              </div>
+
+              {/* Watch Party Badge */}
+              {watchPartyActive && (
+                <div className="watch-party-badge" style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '120px',
+                  background: 'linear-gradient(135deg, #ff00ff, #00ffff)',
+                  color: '#fff',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  🎉 {participants} watching
+                </div>
+              )}
+
+              {/* Close Button */}
+              <button onClick={onClose} style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'rgba(0,0,0,0.8)',
+                border: '1px solid #fff',
+                color: '#fff',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                fontSize: '20px'
+              }}>
+                ✕
+              </button>
+
+              {/* Analytics Overlay */}
+              {analytics && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: '60px',
+                  right: '16px',
+                  background: 'rgba(0,0,0,0.8)',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  color: '#00ffff',
+                  border: '1px solid rgba(0,255,255,0.3)'
+                }}>
+                  <div>👁️ {analytics.views || 0} views</div>
+                  <div>❤️ {analytics.likes || 0} likes</div>
+                  <div>💬 {analytics.comments || 0} comments</div>
+                </div>
+              )}
+            </div>
+
+            {/* Video Info & Controls */}
+            <div style={{ padding: '24px' }}>
+              <h3 style={{ color: '#00ff41', fontSize: '18px', marginBottom: '8px' }}>
+                {video.prompt || 'AI Generated Video'}
+              </h3>
+              <p style={{ color: '#888', fontSize: '14px', marginBottom: '16px' }}>
+                Generated with 3D U-Net • HDR10 • Dolby Atmos 7.1.4
+              </p>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                <button
+                  onClick={startWatchParty}
+                  disabled={watchPartyActive}
+                  style={{
+                    flex: 1,
+                    background: watchPartyActive
+                      ? 'rgba(100,100,100,0.3)'
+                      : 'linear-gradient(135deg, #ff00ff, #00ffff)',
+                    border: 'none',
+                    color: watchPartyActive ? '#666' : '#000',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    cursor: watchPartyActive ? 'not-allowed' : 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {watchPartyActive ? '🎉 Watch Party Active' : '🎉 Start Watch Party'}
+                </button>
+
+                <select
+                  value={quality}
+                  onChange={(e) => setQuality(e.target.value)}
+                  style={{
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(0,255,255,0.3)',
+                    color: '#00ffff',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  <option value="8K">8K UHD</option>
+                  <option value="4K">4K UHD</option>
+                  <option value="1080p">1080p</option>
+                  <option value="720p">720p</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // Post Card with Video Support
+    // ============================================================================
+    const PostCard = ({ post, onLike, onComment, onShare, onSave, onVideoClick, onQuote, onDuet }) => {
+      const [showComments, setShowComments] = useState(false);
+      const [commentText, setCommentText] = useState('');
+      const [comments, setComments] = useState(post.comments || []);
+
+      const handleAddComment = () => {
+        if (commentText.trim()) {
+          const newComment = {
+            id: Date.now(),
+            author: 'You',
+            avatar: '🦉',
+            content: commentText,
+            time: 'Just now',
+            likes: 0
+          };
+          setComments([...comments, newComment]);
+          setCommentText('');
+          onComment(post.id, newComment);
+        }
+      };
+
+      return (
+        <article style={{
+          background: 'rgba(10,10,15,0.8)',
+          borderRadius: '12px',
+          border: '2px solid rgba(0,255,65,0.3)',
+          padding: '24px',
+          marginBottom: '24px',
+          boxShadow: '0 0 20px rgba(0,255,65,0.3)'
+        }}>
+          {/* Post Header */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '16px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(135deg,#00ff41,#00ffff)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>
+                {post.avatar}
+              </div>
+              <div>
+                <div style={{
+                  fontWeight: 600,
+                  color: '#00ff41',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  {post.author}
+                  {post.verified && <span style={{ color: '#00ffff' }}>✓</span>}
+                </div>
+                <div style={{ fontSize: '13px', color: '#888' }}>
+                  {post.time} • {post.visibility || '🌍 Public'}
+                </div>
+              </div>
+            </div>
+            <button style={{
+              background: 'none',
+              border: 'none',
+              color: '#00ffff',
+              cursor: 'pointer',
+              fontSize: '20px'
+            }}>
+              ⋯
+            </button>
+          </div>
+
+          {/* Post Content */}
+          <p style={{
+            color: '#00ffff',
+            marginBottom: '16px',
+            fontSize: '15px',
+            lineHeight: '1.6'
+          }}>
+            {post.content}
+          </p>
+
+          {/* Video/Image Media */}
+          {post.mediaType === 'video' && (
+            <div style={{
+              position: 'relative',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              marginBottom: '16px',
+              background: '#000',
+              aspectRatio: '16/9',
+              cursor: 'pointer'
+            }}
+              onClick={() => onVideoClick && onVideoClick(post)}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, rgba(0,255,65,0.1), rgba(0,255,255,0.1))'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(0,255,255,0.2)',
+                  border: '3px solid #00ffff',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: '32px'
+                }}>
+                  ▶️
+                </div>
+              </div>
+              <div style={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '12px',
+                background: 'rgba(0,0,0,0.8)',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '12px',
+                color: '#fff'
+              }}>
+                {post.duration || '2:45'}
+              </div>
+              {post.isHDR && (
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  left: '12px',
+                  background: 'linear-gradient(135deg, #00ff00, #00ffff)',
+                  color: '#000',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: 'bold'
+                }}>
+                  8K HDR10
+                </div>
+              )}
+            </div>
+          )}
+
+          {post.mediaType === 'image' && (
+            <div style={{
+              borderRadius: '12px',
+              overflow: 'hidden',
+              marginBottom: '16px',
+              background: 'linear-gradient(135deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1))',
+              aspectRatio: '16/9',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '48px'
+            }}>
+              🖼️
+            </div>
+          )}
+
+          {/* Engagement Stats */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 0',
+            borderTop: '1px solid rgba(0,255,255,0.1)',
+            borderBottom: '1px solid rgba(0,255,255,0.1)',
+            marginBottom: '12px',
+            fontSize: '13px',
+            color: '#888'
+          }}>
+            <span>{post.likes.toLocaleString()} likes</span>
+            <span>{comments.length} comments • {post.shares} shares</span>
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            marginBottom: '16px'
+          }}>
+            {/* Multi-Reaction Button */}
+            <div style={{ position: 'relative', flex: 1 }}>
+              <button
+                onMouseEnter={() => {
+                  const picker = document.getElementById(`reactions-${post.id}`);
+                  if (picker) picker.style.display = 'flex';
+                }}
+                onClick={() => onLike(post.id)}
+                style={{
+                  width: '100%',
+                  background: post.liked ? 'rgba(255,0,255,0.2)' : 'rgba(0,255,255,0.1)',
+                  border: '1px solid ' + (post.liked ? '#ff00ff' : 'rgba(0,255,255,0.3)'),
+                  color: post.liked ? '#ff00ff' : '#00ffff',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {post.reaction || (post.liked ? '💖' : '❤️')} Like
+              </button>
+              {/* Reaction Picker */}
+              <div
+                id={`reactions-${post.id}`}
+                onMouseLeave={() => {
+                  const picker = document.getElementById(`reactions-${post.id}`);
+                  if (picker) picker.style.display = 'none';
+                }}
+                style={{
+                  position: 'absolute',
+                  bottom: '50px',
+                  left: '0',
+                  display: 'none',
+                  gap: '8px',
+                  background: 'rgba(0,0,0,0.95)',
+                  padding: '12px 16px',
+                  borderRadius: '30px',
+                  border: '2px solid rgba(0,255,255,0.5)',
+                  boxShadow: '0 8px 30px rgba(0,255,65,0.6)',
+                  zIndex: 100
+                }}
+              >
+                {['❤️', '😂', '😮', '😢', '😡', '🔥', '💯'].map(emoji => (
+                  <button
+                    key={emoji}
+                    onClick={() => onLike(post.id, emoji)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '28px',
+                      cursor: 'pointer',
+                      transform: 'scale(1)',
+                      transition: 'transform 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.4)'}
+                    onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={() => setShowComments(!showComments)}
+              style={{
+                flex: 1,
+                background: 'rgba(0,255,255,0.1)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                color: '#00ffff',
+                padding: '10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              💬 Comment
+            </button>
+            <button
+              onClick={() => onShare(post.id)}
+              style={{
+                flex: 1,
+                background: 'rgba(0,255,255,0.1)',
+                border: '1px solid rgba(0,255,255,0.3)',
+                color: '#00ffff',
+                padding: '10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              🔗 Share
+            </button>
+            <button
+              onClick={() => onSave(post.id)}
+              style={{
+                background: post.saved
+                  ? 'rgba(0,255,0,0.2)'
+                  : 'rgba(0,255,255,0.1)',
+                border: '1px solid ' + (post.saved ? '#00ff00' : 'rgba(0,255,255,0.3)'),
+                color: post.saved ? '#00ff00' : '#00ffff',
+                padding: '10px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              {post.saved ? '✅' : '🔖'}
+            </button>
+          </div>
+
+          {/* Advanced Actions Row */}
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            marginBottom: '16px'
+          }}>
+            <button
+              onClick={() => onQuote && onQuote(post)}
+              style={{
+                flex: 1,
+                background: 'rgba(0,255,255,0.05)',
+                border: '1px solid rgba(0,255,255,0.2)',
+                color: '#00ffff',
+                padding: '8px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '500'
+              }}
+            >
+              💬 Quote Post
+            </button>
+            {post.mediaType === 'video' && (
+              <>
+                <button
+                  onClick={() => onDuet && onDuet(post)}
+                  style={{
+                    flex: 1,
+                    background: 'rgba(255,0,255,0.05)',
+                    border: '1px solid rgba(255,0,255,0.2)',
+                    color: '#ff00ff',
+                    padding: '8px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500'
+                  }}
+                >
+                  🎭 Duet
+                </button>
+                <button
+                  style={{
+                    flex: 1,
+                    background: 'rgba(255,215,0,0.05)',
+                    border: '1px solid rgba(255,215,0,0.2)',
+                    color: '#ffd700',
+                    padding: '8px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500'
+                  }}
+                >
+                  💸 Tip Creator
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Comments Section */}
+          {showComments && (
+            <div style={{
+              marginTop: '16px',
+              paddingTop: '16px',
+              borderTop: '1px solid rgba(0,255,255,0.1)'
+            }}>
+              {/* Comment Input */}
+              <div style={{
+                display: 'flex',
+                gap: '12px',
+                marginBottom: '16px'
+              }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  background: 'linear-gradient(135deg,#00ff41,#00ffff)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px'
+                }}>
+                  🦉
+                </div>
+                <div style={{ flex: 1, display: 'flex', gap: '8px' }}>
+                  <input
+                    type="text"
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
+                    placeholder="Add a comment..."
+                    style={{
+                      flex: 1,
+                      background: 'rgba(0,0,0,0.3)',
+                      border: '1px solid rgba(0,255,255,0.3)',
+                      borderRadius: '20px',
+                      padding: '8px 16px',
+                      color: '#00ffff',
+                      fontSize: '13px'
+                    }}
+                  />
+                  <button
+                    onClick={handleAddComment}
+                    style={{
+                      background: commentText.trim()
+                        ? 'linear-gradient(135deg, #00ff41, #00ffff)'
+                        : 'rgba(100,100,100,0.3)',
+                      border: 'none',
+                      color: '#000',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      cursor: commentText.trim() ? 'pointer' : 'not-allowed',
+                      fontSize: '13px',
+                      fontWeight: 'bold'
+                    }}
+                    disabled={!commentText.trim()}
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+
+              {/* Comments List */}
+              {comments.map(comment => (
+                <div key={comment.id} style={{
+                  display: 'flex',
+                  gap: '12px',
+                  marginBottom: '12px'
+                }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    background: 'linear-gradient(135deg,#00ff41,#00ffff)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '18px',
+                    flexShrink: 0
+                  }}>
+                    {comment.avatar}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      background: 'rgba(0,255,255,0.05)',
+                      border: '1px solid rgba(0,255,255,0.1)',
+                      borderRadius: '12px',
+                      padding: '10px 14px'
+                    }}>
+                      <div style={{
+                        fontWeight: '600',
+                        color: '#00ff41',
+                        fontSize: '13px',
+                        marginBottom: '4px'
+                      }}>
+                        {comment.author}
+                      </div>
+                      <div style={{
+                        color: '#00ffff',
+                        fontSize: '13px',
+                        lineHeight: '1.5'
+                      }}>
+                        {comment.content}
+                      </div>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      gap: '16px',
+                      marginTop: '4px',
+                      fontSize: '12px',
+                      color: '#888'
+                    }}>
+                      <span>{comment.time}</span>
+                      <button style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#888',
+                        cursor: 'pointer',
+                        fontSize: '12px'
+                      }}>
+                        Like
+                      </button>
+                      <button style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#888',
+                        cursor: 'pointer',
+                        fontSize: '12px'
+                      }}>
+                        Reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
+      );
+    };
+
+    // ============================================================================
+    // Trending Sidebar
+    // ============================================================================
+    const TrendingSidebar = () => {
+      const trending = [
+        { tag: '#8KHDR', posts: '12.5K' },
+        { tag: '#DolbyAtmos', posts: '8.2K' },
+        { tag: '#AIVideo', posts: '15.3K' },
+        { tag: '#CinemaGrade', posts: '5.1K' },
+        { tag: '#Hootner', posts: '25.8K' },
+      ];
+
+      const suggestions = [
+        { name: 'VideoMaster', avatar: '🎬', followers: '15.2K' },
+        { name: 'CodeWizard', avatar: '👨‍💻', followers: '8.5K' },
+        { name: 'DesignPro', avatar: '🎨', followers: '12.1K' },
+      ];
+
+      return (
+        <div style={{ position: 'sticky', top: '100px' }}>
+          {/* Trending Topics */}
+          <div style={{
+            background: 'rgba(10,10,15,0.8)',
+            borderRadius: '12px',
+            border: '1px solid rgba(0,255,65,0.3)',
+            padding: '20px',
+            marginBottom: '20px'
+          }}>
+            <h3 style={{
+              color: '#00ff41',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              marginBottom: '16px'
+            }}>
+              🔥 Trending Topics
+            </h3>
+            {trending.map((item, i) => (
+              <div key={i} style={{
+                padding: '12px 0',
+                borderBottom: i < trending.length - 1 ? '1px solid rgba(0,255,255,0.1)' : 'none',
+                cursor: 'pointer'
+              }}>
+                <div style={{
+                  color: '#00ffff',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  marginBottom: '4px'
+                }}>
+                  {item.tag}
+                </div>
+                <div style={{
+                  color: '#888',
+                  fontSize: '12px'
+                }}>
+                  {item.posts} posts
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Suggested Follows */}
+          <div style={{
+            background: 'rgba(10,10,15,0.8)',
+            borderRadius: '12px',
+            border: '1px solid rgba(0,255,65,0.3)',
+            padding: '20px'
+          }}>
+            <h3 style={{
+              color: '#00ff41',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              marginBottom: '16px'
+            }}>
+              👥 Suggested Follows
+            </h3>
+            {suggestions.map((user, i) => (
+              <div key={i} style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px 0',
+                borderBottom: i < suggestions.length - 1 ? '1px solid rgba(0,255,255,0.1)' : 'none'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg,#00ff41,#00ffff)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '20px'
+                  }}>
+                    {user.avatar}
+                  </div>
+                  <div>
+                    <div style={{
+                      color: '#00ff41',
+                      fontSize: '14px',
+                      fontWeight: '600'
+                    }}>
+                      {user.name}
+                    </div>
+                    <div style={{
+                      color: '#888',
+                      fontSize: '12px'
+                    }}>
+                      {user.followers} followers
+                    </div>
+                  </div>
+                </div>
+                <button style={{
+                  background: 'rgba(0,255,255,0.1)',
+                  border: '1px solid rgba(0,255,255,0.3)',
+                  color: '#00ffff',
+                  padding: '6px 16px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600'
+                }}>
+                  Follow
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Creator Monetization */}
+          <div style={{
+            background: 'rgba(10,10,15,0.8)',
+            borderRadius: '12px',
+            border: '2px solid rgba(0,255,65,0.3)',
+            padding: '20px',
+            boxShadow: '0 0 20px rgba(0,255,65,0.2)'
+          }}>
+            <h3 style={{
+              color: '#00ff41',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              marginBottom: '12px'
+            }}>
+              💰 Creator Hub
+            </h3>
+            <div style={{ color: '#00ffff', fontSize: '13px', marginBottom: '16px' }}>
+              Monetize your content with tips, subscriptions & NFTs
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <button style={{
+                background: 'linear-gradient(135deg, #00ff41, #00ffff)',
+                border: 'none',
+                color: '#000',
+                padding: '10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 'bold'
+              }}>
+                💸 Enable Tips
+              </button>
+              <button style={{
+                background: 'linear-gradient(135deg, #ff00ff, #00ffff)',
+                border: 'none',
+                color: '#fff',
+                padding: '10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 'bold'
+              }}>
+                🎨 Mint as NFT
+              </button>
+              <button style={{
+                background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
+                border: 'none',
+                color: '#000',
+                padding: '10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 'bold'
+              }}>
+                ⭐ Start Membership
+              </button>
+            </div>
+          </div>
+
+          {/* NFT Marketplace */}
+          <div style={{
+            background: 'rgba(10,10,15,0.8)',
+            borderRadius: '12px',
+            border: '2px solid rgba(255,0,255,0.3)',
+            padding: '20px'
+          }}>
+            <h3 style={{
+              color: '#ff00ff',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              marginBottom: '16px'
+            }}>
+              🎨 Hot NFTs
+            </h3>
+            {[
+              { name: 'CyberCity #042', price: '2.5 ETH', creator: '🏙️' },
+              { name: 'AI Dream', price: '1.8 ETH', creator: '🤖' },
+              { name: 'Neon Nights', price: '3.2 ETH', creator: '🌃' }
+            ].map((nft, i) => (
+              <div key={i} style={{
+                padding: '12px',
+                borderRadius: '8px',
+                background: 'rgba(255,0,255,0.1)',
+                marginBottom: '8px',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                border: '1px solid rgba(255,0,255,0.2)'
+              }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,0,255,0.2)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,0,255,0.1)'}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ color: '#ff00ff', fontSize: '14px', fontWeight: '600' }}>
+                      {nft.creator} {nft.name}
+                    </div>
+                    <div style={{ color: '#00ffff', fontSize: '12px', marginTop: '4px' }}>
+                      {nft.price}
+                    </div>
+                  </div>
+                  <button style={{
+                    background: 'rgba(255,0,255,0.3)',
+                    border: '1px solid #ff00ff',
+                    color: '#ff00ff',
+                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '11px',
+                    fontWeight: 'bold'
+                  }}>
+                    BUY
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // Main Feed Component
+    // ============================================================================
+    const Feed = () => {
+      const [posts, setPosts] = useState([]);
+      const [showAIModal, setShowAIModal] = useState(false);
+      const [showVideoModal, setShowVideoModal] = useState(false);
+      const [selectedVideo, setSelectedVideo] = useState(null);
+      const [toast, setToast] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [page, setPage] = useState(1);
+      const [hasMore, setHasMore] = useState(true);
+      avatar: '🎬',
+        verified: true,
+          content: 'Just rendered my first 8K HDR10 video with Dolby Atmos 7.1.4! The quality is absolutely stunning! 🤩 #8KHDR #DolbyAtmos',
+            time: '2h ago',
+              visibility: '🌍 Public',
+                mediaType: 'video',
+                  isHDR: true,
+                    duration: '3:24',
+                      likes: 1247,
+                        shares: 89,
+                          liked: false,
+                            saved: false,
+                              comments: [
+                                {
+                                  id: 1,
+                                  author: 'TechEnthusiast',
+                                  avatar: '👨‍💻',
+                                  content: 'This is incredible! What specs are you using?',
+                                  time: '1h ago',
+                                  likes: 24
+                                },
+                                {
+                                  id: 2,
+                                  author: 'VideoGeek',
+                                  avatar: '🎥',
+                                  content: 'The HDR10 grading looks perfect! 🔥',
+                                  time: '45m ago',
+                                  likes: 12
+                                }
+                              ]
+    },
+      {
+        id: 2,
+        author: 'AIResearcher',
+        avatar: '🤖',
+        verified: true,
+        content: 'Working on a new AI model for real-time video upscaling. Early results show 40% improvement in quality! Stay tuned for the demo. #AIVideo #MachineLearning',
+        time: '4h ago',
+        mediaType: 'image',
+        likes: 892,
+        shares: 156,
+        liked: true,
+        saved: true,
+        comments: []
+      },
+      {
+        id: 3,
+        author: 'MusicProducer',
+        avatar: '🎵',
+        verified: false,
+        content: 'New track dropping tonight at midnight! Created entirely with spatial audio for the ultimate immersive experience 🎧✨',
+        time: '6h ago',
+        mediaType: null,
+        likes: 2341,
+        shares: 234,
+        liked: false,
+        saved: false,
+        comments: []
+      },
+      {
+        id: 4,
+        author: 'DevOpsNinja',
+        avatar: '⚙️',
+        verified: true,
+        content: 'Just deployed our new microservices architecture with zero downtime! Kubernetes + Istio makes it seamless. #DevOps #Kubernetes',
+        time: '8h ago',
+        mediaType: null,
+        likes: 567,
+        shares: 78,
+        liked: false,
+        saved: false,
+        comments: []
+      },
+      {
+        id: 5,
+        author: 'DesignMaster',
+        avatar: '🎨',
+        verified: true,
+        content: 'New UI design system complete! Check out these gradient combinations for dark mode interfaces. Pure neon aesthetics! 🌈',
+        time: '12h ago',
+        mediaType: 'image',
+        likes: 1876,
+        shares: 321,
+        liked: true,
+        saved: false,
+        comments: []
+      }
+        ];
+    setPosts(initialPosts);
+      }, []);
+
+    // Generate more posts for infinite scroll
+    const generateMorePosts = () => {
+      const creators = [
+        { name: 'TechVlogger', avatar: '📱', verified: true },
+        { name: 'GameStreamer', avatar: '🎮', verified: true },
+        { name: 'FitnessGuru', avatar: '💪', verified: false },
+        { name: 'FoodCritic', avatar: '🍔', verified: true },
+        { name: 'TravelBlogger', avatar: '✈️', verified: false },
+        { name: 'CodeMentor', avatar: '👨‍💻', verified: true },
+        { name: 'ArtistPro', avatar: '🎨', verified: false },
+        { name: 'MusicComposer', avatar: '🎼', verified: true },
+        { name: 'CryptoTrader', avatar: '₿', verified: false },
+        { name: 'AIEngineer', avatar: '🤖', verified: true }
+      ];
+
+      const contents = [
+        'Just finished an amazing project! Check out the results 🚀',
+        'New video dropping soon! Stay tuned for something special ✨',
+        'Behind the scenes of my latest work. The process is everything! 🎬',
+        'Excited to share this breakthrough with you all! 🔥',
+        'Working on something revolutionary. Can\'t wait to show you! 💡',
+        'This took weeks to perfect, but totally worth it! 🎯',
+        'Collaboration of the year! So grateful for this opportunity 🙏',
+        'Push your limits and amazing things happen! 💪',
+        'Innovation never sleeps. Here\'s what I\'ve been working on 🌟',
+        'The future is here, and it\'s incredible! 🚀'
+      ];
+
+      const mediaTypes = ['video', 'image', null, null];
+      const timeUnits = ['m', 'h', 'd'];
+
+      const newPosts = Array.from({ length: 5 }, (_, i) => {
+        const creator = creators[Math.floor(Math.random() * creators.length)];
+        const content = contents[Math.floor(Math.random() * contents.length)];
+        const mediaType = mediaTypes[Math.floor(Math.random() * mediaTypes.length)];
+        const timeValue = Math.floor(Math.random() * 20) + 1;
+        const timeUnit = timeUnits[Math.floor(Math.random() * timeUnits.length)];
+
+        return {
+          id: Date.now() + i + Math.random(),
+          author: creator.name,
+          avatar: creator.avatar,
+          verified: creator.verified,
+          content: content,
+          time: `${timeValue}${timeUnit} ago`,
+          visibility: '🌍 Public',
+          mediaType: mediaType,
+          isHDR: mediaType === 'video' ? Math.random() > 0.5 : false,
+          duration: mediaType === 'video' ? `${Math.floor(Math.random() * 5) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}` : null,
+          likes: Math.floor(Math.random() * 5000),
+          shares: Math.floor(Math.random() * 500),
+          liked: false,
+          saved: false,
+          comments: []
+        };
+      });
+
+      return newPosts;
+    };
+
+    // Infinite scroll handler
+    useEffect(() => {
+      const handleScroll = () => {
+        if (loading || !hasMore) return;
+
+        const scrollHeight = document.documentElement.scrollHeight;
+        const scrollTop = document.documentElement.scrollTop;
+        const clientHeight = document.documentElement.clientHeight;
+
+        // Load more when 300px from bottom
+        if (scrollHeight - scrollTop - clientHeight < 300) {
+          setLoading(true);
+
+          // Simulate API call delay
+          setTimeout(() => {
+            const newPosts = generateMorePosts();
+            setPosts(prev => [...prev, ...newPosts]);
+            setPage(prev => prev + 1);
+            setLoading(false);
+
+            // Stop loading after 10 pages
+            if (page >= 10) {
+              setHasMore(false);
+            }
+          }, 800);
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading, hasMore, page]);
+
+    const handleLike = (id, reaction) => {
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === id
+            ? {
+              ...post,
+              liked: true,
+              likes: post.liked ? post.likes : post.likes + 1,
+              reaction: reaction || '❤️'
+            }
+            : post
+        )
+      );
+      if (reaction && reaction !== '❤️') {
+        setToast({ message: `Reacted with ${reaction}!`, type: 'success' });
+      }
+    };
+
+    const handleQuote = (post) => {
+      setToast({ message: '💬 Quote feature - Share with your commentary!', type: 'info' });
+      // TODO: Open modal with quoted post
+    };
+
+    const handleDuet = (post) => {
+      setToast({ message: '🎭 Duet mode - Create split-screen with this video!', type: 'info' });
+      // TODO: Open duet recording modal with split screen
+    };
+
+    const handleComment = (id, comment) => {
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === id
+            ? {
+              ...post,
+              comments: [...(post.comments || []), comment]
+            }
+            : post
+        )
+      );
+    };
+
+    const handleShare = (id) => {
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === id ? { ...post, shares: post.shares + 1 } : post
+        )
+      );
+      setToast({ message: '🔗 Link copied to clipboard!', type: 'success' });
+    };
+
+    const handleSave = (id) => {
+      const post = posts.find(p => p.id === id);
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === id ? { ...post, saved: !post.saved } : post
+        )
+      );
+      setToast({
+        message: post?.saved ? '📌 Removed from saved' : '✅ Saved to collection',
+        type: 'success'
+      });
+    };
+
+    const handleNewPost = ({ content, mediaType }) => {
+      if (mediaType === 'video') {
+        // Open AI video generation modal
+        setShowAIModal(true);
+        return;
+      }
+
+      const newPost = {
+        id: Date.now(),
+        author: 'You',
+        avatar: '🦉',
+        verified: true,
+        content,
+        time: 'Just now',
+        visibility: '🌍 Public',
+        mediaType,
+        likes: 0,
+        shares: 0,
+        liked: false,
+        saved: false,
+        comments: []
+      };
+      setPosts([newPost, ...posts]);
+      setToast({ message: '✨ Post published successfully!', type: 'success' });
+    };
+
+    const handleVideoGenerated = ({ videoId, prompt, url, duration }) => {
+      const newVideoPost = {
+        id: Date.now(),
+        author: 'You',
+        avatar: '🦉',
+        verified: true,
+        content: prompt,
+        time: 'Just now',
+        visibility: '🌍 Public',
+        mediaType: 'video',
+        videoUrl: url,
+        videoId: videoId,
+        duration: duration,
+        isHDR: true,
+        likes: 0,
+        shares: 0,
+        liked: false,
+        saved: false,
+        comments: []
+      };
+      setPosts([newVideoPost, ...posts]);
+      setToast({ message: '🎬 AI video generated and posted!', type: 'success' });
+    };
+
+    const handleVideoClick = (post) => {
+      if (post.mediaType === 'video') {
+        setSelectedVideo({
+          videoId: post.videoId || post.id,
+          url: post.videoUrl || '/api/video/sample.mp4',
+          prompt: post.content
+        });
+        setShowVideoModal(true);
+      }
+    };
+
+    return (
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 350px',
+        gap: '24px',
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '24px'
+      }}>
+        {/* Main Feed */}
+        <div>
+          <Stories />
+          <CreatePost onPost={handleNewPost} />
+          {posts.map(post => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onLike={handleLike}
+              onComment={handleComment}
+              onShare={handleShare}
+              onSave={handleSave}
+              onVideoClick={handleVideoClick}
+              onQuote={handleQuote}
+              onDuet={handleDuet}
+            />
+          ))}
+
+          {/* Loading Indicator */}
+          {loading && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '40px',
+              marginTop: '20px'
+            }}>
+              <div style={{
+                width: '50px',
+                height: '50px',
+                border: '4px solid rgba(0,255,255,0.2)',
+                borderTop: '4px solid #00ffff',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }} />
+            </div>
+          )}
+
+          {/* End of Feed Message */}
+          {!hasMore && (
+            <div style={{
+              textAlign: 'center',
+              padding: '40px',
+              color: '#888',
+              fontSize: '14px'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🦉</div>
+              <div style={{ color: '#00ffff', fontWeight: 'bold', marginBottom: '8px' }}>
+                You've reached the end!
+              </div>
+              <div>
+                That's all the amazing content for now. Check back later for more!
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <TrendingSidebar />
+      </div>
+
+          {/* Toast Notification */ }
+    {
+      toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )
+    }
+
+    {/* Modals */ }
+          <AIVideoModal
+            isOpen={showAIModal}
+            onClose={() => setShowAIModal(false)}
+            onGenerate={handleVideoGenerated}
+          />
+          <VideoPlayerModal
+            isOpen={showVideoModal}
+            video={selectedVideo}
+            onClose={() => {
+              setShowVideoModal(false);
+              setSelectedVideo(null);
+            }}
+          />
+        </>
+        );
+      };
+
+    ReactDOM.render(<Feed />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>
