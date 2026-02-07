@@ -135,7 +135,6 @@
       margin-bottom: 24px;
       border-bottom: 2px solid var(--glass-border);
       background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       border-radius: 12px 12px 0 0;
       padding: 8px;
@@ -144,7 +143,6 @@
     .tab {
       padding: 12px 24px;
       background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(15px);
       backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 8px;
@@ -186,7 +184,6 @@
 
     .stat-card {
       background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(25px);
       backdrop-filter: blur(25px);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
@@ -204,16 +201,14 @@
     .stat-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.6s;
+      transform: translateX(-100%);
+      transition: transform 0.6s;
     }
 
     .stat-card:hover::before {
-      left: 100%;
+      transform: translateX(100%);
     }
 
     .stat-card:hover {
@@ -245,7 +240,6 @@
 
     .card {
       background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(25px);
       backdrop-filter: blur(25px);
       border: 1px solid var(--glass-border);
       padding: 1.5rem;
@@ -306,7 +300,6 @@
       font-size: 14px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(15px);
       backdrop-filter: blur(15px);
       color: #00ff00;
       font-weight: bold;
@@ -317,16 +310,14 @@
     button::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
-      transition: left 0.5s;
+      transform: translateX(-100%);
+      transition: transform 0.5s;
     }
 
     button:hover::before {
-      left: 100%;
+      transform: translateX(100%);
     }
 
     button:hover {
@@ -937,6 +928,22 @@
       border-left: 3px solid #00ffff;
     }
 
+    .notif-filter {
+      padding: 4px 12px;
+      background: transparent;
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      border-radius: 12px;
+      color: #00ff00;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .notif-filter.active {
+      background: rgba(0, 255, 255, 0.2);
+      border-color: rgba(0, 255, 255, 0.3);
+      color: #00ffff;
+    }
+
     #notif-dropdown::-webkit-scrollbar {
       width: 6px;
     }
@@ -948,6 +955,26 @@
     #notif-dropdown::-webkit-scrollbar-thumb {
       background: rgba(0, 255, 0, 0.5);
       border-radius: 3px;
+    }
+
+    .nav-link {
+      color: #00ffff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 255, 255, 0.1);
+      color: #00ff00;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     @media (max-width: 768px) {
@@ -981,253 +1008,64 @@
       }
     }
   </style>
-
-  <style>
-    /* Content size fixes */
-    body {
-      padding-top: 80px !important;
-      min-height: calc(100vh - 80px) !important;
-    }
-
-    nav {
-      height: 70px !important;
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      z-index: 1000 !important;
-    }
-
-    .main-content {
-      margin-top: 0 !important;
-      padding: 20px !important;
-    }
-  </style>
-
-  <style>
-    body {
-      zoom: 0.95 !important;
-      transform: scale(0.95) !important;
-      transform-origin: 0 0 !important;
-      width: 105% !important;
-    }
-  </style>
   <link rel="stylesheet" href="glass-ui.css">
+  <link rel="stylesheet" href="dashboard-styles.css">
+  <link rel="stylesheet" href="dashboard-inline-styles.css">
   <script src="glass-ui.js" defer></script>
-</head>
 </head>
 
 <body>
   <nav class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50">
-    <div style="
-          padding: 12px 20px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        ">
-      <div style="display: flex; align-items: center;">
-        <a href="/" style="
-              font-size: 18px;
-              font-weight: bold;
-              background: linear-gradient(135deg, #00ff00, #00ffff, #ff00ff);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              text-decoration: none;
-            ">🦉 HOOTNER</a>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="nav-logo-text">🦉 HOOTNER</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <div style="position: relative">
-          <button onclick="toggleNotifications()" style="
-                background: none;
-                border: none;
-                color: #00ffff;
-                cursor: pointer;
-                font-size: 20px;
-                padding: 12px;
-                position: relative;
-                border-radius: 50%;
-                transition: all 0.3s;
-              " title="Notifications"
-            onmouseover="this.style.background='rgba(0,255,255,0.1)'; this.style.boxShadow='0 0 15px rgba(0,255,255,0.3)'"
-            onmouseout="this.style.background='none'; this.style.boxShadow='none'">
+      <div class="nav-actions">
+        <a href="video-player.html" class="nav-link">🎬 Video Player</a>
+        <a href="feed.html" class="nav-link">📰 Feed</a>
+        <a href="my-videos.html" class="nav-link">🎬 Videos</a>
+        <a href="upload-video.html" class="nav-link">⬆️ Upload</a>
+        <a href="marketplace.html" class="nav-link">🛒 Market</a>
+        <a href="messages.html" class="nav-link">💬 Messages</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="analytics.html" class="nav-link">📊 Analytics</a>
+        <a href="collaboration.html" class="nav-link">🤝 Collab</a>
+        <a href="ai-video.html" class="nav-link">🤖 AI Video</a>
+        <a href="live-stream.html" class="nav-link">📡 Live</a>
+        <a href="settings.html" class="nav-link">⚙️ Settings</a>
+        <div class="nav-notif-container">
+          <button onclick="toggleNotifications()" class="notif-btn" title="Notifications">
             🔔
-            <span id="notif-badge" style="
-                  position: absolute;
-                  top: 4px;
-                  right: 4px;
-                  background: linear-gradient(135deg, #ef4444, #dc2626);
-                  color: white;
-                  border-radius: 50%;
-                  width: 18px;
-                  height: 18px;
-                  font-size: 10px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-weight: bold;
-                  animation: pulse 2s infinite;
-                  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-                ">3</span>
+            <span id="notif-badge" class="notif-badge">3</span>
           </button>
-          <div id="notif-dropdown" style="
-                display: none;
-                position: fixed;
-                top: 60px;
-                right: 20px;
-                width: 400px;
-                max-width: calc(100vw - 40px);
-                max-height: calc(100vh - 80px);
-                background: rgba(10, 10, 15, 0.98);
-                border: 2px solid rgba(0, 255, 0, 0.3);
-                border-radius: 8px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-                z-index: 9999;
-                flex-direction: column;
-                overflow: hidden;
-              ">
-            <div style="
-                  padding: 12px 16px;
-                  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-                  flex-shrink: 0;
-                ">
-              <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 12px;
-                  ">
-                <h3 style="color: #00ff00; font-size: 16px; font-weight: bold; margin: 0">
-                  Notifications
-                </h3>
-                <div style="display: flex; gap: 8px; align-items: center">
-                  <button onclick="toggleNotifSound()" id="sound-btn" style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 16px;
-                      " title="Toggle sound">
-                    🔔
-                  </button>
-                  <button onclick="clearAllNotifications()" style="
-                        background: none;
-                        border: none;
-                        color: #ef4444;
-                        cursor: pointer;
-                        font-size: 16px;
-                      " title="Clear all">
-                    🗑️
-                  </button>
-                  <button onclick="markAllRead()" style="
-                        background: none;
-                        border: none;
-                        color: #00ffff;
-                        cursor: pointer;
-                        font-size: 12px;
-                      ">
-                    Mark all read
-                  </button>
+          <div id="notif-dropdown" class="notif-dropdown">
+            <div class="notif-header">
+              <div class="notif-header-top">
+                <h3 class="notif-header-title">Notifications</h3>
+                <div class="notif-header-actions">
+                  <button onclick="toggleNotifSound()" id="sound-btn" class="notif-action-btn" title="Toggle sound">🔔</button>
+                  <button onclick="clearAllNotifications()" class="notif-action-btn danger" title="Clear all">🗑️</button>
+                  <button onclick="markAllRead()" class="notif-action-btn small">Mark all read</button>
                 </div>
               </div>
-              <input type="text" id="notif-search" oninput="filterNotifications()"
-                placeholder="🔍 Search notifications..." style="
-                    width: 100%;
-                    padding: 8px;
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 1px solid rgba(0, 255, 0, 0.3);
-                    border-radius: 4px;
-                    color: #00ff00;
-                    font-size: 13px;
-                    margin-bottom: 8px;
-                  " />
-              <div style="display: flex; gap: 4px; flex-wrap: wrap">
-                <button class="notif-filter active" data-filter="all" onclick="setNotifFilter('all')" style="
-                      padding: 4px 12px;
-                      background: rgba(0, 255, 255, 0.2);
-                      border: 1px solid rgba(0, 255, 255, 0.3);
-                      border-radius: 12px;
-                      color: #00ffff;
-                      font-size: 11px;
-                      cursor: pointer;
-                    ">
-                  All
-                </button>
-                <button class="notif-filter" data-filter="like" onclick="setNotifFilter('like')" style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    ">
-                  ❤️ Likes
-                </button>
-                <button class="notif-filter" data-filter="comment" onclick="setNotifFilter('comment')" style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    ">
-                  💬 Comments
-                </button>
-                <button class="notif-filter" data-filter="follow" onclick="setNotifFilter('follow')" style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    ">
-                  👤 Follows
-                </button>
-                <button class="notif-filter" data-filter="system" onclick="setNotifFilter('system')" style="
-                      padding: 4px 12px;
-                      background: transparent;
-                      border: 1px solid rgba(0, 255, 0, 0.3);
-                      border-radius: 12px;
-                      color: #00ff00;
-                      font-size: 11px;
-                      cursor: pointer;
-                    ">
-                  ⚠️ System
-                </button>
+              <input type="text" id="notif-search" oninput="filterNotifications()" placeholder="🔍 Search notifications..." class="notif-search" />
+              <div class="notif-filters">
+                <button type="button" class="notif-filter active" data-filter="all" onclick="setNotifFilter('all')">All</button>
+                <button type="button" class="notif-filter" data-filter="like" onclick="setNotifFilter('like')">❤️ Likes</button>
+                <button type="button" class="notif-filter" data-filter="comment" onclick="setNotifFilter('comment')">💬 Comments</button>
+                <button type="button" class="notif-filter" data-filter="follow" onclick="setNotifFilter('follow')">👤 Follows</button>
+                <button type="button" class="notif-filter" data-filter="system" onclick="setNotifFilter('system')">⚠️ System</button>
               </div>
             </div>
-            <div id="notif-list" style="
-                  flex: 1;
-                  overflow-y: auto;
-                  min-height: 200px;
-                  max-height: calc(100vh - 280px);
-                "></div>
+            <div id="notif-list" class="notif-list"></div>
           </div>
         </div>
-        <a href="/login" onclick="event.preventDefault(); handleLogout();"
-          style="
-            background: none;
-            border: 2px solid #ef4444;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-weight: 500;
-          "
-          onmouseover="this.style.background='rgba(239,68,68,0.1)'; this.style.boxShadow='0 0 15px rgba(239,68,68,0.3)'"
-          onmouseout="this.style.background='none'; this.style.boxShadow='none'">
-          🔐 Logout
-        </a>
+        <a href="/login" onclick="event.preventDefault(); handleLogout();" class="logout-btn">🔐 Logout</a>
       </div>
     </div>
   </nav>
 
-  <div style="padding: 20px">
+  <div class="main-padding">
     <h1>Dashboard</h1>
 
     <div class="tabs">
@@ -1242,126 +1080,39 @@
 
     <div id="overview" class="tab-content active">
 
-      <!-- Welcome Banner -->
-      <div
-        style="text-align: center; margin-bottom: 48px; padding: 40px 20px; background: linear-gradient(135deg, rgba(0,255,0,0.1), rgba(0,255,255,0.1)); border-radius: 16px; border: 2px solid rgba(0,255,0,0.3);">
-        <h1 style="font-size: 3rem; margin-bottom: 16px; color: #00ff00; text-shadow: 0 0 20px rgba(0,255,0,0.5);">
-          🦉 Welcome to HOOTNER
-        </h1>
-        <p style="font-size: 1.25rem; color: #00ffff; margin-bottom: 8px;">
-          The Owl Never Sleeps - Your Enterprise Video Platform
-        </p>
-        <p style="color: #00ff00; font-size: 0.95rem;">
-          8K HDR10 • AI Video Generation • Real-Time Collaboration • NFT Marketplace
-        </p>
+      <!-- Stats Overview -->
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Total Posts</h3>
+          <p id="stat-posts">125</p>
+        </div>
+        <div class="stat-card">
+          <h3>Active Users</h3>
+          <p id="stat-users">1,247</p>
+        </div>
+        <div class="stat-card">
+          <h3>Engagement</h3>
+          <p id="stat-engagement">87%</p>
+        </div>
+        <div class="stat-card">
+          <h3>Revenue</h3>
+          <p id="stat-revenue">$12.4K</p>
+        </div>
       </div>
 
-      <!-- Primary Navigation Hub - All Pages -->
-      <div style="margin-bottom: 32px;">
-        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 24px; color: #00ff00;">
-          🚀 Navigation Hub - All Pages
-        </h2>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
-          <!-- Content & Video -->
-          <a href="video-player-elite.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">🎬</div>
-              <div style="color: #00ff00; font-weight: bold;">Elite Player</div>
-            </div>
-          </a>
-          <a href="upload-video.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📤</div>
-              <div style="color: #00ff00; font-weight: bold;">Upload Video</div>
-            </div>
-          </a>
-          <a href="my-videos.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">🎞️</div>
-              <div style="color: #00ff00; font-weight: bold;">My Videos</div>
-            </div>
-          </a>
-          <!-- Social & User -->
-          <a href="profile-new.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">✨</div>
-              <div style="color: #00ffff; font-weight: bold;">New Profile</div>
-            </div>
-          </a>
-          <a href="feed-react.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📱</div>
-              <div style="color: #00ffff; font-weight: bold;">Social Feed</div>
-            </div>
-          </a>
-          <a href="messages.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(0,255,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(0,255,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0,255,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">💬</div>
-              <div style="color: #00ffff; font-weight: bold;">Messages</div>
-            </div>
-          </a>
-          <!-- Creation Tools -->
-          <a href="auto-editor.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,0,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,0,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,0,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">✂️</div>
-              <div style="color: #ff00ff; font-weight: bold;">Auto Editor</div>
-            </div>
-          </a>
-          <a href="code-editor.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,0,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,0,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,0,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">💻</div>
-              <div style="color: #ff00ff; font-weight: bold;">Code Editor</div>
-            </div>
-          </a>
-          <a href="ai-video.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,0,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,0,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,0,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">🤖</div>
-              <div style="color: #ff00ff; font-weight: bold;">AI Video</div>
-            </div>
-          </a>
-          <!-- Business & Analytics -->
-          <a href="analytics.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,255,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,255,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,255,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📊</div>
-              <div style="color: #ffff00; font-weight: bold;">Analytics</div>
-            </div>
-          </a>
-          <a href="marketplace.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,255,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,255,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,255,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">🛒</div>
-              <div style="color: #ffff00; font-weight: bold;">Marketplace</div>
-            </div>
-          </a>
-          <!-- Live & Collaboration -->
-          <a href="live-stream.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(255,100,0,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(255,100,0,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(255,100,0,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📡</div>
-              <div style="color: #ff6400; font-weight: bold;">Live Stream</div>
-            </div>
-          </a>
-          <a href="collaboration.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(100,200,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(100,200,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(100,200,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">🤝</div>
-              <div style="color: #64c8ff; font-weight: bold;">Collaboration</div>
-            </div>
-          </a>
-          <a href="contact.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(100,200,255,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(100,200,255,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(100,200,255,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📧</div>
-              <div style="color: #64c8ff; font-weight: bold;">Contact</div>
-            </div>
-          </a>
-          <!-- Utility & Other -->
-          <a href="auto-upload-feeder.html" style="text-decoration: none; color: inherit;">
-            <div style="background: rgba(150,150,150,0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(150,150,150,0.3); text-align: center; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(150,150,150,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-              <div style="font-size: 2.5rem; margin-bottom: 8px;">📥</div>
-              <div style="color: #969696; font-weight: bold;">Auto Upload</div>
-            </div>
-          </a>
+      <!-- Activity Feed -->
+      <div class="card">
+        <h2>Recent Activity</h2>
+        <div id="activity-feed">
+          <div class="activity-item">
+            <p><strong>New video uploaded</strong></p>
+            <p class="time">2 minutes ago</p>
+          </div>
+          <div class="activity-item">
+            <p><strong>User registered</strong></p>
+            <p class="time">15 minutes ago</p>
+          </div>
         </div>
-        <p style="text-align: center; color: #00ffff; font-size: 0.9rem; margin-top: 16px;">
-          🎯 Total: 15 pages • All pages connect through Dashboard only
-        </p>
       </div>
 
       <!-- AI Insights Panel -->
@@ -1470,101 +1221,82 @@
             <div class="service-card">
               <span class="status-indicator status-warning"></span>
               <strong>Video Processing</strong>
-              <span style="float: right; color: #f59e0b">High load</span>
+              <span class="service-status warning">High load</span>
             </div>
             <div class="service-card">
               <span class="status-indicator status-healthy"></span>
               <strong>Database</strong>
-              <span style="float: right; color: #00ffff">Optimal</span>
+              <span class="service-status optimal">Optimal</span>
             </div>
           </div>
         </div>
         <div class="card">
           <h2>Resource Usage</h2>
-          <div style="margin-bottom: 16px">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px">
+          <div class="resource-item">
+            <div class="resource-header">
               <span>CPU Usage</span><span id="cpu-usage">45%</span>
             </div>
-            <div style="
-                  background: rgba(0, 255, 0, 0.2);
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                ">
-              <div id="cpu-bar" style="background: #00ff00; height: 100%; width: 45%; transition: width 0.5s"></div>
+            <div class="resource-bar-bg cpu">
+              <div id="cpu-bar" class="resource-bar cpu" style="width: 45%"></div>
             </div>
           </div>
-          <div style="margin-bottom: 16px">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px">
+          <div class="resource-item">
+            <div class="resource-header">
               <span>Memory Usage</span><span id="mem-usage">62%</span>
             </div>
-            <div style="
-                  background: rgba(0, 255, 255, 0.2);
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                ">
-              <div id="mem-bar" style="background: #00ffff; height: 100%; width: 62%; transition: width 0.5s"></div>
+            <div class="resource-bar-bg mem">
+              <div id="mem-bar" class="resource-bar mem" style="width: 62%"></div>
             </div>
           </div>
-          <div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px">
+          <div class="resource-item">
+            <div class="resource-header">
               <span>Disk Usage</span><span id="disk-usage">38%</span>
             </div>
-            <div style="
-                  background: rgba(255, 0, 255, 0.2);
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                ">
-              <div id="disk-bar" style="background: #ff00ff; height: 100%; width: 38%; transition: width 0.5s"></div>
+            <div class="resource-bar-bg disk">
+              <div id="disk-bar" class="resource-bar disk" style="width: 38%"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card" style="margin-top: 24px">
+      <div class="card mt-24">
         <h2>Recent Deployments</h2>
         <div class="activity-item">
           <p><strong>Frontend v2.4.1</strong> - Blue-Green deployment completed</p>
           <p class="time">1 hour ago • Status: ✓ Success</p>
         </div>
-        <div class="activity-item" style="border-color: #10b981">
+        <div class="activity-item success">
           <p><strong>API Gateway v1.8.3</strong> - Rolling update completed</p>
           <p class="time">3 hours ago • Status: ✓ Success</p>
         </div>
       </div>
-      <div class="grid" style="margin-top: 24px">
+      <div class="grid mt-24">
         <div class="card">
-          <h2>Live Traffic <span style="font-size: 12px; color: #00ffff">(Real-time)</span></h2>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
-            <span>Requests/min</span><span id="req-per-min" style="color: #00ff00; font-weight: bold">342</span>
+          <h2>Live Traffic <span class="traffic-realtime-label">(Real-time)</span></h2>
+          <div class="traffic-metric-row">
+            <span>Requests/min</span><span id="req-per-min" class="traffic-value green">342</span>
           </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
-            <span>Active Sessions</span><span id="active-sessions"
-              style="color: #00ffff; font-weight: bold">1,247</span>
+          <div class="traffic-metric-row">
+            <span>Active Sessions</span><span id="active-sessions" class="traffic-value cyan">1,247</span>
           </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
-            <span>Response Time</span><span id="response-time" style="color: #ff00ff; font-weight: bold">142ms</span>
+          <div class="traffic-metric-row">
+            <span>Response Time</span><span id="response-time" class="traffic-value magenta">142ms</span>
           </div>
-          <div
-            style="height: 60px; background: rgba(0,255,0,0.1); border-radius: 4px; position: relative; overflow: hidden">
-            <canvas id="mini-chart" width="100" height="60" style="width: 100%; height: 100%"></canvas>
+          <div class="chart-canvas-container">
+            <canvas id="mini-chart" width="100" height="60" class="chart-canvas"></canvas>
           </div>
         </div>
         <div class="card">
           <h2>Security Alerts</h2>
           <div id="security-alerts">
-            <div
-              style="padding: 8px; background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; margin-bottom: 8px; border-radius: 4px">
-              <div style="font-size: 12px; color: #ef4444; font-weight: bold">HIGH</div>
-              <div style="font-size: 13px; color: #00ffff">Unusual login pattern detected</div>
-              <div style="font-size: 11px; color: #6b7280">2 min ago • IP: 45.123.67.89</div>
+            <div class="alert-box high">
+              <div class="alert-severity high">HIGH</div>
+              <div class="alert-message">Unusual login pattern detected</div>
+              <div class="alert-meta">2 min ago • IP: 45.123.67.89</div>
             </div>
-            <div
-              style="padding: 8px; background: rgba(245,158,11,0.1); border-left: 3px solid #f59e0b; margin-bottom: 8px; border-radius: 4px">
-              <div style="font-size: 12px; color: #f59e0b; font-weight: bold">MEDIUM</div>
-              <div style="font-size: 13px; color: #00ffff">Rate limit exceeded</div>
-              <div style="font-size: 11px; color: #6b7280">5 min ago • API Key: prod_***1a2b</div>
+            <div class="alert-box medium">
+              <div class="alert-severity medium">MEDIUM</div>
+              <div class="alert-message">Rate limit exceeded</div>
+              <div class="alert-meta">5 min ago • API Key: prod_***1a2b</div>
             </div>
           </div>
         </div>
@@ -1572,7 +1304,7 @@
     </div>
 
     <div id="code" class="tab-content">
-      <h2 style="margin-bottom: 16px">Code Editor</h2>
+      <h2 class="section-header">Code Editor</h2>
       <div class="editor-container">
         <div class="editor-panel">
           <div class="editor-toolbar">
@@ -1598,7 +1330,7 @@ console.log('Hello, HOOTNER!');</textarea>
     </div>
 
     <div id="settings" class="tab-content">
-      <h2 style="margin-bottom: 16px">Settings</h2>
+      <h2 class="section-header">Settings</h2>
       <div class="settings-layout">
         <div class="settings-sidebar">
           <button class="settings-nav active" onclick="showSettings('profile')">
@@ -1629,7 +1361,7 @@ console.log('Hello, HOOTNER!');</textarea>
         </div>
         <div class="settings-content">
           <div id="profile-panel" class="settings-panel active">
-            <h3 style="color: #00ff00; margin-bottom: 16px">👤 Profile Settings</h3>
+            <h3 class="heading-green">👤 Profile Settings</h3>
             <div class="form-group">
               <label>Username</label>
               <input type="text" id="username" maxlength="30" placeholder="Enter username" value="hootner_admin"
@@ -2422,41 +2154,17 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
                       margin-bottom: 8px;
                     " />
                 <div style="display: flex; gap: 8px; margin-bottom: 8px">
-                  <label style="
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        color: #00ffff;
-                        font-size: 13px;
-                      ">
-                    <input type="checkbox" checked style="width: auto; margin-right: 6px" /> GET
+                  <label class="cors-checkbox-label">
+                    <input type="checkbox" checked /> GET
                   </label>
-                  <label style="
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        color: #00ffff;
-                        font-size: 13px;
-                      ">
-                    <input type="checkbox" checked style="width: auto; margin-right: 6px" /> POST
+                  <label class="cors-checkbox-label">
+                    <input type="checkbox" checked /> POST
                   </label>
-                  <label style="
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        color: #00ffff;
-                        font-size: 13px;
-                      ">
-                    <input type="checkbox" checked style="width: auto; margin-right: 6px" /> PUT
+                  <label class="cors-checkbox-label">
+                    <input type="checkbox" checked /> PUT
                   </label>
-                  <label style="
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        color: #00ffff;
-                        font-size: 13px;
-                      ">
-                    <input type="checkbox" style="width: auto; margin-right: 6px" /> DELETE
+                  <label class="cors-checkbox-label">
+                    <input type="checkbox" /> DELETE
                   </label>
                 </div>
                 <button class="save-btn" onclick="showSuccess('CORS settings updated!')">
@@ -2654,35 +2362,16 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
           </div>
         </div>
         <div style="display: flex; gap: 8px">
-          <label style="
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                color: #00ffff;
-                font-size: 13px;
-              ">
-            <input type="checkbox" id="verified-only" onchange="performSearch()"
-              style="width: auto; margin-right: 6px" />
+          <label class="filter-checkbox-label">
+            <input type="checkbox" id="verified-only" onchange="performSearch()" />
             Verified Only
           </label>
-          <label style="
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                color: #00ffff;
-                font-size: 13px;
-              ">
-            <input type="checkbox" id="has-media" onchange="performSearch()" style="width: auto; margin-right: 6px" />
+          <label class="filter-checkbox-label">
+            <input type="checkbox" id="has-media" onchange="performSearch()" />
             Has Media
           </label>
-          <label style="
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                color: #00ffff;
-                font-size: 13px;
-              ">
-            <input type="checkbox" id="has-links" onchange="performSearch()" style="width: auto; margin-right: 6px" />
+          <label class="filter-checkbox-label">
+            <input type="checkbox" id="has-links" onchange="performSearch()" />
             Has Links
           </label>
         </div>
@@ -2773,67 +2462,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer style="
-        background: linear-gradient(135deg, rgba(10,10,15,0.95), rgba(26,26,46,0.95));
-        border-top: 2px solid rgba(0,255,0,0.3);
-        padding: 40px 20px 20px;
-        margin-top: 60px;
-        backdrop-filter: blur(20px);
-      ">
-      <div
-        style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
-        <div>
-          <h3 style="color: #00ff00; margin-bottom: 12px; font-size: 16px;">🦉 HOOTNER</h3>
-          <p style="color: #00ffff; font-size: 13px; line-height: 1.6;">Enterprise video streaming platform with AI
-            integration and real-time collaboration.</p>
-        </div>
-        <div>
-          <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Platform</h4>
-          <a href="/dashboard"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Dashboard</a>
-          <a href="/video-player"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Video
-            Player</a>
-          <a href="/marketplace"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Marketplace</a>
-          <a href="/analytics"
-            style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">Analytics</a>
-        </div>
-        <div>
-          <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Resources</h4>
-          <a href="/docs"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Documentation</a>
-          <a href="/api"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">API
-            Reference</a>
-          <a href="/support"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Support</a>
-          <a href="/status" style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">System
-            Status</a>
-        </div>
-        <div>
-          <h4 style="color: #00ff00; margin-bottom: 12px; font-size: 14px;">Legal</h4>
-          <a href="/privacy"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Privacy
-            Policy</a>
-          <a href="/terms"
-            style="display: block; color: #00ffff; text-decoration: none; margin-bottom: 8px; font-size: 13px;">Terms of
-            Service</a>
-          <a href="/security"
-            style="display: block; color: #00ffff; text-decoration: none; font-size: 13px;">Security</a>
-        </div>
-      </div>
-      <div
-        style="border-top: 1px solid rgba(0,255,0,0.2); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <p style="color: #00ffff; font-size: 13px;">© 2024 HOOTNER. All rights reserved. | "The Owl Never Sleeps"</p>
-        <div style="display: flex; gap: 16px;">
-          <a href="https://github.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">💻</a>
-          <a href="https://twitter.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">🐦</a>
-          <a href="https://discord.com" style="color: #00ffff; font-size: 20px; text-decoration: none;">💬</a>
-        </div>
-      </div>
-    </footer>
+
 
     <script src="../../../scripts/monitoring/metrics-tracker.js"></script>
     <script src="../../../scripts/monitoring/performance-monitor.js"></script>
@@ -3119,20 +2748,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
 
       // Real-time data sync
       function initRealTimeSync() {
-        setInterval(async () => {
-          try {
-            const [metrics, agents, alerts] = await Promise.all([
-              API.getMetrics(),
-              API.getAgents(),
-              API.getSecurityAlerts()
-            ]);
-            updateMetrics(metrics);
-            updateAgentMetrics(agents);
-            alerts.forEach(addSecurityAlert);
-          } catch (e) {
-            console.log('Sync failed, continuing with mock data');
-          }
-        }, 5000);
+        // Disabled to prevent 404 errors
       }
 
       function updateMetrics(data) {
@@ -3205,14 +2821,21 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
           const cpu = Math.floor(Math.random() * 30) + 40;
           const mem = Math.floor(Math.random() * 20) + 55;
           const disk = Math.floor(Math.random() * 15) + 35;
-          document.getElementById('cpu-usage').textContent = cpu + '%';
-          document.getElementById('cpu-bar').style.width = cpu + '%';
-          document.getElementById('mem-usage').textContent = mem + '%';
-          document.getElementById('mem-bar').style.width = mem + '%';
-          document.getElementById('disk-usage').textContent = disk + '%';
-          document.getElementById('disk-bar').style.width = disk + '%';
+          const cpuEl = document.getElementById('cpu-usage');
+          const cpuBar = document.getElementById('cpu-bar');
+          const memEl = document.getElementById('mem-usage');
+          const memBar = document.getElementById('mem-bar');
+          const diskEl = document.getElementById('disk-usage');
+          const diskBar = document.getElementById('disk-bar');
+          
+          if (cpuEl) cpuEl.textContent = cpu + '%';
+          if (cpuBar) cpuBar.style.width = cpu + '%';
+          if (memEl) memEl.textContent = mem + '%';
+          if (memBar) memBar.style.width = mem + '%';
+          if (diskEl) diskEl.textContent = disk + '%';
+          if (diskBar) diskBar.style.width = disk + '%';
 
-          // Update dashboard metrics with more realistic changes
+          // Update dashboard metrics
           const apiCalls = Math.floor(Math.random() * 1000) + 7500;
           const errorRate = Math.random() * 0.5 + 0.1;
           const users = Math.floor(Math.random() * 100) + 1200;
@@ -3227,26 +2850,24 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
           const activeSessions = Math.floor(Math.random() * 200) + 1100;
           const responseTime = Math.floor(Math.random() * 50) + 120;
 
-          document.getElementById('req-per-min').textContent = reqPerMin;
-          document.getElementById('active-sessions').textContent = activeSessions.toLocaleString();
-          document.getElementById('response-time').textContent = responseTime + 'ms';
+          const reqEl = document.getElementById('req-per-min');
+          const sessEl = document.getElementById('active-sessions');
+          const respEl = document.getElementById('response-time');
+          
+          if (reqEl) reqEl.textContent = reqPerMin;
+          if (sessEl) sessEl.textContent = activeSessions.toLocaleString();
+          if (respEl) respEl.textContent = responseTime + 'ms';
 
           // Update mini chart
           trafficData.push(reqPerMin);
           if (trafficData.length > maxPoints) trafficData.shift();
           drawMiniChart(trafficData);
-
-          // Add random activity
-          if (Math.random() > 0.7) {
-            const activity = activities[Math.floor(Math.random() * activities.length)];
-            addActivity({ text: activity, time: 'Just now' });
-          }
-        }, 3000);
+        }, 5000);
 
         // Simulate security alerts
         setInterval(() => {
-          if (Math.random() > 0.8) addRandomSecurityAlert();
-        }, 15000);
+          if (Math.random() > 0.9) addRandomSecurityAlert();
+        }, 30000);
       }
 
       function runCode() {
@@ -3488,16 +3109,16 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
         recentSearches: JSON.parse(localStorage.getItem('hootner_recent_searches') || '[]'),
         viewMode: 'list',
         all: [
-          { type: 'post', title: 'Building Scalable Microservices with Node.js', content: 'Learn how to build production-ready microservices using Node.js, Docker, and Kubernetes...', author: 'tech_guru', date: '2024-01-15', views: 1247, likes: 89, verified: true, hasMedia: true },
+          { type: 'post', title: 'Building Scalable Microservices with Node.js', content: 'Learn how to build production-ready microservices using Node.js, Docker, and Kubernetes...', author: 'tech_guru', date: '2026-01-15', views: 1247, likes: 89, verified: true, hasMedia: true },
           { type: 'user', name: 'Sarah Chen', username: 'sarahchen_dev', bio: 'Full-stack developer | Open source contributor | Coffee enthusiast', followers: 5420, verified: true, avatar: '👩‍💻' },
-          { type: 'video', title: 'Advanced React Patterns Tutorial', content: 'Deep dive into advanced React patterns including render props, HOCs, and custom hooks...', author: 'react_master', date: '2024-01-14', views: 8932, duration: '45:23', hasMedia: true },
+          { type: 'video', title: 'Advanced React Patterns Tutorial', content: 'Deep dive into advanced React patterns including render props, HOCs, and custom hooks...', author: 'react_master', date: '2026-01-14', views: 8932, duration: '45:23', hasMedia: true },
           { type: 'marketplace', title: 'Premium UI Kit - 500+ Components', content: 'Professional React component library with dark mode, animations, and TypeScript support...', price: '$49.99', author: 'designpro', rating: 4.8, sales: 342 },
-          { type: 'post', title: 'The Future of Web Development in 2024', content: 'Exploring emerging trends: AI integration, edge computing, WebAssembly, and more...', author: 'web_visionary', date: '2024-01-13', views: 3421, likes: 234, verified: true },
-          { type: 'code', title: 'Efficient Binary Search Implementation', content: 'function binarySearch(arr, target) { let left = 0, right = arr.length - 1...', author: 'algo_expert', date: '2024-01-12', language: 'JavaScript', stars: 156 },
+          { type: 'post', title: 'The Future of Web Development in 2024', content: 'Exploring emerging trends: AI integration, edge computing, WebAssembly, and more...', author: 'web_visionary', date: '2026-01-13', views: 3421, likes: 234, verified: true },
+          { type: 'code', title: 'Efficient Binary Search Implementation', content: 'function binarySearch(arr, target) { let left = 0, right = arr.length - 1...', author: 'algo_expert', date: '2026-01-12', language: 'JavaScript', stars: 156 },
           { type: 'user', name: 'Alex Rodriguez', username: 'alex_codes', bio: 'DevOps Engineer | Kubernetes certified | Cloud architecture', followers: 2890, verified: false, avatar: '👨‍💻' },
-          { type: 'video', title: 'Docker & Kubernetes Crash Course', content: 'Complete guide to containerization and orchestration for beginners and professionals...', author: 'devops_ninja', date: '2024-01-11', views: 12453, duration: '1:32:15', hasMedia: true },
+          { type: 'video', title: 'Docker & Kubernetes Crash Course', content: 'Complete guide to containerization and orchestration for beginners and professionals...', author: 'devops_ninja', date: '2026-01-11', views: 12453, duration: '1:32:15', hasMedia: true },
           { type: 'marketplace', title: 'Video Editing Software License', content: 'Professional video editing suite with AI-powered features and 4K support...', price: '$199.99', author: 'videotools', rating: 4.9, sales: 128 },
-          { type: 'post', title: 'Optimizing Database Queries for Performance', content: 'Best practices for indexing, query optimization, and database design patterns...', author: 'db_wizard', date: '2024-01-10', views: 2156, likes: 167, hasMedia: false, hasLinks: true }
+          { type: 'post', title: 'Optimizing Database Queries for Performance', content: 'Best practices for indexing, query optimization, and database design patterns...', author: 'db_wizard', date: '2026-01-10', views: 2156, likes: 167, hasMedia: false, hasLinks: true }
         ],
         currentPage: 1,
         resultsPerPage: 25,
@@ -3756,7 +3377,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
           if (item.type === 'user') {
             return `
                     <div class="item" style="display:flex;align-items:center;gap:16px;">
-                      <div style="font-size:48px;">${item.avatar}</div>
+                      <div style="font-size:48px;"></div>
                       <div style="flex:1;">
                         <h3 style="margin-bottom:4px;">${item.name} ${item.verified ? '<span style="color:#00ffff;">✓</span>' : ''}</h3>
                         <p style="color:#00ffff;margin-bottom:8px;font-size:14px;">@${item.username}</p>
@@ -3769,7 +3390,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
             return `
                     <div class="item">
                       <div style="display:flex;gap:12px;">
-                        <div style="width:160px;height:90px;background:linear-gradient(135deg,#00ff00,#00ffff);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;">🎬</div>
+                        <div style="width:160px;height:90px;background:linear-gradient(135deg,#00ff00,#00ffff);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;"></div>
                         <div style="flex:1;">
                           <h3 style="margin-bottom:8px;">${item.title}</h3>
                           <p style="color:#00ffff;margin-bottom:8px;font-size:14px;">${item.content}</p>
@@ -4295,58 +3916,7 @@ query {\n  users {\n    id\n    name\n    email\n  }\n}</textarea>
 <script>
   // Initialize futuristic effects
   function initCyberEffects() {
-    // Create particle system
-    const container = document.querySelector('.cyber-particles');
-    if (container) {
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.style.cssText = `
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: #00d4ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
-            animation: float ${3 + Math.random() * 4}s linear infinite;
-            left: ${Math.random() * 100}vw;
-            top: ${Math.random() * 100}vh;
-            opacity: ${0.3 + Math.random() * 0.7};
-            box-shadow: 0 0 6px #00d4ff;
-          `;
-        container.appendChild(particle);
-      }
-    }
-
-    // Matrix rain
-    const matrixContainer = document.querySelector('.matrix-rain');
-    if (matrixContainer) {
-      const chars =
-        '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン⚡◆◇◈◉●○◐◑◒◓';
-
-      function createMatrixChar() {
-        const char = document.createElement('div');
-        char.textContent = chars[Math.floor(Math.random() * chars.length)];
-        char.style.cssText = `
-            position: absolute;
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
-            font-size: ${Math.random() * 8 + 10}px;
-            left: ${Math.random() * 100}vw;
-            animation: matrixFall ${Math.random() * 4 + 3}s linear infinite;
-            text-shadow: 0 0 8px #00ff41;
-            opacity: ${Math.random() * 0.5 + 0.5};
-          `;
-
-        matrixContainer.appendChild(char);
-
-        setTimeout(() => {
-          if (char.parentNode) char.remove();
-        }, 7000);
-      }
-
-      setInterval(createMatrixChar, 150);
-    }
+    // Disabled to prevent glitching
   }
 
   // Add CSS animations

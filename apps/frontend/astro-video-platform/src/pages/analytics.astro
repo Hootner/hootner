@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+---
+<Layout title="Analytics">
+  <h1 class="text-4xl font-bold mb-8">Analytics</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <StatCard label="Total Views" value="0" />
+    <StatCard label="Watch Time" value="0h" />
+    <StatCard label="Engagement" value="0%" />
+    <StatCard label="Revenue" value="$0" />
+  </div>
+  
+  <div class="glass-card p-6">
+    <h2 class="text-2xl font-bold mb-4">Performance Chart</h2>
+    <p class="text-gray-400">Chart will appear here</p>
+  </div>
+</Layout>
+
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>
