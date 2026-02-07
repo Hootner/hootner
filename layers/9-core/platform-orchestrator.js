@@ -1,6 +1,6 @@
 /**
  * Platform Orchestrator - Layer 9 Core
- * Coordinates all 10 layers of the heptagonal architecture
+ * Coordinates all 10 layers of the hexarchy architecture
  */
 
 class PlatformOrchestrator {
