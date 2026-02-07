@@ -166,6 +166,7 @@ class EnhancedAgentHub {
   initializeInfrastructureAgents() {
     const infraAgents = [
       'auto-scaling',
+      'github-actions-monitoring',
       'load-testing-tools',
       'health-checks',
       'caching-layers',

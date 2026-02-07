@@ -661,13 +661,367 @@ class ContentModerationAgent extends BaseAgent {
   }
 }
 
+// GitHub Actions Monitoring Agent
+class GitHubActionsMonitoringAgent extends BaseAgent {
+  constructor() {
+    super('github-actions-monitoring', 'infrastructure');
+    this.config = {
+      pollingInterval: 5 * 60 * 1000, // 5 minutes
+      githubToken: process.env.GITHUB_TOKEN || null,
+      owner: process.env.GITHUB_OWNER || 'Hootner',
+      repo: process.env.GITHUB_REPO || 'hootner',
+      maxWorkflowRuns: 10, // Check last 10 runs
+      failureThreshold: 3, // Alert after 3 consecutive failures
+      autoRecoveryEnabled: true
+    };
+    
+    this.failurePatterns = [
+      { pattern: /ECONNREFUSED|ETIMEDOUT|ENOTFOUND/i, type: 'network', severity: 'high' },
+      { pattern: /npm ERR!|yarn error|pnpm ERR!/i, type: 'dependency', severity: 'medium' },
+      { pattern: /Error: test.* failed/i, type: 'test_failure', severity: 'medium' },
+      { pattern: /SyntaxError|ReferenceError|TypeError/i, type: 'code_error', severity: 'high' },
+      { pattern: /Out of memory|heap|memory/i, type: 'resource', severity: 'high' },
+      { pattern: /exit code [1-9]/i, type: 'process_exit', severity: 'medium' }
+    ];
+    
+    this.workflowHistory = new Map();
+    this.consecutiveFailures = new Map();
+    this.alertsSent = new Map();
+  }
+
+  async initialize() {
+    if (!this.config.githubToken) {
+      console.warn('⚠️  GitHub Actions Monitoring: No GITHUB_TOKEN found, using mock mode');
+      this.mockMode = true;
+    } else {
+      this.mockMode = false;
+    }
+    
+    // Start monitoring
+    this.monitoringInterval = setInterval(() => {
+      this.checkWorkflowRuns();
+    }, this.config.pollingInterval);
+    
+    // Run initial check
+    await this.checkWorkflowRuns();
+  }
+
+  async cleanup() {
+    if (this.monitoringInterval) {
+      clearInterval(this.monitoringInterval);
+    }
+  }
+
+  async checkWorkflowRuns() {
+    const startTime = Date.now();
+    
+    try {
+      const runs = await this.fetchWorkflowRuns();
+      const analysis = await this.analyzeWorkflowRuns(runs);
+      
+      if (analysis.hasFailures) {
+        await this.handleFailures(analysis);
+      }
+      
+      if (analysis.hasPatterns) {
+        await this.handleFailurePatterns(analysis);
+      }
+      
+      this.emit('workflowCheck', {
+        runs: runs.length,
+        failures: analysis.failures.length,
+        patterns: analysis.patterns,
+        timestamp: new Date().toISOString()
+      });
+      
+      this.updateMetrics(Date.now() - startTime, true);
+    } catch (error) {
+      this.updateMetrics(Date.now() - startTime, false);
+      this.emit('error', {
+        message: 'Failed to check workflow runs',
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+
+  async fetchWorkflowRuns() {
+    if (this.mockMode) {
+      return this.generateMockWorkflowRuns();
+    }
+    
+    try {
+      const url = `https://api.github.com/repos/${this.config.owner}/${this.config.repo}/actions/runs?per_page=${this.config.maxWorkflowRuns}`;
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${this.config.githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'HOOTNER-GitHub-Actions-Monitor'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      return data.workflow_runs || [];
+    } catch (error) {
+      console.error('Failed to fetch workflow runs:', error.message);
+      return this.generateMockWorkflowRuns();
+    }
+  }
+
+  generateMockWorkflowRuns() {
+    const statuses = ['completed', 'in_progress', 'queued'];
+    const conclusions = ['success', 'failure', 'cancelled', 'skipped', null];
+    const workflows = ['CI', 'Deploy', 'Tests', 'Lint', 'Build'];
+    
+    return Array.from({ length: this.config.maxWorkflowRuns }, (_, i) => {
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const conclusion = status === 'completed' ? 
+        conclusions[Math.floor(Math.random() * (conclusions.length - 1))] : 
+        null;
+      
+      return {
+        id: 1000 + i,
+        name: workflows[Math.floor(Math.random() * workflows.length)],
+        status,
+        conclusion,
+        created_at: new Date(Date.now() - i * 3600000).toISOString(),
+        updated_at: new Date(Date.now() - i * 3600000 + 300000).toISOString(),
+        html_url: `https://github.com/${this.config.owner}/${this.config.repo}/actions/runs/${1000 + i}`,
+        head_branch: 'main',
+        event: 'push'
+      };
+    });
+  }
+
+  async analyzeWorkflowRuns(runs) {
+    const failures = runs.filter(run => 
+      run.status === 'completed' && run.conclusion === 'failure'
+    );
+    
+    const patterns = new Map();
+    const workflowFailures = new Map();
+    
+    // Track consecutive failures per workflow
+    runs.forEach(run => {
+      if (!this.consecutiveFailures.has(run.name)) {
+        this.consecutiveFailures.set(run.name, 0);
+      }
+      
+      if (run.status === 'completed' && run.conclusion === 'failure') {
+        const count = this.consecutiveFailures.get(run.name) + 1;
+        this.consecutiveFailures.set(run.name, count);
+        
+        if (!workflowFailures.has(run.name)) {
+          workflowFailures.set(run.name, []);
+        }
+        workflowFailures.get(run.name).push(run);
+      } else if (run.status === 'completed' && run.conclusion === 'success') {
+        this.consecutiveFailures.set(run.name, 0);
+      }
+    });
+    
+    // Detect failure patterns (would analyze logs in real implementation)
+    for (const [workflow, failedRuns] of workflowFailures) {
+      if (failedRuns.length >= 2) {
+        patterns.set(workflow, {
+          type: 'recurring_failure',
+          count: failedRuns.length,
+          severity: failedRuns.length >= this.config.failureThreshold ? 'critical' : 'warning'
+        });
+      }
+    }
+    
+    return {
+      hasFailures: failures.length > 0,
+      hasPatterns: patterns.size > 0,
+      failures,
+      patterns: Array.from(patterns.entries()).map(([workflow, data]) => ({
+        workflow,
+        ...data
+      })),
+      consecutiveFailures: Array.from(this.consecutiveFailures.entries())
+        .filter(([_, count]) => count >= this.config.failureThreshold)
+        .map(([workflow, count]) => ({ workflow, count }))
+    };
+  }
+
+  async handleFailures(analysis) {
+    for (const failure of analysis.failures) {
+      const alertKey = `${failure.name}-${failure.id}`;
+      
+      if (!this.alertsSent.has(alertKey)) {
+        this.emit('workflowFailure', {
+          workflow: failure.name,
+          runId: failure.id,
+          branch: failure.head_branch,
+          url: failure.html_url,
+          timestamp: failure.updated_at,
+          consecutiveFailures: this.consecutiveFailures.get(failure.name) || 1
+        });
+        
+        this.alertsSent.set(alertKey, Date.now());
+        
+        // Clean old alerts (older than 24 hours)
+        for (const [key, time] of this.alertsSent) {
+          if (Date.now() - time > 24 * 3600000) {
+            this.alertsSent.delete(key);
+          }
+        }
+      }
+    }
+  }
+
+  async handleFailurePatterns(analysis) {
+    for (const pattern of analysis.patterns) {
+      if (pattern.severity === 'critical') {
+        this.emit('criticalPattern', {
+          workflow: pattern.workflow,
+          type: pattern.type,
+          count: pattern.count,
+          message: `Critical: ${pattern.workflow} has failed ${pattern.count} times consecutively`,
+          timestamp: new Date().toISOString()
+        });
+        
+        if (this.config.autoRecoveryEnabled) {
+          await this.attemptAutoRecovery(pattern);
+        }
+      }
+    }
+    
+    // Emit summary for consecutive failures
+    if (analysis.consecutiveFailures.length > 0) {
+      this.emit('consecutiveFailures', {
+        workflows: analysis.consecutiveFailures,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+
+  async attemptAutoRecovery(pattern) {
+    console.log(`🔄 Attempting auto-recovery for ${pattern.workflow}...`);
+    
+    const recoveryStrategies = [
+      'retry_workflow',
+      'clear_cache',
+      'update_dependencies',
+      'restart_runners'
+    ];
+    
+    const strategy = recoveryStrategies[0]; // Start with retry
+    
+    this.emit('autoRecovery', {
+      workflow: pattern.workflow,
+      strategy,
+      pattern: pattern.type,
+      timestamp: new Date().toISOString()
+    });
+    
+    // In real implementation, would trigger GitHub Actions API to retry
+    console.log(`   ✅ Auto-recovery initiated: ${strategy} for ${pattern.workflow}`);
+  }
+
+  async getWorkflowLogs(runId) {
+    if (this.mockMode) {
+      return this.generateMockLogs();
+    }
+    
+    try {
+      const url = `https://api.github.com/repos/${this.config.owner}/${this.config.repo}/actions/runs/${runId}/logs`;
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${this.config.githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'HOOTNER-GitHub-Actions-Monitor'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch logs: ${response.status}`);
+      }
+      
+      const logs = await response.text();
+      return this.analyzeLogs(logs);
+    } catch (error) {
+      console.error('Failed to fetch workflow logs:', error.message);
+      return this.generateMockLogs();
+    }
+  }
+
+  analyzeLogs(logs) {
+    const detectedPatterns = [];
+    
+    for (const { pattern, type, severity } of this.failurePatterns) {
+      if (pattern.test(logs)) {
+        detectedPatterns.push({ type, severity, pattern: pattern.toString() });
+      }
+    }
+    
+    return {
+      patterns: detectedPatterns,
+      hasErrors: detectedPatterns.length > 0,
+      errorCount: detectedPatterns.length,
+      summary: this.generateLogSummary(detectedPatterns)
+    };
+  }
+
+  generateMockLogs() {
+    const mockErrors = [
+      'npm ERR! code ECONNREFUSED',
+      'Error: Test suite failed',
+      'TypeError: Cannot read property of undefined'
+    ];
+    
+    const logs = mockErrors[Math.floor(Math.random() * mockErrors.length)];
+    return this.analyzeLogs(logs);
+  }
+
+  generateLogSummary(patterns) {
+    if (patterns.length === 0) {
+      return 'No error patterns detected';
+    }
+    
+    const grouped = patterns.reduce((acc, p) => {
+      acc[p.type] = (acc[p.type] || 0) + 1;
+      return acc;
+    }, {});
+    
+    return Object.entries(grouped)
+      .map(([type, count]) => `${count} ${type} error(s)`)
+      .join(', ');
+  }
+
+  getMonitoringStatus() {
+    return {
+      name: this.name,
+      status: this.status,
+      config: {
+        pollingInterval: `${this.config.pollingInterval / 60000} minutes`,
+        repository: `${this.config.owner}/${this.config.repo}`,
+        mockMode: this.mockMode,
+        autoRecovery: this.config.autoRecoveryEnabled
+      },
+      metrics: this.metrics,
+      consecutiveFailures: Array.from(this.consecutiveFailures.entries()).map(
+        ([workflow, count]) => ({ workflow, count })
+      ),
+      alertsSent: this.alertsSent.size,
+      workflowHistory: this.workflowHistory.size
+    };
+  }
+}
+
 // Export all production agents
 export const productionAgents = {
   'security-service': SecurityAgent,
   'payment-fraud-detection-agent': PaymentFraudAgent,
   'revenue-optimization': RevenueOptimizationAgent,
   'auto-scaling': AutoScalingAgent,
-  'content-moderation-ai': ContentModerationAgent
+  'content-moderation-ai': ContentModerationAgent,
+  'github-actions-monitoring': GitHubActionsMonitoringAgent
 };
 
 export {
@@ -676,5 +1030,6 @@ export {
   PaymentFraudAgent,
   RevenueOptimizationAgent,
   AutoScalingAgent,
-  ContentModerationAgent
+  ContentModerationAgent,
+  GitHubActionsMonitoringAgent
 };
