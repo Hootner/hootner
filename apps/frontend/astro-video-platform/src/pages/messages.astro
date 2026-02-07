@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Messages">
+  <h1 class="text-4xl font-bold mb-8">Messages</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="glass-card p-6">
+      <h2 class="text-xl font-bold mb-4">Conversations</h2>
+      <p class="text-gray-400">No messages yet</p>
+    </div>
+    
+    <div class="md:col-span-2 glass-card p-6">
+      <p class="text-gray-400 text-center">Select a conversation to start messaging</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>

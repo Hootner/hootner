@@ -1,0 +1,29 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} - HOOTNER</title>
+  <script>
+    import Alpine from 'alpinejs';
+    window.Alpine = Alpine;
+    Alpine.start();
+  </script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen">
+  <Nav />
+  <main class="container mx-auto px-4 py-8">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>

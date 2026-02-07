@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOOTNER ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">HOOTNER ERP Dashboard</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Inventory</h2>
+        <p class="text-3xl" id="inventory-items">0</p>
+        <p class="text-sm text-gray-600">Total Items</p>
+        <p class="text-red-600 mt-2" id="low-stock">0 Low Stock</p>
+      </div>
+      
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Sales</h2>
+        <p class="text-3xl" id="sales-orders">0</p>
+        <p class="text-sm text-gray-600">Total Orders</p>
+        <p class="text-green-600 mt-2" id="revenue">$0</p>
+      </div>
+      
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">HR</h2>
+        <p class="text-3xl" id="employees">0</p>
+        <p class="text-sm text-gray-600">Employees</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-4">Add Inventory Item</h2>
+        <form id="inventory-form" class="space-y-3">
+          <input type="text" id="item-id" placeholder="Item ID" class="w-full p-2 border rounded" required>
+          <input type="text" id="item-name" placeholder="Item Name" class="w-full p-2 border rounded" required>
+          <input type="number" id="item-qty" placeholder="Quantity" class="w-full p-2 border rounded" required>
+          <input type="number" id="item-price" placeholder="Price" step="0.01" class="w-full p-2 border rounded" required>
+          <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">Add Item</button>
+        </form>
+      </div>
+
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-4">Create Sales Order</h2>
+        <form id="sales-form" class="space-y-3">
+          <input type="text" id="customer" placeholder="Customer Name" class="w-full p-2 border rounded" required>
+          <input type="number" id="total" placeholder="Total Amount" step="0.01" class="w-full p-2 border rounded" required>
+          <button type="submit" class="w-full bg-green-600 text-white p-2 rounded">Create Order</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:4000/graphql';
+
+    async function fetchDashboard() {
+      const query = `{ erpDashboard { 
+        inventory { totalItems lowStock } 
+        sales { totalOrders revenue } 
+        hr { totalEmployees } 
+      }}`;
+      
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+      
+      const { data } = await res.json();
+      document.getElementById('inventory-items').textContent = data.erpDashboard.inventory.totalItems;
+      document.getElementById('low-stock').textContent = `${data.erpDashboard.inventory.lowStock} Low Stock`;
+      document.getElementById('sales-orders').textContent = data.erpDashboard.sales.totalOrders;
+      document.getElementById('revenue').textContent = `$${data.erpDashboard.sales.revenue.toFixed(2)}`;
+      document.getElementById('employees').textContent = data.erpDashboard.hr.totalEmployees;
+    }
+
+    document.getElementById('inventory-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mutation = `mutation { addInventoryItem(
+        id: "${document.getElementById('item-id').value}",
+        name: "${document.getElementById('item-name').value}",
+        quantity: ${document.getElementById('item-qty').value},
+        price: ${document.getElementById('item-price').value}
+      )}`;
+      
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: mutation })
+      });
+      
+      e.target.reset();
+      fetchDashboard();
+    });
+
+    document.getElementById('sales-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mutation = `mutation { createSalesOrder(
+        customer: "${document.getElementById('customer').value}",
+        total: ${document.getElementById('total').value}
+      )}`;
+      
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: mutation })
+      });
+      
+      e.target.reset();
+      fetchDashboard();
+    });
+
+    fetchDashboard();
+    setInterval(fetchDashboard, 5000);
+  </script>
+</body>
+</html>

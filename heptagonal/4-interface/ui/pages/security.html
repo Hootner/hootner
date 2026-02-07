@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security - HOOTNER</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+            color: #00ff00;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #00d4ff; font-size: 36px; margin-bottom: 30px; }
+        .security-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,255,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .security-card h2 { color: #00ff00; margin-top: 0; }
+        .badge {
+            display: inline-block;
+            background: rgba(0,255,0,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .active { color: #00ff00; }
+        a { color: #00d4ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 HOOTNER Security</h1>
+        
+        <div class="security-card">
+            <h2>🔐 TLS 1.3 Encryption</h2>
+            <p class="active">✅ ACTIVE</p>
+            <p>All connections encrypted with TLS 1.3 (latest standard)</p>
+            <div class="badge">256-bit AES Encryption</div>
+            <div class="badge">Perfect Forward Secrecy</div>
+            <div class="badge">HSTS Enabled</div>
+        </div>
+
+        <div class="security-card">
+            <h2>🍪 Secure Cookies</h2>
+            <p class="active">✅ ACTIVE</p>
+            <p>GDPR-compliant cookie management</p>
+            <div class="badge">Secure Flag</div>
+            <div class="badge">HttpOnly</div>
+            <div class="badge">SameSite=Strict</div>
+            <p><a href="/cookie-policy">View Cookie Policy</a></p>
+        </div>
+
+        <div class="security-card">
+            <h2>🛡️ Security Headers</h2>
+            <p class="active">✅ ACTIVE</p>
+            <div class="badge">Content-Security-Policy</div>
+            <div class="badge">X-Frame-Options: DENY</div>
+            <div class="badge">X-Content-Type-Options: nosniff</div>
+            <div class="badge">X-XSS-Protection</div>
+        </div>
+
+        <div class="security-card">
+            <h2>🔑 Authentication</h2>
+            <p class="active">✅ ACTIVE</p>
+            <div class="badge">JWT Tokens</div>
+            <div class="badge">2FA Support</div>
+            <div class="badge">USB Passkey (FIDO2)</div>
+            <div class="badge">Session Management</div>
+        </div>
+
+        <div class="security-card">
+            <h2>💾 Data Protection</h2>
+            <p class="active">✅ ACTIVE</p>
+            <div class="badge">Encrypted at Rest</div>
+            <div class="badge">Encrypted in Transit</div>
+            <div class="badge">Regular Backups</div>
+            <div class="badge">GDPR Compliant</div>
+        </div>
+
+        <p style="margin-top: 40px; text-align: center; color: #00ffff;">
+            <a href="/dashboard">← Back to Dashboard</a>
+        </p>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.95);padding:20px;border-top:2px solid #00ff00;display:none;">
+        <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+            <p style="margin:0;color:#00ffff;">🍪 We use secure cookies to improve your experience. <a href="/cookie-policy" style="color:#00ff00;">Learn more</a></p>
+            <button onclick="acceptCookies()" style="background:#00ff00;color:#000;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-weight:bold;">Accept</button>
+        </div>
+    </div>
+
+    <script>
+        // Show cookie banner if not accepted
+        if (!localStorage.getItem('cookies_accepted')) {
+            document.getElementById('cookie-banner').style.display = 'block';
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookies_accepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

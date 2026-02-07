@@ -1,0 +1,25 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  thumbnail: string;
+  views: number;
+}
+const { id, title, thumbnail, views } = Astro.props;
+---
+<a href={`/video-player?id=${id}`} class="glass-card overflow-hidden hover:scale-105 transition block">
+  <img src={thumbnail} alt={title} class="w-full h-48 object-cover">
+  <div class="p-4">
+    <h3 class="font-bold mb-2">{title}</h3>
+    <p class="text-sm text-gray-400">{views} views</p>
+  </div>
+</a>
+
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>

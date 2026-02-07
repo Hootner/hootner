@@ -69,6 +69,8 @@ apps/frontend/astro-app/
 }
 ```
 
+<!-- cSpell:ignore alpinejs astrojs tailwindcss dragover rgba -->
+
 ### astro.config.mjs
 ```javascript
 import { defineConfig } from 'astro/config';
