@@ -13,7 +13,7 @@
     "socket.io": "^4.7.2",
     "cors": "^2.8.5",
     "helmet": "^7.0.0",
-    "rate-limiter-flexible": "^3.0.8"
+    "rate-limiter-flexible": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
