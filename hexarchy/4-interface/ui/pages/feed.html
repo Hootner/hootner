@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦉 Social Feed - HOOTNER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --neon-green: #00ff41;
+      --neon-cyan: #00ffff;
+      --neon-magenta: #ff00ff;
+      --bg-dark: #0a0a0f;
+      --bg-card: rgba(15, 15, 20, 0.95);
+      --border-color: rgba(0, 255, 65, 0.2);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      color: var(--neon-green);
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 255, 65, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    }
+
+    /* Search Bar */
+    .search-container {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+      margin: 0 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 10px 16px 10px 40px;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .search-input::placeholder {
+      color: #666;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 14px;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-top: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 200;
+    }
+
+    .search-results.active {
+      display: block;
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-result-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .search-result-text {
+      flex: 1;
+    }
+
+    .search-result-name {
+      font-weight: 600;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .search-result-type {
+      font-size: 12px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .search-container {
+        display: none;
+      }
+    }
+
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+
+    /* Create Post */
+    .create-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .create-post-header {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .avatar.small {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+
+    .post-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      color: #fff;
+      font-size: 15px;
+      resize: none;
+      min-height: 80px;
+      font-family: inherit;
+    }
+
+    .post-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    }
+
+    .post-input::placeholder {
+      color: #666;
+    }
+
+    .create-post-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .media-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .media-btn {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      color: var(--neon-cyan);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .media-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
+    .post-btn {
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+      border: none;
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .post-btn:hover {
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .post-btn:disabled {
+      background: #333;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Feed Posts */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .post-card:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+    }
+
+    .post-user-info {
+      flex: 1;
+    }
+
+    .post-username {
+      font-weight: 600;
+      color: var(--neon-cyan);
+      font-size: 15px;
+    }
+
+    .post-username .verified {
+      color: var(--neon-green);
+      margin-left: 4px;
+    }
+
+    .post-time {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .post-menu {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px 8px;
+    }
+
+    .post-content {
+      padding: 0 20px 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    .post-media {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .post-media.video {
+      cursor: pointer;
+    }
+
+    .post-stats {
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #888;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .post-actions {
+      display: flex;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: #888;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--neon-cyan);
+    }
+
+    .action-btn.liked {
+      color: #ef4444;
+    }
+
+    .action-btn .icon {
+      font-size: 18px;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+
+    .comment-content {
+      flex: 1;
+    }
+
+    .comment-bubble {
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .comment-username {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--neon-cyan);
+      margin-bottom: 4px;
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .comment-action {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .comment-action:hover {
+      color: var(--neon-cyan);
+    }
+
+    .add-comment {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .comment-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    .comment-submit {
+      background: var(--neon-cyan);
+      border: none;
+      color: #000;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--neon-green);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Trending */
+    .trending-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .trending-item:last-child {
+      border-bottom: none;
+    }
+
+    .trending-item:hover {
+      padding-left: 8px;
+    }
+
+    .trending-category {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .trending-tag {
+      font-weight: 600;
+      color: var(--neon-cyan);
+      font-size: 15px;
+      margin: 4px 0;
+    }
+
+    .trending-posts {
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Suggestions */
+    .suggestion {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .suggestion-info {
+      flex: 1;
+    }
+
+    .suggestion-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .suggestion-handle {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .follow-btn {
+      background: transparent;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .follow-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+    }
+
+    /* Loading Spinner */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 255, 255, 0.2);
+      border-top-color: var(--neon-cyan);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Image Preview */
+    .image-preview {
+      position: relative;
+      margin-top: 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .image-preview.active {
+      display: block;
+    }
+
+    .image-preview img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .comments-section.open {
+      max-height: 500px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .comment-bubble {
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 14px;
+      flex: 1;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .comment-username {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--neon-cyan);
+    }
+
+    .comment-time {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    .comment-likes {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .comment-like-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+    }
+
+    .add-comment {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .comment-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    .comment-submit {
+      background: var(--neon-cyan);
+      border: none;
+      color: #000;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .comment-submit:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    }
+
+    /* Share Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--neon-cyan);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .share-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .share-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .share-option:hover {
+      border-color: var(--neon-cyan);
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .share-icon {
+      font-size: 24px;
+    }
+
+    .share-label {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .copy-link {
+      display: flex;
+      gap: 8px;
+    }
+
+    .link-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .copy-btn {
+      background: var(--neon-green);
+      border: none;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+    }
+
+    /* Post Menu Dropdown */
+    .post-menu-container {
+      position: relative;
+    }
+
+    .post-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 8px 0;
+      min-width: 160px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    .post-menu-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: #ccc;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+    }
+
+    .menu-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+      color: var(--neon-cyan);
+    }
+
+    .menu-item.danger {
+      color: #ef4444;
+    }
+
+    .menu-item.danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--neon-green);
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 2000;
+      transition: transform 0.3s;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Feed Tabs */
+    .feed-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .feed-tab {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      color: #888;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .feed-tab:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+    }
+
+    .feed-tab.active {
+      background: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      color: #000;
+      font-weight: 600;
+    }
+
+    /* Character Counter */
+    .char-counter {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .char-counter.warning {
+      color: #f59e0b;
+    }
+
+    .char-counter.error {
+      color: #ef4444;
+    }
+
+    /* Video Player */
+    .video-container {
+      position: relative;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .video-container video {
+      width: 100%;
+      max-height: 500px;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      transition: opacity 0.3s;
+    }
+
+    .video-container.playing .video-overlay {
+      opacity: 0;
+    }
+
+    .video-container:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .video-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .video-progress-bar {
+      height: 100%;
+      background: var(--neon-cyan);
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    /* Polls */
+    .poll-container {
+      padding: 16px 20px;
+    }
+
+    .poll-question {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .poll-option {
+      position: relative;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .poll-option:hover {
+      border-color: var(--neon-cyan);
+    }
+
+    .poll-option.voted {
+      cursor: default;
+    }
+
+    .poll-option.selected {
+      border-color: var(--neon-green);
+    }
+
+    .poll-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(0, 255, 255, 0.15);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .poll-option.selected .poll-bar {
+      background: rgba(0, 255, 65, 0.2);
+    }
+
+    .poll-text {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .poll-label {
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+
+    .poll-percent {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .poll-option.voted .poll-percent {
+      opacity: 1;
+    }
+
+    .poll-check {
+      color: var(--neon-green);
+      margin-right: 8px;
+    }
+
+    .poll-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    /* Hashtags */
+    .hashtag {
+      color: var(--neon-cyan);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .hashtag:hover {
+      color: var(--neon-green);
+      text-decoration: underline;
+    }
+
+    /* Mentions */
+    .mention {
+      color: var(--neon-magenta);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .mention:hover {
+      text-decoration: underline;
+    }
+
+    /* Bookmark button */
+    .action-btn.bookmarked {
+      color: var(--neon-green);
+    }
+
+    /* Read more */
+    .post-content.truncated {
+      max-height: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .post-content.truncated::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(transparent, var(--bg-card));
+    }
+
+    .read-more-btn {
+      background: none;
+      border: none;
+      color: var(--neon-cyan);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 8px 20px;
+      font-weight: 500;
+    }
+
+    .read-more-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Repost indicator */
+    .repost-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Live indicator */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ef4444;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+  </style>
+  <link rel="stylesheet" href="glass-ui.css">
+  <script src="glass-ui.js" defer></script>
+</head>
+</head>
+<body>
+  <div id="canonical-banner" style="position:fixed; bottom:12px; left:12px; background: rgba(255, 196, 0, 0.1); border: 1px solid rgba(255, 196, 0, 0.3); padding: 8px 12px; border-radius: 8px; font-size: 12px; z-index: 2000; color: #ffdc73;">
+    Legacy Feed • Canonical page: Social Feed (React).
+    <a href="/feed-react.html" style="margin-left:8px; color:#00ffff; text-decoration:underline;">Go to feed-react.html →</a>
+    <button aria-label="Hide" onclick="this.parentElement.remove()" style="margin-left:8px; background:none; border:none; color:#ffdc73; cursor:pointer;">×</button>
+  </div>
+  <!-- Header -->
+  <header class="header">
+    <a href="dashboard.html" class="logo">🦉 HOOTNER</a>
+    
+    <!-- Search Bar -->
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search posts, people, hashtags...">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    
+    <div class="header-actions">
+      <a href="dashboard.html" class="back-btn">← Dashboard</a>
+      <button class="notif-btn">
+        🔔
+        <span class="notif-badge">3</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Feed Column -->
+    <div class="feed-column">
+      <!-- Feed Tabs -->
+      <div class="feed-tabs">
+        <button class="feed-tab active" data-tab="for-you">For You</button>
+        <button class="feed-tab" data-tab="following">Following</button>
+        <button class="feed-tab" data-tab="trending">Trending</button>
+      </div>
+
+      <!-- Create Post -->
+      <div class="create-post">
+        <div class="create-post-header">
+          <div class="avatar">🦉</div>
+          <textarea class="post-input" id="postInput" placeholder="What's on your mind?" maxlength="500"></textarea>
+        </div>
+        <div class="char-counter" id="charCounter">0 / 500</div>
+        <div class="image-preview" id="imagePreview">
+          <img id="previewImg" src="" alt="Preview">
+          <button class="remove-image" id="removeImage">×</button>
+        </div>
+        <div class="create-post-actions">
+          <div class="media-buttons">
+            <button class="media-btn" id="photoBtn">📷 Photo</button>
+            <button class="media-btn" id="videoBtn">🎬 Video</button>
+            <button class="media-btn" id="liveBtn">🔴 Live</button>
+          </div>
+          <button class="post-btn" id="postBtn" disabled>Post</button>
+        </div>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+      </div>
+
+      <!-- Feed -->
+      <div class="feed" id="feed">
+        <!-- Posts will be inserted here -->
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Loading more posts...
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Trending -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">🔥 Trending</h3>
+        <div class="trending-item">
+          <div class="trending-category">Technology</div>
+          <div class="trending-tag">#AIVideoGen</div>
+          <div class="trending-posts">12.4K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Entertainment</div>
+          <div class="trending-tag">#HootnerLive</div>
+          <div class="trending-posts">8.2K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Creators</div>
+          <div class="trending-tag">#ContentCreator</div>
+          <div class="trending-posts">5.7K posts</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-category">Music</div>
+          <div class="trending-tag">#NewMusic2026</div>
+          <div class="trending-posts">3.1K posts</div>
+        </div>
+      </div>
+
+      <!-- Who to Follow -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">👥 Who to Follow</h3>
+        <div class="suggestion">
+          <div class="avatar small">🎬</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">VideoMaster</div>
+            <div class="suggestion-handle">@videomaster</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+        <div class="suggestion">
+          <div class="avatar small">🎵</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">MusicVibes</div>
+            <div class="suggestion-handle">@musicvibes</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+        <div class="suggestion">
+          <div class="avatar small">💻</div>
+          <div class="suggestion-info">
+            <div class="suggestion-name">TechGuru</div>
+            <div class="suggestion-handle">@techguru</div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+      </div>
+
+      <!-- Footer Links -->
+      <div class="sidebar-card" style="font-size: 12px; color: #666;">
+        <a href="#" style="color: #666; margin-right: 12px;">Terms</a>
+        <a href="#" style="color: #666; margin-right: 12px;">Privacy</a>
+        <a href="#" style="color: #666; margin-right: 12px;">Help</a>
+        <a href="contact.html" style="color: #666;">Contact</a>
+        <div style="margin-top: 8px;">© 2026 HOOTNER</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Share Modal -->
+  <div class="modal-overlay" id="shareModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Share Post</h3>
+        <button class="modal-close" id="closeModal">×</button>
+      </div>
+      <div class="share-options">
+        <div class="share-option" data-platform="twitter">
+          <span class="share-icon">🐦</span>
+          <span class="share-label">Twitter</span>
+        </div>
+        <div class="share-option" data-platform="facebook">
+          <span class="share-icon">📘</span>
+          <span class="share-label">Facebook</span>
+        </div>
+        <div class="share-option" data-platform="reddit">
+          <span class="share-icon">🔴</span>
+          <span class="share-label">Reddit</span>
+        </div>
+        <div class="share-option" data-platform="email">
+          <span class="share-icon">✉️</span>
+          <span class="share-label">Email</span>
+        </div>
+      </div>
+      <div class="copy-link">
+        <input type="text" class="link-input" id="shareLink" value="https://hootner.com/post/12345" readonly>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Link copied!</div>
+
+  <script>
+    // Sample post data with comments
+    const samplePosts = [
+      {
+        id: 1,
+        user: { name: 'VideoCreator', handle: '@videocreator', avatar: '🎬', verified: true },
+        time: '2h ago',
+        content: 'Just dropped my latest video edit using HOOTNER\'s AI tools! The results are insane 🔥 Check it out and let me know what you think!',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=1' },
+        likes: 1247,
+        comments: [
+          { id: 1, user: 'TechFan', avatar: '💻', text: 'This is incredible! What AI model did you use?', time: '1h ago', likes: 23 },
+          { id: 2, user: 'CreatorPro', avatar: '🎨', text: 'The color grading is perfect 👌', time: '45m ago', likes: 8 }
+        ],
+        shares: 234,
+        liked: false
+      },
+      {
+        id: 2,
+        user: { name: 'MusicProducer', handle: '@musicprod', avatar: '🎵', verified: true },
+        time: '4h ago',
+        content: 'New beat dropped! 🎧 Made entirely with AI-assisted composition. The future of music production is HERE.',
+        media: null,
+        likes: 892,
+        comments: [
+          { id: 1, user: 'BeatMaker', avatar: '🎹', text: 'Fire! Can you share the workflow?', time: '3h ago', likes: 45 }
+        ],
+        shares: 78,
+        liked: true
+      },
+      {
+        id: 3,
+        user: { name: 'TechReviewer', handle: '@techrev', avatar: '💻', verified: false },
+        time: '6h ago',
+        content: 'Just tested the new streaming features on HOOTNER. 8K HDR support is absolutely mind-blowing! Here\'s a comparison shot.',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=2' },
+        likes: 2341,
+        comments: [],
+        shares: 445,
+        liked: false
+      },
+      {
+        id: 4,
+        user: { name: 'ArtistDaily', handle: '@artistdaily', avatar: '🎨', verified: true },
+        time: '8h ago',
+        content: 'Created this digital artwork live on HOOTNER today! Thanks to everyone who joined the stream. You all inspire me to keep pushing creative boundaries. 💜',
+        media: { type: 'image', url: 'https://picsum.photos/600/400?random=3' },
+        likes: 3567,
+        comments: [
+          { id: 1, user: 'ArtLover', avatar: '🖼️', text: 'Absolutely stunning work!', time: '7h ago', likes: 112 },
+          { id: 2, user: 'Designer99', avatar: '✨', text: 'The detail is insane', time: '6h ago', likes: 67 },
+          { id: 3, user: 'Creative', avatar: '🌟', text: 'What brushes did you use?', time: '5h ago', likes: 34 }
+        ],
+        shares: 567,
+        liked: false
+      },
+      {
+        id: 5,
+        user: { name: 'GamingPro', handle: '@gamingpro', avatar: '🎮', verified: true },
+        time: '12h ago',
+        content: 'GG everyone! Just hit a new personal record. Streaming again tomorrow at 8PM EST. Don\'t miss it!',
+        media: null,
+        likes: 1823,
+        comments: [],
+        shares: 123,
+        liked: false
+      },
+      {
+        id: 6,
+        user: { name: 'StreamerKing', handle: '@streamerking', avatar: '👑', verified: true },
+        time: '1d ago',
+        content: 'Check out this insane gameplay clip! #gaming #esports #HOOTNER',
+        media: { type: 'video', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: '10:34' },
+        likes: 5234,
+        comments: [],
+        shares: 892,
+        liked: false
+      },
+      {
+        id: 7,
+        user: { name: 'PollMaster', handle: '@pollmaster', avatar: '📊', verified: false },
+        time: '2d ago',
+        content: 'Quick poll for my fellow creators! What editing software do you prefer?',
+        media: null,
+        poll: {
+          question: 'What editing software do you prefer?',
+          options: [
+            { id: 1, text: 'Adobe Premiere Pro', votes: 423 },
+            { id: 2, text: 'DaVinci Resolve', votes: 312 },
+            { id: 3, text: 'Final Cut Pro', votes: 189 },
+            { id: 4, text: 'HOOTNER AI Editor', votes: 567 }
+          ],
+          totalVotes: 1491,
+          endsIn: '2 days'
+        },
+        likes: 892,
+        comments: [],
+        shares: 45,
+        liked: false
+      },
+      {
+        id: 8,
+        user: { name: 'LiveNow', handle: '@livenow', avatar: '🔴', verified: true },
+        time: 'LIVE',
+        content: '🔴 LIVE NOW: Building a full-stack app with AI! Come hang out and ask questions! @everyone #coding #webdev #tutorial',
+        media: { type: 'live', url: '', viewers: 1247 },
+        likes: 3421,
+        comments: [],
+        shares: 234,
+        liked: false,
+        isLive: true
+      }
+    ];
+
+    let uploadedImage = null;
+
+    // Format numbers
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+
+    // Highlight hashtags and mentions
+    function highlightText(text) {
+      return text
+        .replace(/#(\w+)/g, '<span class="hashtag" data-tag="$1">#$1</span>')
+        .replace(/@(\w+)/g, '<span class="mention" data-user="$1">@$1</span>');
+    }
+
+    // Create video player HTML
+    function createVideoHTML(media) {
+      return `
+        <div class="video-container" data-playing="false">
+          <video src="${media.url}" preload="metadata"></video>
+          <div class="video-overlay">
+            <button class="play-btn">▶</button>
+          </div>
+          <div class="video-progress">
+            <div class="video-progress-bar"></div>
+          </div>
+          <span class="video-duration">${media.duration || '0:00'}</span>
+        </div>
+      `;
+    }
+
+    // Create poll HTML
+    function createPollHTML(poll, postId) {
+      const optionsHTML = poll.options.map(opt => {
+        const percent = Math.round((opt.votes / poll.totalVotes) * 100);
+        return `
+          <div class="poll-option" data-option-id="${opt.id}" data-post-id="${postId}">
+            <div class="poll-bar" style="width: 0%"></div>
+            <div class="poll-text">
+              <span class="poll-label">${opt.text}</span>
+              <span class="poll-percent">${percent}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="poll-container" data-post-id="${postId}" data-voted="false">
+          <div class="poll-question">${poll.question}</div>
+          ${optionsHTML}
+          <div class="poll-meta">
+            <span>${formatNumber(poll.totalVotes)} votes</span>
+            <span>Ends in ${poll.endsIn}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create live indicator HTML
+    function createLiveHTML(media) {
+      return `
+        <div class="video-container live-stream">
+          <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              LIVE
+            </div>
+            <div style="font-size: 24px;">🎬</div>
+            <div style="color: #888;">${formatNumber(media.viewers)} watching</div>
+            <button class="post-btn" style="margin-top: 8px;">Join Stream</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create comments HTML
+    function createCommentsHTML(comments, postId) {
+      const commentsHTML = comments.map(c => `
+        <div class="comment">
+          <div class="avatar small">${c.avatar}</div>
+          <div class="comment-bubble">
+            <div class="comment-header">
+              <span class="comment-username">${c.user}</span>
+              <span class="comment-time">${c.time}</span>
+            </div>
+            <div class="comment-text">${highlightText(c.text)}</div>
+            <div class="comment-likes">
+              <button class="comment-like-btn">🤍</button>
+              <span>${c.likes}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="comments-section" id="comments-${postId}">
+          ${commentsHTML}
+          <div class="add-comment">
+            <div class="avatar small">🦉</div>
+            <input type="text" class="comment-input" placeholder="Write a comment..." data-post-id="${postId}">
+            <button class="comment-submit" data-post-id="${postId}">Post</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create post HTML
+    function createPostHTML(post) {
+      let mediaHTML = '';
+      
+      if (post.media) {
+        if (post.media.type === 'video') {
+          mediaHTML = createVideoHTML(post.media);
+        } else if (post.media.type === 'live') {
+          mediaHTML = createLiveHTML(post.media);
+        } else {
+          mediaHTML = `<img class="post-media" src="${post.media.url}" alt="Post media" loading="lazy">`;
+        }
+      }
+
+      if (post.poll) {
+        mediaHTML = createPollHTML(post.poll, post.id);
+      }
+
+      const commentCount = Array.isArray(post.comments) ? post.comments.length : post.comments;
+      const isLongContent = post.content.length > 280;
+
+      return `
+        <article class="post-card" data-id="${post.id}">
+          ${post.isLive ? '<div class="repost-indicator"><span class="live-badge"><span class="live-dot"></span>LIVE</span> Currently streaming</div>' : ''}
+          <div class="post-header">
+            <div class="avatar small">${post.user.avatar}</div>
+            <div class="post-user-info">
+              <div class="post-username">
+                ${post.user.name}
+                ${post.user.verified ? '<span class="verified">✓</span>' : ''}
+              </div>
+              <div class="post-time">${post.user.handle} · ${post.time}</div>
+            </div>
+            <div class="post-menu-container">
+              <button class="post-menu">⋯</button>
+              <div class="post-menu-dropdown">
+                <div class="menu-item" data-action="save">🔖 Save Post</div>
+                <div class="menu-item" data-action="hide">👁️ Hide Post</div>
+                <div class="menu-item" data-action="copy">🔗 Copy Link</div>
+                <div class="menu-item danger" data-action="report">🚩 Report</div>
+              </div>
+            </div>
+          </div>
+          <div class="post-content">${highlightText(post.content)}</div>
+          ${isLongContent ? '<button class="read-more-btn">Read more</button>' : ''}
+          ${mediaHTML}
+          <div class="post-stats">
+            <span class="likes-count">${formatNumber(post.likes)} likes</span>
+            <span>${formatNumber(commentCount)} comments · ${formatNumber(post.shares)} shares</span>
+          </div>
+          <div class="post-actions">
+            <button class="action-btn ${post.liked ? 'liked' : ''}" data-action="like">
+              <span class="icon">${post.liked ? '❤️' : '🤍'}</span>
+              <span>Like</span>
+            </button>
+            <button class="action-btn" data-action="comment">
+              <span class="icon">💬</span>
+              <span>Comment</span>
+            </button>
+            <button class="action-btn" data-action="share">
+              <span class="icon">🔄</span>
+              <span>Share</span>
+            </button>
+            <button class="action-btn" data-action="bookmark">
+              <span class="icon">🔖</span>
+              <span>Save</span>
+            </button>
+          </div>
+          ${Array.isArray(post.comments) ? createCommentsHTML(post.comments, post.id) : ''}
+        </article>
+      `;
+    }
+
+    // Initialize feed
+    function initFeed() {
+      const feedEl = document.getElementById('feed');
+      const postsHTML = samplePosts.map(createPostHTML).join('');
+      feedEl.innerHTML = postsHTML;
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    // Post input handling with character counter
+    const postInput = document.getElementById('postInput');
+    const postBtn = document.getElementById('postBtn');
+    const charCounter = document.getElementById('charCounter');
+
+    postInput.addEventListener('input', () => {
+      const len = postInput.value.length;
+      charCounter.textContent = `${len} / 500`;
+      charCounter.className = 'char-counter';
+      if (len > 450) charCounter.classList.add('warning');
+      if (len >= 500) charCounter.classList.add('error');
+      postBtn.disabled = postInput.value.trim() === '' && !uploadedImage;
+    });
+
+    // Image upload handling
+    const photoBtn = document.getElementById('photoBtn');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImage = document.getElementById('removeImage');
+
+    photoBtn.addEventListener('click', () => imageInput.click());
+
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedImage = e.target.result;
+          previewImg.src = uploadedImage;
+          imagePreview.classList.add('active');
+          postBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    removeImage.addEventListener('click', () => {
+      uploadedImage = null;
+      imagePreview.classList.remove('active');
+      imageInput.value = '';
+      postBtn.disabled = postInput.value.trim() === '';
+    });
+
+    // Post submission
+    postBtn.addEventListener('click', () => {
+      if (postInput.value.trim() || uploadedImage) {
+        const newPost = {
+          id: Date.now(),
+          user: { name: 'You', handle: '@you', avatar: '🦉', verified: false },
+          time: 'Just now',
+          content: postInput.value.trim(),
+          media: uploadedImage ? { type: 'image', url: uploadedImage } : null,
+          likes: 0,
+          comments: [],
+          shares: 0,
+          liked: false
+        };
+        
+        const feedEl = document.getElementById('feed');
+        feedEl.insertAdjacentHTML('afterbegin', createPostHTML(newPost));
+        postInput.value = '';
+        charCounter.textContent = '0 / 500';
+        uploadedImage = null;
+        imagePreview.classList.remove('active');
+        imageInput.value = '';
+        postBtn.disabled = true;
+        showToast('Post published!');
+      }
+    });
+
+    // Handle post actions (combined handler)
+    document.getElementById('feed').addEventListener('click', (e) => {
+      // Video player
+      const videoContainer = e.target.closest('.video-container');
+      if (videoContainer && !videoContainer.classList.contains('live-stream')) {
+        const video = videoContainer.querySelector('video');
+        const playBtn = videoContainer.querySelector('.play-btn');
+        if (video && playBtn) {
+          if (video.paused) {
+            video.play();
+            videoContainer.classList.add('playing');
+            playBtn.textContent = '⏸';
+          } else {
+            video.pause();
+            videoContainer.classList.remove('playing');
+            playBtn.textContent = '▶';
+          }
+        }
+        return;
+      }
+
+      // Poll voting
+      const pollOption = e.target.closest('.poll-option');
+      if (pollOption) {
+        const pollContainer = pollOption.closest('.poll-container');
+        if (pollContainer.dataset.voted === 'true') return;
+
+        pollContainer.dataset.voted = 'true';
+        pollOption.classList.add('selected');
+        
+        pollContainer.querySelectorAll('.poll-option').forEach(opt => {
+          opt.classList.add('voted');
+          const percent = opt === pollOption ? 
+            Math.floor(Math.random() * 20) + 35 : 
+            Math.floor(Math.random() * 25) + 10;
+          opt.querySelector('.poll-bar').style.width = percent + '%';
+          opt.querySelector('.poll-percent').textContent = percent + '%';
+        });
+
+        showToast('Vote recorded!');
+        return;
+      }
+
+      // Hashtag click
+      const hashtag = e.target.closest('.hashtag');
+      if (hashtag) {
+        showToast(`Searching #${hashtag.dataset.tag}...`);
+        return;
+      }
+
+      // Mention click
+      const mention = e.target.closest('.mention');
+      if (mention) {
+        showToast(`Viewing @${mention.dataset.user}'s profile...`);
+        return;
+      }
+
+      // Like button
+      const actionBtn = e.target.closest('.action-btn');
+      if (actionBtn) {
+        const action = actionBtn.dataset.action;
+        const postCard = actionBtn.closest('.post-card');
+        
+        if (action === 'like') {
+          actionBtn.classList.toggle('liked');
+          const icon = actionBtn.querySelector('.icon');
+          icon.textContent = actionBtn.classList.contains('liked') ? '❤️' : '🤍';
+        }
+        
+        if (action === 'comment') {
+          const postId = postCard.dataset.id;
+          const commentsSection = document.getElementById(`comments-${postId}`);
+          if (commentsSection) {
+            commentsSection.classList.toggle('open');
+            if (commentsSection.classList.contains('open')) {
+              const input = commentsSection.querySelector('.comment-input');
+              if (input) input.focus();
+            }
+          }
+        }
+        
+        if (action === 'share') {
+          openShareModal(postCard.dataset.id);
+        }
+
+        if (action === 'bookmark') {
+          actionBtn.classList.toggle('bookmarked');
+          const icon = actionBtn.querySelector('.icon');
+          if (actionBtn.classList.contains('bookmarked')) {
+            icon.textContent = '📑';
+            showToast('Post saved to bookmarks!');
+          } else {
+            icon.textContent = '🔖';
+            showToast('Removed from bookmarks');
+          }
+        }
+        return;
+      }
+
+      // Post menu
+      const menuBtn = e.target.closest('.post-menu');
+      if (menuBtn) {
+        const dropdown = menuBtn.nextElementSibling;
+        document.querySelectorAll('.post-menu-dropdown.open').forEach(d => {
+          if (d !== dropdown) d.classList.remove('open');
+        });
+        dropdown.classList.toggle('open');
+        return;
+      }
+
+      // Menu item
+      const menuItem = e.target.closest('.menu-item');
+      if (menuItem) {
+        const action = menuItem.dataset.action;
+        if (action === 'copy') {
+          navigator.clipboard.writeText('https://hootner.com/post/12345');
+          showToast('Link copied!');
+        } else if (action === 'save') {
+          showToast('Post saved!');
+        } else if (action === 'hide') {
+          menuItem.closest('.post-card').remove();
+          showToast('Post hidden');
+        } else if (action === 'report') {
+          showToast('Post reported');
+        }
+        menuItem.closest('.post-menu-dropdown').classList.remove('open');
+        return;
+      }
+
+      // Comment submit
+      const commentSubmit = e.target.closest('.comment-submit');
+      if (commentSubmit) {
+        const postId = commentSubmit.dataset.postId;
+        const input = document.querySelector(`.comment-input[data-post-id="${postId}"]`);
+        if (input && input.value.trim()) {
+          const commentsSection = document.getElementById(`comments-${postId}`);
+          const newComment = `
+            <div class="comment">
+              <div class="avatar small">🦉</div>
+              <div class="comment-bubble">
+                <div class="comment-header">
+                  <span class="comment-username">You</span>
+                  <span class="comment-time">Just now</span>
+                </div>
+                <div class="comment-text">${input.value.trim()}</div>
+                <div class="comment-likes">
+                  <button class="comment-like-btn">🤍</button>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          `;
+          commentsSection.insertAdjacentHTML('afterbegin', newComment);
+          input.value = '';
+        }
+      }
+    });
+
+    // Close menu on click outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.post-menu-container')) {
+        document.querySelectorAll('.post-menu-dropdown.open').forEach(d => d.classList.remove('open'));
+      }
+    });
+
+    // Share Modal
+    const shareModal = document.getElementById('shareModal');
+    const closeModal = document.getElementById('closeModal');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function openShareModal(postId) {
+      document.getElementById('shareLink').value = `https://hootner.com/post/${postId}`;
+      shareModal.classList.add('active');
+    }
+
+    closeModal.addEventListener('click', () => shareModal.classList.remove('active'));
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) shareModal.classList.remove('active');
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('shareLink').value);
+      showToast('Link copied!');
+      shareModal.classList.remove('active');
+    });
+
+    // Share options
+    document.querySelectorAll('.share-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const platform = opt.dataset.platform;
+        showToast(`Opening ${platform}...`);
+        shareModal.classList.remove('active');
+      });
+    });
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Feed tabs
+    document.querySelectorAll('.feed-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        showToast(`Switched to ${tab.textContent}`);
+      });
+    });
+
+    // Follow button handling
+    document.querySelectorAll('.follow-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.textContent === 'Follow') {
+          btn.textContent = 'Following';
+          btn.style.background = 'var(--neon-cyan)';
+          btn.style.color = '#000';
+          showToast('Followed!');
+        } else {
+          btn.textContent = 'Follow';
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--neon-cyan)';
+          showToast('Unfollowed');
+        }
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    
+    const searchData = [
+      { type: 'user', name: 'VideoCreator', handle: '@videocreator', avatar: '🎬' },
+      { type: 'user', name: 'MusicProducer', handle: '@musicprod', avatar: '🎵' },
+      { type: 'user', name: 'TechReviewer', handle: '@techrev', avatar: '💻' },
+      { type: 'user', name: 'ArtistDaily', handle: '@artistdaily', avatar: '🎨' },
+      { type: 'user', name: 'GamingPro', handle: '@gamingpro', avatar: '🎮' },
+      { type: 'hashtag', name: '#AIVideoGen', posts: '12.4K posts' },
+      { type: 'hashtag', name: '#HootnerLive', posts: '8.2K posts' },
+      { type: 'hashtag', name: '#ContentCreator', posts: '5.7K posts' },
+      { type: 'hashtag', name: '#gaming', posts: '45K posts' },
+      { type: 'hashtag', name: '#coding', posts: '23K posts' },
+      { type: 'hashtag', name: '#webdev', posts: '18K posts' }
+    ];
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      
+      if (query.length < 1) {
+        searchResults.classList.remove('active');
+        return;
+      }
+
+      const filtered = searchData.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        (item.handle && item.handle.toLowerCase().includes(query))
+      );
+
+      if (filtered.length > 0) {
+        searchResults.innerHTML = filtered.map(item => `
+          <div class="search-result-item" data-type="${item.type}" data-name="${item.name}">
+            <div class="avatar small">${item.avatar || '#️⃣'}</div>
+            <div class="search-result-text">
+              <div class="search-result-name">${item.name}</div>
+              <div class="search-result-type">${item.type === 'user' ? item.handle : item.posts}</div>
+            </div>
+          </div>
+        `).join('');
+        searchResults.classList.add('active');
+      } else {
+        searchResults.innerHTML = '<div class="search-result-item"><div class="search-result-text">No results found</div></div>';
+        searchResults.classList.add('active');
+      }
+    });
+
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => searchResults.classList.remove('active'), 200);
+    });
+
+    searchResults.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-result-item');
+      if (item) {
+        const name = item.dataset.name;
+        showToast(`Searching for ${name}...`);
+        searchInput.value = '';
+        searchResults.classList.remove('active');
+      }
+    });
+
+    // Update video progress
+    document.querySelectorAll('video').forEach(video => {
+      video.addEventListener('timeupdate', () => {
+        const progress = (video.currentTime / video.duration) * 100;
+        const progressBar = video.closest('.video-container').querySelector('.video-progress-bar');
+        if (progressBar) progressBar.style.width = progress + '%';
+      });
+    });
+
+    // Infinite scroll simulation
+    let loading = false;
+    window.addEventListener('scroll', () => {
+      if (loading) return;
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loading = true;
+        document.getElementById('loading').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('loading').style.display = 'none';
+          loading = false;
+        }, 1500);
+      }
+    });
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', initFeed);
+  </script></body>
+</html>

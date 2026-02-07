@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HOOTNER Cinema Player - 8K HDR10 + Dolby Atmos</title>
+    <link rel="stylesheet" href="glass-ui.css">
+    <script src="glass-ui.js" defer></script>
     <style>
       * {
         margin: 0;
@@ -947,6 +949,12 @@
               <span>PiP</span>
             </button>
 
+            <!-- Share -->
+            <button class="control-btn" onclick="shareVideo()">
+              <span>🔗</span>
+              <span>Share</span>
+            </button>
+
             <!-- Keyboard shortcuts -->
             <button class="control-btn" onclick="toggleShortcuts()">
               <span>⌨️</span>
@@ -1223,14 +1231,18 @@
 
       /**
        * Load video from backend API
-       * Supports URL parameters: ?video=<id> or ?url=<video_url>
+       * Supports URL parameters: ?video=<id> or ?url=<video_url> or ?youtube=<youtube_url>
        */
       async function loadVideoFromBackend() {
         const urlParams = new URLSearchParams(window.location.search)
         const videoId = urlParams.get('video')
         const videoUrl = urlParams.get('url')
+        const youtubeUrl = urlParams.get('youtube')
 
-        if (videoUrl) {
+        if (youtubeUrl) {
+          // Load YouTube video
+          loadYouTubeVideo(youtubeUrl)
+        } else if (videoUrl) {
           // Direct URL provided
           loadVideoUrl(videoUrl)
         } else if (videoId) {
@@ -1239,7 +1251,40 @@
           await fetchVideoMetadata(videoId)
         } else {
           // Load sample/default video
-          loadVideoUrl(`${API_BASE_URL}/api/video/sample`)
+          loadVideoUrl('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')
+        }
+      }
+
+      /**
+       * Load YouTube video
+       */
+      function loadYouTubeVideo(url) {
+        // Extract YouTube video ID
+        let videoId = ''
+        if (url.includes('youtube.com/watch?v=')) {
+          videoId = url.split('v=')[1].split('&')[0]
+        } else if (url.includes('youtu.be/')) {
+          videoId = url.split('youtu.be/')[1].split('?')[0]
+        }
+
+        if (videoId) {
+          const videoContainer = document.querySelector('.video-container')
+          videoContainer.innerHTML = `
+            <iframe 
+              id="youtube-player"
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&rel=0"
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen
+              style="width: 100%; height: 100%; object-fit: contain;">
+            </iframe>
+          `
+          hideLoading()
+          document.title = 'YouTube Video - HOOTNER Cinema Player'
+        } else {
+          showError('Invalid YouTube URL')
         }
       }
 
@@ -1665,6 +1710,25 @@
       // Shortcuts
       function toggleShortcuts() {
         document.getElementById('shortcutsOverlay').classList.toggle('visible')
+      }
+
+      // Share video
+      function shareVideo() {
+        const url = window.location.href
+        const title = document.title
+        
+        if (navigator.share) {
+          navigator.share({
+            title: title,
+            url: url
+          }).catch(() => {})
+        } else {
+          navigator.clipboard.writeText(url).then(() => {
+            alert('Link copied to clipboard!')
+          }).catch(() => {
+            prompt('Copy this link:', url)
+          })
+        }
       }
 
       // Progress bar
