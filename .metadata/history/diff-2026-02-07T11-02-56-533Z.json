@@ -1,0 +1,5862 @@
+{
+  "timestamp": "2026-02-07T11:02:56.526Z",
+  "diff": {
+    "added": [
+      {
+        "path": "PDR.md",
+        "name": "PDR.md",
+        "type": "md",
+        "size": 6063
+      },
+      {
+        "path": "README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 6514
+      },
+      {
+        "path": "administrator/ai-build-optimizer.js",
+        "name": "ai-build-optimizer.js",
+        "type": "js",
+        "size": 7170
+      },
+      {
+        "path": "administrator/quantum-ai-build-system.js",
+        "name": "quantum-ai-build-system.js",
+        "type": "js",
+        "size": 4936
+      },
+      {
+        "path": "administrator/quantum-build-parallelizer.js",
+        "name": "quantum-build-parallelizer.js",
+        "type": "js",
+        "size": 3504
+      },
+      {
+        "path": "administrator/quantum-build.js",
+        "name": "quantum-build.js",
+        "type": "js",
+        "size": 538
+      },
+      {
+        "path": "administrator/self-healing-architecture.js",
+        "name": "self-healing-architecture.js",
+        "type": "js",
+        "size": 3372
+      },
+      {
+        "path": "agents/README_API_SCANNER.md",
+        "name": "README_API_SCANNER.md",
+        "type": "md",
+        "size": 8959
+      },
+      {
+        "path": "agents/api-security-scanner-agent.cjs",
+        "name": "api-security-scanner-agent.cjs",
+        "type": "cjs",
+        "size": 17823
+      },
+      {
+        "path": "agents/fixer-agent.js",
+        "name": "fixer-agent.js",
+        "type": "js",
+        "size": 1986
+      },
+      {
+        "path": "agents/scanner-agent.js",
+        "name": "scanner-agent.js",
+        "type": "js",
+        "size": 1866
+      },
+      {
+        "path": "agents/start-agents.js",
+        "name": "start-agents.js",
+        "type": "js",
+        "size": 519
+      },
+      {
+        "path": "config/API_CONFIG_GUIDE.md",
+        "name": "API_CONFIG_GUIDE.md",
+        "type": "md",
+        "size": 8217
+      },
+      {
+        "path": "config/IMPLEMENTATION_SUMMARY.md",
+        "name": "IMPLEMENTATION_SUMMARY.md",
+        "type": "md",
+        "size": 8987
+      },
+      {
+        "path": "config/QUICK_REFERENCE.md",
+        "name": "QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 4096
+      },
+      {
+        "path": "config/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 2936
+      },
+      {
+        "path": "config/api-endpoints.js",
+        "name": "api-endpoints.js",
+        "type": "js",
+        "size": 5251
+      },
+      {
+        "path": "config/aws/aws-security-policy.json",
+        "name": "aws-security-policy.json",
+        "type": "json",
+        "size": 244
+      },
+      {
+        "path": "config/aws_training_config.json",
+        "name": "aws_training_config.json",
+        "type": "json",
+        "size": 4277
+      },
+      {
+        "path": "config/commitlint.config.json",
+        "name": "commitlint.config.json",
+        "type": "json",
+        "size": 259
+      },
+      {
+        "path": "config/disable-dist.json",
+        "name": "disable-dist.json",
+        "type": "json",
+        "size": 2995
+      },
+      {
+        "path": "config/eslint.config.json",
+        "name": "eslint.config.json",
+        "type": "json",
+        "size": 1118
+      },
+      {
+        "path": "config/jest.config.js",
+        "name": "jest.config.js",
+        "type": "js",
+        "size": 224
+      },
+      {
+        "path": "config/playwright.config.js",
+        "name": "playwright.config.js",
+        "type": "js",
+        "size": 569
+      },
+      {
+        "path": "config/prettier.config.json",
+        "name": "prettier.config.json",
+        "type": "json",
+        "size": 126
+      },
+      {
+        "path": "config/tailwind.config.js",
+        "name": "tailwind.config.js",
+        "type": "js",
+        "size": 298
+      },
+      {
+        "path": "config/training_prompts.json",
+        "name": "training_prompts.json",
+        "type": "json",
+        "size": 445
+      },
+      {
+        "path": "config/unified-dev-config.json",
+        "name": "unified-dev-config.json",
+        "type": "json",
+        "size": 5828
+      },
+      {
+        "path": "config/validate-config.js",
+        "name": "validate-config.js",
+        "type": "js",
+        "size": 12828
+      },
+      {
+        "path": "constants/timeouts.js",
+        "name": "timeouts.js",
+        "type": "js",
+        "size": 127
+      },
+      {
+        "path": "cspell.json",
+        "name": "cspell.json",
+        "type": "json",
+        "size": 389
+      },
+      {
+        "path": "data/subscriptions/subscription-map.json",
+        "name": "subscription-map.json",
+        "type": "json",
+        "size": 40
+      },
+      {
+        "path": "data/usage/customer-billing.json",
+        "name": "customer-billing.json",
+        "type": "json",
+        "size": 952
+      },
+      {
+        "path": "data/usage/money-flow.json",
+        "name": "money-flow.json",
+        "type": "json",
+        "size": 566
+      },
+      {
+        "path": "data/usage/revenue-usage.json",
+        "name": "revenue-usage.json",
+        "type": "json",
+        "size": 3940
+      },
+      {
+        "path": "data/usage/user-analytics.json",
+        "name": "user-analytics.json",
+        "type": "json",
+        "size": 2583
+      },
+      {
+        "path": "docs/ADVANCED_AGENTS.md",
+        "name": "ADVANCED_AGENTS.md",
+        "type": "md",
+        "size": 11412
+      },
+      {
+        "path": "docs/AI_VIDEO_GENERATION_SETUP.md",
+        "name": "AI_VIDEO_GENERATION_SETUP.md",
+        "type": "md",
+        "size": 5177
+      },
+      {
+        "path": "docs/API.md",
+        "name": "API.md",
+        "type": "md",
+        "size": 603
+      },
+      {
+        "path": "docs/API_KEYS_SUMMARY.md",
+        "name": "API_KEYS_SUMMARY.md",
+        "type": "md",
+        "size": 4876
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_GUIDE.md",
+        "name": "API_SECURITY_SCANNER_GUIDE.md",
+        "type": "md",
+        "size": 3367
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_IMPLEMENTATION.md",
+        "name": "API_SECURITY_SCANNER_IMPLEMENTATION.md",
+        "type": "md",
+        "size": 8032
+      },
+      {
+        "path": "docs/API_SECURITY_SCANNER_MANIFEST.md",
+        "name": "API_SECURITY_SCANNER_MANIFEST.md",
+        "type": "md",
+        "size": 16348
+      },
+      {
+        "path": "docs/ARCHITECTURE_DIAGRAM_120_PIPES.md",
+        "name": "ARCHITECTURE_DIAGRAM_120_PIPES.md",
+        "type": "md",
+        "size": 30565
+      },
+      {
+        "path": "docs/AUTHENTICATION_IMPLEMENTATION.md",
+        "name": "AUTHENTICATION_IMPLEMENTATION.md",
+        "type": "md",
+        "size": 8852
+      },
+      {
+        "path": "docs/AWS_ACCOUNT_SWITCHING.md",
+        "name": "AWS_ACCOUNT_SWITCHING.md",
+        "type": "md",
+        "size": 13248
+      },
+      {
+        "path": "docs/AWS_CONFIGURATION.md",
+        "name": "AWS_CONFIGURATION.md",
+        "type": "md",
+        "size": 5233
+      },
+      {
+        "path": "docs/AWS_FOR_BEGINNERS.md",
+        "name": "AWS_FOR_BEGINNERS.md",
+        "type": "md",
+        "size": 8909
+      },
+      {
+        "path": "docs/AWS_S3_TABLE_BUCKET_SETUP.md",
+        "name": "AWS_S3_TABLE_BUCKET_SETUP.md",
+        "type": "md",
+        "size": 1939
+      },
+      {
+        "path": "docs/AWS_TOOLKIT_DEPLOYMENT.md",
+        "name": "AWS_TOOLKIT_DEPLOYMENT.md",
+        "type": "md",
+        "size": 2152
+      },
+      {
+        "path": "docs/BACKEND_APIS.md",
+        "name": "BACKEND_APIS.md",
+        "type": "md",
+        "size": 7927
+      },
+      {
+        "path": "docs/BACKEND_CHECKLIST.md",
+        "name": "BACKEND_CHECKLIST.md",
+        "type": "md",
+        "size": 9968
+      },
+      {
+        "path": "docs/BACKEND_QUICKSTART.md",
+        "name": "BACKEND_QUICKSTART.md",
+        "type": "md",
+        "size": 7412
+      },
+      {
+        "path": "docs/BRANCH_MERGE_GUIDE.md",
+        "name": "BRANCH_MERGE_GUIDE.md",
+        "type": "md",
+        "size": 9089
+      },
+      {
+        "path": "docs/BRANCH_MERGE_IMPLEMENTATION.md",
+        "name": "BRANCH_MERGE_IMPLEMENTATION.md",
+        "type": "md",
+        "size": 7868
+      },
+      {
+        "path": "docs/CLOUDFRONT_API_KEYS.md",
+        "name": "CLOUDFRONT_API_KEYS.md",
+        "type": "md",
+        "size": 3289
+      },
+      {
+        "path": "docs/COMPLETE_CHECKLIST.md",
+        "name": "COMPLETE_CHECKLIST.md",
+        "type": "md",
+        "size": 9464
+      },
+      {
+        "path": "docs/CONTRIBUTING_TOOLING.md",
+        "name": "CONTRIBUTING_TOOLING.md",
+        "type": "md",
+        "size": 1998
+      },
+      {
+        "path": "docs/DASHBOARD_ENHANCEMENTS.md",
+        "name": "DASHBOARD_ENHANCEMENTS.md",
+        "type": "md",
+        "size": 5091
+      },
+      {
+        "path": "docs/DAY_ONE.md",
+        "name": "DAY_ONE.md",
+        "type": "md",
+        "size": 1234
+      },
+      {
+        "path": "docs/DEPLOYMENT_CHECKLIST_120_PIPES.md",
+        "name": "DEPLOYMENT_CHECKLIST_120_PIPES.md",
+        "type": "md",
+        "size": 10982
+      },
+      {
+        "path": "docs/DEPLOY_NOTES_MARKETPLACE.md",
+        "name": "DEPLOY_NOTES_MARKETPLACE.md",
+        "type": "md",
+        "size": 1193
+      },
+      {
+        "path": "docs/DEVELOPMENT_DEPLOYMENT_MAP.md",
+        "name": "DEVELOPMENT_DEPLOYMENT_MAP.md",
+        "type": "md",
+        "size": 10139
+      },
+      {
+        "path": "docs/DMCA_REGISTRATION_GUIDE.md",
+        "name": "DMCA_REGISTRATION_GUIDE.md",
+        "type": "md",
+        "size": 8175
+      },
+      {
+        "path": "docs/DOCUMENTATION_INDEX_120_PIPES.md",
+        "name": "DOCUMENTATION_INDEX_120_PIPES.md",
+        "type": "md",
+        "size": 10822
+      },
+      {
+        "path": "docs/DUAL_AGENT_SETUP.md",
+        "name": "DUAL_AGENT_SETUP.md",
+        "type": "md",
+        "size": 4630
+      },
+      {
+        "path": "docs/DUAL_AI_AGENT_MCP_INTEGRATION.md",
+        "name": "DUAL_AI_AGENT_MCP_INTEGRATION.md",
+        "type": "md",
+        "size": 7025
+      },
+      {
+        "path": "docs/DYNAMODB_MIGRATION.md",
+        "name": "DYNAMODB_MIGRATION.md",
+        "type": "md",
+        "size": 1121
+      },
+      {
+        "path": "docs/EXTERNAL_TESTING_GUIDE.md",
+        "name": "EXTERNAL_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 8690
+      },
+      {
+        "path": "docs/FRONTEND_INTEGRATION_GUIDE.md",
+        "name": "FRONTEND_INTEGRATION_GUIDE.md",
+        "type": "md",
+        "size": 11515
+      },
+      {
+        "path": "docs/FRONTEND_QUICK_CARD.md",
+        "name": "FRONTEND_QUICK_CARD.md",
+        "type": "md",
+        "size": 4885
+      },
+      {
+        "path": "docs/FRONTEND_STRUCTURE.md",
+        "name": "FRONTEND_STRUCTURE.md",
+        "type": "md",
+        "size": 1795
+      },
+      {
+        "path": "docs/GIT_INTEGRITY_MONITORING.md",
+        "name": "GIT_INTEGRITY_MONITORING.md",
+        "type": "md",
+        "size": 6711
+      },
+      {
+        "path": "docs/HTML_NAVIGATION_UPDATE.md",
+        "name": "HTML_NAVIGATION_UPDATE.md",
+        "type": "md",
+        "size": 6309
+      },
+      {
+        "path": "docs/HTML_PAGES_ROUTING_MAP.md",
+        "name": "HTML_PAGES_ROUTING_MAP.md",
+        "type": "md",
+        "size": 9565
+      },
+      {
+        "path": "docs/IMPLEMENTATION_COMPLETE_120_PIPES.md",
+        "name": "IMPLEMENTATION_COMPLETE_120_PIPES.md",
+        "type": "md",
+        "size": 10008
+      },
+      {
+        "path": "docs/INDEX.md",
+        "name": "INDEX.md",
+        "type": "md",
+        "size": 1045
+      },
+      {
+        "path": "docs/INFRASTRUCTURE_TREE_120_PIPES.md",
+        "name": "INFRASTRUCTURE_TREE_120_PIPES.md",
+        "type": "md",
+        "size": 21599
+      },
+      {
+        "path": "docs/LAMBDA_LAYER_CONNECTIONS.md",
+        "name": "LAMBDA_LAYER_CONNECTIONS.md",
+        "type": "md",
+        "size": 1300
+      },
+      {
+        "path": "docs/LEGAL_COMPLIANCE_GUIDE.md",
+        "name": "LEGAL_COMPLIANCE_GUIDE.md",
+        "type": "md",
+        "size": 20471
+      },
+      {
+        "path": "docs/LEGAL_IMPLEMENTATION_SUMMARY.md",
+        "name": "LEGAL_IMPLEMENTATION_SUMMARY.md",
+        "type": "md",
+        "size": 13866
+      },
+      {
+        "path": "docs/LEGAL_QUICK_REFERENCE.md",
+        "name": "LEGAL_QUICK_REFERENCE.md",
+        "type": "md",
+        "size": 2884
+      },
+      {
+        "path": "docs/MCP_INTEGRATION.md",
+        "name": "MCP_INTEGRATION.md",
+        "type": "md",
+        "size": 5024
+      },
+      {
+        "path": "docs/MCP_PROTOCOL_STATUS.md",
+        "name": "MCP_PROTOCOL_STATUS.md",
+        "type": "md",
+        "size": 5096
+      },
+      {
+        "path": "docs/MOBILE_OPTIMIZATION.md",
+        "name": "MOBILE_OPTIMIZATION.md",
+        "type": "md",
+        "size": 2645
+      },
+      {
+        "path": "docs/PASSWORD_RECOVERY_GUIDE.md",
+        "name": "PASSWORD_RECOVERY_GUIDE.md",
+        "type": "md",
+        "size": 4695
+      },
+      {
+        "path": "docs/PAYMENT_STATUS.md",
+        "name": "PAYMENT_STATUS.md",
+        "type": "md",
+        "size": 1312
+      },
+      {
+        "path": "docs/PDR.md",
+        "name": "PDR.md",
+        "type": "md",
+        "size": 3449
+      },
+      {
+        "path": "docs/PLATFORM_10_YEAR_LIFECYCLE.md",
+        "name": "PLATFORM_10_YEAR_LIFECYCLE.md",
+        "type": "md",
+        "size": 10624
+      },
+      {
+        "path": "docs/PLATFORM_COMPARISON.md",
+        "name": "PLATFORM_COMPARISON.md",
+        "type": "md",
+        "size": 9856
+      },
+      {
+        "path": "docs/PLATFORM_SECURITY_INTEGRATION.md",
+        "name": "PLATFORM_SECURITY_INTEGRATION.md",
+        "type": "md",
+        "size": 11940
+      },
+      {
+        "path": "docs/QUICK_DEPLOY.md",
+        "name": "QUICK_DEPLOY.md",
+        "type": "md",
+        "size": 4966
+      },
+      {
+        "path": "docs/QUICK_REFERENCE_120_PIPES.md",
+        "name": "QUICK_REFERENCE_120_PIPES.md",
+        "type": "md",
+        "size": 6624
+      },
+      {
+        "path": "docs/QUICK_REFERENCE_BACKEND.md",
+        "name": "QUICK_REFERENCE_BACKEND.md",
+        "type": "md",
+        "size": 7733
+      },
+      {
+        "path": "docs/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 4399
+      },
+      {
+        "path": "docs/RSS_FEED.md",
+        "name": "RSS_FEED.md",
+        "type": "md",
+        "size": 1942
+      },
+      {
+        "path": "docs/SECURITY_ENHANCEMENTS_NEEDED.md",
+        "name": "SECURITY_ENHANCEMENTS_NEEDED.md",
+        "type": "md",
+        "size": 9580
+      },
+      {
+        "path": "docs/SECURITY_MANIFEST.md",
+        "name": "SECURITY_MANIFEST.md",
+        "type": "md",
+        "size": 11824
+      },
+      {
+        "path": "docs/SOCIAL_FEED_FEATURES.md",
+        "name": "SOCIAL_FEED_FEATURES.md",
+        "type": "md",
+        "size": 11527
+      },
+      {
+        "path": "docs/STABLE_DIFFUSION_TRAINING.md",
+        "name": "STABLE_DIFFUSION_TRAINING.md",
+        "type": "md",
+        "size": 1478
+      },
+      {
+        "path": "docs/START_HERE.md",
+        "name": "START_HERE.md",
+        "type": "md",
+        "size": 8404
+      },
+      {
+        "path": "docs/STRIPE_CONNECTION_DIAGRAM.md",
+        "name": "STRIPE_CONNECTION_DIAGRAM.md",
+        "type": "md",
+        "size": 19184
+      },
+      {
+        "path": "docs/STRIPE_COST_COMPARISON.md",
+        "name": "STRIPE_COST_COMPARISON.md",
+        "type": "md",
+        "size": 12823
+      },
+      {
+        "path": "docs/STRIPE_EMPLOYEE_ACCESS.md",
+        "name": "STRIPE_EMPLOYEE_ACCESS.md",
+        "type": "md",
+        "size": 1913
+      },
+      {
+        "path": "docs/STRIPE_INTEGRATION_SUMMARY.md",
+        "name": "STRIPE_INTEGRATION_SUMMARY.md",
+        "type": "md",
+        "size": 10993
+      },
+      {
+        "path": "docs/STRIPE_USAGE_PRICING_GUIDE.md",
+        "name": "STRIPE_USAGE_PRICING_GUIDE.md",
+        "type": "md",
+        "size": 10039
+      },
+      {
+        "path": "docs/SUSTAINABILITY_COMPLIANCE.md",
+        "name": "SUSTAINABILITY_COMPLIANCE.md",
+        "type": "md",
+        "size": 3004
+      },
+      {
+        "path": "docs/TECHNICAL_DEBT.md",
+        "name": "TECHNICAL_DEBT.md",
+        "type": "md",
+        "size": 8124
+      },
+      {
+        "path": "docs/TEST_PLAN.md",
+        "name": "TEST_PLAN.md",
+        "type": "md",
+        "size": 1070
+      },
+      {
+        "path": "docs/TODO_GUIDELINES.md",
+        "name": "TODO_GUIDELINES.md",
+        "type": "md",
+        "size": 4058
+      },
+      {
+        "path": "docs/USER_LOGIN_GUIDE.html",
+        "name": "USER_LOGIN_GUIDE.html",
+        "type": "html",
+        "size": 7813
+      },
+      {
+        "path": "docs/VISUAL_DESIGNER.md",
+        "name": "VISUAL_DESIGNER.md",
+        "type": "md",
+        "size": 1906
+      },
+      {
+        "path": "docs/WELCOME.md",
+        "name": "WELCOME.md",
+        "type": "md",
+        "size": 2636
+      },
+      {
+        "path": "docs/_Footer.md",
+        "name": "_Footer.md",
+        "type": "md",
+        "size": 672
+      },
+      {
+        "path": "docs/_Sidebar.md",
+        "name": "_Sidebar.md",
+        "type": "md",
+        "size": 683
+      },
+      {
+        "path": "docs/ai/AI_AGENT_ORCHESTRATION.md",
+        "name": "AI_AGENT_ORCHESTRATION.md",
+        "type": "md",
+        "size": 2472
+      },
+      {
+        "path": "docs/ai/CURSOR_AI_MODES.md",
+        "name": "CURSOR_AI_MODES.md",
+        "type": "md",
+        "size": 3345
+      },
+      {
+        "path": "docs/architecture/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "md",
+        "size": 2297
+      },
+      {
+        "path": "docs/commands/ai-services.md",
+        "name": "ai-services.md",
+        "type": "md",
+        "size": 8249
+      },
+      {
+        "path": "docs/commands/deployment.md",
+        "name": "deployment.md",
+        "type": "md",
+        "size": 7495
+      },
+      {
+        "path": "docs/commands/development.md",
+        "name": "development.md",
+        "type": "md",
+        "size": 4725
+      },
+      {
+        "path": "docs/commands/maintenance.md",
+        "name": "maintenance.md",
+        "type": "md",
+        "size": 6334
+      },
+      {
+        "path": "docs/commands/npm-scripts.md",
+        "name": "npm-scripts.md",
+        "type": "md",
+        "size": 6184
+      },
+      {
+        "path": "docs/commands/quick-reference.md",
+        "name": "quick-reference.md",
+        "type": "md",
+        "size": 5429
+      },
+      {
+        "path": "docs/commands/security.md",
+        "name": "security.md",
+        "type": "md",
+        "size": 7135
+      },
+      {
+        "path": "docs/commands/testing.md",
+        "name": "testing.md",
+        "type": "md",
+        "size": 5937
+      },
+      {
+        "path": "docs/compliance/COMPLIANCE_OFFICER_GUIDE.md",
+        "name": "COMPLIANCE_OFFICER_GUIDE.md",
+        "type": "md",
+        "size": 14716
+      },
+      {
+        "path": "docs/deployment/MCP_DEPLOYMENT.md",
+        "name": "MCP_DEPLOYMENT.md",
+        "type": "md",
+        "size": 4775
+      },
+      {
+        "path": "docs/development/IDE_MCP_SETUP.md",
+        "name": "IDE_MCP_SETUP.md",
+        "type": "md",
+        "size": 3281
+      },
+      {
+        "path": "docs/guides/COPILOT_AGENT_TEMPLATES.md",
+        "name": "COPILOT_AGENT_TEMPLATES.md",
+        "type": "md",
+        "size": 1866
+      },
+      {
+        "path": "docs/guides/COPILOT_CLI_PROMPT.md",
+        "name": "COPILOT_CLI_PROMPT.md",
+        "type": "md",
+        "size": 8859
+      },
+      {
+        "path": "docs/guides/DUAL_AGENT_SETUP.md",
+        "name": "DUAL_AGENT_SETUP.md",
+        "type": "md",
+        "size": 2110
+      },
+      {
+        "path": "docs/guides/LIVE_API_TESTING_GUIDE.md",
+        "name": "LIVE_API_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 10853
+      },
+      {
+        "path": "docs/guides/MERGE_PROMPT_GUIDE.md",
+        "name": "MERGE_PROMPT_GUIDE.md",
+        "type": "md",
+        "size": 1142
+      },
+      {
+        "path": "docs/guides/PULL_REQUEST_MECHANICS.md",
+        "name": "PULL_REQUEST_MECHANICS.md",
+        "type": "md",
+        "size": 57007
+      },
+      {
+        "path": "docs/guides/STARTUP_GUIDE.md",
+        "name": "STARTUP_GUIDE.md",
+        "type": "md",
+        "size": 5379
+      },
+      {
+        "path": "docs/guides/WEBSOCKET_VERIFICATION_GUIDE.md",
+        "name": "WEBSOCKET_VERIFICATION_GUIDE.md",
+        "type": "md",
+        "size": 11518
+      },
+      {
+        "path": "docs/legal/NDA_TEMPLATE.md",
+        "name": "NDA_TEMPLATE.md",
+        "type": "md",
+        "size": 13532
+      },
+      {
+        "path": "docs/legal/NDA_USAGE_GUIDE.md",
+        "name": "NDA_USAGE_GUIDE.md",
+        "type": "md",
+        "size": 7986
+      },
+      {
+        "path": "docs/optimization/ELECTRON_OPTIMIZATION.md",
+        "name": "ELECTRON_OPTIMIZATION.md",
+        "type": "md",
+        "size": 5232
+      },
+      {
+        "path": "docs/optimization/ZED_OPTIMIZATION.md",
+        "name": "ZED_OPTIMIZATION.md",
+        "type": "md",
+        "size": 4116
+      },
+      {
+        "path": "docs/qa/DATA_ENGINEER_GUIDE.md",
+        "name": "DATA_ENGINEER_GUIDE.md",
+        "type": "md",
+        "size": 12014
+      },
+      {
+        "path": "docs/qa/QA_TESTING_GUIDE.md",
+        "name": "QA_TESTING_GUIDE.md",
+        "type": "md",
+        "size": 9328
+      },
+      {
+        "path": "docs/readme/apps-README.md",
+        "name": "apps-README.md",
+        "type": "md",
+        "size": 2379
+      },
+      {
+        "path": "docs/readme/commands-README.md",
+        "name": "commands-README.md",
+        "type": "md",
+        "size": 1350
+      },
+      {
+        "path": "docs/readme/config-README.md",
+        "name": "config-README.md",
+        "type": "md",
+        "size": 1058
+      },
+      {
+        "path": "docs/readme/docs-README.md",
+        "name": "docs-README.md",
+        "type": "md",
+        "size": 346
+      },
+      {
+        "path": "docs/readme/electron-code-editor-README.md",
+        "name": "electron-code-editor-README.md",
+        "type": "md",
+        "size": 5653
+      },
+      {
+        "path": "docs/readme/libs-README.md",
+        "name": "libs-README.md",
+        "type": "md",
+        "size": 839
+      },
+      {
+        "path": "docs/readme/services-README.md",
+        "name": "services-README.md",
+        "type": "md",
+        "size": 3909
+      },
+      {
+        "path": "docs/readme/ssl-README.md",
+        "name": "ssl-README.md",
+        "type": "md",
+        "size": 949
+      },
+      {
+        "path": "docs/reference/CSS-VISUAL-REFERENCE.html",
+        "name": "CSS-VISUAL-REFERENCE.html",
+        "type": "html",
+        "size": 21752
+      },
+      {
+        "path": "docs/reports/DASHBOARD_FIXES.md",
+        "name": "DASHBOARD_FIXES.md",
+        "type": "md",
+        "size": 1920
+      },
+      {
+        "path": "docs/reports/DASHBOARD_MANUAL_FIXES.md",
+        "name": "DASHBOARD_MANUAL_FIXES.md",
+        "type": "md",
+        "size": 9262
+      },
+      {
+        "path": "docs/reports/NOTIFICATION_EMBEDDING_SUMMARY.md",
+        "name": "NOTIFICATION_EMBEDDING_SUMMARY.md",
+        "type": "md",
+        "size": 7628
+      },
+      {
+        "path": "docs/reports/organization-status.json",
+        "name": "organization-status.json",
+        "type": "json",
+        "size": 1180
+      },
+      {
+        "path": "docs/security/SECURITY.md",
+        "name": "SECURITY.md",
+        "type": "md",
+        "size": 3906
+      },
+      {
+        "path": "docs/security/USB_PASSKEY_AUTHENTICATION.md",
+        "name": "USB_PASSKEY_AUTHENTICATION.md",
+        "type": "md",
+        "size": 12570
+      },
+      {
+        "path": "docs/status/COPILOT_CLI_STATUS.md",
+        "name": "COPILOT_CLI_STATUS.md",
+        "type": "md",
+        "size": 1705
+      },
+      {
+        "path": "docs/status/LINT_STATUS_REPORT.md",
+        "name": "LINT_STATUS_REPORT.md",
+        "type": "md",
+        "size": 4530
+      },
+      {
+        "path": "docs/status/PROJECT_STATUS.md",
+        "name": "PROJECT_STATUS.md",
+        "type": "md",
+        "size": 7831
+      },
+      {
+        "path": "docs/status/REFACTORING_SUMMARY.md",
+        "name": "REFACTORING_SUMMARY.md",
+        "type": "md",
+        "size": 5603
+      },
+      {
+        "path": "docs/status/TESTING_STATUS.md",
+        "name": "TESTING_STATUS.md",
+        "type": "md",
+        "size": 1324
+      },
+      {
+        "path": "examples/html/amazon-q-chat-example.html",
+        "name": "amazon-q-chat-example.html",
+        "type": "html",
+        "size": 17426
+      },
+      {
+        "path": "examples/html/cloudfront-api-snippet.html",
+        "name": "cloudfront-api-snippet.html",
+        "type": "html",
+        "size": 1811
+      },
+      {
+        "path": "examples/html/error.html",
+        "name": "error.html",
+        "type": "html",
+        "size": 1694
+      },
+      {
+        "path": "examples/html/redirect-dashboard.html",
+        "name": "redirect-dashboard.html",
+        "type": "html",
+        "size": 582
+      },
+      {
+        "path": "examples/html/service-worker-test.html",
+        "name": "service-worker-test.html",
+        "type": "html",
+        "size": 7740
+      },
+      {
+        "path": "examples/html/stripe-activation-website.html",
+        "name": "stripe-activation-website.html",
+        "type": "html",
+        "size": 5261
+      },
+      {
+        "path": "examples/usb-passkey-integration-example.js",
+        "name": "usb-passkey-integration-example.js",
+        "type": "js",
+        "size": 7148
+      },
+      {
+        "path": "frameworks/ai/agents/advanced-agents.js",
+        "name": "advanced-agents.js",
+        "type": "js",
+        "size": 16948
+      },
+      {
+        "path": "frameworks/ai/agents/agent-orchestrator.js",
+        "name": "agent-orchestrator.js",
+        "type": "js",
+        "size": 9728
+      },
+      {
+        "path": "frameworks/ai/agents/dual-agent-orchestrator.js",
+        "name": "dual-agent-orchestrator.js",
+        "type": "js",
+        "size": 3497
+      },
+      {
+        "path": "frameworks/ai/agents/production-agent-implementations.js",
+        "name": "production-agent-implementations.js",
+        "type": "js",
+        "size": 1710
+      },
+      {
+        "path": "frameworks/ai/agents/repo-scan-agent.js",
+        "name": "repo-scan-agent.js",
+        "type": "js",
+        "size": 13776
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 8666
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.controller.ts",
+        "name": "audit.controller.ts",
+        "type": "ts",
+        "size": 3445
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.module.ts",
+        "name": "audit.module.ts",
+        "type": "ts",
+        "size": 1177
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/audit.service.ts",
+        "name": "audit.service.ts",
+        "type": "ts",
+        "size": 8210
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/dto/create-audit-log.dto.ts",
+        "name": "create-audit-log.dto.ts",
+        "type": "ts",
+        "size": 2395
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/dto/query-audit-logs.dto.ts",
+        "name": "query-audit-logs.dto.ts",
+        "type": "ts",
+        "size": 2150
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/health.controller.ts",
+        "name": "health.controller.ts",
+        "type": "ts",
+        "size": 2533
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/main.ts",
+        "name": "main.ts",
+        "type": "ts",
+        "size": 1715
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 2359
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/schemas/audit-log.schema.ts",
+        "name": "audit-log.schema.ts",
+        "type": "ts",
+        "size": 2524
+      },
+      {
+        "path": "frameworks/backend/nestjs/audit/tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "json",
+        "size": 664
+      },
+      {
+        "path": "heptagonal/0-core/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 5423
+      },
+      {
+        "path": "heptagonal/0-core/api/graphql/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 478
+      },
+      {
+        "path": "heptagonal/0-core/api/rest/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 469
+      },
+      {
+        "path": "heptagonal/0-core/api/versioning/middleware.js",
+        "name": "middleware.js",
+        "type": "js",
+        "size": 1787
+      },
+      {
+        "path": "heptagonal/0-core/api-keys/manager.js",
+        "name": "manager.js",
+        "type": "js",
+        "size": 2866
+      },
+      {
+        "path": "heptagonal/0-core/audit/logger.js",
+        "name": "logger.js",
+        "type": "js",
+        "size": 2692
+      },
+      {
+        "path": "heptagonal/0-core/auth/ai-algorithm-auth.js",
+        "name": "ai-algorithm-auth.js",
+        "type": "js",
+        "size": 2799
+      },
+      {
+        "path": "heptagonal/0-core/auth/firebase.js",
+        "name": "firebase.js",
+        "type": "js",
+        "size": 714
+      },
+      {
+        "path": "heptagonal/0-core/auth/jwt.js",
+        "name": "jwt.js",
+        "type": "js",
+        "size": 872
+      },
+      {
+        "path": "heptagonal/0-core/auth/middleware.js",
+        "name": "middleware.js",
+        "type": "js",
+        "size": 3230
+      },
+      {
+        "path": "heptagonal/0-core/auth/session.js",
+        "name": "session.js",
+        "type": "js",
+        "size": 704
+      },
+      {
+        "path": "heptagonal/0-core/auth/usb-passkey.js",
+        "name": "usb-passkey.js",
+        "type": "js",
+        "size": 7432
+      },
+      {
+        "path": "heptagonal/0-core/aws/cloudfront/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 726
+      },
+      {
+        "path": "heptagonal/0-core/aws/cloudwatch-connector.js",
+        "name": "cloudwatch-connector.js",
+        "type": "js",
+        "size": 201
+      },
+      {
+        "path": "heptagonal/0-core/aws/dynamodb-connector.js",
+        "name": "dynamodb-connector.js",
+        "type": "js",
+        "size": 1193
+      },
+      {
+        "path": "heptagonal/0-core/aws/integration-hub.js",
+        "name": "integration-hub.js",
+        "type": "js",
+        "size": 2105
+      },
+      {
+        "path": "heptagonal/0-core/aws/lambda/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 733
+      },
+      {
+        "path": "heptagonal/0-core/aws/lambda-connector.js",
+        "name": "lambda-connector.js",
+        "type": "js",
+        "size": 184
+      },
+      {
+        "path": "heptagonal/0-core/aws/redis-connector.js",
+        "name": "redis-connector.js",
+        "type": "js",
+        "size": 193
+      },
+      {
+        "path": "heptagonal/0-core/aws/s3/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 630
+      },
+      {
+        "path": "heptagonal/0-core/aws/secrets-manager/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 1531
+      },
+      {
+        "path": "heptagonal/0-core/aws/ses/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 456
+      },
+      {
+        "path": "heptagonal/0-core/aws/sns/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 559
+      },
+      {
+        "path": "heptagonal/0-core/aws/sqs/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 1911
+      },
+      {
+        "path": "heptagonal/0-core/aws/sqs-connector.js",
+        "name": "sqs-connector.js",
+        "type": "js",
+        "size": 182
+      },
+      {
+        "path": "heptagonal/0-core/aws/stripe-connector.js",
+        "name": "stripe-connector.js",
+        "type": "js",
+        "size": 196
+      },
+      {
+        "path": "heptagonal/0-core/cache/strategies.js",
+        "name": "strategies.js",
+        "type": "js",
+        "size": 2658
+      },
+      {
+        "path": "heptagonal/0-core/cli/maintenance.js",
+        "name": "maintenance.js",
+        "type": "js",
+        "size": 2043
+      },
+      {
+        "path": "heptagonal/0-core/cli/migrate.js",
+        "name": "migrate.js",
+        "type": "js",
+        "size": 1042
+      },
+      {
+        "path": "heptagonal/0-core/config/env.js",
+        "name": "env.js",
+        "type": "js",
+        "size": 1333
+      },
+      {
+        "path": "heptagonal/0-core/config/features.js",
+        "name": "features.js",
+        "type": "js",
+        "size": 1349
+      },
+      {
+        "path": "heptagonal/0-core/configs/constants/timeouts.js",
+        "name": "timeouts.js",
+        "type": "js",
+        "size": 124
+      },
+      {
+        "path": "heptagonal/0-core/configs/global.config.js",
+        "name": "global.config.js",
+        "type": "js",
+        "size": 1758
+      },
+      {
+        "path": "heptagonal/0-core/configs/security.config.js",
+        "name": "security.config.js",
+        "type": "js",
+        "size": 2182
+      },
+      {
+        "path": "heptagonal/0-core/constants/error-codes.js",
+        "name": "error-codes.js",
+        "type": "js",
+        "size": 1851
+      },
+      {
+        "path": "heptagonal/0-core/constants/http-status.js",
+        "name": "http-status.js",
+        "type": "js",
+        "size": 607
+      },
+      {
+        "path": "heptagonal/0-core/constants/limits.js",
+        "name": "limits.js",
+        "type": "js",
+        "size": 1198
+      },
+      {
+        "path": "heptagonal/0-core/contracts/domain-events.js",
+        "name": "domain-events.js",
+        "type": "js",
+        "size": 2435
+      },
+      {
+        "path": "heptagonal/0-core/database/dynamodb/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 624
+      },
+      {
+        "path": "heptagonal/0-core/database/migrations/runner.js",
+        "name": "runner.js",
+        "type": "js",
+        "size": 2297
+      },
+      {
+        "path": "heptagonal/0-core/database/redis/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 710
+      },
+      {
+        "path": "heptagonal/0-core/database/utils/connection-pool.js",
+        "name": "connection-pool.js",
+        "type": "js",
+        "size": 1710
+      },
+      {
+        "path": "heptagonal/0-core/database/utils/query-builder.js",
+        "name": "query-builder.js",
+        "type": "js",
+        "size": 986
+      },
+      {
+        "path": "heptagonal/0-core/docs/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "md",
+        "size": 9589
+      },
+      {
+        "path": "heptagonal/0-core/documentation/graphql-docs.js",
+        "name": "graphql-docs.js",
+        "type": "js",
+        "size": 1723
+      },
+      {
+        "path": "heptagonal/0-core/documentation/swagger.js",
+        "name": "swagger.js",
+        "type": "js",
+        "size": 1586
+      },
+      {
+        "path": "heptagonal/0-core/errors/custom-errors.js",
+        "name": "custom-errors.js",
+        "type": "js",
+        "size": 1484
+      },
+      {
+        "path": "heptagonal/0-core/errors/handler.js",
+        "name": "handler.js",
+        "type": "js",
+        "size": 2151
+      },
+      {
+        "path": "heptagonal/0-core/i18n/translator.js",
+        "name": "translator.js",
+        "type": "js",
+        "size": 2302
+      },
+      {
+        "path": "heptagonal/0-core/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 2662
+      },
+      {
+        "path": "heptagonal/0-core/jobs/queue.js",
+        "name": "queue.js",
+        "type": "js",
+        "size": 2861
+      },
+      {
+        "path": "heptagonal/0-core/lifecycle/shutdown.js",
+        "name": "shutdown.js",
+        "type": "js",
+        "size": 2367
+      },
+      {
+        "path": "heptagonal/0-core/logging/cloudwatch.js",
+        "name": "cloudwatch.js",
+        "type": "js",
+        "size": 1372
+      },
+      {
+        "path": "heptagonal/0-core/logging/health.js",
+        "name": "health.js",
+        "type": "js",
+        "size": 1564
+      },
+      {
+        "path": "heptagonal/0-core/logging/logger.js",
+        "name": "logger.js",
+        "type": "js",
+        "size": 1847
+      },
+      {
+        "path": "heptagonal/0-core/metrics/prometheus.js",
+        "name": "prometheus.js",
+        "type": "js",
+        "size": 2517
+      },
+      {
+        "path": "heptagonal/0-core/middleware/compression.js",
+        "name": "compression.js",
+        "type": "js",
+        "size": 506
+      },
+      {
+        "path": "heptagonal/0-core/middleware/graceful-degradation.js",
+        "name": "graceful-degradation.js",
+        "type": "js",
+        "size": 6582
+      },
+      {
+        "path": "heptagonal/0-core/middleware/request-id.js",
+        "name": "request-id.js",
+        "type": "js",
+        "size": 322
+      },
+      {
+        "path": "heptagonal/0-core/middleware/response-time.js",
+        "name": "response-time.js",
+        "type": "js",
+        "size": 280
+      },
+      {
+        "path": "heptagonal/0-core/middleware/sanitization.js",
+        "name": "sanitization.js",
+        "type": "js",
+        "size": 1229
+      },
+      {
+        "path": "heptagonal/0-core/notifications/email.js",
+        "name": "email.js",
+        "type": "js",
+        "size": 2135
+      },
+      {
+        "path": "heptagonal/0-core/notifications/push.js",
+        "name": "push.js",
+        "type": "js",
+        "size": 1937
+      },
+      {
+        "path": "heptagonal/0-core/orchestration/event-bus.js",
+        "name": "event-bus.js",
+        "type": "js",
+        "size": 1301
+      },
+      {
+        "path": "heptagonal/0-core/payment/stripe-mock.js",
+        "name": "stripe-mock.js",
+        "type": "js",
+        "size": 1462
+      },
+      {
+        "path": "heptagonal/0-core/payment/stripe.js",
+        "name": "stripe.js",
+        "type": "js",
+        "size": 2468
+      },
+      {
+        "path": "heptagonal/0-core/rbac/permissions.js",
+        "name": "permissions.js",
+        "type": "js",
+        "size": 4207
+      },
+      {
+        "path": "heptagonal/0-core/realtime/event-bus.js",
+        "name": "event-bus.js",
+        "type": "js",
+        "size": 1279
+      },
+      {
+        "path": "heptagonal/0-core/realtime/socket.js",
+        "name": "socket.js",
+        "type": "js",
+        "size": 2109
+      },
+      {
+        "path": "heptagonal/0-core/resilience/bulkhead.js",
+        "name": "bulkhead.js",
+        "type": "js",
+        "size": 834
+      },
+      {
+        "path": "heptagonal/0-core/resilience/circuit-breaker.js",
+        "name": "circuit-breaker.js",
+        "type": "js",
+        "size": 1412
+      },
+      {
+        "path": "heptagonal/0-core/resilience/retry.js",
+        "name": "retry.js",
+        "type": "js",
+        "size": 879
+      },
+      {
+        "path": "heptagonal/0-core/resilience/timeout.js",
+        "name": "timeout.js",
+        "type": "js",
+        "size": 426
+      },
+      {
+        "path": "heptagonal/0-core/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 191
+      },
+      {
+        "path": "heptagonal/0-core/schemas/validation.js",
+        "name": "validation.js",
+        "type": "js",
+        "size": 2570
+      },
+      {
+        "path": "heptagonal/0-core/security/cors.js",
+        "name": "cors.js",
+        "type": "js",
+        "size": 784
+      },
+      {
+        "path": "heptagonal/0-core/security/helmet.js",
+        "name": "helmet.js",
+        "type": "js",
+        "size": 705
+      },
+      {
+        "path": "heptagonal/0-core/security/rate-limit.js",
+        "name": "rate-limit.js",
+        "type": "js",
+        "size": 1216
+      },
+      {
+        "path": "heptagonal/0-core/security/validation.js",
+        "name": "validation.js",
+        "type": "js",
+        "size": 1274
+      },
+      {
+        "path": "heptagonal/0-core/storage/upload.js",
+        "name": "upload.js",
+        "type": "js",
+        "size": 1961
+      },
+      {
+        "path": "heptagonal/0-core/tenancy/middleware.js",
+        "name": "middleware.js",
+        "type": "js",
+        "size": 1610
+      },
+      {
+        "path": "heptagonal/0-core/testing/fixtures.js",
+        "name": "fixtures.js",
+        "type": "js",
+        "size": 931
+      },
+      {
+        "path": "heptagonal/0-core/testing/mocks.js",
+        "name": "mocks.js",
+        "type": "js",
+        "size": 1181
+      },
+      {
+        "path": "heptagonal/0-core/utils/circuit-breaker.js",
+        "name": "circuit-breaker.js",
+        "type": "js",
+        "size": 2329
+      },
+      {
+        "path": "heptagonal/0-core/utils/crypto.js",
+        "name": "crypto.js",
+        "type": "js",
+        "size": 2037
+      },
+      {
+        "path": "heptagonal/0-core/utils/date.js",
+        "name": "date.js",
+        "type": "js",
+        "size": 1692
+      },
+      {
+        "path": "heptagonal/0-core/utils/logger.js",
+        "name": "logger.js",
+        "type": "js",
+        "size": 1563
+      },
+      {
+        "path": "heptagonal/0-core/utils/security.js",
+        "name": "security.js",
+        "type": "js",
+        "size": 5536
+      },
+      {
+        "path": "heptagonal/0-core/utils/string.js",
+        "name": "string.js",
+        "type": "js",
+        "size": 1851
+      },
+      {
+        "path": "heptagonal/0-core/webhooks/sender.js",
+        "name": "sender.js",
+        "type": "js",
+        "size": 3555
+      },
+      {
+        "path": "heptagonal/0-core/workflows/tutoring-session.workflow.js",
+        "name": "tutoring-session.workflow.js",
+        "type": "js",
+        "size": 4487
+      },
+      {
+        "path": "heptagonal/1-foundation/containers/container-manager.js",
+        "name": "container-manager.js",
+        "type": "js",
+        "size": 10347
+      },
+      {
+        "path": "heptagonal/1-foundation/containers/service-manager.cjs",
+        "name": "service-manager.cjs",
+        "type": "cjs",
+        "size": 10347
+      },
+      {
+        "path": "heptagonal/1-foundation/events/PaymentEvents.js",
+        "name": "PaymentEvents.js",
+        "type": "js",
+        "size": 1748
+      },
+      {
+        "path": "heptagonal/1-foundation/events/UserEvents.js",
+        "name": "UserEvents.js",
+        "type": "js",
+        "size": 1095
+      },
+      {
+        "path": "heptagonal/1-foundation/events/VideoEvents.js",
+        "name": "VideoEvents.js",
+        "type": "js",
+        "size": 1528
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 8666
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/audit.controller.ts",
+        "name": "audit.controller.ts",
+        "type": "ts",
+        "size": 3445
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/audit.module.ts",
+        "name": "audit.module.ts",
+        "type": "ts",
+        "size": 1177
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/audit.service.ts",
+        "name": "audit.service.ts",
+        "type": "ts",
+        "size": 8210
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/dto/create-audit-log.dto.ts",
+        "name": "create-audit-log.dto.ts",
+        "type": "ts",
+        "size": 2395
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/dto/query-audit-logs.dto.ts",
+        "name": "query-audit-logs.dto.ts",
+        "type": "ts",
+        "size": 2150
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/health.controller.ts",
+        "name": "health.controller.ts",
+        "type": "ts",
+        "size": 2533
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/main.ts",
+        "name": "main.ts",
+        "type": "ts",
+        "size": 1715
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 2359
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/schemas/audit-log.schema.ts",
+        "name": "audit-log.schema.ts",
+        "type": "ts",
+        "size": 2524
+      },
+      {
+        "path": "heptagonal/1-foundation/frameworks/nestjs/audit/tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "json",
+        "size": 664
+      },
+      {
+        "path": "heptagonal/1-foundation/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 3380
+      },
+      {
+        "path": "heptagonal/1-foundation/infrastructure/load-balancer.js",
+        "name": "load-balancer.js",
+        "type": "js",
+        "size": 1139
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Activity.js",
+        "name": "Activity.js",
+        "type": "js",
+        "size": 1247
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Analytics.js",
+        "name": "Analytics.js",
+        "type": "js",
+        "size": 883
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Comment.js",
+        "name": "Comment.js",
+        "type": "js",
+        "size": 1637
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Notification.js",
+        "name": "Notification.js",
+        "type": "js",
+        "size": 1332
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Payment.js",
+        "name": "Payment.js",
+        "type": "js",
+        "size": 1827
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Playlist.js",
+        "name": "Playlist.js",
+        "type": "js",
+        "size": 1782
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Subscription.js",
+        "name": "Subscription.js",
+        "type": "js",
+        "size": 1898
+      },
+      {
+        "path": "heptagonal/1-foundation/models/User.js",
+        "name": "User.js",
+        "type": "js",
+        "size": 1709
+      },
+      {
+        "path": "heptagonal/1-foundation/models/Video.js",
+        "name": "Video.js",
+        "type": "js",
+        "size": 2448
+      },
+      {
+        "path": "heptagonal/1-foundation/monitoring/system-monitor.js",
+        "name": "system-monitor.js",
+        "type": "js",
+        "size": 22014
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/ActivityRepository.js",
+        "name": "ActivityRepository.js",
+        "type": "js",
+        "size": 1708
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/BaseRepository.js",
+        "name": "BaseRepository.js",
+        "type": "js",
+        "size": 2026
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/CommentRepository.js",
+        "name": "CommentRepository.js",
+        "type": "js",
+        "size": 1787
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/NotificationRepository.js",
+        "name": "NotificationRepository.js",
+        "type": "js",
+        "size": 1728
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/PaymentRepository.js",
+        "name": "PaymentRepository.js",
+        "type": "js",
+        "size": 1844
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/PlaylistRepository.js",
+        "name": "PlaylistRepository.js",
+        "type": "js",
+        "size": 2005
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/SubscriptionRepository.js",
+        "name": "SubscriptionRepository.js",
+        "type": "js",
+        "size": 1883
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/UserRepository.js",
+        "name": "UserRepository.js",
+        "type": "js",
+        "size": 1869
+      },
+      {
+        "path": "heptagonal/1-foundation/repositories/VideoRepository.js",
+        "name": "VideoRepository.js",
+        "type": "js",
+        "size": 2473
+      },
+      {
+        "path": "heptagonal/1-foundation/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 198
+      },
+      {
+        "path": "heptagonal/1-foundation/services/AnalyticsService.js",
+        "name": "AnalyticsService.js",
+        "type": "js",
+        "size": 1978
+      },
+      {
+        "path": "heptagonal/1-foundation/services/AuthService.js",
+        "name": "AuthService.js",
+        "type": "js",
+        "size": 3662
+      },
+      {
+        "path": "heptagonal/1-foundation/services/CommentService.js",
+        "name": "CommentService.js",
+        "type": "js",
+        "size": 2499
+      },
+      {
+        "path": "heptagonal/1-foundation/services/NotificationService.js",
+        "name": "NotificationService.js",
+        "type": "js",
+        "size": 2437
+      },
+      {
+        "path": "heptagonal/1-foundation/services/PaymentService.js",
+        "name": "PaymentService.js",
+        "type": "js",
+        "size": 3192
+      },
+      {
+        "path": "heptagonal/1-foundation/services/PlaylistService.js",
+        "name": "PlaylistService.js",
+        "type": "js",
+        "size": 2591
+      },
+      {
+        "path": "heptagonal/1-foundation/services/SubscriptionService.js",
+        "name": "SubscriptionService.js",
+        "type": "js",
+        "size": 2647
+      },
+      {
+        "path": "heptagonal/1-foundation/services/UserService.js",
+        "name": "UserService.js",
+        "type": "js",
+        "size": 2984
+      },
+      {
+        "path": "heptagonal/1-foundation/services/VideoService.js",
+        "name": "VideoService.js",
+        "type": "js",
+        "size": 2896
+      },
+      {
+        "path": "heptagonal/1-foundation/validators/BusinessRulesValidator.js",
+        "name": "BusinessRulesValidator.js",
+        "type": "js",
+        "size": 2533
+      },
+      {
+        "path": "heptagonal/1-foundation/validators/ContentPolicyValidator.js",
+        "name": "ContentPolicyValidator.js",
+        "type": "js",
+        "size": 1703
+      },
+      {
+        "path": "heptagonal/1-foundation/validators/PaymentValidator.js",
+        "name": "PaymentValidator.js",
+        "type": "js",
+        "size": 1744
+      },
+      {
+        "path": "heptagonal/1-foundation/validators/UserValidator.js",
+        "name": "UserValidator.js",
+        "type": "js",
+        "size": 2173
+      },
+      {
+        "path": "heptagonal/1-foundation/validators/VideoValidator.js",
+        "name": "VideoValidator.js",
+        "type": "js",
+        "size": 2303
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/Address.js",
+        "name": "Address.js",
+        "type": "js",
+        "size": 1056
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/DateRange.js",
+        "name": "DateRange.js",
+        "type": "js",
+        "size": 1120
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/Email.js",
+        "name": "Email.js",
+        "type": "js",
+        "size": 682
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/Money.js",
+        "name": "Money.js",
+        "type": "js",
+        "size": 1765
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/Username.js",
+        "name": "Username.js",
+        "type": "js",
+        "size": 827
+      },
+      {
+        "path": "heptagonal/1-foundation/value-objects/VideoMetadata.js",
+        "name": "VideoMetadata.js",
+        "type": "js",
+        "size": 1516
+      },
+      {
+        "path": "heptagonal/2-intelligence/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 12474
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai/ContentModerationService.js",
+        "name": "ContentModerationService.js",
+        "type": "js",
+        "size": 4875
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai/RecommendationEngine.js",
+        "name": "RecommendationEngine.js",
+        "type": "js",
+        "size": 4691
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai/SearchEngine.js",
+        "name": "SearchEngine.js",
+        "type": "js",
+        "size": 5868
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/agents/advanced-agents.js",
+        "name": "advanced-agents.js",
+        "type": "js",
+        "size": 16948
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/agents/agent-orchestrator.js",
+        "name": "agent-orchestrator.js",
+        "type": "js",
+        "size": 9728
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/agents/dual-agent-orchestrator.js",
+        "name": "dual-agent-orchestrator.js",
+        "type": "js",
+        "size": 11232
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/agents/production-agent-implementations.js",
+        "name": "production-agent-implementations.js",
+        "type": "js",
+        "size": 19778
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/aws-connector.js",
+        "name": "aws-connector.js",
+        "type": "js",
+        "size": 1176
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/ml-pipeline.js",
+        "name": "ml-pipeline.js",
+        "type": "js",
+        "size": 638
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/realtime-analytics.js",
+        "name": "realtime-analytics.js",
+        "type": "js",
+        "size": 667
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/CINEMA_GRADE_SUMMARY.md",
+        "name": "CINEMA_GRADE_SUMMARY.md",
+        "type": "md",
+        "size": 10411
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/ENHANCEMENT_SUMMARY.md",
+        "name": "ENHANCEMENT_SUMMARY.md",
+        "type": "md",
+        "size": 8570
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/INTEGRATION_GUIDE.md",
+        "name": "INTEGRATION_GUIDE.md",
+        "type": "md",
+        "size": 22184
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/LONG_FORM_SUPPORT.md",
+        "name": "LONG_FORM_SUPPORT.md",
+        "type": "md",
+        "size": 12496
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 12579
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/README_30MIN.md",
+        "name": "README_30MIN.md",
+        "type": "md",
+        "size": 11593
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/README_8K_HDR_ATMOS.md",
+        "name": "README_8K_HDR_ATMOS.md",
+        "type": "md",
+        "size": 11474
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/README_ENHANCED.md",
+        "name": "README_ENHANCED.md",
+        "type": "md",
+        "size": 15575
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/TEST_INTEGRATION.md",
+        "name": "TEST_INTEGRATION.md",
+        "type": "md",
+        "size": 11937
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/UPGRADE_SUMMARY.md",
+        "name": "UPGRADE_SUMMARY.md",
+        "type": "md",
+        "size": 18416
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/adaptive_streaming.py",
+        "name": "adaptive_streaming.py",
+        "type": "py",
+        "size": 15455
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/advanced_samplers.py",
+        "name": "advanced_samplers.py",
+        "type": "py",
+        "size": 19930
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/ai_video_intelligence.py",
+        "name": "ai_video_intelligence.py",
+        "type": "py",
+        "size": 16311
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/analytics_engine.py",
+        "name": "analytics_engine.py",
+        "type": "py",
+        "size": 15446
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/api.py",
+        "name": "api.py",
+        "type": "py",
+        "size": 24519
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/api_enhanced.py",
+        "name": "api_enhanced.py",
+        "type": "py",
+        "size": 23442
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/cinema_integration.py",
+        "name": "cinema_integration.py",
+        "type": "py",
+        "size": 11618
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/config/development.yaml",
+        "name": "development.yaml",
+        "type": "yaml",
+        "size": 6824
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/config/production.yaml",
+        "name": "production.yaml",
+        "type": "yaml",
+        "size": 6245
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/config_manager.py",
+        "name": "config_manager.py",
+        "type": "py",
+        "size": 7909
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/diffusion.py",
+        "name": "diffusion.py",
+        "type": "py",
+        "size": 17003
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/dolby_atmos.py",
+        "name": "dolby_atmos.py",
+        "type": "py",
+        "size": 18863
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/example_real_to_game.py",
+        "name": "example_real_to_game.py",
+        "type": "py",
+        "size": 2438
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/example_reference_usage.py",
+        "name": "example_reference_usage.py",
+        "type": "py",
+        "size": 2851
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/examples.py",
+        "name": "examples.py",
+        "type": "py",
+        "size": 11188
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/generator.py",
+        "name": "generator.py",
+        "type": "py",
+        "size": 11904
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/hdr_processing.py",
+        "name": "hdr_processing.py",
+        "type": "py",
+        "size": 14603
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/image_analyzer.py",
+        "name": "image_analyzer.py",
+        "type": "py",
+        "size": 6564
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/install.py",
+        "name": "install.py",
+        "type": "py",
+        "size": 3888
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/long_form_processor.py",
+        "name": "long_form_processor.py",
+        "type": "py",
+        "size": 13514
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/long_video_api.py",
+        "name": "long_video_api.py",
+        "type": "py",
+        "size": 16410
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/model_optimization.py",
+        "name": "model_optimization.py",
+        "type": "py",
+        "size": 17318
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/monitoring.py",
+        "name": "monitoring.py",
+        "type": "py",
+        "size": 17191
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/real_to_game_style.py",
+        "name": "real_to_game_style.py",
+        "type": "py",
+        "size": 5052
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/subtitle_generator.py",
+        "name": "subtitle_generator.py",
+        "type": "py",
+        "size": 14633
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/text_encoder.py",
+        "name": "text_encoder.py",
+        "type": "py",
+        "size": 9453
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/unet.py",
+        "name": "unet.py",
+        "type": "py",
+        "size": 17577
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/video_effects.py",
+        "name": "video_effects.py",
+        "type": "py",
+        "size": 17609
+      },
+      {
+        "path": "heptagonal/2-intelligence/ai-services/video-generation/watch_party.py",
+        "name": "watch_party.py",
+        "type": "py",
+        "size": 15130
+      },
+      {
+        "path": "heptagonal/2-intelligence/analytics/ABTestingService.js",
+        "name": "ABTestingService.js",
+        "type": "js",
+        "size": 3945
+      },
+      {
+        "path": "heptagonal/2-intelligence/analytics/UserBehaviorAnalytics.js",
+        "name": "UserBehaviorAnalytics.js",
+        "type": "js",
+        "size": 6281
+      },
+      {
+        "path": "heptagonal/2-intelligence/analytics/VideoAnalyticsService.js",
+        "name": "VideoAnalyticsService.js",
+        "type": "js",
+        "size": 6233
+      },
+      {
+        "path": "heptagonal/2-intelligence/feedback-loops/feedback-engine.js",
+        "name": "feedback-engine.js",
+        "type": "js",
+        "size": 6861
+      },
+      {
+        "path": "heptagonal/2-intelligence/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 1322
+      },
+      {
+        "path": "heptagonal/2-intelligence/ml/MLModelService.js",
+        "name": "MLModelService.js",
+        "type": "js",
+        "size": 6598
+      },
+      {
+        "path": "heptagonal/2-intelligence/personalization/personalization-engine.js",
+        "name": "personalization-engine.js",
+        "type": "js",
+        "size": 6439
+      },
+      {
+        "path": "heptagonal/2-intelligence/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 198
+      },
+      {
+        "path": "heptagonal/3-communication/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 10374
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/api-gateway.js",
+        "name": "api-gateway.js",
+        "type": "js",
+        "size": 676
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/enhanced-mcp-server.js",
+        "name": "enhanced-mcp-server.js",
+        "type": "js",
+        "size": 10539
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/IMPLEMENTATION_SUMMARY.md",
+        "name": "IMPLEMENTATION_SUMMARY.md",
+        "type": "md",
+        "size": 10143
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 11124
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/SCHEMA_CONFIG.md",
+        "name": "SCHEMA_CONFIG.md",
+        "type": "md",
+        "size": 2229
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/CacheMiddleware.js",
+        "name": "CacheMiddleware.js",
+        "type": "js",
+        "size": 3249
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/GraphQLCachePlugin.js",
+        "name": "GraphQLCachePlugin.js",
+        "type": "js",
+        "size": 4591
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/GraphQLCacheService.js",
+        "name": "GraphQLCacheService.js",
+        "type": "js",
+        "size": 10391
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/MIGRATION.md",
+        "name": "MIGRATION.md",
+        "type": "md",
+        "size": 7072
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 11043
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/UnifiedCacheManager.js",
+        "name": "UnifiedCacheManager.js",
+        "type": "js",
+        "size": 7076
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/example.js",
+        "name": "example.js",
+        "type": "js",
+        "size": 1954
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 885
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/shared/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 2378
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/shared/constants.js",
+        "name": "constants.js",
+        "type": "js",
+        "size": 1102
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/cache/shared/utils.js",
+        "name": "utils.js",
+        "type": "js",
+        "size": 2795
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/db.js",
+        "name": "db.js",
+        "type": "js",
+        "size": 466
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/lambda.js",
+        "name": "lambda.js",
+        "type": "js",
+        "size": 333
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/middleware/authMiddleware.js",
+        "name": "authMiddleware.js",
+        "type": "js",
+        "size": 2783
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/middleware/rateLimiter.js",
+        "name": "rateLimiter.js",
+        "type": "js",
+        "size": 5229
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/middleware/security.js",
+        "name": "security.js",
+        "type": "js",
+        "size": 3648
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Contact.js",
+        "name": "Contact.js",
+        "type": "js",
+        "size": 1097
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Conversation.js",
+        "name": "Conversation.js",
+        "type": "js",
+        "size": 1939
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Message.js",
+        "name": "Message.js",
+        "type": "js",
+        "size": 1323
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Order.js",
+        "name": "Order.js",
+        "type": "js",
+        "size": 1293
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Playlist.js",
+        "name": "Playlist.js",
+        "type": "js",
+        "size": 4160
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Product.js",
+        "name": "Product.js",
+        "type": "js",
+        "size": 1382
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/User.js",
+        "name": "User.js",
+        "type": "js",
+        "size": 2847
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/Video.js",
+        "name": "Video.js",
+        "type": "js",
+        "size": 6559
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/models/dynamoClient.js",
+        "name": "dynamoClient.js",
+        "type": "js",
+        "size": 935
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/package-lock.json",
+        "name": "package-lock.json",
+        "type": "json",
+        "size": 294955
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 1570
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 655
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/mutations.js",
+        "name": "mutations.js",
+        "type": "js",
+        "size": 5371
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/playlistResolvers.js",
+        "name": "playlistResolvers.js",
+        "type": "js",
+        "size": 2252
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/queries.js",
+        "name": "queries.js",
+        "type": "js",
+        "size": 2125
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/subscriptions.js",
+        "name": "subscriptions.js",
+        "type": "js",
+        "size": 3461
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/types.js",
+        "name": "types.js",
+        "type": "js",
+        "size": 506
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/resolvers/videoResolvers.js",
+        "name": "videoResolvers.js",
+        "type": "js",
+        "size": 3265
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/routes/contact.js",
+        "name": "contact.js",
+        "type": "js",
+        "size": 785
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/routes/marketplace.js",
+        "name": "marketplace.js",
+        "type": "js",
+        "size": 3208
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/routes/messages.js",
+        "name": "messages.js",
+        "type": "js",
+        "size": 2240
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/seed.js",
+        "name": "seed.js",
+        "type": "js",
+        "size": 3894
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/server-enhanced.js",
+        "name": "server-enhanced.js",
+        "type": "js",
+        "size": 7225
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/server.js",
+        "name": "server.js",
+        "type": "js",
+        "size": 6448
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/test-examples.js",
+        "name": "test-examples.js",
+        "type": "js",
+        "size": 8002
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/activityPublisher.js",
+        "name": "activityPublisher.js",
+        "type": "js",
+        "size": 6497
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/activityStreamGenerator.js",
+        "name": "activityStreamGenerator.js",
+        "type": "js",
+        "size": 8406
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/auth.js",
+        "name": "auth.js",
+        "type": "js",
+        "size": 3473
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/errorBoundary.js",
+        "name": "errorBoundary.js",
+        "type": "js",
+        "size": 7505
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/logger.js",
+        "name": "logger.js",
+        "type": "js",
+        "size": 1391
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/pubsub.js",
+        "name": "pubsub.js",
+        "type": "js",
+        "size": 5559
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/sanitizeHtml.js",
+        "name": "sanitizeHtml.js",
+        "type": "js",
+        "size": 5411
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/tokenManager.js",
+        "name": "tokenManager.js",
+        "type": "js",
+        "size": 6752
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/utils/validateEnv.js",
+        "name": "validateEnv.js",
+        "type": "js",
+        "size": 6605
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/webhooks/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 7099
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/webhooks/routes.js",
+        "name": "routes.js",
+        "type": "js",
+        "size": 668
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/graphql-api/webhooks/stripeWebhookHandler.js",
+        "name": "stripeWebhookHandler.js",
+        "type": "js",
+        "size": 15861
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/mcp-server.js",
+        "name": "mcp-server.js",
+        "type": "js",
+        "size": 2747
+      },
+      {
+        "path": "heptagonal/3-communication/adapters/websocket-gateway.js",
+        "name": "websocket-gateway.js",
+        "type": "js",
+        "size": 911
+      },
+      {
+        "path": "heptagonal/3-communication/clients/CDNClient.js",
+        "name": "CDNClient.js",
+        "type": "js",
+        "size": 1729
+      },
+      {
+        "path": "heptagonal/3-communication/clients/EmailClient.js",
+        "name": "EmailClient.js",
+        "type": "js",
+        "size": 3229
+      },
+      {
+        "path": "heptagonal/3-communication/clients/FirebaseClient.js",
+        "name": "FirebaseClient.js",
+        "type": "js",
+        "size": 3279
+      },
+      {
+        "path": "heptagonal/3-communication/clients/S3Client.js",
+        "name": "S3Client.js",
+        "type": "js",
+        "size": 3213
+      },
+      {
+        "path": "heptagonal/3-communication/clients/StripeClient.js",
+        "name": "StripeClient.js",
+        "type": "js",
+        "size": 3487
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/CommentController.js",
+        "name": "CommentController.js",
+        "type": "js",
+        "size": 2474
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/PaymentController.js",
+        "name": "PaymentController.js",
+        "type": "js",
+        "size": 3164
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/PlaylistController.js",
+        "name": "PlaylistController.js",
+        "type": "js",
+        "size": 3278
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/SubscriptionController.js",
+        "name": "SubscriptionController.js",
+        "type": "js",
+        "size": 2455
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/UserController.js",
+        "name": "UserController.js",
+        "type": "js",
+        "size": 3380
+      },
+      {
+        "path": "heptagonal/3-communication/controllers/VideoController.js",
+        "name": "VideoController.js",
+        "type": "js",
+        "size": 4417
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/MutationResolvers.js",
+        "name": "MutationResolvers.js",
+        "type": "js",
+        "size": 5843
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/PlaylistTypeResolver.js",
+        "name": "PlaylistTypeResolver.js",
+        "type": "js",
+        "size": 1822
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/QueryResolvers.js",
+        "name": "QueryResolvers.js",
+        "type": "js",
+        "size": 3192
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/SubscriptionResolvers.js",
+        "name": "SubscriptionResolvers.js",
+        "type": "js",
+        "size": 2563
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/UserTypeResolver.js",
+        "name": "UserTypeResolver.js",
+        "type": "js",
+        "size": 1964
+      },
+      {
+        "path": "heptagonal/3-communication/graphql/VideoTypeResolver.js",
+        "name": "VideoTypeResolver.js",
+        "type": "js",
+        "size": 2000
+      },
+      {
+        "path": "heptagonal/3-communication/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 3267
+      },
+      {
+        "path": "heptagonal/3-communication/integrations/GoogleAnalyticsAPI.js",
+        "name": "GoogleAnalyticsAPI.js",
+        "type": "js",
+        "size": 2008
+      },
+      {
+        "path": "heptagonal/3-communication/integrations/SocialMediaAPI.js",
+        "name": "SocialMediaAPI.js",
+        "type": "js",
+        "size": 1666
+      },
+      {
+        "path": "heptagonal/3-communication/localization/i18n-service.js",
+        "name": "i18n-service.js",
+        "type": "js",
+        "size": 3067
+      },
+      {
+        "path": "heptagonal/3-communication/notifications/notification-service.js",
+        "name": "notification-service.js",
+        "type": "js",
+        "size": 5162
+      },
+      {
+        "path": "heptagonal/3-communication/queue/EventPublisher.js",
+        "name": "EventPublisher.js",
+        "type": "js",
+        "size": 1839
+      },
+      {
+        "path": "heptagonal/3-communication/queue/EventSubscriber.js",
+        "name": "EventSubscriber.js",
+        "type": "js",
+        "size": 1791
+      },
+      {
+        "path": "heptagonal/3-communication/queue/SQSConsumer.js",
+        "name": "SQSConsumer.js",
+        "type": "js",
+        "size": 3025
+      },
+      {
+        "path": "heptagonal/3-communication/queue/SQSProducer.js",
+        "name": "SQSProducer.js",
+        "type": "js",
+        "size": 2655
+      },
+      {
+        "path": "heptagonal/3-communication/resolvers-erp.js",
+        "name": "resolvers-erp.js",
+        "type": "js",
+        "size": 975
+      },
+      {
+        "path": "heptagonal/3-communication/routes.js",
+        "name": "routes.js",
+        "type": "js",
+        "size": 3497
+      },
+      {
+        "path": "heptagonal/3-communication/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 202
+      },
+      {
+        "path": "heptagonal/3-communication/schema-erp.js",
+        "name": "schema-erp.js",
+        "type": "js",
+        "size": 1268
+      },
+      {
+        "path": "heptagonal/3-communication/schema.js",
+        "name": "schema.js",
+        "type": "js",
+        "size": 5470
+      },
+      {
+        "path": "heptagonal/3-communication/websocket/ChatHandler.js",
+        "name": "ChatHandler.js",
+        "type": "js",
+        "size": 3390
+      },
+      {
+        "path": "heptagonal/3-communication/websocket/NotificationHandler.js",
+        "name": "NotificationHandler.js",
+        "type": "js",
+        "size": 2342
+      },
+      {
+        "path": "heptagonal/3-communication/websocket/PresenceHandler.js",
+        "name": "PresenceHandler.js",
+        "type": "js",
+        "size": 3888
+      },
+      {
+        "path": "heptagonal/3-communication/websocket/VideoSyncHandler.js",
+        "name": "VideoSyncHandler.js",
+        "type": "js",
+        "size": 4430
+      },
+      {
+        "path": "heptagonal/4-interface/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 12319
+      },
+      {
+        "path": "heptagonal/4-interface/accessibility/accessibility-service.js",
+        "name": "accessibility-service.js",
+        "type": "js",
+        "size": 12133
+      },
+      {
+        "path": "heptagonal/4-interface/components/AmazonQChatWindow.jsx",
+        "name": "AmazonQChatWindow.jsx",
+        "type": "jsx",
+        "size": 8905
+      },
+      {
+        "path": "heptagonal/4-interface/components/ChatLauncher.jsx",
+        "name": "ChatLauncher.jsx",
+        "type": "jsx",
+        "size": 3499
+      },
+      {
+        "path": "heptagonal/4-interface/components/CommentForm.jsx",
+        "name": "CommentForm.jsx",
+        "type": "jsx",
+        "size": 1540
+      },
+      {
+        "path": "heptagonal/4-interface/components/CommentItem.jsx",
+        "name": "CommentItem.jsx",
+        "type": "jsx",
+        "size": 3488
+      },
+      {
+        "path": "heptagonal/4-interface/components/CommentList.jsx",
+        "name": "CommentList.jsx",
+        "type": "jsx",
+        "size": 1931
+      },
+      {
+        "path": "heptagonal/4-interface/components/Navigation.jsx",
+        "name": "Navigation.jsx",
+        "type": "jsx",
+        "size": 1727
+      },
+      {
+        "path": "heptagonal/4-interface/components/PlaylistCard.jsx",
+        "name": "PlaylistCard.jsx",
+        "type": "jsx",
+        "size": 1045
+      },
+      {
+        "path": "heptagonal/4-interface/components/UserProfile.jsx",
+        "name": "UserProfile.jsx",
+        "type": "jsx",
+        "size": 2003
+      },
+      {
+        "path": "heptagonal/4-interface/components/VideoCard.jsx",
+        "name": "VideoCard.jsx",
+        "type": "jsx",
+        "size": 1490
+      },
+      {
+        "path": "heptagonal/4-interface/components/VideoPlayer.jsx",
+        "name": "VideoPlayer.jsx",
+        "type": "jsx",
+        "size": 3219
+      },
+      {
+        "path": "heptagonal/4-interface/components/VideoPlayerControls.jsx",
+        "name": "VideoPlayerControls.jsx",
+        "type": "jsx",
+        "size": 2394
+      },
+      {
+        "path": "heptagonal/4-interface/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 2471
+      },
+      {
+        "path": "heptagonal/4-interface/presenters/CommentPresenter.js",
+        "name": "CommentPresenter.js",
+        "type": "js",
+        "size": 1784
+      },
+      {
+        "path": "heptagonal/4-interface/presenters/PlaylistPresenter.js",
+        "name": "PlaylistPresenter.js",
+        "type": "js",
+        "size": 2445
+      },
+      {
+        "path": "heptagonal/4-interface/presenters/UserPresenter.js",
+        "name": "UserPresenter.js",
+        "type": "js",
+        "size": 2342
+      },
+      {
+        "path": "heptagonal/4-interface/presenters/VideoPresenter.js",
+        "name": "VideoPresenter.js",
+        "type": "js",
+        "size": 1893
+      },
+      {
+        "path": "heptagonal/4-interface/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 198
+      },
+      {
+        "path": "heptagonal/4-interface/state/UIState.jsx",
+        "name": "UIState.jsx",
+        "type": "jsx",
+        "size": 5112
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/libs/peerjs.min.js",
+        "name": "peerjs.min.js",
+        "type": "js",
+        "size": 580
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/libs/video-js.css",
+        "name": "video-js.css",
+        "type": "css",
+        "size": 311
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/libs/video.min.js",
+        "name": "video.min.js",
+        "type": "js",
+        "size": 1615
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/security/enterprise-security.js",
+        "name": "enterprise-security.js",
+        "type": "js",
+        "size": 51719
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/security/security-config.js",
+        "name": "security-config.js",
+        "type": "js",
+        "size": 3261
+      },
+      {
+        "path": "heptagonal/4-interface/ui/assets/security/session-revocation.js",
+        "name": "session-revocation.js",
+        "type": "js",
+        "size": 2946
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/auth-guard.js",
+        "name": "auth-guard.js",
+        "type": "js",
+        "size": 1036
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/AI_AGENT_PANEL_DOCS.md",
+        "name": "AI_AGENT_PANEL_DOCS.md",
+        "type": "md",
+        "size": 6098
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "md",
+        "size": 7569
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 3460
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/advanced-features.js",
+        "name": "advanced-features.js",
+        "type": "js",
+        "size": 9663
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-agent-init.js",
+        "name": "ai-agent-init.js",
+        "type": "js",
+        "size": 2257
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-agent-panel-extended.js",
+        "name": "ai-agent-panel-extended.js",
+        "type": "js",
+        "size": 8982
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-agent-panel-sophisticated.js",
+        "name": "ai-agent-panel-sophisticated.js",
+        "type": "js",
+        "size": 13204
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-agent-panel.js",
+        "name": "ai-agent-panel.js",
+        "type": "js",
+        "size": 24156
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-assistant-bridge.js",
+        "name": "ai-assistant-bridge.js",
+        "type": "js",
+        "size": 3797
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-assistant-clean.js",
+        "name": "ai-assistant-clean.js",
+        "type": "js",
+        "size": 17859
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ai-assistant.js",
+        "name": "ai-assistant.js",
+        "type": "js",
+        "size": 16470
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/cloud-sync-advanced.js",
+        "name": "cloud-sync-advanced.js",
+        "type": "js",
+        "size": 21353
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/cloud-sync-fixed.js",
+        "name": "cloud-sync-fixed.js",
+        "type": "js",
+        "size": 16150
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/cloud-sync.js",
+        "name": "cloud-sync.js",
+        "type": "js",
+        "size": 14374
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/command-palette.html",
+        "name": "command-palette.html",
+        "type": "html",
+        "size": 4509
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/cross-integration.js",
+        "name": "cross-integration.js",
+        "type": "js",
+        "size": 5289
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/cursor-ui.js",
+        "name": "cursor-ui.js",
+        "type": "js",
+        "size": 13334
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/demo.html",
+        "name": "demo.html",
+        "type": "html",
+        "size": 7643
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/enhancements.js",
+        "name": "enhancements.js",
+        "type": "js",
+        "size": 6234
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/enterprise.js",
+        "name": "enterprise.js",
+        "type": "js",
+        "size": 10284
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/error-handler.js",
+        "name": "error-handler.js",
+        "type": "js",
+        "size": 9756
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/fallback-handlers.js",
+        "name": "fallback-handlers.js",
+        "type": "js",
+        "size": 8511
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/feature-expansions.js",
+        "name": "feature-expansions.js",
+        "type": "js",
+        "size": 12920
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 260294
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 3497
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/integration-commands.js",
+        "name": "integration-commands.js",
+        "type": "js",
+        "size": 10528
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/lsp-client-fixed.js",
+        "name": "lsp-client-fixed.js",
+        "type": "js",
+        "size": 6189
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/lsp-client.js",
+        "name": "lsp-client.js",
+        "type": "js",
+        "size": 9063
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/main.js",
+        "name": "main.js",
+        "type": "js",
+        "size": 8681
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/monaco-extensions.js",
+        "name": "monaco-extensions.js",
+        "type": "js",
+        "size": 12534
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/package-manager.js",
+        "name": "package-manager.js",
+        "type": "js",
+        "size": 11168
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 918
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/performance-optimizer.js",
+        "name": "performance-optimizer.js",
+        "type": "js",
+        "size": 5040
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/platform-integration.js",
+        "name": "platform-integration.js",
+        "type": "js",
+        "size": 14612
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/plugin-api.js",
+        "name": "plugin-api.js",
+        "type": "js",
+        "size": 5392
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/plugin-system-fixed.js",
+        "name": "plugin-system-fixed.js",
+        "type": "js",
+        "size": 11522
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/plugin-system.js",
+        "name": "plugin-system.js",
+        "type": "js",
+        "size": 11522
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/quick-setup.js",
+        "name": "quick-setup.js",
+        "type": "js",
+        "size": 8444
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/renderer-manager.js",
+        "name": "renderer-manager.js",
+        "type": "js",
+        "size": 4036
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/security-compliance.js",
+        "name": "security-compliance.js",
+        "type": "js",
+        "size": 10605
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/server.js",
+        "name": "server.js",
+        "type": "js",
+        "size": 299
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/sw.js",
+        "name": "sw.js",
+        "type": "js",
+        "size": 2847
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/ui-enhancements.js",
+        "name": "ui-enhancements.js",
+        "type": "js",
+        "size": 7934
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/unified-ai-system.js",
+        "name": "unified-ai-system.js",
+        "type": "js",
+        "size": 5482
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/electron-code-editor/web-bridge.js",
+        "name": "web-bridge.js",
+        "type": "js",
+        "size": 13461
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/footer-enhanced.js",
+        "name": "footer-enhanced.js",
+        "type": "js",
+        "size": 9107
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/footer-loader.js",
+        "name": "footer-loader.js",
+        "type": "js",
+        "size": 7327
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/footer.html",
+        "name": "footer.html",
+        "type": "html",
+        "size": 3627
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/header-enhanced.js",
+        "name": "header-enhanced.js",
+        "type": "js",
+        "size": 18715
+      },
+      {
+        "path": "heptagonal/4-interface/ui/components/navigation-policy.js",
+        "name": "navigation-policy.js",
+        "type": "js",
+        "size": 1410
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frameworks/linting/eslint.config.js",
+        "name": "eslint.config.js",
+        "type": "js",
+        "size": 1111
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frameworks/linting/eslint.security.config.js",
+        "name": "eslint.security.config.js",
+        "type": "js",
+        "size": 1862
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frameworks/linting/frontend-eslint.config.js",
+        "name": "frontend-eslint.config.js",
+        "type": "js",
+        "size": 362
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frameworks/linting/simple.eslintrc.json",
+        "name": "simple.eslintrc.json",
+        "type": "json",
+        "size": 242
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/CINEMA_PLAYER_GUIDE.md",
+        "name": "CINEMA_PLAYER_GUIDE.md",
+        "type": "md",
+        "size": 13061
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 8042
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/events/event.json",
+        "name": "event.json",
+        "type": "json",
+        "size": 2089
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/example-pattern.json",
+        "name": "example-pattern.json",
+        "type": "json",
+        "size": 1738
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/hello_world/__init__.py",
+        "name": "__init__.py",
+        "type": "py",
+        "size": 0
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/hello_world/app.py",
+        "name": "app.py",
+        "type": "py",
+        "size": 1134
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/Hootner/template.yaml",
+        "name": "template.yaml",
+        "type": "yaml",
+        "size": 1755
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/cinema-player.html",
+        "name": "cinema-player.html",
+        "type": "html",
+        "size": 59467
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 2038
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/html-pages/server.js",
+        "name": "server.js",
+        "type": "js",
+        "size": 756
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 383
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/package-lock.json",
+        "name": "package-lock.json",
+        "type": "json",
+        "size": 85193
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 769
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/postcss.config.js",
+        "name": "postcss.config.js",
+        "type": "js",
+        "size": 80
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/App.css",
+        "name": "App.css",
+        "type": "css",
+        "size": 550
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/App.tsx",
+        "name": "App.tsx",
+        "type": "tsx",
+        "size": 444
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/apollo-client.ts",
+        "name": "apollo-client.ts",
+        "type": "ts",
+        "size": 702
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/AlgorithmMarketplace.tsx",
+        "name": "AlgorithmMarketplace.tsx",
+        "type": "tsx",
+        "size": 3971
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/Dashboard.tsx",
+        "name": "Dashboard.tsx",
+        "type": "tsx",
+        "size": 10325
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/GraphQLDemo.tsx",
+        "name": "GraphQLDemo.tsx",
+        "type": "tsx",
+        "size": 3040
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/PlaylistManager.tsx",
+        "name": "PlaylistManager.tsx",
+        "type": "tsx",
+        "size": 3749
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 5599
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/VideoControls.tsx",
+        "name": "VideoControls.tsx",
+        "type": "tsx",
+        "size": 6217
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/VideoPlayer.tsx",
+        "name": "VideoPlayer.tsx",
+        "type": "tsx",
+        "size": 5398
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/VideoProgressBar.tsx",
+        "name": "VideoProgressBar.tsx",
+        "type": "tsx",
+        "size": 4010
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/VideoSettings.tsx",
+        "name": "VideoSettings.tsx",
+        "type": "tsx",
+        "size": 1848
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/VideoVolumeControl.tsx",
+        "name": "VideoVolumeControl.tsx",
+        "type": "tsx",
+        "size": 2441
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/components/legal/LegalComponents.jsx",
+        "name": "LegalComponents.jsx",
+        "type": "jsx",
+        "size": 18831
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/graphql/queries.ts",
+        "name": "queries.ts",
+        "type": "ts",
+        "size": 1105
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/hooks/useVideoPlayer.ts",
+        "name": "useVideoPlayer.ts",
+        "type": "ts",
+        "size": 8077
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/main.tsx",
+        "name": "main.tsx",
+        "type": "tsx",
+        "size": 395
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/src/types/videoPlayer.ts",
+        "name": "videoPlayer.ts",
+        "type": "ts",
+        "size": 3075
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/tailwind.config.js",
+        "name": "tailwind.config.js",
+        "type": "js",
+        "size": 708
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "json",
+        "size": 595
+      },
+      {
+        "path": "heptagonal/4-interface/ui/frontend/vite.config.ts",
+        "name": "vite.config.ts",
+        "type": "ts",
+        "size": 263
+      },
+      {
+        "path": "heptagonal/4-interface/ui/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 887
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/admin-session-manager.html",
+        "name": "admin-session-manager.html",
+        "type": "html",
+        "size": 9346
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/agent-management.html",
+        "name": "agent-management.html",
+        "type": "html",
+        "size": 23536
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/ai-video.html",
+        "name": "ai-video.html",
+        "type": "html",
+        "size": 57650
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/analytics.html",
+        "name": "analytics.html",
+        "type": "html",
+        "size": 6945
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/asset-loader.js",
+        "name": "asset-loader.js",
+        "type": "js",
+        "size": 2705
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/auto-editor.html",
+        "name": "auto-editor.html",
+        "type": "html",
+        "size": 62111
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/code-editor.html",
+        "name": "code-editor.html",
+        "type": "html",
+        "size": 74184
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/collaboration.html",
+        "name": "collaboration.html",
+        "type": "html",
+        "size": 19258
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/config.js",
+        "name": "config.js",
+        "type": "js",
+        "size": 639
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/contact.html",
+        "name": "contact.html",
+        "type": "html",
+        "size": 16622
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/dashboard.html",
+        "name": "dashboard.html",
+        "type": "html",
+        "size": 195460
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/devops-monitoring.html",
+        "name": "devops-monitoring.html",
+        "type": "html",
+        "size": 26152
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/erp-dashboard.html",
+        "name": "erp-dashboard.html",
+        "type": "html",
+        "size": 4943
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/feed-react-config.js",
+        "name": "feed-react-config.js",
+        "type": "js",
+        "size": 575
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/feed-react.html",
+        "name": "feed-react.html",
+        "type": "html",
+        "size": 71903
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/graphql-config.js",
+        "name": "graphql-config.js",
+        "type": "js",
+        "size": 836
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 855
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/live-activity.html",
+        "name": "live-activity.html",
+        "type": "html",
+        "size": 20379
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/live-stream.html",
+        "name": "live-stream.html",
+        "type": "html",
+        "size": 11608
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/login.html",
+        "name": "login.html",
+        "type": "html",
+        "size": 23240
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/manifest.json",
+        "name": "manifest.json",
+        "type": "json",
+        "size": 2519
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/marketplace.html",
+        "name": "marketplace.html",
+        "type": "html",
+        "size": 21515
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/messages.html",
+        "name": "messages.html",
+        "type": "html",
+        "size": 15169
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/my-videos.html",
+        "name": "my-videos.html",
+        "type": "html",
+        "size": 12721
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/profile.html",
+        "name": "profile.html",
+        "type": "html",
+        "size": 148304
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/profile.js",
+        "name": "profile.js",
+        "type": "js",
+        "size": 603
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/security-core.js",
+        "name": "security-core.js",
+        "type": "js",
+        "size": 19664
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/security.html",
+        "name": "security.html",
+        "type": "html",
+        "size": 4433
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/settings.html",
+        "name": "settings.html",
+        "type": "html",
+        "size": 20455
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/settings.js",
+        "name": "settings.js",
+        "type": "js",
+        "size": 1289
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/shared-styles.css",
+        "name": "shared-styles.css",
+        "type": "css",
+        "size": 2844
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/sw.js",
+        "name": "sw.js",
+        "type": "js",
+        "size": 2612
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/tailwind-input.css",
+        "name": "tailwind-input.css",
+        "type": "css",
+        "size": 59
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/tailwind-output.css",
+        "name": "tailwind-output.css",
+        "type": "css",
+        "size": 14101
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/ultra-editor.html",
+        "name": "ultra-editor.html",
+        "type": "html",
+        "size": 18697
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/upload-video.html",
+        "name": "upload-video.html",
+        "type": "html",
+        "size": 9698
+      },
+      {
+        "path": "heptagonal/4-interface/ui/pages/video-player.html",
+        "name": "video-player.html",
+        "type": "html",
+        "size": 261488
+      },
+      {
+        "path": "heptagonal/4-interface/ui/server/html-pages-server.js",
+        "name": "html-pages-server.js",
+        "type": "js",
+        "size": 1466
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/AlgorithmMarketplace.tsx",
+        "name": "AlgorithmMarketplace.tsx",
+        "type": "tsx",
+        "size": 0
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/legal/LegalComponents.jsx",
+        "name": "LegalComponents.jsx",
+        "type": "jsx",
+        "size": 12457
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/video/VideoControls.tsx",
+        "name": "VideoControls.tsx",
+        "type": "tsx",
+        "size": 4588
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/video/VideoProgressBar.tsx",
+        "name": "VideoProgressBar.tsx",
+        "type": "tsx",
+        "size": 3609
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/video/VideoSettings.tsx",
+        "name": "VideoSettings.tsx",
+        "type": "tsx",
+        "size": 1641
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/video/VideoVolumeControl.tsx",
+        "name": "VideoVolumeControl.tsx",
+        "type": "tsx",
+        "size": 2132
+      },
+      {
+        "path": "heptagonal/4-interface/ui/src/components/video/types.ts",
+        "name": "types.ts",
+        "type": "ts",
+        "size": 1072
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/apexcharts-config.js",
+        "name": "apexcharts-config.js",
+        "type": "js",
+        "size": 1508
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/csp-reporter.js",
+        "name": "csp-reporter.js",
+        "type": "js",
+        "size": 1710
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/csrf-protection.js",
+        "name": "csrf-protection.js",
+        "type": "js",
+        "size": 1697
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/d3-charts.js",
+        "name": "d3-charts.js",
+        "type": "js",
+        "size": 2858
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/plotly-graphs.js",
+        "name": "plotly-graphs.js",
+        "type": "js",
+        "size": 1552
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/rate-limiter.js",
+        "name": "rate-limiter.js",
+        "type": "js",
+        "size": 668
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/scripts/sanitizer.js",
+        "name": "sanitizer.js",
+        "type": "js",
+        "size": 729
+      },
+      {
+        "path": "heptagonal/4-interface/ui/utils/usb-passkey-client.js",
+        "name": "usb-passkey-client.js",
+        "type": "js",
+        "size": 11290
+      },
+      {
+        "path": "heptagonal/4-interface/utils/formatters.js",
+        "name": "formatters.js",
+        "type": "js",
+        "size": 2774
+      },
+      {
+        "path": "heptagonal/4-interface/utils/validation.js",
+        "name": "validation.js",
+        "type": "js",
+        "size": 4524
+      },
+      {
+        "path": "heptagonal/4-interface/viewmodels/CommentViewModel.js",
+        "name": "CommentViewModel.js",
+        "type": "js",
+        "size": 1101
+      },
+      {
+        "path": "heptagonal/4-interface/viewmodels/PlaylistViewModel.js",
+        "name": "PlaylistViewModel.js",
+        "type": "js",
+        "size": 1268
+      },
+      {
+        "path": "heptagonal/4-interface/viewmodels/UserViewModel.js",
+        "name": "UserViewModel.js",
+        "type": "js",
+        "size": 968
+      },
+      {
+        "path": "heptagonal/4-interface/viewmodels/VideoViewModel.js",
+        "name": "VideoViewModel.js",
+        "type": "js",
+        "size": 1128
+      },
+      {
+        "path": "heptagonal/5-economy/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 13462
+      },
+      {
+        "path": "heptagonal/5-economy/business/REVENUE_ALGORITHMS_README.md",
+        "name": "REVENUE_ALGORITHMS_README.md",
+        "type": "md",
+        "size": 7291
+      },
+      {
+        "path": "heptagonal/5-economy/business/ab-testing.js",
+        "name": "ab-testing.js",
+        "type": "js",
+        "size": 10214
+      },
+      {
+        "path": "heptagonal/5-economy/business/advanced-content-moderation.js",
+        "name": "advanced-content-moderation.js",
+        "type": "js",
+        "size": 12105
+      },
+      {
+        "path": "heptagonal/5-economy/business/age-verification.js",
+        "name": "age-verification.js",
+        "type": "js",
+        "size": 7100
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/computer-vision.js",
+        "name": "computer-vision.js",
+        "type": "js",
+        "size": 19392
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/content-moderation-ai.js",
+        "name": "content-moderation-ai.js",
+        "type": "js",
+        "size": 1707
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/copilot-commit-agent.js",
+        "name": "copilot-commit-agent.js",
+        "type": "js",
+        "size": 0
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/deep-learning-pipelines.js",
+        "name": "deep-learning-pipelines.js",
+        "type": "js",
+        "size": 23871
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/edge-ai-processing.js",
+        "name": "edge-ai-processing.js",
+        "type": "js",
+        "size": 14366
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/federated-learning.js",
+        "name": "federated-learning.js",
+        "type": "js",
+        "size": 23971
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/natural-language-processing.js",
+        "name": "natural-language-processing.js",
+        "type": "js",
+        "size": 19538
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/personalization-agent.js",
+        "name": "personalization-agent.js",
+        "type": "js",
+        "size": 7606
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/predictive-analytics.js",
+        "name": "predictive-analytics.js",
+        "type": "js",
+        "size": 16496
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/recommendation-ml.js",
+        "name": "recommendation-ml.js",
+        "type": "js",
+        "size": 4819
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/run-all-agents.js",
+        "name": "run-all-agents.js",
+        "type": "js",
+        "size": 10680
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/sentiment-analysis.js",
+        "name": "sentiment-analysis.js",
+        "type": "js",
+        "size": 23769
+      },
+      {
+        "path": "heptagonal/5-economy/business/ai/speech-to-text-service.js",
+        "name": "speech-to-text-service.js",
+        "type": "js",
+        "size": 2496
+      },
+      {
+        "path": "heptagonal/5-economy/business/algorithm-api/algorithm-api.js",
+        "name": "algorithm-api.js",
+        "type": "js",
+        "size": 5755
+      },
+      {
+        "path": "heptagonal/5-economy/business/algorithm-api/subscriptions.js",
+        "name": "subscriptions.js",
+        "type": "js",
+        "size": 6288
+      },
+      {
+        "path": "heptagonal/5-economy/business/analytics/apm-monitoring.js",
+        "name": "apm-monitoring.js",
+        "type": "js",
+        "size": 6903
+      },
+      {
+        "path": "heptagonal/5-economy/business/analytics/business-metrics.js",
+        "name": "business-metrics.js",
+        "type": "js",
+        "size": 8397
+      },
+      {
+        "path": "heptagonal/5-economy/business/analytics/comprehensive-monitoring.js",
+        "name": "comprehensive-monitoring.js",
+        "type": "js",
+        "size": 11706
+      },
+      {
+        "path": "heptagonal/5-economy/business/analytics/performance-monitor.js",
+        "name": "performance-monitor.js",
+        "type": "js",
+        "size": 8408
+      },
+      {
+        "path": "heptagonal/5-economy/business/analytics/usage-tracking.js",
+        "name": "usage-tracking.js",
+        "type": "js",
+        "size": 1901
+      },
+      {
+        "path": "heptagonal/5-economy/business/api-documentation.js",
+        "name": "api-documentation.js",
+        "type": "js",
+        "size": 8875
+      },
+      {
+        "path": "heptagonal/5-economy/business/audit-logging.js",
+        "name": "audit-logging.js",
+        "type": "js",
+        "size": 6047
+      },
+      {
+        "path": "heptagonal/5-economy/business/backup-verification.js",
+        "name": "backup-verification.js",
+        "type": "js",
+        "size": 8387
+      },
+      {
+        "path": "heptagonal/5-economy/business/blockchain-service.js",
+        "name": "blockchain-service.js",
+        "type": "js",
+        "size": 810
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/conversion-optimization.js",
+        "name": "conversion-optimization.js",
+        "type": "js",
+        "size": 10459
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/currency-conversion.js",
+        "name": "currency-conversion.js",
+        "type": "js",
+        "size": 15799
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/local-payment-methods.js",
+        "name": "local-payment-methods.js",
+        "type": "js",
+        "size": 18982
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/payment-fraud-detection-agent.js",
+        "name": "payment-fraud-detection-agent.js",
+        "type": "js",
+        "size": 9029
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/payment-service-simple.js",
+        "name": "payment-service-simple.js",
+        "type": "js",
+        "size": 2412
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/payment-service.js",
+        "name": "payment-service.js",
+        "type": "js",
+        "size": 7286
+      },
+      {
+        "path": "heptagonal/5-economy/business/commerce/pricing-algorithms.js",
+        "name": "pricing-algorithms.js",
+        "type": "js",
+        "size": 10671
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/audit-service.js",
+        "name": "audit-service.js",
+        "type": "js",
+        "size": 1227
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/behavioral-biometrics.js",
+        "name": "behavioral-biometrics.js",
+        "type": "js",
+        "size": 23003
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/compliance-certification.js",
+        "name": "compliance-certification.js",
+        "type": "js",
+        "size": 17753
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/gdpr-compliance-tools.js",
+        "name": "gdpr-compliance-tools.js",
+        "type": "js",
+        "size": 4171
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/penetration-testing.js",
+        "name": "penetration-testing.js",
+        "type": "js",
+        "size": 17039
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/quantum-resistant-encryption.js",
+        "name": "quantum-resistant-encryption.js",
+        "type": "js",
+        "size": 16831
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/security-service.js",
+        "name": "security-service.js",
+        "type": "js",
+        "size": 4321
+      },
+      {
+        "path": "heptagonal/5-economy/business/compliance/zero-trust-architecture.js",
+        "name": "zero-trust-architecture.js",
+        "type": "js",
+        "size": 13433
+      },
+      {
+        "path": "heptagonal/5-economy/business/content-licensing.js",
+        "name": "content-licensing.js",
+        "type": "js",
+        "size": 5746
+      },
+      {
+        "path": "heptagonal/5-economy/business/data/data-warehouse.js",
+        "name": "data-warehouse.js",
+        "type": "js",
+        "size": 8638
+      },
+      {
+        "path": "heptagonal/5-economy/business/data/etl-pipelines.js",
+        "name": "etl-pipelines.js",
+        "type": "js",
+        "size": 9787
+      },
+      {
+        "path": "heptagonal/5-economy/business/data/regional-data-residency.js",
+        "name": "regional-data-residency.js",
+        "type": "js",
+        "size": 19946
+      },
+      {
+        "path": "heptagonal/5-economy/business/desktop-app.js",
+        "name": "desktop-app.js",
+        "type": "js",
+        "size": 9799
+      },
+      {
+        "path": "heptagonal/5-economy/business/erp/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 1584
+      },
+      {
+        "path": "heptagonal/5-economy/business/erp/erp-core.js",
+        "name": "erp-core.js",
+        "type": "js",
+        "size": 2608
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/5g-optimization.js",
+        "name": "5g-optimization.js",
+        "type": "js",
+        "size": 15677
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/auto-scaling.js",
+        "name": "auto-scaling.js",
+        "type": "js",
+        "size": 13906
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/caching-layers.js",
+        "name": "caching-layers.js",
+        "type": "js",
+        "size": 15102
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/cdn-management.js",
+        "name": "cdn-management.js",
+        "type": "js",
+        "size": 11715
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/certificate-management.js",
+        "name": "certificate-management.js",
+        "type": "js",
+        "size": 17304
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/database-sharding.js",
+        "name": "database-sharding.js",
+        "type": "js",
+        "size": 15136
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/edge-computing.js",
+        "name": "edge-computing.js",
+        "type": "js",
+        "size": 16424
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/health-checks.js",
+        "name": "health-checks.js",
+        "type": "js",
+        "size": 8016
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/hybrid-cloud.js",
+        "name": "hybrid-cloud.js",
+        "type": "js",
+        "size": 12887
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/load-testing-tools.js",
+        "name": "load-testing-tools.js",
+        "type": "js",
+        "size": 5579
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/multi-cloud-strategy.js",
+        "name": "multi-cloud-strategy.js",
+        "type": "js",
+        "size": 12522
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/queue-systems.js",
+        "name": "queue-systems.js",
+        "type": "js",
+        "size": 14773
+      },
+      {
+        "path": "heptagonal/5-economy/business/infrastructure/rate-limiting.js",
+        "name": "rate-limiting.js",
+        "type": "js",
+        "size": 7951
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/accounting-software-integration.js",
+        "name": "accounting-software-integration.js",
+        "type": "js",
+        "size": 14226
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/blockchain-integration.js",
+        "name": "blockchain-integration.js",
+        "type": "js",
+        "size": 17366
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/business-intelligence-integration.js",
+        "name": "business-intelligence-integration.js",
+        "type": "js",
+        "size": 17604
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/crm-integration.js",
+        "name": "crm-integration.js",
+        "type": "js",
+        "size": 6840
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/document-management-integration.js",
+        "name": "document-management-integration.js",
+        "type": "js",
+        "size": 17518
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/erp-integration.js",
+        "name": "erp-integration.js",
+        "type": "js",
+        "size": 4602
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/hr-systems-integration.js",
+        "name": "hr-systems-integration.js",
+        "type": "js",
+        "size": 12481
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/marketing-automation-integration.js",
+        "name": "marketing-automation-integration.js",
+        "type": "js",
+        "size": 15818
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/mobile-app-integration.js",
+        "name": "mobile-app-integration.js",
+        "type": "js",
+        "size": 8538
+      },
+      {
+        "path": "heptagonal/5-economy/business/integration/service-integration-hub.js",
+        "name": "service-integration-hub.js",
+        "type": "js",
+        "size": 15666
+      },
+      {
+        "path": "heptagonal/5-economy/business/iot-device-support.js",
+        "name": "iot-device-support.js",
+        "type": "js",
+        "size": 16025
+      },
+      {
+        "path": "heptagonal/5-economy/business/localization/cultural-localization.js",
+        "name": "cultural-localization.js",
+        "type": "js",
+        "size": 16278
+      },
+      {
+        "path": "heptagonal/5-economy/business/localization/multi-language-support.js",
+        "name": "multi-language-support.js",
+        "type": "js",
+        "size": 14500
+      },
+      {
+        "path": "heptagonal/5-economy/business/localization/translation-api.js",
+        "name": "translation-api.js",
+        "type": "js",
+        "size": 3369
+      },
+      {
+        "path": "heptagonal/5-economy/business/noc-service.js",
+        "name": "noc-service.js",
+        "type": "js",
+        "size": 5515
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/alternative-payments.js",
+        "name": "alternative-payments.js",
+        "type": "js",
+        "size": 3644
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/enhanced-revenue-api.js",
+        "name": "enhanced-revenue-api.js",
+        "type": "js",
+        "size": 17647
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/local-revenue-api.js",
+        "name": "local-revenue-api.js",
+        "type": "js",
+        "size": 4569
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/revenue-algorithms-api.js",
+        "name": "revenue-algorithms-api.js",
+        "type": "js",
+        "size": 10180
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/revenue-analytics.js",
+        "name": "revenue-analytics.js",
+        "type": "js",
+        "size": 10609
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/revenue-integration.js",
+        "name": "revenue-integration.js",
+        "type": "js",
+        "size": 12064
+      },
+      {
+        "path": "heptagonal/5-economy/business/revenue/revenue-optimization.js",
+        "name": "revenue-optimization.js",
+        "type": "js",
+        "size": 11452
+      },
+      {
+        "path": "heptagonal/5-economy/business/sdk-generation.js",
+        "name": "sdk-generation.js",
+        "type": "js",
+        "size": 9491
+      },
+      {
+        "path": "heptagonal/5-economy/business/secrets-management.js",
+        "name": "secrets-management.js",
+        "type": "js",
+        "size": 13535
+      },
+      {
+        "path": "heptagonal/5-economy/business/subscription-manager.js",
+        "name": "subscription-manager.js",
+        "type": "js",
+        "size": 984
+      },
+      {
+        "path": "heptagonal/5-economy/business/time-zone-management.js",
+        "name": "time-zone-management.js",
+        "type": "js",
+        "size": 16175
+      },
+      {
+        "path": "heptagonal/5-economy/business/tv-apps.js",
+        "name": "tv-apps.js",
+        "type": "js",
+        "size": 10632
+      },
+      {
+        "path": "heptagonal/5-economy/business/webhook-management.js",
+        "name": "webhook-management.js",
+        "type": "js",
+        "size": 8943
+      },
+      {
+        "path": "heptagonal/5-economy/fraud-detection/fraud-system.js",
+        "name": "fraud-system.js",
+        "type": "js",
+        "size": 5926
+      },
+      {
+        "path": "heptagonal/5-economy/fraud-detection/payment-fraud-service.js",
+        "name": "payment-fraud-service.js",
+        "type": "js",
+        "size": 7493
+      },
+      {
+        "path": "heptagonal/5-economy/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 1326
+      },
+      {
+        "path": "heptagonal/5-economy/monetization/AdRevenueService.js",
+        "name": "AdRevenueService.js",
+        "type": "js",
+        "size": 6701
+      },
+      {
+        "path": "heptagonal/5-economy/monetization/SubscriptionService.js",
+        "name": "SubscriptionService.js",
+        "type": "js",
+        "size": 8405
+      },
+      {
+        "path": "heptagonal/5-economy/payments/PaymentService.js",
+        "name": "PaymentService.js",
+        "type": "js",
+        "size": 6348
+      },
+      {
+        "path": "heptagonal/5-economy/payments/PayoutService.js",
+        "name": "PayoutService.js",
+        "type": "js",
+        "size": 7137
+      },
+      {
+        "path": "heptagonal/5-economy/pricing/DynamicPricingService.js",
+        "name": "DynamicPricingService.js",
+        "type": "js",
+        "size": 6412
+      },
+      {
+        "path": "heptagonal/5-economy/pricing/pricing-engine.js",
+        "name": "pricing-engine.js",
+        "type": "js",
+        "size": 5160
+      },
+      {
+        "path": "heptagonal/5-economy/pricing/tiered-billing.js",
+        "name": "tiered-billing.js",
+        "type": "js",
+        "size": 3692
+      },
+      {
+        "path": "heptagonal/5-economy/revenue/RevenueAnalyticsService.js",
+        "name": "RevenueAnalyticsService.js",
+        "type": "js",
+        "size": 8729
+      },
+      {
+        "path": "heptagonal/5-economy/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 195
+      },
+      {
+        "path": "heptagonal/6-governance/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 16275
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/CopyrightService.js",
+        "name": "CopyrightService.js",
+        "type": "js",
+        "size": 7452
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/PrivacyComplianceService.js",
+        "name": "PrivacyComplianceService.js",
+        "type": "js",
+        "size": 9096
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/UserReportingService.js",
+        "name": "UserReportingService.js",
+        "type": "js",
+        "size": 6353
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/gdpr-compliance.js",
+        "name": "gdpr-compliance.js",
+        "type": "js",
+        "size": 3145
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-integration.handler.js",
+        "name": "security-integration.handler.js",
+        "type": "js",
+        "size": 830
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-integration.js",
+        "name": "security-integration.js",
+        "type": "js",
+        "size": 3823
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-scripts/disable-false-positives.js",
+        "name": "disable-false-positives.js",
+        "type": "js",
+        "size": 489
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-scripts/security-audit.js",
+        "name": "security-audit.js",
+        "type": "js",
+        "size": 7424
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-scripts/security-config.js",
+        "name": "security-config.js",
+        "type": "js",
+        "size": 3773
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-scripts/security-fix-minimal.js",
+        "name": "security-fix-minimal.js",
+        "type": "js",
+        "size": 1310
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/security-scripts/security-fixer.js",
+        "name": "security-fixer.js",
+        "type": "js",
+        "size": 3350
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/soc2-compliance.js",
+        "name": "soc2-compliance.js",
+        "type": "js",
+        "size": 4670
+      },
+      {
+        "path": "heptagonal/6-governance/compliance/threat-detection.js",
+        "name": "threat-detection.js",
+        "type": "js",
+        "size": 1036
+      },
+      {
+        "path": "heptagonal/6-governance/incident-response/incident-system.js",
+        "name": "incident-system.js",
+        "type": "js",
+        "size": 6945
+      },
+      {
+        "path": "heptagonal/6-governance/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 1362
+      },
+      {
+        "path": "heptagonal/6-governance/legal/LEGAL_TEMPLATES.md",
+        "name": "LEGAL_TEMPLATES.md",
+        "type": "md",
+        "size": 5613
+      },
+      {
+        "path": "heptagonal/6-governance/moderation/ContentModerationPolicyService.js",
+        "name": "ContentModerationPolicyService.js",
+        "type": "js",
+        "size": 8784
+      },
+      {
+        "path": "heptagonal/6-governance/moderation/content-moderation.js",
+        "name": "content-moderation.js",
+        "type": "js",
+        "size": 2170
+      },
+      {
+        "path": "heptagonal/6-governance/policies/AgeVerificationService.js",
+        "name": "AgeVerificationService.js",
+        "type": "js",
+        "size": 8203
+      },
+      {
+        "path": "heptagonal/6-governance/policies/CommunityGuidelinesService.js",
+        "name": "CommunityGuidelinesService.js",
+        "type": "js",
+        "size": 7403
+      },
+      {
+        "path": "heptagonal/6-governance/rate-limiting/rate-limiter.js",
+        "name": "rate-limiter.js",
+        "type": "js",
+        "size": 8148
+      },
+      {
+        "path": "heptagonal/6-governance/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 197
+      },
+      {
+        "path": "heptagonal/6-governance/versioning/api-version-manager.js",
+        "name": "api-version-manager.js",
+        "type": "js",
+        "size": 5102
+      },
+      {
+        "path": "heptagonal/7-data/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 15831
+      },
+      {
+        "path": "heptagonal/7-data/analytics/BusinessIntelligenceService.js",
+        "name": "BusinessIntelligenceService.js",
+        "type": "js",
+        "size": 12157
+      },
+      {
+        "path": "heptagonal/7-data/analytics/analytics-engine.js",
+        "name": "analytics-engine.js",
+        "type": "js",
+        "size": 8288
+      },
+      {
+        "path": "heptagonal/7-data/analytics/user-detection.js",
+        "name": "user-detection.js",
+        "type": "js",
+        "size": 4392
+      },
+      {
+        "path": "heptagonal/7-data/backup/backup-manager.js",
+        "name": "backup-manager.js",
+        "type": "js",
+        "size": 10149
+      },
+      {
+        "path": "heptagonal/7-data/caching/cache-layer.js",
+        "name": "cache-layer.js",
+        "type": "js",
+        "size": 3932
+      },
+      {
+        "path": "heptagonal/7-data/etl/ETLService.js",
+        "name": "ETLService.js",
+        "type": "js",
+        "size": 12210
+      },
+      {
+        "path": "heptagonal/7-data/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 1079
+      },
+      {
+        "path": "heptagonal/7-data/migrations/migration-manager.js",
+        "name": "migration-manager.js",
+        "type": "js",
+        "size": 4278
+      },
+      {
+        "path": "heptagonal/7-data/reporting/DataExportService.js",
+        "name": "DataExportService.js",
+        "type": "js",
+        "size": 9391
+      },
+      {
+        "path": "heptagonal/7-data/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 189
+      },
+      {
+        "path": "heptagonal/7-data/storage/database-manager.js",
+        "name": "database-manager.js",
+        "type": "js",
+        "size": 5771
+      },
+      {
+        "path": "heptagonal/7-data/storage/timeseries-db.js",
+        "name": "timeseries-db.js",
+        "type": "js",
+        "size": 975
+      },
+      {
+        "path": "heptagonal/7-data/warehouse/DataWarehouseService.js",
+        "name": "DataWarehouseService.js",
+        "type": "js",
+        "size": 10807
+      },
+      {
+        "path": "heptagonal/8-operations/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 21341
+      },
+      {
+        "path": "heptagonal/8-operations/backup/BackupService.js",
+        "name": "BackupService.js",
+        "type": "js",
+        "size": 10483
+      },
+      {
+        "path": "heptagonal/8-operations/ci-cd/pipeline.js",
+        "name": "pipeline.js",
+        "type": "js",
+        "size": 6554
+      },
+      {
+        "path": "heptagonal/8-operations/devops/cleanup-redundant.js",
+        "name": "cleanup-redundant.js",
+        "type": "js",
+        "size": 2103
+      },
+      {
+        "path": "heptagonal/8-operations/devops/validate-hexagonal.js",
+        "name": "validate-hexagonal.js",
+        "type": "js",
+        "size": 1671
+      },
+      {
+        "path": "heptagonal/8-operations/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 1143
+      },
+      {
+        "path": "heptagonal/8-operations/infrastructure/InfrastructureService.js",
+        "name": "InfrastructureService.js",
+        "type": "js",
+        "size": 11317
+      },
+      {
+        "path": "heptagonal/8-operations/infrastructure/aws-setup.js",
+        "name": "aws-setup.js",
+        "type": "js",
+        "size": 5668
+      },
+      {
+        "path": "heptagonal/8-operations/infrastructure/infrastructure-manager-clean.js",
+        "name": "infrastructure-manager-clean.js",
+        "type": "js",
+        "size": 14293
+      },
+      {
+        "path": "heptagonal/8-operations/infrastructure/infrastructure-manager.js",
+        "name": "infrastructure-manager.js",
+        "type": "js",
+        "size": 19272
+      },
+      {
+        "path": "heptagonal/8-operations/infrastructure/terraform/template.yaml",
+        "name": "template.yaml",
+        "type": "yaml",
+        "size": 2891
+      },
+      {
+        "path": "heptagonal/8-operations/monitoring/MonitoringService.js",
+        "name": "MonitoringService.js",
+        "type": "js",
+        "size": 10929
+      },
+      {
+        "path": "heptagonal/8-operations/monitoring/monitoring-service.js",
+        "name": "monitoring-service.js",
+        "type": "js",
+        "size": 4871
+      },
+      {
+        "path": "heptagonal/8-operations/scale-config.json",
+        "name": "scale-config.json",
+        "type": "json",
+        "size": 196
+      },
+      {
+        "path": "heptagonal/8-operations/testing/advanced-agents.test.js",
+        "name": "advanced-agents.test.js",
+        "type": "js",
+        "size": 8048
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 6557
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/basic.spec.js",
+        "name": "basic.spec.js",
+        "type": "js",
+        "size": 313
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/feed.spec.cjs",
+        "name": "feed.spec.cjs",
+        "type": "cjs",
+        "size": 820
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/helpers.ts",
+        "name": "helpers.ts",
+        "type": "ts",
+        "size": 9348
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/video-playback.spec.ts",
+        "name": "video-playback.spec.ts",
+        "type": "ts",
+        "size": 10697
+      },
+      {
+        "path": "heptagonal/8-operations/testing/e2e/video-upload.spec.ts",
+        "name": "video-upload.spec.ts",
+        "type": "ts",
+        "size": 13053
+      },
+      {
+        "path": "heptagonal/8-operations/testing/electron-code-editor/e2e/editor.spec.js",
+        "name": "editor.spec.js",
+        "type": "js",
+        "size": 1359
+      },
+      {
+        "path": "heptagonal/8-operations/testing/frontend-setup.ts",
+        "name": "frontend-setup.ts",
+        "type": "ts",
+        "size": 1113
+      },
+      {
+        "path": "heptagonal/8-operations/testing/load-test.js",
+        "name": "load-test.js",
+        "type": "js",
+        "size": 458
+      },
+      {
+        "path": "heptagonal/8-operations/testing/playwright-report/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 516591
+      },
+      {
+        "path": "heptagonal/8-operations/testing/postman/HOOTNER-API.postman_collection.json",
+        "name": "HOOTNER-API.postman_collection.json",
+        "type": "json",
+        "size": 1903
+      },
+      {
+        "path": "heptagonal/8-operations/testing/reports/playwright/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 914914
+      },
+      {
+        "path": "heptagonal/8-operations/testing/security/security.spec.js",
+        "name": "security.spec.js",
+        "type": "js",
+        "size": 12557
+      },
+      {
+        "path": "heptagonal/8-operations/testing/service-integration-hub.test.js",
+        "name": "service-integration-hub.test.js",
+        "type": "js",
+        "size": 1701
+      },
+      {
+        "path": "heptagonal/8-operations/testing/setup.ts",
+        "name": "setup.ts",
+        "type": "ts",
+        "size": 280
+      },
+      {
+        "path": "heptagonal/8-operations/testing/unit/health.test.js",
+        "name": "health.test.js",
+        "type": "js",
+        "size": 202
+      },
+      {
+        "path": "heptagonal/FINAL_CLEAN_ARCHITECTURE.md",
+        "name": "FINAL_CLEAN_ARCHITECTURE.md",
+        "type": "md",
+        "size": 3206
+      },
+      {
+        "path": "heptagonal/PDR.md",
+        "name": "PDR.md",
+        "type": "md",
+        "size": 3028
+      },
+      {
+        "path": "heptagonal/integration-hub.js",
+        "name": "integration-hub.js",
+        "type": "js",
+        "size": 12661
+      },
+      {
+        "path": "heptagonal/service-orchestrator.js",
+        "name": "service-orchestrator.js",
+        "type": "js",
+        "size": 5536
+      },
+      {
+        "path": "index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 7692
+      },
+      {
+        "path": "layers/9-core/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 1434
+      },
+      {
+        "path": "layers/9-core/platform-orchestrator.js",
+        "name": "platform-orchestrator.js",
+        "type": "js",
+        "size": 725
+      },
+      {
+        "path": "layers/api-keys/example-lambda.js",
+        "name": "example-lambda.js",
+        "type": "js",
+        "size": 933
+      },
+      {
+        "path": "lib/data-utils.js",
+        "name": "data-utils.js",
+        "type": "js",
+        "size": 72
+      },
+      {
+        "path": "package-lock.json",
+        "name": "package-lock.json",
+        "type": "json",
+        "size": 508834
+      },
+      {
+        "path": "package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 13547
+      },
+      {
+        "path": "src/Function/index.js",
+        "name": "index.js",
+        "type": "js",
+        "size": 180
+      },
+      {
+        "path": "src/Function/package.json",
+        "name": "package.json",
+        "type": "json",
+        "size": 47
+      },
+      {
+        "path": "src/frontend/pages/admin-session-manager.html",
+        "name": "admin-session-manager.html",
+        "type": "html",
+        "size": 9445
+      },
+      {
+        "path": "src/frontend/pages/agent-management.html",
+        "name": "agent-management.html",
+        "type": "html",
+        "size": 23374
+      },
+      {
+        "path": "src/frontend/pages/ai-video.html",
+        "name": "ai-video.html",
+        "type": "html",
+        "size": 68044
+      },
+      {
+        "path": "src/frontend/pages/analytics.html",
+        "name": "analytics.html",
+        "type": "html",
+        "size": 6558
+      },
+      {
+        "path": "src/frontend/pages/auto-editor.html",
+        "name": "auto-editor.html",
+        "type": "html",
+        "size": 93496
+      },
+      {
+        "path": "src/frontend/pages/auto-upload-feeder.html",
+        "name": "auto-upload-feeder.html",
+        "type": "html",
+        "size": 5993
+      },
+      {
+        "path": "src/frontend/pages/cinema-player.html",
+        "name": "cinema-player.html",
+        "type": "html",
+        "size": 53063
+      },
+      {
+        "path": "src/frontend/pages/code-editor.html",
+        "name": "code-editor.html",
+        "type": "html",
+        "size": 73478
+      },
+      {
+        "path": "src/frontend/pages/collaboration.html",
+        "name": "collaboration.html",
+        "type": "html",
+        "size": 19096
+      },
+      {
+        "path": "src/frontend/pages/config.html",
+        "name": "config.html",
+        "type": "html",
+        "size": 7708
+      },
+      {
+        "path": "src/frontend/pages/contact.html",
+        "name": "contact.html",
+        "type": "html",
+        "size": 7678
+      },
+      {
+        "path": "src/frontend/pages/content-creation-features.js",
+        "name": "content-creation-features.js",
+        "type": "js",
+        "size": 1867
+      },
+      {
+        "path": "src/frontend/pages/dashboard.html",
+        "name": "dashboard.html",
+        "type": "html",
+        "size": 188734
+      },
+      {
+        "path": "src/frontend/pages/devops-monitoring.html",
+        "name": "devops-monitoring.html",
+        "type": "html",
+        "size": 25990
+      },
+      {
+        "path": "src/frontend/pages/error.html",
+        "name": "error.html",
+        "type": "html",
+        "size": 1454
+      },
+      {
+        "path": "src/frontend/pages/feed-react.html",
+        "name": "feed-react.html",
+        "type": "html",
+        "size": 72435
+      },
+      {
+        "path": "src/frontend/pages/feed.html",
+        "name": "feed.html",
+        "type": "html",
+        "size": 104239
+      },
+      {
+        "path": "src/frontend/pages/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 15675
+      },
+      {
+        "path": "src/frontend/pages/live-activity.html",
+        "name": "live-activity.html",
+        "type": "html",
+        "size": 20478
+      },
+      {
+        "path": "src/frontend/pages/live-stream.html",
+        "name": "live-stream.html",
+        "type": "html",
+        "size": 11462
+      },
+      {
+        "path": "src/frontend/pages/login.html",
+        "name": "login.html",
+        "type": "html",
+        "size": 45347
+      },
+      {
+        "path": "src/frontend/pages/marketplace-styles.css",
+        "name": "marketplace-styles.css",
+        "type": "css",
+        "size": 4277
+      },
+      {
+        "path": "src/frontend/pages/marketplace.css",
+        "name": "marketplace.css",
+        "type": "css",
+        "size": 1683
+      },
+      {
+        "path": "src/frontend/pages/marketplace.html",
+        "name": "marketplace.html",
+        "type": "html",
+        "size": 19941
+      },
+      {
+        "path": "src/frontend/pages/messages.html",
+        "name": "messages.html",
+        "type": "html",
+        "size": 21161
+      },
+      {
+        "path": "src/frontend/pages/mobile-player.html",
+        "name": "mobile-player.html",
+        "type": "html",
+        "size": 15008
+      },
+      {
+        "path": "src/frontend/pages/my-videos.html",
+        "name": "my-videos.html",
+        "type": "html",
+        "size": 11715
+      },
+      {
+        "path": "src/frontend/pages/pricing.html",
+        "name": "pricing.html",
+        "type": "html",
+        "size": 14949
+      },
+      {
+        "path": "src/frontend/pages/profile-new.html",
+        "name": "profile-new.html",
+        "type": "html",
+        "size": 85890
+      },
+      {
+        "path": "src/frontend/pages/security-command-center.html",
+        "name": "security-command-center.html",
+        "type": "html",
+        "size": 27811
+      },
+      {
+        "path": "src/frontend/pages/security-demo.html",
+        "name": "security-demo.html",
+        "type": "html",
+        "size": 19969
+      },
+      {
+        "path": "src/frontend/pages/settings.html",
+        "name": "settings.html",
+        "type": "html",
+        "size": 21941
+      },
+      {
+        "path": "src/frontend/pages/ultra-editor.html",
+        "name": "ultra-editor.html",
+        "type": "html",
+        "size": 18286
+      },
+      {
+        "path": "src/frontend/pages/upload-metrics.html",
+        "name": "upload-metrics.html",
+        "type": "html",
+        "size": 3236
+      },
+      {
+        "path": "src/frontend/pages/upload-video.html",
+        "name": "upload-video.html",
+        "type": "html",
+        "size": 34464
+      },
+      {
+        "path": "src/frontend/pages/usb-passkey-demo.html",
+        "name": "usb-passkey-demo.html",
+        "type": "html",
+        "size": 19901
+      },
+      {
+        "path": "src/frontend/pages/video-player.html",
+        "name": "video-player.html",
+        "type": "html",
+        "size": 81926
+      },
+      {
+        "path": "src/frontend/styles/main.css",
+        "name": "main.css",
+        "type": "css",
+        "size": 34531
+      },
+      {
+        "path": "template.yaml",
+        "name": "template.yaml",
+        "type": "yaml",
+        "size": 27139
+      },
+      {
+        "path": "tests/advanced-agents.test.js",
+        "name": "advanced-agents.test.js",
+        "type": "js",
+        "size": 8048
+      },
+      {
+        "path": "tests/e2e/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 6557
+      },
+      {
+        "path": "tests/e2e/basic.spec.js",
+        "name": "basic.spec.js",
+        "type": "js",
+        "size": 313
+      },
+      {
+        "path": "tests/e2e/feed.spec.cjs",
+        "name": "feed.spec.cjs",
+        "type": "cjs",
+        "size": 820
+      },
+      {
+        "path": "tests/e2e/helpers.ts",
+        "name": "helpers.ts",
+        "type": "ts",
+        "size": 9479
+      },
+      {
+        "path": "tests/e2e/platform.spec.js",
+        "name": "platform.spec.js",
+        "type": "js",
+        "size": 689
+      },
+      {
+        "path": "tests/e2e/video-playback.spec.ts",
+        "name": "video-playback.spec.ts",
+        "type": "ts",
+        "size": 10841
+      },
+      {
+        "path": "tests/e2e/video-upload.spec.ts",
+        "name": "video-upload.spec.ts",
+        "type": "ts",
+        "size": 13053
+      },
+      {
+        "path": "tests/electron-code-editor/e2e/editor.spec.js",
+        "name": "editor.spec.js",
+        "type": "js",
+        "size": 1385
+      },
+      {
+        "path": "tests/frontend-setup.ts",
+        "name": "frontend-setup.ts",
+        "type": "ts",
+        "size": 1113
+      },
+      {
+        "path": "tests/load-test.js",
+        "name": "load-test.js",
+        "type": "js",
+        "size": 458
+      },
+      {
+        "path": "tests/playwright-report/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 516591
+      },
+      {
+        "path": "tests/postman/HOOTNER-API.postman_collection.json",
+        "name": "HOOTNER-API.postman_collection.json",
+        "type": "json",
+        "size": 1903
+      },
+      {
+        "path": "tests/reports/playwright/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 914914
+      },
+      {
+        "path": "tests/security/security.spec.js",
+        "name": "security.spec.js",
+        "type": "js",
+        "size": 12483
+      },
+      {
+        "path": "tests/service-integration-hub.test.js",
+        "name": "service-integration-hub.test.js",
+        "type": "js",
+        "size": 1701
+      },
+      {
+        "path": "tests/setup.ts",
+        "name": "setup.ts",
+        "type": "ts",
+        "size": 280
+      },
+      {
+        "path": "tests/unit/health.test.js",
+        "name": "health.test.js",
+        "type": "js",
+        "size": 202
+      },
+      {
+        "path": "tests/unit/metadata.test.js",
+        "name": "metadata.test.js",
+        "type": "js",
+        "size": 930
+      },
+      {
+        "path": "tools/check-all-html-dashboard.js",
+        "name": "check-all-html-dashboard.js",
+        "type": "js",
+        "size": 2547
+      },
+      {
+        "path": "tools/check-dashboard-links.js",
+        "name": "check-dashboard-links.js",
+        "type": "js",
+        "size": 2713
+      },
+      {
+        "path": "tools/check-dynamic.js",
+        "name": "check-dynamic.js",
+        "type": "js",
+        "size": 3243
+      },
+      {
+        "path": "tools/check-infrastructure.js",
+        "name": "check-infrastructure.js",
+        "type": "js",
+        "size": 2423
+      },
+      {
+        "path": "tools/check-pwa.js",
+        "name": "check-pwa.js",
+        "type": "js",
+        "size": 2191
+      },
+      {
+        "path": "tools/check-stack.js",
+        "name": "check-stack.js",
+        "type": "js",
+        "size": 1438
+      },
+      {
+        "path": "tools/check-training-status.js",
+        "name": "check-training-status.js",
+        "type": "js",
+        "size": 5271
+      },
+      {
+        "path": "tools/execute-hexarchy-migration.js",
+        "name": "execute-hexarchy-migration.js",
+        "type": "js",
+        "size": 2466
+      },
+      {
+        "path": "tools/find-duplicates.js",
+        "name": "find-duplicates.js",
+        "type": "js",
+        "size": 3587
+      },
+      {
+        "path": "tools/scan-connections.js",
+        "name": "scan-connections.js",
+        "type": "js",
+        "size": 3984
+      },
+      {
+        "path": "tools/scan-docs.js",
+        "name": "scan-docs.js",
+        "type": "js",
+        "size": 3080
+      },
+      {
+        "path": "tools/setup-stable-diffusion.js",
+        "name": "setup-stable-diffusion.js",
+        "type": "js",
+        "size": 11344
+      },
+      {
+        "path": "tools/setup-training.js",
+        "name": "setup-training.js",
+        "type": "js",
+        "size": 2278
+      },
+      {
+        "path": "tools/start-dual-agent.js",
+        "name": "start-dual-agent.js",
+        "type": "js",
+        "size": 2697
+      },
+      {
+        "path": "tools/training-helper.js",
+        "name": "training-helper.js",
+        "type": "js",
+        "size": 2809
+      },
+      {
+        "path": "tools/update-cicd-paths.js",
+        "name": "update-cicd-paths.js",
+        "type": "js",
+        "size": 1270
+      },
+      {
+        "path": "tools/update-import-paths.js",
+        "name": "update-import-paths.js",
+        "type": "js",
+        "size": 2792
+      }
+    ],
+    "removed": [],
+    "modified": [
+      {
+        "path": "api/graphql/resolvers/videoResolvers-dynamodb.js",
+        "name": "videoResolvers-dynamodb.js",
+        "type": "js",
+        "size": 4845
+      },
+      {
+        "path": "api/graphql/styles/hootner.css",
+        "name": "hootner.css",
+        "type": "css",
+        "size": 10905
+      },
+      {
+        "path": "apps/frontend/html-pages/Hootner/hello_world/app.py",
+        "name": "app.py",
+        "type": "py",
+        "size": 1134
+      },
+      {
+        "path": "apps/frontend/index.html",
+        "name": "index.html",
+        "type": "html",
+        "size": 748
+      },
+      {
+        "path": "apps/frontend/public/config.html",
+        "name": "config.html",
+        "type": "html",
+        "size": 7609
+      },
+      {
+        "path": "apps/frontend/public/input.css",
+        "name": "input.css",
+        "type": "css",
+        "size": 59
+      },
+      {
+        "path": "apps/frontend/public/login.html",
+        "name": "login.html",
+        "type": "html",
+        "size": 8118
+      },
+      {
+        "path": "scripts/aws_train_sd.py",
+        "name": "aws_train_sd.py",
+        "type": "py",
+        "size": 10272
+      },
+      {
+        "path": "scripts/enhanced-mcp-client.js",
+        "name": "enhanced-mcp-client.js",
+        "type": "js",
+        "size": 5682
+      },
+      {
+        "path": "scripts/git-health-monitor.js",
+        "name": "git-health-monitor.js",
+        "type": "js",
+        "size": 7477
+      },
+      {
+        "path": "scripts/offline_render_pipeline.py",
+        "name": "offline_render_pipeline.py",
+        "type": "py",
+        "size": 9589
+      },
+      {
+        "path": "scripts/servers/real-backend-server.js",
+        "name": "real-backend-server.js",
+        "type": "js",
+        "size": 10806
+      },
+      {
+        "path": "scripts/servers/run-autoscaling-agent.js",
+        "name": "run-autoscaling-agent.js",
+        "type": "js",
+        "size": 12642
+      },
+      {
+        "path": "scripts/servers/start-landing.js",
+        "name": "start-landing.js",
+        "type": "js",
+        "size": 1732
+      },
+      {
+        "path": "scripts/servers/start-platform-complete.js",
+        "name": "start-platform-complete.js",
+        "type": "js",
+        "size": 2772
+      },
+      {
+        "path": "scripts/test-dual-agent-connections.js",
+        "name": "test-dual-agent-connections.js",
+        "type": "js",
+        "size": 5983
+      },
+      {
+        "path": "scripts/testing/test-activity-server.js",
+        "name": "test-activity-server.js",
+        "type": "js",
+        "size": 4582
+      },
+      {
+        "path": "scripts/testing/test-advanced-agents.js",
+        "name": "test-advanced-agents.js",
+        "type": "js",
+        "size": 7371
+      },
+      {
+        "path": "scripts/training/unified-training-pipeline.py",
+        "name": "unified-training-pipeline.py",
+        "type": "py",
+        "size": 12956
+      },
+      {
+        "path": "scripts/validate-mcp-protocol.js",
+        "name": "validate-mcp-protocol.js",
+        "type": "js",
+        "size": 8781
+      },
+      {
+        "path": "scripts/validate_workflows.py",
+        "name": "validate_workflows.py",
+        "type": "py",
+        "size": 726
+      },
+      {
+        "path": "services/video-generation/CINEMA_GRADE_SUMMARY.md",
+        "name": "CINEMA_GRADE_SUMMARY.md",
+        "type": "md",
+        "size": 9628
+      },
+      {
+        "path": "services/video-generation/ENHANCEMENT_SUMMARY.md",
+        "name": "ENHANCEMENT_SUMMARY.md",
+        "type": "md",
+        "size": 8479
+      },
+      {
+        "path": "services/video-generation/INTEGRATION_GUIDE.md",
+        "name": "INTEGRATION_GUIDE.md",
+        "type": "md",
+        "size": 21857
+      },
+      {
+        "path": "services/video-generation/LONG_FORM_SUPPORT.md",
+        "name": "LONG_FORM_SUPPORT.md",
+        "type": "md",
+        "size": 11824
+      },
+      {
+        "path": "services/video-generation/README.md",
+        "name": "README.md",
+        "type": "md",
+        "size": 15716
+      },
+      {
+        "path": "services/video-generation/README_8K_HDR_ATMOS.md",
+        "name": "README_8K_HDR_ATMOS.md",
+        "type": "md",
+        "size": 11359
+      },
+      {
+        "path": "services/video-generation/TEST_INTEGRATION.md",
+        "name": "TEST_INTEGRATION.md",
+        "type": "md",
+        "size": 11637
+      },
+      {
+        "path": "services/video-generation/adaptive_streaming.py",
+        "name": "adaptive_streaming.py",
+        "type": "py",
+        "size": 16992
+      },
+      {
+        "path": "services/video-generation/ai_video_intelligence.py",
+        "name": "ai_video_intelligence.py",
+        "type": "py",
+        "size": 16311
+      },
+      {
+        "path": "services/video-generation/analytics_engine.py",
+        "name": "analytics_engine.py",
+        "type": "py",
+        "size": 16638
+      },
+      {
+        "path": "services/video-generation/api.py",
+        "name": "api.py",
+        "type": "py",
+        "size": 21933
+      },
+      {
+        "path": "services/video-generation/api_enhanced.py",
+        "name": "api_enhanced.py",
+        "type": "py",
+        "size": 24704
+      },
+      {
+        "path": "services/video-generation/cinema_integration.py",
+        "name": "cinema_integration.py",
+        "type": "py",
+        "size": 11660
+      },
+      {
+        "path": "services/video-generation/config_manager.py",
+        "name": "config_manager.py",
+        "type": "py",
+        "size": 9309
+      },
+      {
+        "path": "services/video-generation/diffusion.py",
+        "name": "diffusion.py",
+        "type": "py",
+        "size": 16750
+      },
+      {
+        "path": "services/video-generation/dolby_atmos.py",
+        "name": "dolby_atmos.py",
+        "type": "py",
+        "size": 18863
+      },
+      {
+        "path": "services/video-generation/examples.py",
+        "name": "examples.py",
+        "type": "py",
+        "size": 11188
+      },
+      {
+        "path": "services/video-generation/generator.py",
+        "name": "generator.py",
+        "type": "py",
+        "size": 12929
+      },
+      {
+        "path": "services/video-generation/hdr_processing.py",
+        "name": "hdr_processing.py",
+        "type": "py",
+        "size": 14637
+      },
+      {
+        "path": "services/video-generation/install.py",
+        "name": "install.py",
+        "type": "py",
+        "size": 4266
+      },
+      {
+        "path": "services/video-generation/long_form_processor.py",
+        "name": "long_form_processor.py",
+        "type": "py",
+        "size": 13514
+      },
+      {
+        "path": "services/video-generation/model_optimization.py",
+        "name": "model_optimization.py",
+        "type": "py",
+        "size": 17318
+      },
+      {
+        "path": "services/video-generation/monitoring.py",
+        "name": "monitoring.py",
+        "type": "py",
+        "size": 18527
+      },
+      {
+        "path": "services/video-generation/subtitle_generator.py",
+        "name": "subtitle_generator.py",
+        "type": "py",
+        "size": 14664
+      },
+      {
+        "path": "services/video-generation/unet.py",
+        "name": "unet.py",
+        "type": "py",
+        "size": 17846
+      },
+      {
+        "path": "services/video-generation/video_effects.py",
+        "name": "video_effects.py",
+        "type": "py",
+        "size": 17450
+      },
+      {
+        "path": "services/video-generation/watch_party.py",
+        "name": "watch_party.py",
+        "type": "py",
+        "size": 15130
+      }
+    ]
+  },
+  "summary": {
+    "added": 926,
+    "removed": 0,
+    "modified": 48,
+    "totalFiles": 1287,
+    "previousFiles": 361,
+    "growth": 926
+  }
+}
