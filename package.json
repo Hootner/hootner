@@ -169,7 +169,7 @@
     "aws:configure": "aws configure",
     "aws:identity": "aws sts get-caller-identity",
     "aws:status": "node scripts/aws-status-check.js",
-    "postinstall": "cd heptagonal/3-communication/adapters/graphql-api && npm install",
+    "postinstall": "cd hexarchy/3-communication/adapters/graphql-api && npm install",
     "py:precommit:install": "python -m pip install --user pre-commit || true && python -m pre_commit install || true",
     "py:precommit:run": "python -m pre_commit run --all-files || true",
     "website:start": "node scripts/stripe-website-server.js",
