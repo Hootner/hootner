@@ -59,7 +59,7 @@ async function httpCheck(url, expectedCodes = [200]) {
 async function checkServerAvailability() {
   // Quick check if any server is running
   const mainServerUp = await httpCheck('http://localhost:3000/api/health');
-  const apiServerUp = await httpCheck('http://localhost:4000/graphql', [200, 400, 404]);
+  const apiServerUp = await httpCheck('http://localhost:4000/graphql', [200, 400]);
   return mainServerUp || apiServerUp;
 }
 

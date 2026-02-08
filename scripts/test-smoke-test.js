@@ -23,10 +23,11 @@ test1.stdout.on('data', (data) => {
 });
 
 test1.on('close', (code) => {
-  if (code === 0 && test1Output.includes('skipping smoke tests')) {
+  if (code === 0 && test1Output.includes('Servers not running - skipping smoke tests')) {
     console.log('✅ Test 1 passed: Correctly skipped tests when no server\n');
   } else {
-    console.log('❌ Test 1 failed: Expected exit code 0 and skip message\n');
+    console.log('❌ Test 1 failed: Expected exit code 0 and skip message');
+    console.log('   Output:', test1Output.substring(0, 200));
     process.exit(1);
   }
 
@@ -79,19 +80,20 @@ test1.on('close', (code) => {
           mockServer.close();
           
           // With SKIP flag and server running, it should run tests
-          // But fail on Test 2 (API on port 4000)
+          // But will fail on Test 2 (API on port 4000) - that's expected
           if (test3Output.includes('Test 1: Health check...')) {
             console.log('✅ Test 3 passed: Ran tests when server detected\n');
+            console.log('✅ All smoke-test.js tests completed successfully!');
+            console.log('\n📋 Summary:');
+            console.log('  - Skips tests when SKIP_SMOKE_IF_NO_SERVER=true and no servers');
+            console.log('  - Fails appropriately when servers expected but not available');
+            console.log('  - Runs tests when servers are detected');
+            process.exit(0);
           } else {
-            console.log('⚠️  Test 3 partial: Server detected but tests failed (expected - no GraphQL server)\n');
+            console.log('❌ Test 3 failed: Expected tests to run when server available');
+            console.log('   Output:', test3Output.substring(0, 200));
+            process.exit(1);
           }
-          
-          console.log('✅ All smoke-test.js tests completed successfully!');
-          console.log('\n📋 Summary:');
-          console.log('  - Skips tests when SKIP_SMOKE_IF_NO_SERVER=true and no servers');
-          console.log('  - Fails appropriately when servers expected but not available');
-          console.log('  - Runs tests when servers are detected');
-          process.exit(0);
         });
       }, SERVER_READY_DELAY_MS);
     });
