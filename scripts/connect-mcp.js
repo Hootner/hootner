@@ -10,6 +10,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +21,10 @@ async function connectToMCP() {
 
   try {
     // Start enhanced MCP server
-    const serverPath = join(projectRoot, 'hexarchy/3-communication/adapters/enhanced-mcp-server.js');
+    const serverRelativePath = fs.existsSync(join(projectRoot, 'heptagonal/3-communication/adapters/enhanced-mcp-server.js'))
+      ? 'heptagonal/3-communication/adapters/enhanced-mcp-server.js'
+      : 'hexarchy/3-communication/adapters/enhanced-mcp-server.js';
+    const serverPath = join(projectRoot, serverRelativePath);
     const serverProcess = spawn('node', [serverPath], {
       cwd: projectRoot,
       stdio: ['pipe', 'pipe', 'inherit']
@@ -54,13 +58,13 @@ async function connectToMCP() {
       console.log(`   - ${tool.name}: ${tool.description}`);
     });
 
-    // Get hexarchy status
-    console.log('\n📊 Getting Hexarchy Status...');
+    // Get agent hub status
+    console.log('\n📊 Getting Agent Hub Status...');
     const statusResponse = await client.callTool({
       name: 'agent_hub_status',
       arguments: {}
     });
-    
+
     const status = JSON.parse(statusResponse.content[0].text);
     console.log('\n✨ System Status:');
     console.log(`   Session ID: ${status.sessionId}`);
@@ -74,7 +78,7 @@ async function connectToMCP() {
       name: 'mcp_protocol_info',
       arguments: {}
     });
-    
+
     const protocol = JSON.parse(protocolResponse.content[0].text);
     console.log(`   Protocol Version: ${protocol.protocolVersion}`);
     console.log(`   Server Version: ${protocol.serverVersion}`);

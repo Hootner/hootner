@@ -9,6 +9,7 @@ import express from 'express';
 import { spawn } from 'child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -24,7 +25,11 @@ const initializeMCP = async () => {
     console.log('🤖 Starting Enhanced MCP Server for Amazon Q chat...');
 
     // Start enhanced MCP server process
-    mcpServerProcess = spawn('node', ['hexarchy/3-communication/adapters/enhanced-mcp-server.js'], {
+    const serverScriptPath = fs.existsSync('heptagonal/3-communication/adapters/enhanced-mcp-server.js')
+      ? 'heptagonal/3-communication/adapters/enhanced-mcp-server.js'
+      : 'hexarchy/3-communication/adapters/enhanced-mcp-server.js';
+
+    mcpServerProcess = spawn('node', [serverScriptPath], {
       cwd: process.cwd(),
       stdio: ['pipe', 'pipe', 'inherit']
     });

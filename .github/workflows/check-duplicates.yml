@@ -1,0 +1,48 @@
+name: Check for Duplicates
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  check-duplicates:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Check for duplicate HTML files
+        run: |
+          echo "🔍 Checking for duplicate files..."
+          node scripts/cleanup-duplicates.js
+          
+          if [ $? -ne 0 ]; then
+            echo "❌ Duplicates found! Please consolidate before merging."
+            exit 1
+          fi
+          
+          echo "✅ No duplicates found"
+      
+      - name: Check file locations
+        run: |
+          echo "📁 Checking file locations..."
+          
+          # Check for HTML files in wrong locations
+          WRONG_LOCATION=$(find src/frontend/pages heptagonal/4-interface/ui/pages apps/frontend/public -name "*.html" 2>/dev/null | wc -l)
+          
+          if [ "$WRONG_LOCATION" -gt 0 ]; then
+            echo "❌ HTML files found in wrong locations:"
+            find src/frontend/pages heptagonal/4-interface/ui/pages apps/frontend/public -name "*.html" 2>/dev/null
+            echo ""
+            echo "💡 All HTML files must be in: apps/frontend/html-pages/"
+            exit 1
+          fi
+          
+          echo "✅ All files in correct locations"

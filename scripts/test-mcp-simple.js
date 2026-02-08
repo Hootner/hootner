@@ -5,7 +5,32 @@
  * Tests the MCP server by importing and calling it directly
  */
 
-import EnhancedMCPServer from '../hexarchy/3-communication/adapters/enhanced-mcp-server.js';
+let EnhancedMCPServer;
+
+try {
+  ({ default: EnhancedMCPServer } = await import(
+    '../heptagonal/3-communication/adapters/enhanced-mcp-server.js'
+  ));
+} catch (error) {
+  // Only fall back if the heptagonal server *script itself* is missing.
+  // If the script exists but one of its dependencies is missing, we want to
+  // surface the real error instead of hiding it behind a legacy-path lookup.
+  const heptagonalSpecifier = '../heptagonal/3-communication/adapters/enhanced-mcp-server.js'
+  const message = String(error?.message || '')
+  const missingThisFile =
+    error?.code === 'ERR_MODULE_NOT_FOUND' &&
+    (message.includes('heptagonal/3-communication/adapters/enhanced-mcp-server.js') ||
+      message.includes(heptagonalSpecifier) ||
+      String(error?.url || '').includes('heptagonal/3-communication/adapters/enhanced-mcp-server.js'))
+
+  if (!missingThisFile) {
+    throw error
+  }
+
+  ({ default: EnhancedMCPServer } = await import(
+    '../hexarchy/3-communication/adapters/enhanced-mcp-server.js'
+  ))
+}
 
 async function testMCP() {
   console.log('🦉 Testing HOOTNER MCP Server...\n');

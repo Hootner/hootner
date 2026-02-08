@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+/**
+ * Pre-commit hook: Check for duplicate files
+ * Prevents commits with duplicate HTML files
+ */
+
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+
+const ALLOWED_LOCATIONS = {
+	html: ['apps/frontend/html-pages'],
+	js: ['scripts', 'api', 'services', 'heptagonal'],
+	jsx: ['apps/frontend/src/components', 'heptagonal/4-interface/components'],
+};
+
+function findDuplicateHTMLFiles() {
+	const htmlFiles = {};
+	const stagedFiles = execSync('git diff --cached --name-only --diff-filter=ACM')
+		.toString()
+		.trim()
+		.split('\n')
+		.filter((f) => f.endsWith('.html'));
+
+	if (stagedFiles.length === 0) return [];
+
+	// Check all HTML files in repo
+	const allHTML = execSync('git ls-files "*.html"').toString().trim().split('\n');
+
+	allHTML.forEach((file) => {
+		const basename = path.basename(file);
+		if (!htmlFiles[basename]) htmlFiles[basename] = [];
+		htmlFiles[basename].push(file);
+	});
+
+	return Object.entries(htmlFiles).filter(([_, locations]) => locations.length > 1);
+}
+
+function checkFileLocations() {
+	const stagedFiles = execSync('git diff --cached --name-only --diff-filter=ACM')
+		.toString()
+		.trim()
+		.split('\n');
+
+	const violations = [];
+
+	stagedFiles.forEach((file) => {
+		if (file.endsWith('.html')) {
+			const isAllowed = ALLOWED_LOCATIONS.html.some((loc) => file.startsWith(loc));
+			if (!isAllowed) {
+				violations.push({
+					file,
+					expected: ALLOWED_LOCATIONS.html.join(' or '),
+				});
+			}
+		}
+	});
+
+	return violations;
+}
+
+// Main execution
+console.log('🔍 Checking for duplicate files...\n');
+
+const duplicates = findDuplicateHTMLFiles();
+const violations = checkFileLocations();
+
+if (duplicates.length > 0) {
+	console.error('❌ DUPLICATE FILES DETECTED:\n');
+	duplicates.forEach(([filename, locations]) => {
+		console.error(`  ${filename}:`);
+		locations.forEach((loc) => console.error(`    - ${loc}`));
+	});
+	console.error('\n💡 Fix: Delete duplicates, keep only one in apps/frontend/html-pages/\n');
+	process.exit(1);
+}
+
+if (violations.length > 0) {
+	console.error('❌ FILES IN WRONG LOCATION:\n');
+	violations.forEach(({ file, expected }) => {
+		console.error(`  ${file}`);
+		console.error(`    Expected: ${expected}\n`);
+	});
+	console.error('💡 Fix: Move files to correct location\n');
+	process.exit(1);
+}
+
+console.log('✅ No duplicates found. Commit allowed.\n');
+process.exit(0);

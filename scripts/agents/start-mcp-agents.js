@@ -35,12 +35,12 @@ pages.forEach(page => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'running',
     services: Array.from(services.keys()),
     mcp: 'active',
     agents: '75+',
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -157,7 +157,7 @@ const startService = (name, command, args) => {
 startService('AI Agents (75+)', 'node', ['hexarchy/5-economy/business/ai/run-all-agents.js']);
 
 // Layer 3: MCP Server
-startService('MCP Dual-Agent Server', 'node', ['hexarchy/3-communication/adapters/enhanced-mcp-server.js']);
+startService('MCP Dual-Agent Server', 'node', ['heptagonal/3-communication/adapters/enhanced-mcp-server.js']);
 
 // Layer 3: GraphQL API
 startService('GraphQL API', 'node', ['hexarchy/3-communication/adapters/graphql-api/server.js']);

@@ -2,19 +2,19 @@
 
 Purpose: give an AI agent the exact, actionable signals it needs to be productive in this repository (architecture, key files, developer workflows, and conventions).
 
-- **Big picture**: HOOTNER is a monorepo-style full-stack platform (video player, AI services, microservices) organized around a hexarchy (see `hexarchy/`) and framework folders (`frameworks/`). The runtime orchestration is handled through event-driven architecture; AI agents live under `frameworks/ai/agents/` and `scripts/agents/` with **dual-agent orchestration** coordinating GitHub Copilot + Amazon Q. The platform runs **75+ specialized agents** through the Enhanced Agent Hub.
+- **Big picture**: HOOTNER is a monorepo-style full-stack platform (video player, AI services, microservices) organized around a heptagonal architecture (see `heptagonal/`) with 9 layers (0-8). The runtime orchestration is handled through event-driven architecture; AI agents live under `heptagonal/2-intelligence/ai-services/agents/` and `scripts/agents/` with **dual-agent orchestration** coordinating GitHub Copilot + Amazon Q. The platform runs **75+ specialized agents** through the Enhanced Agent Hub.
 
 - **Key files to read first**:
   - [scripts/agents/enhanced-agent-hub.js](../scripts/agents/enhanced-agent-hub.js) — **NEW**: Central hub orchestrating 75+ production agents across security, BI, infrastructure, and AI services.
   - [start-dual-agent.js](../start-dual-agent.js) — **NEW**: Dual AI agent system entry point with intelligent routing between Copilot and Amazon Q.
-  - [hexarchy/2-intelligence/ai-services/agents/dual-agent-orchestrator.js](../hexarchy/2-intelligence/ai-services/agents/dual-agent-orchestrator.js) — Core routing logic and agent coordination.
-  - [hexarchy/0-core/orchestration/event-bus.js](../hexarchy/0-core/orchestration/event-bus.js) — Event-driven communication between hexarchy layers.
+  - [heptagonal/2-intelligence/ai-services/agents/dual-agent-orchestrator.js](../heptagonal/2-intelligence/ai-services/agents/dual-agent-orchestrator.js) — Core routing logic and agent coordination.
+  - [heptagonal/0-core/orchestration/event-bus.js](../heptagonal/0-core/orchestration/event-bus.js) — Event-driven communication between heptagonal layers.
   - [README.md](../README.md) — project quick-start, top-level commands, and environment notes.
 
 - **Architecture summary (short)**:
   - **Dual-Agent System**: GitHub Copilot handles code completion/refactoring; Amazon Q handles AWS integration/security audits. Intelligent routing in `dual-agent-orchestrator.js` with fallback logic.
   - **Enhanced Agent Hub**: 75+ production agents categorized as Core AI (12), Business Intelligence (15), Security & Compliance (18), Infrastructure & Operations (20), and Specialized Services (10).
-  - **Hexarchy Pattern**: 8-layer architecture from `0-core/` (infrastructure) to `8-operations/` (DevOps), with event-driven communication via `event-bus.js`.
+  - **Heptagonal Pattern**: 9-layer architecture from `0-core/` (infrastructure) to `8-operations/` (DevOps), with event-driven communication via `event-bus.js`.
   - **Agent Categories**: Core agents auto-start in production; infrastructure agents handle scaling/monitoring; security agents perform compliance checks.
 
 - **Developer workflows & commands** (use these exact commands when scripting or running tasks):
@@ -32,11 +32,13 @@ Purpose: give an AI agent the exact, actionable signals it needs to be productiv
   - Enhanced agents: `npm run agents:status` (check 75+ agent status)
 
 - **Conventions and patterns to follow**:
+  - **CRITICAL: File Organization** - Read `.amazonq/rules/file-organization.md` BEFORE creating any file. All HTML pages go in `apps/frontend/html-pages/` ONLY.
   - ES modules are the primary module system. Some legacy files use CommonJS (.cjs or `require()`); prefer ESM when adding new modules.
-  - Agents live in `frameworks/ai/agents/` and expose start/monitor/process functions. `enhanced-agent-hub.js` shows the expected interface: `initialize()`, `processRequest(req,res)`, and `getStatus()`.
+  - Agents live in `heptagonal/2-intelligence/ai-services/agents/` and expose start/monitor/process functions. `enhanced-agent-hub.js` shows the expected interface: `initialize()`, `processRequest(req,res)`, and `getStatus()`.
   - **Dual-Agent Routing**: Use routing rules in `dual-agent-orchestrator.js` - AWS tasks go to Amazon Q, code completion goes to Copilot, with automatic fallback.
-  - Orchestration events: use the orchestrator event names shown in `hexarchy/0-core/orchestration/event-bus.js` for inter-domain communication.
-  - Hexarchy directories map responsibilities; place new code in the appropriate layer (e.g., AI code in `hexarchy/2-intelligence/` or `frameworks/ai/`).
+  - Orchestration events: use the orchestrator event names shown in `heptagonal/0-core/orchestration/event-bus.js` for inter-domain communication.
+  - Heptagonal directories map responsibilities; place new code in the appropriate layer (e.g., AI code in `heptagonal/2-intelligence/`).
+  - **NEVER create duplicate files** - Search for existing files first: `git ls-files | grep filename`
 
 - **Integration points & runtime details**:
   - **Main Platform**: `http://localhost:3000` (primary app entry)

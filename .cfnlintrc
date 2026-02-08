@@ -1,0 +1,11 @@
+ignore_checks:
+- E0000
+
+ignore_templates:
+- package.json
+- package-lock.json
+- node_modules/**
+- .git/**
+- apps/**
+- scripts/**
+- hexarchy/**/*.json

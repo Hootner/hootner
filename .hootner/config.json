@@ -1,7 +1,9 @@
 {
-  "mode": "aws",
+  "mode": "local",
   "aws": {
-    "enabled": true
+    "enabled": false,
+    "localDynamoDB": true,
+    "localStorage": true
   },
-  "setupDate": "2026-02-06T19:19:51.616Z"
+  "setupDate": "2026-02-08T13:31:39.565Z"
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import DualAgentOrchestrator from './hexarchy/2-intelligence/ai-services/agents/dual-agent-orchestrator.js';
-import EnhancedMCPServer from './hexarchy/3-communication/adapters/enhanced-mcp-server.js';
+import DualAgentOrchestrator from '../heptagonal/2-intelligence/ai-services/agents/dual-agent-orchestrator.js';
+import EnhancedMCPServer from '../heptagonal/3-communication/adapters/enhanced-mcp-server.js';
 
 console.log('🤖 Starting HOOTNER Enhanced Dual-Agent System with MCP Integration...\n');
 

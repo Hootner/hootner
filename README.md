@@ -1,8 +1,10 @@
 # 🦉 HOOTNER
 
+[![Security Policy](https://img.shields.io/badge/security-policy-blue)](SECURITY.md) [![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-policy-purple)](CODE_OF_CONDUCT.md)
+
 **AI-Native Video Intelligence Platform**
 
-> *Enterprise-grade video streaming with 75+ AI agents, 120 AWS integrations, and hexagonal architecture*
+> _Enterprise-grade video streaming with 75+ AI agents, 120 AWS integrations, and hexagonal architecture_
 
 ## 📊 Platform Stats
 
@@ -34,33 +36,43 @@ npm run start:all      # Launch platform
 ## 🏗️ Hexagonal Architecture (10 Layers)
 
 ### Layer 0: Core Infrastructure
+
 API configs, authentication, AWS connectors, database utilities, logging, security
 
 ### Layer 1: Foundation
+
 Domain models, validators, repositories, events, core services
 
 ### Layer 2: Intelligence
+
 AI services, video generation, analytics engines, ML models
 
 ### Layer 3: Communication
+
 API adapters, GraphQL resolvers, message queues, WebSocket, MCP server
 
 ### Layer 4: Interface
+
 React components, UI frameworks, frontend apps, view models
 
 ### Layer 5: Economy
+
 Business logic, Stripe payments, revenue optimization, fraud detection
 
 ### Layer 6: Governance
+
 Compliance, content moderation, legal templates, policy enforcement
 
 ### Layer 7: Data
+
 Analytics, backup, caching, storage, data warehouse
 
 ### Layer 8: Operations
+
 CI/CD, deployment, infrastructure as code, monitoring, testing
 
 ### Layer 9: Documentation
+
 README, PDR, guides, API docs, architecture diagrams (220 files)
 
 ## 🔧 Development Commands
@@ -86,11 +98,13 @@ npm run lint:fix         # Fix linting issues
 ## 🎯 Development Modes
 
 ### Local Mode (Recommended)
+
 - ✅ No AWS account needed
 - ✅ Zero costs
 - ✅ Perfect for development
 
 ### AWS Mode
+
 - 🚀 Production-like environment
 - 🚀 Real AWS services
 - 💰 ~$0-5/month with free tier
@@ -112,24 +126,28 @@ my-local-repo/
 ## 🌟 Key Features
 
 ### Video Intelligence
+
 - Real-time neural video synthesis
 - 8K HDR support with Dolby Atmos
 - Adaptive streaming
 - Long-form content processing
 
 ### AI Capabilities
+
 - 75+ specialized agents
 - Dual-agent orchestration
 - Predictive analytics
 - Automated metadata generation
 
 ### Security
+
 - USB Passkey (FIDO2/WebAuthn)
 - JWT token management
 - Quantum-resistant encryption
 - Role-based access control
 
 ### Billing
+
 - Usage-based pricing
 - Stripe integration
 - Volume discounts (up to 60% off)
@@ -146,22 +164,26 @@ my-local-repo/
 ## 📚 Documentation
 
 ### Getting Started
+
 - [AWS for Beginners](docs/AWS_FOR_BEGINNERS.md) - Complete AWS guide
 - [Quick Start Guide](docs/QUICK_START.md) - Get running in 5 minutes
 - [Day One Guide](docs/DAY_ONE.md) - Your first day with HOOTNER
 
 ### Architecture
+
 - [Infrastructure Tree](INFRASTRUCTURE_TREE_120_PIPES.md) - All 120 pipes mapped
 - [Architecture Diagram](ARCHITECTURE_DIAGRAM_120_PIPES.md) - Visual overview
 - [Hexagonal Architecture](hexarchy/README.md) - Layer-by-layer breakdown
 
 ### Development
+
 - [API Documentation](docs/API.md) - REST & GraphQL APIs
 - [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) - Deploy to AWS
 - [Contributing Guide](docs/CONTRIBUTING_TOOLING.md) - How to contribute
 - [Pull Request Mechanics](docs/guides/PULL_REQUEST_MECHANICS.md) - Understand how PRs work
 
 ### Advanced
+
 - [Dual Agent Setup](docs/DUAL_AGENT_SETUP.md) - Amazon Q + GitHub Copilot
 - [Product Requirements](PDR.md) - Full PRD
 - [Stripe Integration](STRIPE_USAGE_PRICING_GUIDE.md) - Billing setup

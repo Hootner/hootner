@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Check for duplicates
+node .husky/check-duplicates
+
 # Generate metadata before commit
 node scripts/metadata/generate-codebase-metadata.js
 

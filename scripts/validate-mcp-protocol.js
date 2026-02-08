@@ -44,11 +44,11 @@ class MCPProtocolValidator {
   async validateSDKVersion() {
     try {
       this.validationResults.total++;
-      
+
       // Check if MCP SDK is properly imported
       const { Server } = await import('@modelcontextprotocol/sdk/server/index.js');
       const { Client } = await import('@modelcontextprotocol/sdk/client/index.js');
-      
+
       if (!Server || !Client) {
         throw new Error('MCP SDK classes not properly imported');
       }
@@ -65,7 +65,7 @@ class MCPProtocolValidator {
   async validateAgentWrappers() {
     try {
       this.validationResults.total++;
-      
+
       const agentCount = Object.keys(productionAgents).length;
       if (agentCount < 8) {
         this.validationResults.warnings++;
@@ -77,7 +77,7 @@ class MCPProtocolValidator {
       if (securityAgent) {
         const agentInstance = new securityAgent();
         const wrapper = new MCPAgentWrapper(agentInstance);
-        
+
         const capabilities = wrapper.getCapabilities();
         if (!capabilities.tools || !capabilities.agentName) {
           throw new Error('Agent wrapper missing required capabilities');
@@ -96,11 +96,16 @@ class MCPProtocolValidator {
   async validateServerCapabilities() {
     try {
       this.validationResults.total++;
-      
+
       // Validate enhanced MCP server capabilities
-      const { default: EnhancedMCPServer } = await import('../hexarchy/3-communication/adapters/enhanced-mcp-server.js');
+      let EnhancedMCPServer;
+      try {
+        ({ default: EnhancedMCPServer } = await import('../heptagonal/3-communication/adapters/enhanced-mcp-server.js'));
+      } catch {
+        ({ default: EnhancedMCPServer } = await import('../hexarchy/3-communication/adapters/enhanced-mcp-server.js'));
+      }
       const server = new EnhancedMCPServer();
-      
+
       if (!server.server || !server.orchestrator || !server.agentHub) {
         throw new Error('Enhanced MCP Server missing required components');
       }
@@ -117,7 +122,7 @@ class MCPProtocolValidator {
   async validateToolSchemas() {
     try {
       this.validationResults.total++;
-      
+
       const requiredTools = [
         'dual_agent_route',
         'agent_hub_status',
@@ -146,7 +151,7 @@ class MCPProtocolValidator {
   async validateRequestResponseFlow() {
     try {
       this.validationResults.total++;
-      
+
       // Test agent request processing
       const securityAgentClass = productionAgents['security-service'];
       if (securityAgentClass) {
@@ -158,7 +163,7 @@ class MCPProtocolValidator {
         };
 
         const response = await agent.processRequest(testRequest);
-        
+
         if (!response || !response.agent || !response.timestamp) {
           throw new Error('Agent response missing required fields');
         }
@@ -213,7 +218,7 @@ class MCPProtocolValidator {
 
   async fixCommonIssues() {
     console.log('🔧 Attempting to fix common MCP Protocol issues...\n');
-    
+
     let fixedIssues = 0;
 
     // Fix 1: Ensure all agents have processRequest method
@@ -238,13 +243,13 @@ class MCPProtocolValidator {
 // Run validation if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   const validator = new MCPProtocolValidator();
-  
+
   if (process.argv.includes('--fix')) {
     await validator.fixCommonIssues();
   } else {
     await validator.validateProtocolCompliance();
   }
-  
+
   process.exit(validator.validationResults.failed > 0 ? 1 : 0);
 }
 

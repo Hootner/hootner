@@ -1,0 +1,27 @@
+name: 'HOOTNER Agent Bridge'
+description: '🦉 The Owl Never Sleeps - 80+ AI agents for CI/CD pipelines'
+author: 'HOOTNER'
+branding:
+  icon: 'eye'
+  color: 'yellow'
+
+inputs:
+  agent-type:
+    description: 'Agent to use (security, aws, business, code-quality)'
+    required: true
+  query:
+    description: 'Query for the agent'
+    required: true
+  api-key:
+    description: 'HOOTNER API key'
+    required: true
+
+outputs:
+  result:
+    description: 'Agent response'
+  agent-used:
+    description: 'Which agent processed the request'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

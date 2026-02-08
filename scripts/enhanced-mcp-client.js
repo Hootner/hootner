@@ -8,6 +8,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { spawn } from 'child_process';
+import fs from 'fs';
 
 class EnhancedMCPClient {
   constructor() {
@@ -18,9 +19,13 @@ class EnhancedMCPClient {
 
   async connect() {
     console.log('🦉 Connecting to Enhanced HOOTNER MCP Server...');
-    
+
     // Start enhanced MCP server process
-    this.serverProcess = spawn('node', ['hexarchy/3-communication/adapters/enhanced-mcp-server.js'], {
+    const serverScriptPath = fs.existsSync('heptagonal/3-communication/adapters/enhanced-mcp-server.js')
+      ? 'heptagonal/3-communication/adapters/enhanced-mcp-server.js'
+      : 'hexarchy/3-communication/adapters/enhanced-mcp-server.js';
+
+    this.serverProcess = spawn('node', [serverScriptPath], {
       cwd: process.cwd(),
       stdio: ['pipe', 'pipe', 'inherit']
     });
@@ -45,7 +50,7 @@ class EnhancedMCPClient {
     // Connect
     await this.client.connect(this.transport);
     console.log('✅ Connected to Enhanced HOOTNER MCP Server');
-    
+
     return this;
   }
 
@@ -56,54 +61,54 @@ class EnhancedMCPClient {
 
   async routeThroughDualAgent(type, query, context = {}) {
     console.log(`🔄 Routing ${type} request through dual agents...`);
-    const response = await this.client.callTool({ 
-      name: 'dual_agent_route', 
-      arguments: { type, query, context } 
+    const response = await this.client.callTool({
+      name: 'dual_agent_route',
+      arguments: { type, query, context }
     });
     return JSON.parse(response.content[0].text);
   }
 
   async getAgentHubStatus() {
     console.log('📊 Getting agent hub status...');
-    const response = await this.client.callTool({ 
-      name: 'agent_hub_status', 
-      arguments: {} 
+    const response = await this.client.callTool({
+      name: 'agent_hub_status',
+      arguments: {}
     });
     return JSON.parse(response.content[0].text);
   }
 
   async executeAgentAction(agentName, action, args = []) {
     console.log(`🎯 Executing ${action} on ${agentName}...`);
-    const response = await this.client.callTool({ 
-      name: 'execute_agent_action', 
-      arguments: { agentName, action, args } 
+    const response = await this.client.callTool({
+      name: 'execute_agent_action',
+      arguments: { agentName, action, args }
     });
     return JSON.parse(response.content[0].text);
   }
 
   async listAgentsByCategory(category = null) {
     console.log(`📋 Listing agents${category ? ` in ${category} category` : ''}...`);
-    const response = await this.client.callTool({ 
-      name: 'list_agents_by_category', 
-      arguments: category ? { category } : {} 
+    const response = await this.client.callTool({
+      name: 'list_agents_by_category',
+      arguments: category ? { category } : {}
     });
     return JSON.parse(response.content[0].text);
   }
 
   async getOrchestratorStats() {
     console.log('📈 Getting orchestrator statistics...');
-    const response = await this.client.callTool({ 
-      name: 'orchestrator_stats', 
-      arguments: {} 
+    const response = await this.client.callTool({
+      name: 'orchestrator_stats',
+      arguments: {}
     });
     return JSON.parse(response.content[0].text);
   }
 
   async connectExternalAgent(agentName, endpoint) {
     console.log(`🔗 Connecting external agent: ${agentName}...`);
-    const response = await this.client.callTool({ 
-      name: 'connect_external_agent', 
-      arguments: { agentName, endpoint } 
+    const response = await this.client.callTool({
+      name: 'connect_external_agent',
+      arguments: { agentName, endpoint }
     });
     return JSON.parse(response.content[0].text);
   }
@@ -164,7 +169,7 @@ class EnhancedMCPClient {
 // Run demonstration if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   const client = new EnhancedMCPClient();
-  
+
   try {
     await client.connect();
     await client.demonstrateConnections();

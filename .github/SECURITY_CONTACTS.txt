@@ -1,0 +1,5 @@
+# Security Contacts for HOOTNER
+# Use these contacts for reporting security issues.
+
+security@hootner.com
+support@hootner.com
