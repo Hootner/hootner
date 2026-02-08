@@ -6,6 +6,9 @@
 import http from 'http';
 import { spawn } from 'child_process';
 
+// Configuration constants
+const SERVER_READY_DELAY_MS = 500; // Time to wait for mock server to be ready to accept connections
+
 console.log('🧪 Testing smoke-test.js functionality\n');
 
 // Test 1: Smoke test should skip when SKIP_SMOKE_IF_NO_SERVER=true and no servers running
@@ -90,7 +93,7 @@ test1.on('close', (code) => {
           console.log('  - Runs tests when servers are detected');
           process.exit(0);
         });
-      }, 500);
+      }, SERVER_READY_DELAY_MS);
     });
   });
 });

@@ -24,6 +24,8 @@
 
 import http from 'http';
 
+// Configuration constants
+const HTTP_REQUEST_TIMEOUT_MS = 2000; // Timeout for health check requests
 const VERSION = process.argv[2] || 'unknown';
 const IS_CI = process.env.CI === 'true';
 const IS_DEPLOYMENT = process.env.DEPLOYMENT_CONTEXT === 'true';
@@ -37,7 +39,7 @@ async function httpCheck(url, expectedCodes = [200]) {
       port: urlObj.port,
       path: urlObj.pathname,
       method: 'GET',
-      timeout: 2000
+      timeout: HTTP_REQUEST_TIMEOUT_MS
     };
 
     const req = http.request(options, (res) => {
