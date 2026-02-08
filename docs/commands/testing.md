@@ -111,18 +111,37 @@ node tests/performance/endurance-test.js
 
 ## 💨 Smoke Tests
 
+Smoke tests are designed to quickly validate critical functionality. They run in two contexts:
+
+### Pre-Push Context (Local Development)
 ```bash
-# Quick smoke tests
+# Quick smoke tests (skips if servers not running)
 npm run test:smoke
+```
 
-# Basic functionality check
-node tests/smoke-test.js
+When run locally during pre-push checks, smoke tests will automatically skip if the servers are not running. This is expected behavior and allows developers to push code without starting all services.
 
-# Health check tests
-node tests/health-check.js
+### Deployment Context
+```bash
+# Full smoke tests for deployment validation
+npm run test:smoke:deployment
 
-# Critical path tests
-node tests/critical-path.js
+# Or run directly with version
+node scripts/smoke-test.js v1.0.0
+```
+
+During deployment, smoke tests verify that deployed services are healthy by checking:
+- Main API health endpoint: `http://localhost:3000/api/health`
+- GraphQL API endpoint: `http://localhost:4000/graphql`
+
+### Environment Variables
+- `SKIP_SMOKE_IF_NO_SERVER=true` - Skip tests if servers are not running (used in pre-push)
+- `DEPLOYMENT_CONTEXT=true` - Force tests to run and fail if servers unavailable
+
+### Testing the Smoke Test
+```bash
+# Test the smoke test script itself
+node scripts/test-smoke-test.js
 ```
 
 ## 🔒 Security Tests

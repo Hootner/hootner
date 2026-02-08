@@ -1,5 +1,26 @@
 #!/usr/bin/env node
-// Smoke Test Script for Deployment Validation
+/**
+ * Smoke Test Script for Deployment Validation
+ * 
+ * This script performs basic health checks on the HOOTNER platform services.
+ * It has context-aware behavior:
+ * 
+ * - Pre-push context (SKIP_SMOKE_IF_NO_SERVER=true): 
+ *   Skips tests gracefully if servers are not running. This is normal for local development.
+ * 
+ * - Deployment context (DEPLOYMENT_CONTEXT=true):
+ *   Requires servers to be running and fails if health checks don't pass.
+ * 
+ * Usage:
+ *   npm run test:smoke                    # Pre-push (skips if no server)
+ *   npm run test:smoke:deployment         # Deployment (requires servers)
+ *   node scripts/smoke-test.js v1.0.0     # Direct with version
+ * 
+ * Environment Variables:
+ *   SKIP_SMOKE_IF_NO_SERVER - Skip tests if servers not detected (default in test:smoke)
+ *   DEPLOYMENT_CONTEXT - Force tests to run and fail if servers unavailable
+ *   CI - Indicates running in CI environment
+ */
 
 import http from 'http';
 
