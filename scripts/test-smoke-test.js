@@ -9,6 +9,9 @@ import { spawn } from 'child_process';
 // Configuration constants
 const SERVER_READY_DELAY_MS = 500; // Time to wait for mock server to be ready to accept connections
 
+// Expected message from smoke-test.js (must match the MSG_SERVERS_NOT_RUNNING constant there)
+const EXPECTED_SKIP_MESSAGE = 'Servers not running - skipping smoke tests';
+
 console.log('🧪 Testing smoke-test.js functionality\n');
 
 // Test 1: Smoke test should skip when SKIP_SMOKE_IF_NO_SERVER=true and no servers running
@@ -23,10 +26,11 @@ test1.stdout.on('data', (data) => {
 });
 
 test1.on('close', (code) => {
-  if (code === 0 && test1Output.includes('Servers not running - skipping smoke tests')) {
+  if (code === 0 && test1Output.includes(EXPECTED_SKIP_MESSAGE)) {
     console.log('✅ Test 1 passed: Correctly skipped tests when no server\n');
   } else {
     console.log('❌ Test 1 failed: Expected exit code 0 and skip message');
+    console.log(`   Looking for: "${EXPECTED_SKIP_MESSAGE}"`);
     console.log('   Output:', test1Output.substring(0, 200));
     process.exit(1);
   }

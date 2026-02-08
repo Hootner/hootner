@@ -26,10 +26,14 @@ import http from 'http';
 
 // Configuration constants
 const HTTP_REQUEST_TIMEOUT_MS = 2000; // Timeout for health check requests
+const GRAPHQL_EXPECTED_STATUS_CODES = [200, 400]; // GraphQL returns 400 for missing query param
 const VERSION = process.argv[2] || 'unknown';
 const IS_CI = process.env.CI === 'true';
 const IS_DEPLOYMENT = process.env.DEPLOYMENT_CONTEXT === 'true';
 const SKIP_IF_NO_SERVER = process.env.SKIP_SMOKE_IF_NO_SERVER === 'true';
+
+// Messages
+const MSG_SERVERS_NOT_RUNNING = 'Servers not running - skipping smoke tests';
 
 async function httpCheck(url, expectedCodes = [200]) {
   return new Promise((resolve) => {
@@ -59,7 +63,7 @@ async function httpCheck(url, expectedCodes = [200]) {
 async function checkServerAvailability() {
   // Quick check if any server is running
   const mainServerUp = await httpCheck('http://localhost:3000/api/health');
-  const apiServerUp = await httpCheck('http://localhost:4000/graphql', [200, 400]);
+  const apiServerUp = await httpCheck('http://localhost:4000/graphql', GRAPHQL_EXPECTED_STATUS_CODES);
   return mainServerUp || apiServerUp;
 }
 
@@ -70,7 +74,7 @@ async function runTests() {
   if (SKIP_IF_NO_SERVER && !IS_DEPLOYMENT) {
     const serverAvailable = await checkServerAvailability();
     if (!serverAvailable) {
-      console.log('ℹ️  Servers not running - skipping smoke tests');
+      console.log(`ℹ️  ${MSG_SERVERS_NOT_RUNNING}`);
       console.log('   (This is normal for pre-push checks in local development)');
       console.log('   Smoke tests will run during deployment validation.\n');
       process.exit(0);
@@ -91,7 +95,7 @@ async function runTests() {
 
   // Test 2: API availability
   process.stdout.write('Test 2: API availability... ');
-  const apiOk = await httpCheck('http://localhost:4000/graphql', [200, 400]);
+  const apiOk = await httpCheck('http://localhost:4000/graphql', GRAPHQL_EXPECTED_STATUS_CODES);
   if (!apiOk) {
     console.log('❌ Failed');
     testsFailed = true;
