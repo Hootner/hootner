@@ -560,6 +560,12 @@
             <button class="nav-item" onclick="showTab('privacy')">
               Privacy
             </button>
+            <button class="nav-item" onclick="showTab('subscription')">
+              💳 Subscription
+            </button>
+            <button class="nav-item" onclick="showTab('billing')">
+              💰 Billing & Payments
+            </button>
           </div>
 
           <div class="content">
@@ -657,12 +663,130 @@
               <h2>Privacy Settings</h2>
               <p style="color: #00ff00">Manage your privacy settings here.</p>
             </div>
+
+            <!-- Subscription Tab -->
+            <div id="subscription-tab" class="hidden">
+              <h2>Subscription Management</h2>
+              <div id="subscription-status" style="margin-bottom: 24px">
+                <div style="background: rgba(0,255,0,0.1); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,255,0,0.3);">
+                  <h3 style="color: #00ff00; margin-bottom: 12px;">Current Plan: <span id="current-plan">Loading...</span></h3>
+                  <p style="color: #00ffff; font-size: 14px;">Status: <span id="plan-status">Active</span></p>
+                  <p style="color: #00ffff; font-size: 14px;">Next billing: <span id="next-billing">Loading...</span></p>
+                </div>
+              </div>
+
+              <h3 style="color: #00ffff; margin-bottom: 16px;">Available Plans</h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <!-- Basic Plan -->
+                <div style="background: rgba(10,10,15,0.8); padding: 20px; border-radius: 8px; border: 2px solid rgba(0,255,0,0.3);">
+                  <h4 style="color: #00ff00; margin-bottom: 8px;">Basic</h4>
+                  <p style="color: #00ffff; font-size: 24px; margin-bottom: 12px;">$9.99<span style="font-size: 14px;">/month</span></p>
+                  <ul style="color: #00ffff; font-size: 14px; list-style: none; padding: 0;">
+                    <li>✓ HD Streaming</li>
+                    <li>✓ Standard Support</li>
+                    <li>✓ 1 Device</li>
+                  </ul>
+                  <button class="save-btn" onclick="subscribeToPlan('basic')" style="margin-top: 16px; width: 100%;">Select Plan</button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div style="background: rgba(10,10,15,0.8); padding: 20px; border-radius: 8px; border: 2px solid rgba(0,255,255,0.5);">
+                  <h4 style="color: #00ffff; margin-bottom: 8px;">Premium</h4>
+                  <p style="color: #00ffff; font-size: 24px; margin-bottom: 12px;">$19.99<span style="font-size: 14px;">/month</span></p>
+                  <ul style="color: #00ffff; font-size: 14px; list-style: none; padding: 0;">
+                    <li>✓ 4K Streaming</li>
+                    <li>✓ Priority Support</li>
+                    <li>✓ 3 Devices</li>
+                    <li>✓ Downloads</li>
+                  </ul>
+                  <button class="save-btn" onclick="subscribeToPlan('premium')" style="margin-top: 16px; width: 100%;">Select Plan</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div style="background: rgba(10,10,15,0.8); padding: 20px; border-radius: 8px; border: 2px solid rgba(255,0,255,0.5);">
+                  <h4 style="color: #ff00ff; margin-bottom: 8px;">Enterprise</h4>
+                  <p style="color: #00ffff; font-size: 24px; margin-bottom: 12px;">$99.99<span style="font-size: 14px;">/month</span></p>
+                  <ul style="color: #00ffff; font-size: 14px; list-style: none; padding: 0;">
+                    <li>✓ 8K Streaming</li>
+                    <li>✓ 24/7 Support</li>
+                    <li>✓ Unlimited Devices</li>
+                    <li>✓ API Access</li>
+                    <li>✓ Analytics Dashboard</li>
+                  </ul>
+                  <button class="save-btn" onclick="subscribeToPlan('enterprise')" style="margin-top: 16px; width: 100%;">Select Plan</button>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <button class="save-btn" onclick="cancelSubscription()" style="background: #ef4444;">Cancel Subscription</button>
+              </div>
+            </div>
+
+            <!-- Billing Tab -->
+            <div id="billing-tab" class="hidden">
+              <h2>Billing & Payments</h2>
+              
+              <!-- Payment Methods -->
+              <div style="margin-bottom: 32px;">
+                <h3 style="color: #00ffff; margin-bottom: 16px;">Payment Methods</h3>
+                <div id="payment-methods" style="background: rgba(0,255,0,0.1); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,255,0,0.3);">
+                  <p style="color: #00ffff; font-size: 14px;">No payment methods saved</p>
+                </div>
+                <button class="save-btn" onclick="addPaymentMethod()" style="margin-top: 12px;">Add Payment Method</button>
+              </div>
+
+              <!-- Billing History -->
+              <div style="margin-bottom: 32px;">
+                <h3 style="color: #00ffff; margin-bottom: 16px;">Billing History</h3>
+                <div id="billing-history" style="background: rgba(0,255,0,0.1); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,255,0,0.3);">
+                  <table style="width: 100%; color: #00ffff; font-size: 14px;">
+                    <thead>
+                      <tr style="border-bottom: 1px solid rgba(0,255,0,0.3);">
+                        <th style="text-align: left; padding: 8px;">Date</th>
+                        <th style="text-align: left; padding: 8px;">Description</th>
+                        <th style="text-align: right; padding: 8px;">Amount</th>
+                        <th style="text-align: right; padding: 8px;">Status</th>
+                        <th style="text-align: right; padding: 8px;">Invoice</th>
+                      </tr>
+                    </thead>
+                    <tbody id="billing-table-body">
+                      <tr>
+                        <td colspan="5" style="padding: 16px; text-align: center;">Loading billing history...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Revenue (for creators) -->
+              <div id="creator-revenue" style="display: none; margin-bottom: 32px;">
+                <h3 style="color: #00ffff; margin-bottom: 16px;">Creator Revenue</h3>
+                <div style="background: rgba(0,255,0,0.1); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,255,0,0.3);">
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div>
+                      <p style="color: #00ffff; font-size: 12px;">This Month</p>
+                      <p style="color: #00ff00; font-size: 24px; font-weight: bold;" id="revenue-month">$0.00</p>
+                    </div>
+                    <div>
+                      <p style="color: #00ffff; font-size: 12px;">Total Earnings</p>
+                      <p style="color: #00ff00; font-size: 24px; font-weight: bold;" id="revenue-total">$0.00</p>
+                    </div>
+                    <div>
+                      <p style="color: #00ffff; font-size: 12px;">Pending Payout</p>
+                      <p style="color: #ffff00; font-size: 24px; font-weight: bold;" id="revenue-pending">$0.00</p>
+                    </div>
+                  </div>
+                  <button class="save-btn" onclick="requestPayout()" style="margin-top: 16px;">Request Payout</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <script src="settings.js"></script>
+    <script src="settings-billing.js"></script>
     <div class="main-content"><script src="notifications.js"></script></div>
   </body>
 </html>
