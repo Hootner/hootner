@@ -89,20 +89,217 @@
         <div id="user-flow" class="h-64"></div>
       </div>
     </div>
+
+    <!-- Revenue Analytics Section -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-sm text-cyan-400 mb-2">Today's Revenue</h3>
+        <p id="revenue-today" class="text-3xl font-bold text-green-400">$0</p>
+        <p class="text-xs text-gray-400 mt-2">vs yesterday: <span id="revenue-yesterday-change" class="text-green-400">+0%</span></p>
+      </div>
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-sm text-cyan-400 mb-2">Monthly Revenue</h3>
+        <p id="revenue-month" class="text-3xl font-bold text-green-400">$0</p>
+        <p class="text-xs text-gray-400 mt-2">vs last month: <span id="revenue-month-change" class="text-green-400">+0%</span></p>
+      </div>
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-sm text-cyan-400 mb-2">Active Subscribers</h3>
+        <p id="subscribers-count" class="text-3xl font-bold text-cyan-400">0</p>
+        <p class="text-xs text-gray-400 mt-2">Churn rate: <span id="churn-rate" class="text-yellow-400">0%</span></p>
+      </div>
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-sm text-cyan-400 mb-2">Conversion Rate</h3>
+        <p id="conversion-rate" class="text-3xl font-bold text-green-400">0%</p>
+        <p class="text-xs text-gray-400 mt-2">Trial to paid: <span id="trial-conversion" class="text-green-400">0%</span></p>
+      </div>
+    </div>
+
+    <!-- Video Performance Section -->
+    <div class="mt-8 glass rounded-xl p-6 neon">
+      <h3 class="text-lg font-semibold mb-4 text-cyan-400">📹 Top Performing Videos</h3>
+      <div id="top-videos" class="space-y-3">
+        <p class="text-gray-400 text-sm">Loading video analytics...</p>
+      </div>
+    </div>
+
+    <!-- User Engagement Section -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-lg font-semibold mb-4 text-cyan-400">👥 User Engagement</h3>
+        <div id="engagement-metrics" class="space-y-3">
+          <div class="flex justify-between">
+            <span>Daily Active Users:</span>
+            <span id="dau" class="text-green-400 font-bold">0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Monthly Active Users:</span>
+            <span id="mau" class="text-green-400 font-bold">0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>DAU/MAU Ratio:</span>
+            <span id="dau-mau-ratio" class="text-cyan-400 font-bold">0%</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Avg Session Length:</span>
+            <span id="avg-session" class="text-cyan-400 font-bold">0m</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="glass rounded-xl p-6 neon">
+        <h3 class="text-lg font-semibold mb-4 text-cyan-400">🎯 Content Metrics</h3>
+        <div id="content-metrics" class="space-y-3">
+          <div class="flex justify-between">
+            <span>Total Videos:</span>
+            <span id="total-videos" class="text-green-400 font-bold">0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Total Views:</span>
+            <span id="total-views" class="text-green-400 font-bold">0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Avg Watch Time:</span>
+            <span id="avg-watch-time" class="text-cyan-400 font-bold">0m</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Engagement Rate:</span>
+            <span id="engagement-rate" class="text-cyan-400 font-bold">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
     // Initialize advanced analytics
     let socket;
     
+    async function loadRealAnalytics() {
+      try {
+        // Fetch KPIs
+        const kpisResponse = await fetch('/api/analytics/kpis?timeRange=24h', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (kpisResponse.ok) {
+          const kpis = await kpisResponse.json();
+          updateKPIs(kpis);
+        }
+        
+        // Fetch revenue analytics
+        const revenueResponse = await fetch('/api/analytics/revenue', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (revenueResponse.ok) {
+          const revenue = await revenueResponse.json();
+          updateRevenueMetrics(revenue);
+        }
+        
+        // Fetch video performance
+        const videosResponse = await fetch('/api/analytics/videos/top?limit=5', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (videosResponse.ok) {
+          const videos = await videosResponse.json();
+          updateTopVideos(videos);
+        }
+        
+      } catch (error) {
+        console.log('Error loading analytics, using mock data:', error);
+        startMockAnalytics();
+      }
+    }
+    
+    function updateKPIs(kpis) {
+      if (kpis.metrics) {
+        const { activeUsers, totalVideos, videoViews, conversionRate, churnRate } = kpis.metrics;
+        
+        // User engagement
+        if (activeUsers) {
+          document.getElementById('dau').textContent = activeUsers.dau || 0;
+          document.getElementById('mau').textContent = activeUsers.mau || 0;
+          document.getElementById('dau-mau-ratio').textContent = activeUsers.dauMauRatio || '0%';
+        }
+        
+        // Video metrics
+        if (totalVideos) {
+          document.getElementById('total-videos').textContent = totalVideos.total || 0;
+        }
+        
+        if (videoViews) {
+          document.getElementById('total-views').textContent = videoViews.total || 0;
+          document.getElementById('avg-watch-time').textContent = 
+            videoViews.avgWatchTime ? `${(videoViews.avgWatchTime / 60).toFixed(1)}m` : '0m';
+        }
+        
+        // Conversion & churn
+        if (conversionRate) {
+          document.getElementById('conversion-rate').textContent = `${conversionRate}%`;
+          document.getElementById('trial-conversion').textContent = `${conversionRate}%`;
+        }
+        
+        if (churnRate) {
+          document.getElementById('churn-rate').textContent = `${churnRate}%`;
+        }
+      }
+    }
+    
+    function updateRevenueMetrics(revenue) {
+      if (revenue.today) {
+        document.getElementById('revenue-today').textContent = 
+          `$${revenue.today.toLocaleString()}`;
+        document.getElementById('revenue-yesterday-change').textContent = 
+          `${revenue.todayChange > 0 ? '+' : ''}${revenue.todayChange}%`;
+      }
+      
+      if (revenue.month) {
+        document.getElementById('revenue-month').textContent = 
+          `$${revenue.month.toLocaleString()}`;
+        document.getElementById('revenue-month-change').textContent = 
+          `${revenue.monthChange > 0 ? '+' : ''}${revenue.monthChange}%`;
+      }
+      
+      if (revenue.subscribers) {
+        document.getElementById('subscribers-count').textContent = 
+          revenue.subscribers.toLocaleString();
+      }
+    }
+    
+    function updateTopVideos(videos) {
+      const container = document.getElementById('top-videos');
+      if (videos.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-sm">No video data available yet</p>';
+        return;
+      }
+      
+      container.innerHTML = videos.map((video, index) => `
+        <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg hover:bg-gray-800 transition">
+          <div class="flex items-center space-x-3">
+            <span class="text-2xl font-bold text-cyan-400">#${index + 1}</span>
+            <div>
+              <p class="text-green-400 font-semibold">${video.title || 'Untitled Video'}</p>
+              <p class="text-xs text-gray-400">${video.views || 0} views • ${video.likes || 0} likes</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-cyan-400">${video.watchTime ? (video.watchTime / 60).toFixed(1) : 0}m avg watch</p>
+            <p class="text-xs text-gray-400">${video.engagement || 0}% engagement</p>
+          </div>
+        </div>
+      `).join('');
+    }
+    
     function initAnalytics() {
+      loadRealAnalytics();
+      
+      // Try WebSocket connection for real-time updates
       try {
         socket = io('http://localhost:3005');
         socket.on('analytics', updateAnalytics);
         socket.on('predictions', updatePredictions);
       } catch (e) {
-        console.log('Using mock analytics data');
-        startMockAnalytics();
+        console.log('WebSocket not available, using polling');
+        setInterval(loadRealAnalytics, 30000); // Refresh every 30 seconds
       }
       
       createHeatmap();
