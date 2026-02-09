@@ -212,8 +212,16 @@ Resources:
       GroupDescription: Security group for Batch compute resources
       VpcId: !Ref VPC
       SecurityGroupEgress:
-        - IpProtocol: -1
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
           CidrIp: 0.0.0.0/0
+          Description: HTTPS for AWS services and container registries
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP for package downloads
       Tags:
         - Key: Project
           Value: HOOTNER
@@ -483,6 +491,8 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: !GetAtt UserPool.Arn
+            Type: COGNITO_USER_POOLS
+            IdentitySource: method.request.header.Authorization
 
   # Lambda Functions
   GraphQLFunction:
@@ -1061,7 +1071,7 @@ Outputs:
 
   APIGatewayUrl:
     Description: REST API Gateway URL
-    Value: !Sub https://${APIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod
+    Value: !Sub https://${APIGateway.RestApiId}.execute-api.${AWS::Region}.amazonaws.com/prod
 
   PublicSubnet1Id:
     Description: Public Subnet 1 ID
