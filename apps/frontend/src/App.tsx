@@ -13,6 +13,8 @@ import { AnalyticsPage } from "@/pages/AnalyticsPage";
 import { CrossModulePage } from "@/pages/CrossModulePage";
 import { SocialFeedPage } from "@/pages/SocialFeedPage";
 import { AIGeneratorPage } from "@/pages/AIGeneratorPage";
+import { SceneBuilderPage } from "@/pages/SceneBuilderPage";
+import { ShaderPlaygroundPage } from "@/pages/ShaderPlaygroundPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,8 @@ export default function App() {
                 <Route path="/social" element={<SocialFeedPage />} />
                 <Route path="/generate" element={<AIGeneratorPage />} />
                 <Route path="/3d/*" element={<VisualizationPage />} />
+                <Route path="/scene-builder" element={<SceneBuilderPage />} />
+                <Route path="/shaders" element={<ShaderPlaygroundPage />} />
                 <Route path="/admin/*" element={<AdminPage />} />
                 <Route path="/analytics/*" element={<AnalyticsPage />} />
                 <Route path="/heatmap-3d" element={<CrossModulePage />} />

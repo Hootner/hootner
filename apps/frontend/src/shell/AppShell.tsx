@@ -7,6 +7,8 @@ import {
   Broadcast,
   UsersThree,
   Sparkle,
+  Stack,
+  Code,
 } from "@phosphor-icons/react";
 
 const NAV_ITEMS = [
@@ -14,6 +16,8 @@ const NAV_ITEMS = [
   { to: "/social", label: "Social Feed", icon: UsersThree },
   { to: "/generate", label: "AI Generator", icon: Sparkle },
   { to: "/3d", label: "3D Visualization", icon: Cube },
+  { to: "/scene-builder", label: "Scene Builder", icon: Stack },
+  { to: "/shaders", label: "Shader Lab", icon: Code },
   { to: "/analytics", label: "Analytics", icon: ChartLine },
   { to: "/admin", label: "Admin", icon: ShieldCheck },
   { to: "/heatmap-3d", label: "3D Heatmap", icon: Broadcast },
