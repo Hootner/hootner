@@ -1,22 +1,43 @@
-import Dashboard from './components/Dashboard'
-import { GraphQLDemo } from './components/GraphQLDemo'
-import Footer from './components/Footer'
-import Sidebar from './components/Sidebar'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/shared/ui/sonner";
+import { AppShell } from "@/shell/AppShell";
+import { apolloClient } from "@/shared/lib/apollo-client";
+import { AuthProvider } from "@/shell/AuthProvider";
 
-function App() {
+import { DashboardPage } from "@/pages/DashboardPage";
+import { VisualizationPage } from "@/pages/VisualizationPage";
+import { AdminPage } from "@/pages/AdminPage";
+import { AnalyticsPage } from "@/pages/AnalyticsPage";
+import { CrossModulePage } from "@/pages/CrossModulePage";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 5 * 60 * 1000, retry: 2 },
+  },
+});
+
+export default function App() {
   return (
-    <div className="App flex min-h-screen">
-      <Sidebar />
-      <div className="flex flex-col flex-grow ml-16 lg:ml-64">
-        <main className="flex-grow">
-          <GraphQLDemo />
-          <Dashboard />
-        </main>
-        <Footer />
-      </div>
-    </div>
-  )
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<AppShell />}>
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard/*" element={<DashboardPage />} />
+                <Route path="/3d/*" element={<VisualizationPage />} />
+                <Route path="/admin/*" element={<AdminPage />} />
+                <Route path="/analytics/*" element={<AnalyticsPage />} />
+                <Route path="/heatmap-3d" element={<CrossModulePage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+          <Toaster />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
+  );
 }
-
-export default App
