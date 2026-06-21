@@ -11,6 +11,8 @@ import { VisualizationPage } from "@/pages/VisualizationPage";
 import { AdminPage } from "@/pages/AdminPage";
 import { AnalyticsPage } from "@/pages/AnalyticsPage";
 import { CrossModulePage } from "@/pages/CrossModulePage";
+import { SocialFeedPage } from "@/pages/SocialFeedPage";
+import { AIGeneratorPage } from "@/pages/AIGeneratorPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +30,8 @@ export default function App() {
               <Route element={<AppShell />}>
                 <Route index element={<Navigate to="/dashboard" replace />} />
                 <Route path="/dashboard/*" element={<DashboardPage />} />
+                <Route path="/social" element={<SocialFeedPage />} />
+                <Route path="/generate" element={<AIGeneratorPage />} />
                 <Route path="/3d/*" element={<VisualizationPage />} />
                 <Route path="/admin/*" element={<AdminPage />} />
                 <Route path="/analytics/*" element={<AnalyticsPage />} />

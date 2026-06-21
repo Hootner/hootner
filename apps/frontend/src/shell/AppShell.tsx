@@ -5,10 +5,14 @@ import {
   ShieldCheck,
   ChartLine,
   Broadcast,
+  UsersThree,
+  Sparkle,
 } from "@phosphor-icons/react";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Video Intelligence", icon: MonitorPlay },
+  { to: "/social", label: "Social Feed", icon: UsersThree },
+  { to: "/generate", label: "AI Generator", icon: Sparkle },
   { to: "/3d", label: "3D Visualization", icon: Cube },
   { to: "/analytics", label: "Analytics", icon: ChartLine },
   { to: "/admin", label: "Admin", icon: ShieldCheck },
