@@ -9,6 +9,7 @@ import {
   Sparkle,
   Stack,
   Code,
+  Storefront,
 } from "@phosphor-icons/react";
 
 const NAV_ITEMS = [
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { to: "/3d", label: "3D Visualization", icon: Cube },
   { to: "/scene-builder", label: "Scene Builder", icon: Stack },
   { to: "/shaders", label: "Shader Lab", icon: Code },
+  { to: "/marketplace", label: "Marketplace", icon: Storefront },
   { to: "/analytics", label: "Analytics", icon: ChartLine },
   { to: "/admin", label: "Admin", icon: ShieldCheck },
   { to: "/heatmap-3d", label: "3D Heatmap", icon: Broadcast },
