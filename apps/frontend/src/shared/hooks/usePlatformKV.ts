@@ -49,10 +49,9 @@ export function usePlatformKV<T>(
           setData(JSON.parse(result.data.kvGet.value));
         }
       } catch {
-        // Fall back to default on network failure
-        if (!cancelled) {
-          setData(defaultValue);
-        }
+        // On network failure, keep whatever state is already in memory
+        // (which may have been updated by component logic).
+        // The useState initializer already provides the defaultValue.
       }
     }
 
